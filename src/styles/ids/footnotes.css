@@ -30,8 +30,8 @@ ids-footnote-link {
 
   /* Not selected state: outlined circle */
   background: transparent;
-  border: 1px solid var(--mdlt-text);
-  color: var(--mdlt-text);
+  border: 1px solid var(--m__text-color);
+  color: var(--m__text-color);
 
   &.enlarge {
     font-size: 0.85em;
@@ -39,15 +39,15 @@ ids-footnote-link {
 
   /* Selected state: filled circle */
   &.open {
-    background: var(--mdlt-text);
+    background: var(--m__text-color);
     border: 1px solid transparent;
-    color: var(--mdlt-background);
+    color: var(--m__background-color);
   }
 
   /* Hover state for non-selected */
   &:not(.open):hover {
-    border-color: var(--mdlt-text-hover);
-    color: var(--mdlt-text-hover);
+    border-color: var(--m__text-hover-color);
+    color: var(--m__text-hover-color);
   }
 }
 
@@ -73,8 +73,8 @@ aside.ids-footnote {
   padding: 0.975em;
   font-size: 0.8em;
   z-index: 150;
-  box-shadow: 0 0.5em 1em color-mix(in srgb, var(--mdlt-text) 30%, transparent);
-  background: var(--mdlt-background);
+  box-shadow: 0 0.5em 1em color-mix(in srgb, var(--m__text-color) 30%, transparent);
+  background: var(--m__background-color);
   border-radius: 0.3em;
 
   /* First paragraph badge - black filled circle */
@@ -85,8 +85,8 @@ aside.ids-footnote {
     width: 1.3em;
     height: 1.3em;
     border-radius: 50%;
-    background: var(--mdlt-text);
-    color: var(--mdlt-background);
+    background: var(--m__text-color);
+    color: var(--m__background-color);
     font-size: 1em;
     line-height: 1;
     margin-right: 0.3em;
@@ -100,8 +100,8 @@ aside.ids-footnote {
   /* Scrollability */
   &.scrollable {
     box-shadow:
-      0 0.5em 1em color-mix(in srgb, var(--mdlt-text) 50%, transparent),
-      0 -10em 0 color-mix(in srgb, var(--mdlt-text) 30%, transparent);
+      0 0.5em 1em color-mix(in srgb, var(--m__text-color) 50%, transparent),
+      0 -10em 0 color-mix(in srgb, var(--m__text-color) 30%, transparent);
     overflow: auto;
   }
 }
@@ -123,7 +123,7 @@ aside.ids-footnote {
     margin-bottom: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    box-shadow: 0 0.5em 1em color-mix(in srgb, var(--mdlt-text) 30%, transparent);
+    box-shadow: 0 0.5em 1em color-mix(in srgb, var(--m__text-color) 30%, transparent);
   }
 }
 
@@ -142,7 +142,7 @@ html:has(.ids-footnote.scrollable) {
   width: 100%;
   background-color: transparent;
   border: none;
-  color: var(--mdlt-text-link);
+  color: var(--m__text-link-color);
   cursor: pointer;
   font-size: 0.9em;
   padding: 0.5em 0;
@@ -150,7 +150,7 @@ html:has(.ids-footnote.scrollable) {
 
   &:hover,
   &:active {
-    color: var(--mdlt-text-hover);
+    color: var(--m__text-hover-color);
   }
 
   svg {

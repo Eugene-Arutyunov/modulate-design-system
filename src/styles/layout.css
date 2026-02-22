@@ -1,24 +1,24 @@
-.ids__space {
-  height: 1.2rem;
+.m__space {
+  height: var(--m__space-m);
 
   &.XS {
-    height: 0.7rem;
+    height: var(--m__space-xs);
   }
   &.S {
-    height: 0.9rem;
+    height: var(--m__space-s);
   }
   &.M {
-    height: 1.2rem;
+    height: var(--m__space-m);
   }
   &.L {
-    height: 2.4rem;
+    height: var(--m__space-l);
   }
   &.XL {
-    height: 4.8rem;
+    height: var(--m__space-xl);
   }
 }
 
-.ids__wrapper {
+.m__wrapper {
   position: relative;
   width: 100%;
   margin: 0 auto;
@@ -29,7 +29,7 @@
     width: 100%;
   }
 
-  & .ids__text-width {
+  & .m__text-width {
     width: 85%;
 
     @media (width < 767px) {
@@ -38,7 +38,7 @@
   }
 }
 
-.ids__sequence {
+.m__sequence {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
@@ -60,7 +60,7 @@
     margin-bottom: calc(var(--gap) * 1.5);
   }
 
-  .ids__sequence-item {
+  .m__sequence-item {
     --columns: 4;
     width: calc((100% - var(--gap) * (var(--columns) - 1)) / var(--columns));
 
@@ -70,7 +70,7 @@
   }
 
   &.XL {
-    .ids__sequence-item {
+    .m__sequence-item {
       --columns: 2;
 
       @media (width < 767px) {
@@ -80,7 +80,7 @@
   }
 
   &.L {
-    .ids__sequence-item {
+    .m__sequence-item {
       --columns: 3;
 
       @media (width < 767px) {
@@ -90,7 +90,7 @@
   }
 
   &.S {
-    .ids__sequence-item {
+    .m__sequence-item {
       --columns: 6;
 
       @media (width < 767px) {
@@ -100,24 +100,24 @@
   }
 }
 
-.ids__rounded {
-  border-radius: var(--ids__radius);
+.m__rounded {
+  border-radius: var(--m__radius);
   corner-shape: squircle;
   overflow: hidden;
 }
 
 @supports not (corner-shape: squircle) {
-  .ids__rounded {
+  .m__rounded {
     border-radius: 0;
     border-radius: initial;
     mask:
       url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,1 c0,-1 0,-1 1,-1 l99,0 l0,100 l-100,0 Z"/></svg>')
-        top left / calc(var(--ids__radius) * 100) no-repeat intersect,
+        top left / calc(var(--m__radius) * 100) no-repeat intersect,
       url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l99,0 c1,0 1,0 1,1 l0,99 l-100,0 l0,-100 Z"/></svg>')
-        top right / calc(var(--ids__radius) * 100) no-repeat intersect,
+        top right / calc(var(--m__radius) * 100) no-repeat intersect,
       url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,99 c0,1 -0,1 -1,1 l-99,0 Z"/></svg>')
-        bottom right / calc(var(--ids__radius) * 100) no-repeat intersect,
+        bottom right / calc(var(--m__radius) * 100) no-repeat intersect,
       url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,100 l-99,0 c-1,0 -1,-0 -1,-1 Z"/></svg>')
-        bottom left / calc(var(--ids__radius) * 100) no-repeat intersect;
+        bottom left / calc(var(--m__radius) * 100) no-repeat intersect;
   }
 }

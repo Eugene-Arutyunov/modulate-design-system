@@ -1,8 +1,8 @@
 {% extends 'layout.html' %} {% set pageTitle = 'Modulate Design System' %} {%
 block content %}
 
-<div class="ids__wrapper">
-  <div class="ids__text-width">
+<div class="m__wrapper">
+  <div class="m__text-width">
     <p>
       This document defines the visual language of Modulate product interfaces
       for web: color, typography, UI components, and principles of layout
@@ -13,26 +13,37 @@ block content %}
 </div>
 
 <ids-nav-item id="color" label="Color">
-  <div class="ids__wrapper">
-    <div class="ids__space L"></div>
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
 
     <h2>Color</h2>
-    <div class="ids__text-width">
+    <div class="m__text-width">
       <p>
         This is the source of truth for color values in the palette. If a color
         in the design file differs slightly, consider using the value from here.
         If it differs significantly, it may be worth checking with the designer.
       </p>
     </div>
-
-    <h3>UI Colors</h3>
+    <div class="m__space S"></div>
+    <h3>UI Color Palette</h3>
     {% include 'components/color-palette.html' %}
-    <div class="ids__space S"></div>
+  </div>
 
-    <h3>Emotion Colors</h3>
+  <div class="dark-mode color-palette-dark">
+    <div class="m__wrapper">
+      <p>Dark mode</p>
+      {% include 'components/color-palette.html' %}
+      <div class="m__space S"></div>
+    </div>
+  </div>
+
+  <div class="m__wrapper">
+    <div class="m__space S"></div>
+
+    <h3>Emotion Color Palette</h3>
     {% include 'components/emotion-color-palette.html' %}
-    <div class="ids__space S"></div>
-    <div class="ids__text-width">
+    <div class="m__space S"></div>
+    <div class="m__text-width">
       <p>
         Each variable stores a full color value, for example:
         <code>rgb(253, 47, 75)</code>. To apply transparency, use
@@ -40,28 +51,28 @@ block content %}
         the token list short and makes opacity intent explicit in the code.
       </p>
     </div>
-    <div class="ids__text-width">
+    <div class="m__text-width">
       <aside class="code">
         <h4>CSS</h4>
-        <p><code>color: var(--mdlt-accent);</code></p>
+        <p><code>color: var(--m__accent-color);</code></p>
         <p>
           <code
-            >color: color-mix(in srgb, var(--mdlt-accent) 50%,
+            >color: color-mix(in srgb, var(--m__accent-color) 50%,
             transparent);</code
           >
         </p>
       </aside>
     </div>
-    <div class="ids__space S"></div>
+    <div class="m__space S"></div>
   </div>
 </ids-nav-item>
 
 <ids-nav-item id="layout" label="Layout & Spacing">
-  <div class="ids__wrapper">
-    <div class="ids__space L"></div>
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
 
     <h2>Layout & Spacing</h2>
-    <div class="ids__text-width">
+    <div class="m__text-width">
       <ul>
         <li>
           Pages are composed of stacked full-width sections, not column grids.
@@ -72,7 +83,7 @@ block content %}
         </li>
         <li>
           Spacing between sections or before headings is handled with explicit
-          spacer elements (<code>ids__space</code>), not margins on content
+          spacer elements (<code>m__space</code>), not margins on content
           elements. Content elements can't know what spacing is appropriate in
           every context — the spacer is placed by whoever assembles the layout.
         </li>
@@ -82,44 +93,43 @@ block content %}
 </ids-nav-item>
 
 <ids-nav-item id="typography" label="Typography">
-  <div class="ids__wrapper">
-    <div class="ids__space L"></div>
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
 
     <h2>Typography</h2>
-
-
   </div>
 </ids-nav-item>
 
 <ids-nav-item id="ui-components" label="UI Components">
-  <div class="ids__wrapper">
-    <div class="ids__space L"></div>
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
 
     <h2>UI Components</h2>
 
-    <div class="ids__text-width">
+    <div class="m__text-width">
       <p>This section is a work in progress.</p>
     </div>
   </div>
 </ids-nav-item>
 
-<ids-nav-item id="icons" label="Icons & Graphics">
-  <div class="ids__wrapper">
-    <div class="ids__space L"></div>
+<ids-nav-item id="icons" label="Icons">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
 
     <h2>Icons & Graphics</h2>
 
-    <div class="ids__text-width">
+    <div class="m__text-width">
       <p>This section is a work in progress.</p>
     </div>
+  </div>
 </ids-nav-item>
 
 <ids-nav-item id="principles" label="Principles">
-  <div class="ids__wrapper">
-    <div class="ids__space L"></div>
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
 
     <h2>Principles</h2>
-    <div class="ids__text-width">
+    <div class="m__text-width">
       <p>This section is a work in progress.</p>
       <ul>
         <li>
