@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
@@ -14,25 +14,21 @@
 
     <link rel="stylesheet" href="/bundle.css" />
   </head>
-  <body class="ids">
+  <body class="ids modulate-design-system-tags">
     
 
 <div class="m__wrapper">
   <header class="header">
     <nav class="nav">
-      
-  <span class="nav-link">Modulate Design System</span>
-  
-
+       <span class="nav-link"
+  >Modulate Design System</span
+>
+ 
       <div class="nav-spacer"></div>
-      
-  <a href="/prototypes/" class="nav-link">Prototypes</a>
-  
-
-      
-  <a href="/ui/" class="nav-link">UI Architecture</a>
-  
-
+       <a href="/ui-playground/" class="nav-link">Playground</a>
+   <a href="/prototypes/" class="nav-link">Prototypes</a>
+   <a href="/ui/" class="nav-link">UI Architecture</a>
+ 
     </nav>
   </header>
 </div>
@@ -490,10 +486,17 @@
           sticky, and is not part of the section flow.
         </li>
         <li>
+          Components carry a default bottom margin
+          (<code>var(--m__default-margin-bottom)</code>) and no top margin. This
+          keeps vertical stacking predictable and makes it easy to top-align
+          elements placed side by side.
+        </li>
+        <li>
           Spacing between sections or before headings is handled with explicit
-          spacer elements (<code>m__space</code>), not margins on content
-          elements. Content elements can't know what spacing is appropriate in
-          every context — the spacer is placed by whoever assembles the layout.
+          spacer elements (<code>.m__space</code>), not margins on content
+          elements. The idea behind this is that content elements can't know
+          what spacing is appropriate in every context — that's why the spacer
+          should be placed by whoever assembles the layout.
         </li>
       </ul>
     </div>
@@ -505,6 +508,88 @@
     <div class="m__space L"></div>
 
     <h2>Typography</h2>
+    <table>
+      <colgroup>
+        <col style="width: 15%" />
+        <col style="width: 60%" />
+        <col style="width: 25%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Sample</th>
+          <th>Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>p</code></td>
+          <td>
+            <p>
+              High-performance API that transforms spoken audio into sharp,
+              actionable insights: detecting fraud, surfacing social toxicity,
+              and spotlighting positive human behavior with impressive speed and
+              precision.
+            </p>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>strong</code></td>
+          <td>
+            <p>
+              High-performance API that transforms spoken audio into
+              <strong
+                >sharp, actionable insights: detecting fraud, surfacing social
+                toxicity,</strong
+              >
+              and spotlighting positive human behavior with impressive speed and
+              precision.
+            </p>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>a</code></td>
+          <td>
+            <p>
+              License: <a href="https://modulate.ai/contact">Proprietary</a>
+            </p>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>code</code></td>
+          <td>
+            <p>
+              Authenticate via the <code>Authorization</code> header using
+              <code>Basic</code> auth.
+            </p>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>h1</code></td>
+          <td><h1>Modulate Platform API (0.1.0)</h1></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>h2</code></td>
+          <td><h2>List all jobs associated with the account</h2></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>ul</code></td>
+          <td>
+            <ul>
+              <li>The username should be equal to your account ID.</li>
+              <li>The password should be equal to your API key.</li>
+            </ul>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </ids-nav-item>
 
