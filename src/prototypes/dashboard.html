@@ -1,0 +1,77 @@
+---
+pageTitle: Dashboard
+permalink: /prototypes/dashboard/
+---
+
+{% extends 'dashboard-layout.html' %} {% block content %}
+
+<div class="dashboard-wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <aside class="nav-sidebar">
+      <nav>
+        <a href="#" class="nav-sidebar__link active">Overview</a>
+        <a href="#" class="nav-sidebar__link">API Key</a>
+        <a href="#" class="nav-sidebar__link">API Docs</a>
+        <a href="#" class="nav-sidebar__link">Members</a>
+        <a href="#" class="nav-sidebar__link">Pricing</a>
+        <a href="#" class="nav-sidebar__link">Billing</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-content">
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <p class="stat-card__label">API Calls</p>
+          <p class="stat-card__value">84,210</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Active Members</p>
+          <p class="stat-card__value">12</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Current Plan</p>
+          <p class="stat-card__value">Pro</p>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Getting started</h2>
+        <p>
+          To start using the API, grab your <a href="#">API key</a> from the
+          settings page. Make sure to keep it secure and never expose it in
+          client-side code.
+        </p>
+        <p>
+          Check the <a href="#">API Docs</a> for a full reference of available
+          endpoints, request formats, and response schemas.
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Recent activity</h2>
+        <p>
+          Your last API call was made 2 minutes ago from
+          <a href="#">production</a>. Usage is within the plan limits — 84,210
+          of 100,000 requests used this month.
+        </p>
+        <p>
+          Approaching the limit? <a href="#">Upgrade your plan</a> to get
+          unlimited requests and priority support.
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Team</h2>
+        <p>
+          You have 12 active members on this workspace.
+          <a href="#">Invite a new member</a> or <a href="#">manage roles</a> in
+          the Members section.
+        </p>
+      </div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}
