@@ -1,0 +1,47 @@
+---
+pageTitle: API Keys
+permalink: /prototypes/api-keys/
+---
+
+{% extends 'prototype-layout.html' %} {% block content %}
+
+<div class="dashboard-wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <aside class="nav-sidebar">
+      <nav>{% include 'dashboard-nav-sidebar.html' %}</nav>
+    </aside>
+
+    <main class="dashboard-content">
+      <div class="dashboard-section">
+        <h2>API Keys</h2>
+        <p>
+          API keys authenticate your requests. Model keys provide access to
+          model inference endpoints. Console Admin keys can perform any console
+          action via the API. Console Read-Only keys can read console data but
+          not modify it. Key values are shown once at creation and cannot be
+          retrieved later.
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Active keys</h2>
+        <p>
+          No active API keys. Create your first key to start making API
+          requests.
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Inactive keys</h2>
+        <p>
+          Deactivated keys are listed here. They can no longer authenticate
+          requests but remain visible for reference.
+        </p>
+      </div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

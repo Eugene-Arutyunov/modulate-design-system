@@ -1,0 +1,70 @@
+---
+pageTitle: Models
+permalink: /prototypes/models/
+---
+
+{% extends 'prototype-layout.html' %} {% block content %}
+
+<div class="dashboard-wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <aside class="nav-sidebar">
+      <nav>{% include 'dashboard-nav-sidebar.html' %}</nav>
+    </aside>
+
+    <main class="dashboard-content">
+      <div class="dashboard-section">
+        <h2>Models</h2>
+        <p>
+          Browse available models, view usage statistics, and monitor request
+          activity. Select a model to see its overview, charts, and recent
+          requests.
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Velma-2 STT Batch</h2>
+        <p>
+          Velma 2's powerful and flexible batch transcription model, supporting
+          over 70 languages with features such as speaker diarization, accent
+          detection, emotion detection, PII/PHI tagging, and more.
+        </p>
+        <p>
+          Endpoint: <code>https://modulate-developer-apis.com/api/velma-2-stt-batch</code>
+        </p>
+        <p>
+          Type: batch. Accepted media formats: aac, aiff, flac, mov, mp3, mp4,
+          ogg, opus, wav, webm. Concurrency quota: 5 concurrent requests.
+          Monthly usage quota: 1,000 hours. Cost: $0.03 per hour.
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Velma-2 STT Batch — English Fast</h2>
+        <p>
+          English-only batch transcription with extremely high throughput and
+          automatic capitalization and punctuation. Opus format audio only.
+          Ideal for high-scale batch processing.
+        </p>
+        <p>
+          Endpoint: <code>https://modulate-developer-apis.com/api/velma-2-stt-batch-english-vfast</code>
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Velma-2 STT Streaming</h2>
+        <p>
+          Real-time streaming transcription via WebSocket with full
+          voice-native understanding: multilingual support, speaker
+          diarization, emotion, accent, and PII/PHI tagging.
+        </p>
+        <p>
+          Endpoint: <code>https://modulate-developer-apis.com/api/velma-2-stt-streaming</code>
+        </p>
+      </div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

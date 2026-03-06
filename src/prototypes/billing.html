@@ -1,0 +1,64 @@
+---
+pageTitle: Billing
+permalink: /prototypes/billing/
+---
+
+{% extends 'prototype-layout.html' %} {% block content %}
+
+<div class="dashboard-wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <aside class="nav-sidebar">
+      <nav>{% include 'dashboard-nav-sidebar.html' %}</nav>
+    </aside>
+
+    <main class="dashboard-content">
+      <div class="dashboard-section">
+        <h2>Billing</h2>
+        <p>
+          Credits fund your API usage. 1 credit = $0.01 USD, consumed based on
+          audio duration and model cost rate. Purchase credits via Stripe, apply
+          a credit code, or receive credits through an invite link. The billing
+          history below shows all credit additions to your account.
+        </p>
+      </div>
+
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <p class="stat-card__label">Credit Balance</p>
+          <p class="stat-card__value">1,000</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Lifetime Paid Spend</p>
+          <p class="stat-card__value">0</p>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Apply credit code</h2>
+        <p>
+          Enter a credit code to add credits to your balance.
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Purchase credits</h2>
+        <p>
+          100 API Credits — $1.00. 1,000 API Credits — $10.00. 10,000 API
+          Credits — $100.00.
+        </p>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Billing history</h2>
+        <p>
+          3/6/2026, 7:01:52 PM — new_account_grant — 1,000 credits — New
+          account credits.
+        </p>
+      </div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}
