@@ -7,9 +7,19 @@ Index of notable functional blocks for developer navigation. Add a short descrip
 ## Theme toggle
 
 **Script:** `src/assets/js/theme-toggle.js`  
-**Used in:** `src/includes/prototype-header.html` (toggle control), `src/includes/prototype-layout.html` (script tag).
+**Used in:** `src/includes/header.html` (toggle control), `src/includes/layout.html` (script tag).
 
-Switches between light and dark theme in the prototype header. Keeps `body` class `dark-mode` in sync with `localStorage` key `prototype-theme` (`'light'` / `'dark'`). The initial theme is applied by a small inline script right after `<body>` in the prototype layout so the correct theme is set before first paint (avoids flash).
+Switches between light and dark theme in the dashboard header. Supports multiple `.theme-toggle` elements (header + popover); all stay in sync. Keeps `body` class `dark-mode` in sync with `localStorage` key `prototype-theme` (`'light'` / `'dark'`). The initial theme is applied by a small inline script right after `<body>` in the prototype layout so the correct theme is set before first paint (avoids flash).
+
+---
+
+## Header user menu
+
+**Script:** `src/assets/js/header-menu.js`  
+**Markup:** `src/includes/header.html` (user trigger + popover).  
+**Styles:** `src/styles/dashboard/header.css` (`.prototype-header__user-*`, `.prototype-header__popover*`).
+
+Dropdown menu: trigger shows user name + chevron; click opens popover (Account link, Appearance + theme toggle, Log out). Popover aligned to right, below trigger with gap. On mobile, Dashboard/Playground links are hidden; user menu and theme toggle remain. Close on outside click or Escape. Theme toggle in popover and in header both bound by theme-toggle.js.
 
 ---
 
