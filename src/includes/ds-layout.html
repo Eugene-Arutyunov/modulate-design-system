@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{{ pageTitle if pageTitle else 'Modulate Design' }}</title>
+    <meta
+      name="description"
+      content="{{ pageDesc if pageDesc else 'Modulate UI library' }}" />
+    <meta property="og:image" content="/assets/IMG_7135.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="shortcut icon" href="/assets/favicon.png" />
+
+    <link rel="stylesheet" href="/bundle.css" />
+  </head>
+  <body class="ids modulate-design-system-tags">
+    {% include 'ds-header.html' %} {% block content %}{% endblock %} {% include
+    'ds-footer.html' %}
+
+    <script src="/assets/js/lib/photoswipe.umd.min.js"></script>
+    <script src="/assets/js/lib/photoswipe-lightbox.umd.min.js"></script>
+    <script type="module" src="/assets/js/main.js"></script>
+  </body>
+</html>

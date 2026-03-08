@@ -1,25 +1,28 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>{{ pageTitle if pageTitle else 'Modulate Design' }}</title>
+    <title>{{ pageTitle if pageTitle else 'Prototype' }}</title>
     <meta
       name="description"
       content="{{ pageDesc if pageDesc else 'Modulate UI library' }}" />
-    <meta property="og:image" content="/assets/IMG_7135.jpg" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="shortcut icon" href="/assets/favicon.png" />
+    <link rel="shortcut icon" href="/assets/favicon-product.png" />
 
     <link rel="stylesheet" href="/bundle.css" />
   </head>
-  <body class="ids modulate-design-system-tags">
-    {% include 'header.html' %} {% block content %}{% endblock %} {% include
-    'footer.html' %}
-
-    <script src="/assets/js/lib/photoswipe.umd.min.js"></script>
-    <script src="/assets/js/lib/photoswipe-lightbox.umd.min.js"></script>
-    <script type="module" src="/assets/js/main.js"></script>
+  <body class="ids">
+    <script>
+      (function () {
+        var theme = localStorage.getItem('prototype-theme');
+        if (theme !== 'light') {
+          document.body.classList.add('dark-mode');
+        }
+      })();
+    </script>
+    {% include 'header.html' %}
+    {% block content %}{% endblock %}
+    <script src="/assets/js/theme-toggle.js"></script>
   </body>
 </html>
