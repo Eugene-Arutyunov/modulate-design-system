@@ -1,16 +1,18 @@
 (function () {
   var KEY = 'prototype-theme';
-  var btn = document.querySelector('.theme-toggle');
-  if (!btn) return;
+  var btns = document.querySelectorAll('.theme-toggle');
+  if (!btns.length) return;
 
-  function updateToggle() {
+  function updateToggles() {
     var isDark = document.body.classList.contains('dark-mode');
-    btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
+    btns.forEach(function (btn) {
+      btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
+    });
   }
 
-  updateToggle();
+  updateToggles();
 
-  btn.addEventListener('click', function () {
+  function handleClick() {
     var isDark = document.body.classList.contains('dark-mode');
     if (isDark) {
       document.body.classList.remove('dark-mode');
@@ -19,6 +21,10 @@
       document.body.classList.add('dark-mode');
       localStorage.setItem(KEY, 'dark');
     }
-    updateToggle();
+    updateToggles();
+  }
+
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', handleClick);
   });
 })();

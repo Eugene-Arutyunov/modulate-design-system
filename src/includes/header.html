@@ -9,17 +9,118 @@
       >
       <a href="#" class="prototype-header__link">Playground</a>
     </nav>
-    <div class="prototype-header__theme">
+    <div class="prototype-header__user-wrap">
       <button
         type="button"
-        class="theme-toggle"
-        role="switch"
-        aria-checked="true"
-        aria-label="Тёмная тема">
-        <span class="theme-toggle__track">
-          <span class="theme-toggle__thumb"></span>
+        class="prototype-header__user-trigger"
+        id="header-user-trigger"
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="User menu">
+        <span class="prototype-header__user-name">Eugene Arutyunov</span>
+        <span class="prototype-header__user-chevron" aria-hidden="true">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2">
+            <path d="M2 4.5l4 4 4-4" />
+          </svg>
         </span>
       </button>
+      <div
+        class="prototype-header__popover"
+        id="header-user-popover"
+        role="menu"
+        aria-labelledby="header-user-trigger"
+        hidden>
+        <a
+          href="/dashboard/account/"
+          class="prototype-header__popover-user"
+          role="menuitem">
+          <span class="prototype-header__popover-name">Eugene Arutyunov</span>
+          <span class="prototype-header__popover-email">e@intuition.team</span>
+        </a>
+        <nav class="prototype-header__popover-nav" aria-label="Main">
+          <a href="#" class="prototype-header__popover-link" role="menuitem"
+            >Playground</a
+          >
+          <a
+            href="/dashboard/overview/"
+            class="prototype-header__popover-link"
+            role="menuitem"
+            >Dashboard</a
+          >
+          <a
+            href="/dashboard/api-keys/"
+            class="prototype-header__popover-link"
+            role="menuitem"
+            >API Keys</a
+          >
+          <a
+            href="/dashboard/models/"
+            class="prototype-header__popover-link"
+            role="menuitem"
+            >Models</a
+          >
+          <a
+            href="/dashboard/documentation/"
+            class="prototype-header__popover-link"
+            role="menuitem"
+            >Documentation</a
+          >
+          <a
+            href="/dashboard/usage/"
+            class="prototype-header__popover-link"
+            role="menuitem"
+            >Usage</a
+          >
+          <a
+            href="/dashboard/billing/"
+            class="prototype-header__popover-link"
+            role="menuitem"
+            >Billing</a
+          >
+          <a
+            href="/dashboard/account/"
+            class="prototype-header__popover-link"
+            role="menuitem"
+            >Account</a
+          >
+          <a
+            href="/dashboard/organization/"
+            class="prototype-header__popover-link"
+            role="menuitem"
+            >Organization</a
+          >
+          <a href="/" class="prototype-header__popover-link" role="menuitem"
+            >←</a
+          >
+        </nav>
+        <div class="prototype-header__popover-appearance">
+          <span class="prototype-header__popover-appearance-label"
+            >Appearance</span
+          >
+          <button
+            type="button"
+            class="theme-toggle"
+            role="switch"
+            aria-checked="true"
+            aria-label="Тёмная тема">
+            <span class="theme-toggle__track">
+              <span class="theme-toggle__thumb"></span>
+            </span>
+          </button>
+        </div>
+        <button
+          type="button"
+          class="prototype-header__popover-logout"
+          role="menuitem">
+          Log out
+        </button>
+      </div>
     </div>
   </div>
 </header>
