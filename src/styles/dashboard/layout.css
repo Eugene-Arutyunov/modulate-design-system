@@ -37,9 +37,15 @@ aside.nav-sidebar {
   }
 }
 
+.m__card {
+  background-color: var(--m__bg-surface-color);
+  border-radius: var(--m__card-radius);
+  padding: var(--m__card-padding);
+}
+
 .dashboard-content {
   & .dashboard-section {
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
 
     & h2 {
       font-size: 1rem;
@@ -52,7 +58,6 @@ aside.nav-sidebar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
     gap: 0.5rem;
-    margin-bottom: 2rem;
 
     @media (width < 767px) {
       grid-template-columns: 1fr;
@@ -61,8 +66,8 @@ aside.nav-sidebar {
 
   & .stat-card {
     background-color: var(--m__bg-surface-color);
-    border-radius: 0.75rem;
-    padding: 1rem 1rem;
+    border-radius: var(--m__card-radius);
+    padding: var(--m__card-padding);
 
     & .stat-card__label {
       font-size: 0.75rem;

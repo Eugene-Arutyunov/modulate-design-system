@@ -45,21 +45,42 @@
   }
 }
 
-/* UI Structure Visualizer */
-.ui-structure-container {
-  font-family: monospace;
-  font-size: 0.7em;
-  line-height: 1.3;
-  white-space: pre;
-}
+/* Docs component tables (Layout, Typography, etc.) */
+.docs-component-table {
+  border-spacing: 0;
+  background-color: inherit;
 
-.ui-route-block {
-  margin: 0 0 1em 0;
-  padding: 0;
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  white-space: pre;
-  background: none;
-  border: none;
+  & thead {
+    background-color: inherit;
+  }
+
+  & tr {
+    background-color: inherit;
+
+    & th {
+      text-align: left;
+      font-size: 0.75em;
+      font-weight: 400;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--m__text-color) 30%, transparent);
+      padding: 0 0.5em 0.3em 0;
+      background-color: var(--m__background-color);
+    }
+
+    & td {
+      padding: 0.8em 0.5em 1em 0;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--m__text-color) 12%, transparent);
+      vertical-align: top;
+    }
+
+    & td:nth-child(2),
+    & th:nth-child(2) {
+      padding-right: 2em;
+    }
+  }
+
+  & tbody tr:last-child td {
+    border-bottom: none;
+  }
 }

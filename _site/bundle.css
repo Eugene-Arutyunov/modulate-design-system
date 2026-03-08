@@ -184,6 +184,11 @@ body {
   --m__line-height-base: 1.3;
 }
 
+:root {
+  --m__card-radius: 0.75rem;
+  --m__card-padding: 1rem;
+}
+
 .m__space {
   height: var(--m__space-m);
 
@@ -1491,23 +1496,121 @@ div.pswp__img--placeholder,
   }
 }
 
-/* UI Structure Visualizer */
-.ui-structure-container {
-  font-family: monospace;
-  font-size: 0.7em;
-  line-height: 1.3;
-  white-space: pre;
+/* Docs component tables (Layout, Typography, etc.) */
+.docs-component-table {
+  border-spacing: 0;
+  background-color: inherit;
+
+  & thead {
+    background-color: inherit;
+  }
+
+  & tr {
+    background-color: inherit;
+
+    & th {
+      text-align: left;
+      font-size: 0.75em;
+      font-weight: 400;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--m__text-color) 30%, transparent);
+      padding: 0 0.5em 0.3em 0;
+      background-color: var(--m__background-color);
+    }
+
+    & td {
+      padding: 0.8em 0.5em 1em 0;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--m__text-color) 12%, transparent);
+      vertical-align: top;
+    }
+
+    & td:nth-child(2),
+    & th:nth-child(2) {
+      padding-right: 2em;
+    }
+  }
+
+  & tbody tr:last-child td {
+    border-bottom: none;
+  }
 }
 
-.ui-route-block {
-  margin: 0 0 1em 0;
-  padding: 0;
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  white-space: pre;
-  background: none;
-  border: none;
+/* UI Visualizer — semantic structure, extend via .ui-viz__* */
+.ui-viz {
+  font-size: 0.9rem;
+  line-height: 1.4;
+
+  & .ui-viz__route {
+    margin-bottom: 1.5em;
+  }
+
+  & .ui-viz__route-title {
+    margin: 0 0 0.25em 0;
+    font-size: 1em;
+    font-weight: 600;
+  }
+
+  & .ui-viz__route-path {
+    display: block;
+    margin: 0 0 0.5em 0;
+    font-size: 0.85em;
+    color: color-mix(
+      in srgb,
+      var(--m__text-color, currentColor) 70%,
+      transparent
+    );
+  }
+
+  & .ui-viz__sections {
+    margin: 0;
+    list-style: disc;
+  }
+
+  & .ui-viz__section {
+    margin-bottom: 0.25em;
+  }
+
+  & .ui-viz__section--group {
+    & .ui-viz__section-frame {
+      display: inline-block;
+      margin-top: 0.25em;
+      padding: 0.35em 0.6em;
+      border: 1px solid
+        color-mix(in srgb, var(--m__text-color, currentColor) 35%, transparent);
+      border-radius: 0.35em;
+    }
+
+    & .ui-viz__section-frame-list {
+      margin: 0;
+      list-style: disc;
+    }
+
+    & .ui-viz__section-frame-item {
+      margin-bottom: 0.1em;
+    }
+  }
+
+  & .ui-viz__section--content {
+    color: color-mix(
+      in srgb,
+      var(--m__text-color, currentColor) 75%,
+      transparent
+    );
+  }
+
+  & .ui-viz__states {
+    color: color-mix(
+      in srgb,
+      var(--m__text-color, currentColor) 70%,
+      transparent
+    );
+    font-size: 0.9em;
+  }
+
+  & .ui-viz__error {
+    color: rgba(var(--ids__UI-error-RGB), 1);
+  }
 }
 
 :root {
@@ -1574,12 +1677,33 @@ div.pswp__img--placeholder,
     flex-shrink: 0;
   }
 
+  & .prototype-header__right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  & .prototype-header__links {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  & .prototype-header__link {
+    color: var(--m__text-color);
+    text-decoration: none;
+    font-size: 0.9em;
+  }
+
+  & .prototype-header__link:hover {
+    text-decoration: underline;
+  }
+
   & .prototype-header__icon {
     display: block;
     width: 1.35rem;
     height: 1.35rem;
     color: var(--m__text-color);
-    border: 1px solid color-mix(in srgb, var(--m__text-color) 50%, transparent);
+    background-color: var(--m__bg-surface-color);
 
     border-radius: 50%;
   }
@@ -1658,9 +1782,15 @@ aside.nav-sidebar {
   }
 }
 
+.m__card {
+  background-color: var(--m__bg-surface-color);
+  border-radius: var(--m__card-radius);
+  padding: var(--m__card-padding);
+}
+
 .dashboard-content {
   & .dashboard-section {
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
 
     & h2 {
       font-size: 1rem;
@@ -1673,7 +1803,6 @@ aside.nav-sidebar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
     gap: 0.5rem;
-    margin-bottom: 2rem;
 
     @media (width < 767px) {
       grid-template-columns: 1fr;
@@ -1682,8 +1811,8 @@ aside.nav-sidebar {
 
   & .stat-card {
     background-color: var(--m__bg-surface-color);
-    border-radius: 0.75rem;
-    padding: 1rem 1rem;
+    border-radius: var(--m__card-radius);
+    padding: var(--m__card-padding);
 
     & .stat-card__label {
       font-size: 0.75rem;
@@ -1700,4 +1829,3 @@ aside.nav-sidebar {
     }
   }
 }
-

@@ -16,9 +16,11 @@ Switches between light and dark theme in the prototype header. Keeps `body` clas
 ## UI structure visualizer
 
 **Script:** `src/assets/js/ui-visualizer.js`  
-**Page:** `src/ui.html` (UI Architecture).
+**Data:** `ui.yaml` (root: array of routes, or `{ version?, routes }`). Every section is a node `section:`; inside it either one **component**, or several (**components**), or **content** (named block; body in includes). Data reflects dashboard pages in `src/dashboard/`.  
+**Page:** `src/ui.html` (UI Architecture).  
+**Styles:** `.ui-viz` + `.ui-viz__*` in `src/styles/ui-visualizer.css`.
 
-Renders the UI architecture / structure from YAML. Loaded only on the UI page.
+Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Semantic DOM (article, ul, li) and stable class namespace for easy extension of data format, layout, and styles.
 
 ---
 

@@ -1,57 +1,102 @@
-- route: /login
-  title: Login
+- route: /dashboard/overview/
+  title: Overview
   sections:
-    - component: LoginForm
+    - section:
+        components:
+          - credit-balance-stat
+          - credit-balance-over-time
+          - all-time-credits-used
+          - all-time-hours
+    - section:
+        component: usage-by-model
+    - section:
+        component: requests-by-status
+    - section:
+        component: recent-usage
+    - section:
+        components:
+          - organization
+          - users
 
-- route: /signup
-  title: Signup
+- route: /dashboard/usage/
+  title: Usage
   sections:
-    - component: EmailSignup
-      states:
-        - email-sent
-    - component: EmailVerification
-      states:
-        - verified
-    - component: PasswordCreation
+    - section:
+        content: usage-log
+    - section:
+        content: filters
+    - section:
+        content: request-log
 
-- route: /dashboard
-  title: Dashboard
-  sections:
-    - component: ApiKeySection
-    - component: ApiKeyRegenerate
-    - component: CreditsSection
-    - component: CreditsRedeem
-    - component: CreditsSpent
-    - component: CreditsOutOfCredits
-      states:
-        - empty
-    - component: CreditsBuy
-    - component: ApiDocsLink
-    - component: PricingLink
-
-- route: /playground
-  title: Playground
-  sections:
-    - component: InputConfig
-    - component: OutputConfig
-
-- route: /account
+- route: /dashboard/account/
   title: Account
   sections:
-    - component: ChangePassword
-    - component: AccountDeactivation
-      states:
-        - confirm
+    - section:
+        content: account-settings
+    - section:
+        content: display-name
+    - section:
+        content: email
+    - section:
+        content: change-password
+    - section:
+        content: training-data-opt-out
+    - section:
+        content: delete-account
 
-- route: /billing
+- route: /dashboard/billing/
   title: Billing
   sections:
-    - component: PaymentMethodsList
-    - component: ConnectPaymentMethod
-    - component: PaymentMethodFailure
-      states:
-        - failure
-    - component: UpdatePaymentMethod
-    - component: RemovePaymentMethod
-      states:
-        - confirm
+    - section:
+        content: billing-intro
+    - section:
+        components:
+          - StatCard
+    - section:
+        content: apply-credit-code
+    - section:
+        content: purchase-credits
+    - section:
+        content: billing-history
+
+- route: /dashboard/api-keys/
+  title: API Keys
+  sections:
+    - section:
+        content: api-keys-intro
+    - section:
+        content: active-keys
+    - section:
+        content: inactive-keys
+
+- route: /dashboard/organization/
+  title: Organization
+  sections:
+    - section:
+        content: organization-intro
+    - section:
+        content: organization-details
+
+- route: /dashboard/documentation/
+  title: Documentation
+  sections:
+    - section:
+        content: documentation-intro
+    - section:
+        content: velma-models
+    - section:
+        content: feature-comparison
+    - section:
+        content: auth-rate-limits
+
+- route: /dashboard/models/
+  title: Models
+  sections:
+    - section:
+        content: models-intro
+    - section:
+        content: velma-stt-batch
+    - section:
+        content: velma-stt-batch-english-fast
+    - section:
+        content: velma-stt-streaming

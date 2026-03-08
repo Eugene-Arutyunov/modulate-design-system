@@ -1,0 +1,44 @@
+---
+pageTitle: Overview
+permalink: /dashboard/overview/
+---
+
+{% extends 'layout.html' %} {% block content %}
+
+<div class="dashboard-wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <aside class="nav-sidebar">
+      <nav>{% include 'dashboard-nav-sidebar.html' %}</nav>
+    </aside>
+
+    <main class="dashboard-content">
+      <section
+        class="dashboard-section dashboard-section--group"
+        aria-label="Stats">
+        <div class="dashboard-stats">
+          {% include 'dashboard/overview/credit-balance-stat.html' %} {% include
+          'dashboard/overview/credit-balance-over-time.html' %} {% include
+          'dashboard/overview/all-time-credits-used.html' %} {% include
+          'dashboard/overview/all-time-hours.html' %}
+        </div>
+      </section>
+
+      {% include 'dashboard/overview/usage-by-model.html' %} {% include
+      'dashboard/overview/requests-by-status.html' %} {% include
+      'dashboard/overview/recent-usage.html' %}
+
+      <section
+        class="dashboard-section dashboard-section--group"
+        aria-label="Organization and users">
+        <div class="dashboard-stats">
+          {% include 'dashboard/overview/organization.html' %} {% include
+          'dashboard/overview/users.html' %}
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

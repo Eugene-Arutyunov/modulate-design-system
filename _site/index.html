@@ -26,8 +26,9 @@
  
       <div class="nav-spacer"></div>
        <a href="/ui-playground/" class="nav-link">Playground</a>
-   <a href="/prototype/dashboard/" class="nav-link">Prototype</a>
-   <a href="/ui/" class="nav-link">UI Architecture</a>
+   <a href="/dashboard/overview/" class="nav-link">Prototype</a>
+   <a href="/ui/" class="nav-link">UI
+      Architecture</a>
  
     </nav>
   </header>
@@ -471,20 +472,59 @@
   </div>
 </ids-nav-item>
 
-<ids-nav-item id="layout" label="Layout & Spacing">
+<ids-nav-item id="layout" label="Layout">
   <div class="m__wrapper">
     <div class="m__space L"></div>
 
-    <h2>Layout & Spacing</h2>
+    <h2>Layout</h2>
+    <div class="m__text-width">
+      <p>
+        Pages are composed of stacked full-width sections, not column grids.
+        Each section is independently sized and self-contained — they can be
+        reordered without side effects. Complex layouts live inside sections,
+        not across them. Navigation is an exception: it may be fixed or sticky,
+        and is not part of the section flow.
+      </p>
+    </div>
+    <table class="docs-component-table">
+      <colgroup>
+        <col style="width: 15%" />
+        <col style="width: 60%" />
+        <col style="width: 25%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Sample</th>
+          <th>Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>.m__card</code></td>
+          <td>
+            <div class="m__card">
+              Card with surface background, rounded corners, and token-based
+              padding.
+            </div>
+          </td>
+          <td>
+            <code>--m__card-radius</code><br />
+            <code>--m__card-padding</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="spacing" label="Spacing">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Spacing</h2>
     <div class="m__text-width">
       <ul>
-        <li>
-          Pages are composed of stacked full-width sections, not column grids.
-          Each section is independently sized and self-contained — they can be
-          reordered without side effects. Complex layouts live inside sections,
-          not across them. Navigation is an exception: it may be fixed or
-          sticky, and is not part of the section flow.
-        </li>
         <li>
           Components carry a default bottom margin
           (<code>var(--m__default-margin-bottom)</code>) and no top margin. This
@@ -508,7 +548,7 @@
     <div class="m__space L"></div>
 
     <h2>Typography</h2>
-    <table>
+    <table class="docs-component-table">
       <colgroup>
         <col style="width: 15%" />
         <col style="width: 60%" />
