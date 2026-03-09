@@ -30,7 +30,11 @@
   --m__text-color: rgb(180, 180, 190);
   --m__text-link-color: rgb(180, 180, 190);
   --m__text-hover-color: rgb(255, 255, 255);
-  --m__text-caption-color: rgb(128, 128, 128);
+  --m__text-caption-color: color-mix(
+    in srgb,
+    var(--m__text-color) 65%,
+    var(--m__bg-surface-color)
+  );
   --m__text-inverted-color: rgb(20, 20, 30);
   --m__text-accent-color: rgb(180, 180, 190);
 
@@ -42,8 +46,16 @@
   --m__bg-mark-color: rgb(255, 200, 29);
 
   /* UI */
-  --m__ui-control-color: var(--m__bg-surface-color);
-  --m__ui-border-color: var(--m__bg-surface-color);
+  --m__ui-control-color: color-mix(
+    in srgb,
+    var(--m__text-color) 15%,
+    var(--m__bg-surface-color)
+  );
+  --m__ui-border-color: color-mix(
+    in srgb,
+    var(--m__text-color) 15%,
+    var(--m__bg-surface-color)
+  );
   --m__ui-error-color: rgb(255, 53, 84);
   --m__ui-success-color: rgb(21, 207, 135);
 

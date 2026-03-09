@@ -1,6 +1,8 @@
 (function () {
   var trigger = document.getElementById('header-user-trigger');
   var popover = document.getElementById('header-user-popover');
+  var appearanceItem = popover?.querySelector('.prototype-header__popover-appearance');
+  var appearanceToggle = appearanceItem?.querySelector('.theme-toggle');
   if (!trigger || !popover) return;
 
   function open() {
@@ -37,4 +39,17 @@
     if (popover.hidden) return;
     close();
   });
+
+  if (appearanceItem && appearanceToggle) {
+    appearanceItem.addEventListener('click', function (e) {
+      if (e.target === appearanceToggle || appearanceToggle.contains(e.target)) return;
+      appearanceToggle.click();
+    });
+
+    appearanceItem.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      appearanceToggle.click();
+    });
+  }
 })();
