@@ -27,16 +27,20 @@ function waitForJsYaml(maxAttempts = 50, interval = 100) {
 /**
  * Normalizes raw YAML into a fixed shape. Extend here when ui.yaml format changes.
  * Supports: array of routes (legacy) or { version?, routes: [...] }.
- * Each section is { section: { component? | components? | content? } }. Normalized
- * section has type: 'component' | 'group' | 'content' and corresponding payload.
+ * Each section is { section: { component? | components? | text-content? } }.
+ * Normalized section has type: 'component' | 'group' | 'text-content' and the
+ * corresponding payload.
  */
 function normalizeSection(item) {
   const s = item?.section ?? item;
   if (!s || typeof s !== 'object') {
     return { type: 'component', component: '', states: [] };
   }
-  if (s.content !== undefined && s.components === undefined && s.group === undefined) {
-    return { type: 'content', name: typeof s.content === 'string' ? s.content : '' };
+  if (s['text-content'] !== undefined && s.components === undefined && s.group === undefined) {
+    return {
+      type: 'text-content',
+      name: typeof s['text-content'] === 'string' ? s['text-content'] : '',
+    };
   }
   if (s.components !== undefined) {
     return { type: 'group', components: Array.isArray(s.components) ? s.components : [] };
@@ -123,8 +127,8 @@ function renderUIStructure(data) {
         });
         frame.appendChild(subList);
         li.appendChild(frame);
-      } else if (section.type === 'content') {
-        li.textContent = `Content: ${section.name}`;
+      } else if (section.type === 'text-content') {
+        li.textContent = `Text content: ${section.name}`;
       }
       list.appendChild(li);
     });

@@ -76,9 +76,22 @@ block content %}
       <p>
         Pages are composed of stacked full-width sections, not column grids.
         Each section is independently sized and self-contained — they can be
-        reordered without side effects. Complex layouts live inside sections,
-        not across them. Navigation is an exception: it may be fixed or sticky,
-        and is not part of the section flow.
+        reordered without side effects. Complex layouts live
+        <ids-footnote-link>inside</ids-footnote-link> sections, not across them.
+      </p>
+      <ids-footnote>
+        <p>
+          Navigation is an exception. It sits outside the section flow and is
+          not counted as part of it.
+        </p>
+      </ids-footnote>
+      <p>
+        <em>Draft.</em> Sections currently come in two types:
+        <strong>Card</strong> and <strong>Text-content</strong>. A Card contains
+        an interactive component or a purpose-designed widget for presenting
+        data. Text-content contains unstructured HTML text with shared styles
+        for selected tags; see the Typography section for the supported text
+        elements.
       </p>
     </div>
     <table class="docs-component-table">
@@ -99,14 +112,37 @@ block content %}
           <td><code>.m__card</code></td>
           <td>
             <div class="m__card">
-              Card with surface background, rounded corners, and token-based
-              padding.
+              This is for interactive components and purpose-designed widgets
+              that display data.
             </div>
           </td>
           <td>
             <code>--m__card-radius</code><br />
             <code>--m__card-padding</code>
           </td>
+        </tr>
+        <tr>
+          <td><code>.m__text-content</code></td>
+          <td>
+            <div class="m__text-content">
+              <h4>Text content section</h4>
+              <p>
+                This is for documentation-style copy with
+                <a href="https://modulate.ai">links</a>, inline
+                <code>code</code>, headings, and lists, when the content is
+                mostly unstructured HTML rather than a purpose-built UI widget.
+              </p>
+              <p>Supported tags include:</p>
+              <ul>
+                <li><code>strong</code> for emphasis</li>
+                <li><code>a</code> for links</li>
+                <li><code>h1...h6</code>for headings</li>
+                <li><code>ul li</code> and <code>ol li</code> for lists</li>
+                <li><code>code</code> for inline code</li>
+              </ul>
+            </div>
+          </td>
+          <td></td>
         </tr>
       </tbody>
     </table>

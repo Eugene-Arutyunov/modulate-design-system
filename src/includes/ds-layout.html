@@ -14,10 +14,32 @@
 
     <link rel="stylesheet" href="/bundle.css" />
   </head>
-  <body class="ids modulate-design-system-tags">
+  <body
+    class="ids m__text-content"
+    data-theme-storage-key="design-system-theme">
+    <script>
+      (function () {
+        var key = document.body.dataset.themeStorageKey;
+        var theme = localStorage.getItem(key);
+        if (theme !== "light") {
+          document.body.classList.add("dark-mode");
+        }
+      })();
+    </script>
+    <button
+      type="button"
+      class="theme-toggle ds-theme-toggle"
+      role="switch"
+      aria-checked="true"
+      aria-label="Dark theme">
+      <span class="theme-toggle__track">
+        <span class="theme-toggle__thumb"></span>
+      </span>
+    </button>
     {% include 'ds-header.html' %} {% block content %}{% endblock %} {% include
     'ds-footer.html' %}
 
+    <script src="/assets/js/theme-toggle.js"></script>
     <script src="/assets/js/lib/photoswipe.umd.min.js"></script>
     <script src="/assets/js/lib/photoswipe-lightbox.umd.min.js"></script>
     <script type="module" src="/assets/js/main.js"></script>

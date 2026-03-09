@@ -1,5 +1,5 @@
 (function () {
-  var KEY = 'prototype-theme';
+  var KEY = document.body.dataset.themeStorageKey || 'prototype-theme';
   var btns = document.querySelectorAll('.theme-toggle');
   if (!btns.length) return;
 

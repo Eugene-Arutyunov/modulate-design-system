@@ -12,16 +12,18 @@
 
     <link rel="stylesheet" href="/bundle.css" />
   </head>
-  <body class="ids">
+  <body class="ids" data-theme-storage-key="prototype-theme">
     <script>
       (function () {
-        var theme = localStorage.getItem("prototype-theme");
+        var key = document.body.dataset.themeStorageKey;
+        var theme = localStorage.getItem(key);
         if (theme !== "light") {
           document.body.classList.add("dark-mode");
         }
       })();
     </script>
-    {% include 'header.html' %} {% block content %}{% endblock %}
+    {% include 'header.html' %} {% block content %}{% endblock %} {% include
+    'footer.html' %}
     <script src="/assets/js/theme-toggle.js"></script>
     <script src="/assets/js/header-menu.js"></script>
   </body>
