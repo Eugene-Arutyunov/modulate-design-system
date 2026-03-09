@@ -1,0 +1,119 @@
+.m__text-content {
+  & p {
+    font-size: var(--m__font-size-m);
+    margin: 0 0 var(--m__default-margin-bottom);
+  }
+
+  & strong,
+  & b {
+    font-weight: 600;
+  }
+
+  & a {
+    color: var(--m__text-link-color);
+    text-decoration: underline;
+    will-change: color;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-skip-ink: none;
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--m__text-link-color) 20%,
+      transparent
+    );
+    transition:
+      color 0.5s ease,
+      text-decoration 0.5s ease;
+
+    &:hover {
+      color: var(--m__text-hover-color);
+      text-decoration-color: color-mix(
+        in srgb,
+        var(--m__text-hover-color) 20%,
+        transparent
+      );
+      transition:
+        color 0s ease,
+        text-decoration 0s ease;
+    }
+  }
+
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    margin: 0 0 var(--m__default-margin-bottom);
+    font-weight: var(--m__font-weight-bold);
+    line-height: var(--m__line-height-base);
+  }
+
+  & h1 {
+    font-size: var(--m__font-size-xxxl);
+  }
+
+  & h2 {
+    font-size: var(--m__font-size-xxl);
+  }
+
+  & h3 {
+    font-size: var(--m__font-size-xl);
+  }
+
+  & h4 {
+    font-size: var(--m__font-size-l);
+  }
+
+  & h5 {
+    font-size: var(--m__font-size-m);
+  }
+
+  & h6 {
+    font-size: var(--m__font-size-s);
+    text-transform: uppercase;
+  }
+
+  & code {
+    font-size: var(--m__font-size-s);
+    font-family: "Inter";
+    letter-spacing: 0.02em;
+    font-weight: var(--m__font-weight-medium);
+    padding: 0.1rem 0.25rem;
+    border-radius: 0.2rem;
+    color: var(--m__code-color);
+    border: 1px solid color-mix(in srgb, var(--m__code-color) 10%, transparent);
+    background: color-mix(in srgb, var(--m__code-color) 10%, transparent);
+  }
+
+  & ul,
+  & ol {
+    margin: 0 0 var(--m__default-margin-bottom) 0;
+    padding: 0;
+
+    & li {
+      position: relative;
+      margin-bottom: var(--m__default-margin-bottom);
+    }
+  }
+
+  & ol {
+    & li {
+      list-style: decimal inside none;
+    }
+  }
+
+  & ul {
+    & li {
+      list-style-type: none;
+      padding-left: 0.8rem;
+      margin-bottom: var(--m__default-margin-bottom);
+
+      &:before {
+        position: absolute;
+        left: 0;
+        content: "⋅ ";
+      }
+    }
+  }
+}
