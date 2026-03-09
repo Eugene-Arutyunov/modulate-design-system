@@ -23,15 +23,28 @@ aside.nav-sidebar {
   }
 
   & .nav-sidebar__link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
     padding: 0.45rem 0.75rem;
     border-radius: 0.5rem;
     color: var(--m__text-color);
     text-decoration: none;
     font-size: 0.9rem;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+    & .nav-sidebar__link-icon {
+      width: 1rem;
+      height: 1rem;
+      color: currentColor;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
 
     &:hover {
       background-color: var(--m__bg-surface-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
 
     &.active {
@@ -57,20 +70,35 @@ aside.nav-sidebar {
   font: inherit;
   cursor: pointer;
   text-decoration: none;
+  transition: background-color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
 
   &:hover {
     background-color: var(--m__bg-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 }
 
 .dashboard-content {
+  & .dashboard-page-title {
+    margin: 0 0 1rem;
+    font-size: var(--m__font-size-xl);
+    font-weight: var(--m__font-weight-bold);
+  }
+
   & .dashboard-section {
     margin-bottom: 0.5rem;
 
     & h2 {
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: var(--m__font-size-m);
+      font-weight: var(--m__font-weight-bold);
       margin: 0 0 1rem 0;
+    }
+
+    & .dashboard-section__caption {
+      margin: -0.5rem 0 0.75rem;
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
     }
   }
 
@@ -85,12 +113,13 @@ aside.nav-sidebar {
   }
 
   & .stat-card {
+    margin-bottom: var(--m__default-margin-bottom);
     background-color: var(--m__bg-surface-color);
     border-radius: var(--m__card-radius);
     padding: var(--m__card-padding);
 
     & .stat-card__label {
-      font-size: 0.75rem;
+      font-size: var(--m__font-size-s);
       color: var(--m__text-caption-color);
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -98,9 +127,52 @@ aside.nav-sidebar {
     }
 
     & .stat-card__value {
-      font-size: 1.6rem;
-      font-weight: 600;
+      font-size: var(--m__font-size-xxl);
+      font-weight: var(--m__font-weight-bold);
       margin: 0;
+    }
+
+    & .stat-card__caption {
+      margin: 0 0 0.75rem;
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
+    }
+
+    & .stat-card__meta-list {
+      margin-top: 1rem;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    & .stat-card__meta-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 0;
+      font-size: var(--m__font-size-s);
+    }
+
+    & .stat-card__meta-label {
+      color: var(--m__text-caption-color);
+    }
+
+    & .stat-card__meta-value {
+      font-weight: var(--m__font-weight-bold);
+    }
+
+    & .stat-card__chart-placeholder {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    & .stat-card__chart-line {
+      display: block;
+      height: 1px;
+      background-color: color-mix(
+        in srgb,
+        var(--m__text-color) 20%,
+        transparent
+      );
     }
   }
 }

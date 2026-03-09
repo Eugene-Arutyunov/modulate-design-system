@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "prebuild": "rm -rf _site",
+    "icons:build": "node scripts/generate-svg-sprite.js",
+    "prebuild": "node scripts/generate-svg-sprite.js && rm -rf _site",
     "build": "eleventy",
-    "build:clean": "eleventy",
+    "build:clean": "node scripts/generate-svg-sprite.js && eleventy",
+    "predev": "node scripts/generate-svg-sprite.js",
     "dev": "eleventy --serve"
   },
   "dependencies": {

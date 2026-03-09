@@ -44,29 +44,46 @@ Shared tag styling for unstructured HTML text blocks: headings, paragraphs, link
 
 ---
 
+## Interaction timing tokens
+
+**Styles:** `src/styles/animations.css`.
+
+Shared timing tokens for hover behavior. The system defines instant hover, animated unhover, and shared easing as tokens, while leaving the exact transitioned properties up to the component author.
+
+---
+
+## SVG icon sprite flow
+
+**Source:** `src/assets/images/svg-icons-source/*.svg`  
+**Build script:** `scripts/generate-svg-sprite.js`  
+**Generated include:** `src/includes/assets/svg-icons-sprite.html`  
+**Usage docs:** `SVG-ICON-SPRITE.md`.
+
+Raw SVG files are normalized into one hidden sprite include. The generator removes internal SVG styles and presentational attributes, drops helper shapes with `fill: none`, assigns symbol ids from filenames, and sets icons up for `currentColor`. Layouts include the sprite globally, and icons are rendered via `<use href="#icon-name">`.
+
+---
+
+## Dashboard navigation icons
+
+**Markup:** `src/includes/dashboard-nav-sidebar.html`, `src/includes/header.html`  
+**Styles:** `src/styles/dashboard/layout.css`, `src/styles/dashboard/header.css`.
+
+Dashboard page navigation in the prototype uses the shared SVG sprite for page icons. The prototype header logo also uses sprite symbol `#mod-icon`. Current page-icon mapping is explicit in markup so each link stays easy to read and reorder.
+
+---
+
+## Behaviors dashboard page
+
+**Page:** `src/dashboard/behaviors.html`  
+**UI structure:** `ui.yaml`.
+
+Placeholder dashboard page added to use the existing `behaviors` icon and keep dashboard navigation aligned with the available icon set.
+
+---
+
 ## Layouts: design system vs prototype
 
 Two separate page wrappers:
 
 - **Design system / docs:** `src/includes/ds-layout.html` — docs shell with design-system header/footer, shared styles and scripts. Used by the main design-system pages.
 - **Prototype / product pages:** `src/includes/layout.html` — product shell with dashboard header, theme script, content block, and shared product footer.
-
----
-
-## Product footer
-
-**Markup:** `src/includes/footer.html`  
-**Styles:** `src/styles/footer.css`  
-**Asset:** `src/includes/assets/modulate-logo-notag-black.html`.
-
-Footer for product pages in `layout.html`: logo + company blurb, contact/support block, and legal links. Shares the same footer style module with the design-system footer; only the content differs.
-
----
-
-## Design system footer
-
-**Markup:** `src/includes/ds-footer.html`  
-**Styles:** `src/styles/footer.css`  
-**Asset:** `src/includes/assets/modulate-logo-notag-black.html`.
-
-Footer for docs pages in `ds-layout`: same shared footer structure and styles, but with design-system workspace copy, Ilya Sinelnikov contact, and a minimal copyright line.

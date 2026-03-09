@@ -22,8 +22,9 @@
       transparent
     );
     transition:
-      color 0.5s ease,
-      text-decoration 0.5s ease;
+      color var(--m__unhover-transition-duration) var(--m__transition-easing),
+      text-decoration-color var(--m__unhover-transition-duration)
+        var(--m__transition-easing);
 
     &:hover {
       color: var(--m__text-hover-color);
@@ -32,9 +33,8 @@
         var(--m__text-hover-color) 20%,
         transparent
       );
-      transition:
-        color 0s ease,
-        text-decoration 0s ease;
+      transition-duration:
+        var(--m__hover-transition-duration), var(--m__hover-transition-duration);
     }
   }
 
@@ -58,7 +58,7 @@
   }
 
   & h3 {
-    font-size: var(--m__font-size-xl);
+    font-size: var(--m__font-size-l);
   }
 
   & h4 {

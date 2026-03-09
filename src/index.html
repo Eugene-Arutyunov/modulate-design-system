@@ -66,10 +66,25 @@ block content %}
     <h2>Layout</h2>
     <div class="m__text-width">
       <p>
-        Pages are composed of stacked full-width sections, not column grids.
-        Each section is independently sized and self-contained — they can be
-        reordered without side effects. Complex layouts live
-        <ids-footnote-link>inside</ids-footnote-link> sections, not across them.
+        The main unit is
+        <code>rem</code>, it is used for text sizes and spacing.
+      </p>
+      <p>
+        <code>:root</code> currently sets <code>font-size: 125%</code>, which
+        gives <code>1rem = 20px</code>. This can be tuned more precisely later,
+        including with separate values for desktop and mobile if needed.
+      </p>
+      <p>
+        The system supports two layout modes: desktop and mobile. Media queries
+        look at viewport width rather than device type.
+      </p>
+      <div class="m__space S"></div>
+      <h3>Page composition</h3>
+      <p>
+        Pages are composed of stacked full-width sections,
+        <ids-footnote-link>not column grids</ids-footnote-link>. Each section is
+        independently sized and self-contained — they can be reordered without
+        side effects. Complex layouts live inside sections, not across them.
       </p>
       <ids-footnote>
         <p>
@@ -78,12 +93,16 @@ block content %}
         </p>
       </ids-footnote>
       <p>
-        <em>Draft.</em> Sections currently come in two types:
+        Sections come in two types:
         <strong>Card</strong> and <strong>Text-content</strong>. A Card contains
-        an interactive component or a purpose-designed widget for presenting
-        data. Text-content contains unstructured HTML text with shared styles
-        for selected tags; see the Typography section for the supported text
+        an interactive component or a purpose-built widget for presenting data.
+        Text-content contains free-form HTML text with shared styles for
+        selected tags; see the Typography section for the supported text
         elements.
+      </p>
+      <p>
+        A section may contain one or several Cards, but only one Text-content
+        block.
       </p>
     </div>
     <table class="docs-component-table">
@@ -300,8 +319,159 @@ block content %}
     <h2>Icons & Graphics</h2>
 
     <div class="m__text-width">
-      <p>This section is a work in progress.</p>
+      <p>
+        Icons are collected into one hidden SVG sprite and then reused through
+        <code>&lt;use&gt;</code>. This keeps each icon defined once, avoids
+        duplicated SVG markup, and makes color inheritance and updates easier to
+        manage.
+      </p>
+
+      <p>Here are the current icons and their ids:</p>
+
+      <div class="docs-icon-row">
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#account"></use>
+          </svg>
+          <span class="docs-icon-row__label">#account</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#api-docs"></use>
+          </svg>
+          <span class="docs-icon-row__label">#api-docs</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#api-key"></use>
+          </svg>
+          <span class="docs-icon-row__label">#api-key</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#behaviors"></use>
+          </svg>
+          <span class="docs-icon-row__label">#behaviors</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#billing"></use>
+          </svg>
+          <span class="docs-icon-row__label">#billing</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#mod-icon"></use>
+          </svg>
+          <span class="docs-icon-row__label">#mod-icon</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#models"></use>
+          </svg>
+          <span class="docs-icon-row__label">#models</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#overview"></use>
+          </svg>
+          <span class="docs-icon-row__label">#overview</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#usage"></use>
+          </svg>
+          <span class="docs-icon-row__label">#usage</span>
+        </div>
+      </div>
     </div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="animations" label="Animations">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Animations</h2>
+    <div class="m__text-width">
+      <p>
+        Animation tokens define timing only. The system provides tokens for
+        instant hover, animated unhover, and shared easing, but it does not
+        prescribe which CSS properties should be included in a transition.
+      </p>
+    </div>
+    <table class="docs-component-table">
+      <colgroup>
+        <col style="width: 15%" />
+        <col style="width: 60%" />
+        <col style="width: 25%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Interaction</th>
+          <th>Sample</th>
+          <th>Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>hover</code></td>
+          <td>
+            <div class="docs-animation-samples">
+              <div class="m__text-content docs-animation-samples__text">
+                <p><a href="https://modulate.ai">Text link</a></p>
+              </div>
+              <button type="button" class="m__button">Button</button>
+              <aside class="nav-sidebar docs-animation-samples__sidebar">
+                <nav>
+                  <a href="#" class="nav-sidebar__link">
+                    <svg
+                      class="nav-sidebar__link-icon"
+                      viewBox="0 0 32 32"
+                      aria-hidden="true">
+                      <use href="#overview"></use>
+                    </svg>
+                    <span>Sidebar item</span>
+                  </a>
+                </nav>
+              </aside>
+            </div>
+          </td>
+          <td>
+            <code>--m__hover-transition-duration</code><br />
+            <code>--m__unhover-transition-duration</code><br />
+            <code>--m__transition-easing</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </ids-nav-item>
 

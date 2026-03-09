@@ -1,5 +1,5 @@
 .prototype-header {
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -101,16 +101,29 @@
   }
 
   & .prototype-header__popover-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
     padding: 0.45rem 0.75rem;
     border-radius: 0.5rem;
     color: var(--m__text-color);
     text-decoration: none;
     font-size: 0.9em;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+    & .prototype-header__popover-link-icon {
+      width: 1rem;
+      height: 1rem;
+      color: currentColor;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
   }
 
   & .prototype-header__popover-link:hover {
     background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 
   & .prototype-header__popover-user {
@@ -120,10 +133,13 @@
     color: var(--m__text-color);
     text-decoration: none;
     font-size: 0.9em;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
   }
 
   & .prototype-header__popover-user:hover {
     background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 
   & .prototype-header__popover-name {
@@ -145,9 +161,12 @@
     padding: 0.45rem 0.75rem;
     border-radius: 0.5rem;
     cursor: pointer;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
 
     &:hover {
       background-color: var(--m__bg-surface-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
   }
 
@@ -169,10 +188,13 @@
     font-size: 0.9em;
     text-align: left;
     cursor: pointer;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
   }
 
   & .prototype-header__popover-logout:hover {
     background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 
   & .prototype-header__link {

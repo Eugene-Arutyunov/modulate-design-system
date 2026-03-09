@@ -76,6 +76,7 @@ body {
   --m__text-caption-color: rgb(150, 150, 170);
   --m__text-inverted-color: rgb(242, 242, 246);
   --m__text-accent-color: rgb(20, 20, 50);
+  --m__code-color: rgb(124, 58, 237);
 
   /* BACKGROUND */
   --m__background-color: rgb(255, 255, 255);
@@ -89,9 +90,6 @@ body {
   --m__ui-border-color: rgb(220, 220, 230);
   --m__ui-error-color: rgb(255, 53, 84);
   --m__ui-success-color: rgb(21, 207, 135);
-
-  /* CODE */
-  --m__code-color: rgb(124, 58, 237);
 }
 
 .dark-mode {
@@ -106,6 +104,7 @@ body {
   );
   --m__text-inverted-color: rgb(20, 20, 30);
   --m__text-accent-color: rgb(180, 180, 190);
+  --m__code-color: rgb(167, 139, 250);
 
   /* BACKGROUND */
   --m__background-color: rgb(20, 20, 25);
@@ -127,37 +126,6 @@ body {
   );
   --m__ui-error-color: rgb(255, 53, 84);
   --m__ui-success-color: rgb(21, 207, 135);
-
-  /* CODE */
-  --m__code-color: rgb(167, 139, 250);
-
-  color: var(--m__text-color);
-  background-color: var(--m__background-color);
-}
-
-.modulate-legacy-dark-theme {
-  /* TEXT */
-  --m__text-color: rgb(255, 255, 255);
-  --m__text-caption-color: rgb(128, 128, 128);
-  --m__text-link-color: rgb(255, 255, 255);
-  --m__text-inverted-color: rgb(20, 20, 30);
-  --m__text-hover-color: rgb(120, 180, 255);
-
-  /* BACKGROUND */
-  --m__background-color: rgb(33, 20, 67);
-  --m__bg-surface-color: rgb(33, 20, 67);
-  --m__bg-accent-color: rgb(33, 20, 67);
-  --m__bg-hover-color: rgb(100, 110, 140);
-  --m__bg-mark-color: rgb(255, 200, 29);
-
-  /* UI */
-  --m__ui-control-color: var(--m__bg-surface-color);
-  --m__ui-border-color: rgb(60, 50, 90);
-  --m__ui-error-color: rgb(255, 53, 84);
-  --m__ui-success-color: rgb(21, 207, 135);
-
-  /* CODE */
-  --m__code-color: rgb(167, 139, 250);
 
   color: var(--m__text-color);
   background-color: var(--m__background-color);
@@ -349,6 +317,12 @@ body {
   }
 }
 
+:root {
+  --m__hover-transition-duration: 0s;
+  --m__unhover-transition-duration: 0.3s;
+  --m__transition-easing: ease;
+}
+
 .m__text-content {
   & p {
     font-size: var(--m__font-size-m);
@@ -373,8 +347,9 @@ body {
       transparent
     );
     transition:
-      color 0.5s ease,
-      text-decoration 0.5s ease;
+      color var(--m__unhover-transition-duration) var(--m__transition-easing),
+      text-decoration-color var(--m__unhover-transition-duration)
+        var(--m__transition-easing);
 
     &:hover {
       color: var(--m__text-hover-color);
@@ -383,9 +358,8 @@ body {
         var(--m__text-hover-color) 20%,
         transparent
       );
-      transition:
-        color 0s ease,
-        text-decoration 0s ease;
+      transition-duration:
+        var(--m__hover-transition-duration), var(--m__hover-transition-duration);
     }
   }
 
@@ -409,7 +383,7 @@ body {
   }
 
   & h3 {
-    font-size: var(--m__font-size-xl);
+    font-size: var(--m__font-size-l);
   }
 
   & h4 {
@@ -1504,8 +1478,8 @@ div.pswp__img--placeholder,
 
 .ds-theme-toggle {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: 0.15rem;
+  right: 0.2rem;
   z-index: 200;
   padding: 0.35rem;
   border-radius: 999px;
@@ -1648,6 +1622,54 @@ div.pswp__img--placeholder,
   }
 }
 
+.docs-icon-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+
+  & .docs-icon-row__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 5.5rem;
+    padding: 0.75rem;
+    border-radius: var(--m__card-radius);
+    background-color: var(--m__bg-surface-color);
+  }
+
+  & .docs-icon-row__icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    color: var(--m__text-color);
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  & .docs-icon-row__label {
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+  }
+}
+
+.docs-animation-samples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+
+  & .docs-animation-samples__text {
+    & p {
+      margin: 0;
+    }
+  }
+
+  & .docs-animation-samples__sidebar {
+    min-width: 10rem;
+  }
+}
+
 /* UI Visualizer — semantic structure, extend via .ui-viz__* */
 .ui-viz {
   font-size: 0.9rem;
@@ -1778,7 +1800,7 @@ div.pswp__img--placeholder,
 }
 
 .prototype-header {
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1880,16 +1902,29 @@ div.pswp__img--placeholder,
   }
 
   & .prototype-header__popover-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
     padding: 0.45rem 0.75rem;
     border-radius: 0.5rem;
     color: var(--m__text-color);
     text-decoration: none;
     font-size: 0.9em;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+    & .prototype-header__popover-link-icon {
+      width: 1rem;
+      height: 1rem;
+      color: currentColor;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
   }
 
   & .prototype-header__popover-link:hover {
     background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 
   & .prototype-header__popover-user {
@@ -1899,10 +1934,13 @@ div.pswp__img--placeholder,
     color: var(--m__text-color);
     text-decoration: none;
     font-size: 0.9em;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
   }
 
   & .prototype-header__popover-user:hover {
     background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 
   & .prototype-header__popover-name {
@@ -1924,9 +1962,12 @@ div.pswp__img--placeholder,
     padding: 0.45rem 0.75rem;
     border-radius: 0.5rem;
     cursor: pointer;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
 
     &:hover {
       background-color: var(--m__bg-surface-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
   }
 
@@ -1948,10 +1989,13 @@ div.pswp__img--placeholder,
     font-size: 0.9em;
     text-align: left;
     cursor: pointer;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
   }
 
   & .prototype-header__popover-logout:hover {
     background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 
   & .prototype-header__link {
@@ -2001,15 +2045,28 @@ aside.nav-sidebar {
   }
 
   & .nav-sidebar__link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
     padding: 0.45rem 0.75rem;
     border-radius: 0.5rem;
     color: var(--m__text-color);
     text-decoration: none;
     font-size: 0.9rem;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+    & .nav-sidebar__link-icon {
+      width: 1rem;
+      height: 1rem;
+      color: currentColor;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
 
     &:hover {
       background-color: var(--m__bg-surface-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
 
     &.active {
@@ -2035,20 +2092,35 @@ aside.nav-sidebar {
   font: inherit;
   cursor: pointer;
   text-decoration: none;
+  transition: background-color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
 
   &:hover {
     background-color: var(--m__bg-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 }
 
 .dashboard-content {
+  & .dashboard-page-title {
+    margin: 0 0 1rem;
+    font-size: var(--m__font-size-xl);
+    font-weight: var(--m__font-weight-bold);
+  }
+
   & .dashboard-section {
     margin-bottom: 0.5rem;
 
     & h2 {
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: var(--m__font-size-m);
+      font-weight: var(--m__font-weight-bold);
       margin: 0 0 1rem 0;
+    }
+
+    & .dashboard-section__caption {
+      margin: -0.5rem 0 0.75rem;
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
     }
   }
 
@@ -2063,12 +2135,13 @@ aside.nav-sidebar {
   }
 
   & .stat-card {
+    margin-bottom: var(--m__default-margin-bottom);
     background-color: var(--m__bg-surface-color);
     border-radius: var(--m__card-radius);
     padding: var(--m__card-padding);
 
     & .stat-card__label {
-      font-size: 0.75rem;
+      font-size: var(--m__font-size-s);
       color: var(--m__text-caption-color);
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -2076,9 +2149,52 @@ aside.nav-sidebar {
     }
 
     & .stat-card__value {
-      font-size: 1.6rem;
-      font-weight: 600;
+      font-size: var(--m__font-size-xxl);
+      font-weight: var(--m__font-weight-bold);
       margin: 0;
+    }
+
+    & .stat-card__caption {
+      margin: 0 0 0.75rem;
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
+    }
+
+    & .stat-card__meta-list {
+      margin-top: 1rem;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    & .stat-card__meta-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 0;
+      font-size: var(--m__font-size-s);
+    }
+
+    & .stat-card__meta-label {
+      color: var(--m__text-caption-color);
+    }
+
+    & .stat-card__meta-value {
+      font-weight: var(--m__font-weight-bold);
+    }
+
+    & .stat-card__chart-placeholder {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    & .stat-card__chart-line {
+      display: block;
+      height: 1px;
+      background-color: color-mix(
+        in srgb,
+        var(--m__text-color) 20%,
+        transparent
+      );
     }
   }
 }
