@@ -1,13 +1,34 @@
 {
+  "name": "modulate-design-system",
+  "version": "0.0.1",
+  "description": "CSS design tokens for Modulate",
+  "license": "MIT",
+  "main": "dist/tokens.css",
+  "exports": {
+    ".": "./dist/tokens.css",
+    "./colors": "./dist/colors.css",
+    "./typography": "./dist/typography.css",
+    "./spacers": "./dist/spacers.css",
+    "./layout": "./dist/layout.css",
+    "./ui-components": "./dist/ui-components.css"
+  },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "icons:build": "node scripts/generate-svg-sprite.js",
     "prebuild": "node scripts/generate-svg-sprite.js && rm -rf _site",
     "build": "eleventy",
     "build:clean": "node scripts/generate-svg-sprite.js && eleventy",
     "predev": "node scripts/generate-svg-sprite.js",
-    "dev": "eleventy --serve"
+    "dev": "eleventy --serve",
+    "tokens:build": "node scripts/build-tokens.js"
   },
   "dependencies": {
+    "lightningcss": "^1.29.0",
+    "browserslist": "^4.24.0"
+  },
+  "devDependencies": {
     "@11ty/eleventy": "^3.0.0"
   }
 }
