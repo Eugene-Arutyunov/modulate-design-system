@@ -79,6 +79,25 @@ aside.nav-sidebar {
   }
 }
 
+.m__button-secondary {
+  display: inline-block;
+  padding: var(--m__button-secondary-padding);
+  background-color: transparent;
+  color: var(--m__text-color);
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: var(--m__button-radius);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none !important;
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
 .dashboard-content {
   & .dashboard-page-title {
     margin: 0 0 1rem;
