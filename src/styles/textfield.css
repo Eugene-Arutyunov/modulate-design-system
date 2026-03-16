@@ -1,0 +1,30 @@
+.m__textfield {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  & label {
+    font-size: var(--m__font-size-s);
+    font-weight: 500;
+    color: var(--m__text-color);
+  }
+
+  & input {
+    background-color: var(--m__ui-control-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__textfield-radius);
+    padding: var(--m__textfield-padding);
+    color: var(--m__text-color);
+    width: 100%;
+    line-height: var(--m__line-height-base);
+
+    &::placeholder {
+      color: var(--m__text-caption-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--m__text-hover-color);
+      outline-offset: -1px;
+    }
+  }
+}

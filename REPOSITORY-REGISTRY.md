@@ -87,3 +87,32 @@ Two separate page wrappers:
 
 - **Design system / docs:** `src/includes/ds-layout.html` — docs shell with design-system header/footer, shared styles and scripts. Used by the main design-system pages.
 - **Prototype / product pages:** `src/includes/layout.html` — product shell with dashboard header, theme script, content block, and shared product footer.
+
+---
+
+## Auth layout
+
+**Markup:** `src/includes/auth-layout.html`  
+**Styles:** `src/styles/auth-layout.css`
+
+Standalone two-column layout for auth screens. No dashboard header or footer. Left column: flex-column with logo header, centered form main area, and legal footer. Right column: solid `--m__bg-accent-color` fill, hidden on mobile. Used by all three auth pages.
+
+---
+
+## Textfield component
+
+**Styles:** `src/styles/textfield.css`  
+**Tokens:** `--m__textfield-padding`, `--m__textfield-radius`, `--m__textfield-label-size` in `src/styles/tokens/ui-components.css`.  
+**Class:** `.m__textfield`
+
+Label + input pair. Label sits above the input. Input uses `--m__ui-control-color` background, `--m__ui-border-color` border, and focus outline via `--m__text-hover-color`. Works with `type="email"` and `type="password"`.
+
+---
+
+## Auth screens
+
+**Pages:** `src/auth/login.html`, `src/auth/signup.html`, `src/auth/reset-password.html`  
+**Layout:** `src/includes/auth-layout.html`  
+**UI structure:** `ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`).
+
+Three auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link".

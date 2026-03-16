@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{{ pageTitle if pageTitle else 'Sign in' }}</title>
+    <meta
+      name="description"
+      content="{{ pageDesc if pageDesc else 'Modulate UI library' }}" />
+    <link rel="shortcut icon" href="/assets/favicon-product.png" />
+
+    <link rel="stylesheet" href="/bundle.css" />
+  </head>
+  <body class="ids">
+    {% include 'assets/svg-icons-sprite.html' %}
+
+    <div class="auth-layout">
+      <div class="auth-layout__left">
+        <header class="auth-layout__header">
+          <a href="/index-landing/" class="auth-layout__logo" aria-label="Home">
+            <svg
+              class="auth-layout__logo-icon"
+              viewBox="0 0 32 32"
+              aria-hidden="true">
+              <use href="#mod-icon"></use>
+            </svg>
+          </a>
+        </header>
+
+        <main class="auth-layout__main">{% block content %}{% endblock %}</main>
+
+        <footer class="auth-layout__footer">
+          <div class="m__text-content">
+            <p>
+              By proceeding, you agree to our <a href="#">Terms of Use</a> and
+              <a href="#">Privacy Policy</a>
+            </p>
+          </div>
+        </footer>
+      </div>
+
+      <div class="auth-layout__right" aria-hidden="true"></div>
+    </div>
+  </body>
+</html>
