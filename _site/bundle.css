@@ -131,6 +131,7 @@ body {
 }
 
 :root {
+  --m__space-xxs: 0.3rem;
   --m__space-xs: 0.7rem;
   --m__space-s: 0.9rem;
   --m__space-m: 1.2rem;
@@ -157,17 +158,21 @@ body {
 }
 
 :root {
-  --m__card-radius: 0.75rem;
+  --m__radius-s: 0.3rem;
+  --m__radius-m: 0.4rem;
+  --m__radius-l: 0.75rem;
+
+  --m__card-radius: var(--m__radius-l);
   --m__card-padding: 1rem;
 }
 
 :root {
   --m__button-padding: 0.5rem 1rem;
-  --m__button-secondary-padding: 0.15rem 0.45rem;
-  --m__button-radius: 0.5rem;
+  --m__button-compact-padding: 0.15rem 0.45rem;
 
-  --m__textfield-padding: 0.5rem 0.75rem;
-  --m__textfield-radius: 0.35rem;
+  --m__button-icon-size: 1lh;
+
+  --m__textfield-padding: 0.5rem 0.5rem;
 }
 
 .m__space {
@@ -2081,35 +2086,89 @@ aside.nav-sidebar {
   padding: var(--m__card-padding);
 }
 
-.m__button {
-  display: inline-block;
+a.m__button,
+button.m__button,
+a.m__button-secondary,
+button.m__button-secondary,
+a.m__button-compact,
+button.m__button-compact,
+a.m__button-secondary-compact,
+button.m__button-secondary-compact {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--m__space-xxs);
+  border-radius: var(--m__radius-m);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.m__button__icon {
+  display: block;
+  position: relative;
+  width: var(--m__button-icon-size);
+  height: var(--m__button-icon-size);
+  flex-shrink: 0;
+  overflow: hidden;
+  align-self: end;
+}
+
+a.m__button,
+button.m__button {
   padding: var(--m__button-padding);
   background-color: var(--m__bg-accent-color);
   color: var(--m__text-inverted-color);
   border: none;
-  border-radius: var(--m__button-radius);
-  font: inherit;
-  cursor: pointer;
-  text-decoration: none;
   transition: background-color var(--m__unhover-transition-duration)
     var(--m__transition-easing);
 
   &:hover {
     background-color: var(--m__bg-hover-color);
+    color: var(--m__text-inverted-color);
     transition-duration: var(--m__hover-transition-duration);
   }
 }
 
-.m__button-secondary {
-  display: inline-block;
-  padding: var(--m__button-secondary-padding);
+a.m__button-secondary,
+button.m__button-secondary {
+  padding: var(--m__button-padding);
   background-color: transparent;
   color: var(--m__text-color);
   border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-  border-radius: var(--m__button-radius);
-  font: inherit;
-  cursor: pointer;
-  text-decoration: none !important;
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-compact,
+button.m__button-compact {
+  padding: var(--m__button-compact-padding);
+  border-radius: var(--m__radius-s);
+  background-color: var(--m__bg-accent-color);
+  color: var(--m__text-inverted-color);
+  border: none;
+  transition: background-color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    background-color: var(--m__bg-hover-color);
+    color: var(--m__text-inverted-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-secondary-compact,
+button.m__button-secondary-compact {
+  padding: var(--m__button-compact-padding);
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  color: var(--m__text-color);
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
   transition: color var(--m__unhover-transition-duration)
     var(--m__transition-easing);
 
@@ -2221,6 +2280,7 @@ aside.nav-sidebar {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  margin-bottom: var(--m__default-margin-bottom);
 
   & label {
     font-size: var(--m__font-size-s);
@@ -2231,7 +2291,7 @@ aside.nav-sidebar {
   & input {
     background-color: var(--m__ui-control-color);
     border: 1px solid var(--m__ui-border-color);
-    border-radius: var(--m__textfield-radius);
+    border-radius: var(--m__radius-s);
     padding: var(--m__textfield-padding);
     color: var(--m__text-color);
     width: 100%;
@@ -2311,31 +2371,51 @@ aside.nav-sidebar {
 .auth-form {
   width: 100%;
   max-width: 20rem;
-  display: flex;
-  flex-direction: column;
-  gap: var(--m__space-m);
 
   & h1 {
-    margin: 0 0 var(--m__space-s);
+    margin: 0 0 var(--m__default-margin-bottom);
     font-size: 1.6rem;
     font-weight: 700;
     line-height: 1.2;
     color: var(--m__text-accent-color);
   }
 
-  & .auth-form__actions {
+  & .auth-form__oauth {
     display: flex;
     flex-direction: column;
-    gap: var(--m__space-s);
-    margin-top: var(--m__space-xs);
+    margin-bottom: var(--m__default-margin-bottom);
+
+    & .m__button-secondary {
+      width: 100%;
+      margin-bottom: var(--m__default-margin-bottom);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  & .auth-form__actions {
+    margin-bottom: var(--m__default-margin-bottom);
+
+    & .m__button {
+      width: 100%;
+    }
   }
 
   & .auth-form__links {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--m__space-xs);
-    font-size: 0.875rem;
+    font-size: var(--m__font-size-s);
+
+    & a {
+      margin-bottom: var(--m__default-margin-bottom);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
@@ -2347,56 +2427,11 @@ aside.nav-sidebar {
   padding: var(--m__space-xl) 0;
 
   & .landing__hero-inner {
-    max-width: 36rem;
-
     & h1 {
-      font-size: var(--m__font-size-xxxl);
-      margin-bottom: var(--m__space-s);
     }
 
     & p {
-      font-size: var(--m__font-size-l);
-      color: var(--m__text-caption-color);
-      margin-bottom: var(--m__space-m);
     }
-  }
-}
-
-.landing__features {
-  padding: var(--m__space-xl) 0;
-
-  & .landing__feature {
-    & h5 {
-      font-size: var(--m__font-size-m);
-      font-weight: var(--m__font-weight-bold);
-      margin-bottom: var(--m__space-xs);
-    }
-
-    & p {
-      color: var(--m__text-caption-color);
-    }
-  }
-}
-
-.landing__developers {
-  padding: var(--m__space-xl) 0;
-
-  & .landing__developers-inner {
-    display: flex;
-    gap: var(--m__space-xl);
-    align-items: flex-start;
-
-    @media (width < 768px) {
-      flex-direction: column;
-    }
-  }
-
-  & .landing__developers-text {
-    flex: 1;
-  }
-
-  & .landing__developers-code {
-    flex: 1;
   }
 }
 
@@ -2410,7 +2445,7 @@ aside.nav-sidebar {
 
 .landing__code {
   background-color: var(--m__bg-surface-color);
-  border-radius: var(--m__button-radius);
+  border-radius: var(--m__radius-s);
   padding: var(--m__space-m);
   font-family: "Inter";
   font-size: var(--m__font-size-s);
@@ -2426,26 +2461,5 @@ aside.nav-sidebar {
     border: none;
     padding: 0;
     color: inherit;
-  }
-}
-
-.landing__learn-more {
-  padding: var(--m__space-xl) 0;
-}
-
-.landing__cta {
-  padding: var(--m__space-xl) 0;
-
-  & .landing__cta-inner {
-    max-width: 32rem;
-
-    & h2 {
-      margin-bottom: var(--m__space-s);
-    }
-
-    & p {
-      color: var(--m__text-caption-color);
-      margin-bottom: var(--m__space-m);
-    }
   }
 }

@@ -30,11 +30,26 @@ The sprite is included globally in both layouts:
 During generation, the script:
 
 - removes XML headers, `<defs>`, `<style>`, and other editor metadata
-- removes internal `class`, `id`, `data-name`, `fill`, `stroke`, and inline style attributes
 - drops helper shapes whose fill resolves to `none`
-- applies `fill="currentColor"` on each generated `<symbol>`
 
-The result is a clean icon system with no internal styling. Icons inherit color from the place where they are used.
+**Monochrome icons** (default):
+
+- strips all `class`, `id`, `data-name`, `fill`, `stroke`, and inline `style` attributes
+- applies `fill="currentColor"` on the generated `<symbol>`
+- icon inherits color from where it is used
+
+**Colored icons** (brand/vendor logos):
+
+- resolves class-based fills to inline `fill` attributes before stripping `<style>`
+- removes only editor junk (`class`, `id`, `data-name`, `style`, `xmlns`)
+- keeps all visual attributes (`fill`, `stroke`, etc.)
+- the `<symbol>` has no `fill="currentColor"` — colors are fixed and do not change on hover
+
+To mark an icon as colored, add its base filename (without `.svg`) to the `COLORED_ICONS` set at the top of `scripts/generate-svg-sprite.js`:
+
+```js
+const COLORED_ICONS = new Set(["google", "microsoft", "facebook"]);
+```
 
 ## How to use an icon
 
@@ -58,3 +73,4 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 - The build script is `scripts/generate-svg-sprite.js`.
 - `npm run build`, `npm run build:clean`, and `npm run dev` regenerate the sprite automatically before running.
 - Do not edit `src/includes/assets/svg-icons-sprite.html` by hand. It is generated.
+- Colored icon symbols render identically regardless of CSS `color` or `fill` on the parent element.

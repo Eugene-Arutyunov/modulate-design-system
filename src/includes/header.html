@@ -9,12 +9,16 @@
   </a>
   <div class="prototype-header__right">
     <nav class="prototype-header__links">
+      <a href="/" class="prototype-header__link">←</a>
       <a href="/dashboard/overview/" class="prototype-header__link"
         >Dashboard</a
       >
       <a href="#" class="prototype-header__link">Playground</a>
-      <a href="/auth/login/" class="m__button-secondary">Sign in</a>
+      {% if isLanding %}
+      <a href="/auth/login/" class="m__button-compact">Sign in</a>
+      {% endif %}
     </nav>
+    {% if not isLanding %}
     <div class="prototype-header__user-wrap">
       <button
         type="button"
@@ -149,9 +153,6 @@
             </svg>
             <span>Account</span></a
           >
-          <a href="/" class="prototype-header__popover-link" role="menuitem"
-            >←</a
-          >
         </nav>
         <div class="prototype-header__popover-divider" aria-hidden="true"></div>
         <div
@@ -181,5 +182,6 @@
         </button>
       </div>
     </div>
+    {% endif %}
   </div>
 </header>

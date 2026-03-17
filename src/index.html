@@ -298,10 +298,22 @@ block content %}
           <td><code>.m__button</code></td>
           <td>
             <button type="button" class="m__button">Create API key</button>
+            &ensp;
+            <button type="button" class="m__button">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#api-key"></use>
+              </svg>
+              Create API key
+            </button>
           </td>
           <td>
             <code>--m__button-padding</code><br />
-            <code>--m__button-radius</code><br />
+            <code>--m__radius-m</code><br />
+            <code>--m__space-xxs</code><br />
+            <code>--m__button-icon-size</code><br />
             <code>--m__bg-accent-color</code><br />
             <code>--m__bg-hover-color</code><br />
             <code>--m__text-inverted-color</code>
@@ -312,11 +324,48 @@ block content %}
           <td>
             <button type="button" class="m__button-secondary">Sign in</button>
             &ensp;
-            <a href="#" class="m__button-secondary">Sign in</a>
+            <button type="button" class="m__button-secondary">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#overview"></use>
+              </svg>
+              Continue with Google
+            </button>
           </td>
           <td>
-            <code>--m__button-secondary-padding</code><br />
-            <code>--m__button-radius</code><br />
+            <code>--m__button-padding</code><br />
+            <code>--m__radius-m</code><br />
+            <code>--m__space-xxs</code><br />
+            <code>--m__button-icon-size</code><br />
+            <code>--m__text-color</code><br />
+            <code>--m__text-hover-color</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-compact</code></td>
+          <td>
+            <button type="button" class="m__button-compact">
+              Create API key
+            </button>
+          </td>
+          <td>
+            <code>--m__button-compact-padding</code><br />
+            <code>--m__radius-s</code><br />
+            <code>--m__bg-accent-color</code><br />
+            <code>--m__bg-hover-color</code><br />
+            <code>--m__text-inverted-color</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-secondary-compact</code></td>
+          <td>
+            <a href="#" class="m__button-secondary-compact">Sign in</a>
+          </td>
+          <td>
+            <code>--m__button-compact-padding</code><br />
+            <code>--m__radius-s</code><br />
             <code>--m__text-color</code><br />
             <code>--m__text-hover-color</code>
           </td>
@@ -336,7 +385,7 @@ block content %}
           </td>
           <td>
             <code>--m__textfield-padding</code><br />
-            <code>--m__textfield-radius</code><br />
+            <code>--m__radius-s</code><br />
             <code>--m__font-size-s</code><br />
             <code>--m__ui-control-color</code><br />
             <code>--m__ui-border-color</code><br />
@@ -357,7 +406,7 @@ block content %}
     <div class="m__text-width">
       <p>
         Icons are collected into one hidden SVG sprite and then reused through
-        <code>&lt;use&gt;</code>. This keeps each icon defined once, avoids
+        <code>&lt;use&gt;</code>. This keeps each icon defined once, avoids
         duplicated SVG markup, and makes color inheritance and updates easier to
         manage.
       </p>
@@ -365,6 +414,15 @@ block content %}
       <p>Here are the current icons and their ids:</p>
 
       <div class="docs-icon-row">
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#mod-icon"></use>
+          </svg>
+          <span class="docs-icon-row__label">#mod-icon</span>
+        </div>
         <div class="docs-icon-row__item">
           <svg
             class="docs-icon-row__icon"
@@ -415,9 +473,9 @@ block content %}
             class="docs-icon-row__icon"
             viewBox="0 0 32 32"
             aria-hidden="true">
-            <use href="#mod-icon"></use>
+            <use href="#emotions"></use>
           </svg>
-          <span class="docs-icon-row__label">#mod-icon</span>
+          <span class="docs-icon-row__label">#emotions</span>
         </div>
         <div class="docs-icon-row__item">
           <svg
@@ -446,7 +504,40 @@ block content %}
           </svg>
           <span class="docs-icon-row__label">#usage</span>
         </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#google"></use>
+          </svg>
+          <span class="docs-icon-row__label">#google</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#microsoft"></use>
+          </svg>
+          <span class="docs-icon-row__label">#microsoft</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#facebook"></use>
+          </svg>
+          <span class="docs-icon-row__label">#facebook</span>
+        </div>
       </div>
+      <div class="m__space S"></div>
+      <p>
+        Brand icons are colored — they render in their trademark colors and do
+        not respond to <code>color</code> or <code>fill</code> on the parent
+        element.
+      </p>
     </div>
   </div>
 </ids-nav-item>

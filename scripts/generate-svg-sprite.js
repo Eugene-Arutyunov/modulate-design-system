@@ -17,6 +17,10 @@ const OUTPUT_FILE = path.join(
   "svg-icons-sprite.html",
 );
 
+// Icons that keep their original fill colors instead of using currentColor.
+// These are typically brand/vendor logos that must render in their trademark colors.
+const COLORED_ICONS = new Set(["google", "microsoft", "facebook"]);
+
 const SHAPE_TAGS = new Set([
   "path",
   "rect",
@@ -91,6 +95,7 @@ function shouldDropShape(attributes, classStyles) {
   return resolvedFill.toLowerCase() === "none";
 }
 
+// Monochrome: strip all color and editor attributes so the icon inherits currentColor.
 function sanitizeAttributes(attributes) {
   return attributes
     .replace(
@@ -99,6 +104,36 @@ function sanitizeAttributes(attributes) {
     )
     .replace(/\s+/g, " ")
     .trim();
+}
+
+// Colored: resolve class-based fills to inline fill attributes, remove only editor junk.
+function resolveColorAttributes(attributes, classStyles) {
+  const classNames = getAttribute(attributes, "class")
+    .split(/\s+/)
+    .filter(Boolean);
+
+  // Class fill overrides any inline fill
+  let resolvedFill = getAttribute(attributes, "fill");
+  classNames.forEach((className) => {
+    if (classStyles[className] && classStyles[className].fill) {
+      resolvedFill = classStyles[className].fill;
+    }
+  });
+
+  // Remove editor junk and the existing fill (re-added below as resolved value)
+  let cleaned = attributes
+    .replace(
+      /\s+(?:class|id|data-name|style|xmlns(?::\w+)?|fill)=(['"])(.*?)\1/gi,
+      "",
+    )
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (resolvedFill) {
+    cleaned = `fill="${resolvedFill}"${cleaned ? " " + cleaned : ""}`;
+  }
+
+  return cleaned;
 }
 
 function sanitizeInnerSvg(innerSvg, classStyles) {
@@ -136,8 +171,42 @@ function sanitizeInnerSvg(innerSvg, classStyles) {
     .trim();
 }
 
+function sanitizeInnerSvgColored(innerSvg, classStyles) {
+  let cleaned = innerSvg
+    .replace(/<defs[\s\S]*?<\/defs>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<title[\s\S]*?<\/title>/gi, "")
+    .replace(/<desc[\s\S]*?<\/desc>/gi, "")
+    .replace(/<metadata[\s\S]*?<\/metadata>/gi, "");
+
+  cleaned = cleaned.replace(
+    /<(path|rect|circle|ellipse|polygon|polyline|line)\b([^>]*)\/>/gi,
+    (fullMatch, tagName, attributes) => {
+      if (shouldDropShape(attributes, classStyles)) {
+        return "";
+      }
+
+      const resolved = resolveColorAttributes(attributes, classStyles);
+      return resolved ? `<${tagName} ${resolved} />` : `<${tagName} />`;
+    },
+  );
+
+  cleaned = cleaned.replace(/<(g)\b([^>]*)>/gi, (fullMatch, tagName, attributes) => {
+    const resolved = resolveColorAttributes(attributes, classStyles);
+    return resolved ? `<${tagName} ${resolved}>` : `<${tagName}>`;
+  });
+
+  return cleaned
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .filter((line, index, lines) => line || (index > 0 && lines[index - 1]))
+    .join("\n")
+    .trim();
+}
+
 function buildSymbol(fileName) {
   const id = path.basename(fileName, ".svg");
+  const isColored = COLORED_ICONS.has(id);
   const filePath = path.join(SOURCE_DIR, fileName);
   const svgContent = fs.readFileSync(filePath, "utf8");
   const svgMatch = svgContent.match(/<svg\b([^>]*)>([\s\S]*?)<\/svg>/i);
@@ -155,12 +224,15 @@ function buildSymbol(fileName) {
   }
 
   const classStyles = parseClassStyles(svgContent);
-  const sanitizedInnerSvg = sanitizeInnerSvg(innerSvg, classStyles);
+  const sanitizedInnerSvg = isColored
+    ? sanitizeInnerSvgColored(innerSvg, classStyles)
+    : sanitizeInnerSvg(innerSvg, classStyles);
 
-  return `  <symbol id="${id}" viewBox="${viewBox}" fill="currentColor">\n${indentBlock(
-    sanitizedInnerSvg,
-    4,
-  )}\n  </symbol>`;
+  const symbolAttrs = isColored
+    ? `id="${id}" viewBox="${viewBox}"`
+    : `id="${id}" viewBox="${viewBox}" fill="currentColor"`;
+
+  return `  <symbol ${symbolAttrs}>\n${indentBlock(sanitizedInnerSvg, 4)}\n  </symbol>`;
 }
 
 function indentBlock(content, spaces) {
