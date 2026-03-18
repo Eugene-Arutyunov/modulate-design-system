@@ -1,118 +1,239 @@
-- route: /dashboard/overview/
-  title: Overview
-  sections:
-    - section:
-        components:
-          - credit-balance-stat
-          - credit-balance-over-time
-    - section:
-        component: usage-by-model
-    - section:
-        component: requests-by-status
-    - section:
-        component: recent-usage
-    - section:
-        components:
-          - organization
-          - users
+product:
+  - route: /dashboard/overview/
+    title: Overview
+    sections:
+      - section:
+          widgets:
+            - credit-balance-stat
+            - credit-balance-over-time
+      - section:
+          widget: usage-by-model
+      - section:
+          widget: requests-by-status
+      - section:
+          widget: recent-usage
+      - section:
+          widgets:
+            - organization
+            - users
 
-- route: /dashboard/api-keys/
-  title: API Keys
-  sections:
-    - section:
-        text-content: api-keys-intro
-    - section:
-        text-content: api-keys-table
+  - route: /dashboard/api-keys/
+    title: API Keys
+    sections:
+      - section:
+          text-content: api-keys-intro
+      - section:
+          text-content: api-keys-table
 
-- route: /dashboard/models/
-  title: Models
-  sections:
-    - section:
-        text-content: models-intro
-    - section:
-        text-content: velma-stt-batch
-    - section:
-        text-content: velma-stt-batch-english-fast
-    - section:
-        text-content: velma-stt-streaming
+  - route: /dashboard/models/
+    title: Models
+    sections:
+      - section:
+          text-content: models-intro
+      - section:
+          text-content: velma-stt-batch
+      - section:
+          text-content: velma-stt-batch-english-fast
+      - section:
+          text-content: velma-stt-streaming
 
-- route: /dashboard/documentation/
-  title: Documentation
-  sections:
-    - section:
-        text-content: documentation-intro
-    - section:
-        text-content: velma-models
-    - section:
-        text-content: feature-comparison
-    - section:
-        text-content: auth-rate-limits
+  - route: /dashboard/documentation/
+    title: Documentation
+    sections:
+      - section:
+          text-content: documentation-intro
+      - section:
+          text-content: velma-models
+      - section:
+          text-content: feature-comparison
+      - section:
+          text-content: auth-rate-limits
 
-- route: /dashboard/usage/
-  title: Usage
-  sections:
-    - section:
-        text-content: usage-log
-    - section:
-        text-content: filters
-    - section:
-        text-content: request-log
+  - route: /dashboard/usage/
+    title: Usage
+    sections:
+      - section:
+          text-content: usage-log
+      - section:
+          text-content: filters
+      - section:
+          text-content: request-log
 
-- route: /dashboard/behaviors/
-  title: Behaviors
-  sections:
-    - section:
-        text-content: behaviors-intro
+  - route: /dashboard/behaviors/
+    title: Behaviors
+    sections:
+      - section:
+          text-content: behaviors-intro
 
-- route: /dashboard/billing/
-  title: Billing
-  sections:
-    - section:
-        text-content: billing-intro
-    - section:
-        components:
-          - StatCard
-    - section:
-        text-content: apply-credit-code
-    - section:
-        text-content: purchase-credits
-    - section:
-        text-content: billing-history
+  - route: /dashboard/billing/
+    title: Billing
+    sections:
+      - section:
+          text-content: billing-intro
+      - section:
+          widgets:
+            - StatCard
+      - section:
+          text-content: apply-credit-code
+      - section:
+          text-content: purchase-credits
+      - section:
+          text-content: billing-history
 
-- route: /dashboard/account/
-  title: Account
-  sections:
-    - section:
-        text-content: account-settings
-    - section:
-        text-content: display-name
-    - section:
-        text-content: email
-    - section:
-        text-content: change-password
-    - section:
-        text-content: training-data-opt-out
-    - section:
-        text-content: delete-account
-    - section:
-        text-content: organization-intro
-    - section:
-        text-content: organization-details
+  - route: /dashboard/account/
+    title: Account
+    sections:
+      - section:
+          text-content: account-settings
+      - section:
+          text-content: display-name
+      - section:
+          text-content: email
+      - section:
+          text-content: change-password
+      - section:
+          text-content: training-data-opt-out
+      - section:
+          text-content: delete-account
+      - section:
+          text-content: organization-intro
+      - section:
+          text-content: organization-details
 
-- route: /auth/login/
-  title: Sign in
-  sections:
-    - section:
-        component: login-form
+  - route: /auth/login/
+    title: Sign in
+    sections:
+      - section:
+          widget: login-form
 
-- route: /auth/signup/
-  title: Create account
-  sections:
-    - section:
-        component: signup-form
+  - route: /auth/signup/
+    title: Create account
+    sections:
+      - section:
+          widget: signup-form
 
-- route: /auth/reset-password/
-  title: Reset password
-  sections:
-    - section:
-        component: reset-password-form
+  - route: /auth/reset-password/
+    title: Reset password
+    sections:
+      - section:
+          widget: reset-password-form
+
+prototype:
+  - route: /dashboard/overview/
+    title: Overview
+    sections:
+      - section:
+          widgets:
+            - credit-balance-stat
+            - credit-balance-over-time
+      - section:
+          widget: usage-by-model
+      - section:
+          widget: requests-by-status
+      - section:
+          widget: recent-usage
+      - section:
+          widgets:
+            - organization
+            - users
+
+  - route: /dashboard/api-keys/
+    title: API Keys
+    sections:
+      - section:
+          text-content: api-keys-intro
+      - section:
+          text-content: api-keys-table
+
+  - route: /dashboard/models/
+    title: Models
+    sections:
+      - section:
+          text-content: models-intro
+      - section:
+          text-content: velma-stt-batch
+      - section:
+          text-content: velma-stt-batch-english-fast
+      - section:
+          text-content: velma-stt-streaming
+
+  - route: /dashboard/documentation/
+    title: Documentation
+    sections:
+      - section:
+          text-content: documentation-intro
+      - section:
+          text-content: velma-models
+      - section:
+          text-content: feature-comparison
+      - section:
+          text-content: auth-rate-limits
+
+  - route: /dashboard/usage/
+    title: Usage
+    sections:
+      - section:
+          text-content: usage-log
+      - section:
+          text-content: filters
+      - section:
+          text-content: request-log
+
+  - route: /dashboard/behaviors/
+    title: Behaviors
+    sections:
+      - section:
+          text-content: behaviors-intro
+
+  - route: /dashboard/billing/
+    title: Billing
+    sections:
+      - section:
+          text-content: billing-intro
+      - section:
+          widgets:
+            - StatCard
+      - section:
+          text-content: apply-credit-code
+      - section:
+          text-content: purchase-credits
+      - section:
+          text-content: billing-history
+
+  - route: /dashboard/account/
+    title: Account
+    sections:
+      - section:
+          text-content: account-settings
+      - section:
+          text-content: display-name
+      - section:
+          text-content: email
+      - section:
+          text-content: change-password
+      - section:
+          text-content: training-data-opt-out
+      - section:
+          text-content: delete-account
+      - section:
+          text-content: organization-intro
+      - section:
+          text-content: organization-details
+
+  - route: /auth/login/
+    title: Sign in
+    sections:
+      - section:
+          widget: login-form
+
+  - route: /auth/signup/
+    title: Create account
+    sections:
+      - section:
+          widget: signup-form
+
+  - route: /auth/reset-password/
+    title: Reset password
+    sections:
+      - section:
+          widget: reset-password-form

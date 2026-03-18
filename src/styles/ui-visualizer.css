@@ -1,25 +1,79 @@
 /* UI Visualizer — semantic structure, extend via .ui-viz__* */
+.ui-viz-intro {
+  margin: 0 0 1em 0;
+  font-size: 0.95rem;
+}
+
 .ui-viz {
   font-size: 0.9rem;
   line-height: 1.4;
+  margin-top: 1.5em;
 
-  & .ui-viz__route {
-    margin-bottom: 1.5em;
-  }
+  & .ui-viz__table {
+    border-spacing: 0;
+    background-color: var(--m__background-color);
+    width: 100%;
 
-  & .ui-viz__route-title {
-    margin: 0 0 0.25em 0;
-    font-size: 1em;
-    font-weight: 600;
+    @media (max-width: 768px) {
+      font-size: 0.7em;
+    }
+
+    thead {
+      background-color: var(--m__background-color);
+    }
+
+    tr {
+      background-color: var(--m__background-color);
+
+      & th {
+        position: sticky;
+        top: 0;
+        text-align: left;
+        font-size: 0.75em;
+        font-weight: 400;
+        border-bottom: 1px solid
+          color-mix(in srgb, var(--m__text-color) 30%, transparent);
+        padding-bottom: 0.3em;
+        background-color: var(--m__background-color);
+
+        @media (max-width: 768px) {
+          padding-top: 0.8em;
+        }
+      }
+
+      & td {
+        padding: 0.8em 0.5em 1em 0;
+        border-bottom: 1px solid
+          color-mix(in srgb, var(--m__text-color) 12%, transparent);
+        vertical-align: top;
+        background-color: var(--m__background-color);
+      }
+
+      &:last-child {
+        & td {
+          border-bottom: none;
+        }
+      }
+    }
   }
 
   & .ui-viz__route-path {
     display: block;
-    margin: 0 0 0.5em 0;
+    margin: 0 0 0.4em 0;
     font-size: 0.85em;
     color: color-mix(
       in srgb,
       var(--m__text-color, currentColor) 70%,
+      transparent
+    );
+  }
+
+  & .ui-viz__empty {
+    margin: 0;
+    font-size: 0.9em;
+    color: color-mix(
+      in srgb,
+      var(--m__text-color, currentColor) 55%,
       transparent
     );
   }
@@ -33,7 +87,7 @@
     margin-bottom: 0.25em;
   }
 
-  & .ui-viz__section--group {
+  & .ui-viz__section--widgets {
     & .ui-viz__section-frame {
       display: inline-block;
       margin-top: 0.25em;

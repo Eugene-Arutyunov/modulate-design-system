@@ -439,8 +439,9 @@
       <h3>Page composition</h3>
       <p>
         Pages are composed of stacked full-width sections,
-        <ids-footnote-link>not column grids</ids-footnote-link>. Each section is
-        independently sized and self-contained — they can be reordered without
+        <ids-footnote-link>not column grids</ids-footnote-link>. Each section
+        always spans the full available width and takes as much height as its
+        content needs; sections are self-contained and can be reordered without
         side effects. Complex layouts live inside sections, not across them.
       </p>
       <ids-footnote>
@@ -450,18 +451,18 @@
         </p>
       </ids-footnote>
       <p>
-        Sections come in two types:
-        <strong>Card</strong> and <strong>Text-content</strong>. A Card contains
-        an interactive component or a purpose-built widget for presenting data.
-        Text-content contains free-form HTML text with shared styles for
-        selected tags; see the Typography section for the supported text
-        elements.
+        Section content can be of two kinds: <strong>Card</strong> or
+        <strong>Text-content</strong>. A Card contains an interactive component
+        or a purpose-built widget for presenting data. Text-content is free-form
+        HTML text with shared styles for selected tags; see the Typography
+        section for the supported text elements.
       </p>
       <p>
-        A section may contain one or several Cards, but only one Text-content
-        block.
+        A section may contain: one or several Cards, or one Text-content block
+        (which always spans the full width).
       </p>
     </div>
+    <div class="m__space L"></div>
     <table class="docs-component-table">
       <colgroup>
         <col style="width: 15%" />
@@ -547,6 +548,15 @@
     <div class="m__space L"></div>
 
     <h2>Typography</h2>
+    <div class="m__text-width">
+      <p>
+        The supported text elements (headings, paragraphs, links, lists, inline
+        code) are styled when they appear inside a container with the
+        <code>.m__text-content</code> class. A Text-content section uses this
+        class on its wrapper so the shared typography applies.
+      </p>
+    </div>
+    <div class="m__space M"></div>
     <table class="docs-component-table">
       <colgroup>
         <col style="width: 15%" />

@@ -27,11 +27,11 @@ Dropdown menu: trigger shows user name + chevron; click opens popover (Account l
 ## UI structure visualizer
 
 **Script:** `src/assets/js/ui-visualizer.js`  
-**Data:** `ui.yaml` (root: array of routes, or `{ version?, routes }`). Every section is a node `section:`; inside it either one **component**, or several (**components**), or **text-content** (named text block / prose section). Data reflects dashboard pages in `src/dashboard/`.  
+**Data:** `ui.yaml` with two root keys: **product** (actual structure in the product) and **prototype** (target structure for this repo). Each is an array of routes; every section is a node `section:` with **widget**, **widgets**, or **text-content**.  
 **Page:** `src/ui.html` (UI Architecture).  
 **Styles:** `.ui-viz` + `.ui-viz__*` in `src/styles/ui-visualizer.css`.
 
-Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Semantic DOM (article, ul, li) and stable class namespace for easy extension of data format, layout, and styles.
+Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders two columns per route (product vs prototype). Prototype is the target structure for this repository; when the product catches up, update the `product` block in `ui.yaml`.
 
 ---
 
