@@ -42,7 +42,7 @@ If you deploy on Vercel or another platform, add `NODE_AUTH_TOKEN` to the projec
 ### 3. Install the package
 
 ```bash
-pnpm add @eugene-arutyunov/modulate-design-system
+npm install @eugene-arutyunov/modulate-design-system
 ```
 
 ## Usage
@@ -74,7 +74,7 @@ Import the full token set or individual modules:
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full workflow: branching strategy, how to set up canary builds, and how to submit changes.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full workflow: branching strategy, canary builds, and how to submit changes.
 
 ## License
 
