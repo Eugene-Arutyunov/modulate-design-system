@@ -1,0 +1,39 @@
+# Canary Build Workflow (template)
+#
+# HOW TO USE:
+# 1. Copy this file and rename it to canary.yml (remove .template)
+# 2. Replace <your-github-username> below with your GitHub username (lowercase)
+# 3. Commit canary.yml to your fork's main branch
+# 4. Make sure your fork allows GITHUB_TOKEN to write packages:
+#    Settings → Actions → General → Workflow permissions → Read and write
+#
+# DO NOT push canary.yml to upstream. See CONTRIBUTING.md for details.
+
+name: Canary
+on:
+  push:
+    branches-ignore: [main]
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/build-tokens.js
+      - name: Publish canary
+        run: |
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          pnpm pkg set "name=@<your-github-username>/design-system"
+          pnpm version 0.0.0-canary.${TIMESTAMP} --no-git-tag-version
+          pnpm publish --no-git-checks --tag canary
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
