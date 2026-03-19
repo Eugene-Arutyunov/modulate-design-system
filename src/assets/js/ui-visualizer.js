@@ -36,13 +36,10 @@ function normalizeSection(item) {
   if (!s || typeof s !== 'object') {
     return { type: 'widget', widget: '', states: [] };
   }
-  const hasLegacyComponentKeys =
-    s.component !== undefined || s.components !== undefined;
-  const hasNewWidgetKeys = s.widget !== undefined || s.widgets !== undefined;
   if (
     s['text-content'] !== undefined &&
-    !hasNewWidgetKeys &&
-    !hasLegacyComponentKeys &&
+    s.widget === undefined &&
+    s.widgets === undefined &&
     s.group === undefined
   ) {
     return {
@@ -52,10 +49,6 @@ function normalizeSection(item) {
   }
   if (s.widgets !== undefined) {
     return { type: 'widgets', widgets: Array.isArray(s.widgets) ? s.widgets : [] };
-  }
-  if (s.components !== undefined) {
-    // Legacy compatibility: keep old ui.yaml keys working.
-    return { type: 'widgets', widgets: Array.isArray(s.components) ? s.components : [] };
   }
   if (s.widget !== undefined) {
     return {
@@ -68,22 +61,10 @@ function normalizeSection(item) {
     const g = s.group;
     const widgets = Array.isArray(g.widgets)
       ? g.widgets
-      : Array.isArray(g.components)
-        ? g.components
-        : g.component !== undefined && g.component !== ''
-          ? [g.component]
-          : g.widget !== undefined && g.widget !== ''
-            ? [g.widget]
-            : [];
+      : g.widget !== undefined && g.widget !== ''
+        ? [g.widget]
+        : [];
     return { type: 'widgets', widgets };
-  }
-  if (s.component !== undefined) {
-    // Legacy compatibility: keep old ui.yaml keys working.
-    return {
-      type: 'widget',
-      widget: s.component ?? '',
-      states: Array.isArray(s.states) ? s.states : [],
-    };
   }
   return { type: 'widget', widget: '', states: [] };
 }
