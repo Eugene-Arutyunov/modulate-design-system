@@ -1,0 +1,29 @@
+# canary.yml — only for fork
+name: Canary
+on:
+  push:
+    branches-ignore: [main]
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/build-tokens.js
+      - name: Publish canary
+        run: |
+          HASH=$(git rev-parse --short HEAD)
+          BRANCH=$(echo "$GITHUB_REF_NAME" | sed 's/[^a-zA-Z0-9-]/-/g')
+          pnpm version 0.0.0-canary.${BRANCH}.${HASH} --no-git-tag-version
+          pnpm publish --no-git-checks --tag canary
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
