@@ -18,11 +18,12 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com
       - run: pnpm install --frozen-lockfile
-      - run: node scripts/build-tokens.js
+      - run: pnpm run build
       - name: Publish canary
         run: |
           HASH=$(git rev-parse --short HEAD)
           BRANCH=$(echo "$GITHUB_REF_NAME" | sed 's/[^a-zA-Z0-9-]/-/g')
+          pnpm pkg set "name=@rodshtein/modulate-design-system"
           pnpm version 0.0.0-canary.${BRANCH}.${HASH} --no-git-tag-version
           pnpm publish --no-git-checks --tag canary
         env:
