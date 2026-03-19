@@ -1,21 +1,40 @@
 product:
+  - route: /index-landing/
+    title: Landing
+    sections:
+      - section:
+          widget: hero
+      - section:
+          widgets:
+            - feature-transcription
+            - feature-voice-native
+            - feature-ensemble
+      - section:
+          text-content: built-for-developers
+      - section:
+          text-content: learn-more
+      - section:
+          text-content: cta
+
   - route: /dashboard/overview/
     title: Overview
     sections:
       - section:
+          widget: organization
+      - section:
           widgets:
+            - users
             - credit-balance-stat
-            - credit-balance-over-time
+            - all-time-hours
+            - all-time-credits-used
       - section:
           widget: usage-by-model
       - section:
           widget: requests-by-status
       - section:
-          widget: recent-usage
+          widget: credit-balance-over-time
       - section:
-          widgets:
-            - organization
-            - users
+          widget: recent-usage
 
   - route: /dashboard/api-keys/
     title: API Keys
@@ -31,11 +50,21 @@ product:
       - section:
           text-content: models-intro
       - section:
+          text-content: velma-music-detection
+      - section:
           text-content: velma-stt-batch
       - section:
           text-content: velma-stt-batch-english-fast
       - section:
           text-content: velma-stt-streaming
+      - section:
+          text-content: velma-synthetic-voice-detection
+      - section:
+          widgets:
+            - model-credits-consumed
+            - model-requests-by-status
+      - section:
+          widget: model-recent-requests
 
   - route: /dashboard/documentation/
     title: Documentation
@@ -45,7 +74,7 @@ product:
       - section:
           text-content: velma-models
       - section:
-          text-content: feature-comparison
+          text-content: model-comparison
       - section:
           text-content: auth-rate-limits
 
@@ -59,12 +88,6 @@ product:
       - section:
           text-content: request-log
 
-  - route: /dashboard/behaviors/
-    title: Behaviors
-    sections:
-      - section:
-          text-content: behaviors-intro
-
   - route: /dashboard/billing/
     title: Billing
     sections:
@@ -72,9 +95,8 @@ product:
           text-content: billing-intro
       - section:
           widgets:
-            - StatCard
-      - section:
-          text-content: apply-credit-code
+            - credit-balance
+            - apply-credit-code
       - section:
           text-content: purchase-credits
       - section:
@@ -90,15 +112,102 @@ product:
       - section:
           text-content: email
       - section:
+          text-content: organization-role
+      - section:
           text-content: change-password
       - section:
           text-content: training-data-opt-out
       - section:
           text-content: delete-account
+
+  - route: /dashboard/organization/
+    title: Organization
+    sections:
       - section:
           text-content: organization-intro
       - section:
           text-content: organization-details
+      - section:
+          text-content: members
+      - section:
+          text-content: pending-invites
+
+  - route: /internal/users/
+    title: Users & Organizations
+    sections:
+      - section:
+          text-content: users-orgs-intro
+      - section:
+          widget: users-table
+
+  - route: /internal/data/
+    title: Data Management
+    sections:
+      - section:
+          text-content: data-management-intro
+      - section:
+          widget: data-export
+
+  - route: /internal/invites/
+    title: Invites & Credits
+    sections:
+      - section:
+          text-content: invites-credits-intro
+      - section:
+          widget: invites-table
+
+  - route: /internal/usage/
+    title: Platform Usage
+    sections:
+      - section:
+          text-content: platform-usage-intro
+      - section:
+          widget: usage-filters
+      - section:
+          widgets:
+            - stat-total-requests
+            - stat-credits-consumed
+            - stat-duration
+            - stat-purchased-credits
+            - stat-granted-credits
+      - section:
+          widgets:
+            - usage-by-model
+            - credit-consumption
+
+  - route: /internal/overrides/
+    title: Org Overrides
+    sections:
+      - section:
+          text-content: overrides-intro
+      - section:
+          widget: org-selector
+      - section:
+          widget: bulk-tag-overrides
+
+  - route: /internal/reports/
+    title: Reports
+    sections:
+      - section:
+          text-content: reports-intro
+      - section:
+          widget: report-generator
+
+  - route: /internal/models/
+    title: Model Management
+    sections:
+      - section:
+          text-content: model-management-intro
+      - section:
+          text-content: velma-music-detection
+      - section:
+          text-content: velma-stt-batch
+      - section:
+          text-content: velma-stt-batch-english-fast
+      - section:
+          text-content: velma-stt-streaming
+      - section:
+          text-content: velma-synthetic-voice-detection
 
   - route: /auth/login/
     title: Sign in
@@ -119,23 +228,42 @@ product:
           widget: reset-password-form
 
 prototype:
+  - route: /index-landing/
+    title: Landing
+    sections:
+      - section:
+          widget: hero
+      - section:
+          widgets:
+            - feature-transcription
+            - feature-voice-native
+            - feature-ensemble
+      - section:
+          text-content: built-for-developers
+      - section:
+          text-content: learn-more
+      - section:
+          text-content: cta
+
   - route: /dashboard/overview/
     title: Overview
     sections:
       - section:
+          widget: organization
+      - section:
           widgets:
+            - users
             - credit-balance-stat
-            - credit-balance-over-time
+            - all-time-hours
+            - all-time-credits-used
       - section:
           widget: usage-by-model
       - section:
           widget: requests-by-status
       - section:
-          widget: recent-usage
+          widget: credit-balance-over-time
       - section:
-          widgets:
-            - organization
-            - users
+          widget: recent-usage
 
   - route: /dashboard/api-keys/
     title: API Keys
@@ -151,11 +279,21 @@ prototype:
       - section:
           text-content: models-intro
       - section:
+          text-content: velma-music-detection
+      - section:
           text-content: velma-stt-batch
       - section:
           text-content: velma-stt-batch-english-fast
       - section:
           text-content: velma-stt-streaming
+      - section:
+          text-content: velma-synthetic-voice-detection
+      - section:
+          widgets:
+            - model-credits-consumed
+            - model-requests-by-status
+      - section:
+          widget: model-recent-requests
 
   - route: /dashboard/documentation/
     title: Documentation
@@ -165,7 +303,7 @@ prototype:
       - section:
           text-content: velma-models
       - section:
-          text-content: feature-comparison
+          text-content: model-comparison
       - section:
           text-content: auth-rate-limits
 
@@ -179,12 +317,6 @@ prototype:
       - section:
           text-content: request-log
 
-  - route: /dashboard/behaviors/
-    title: Behaviors
-    sections:
-      - section:
-          text-content: behaviors-intro
-
   - route: /dashboard/billing/
     title: Billing
     sections:
@@ -192,9 +324,8 @@ prototype:
           text-content: billing-intro
       - section:
           widgets:
-            - StatCard
-      - section:
-          text-content: apply-credit-code
+            - credit-balance
+            - apply-credit-code
       - section:
           text-content: purchase-credits
       - section:
@@ -210,15 +341,102 @@ prototype:
       - section:
           text-content: email
       - section:
+          text-content: organization-role
+      - section:
           text-content: change-password
       - section:
           text-content: training-data-opt-out
       - section:
           text-content: delete-account
+
+  - route: /dashboard/organization/
+    title: Organization
+    sections:
       - section:
           text-content: organization-intro
       - section:
           text-content: organization-details
+      - section:
+          text-content: members
+      - section:
+          text-content: pending-invites
+
+  - route: /internal/users/
+    title: Users & Organizations
+    sections:
+      - section:
+          text-content: users-orgs-intro
+      - section:
+          widget: users-table
+
+  - route: /internal/data/
+    title: Data Management
+    sections:
+      - section:
+          text-content: data-management-intro
+      - section:
+          widget: data-export
+
+  - route: /internal/invites/
+    title: Invites & Credits
+    sections:
+      - section:
+          text-content: invites-credits-intro
+      - section:
+          widget: invites-table
+
+  - route: /internal/usage/
+    title: Platform Usage
+    sections:
+      - section:
+          text-content: platform-usage-intro
+      - section:
+          widget: usage-filters
+      - section:
+          widgets:
+            - stat-total-requests
+            - stat-credits-consumed
+            - stat-duration
+            - stat-purchased-credits
+            - stat-granted-credits
+      - section:
+          widgets:
+            - usage-by-model
+            - credit-consumption
+
+  - route: /internal/overrides/
+    title: Org Overrides
+    sections:
+      - section:
+          text-content: overrides-intro
+      - section:
+          widget: org-selector
+      - section:
+          widget: bulk-tag-overrides
+
+  - route: /internal/reports/
+    title: Reports
+    sections:
+      - section:
+          text-content: reports-intro
+      - section:
+          widget: report-generator
+
+  - route: /internal/models/
+    title: Model Management
+    sections:
+      - section:
+          text-content: model-management-intro
+      - section:
+          text-content: velma-music-detection
+      - section:
+          text-content: velma-stt-batch
+      - section:
+          text-content: velma-stt-batch-english-fast
+      - section:
+          text-content: velma-stt-streaming
+      - section:
+          text-content: velma-synthetic-voice-detection
 
   - route: /auth/login/
     title: Sign in
