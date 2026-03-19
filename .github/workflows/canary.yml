@@ -1,0 +1,33 @@
+name: Canary
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/build-tokens.js
+      - name: Publish canary
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          HASH=$(git rev-parse --short HEAD)
+          pnpm pkg set "name=@${REPO_OWNER}/modulate-design-system"
+          pnpm version "0.0.0-pr.${PR_NUMBER}.${HASH}" --no-git-tag-version
+          pnpm publish --no-git-checks --tag "pr-${PR_NUMBER}"
