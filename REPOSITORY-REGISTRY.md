@@ -31,7 +31,7 @@ Dropdown menu: trigger shows user name + chevron; click opens popover (Account l
 **Page:** `src/ui.html` (UI Architecture).  
 **Styles:** `.ui-viz` + `.ui-viz__*` in `src/styles/ui-visualizer.css`.
 
-Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders two columns per route (product vs prototype). Prototype is the target structure for this repository; when the product catches up, update the `product` block in `ui.yaml`.
+Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders two columns per route (product vs prototype). Prototype is the target structure for this repository; when the product catches up, update the `product` block in `ui.yaml`. Static diagram: `src/includes/ui-arch-diagram.html` (aside with both columns), `ui-arch-diagram-structure.html` (left: route + list), `ui-arch-diagram-layout.html` (right: 4 section blocks). Full diagram on `src/ui.html`; index uses only the layout include inside `<aside class="ui-arch-diagram ui-arch-diagram--layout-only">`. Styles in `ui-visualizer.css` under `.ui-arch-diagram`.
 
 ---
 
