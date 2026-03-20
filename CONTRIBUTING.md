@@ -37,7 +37,7 @@ git push origin my-change
 
 Open a Pull Request from `your-fork:my-change` → `upstream:main`.
 
-As soon as the PR is opened, a canary build is published automatically. Each subsequent push triggers a new build (see [Using canary builds](#using-canary-builds-in-a-consuming-project)).
+> **Note for external contributors:** canary builds are only available to maintainers with write access to this repository (see [Canary workflow](#canary-workflow)). If you need to test your changes via a canary build, ask a maintainer to open a branch in the upstream repo.
 
 ### 5. After the PR is merged
 
@@ -60,6 +60,8 @@ File: `.github/workflows/release.yml`.
 ### Canary workflow
 
 Triggered on every push to an open PR targeting `main`. Publishes a pre-release to GitHub Packages.
+
+**This workflow is available to maintainers only.** The workflow uses the `pull_request` event, which GitHub restricts for security: PRs opened from forks receive a read-only `GITHUB_TOKEN` and no repository secrets, so the publish step will fail. Only PRs opened from a branch inside this repository (by contributors with write access) get the write permissions required to publish to GitHub Packages.
 
 Each PR gets its own dist-tag (`pr-42`), so builds from different PRs don't overwrite each other. Version format: `0.0.0-pr.{PR_NUMBER}.{SHORT_HASH}`.
 

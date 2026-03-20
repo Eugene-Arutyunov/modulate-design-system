@@ -76,6 +76,8 @@ Import the full token set or individual modules:
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full workflow: branching strategy, canary builds, and how to submit changes.
 
+Canary builds (pre-release packages published per PR) are available to maintainers with write access only. External contributors can open PRs as usual — a maintainer can publish a canary build on their behalf if needed.
+
 ## License
 
 MIT
