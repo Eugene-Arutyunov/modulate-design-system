@@ -3,12 +3,79 @@
   padding: 4rem 0;
 }
 
-/* Color palette plates (from modulate-design) */
+/* Color palette plates */
 .guide-color-plate {
-  padding: 0.5em 0.5em 2.36em 0.5em;
-  font-size: 0.7em;
-  line-height: 1;
-  min-height: 7em;
+  padding: 0.5rem;
+  line-height: 1.2;
+  min-height: 6.2rem;
+
+  & > * {
+    margin-bottom: 0.4rem;
+  }
+
+  & p {
+    font-size: inherit;
+    font-weight: 500;
+    margin: 0 0 0.4rem;
+  }
+
+  & .guide-color-plate__value {
+    display: inline-block;
+    font: inherit;
+    font-size: 0.75rem;
+    color: inherit;
+    opacity: 0.7;
+    background: none;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition:
+      border-color 0.3s var(--m__transition-easing),
+      opacity 0.3s var(--m__transition-easing);
+
+    &:hover {
+      opacity: 1;
+      border-color: currentColor;
+      transition-duration: 0s, 0s;
+    }
+  }
+
+  & .guide-color-plate__emotions {
+    font-size: 0.75rem;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  &.guide-color-plate--emotions {
+    min-height: 9.2rem;
+  }
+}
+
+@keyframes guide-color-copy-flash {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.guide-color-plate__flash {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: guide-color-copy-flash 0.4s ease-out forwards;
 }
 
 /* Emotion colors showcase (from modulate-design) */

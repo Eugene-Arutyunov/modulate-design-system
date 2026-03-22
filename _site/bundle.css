@@ -92,6 +92,16 @@ body {
   --m__ui-border-color: rgb(220, 220, 230);
   --m__ui-error-color: rgb(255, 53, 84);
   --m__ui-success-color: rgb(21, 207, 135);
+
+  /* CHARTS */
+  --m__chart-default-color: rgb(20, 20, 50);
+  --m__chart-model-1-color: rgb(124, 58, 237);
+  --m__chart-model-2-color: rgb(167, 120, 250);
+  --m__chart-model-3-color: rgb(196, 167, 255);
+  --m__chart-status-success-color: rgb(80, 210, 120);
+  --m__chart-status-server-error-color: rgb(255, 53, 84);
+  --m__chart-status-client-error-color: rgb(255, 120, 80);
+  --m__chart-status-processing-color: var(--m__text-caption-color);
 }
 
 .dark-mode {
@@ -128,6 +138,16 @@ body {
   );
   --m__ui-error-color: rgb(255, 53, 84);
   --m__ui-success-color: rgb(21, 207, 135);
+
+  /* CHARTS */
+  --m__chart-default-color: rgb(180, 180, 220);
+  --m__chart-model-1-color: rgb(167, 139, 250);
+  --m__chart-model-2-color: rgb(196, 175, 255);
+  --m__chart-model-3-color: rgb(220, 208, 255);
+  --m__chart-status-success-color: rgb(100, 230, 150);
+  --m__chart-status-server-error-color: rgb(255, 90, 110);
+  --m__chart-status-client-error-color: rgb(255, 150, 110);
+  --m__chart-status-processing-color: var(--m__text-caption-color);
 }
 
 :root {
@@ -1543,12 +1563,79 @@ div.pswp__img--placeholder,
   padding: 4rem 0;
 }
 
-/* Color palette plates (from modulate-design) */
+/* Color palette plates */
 .guide-color-plate {
-  padding: 0.5em 0.5em 2.36em 0.5em;
-  font-size: 0.7em;
-  line-height: 1;
-  min-height: 7em;
+  padding: 0.5rem;
+  line-height: 1.2;
+  min-height: 6.2rem;
+
+  & > * {
+    margin-bottom: 0.4rem;
+  }
+
+  & p {
+    font-size: inherit;
+    font-weight: 500;
+    margin: 0 0 0.4rem;
+  }
+
+  & .guide-color-plate__value {
+    display: inline-block;
+    font: inherit;
+    font-size: 0.75rem;
+    color: inherit;
+    opacity: 0.7;
+    background: none;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition:
+      border-color 0.3s var(--m__transition-easing),
+      opacity 0.3s var(--m__transition-easing);
+
+    &:hover {
+      opacity: 1;
+      border-color: currentColor;
+      transition-duration: 0s, 0s;
+    }
+  }
+
+  & .guide-color-plate__emotions {
+    font-size: 0.75rem;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  &.guide-color-plate--emotions {
+    min-height: 9.2rem;
+  }
+}
+
+@keyframes guide-color-copy-flash {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.guide-color-plate__flash {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: guide-color-copy-flash 0.4s ease-out forwards;
 }
 
 /* Emotion colors showcase (from modulate-design) */
@@ -1985,7 +2072,7 @@ aside.ui-arch-diagram {
 :root {
   /* Emotion group colors - base values */
   --emotion-attack-rejection-group: rgb(255, 53, 84);
-  --emotion-threat-uncertainty-group: rgb(180, 100, 200);
+  --emotion-threat-uncertainty-group: rgb(200, 80, 160);
   --emotion-excited-engaged-group: rgb(255, 120, 80);
   --emotion-low-energy-negative-group: rgb(0, 120, 200);
   --emotion-calm-grounded-group: rgb(110, 140, 190);
@@ -2505,6 +2592,16 @@ button.m__button-secondary-compact {
         transparent
       );
     }
+  }
+
+  & .chart-container {
+    position: relative;
+    width: 100%;
+  }
+
+  & .chart-empty {
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
   }
 }
 
