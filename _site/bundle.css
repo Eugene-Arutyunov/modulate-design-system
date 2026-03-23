@@ -3,6 +3,7 @@
 
 body {
   margin: 0;
+  font-synthesis: none;
 }
 
 *,
@@ -2405,6 +2406,34 @@ aside.nav-sidebar {
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__widget-radius);
   padding: var(--m__widget-padding);
+
+  & .m__widget__value {
+    font-size: var(--m__font-size-xxl);
+    font-weight: var(--m__font-weight-bold);
+    margin: 0;
+  }
+
+  & .m__widget__meta-list {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  & .m__widget__meta-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    font-size: var(--m__font-size-s);
+  }
+
+  & .m__widget__meta-label {
+    color: var(--m__text-caption-color);
+  }
+
+  & .m__widget__meta-value {
+    font-weight: var(--m__font-weight-bold);
+  }
 }
 
 a.m__button,
@@ -2512,7 +2541,7 @@ button.m__button-secondary-compact {
     & h2 {
       font-size: var(--m__font-size-m);
       font-weight: var(--m__font-weight-bold);
-      margin: 0 0 1rem 0;
+      margin: 0 0 0.4rem 0;
     }
 
     & .dashboard-section__caption {
@@ -2529,70 +2558,6 @@ button.m__button-secondary-compact {
 
     @media (width < 767px) {
       grid-template-columns: 1fr;
-    }
-  }
-
-  & .stat-card {
-    margin-bottom: var(--m__default-margin-bottom);
-    background-color: var(--m__bg-surface-color);
-    border-radius: var(--m__widget-radius);
-    padding: var(--m__widget-padding);
-
-    & .stat-card__label {
-      font-size: var(--m__font-size-s);
-      color: var(--m__text-caption-color);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin: 0 0 0.5rem 0;
-    }
-
-    & .stat-card__value {
-      font-size: var(--m__font-size-xxl);
-      font-weight: var(--m__font-weight-bold);
-      margin: 0;
-    }
-
-    & .stat-card__caption {
-      margin: 0 0 0.75rem;
-      font-size: var(--m__font-size-s);
-      color: var(--m__text-caption-color);
-    }
-
-    & .stat-card__meta-list {
-      margin-top: 1rem;
-      display: grid;
-      gap: 0.35rem;
-    }
-
-    & .stat-card__meta-item {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      margin: 0;
-      font-size: var(--m__font-size-s);
-    }
-
-    & .stat-card__meta-label {
-      color: var(--m__text-caption-color);
-    }
-
-    & .stat-card__meta-value {
-      font-weight: var(--m__font-weight-bold);
-    }
-
-    & .stat-card__chart-placeholder {
-      display: grid;
-      gap: 0.7rem;
-    }
-
-    & .stat-card__chart-line {
-      display: block;
-      height: 1px;
-      background-color: color-mix(
-        in srgb,
-        var(--m__text-color) 20%,
-        transparent
-      );
     }
   }
 

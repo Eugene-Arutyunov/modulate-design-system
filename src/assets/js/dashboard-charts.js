@@ -9,9 +9,21 @@
 
   var fullData = null;
 
-  function formatChartLabel(isoString) {
-    var d = new Date(isoString);
-    return d.getMonth() + 1 + "/" + d.getDate();
+  function dayKey(isoString) {
+    return isoString.slice(0, 10);
+  }
+
+  function formatDayLabels(dayStrings) {
+    var prevMonth = -1;
+    return dayStrings.map(function (dayStr) {
+      var d = new Date(dayStr + "T00:00:00");
+      var m = d.getMonth();
+      if (m !== prevMonth) {
+        prevMonth = m;
+        return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      }
+      return String(d.getDate());
+    });
   }
 
   function cssVar(style, name) {
@@ -132,16 +144,18 @@
     canvas.parentNode.querySelector(".chart-empty").hidden = true;
     canvas.hidden = false;
 
-    var sorted = history.data_points.slice().sort(function (a, b) {
-      return a.period < b.period ? -1 : a.period > b.period ? 1 : 0;
-    });
+    var dayMap = new Map();
+    for (var i = 0; i < history.data_points.length; i++) {
+      var dk = dayKey(history.data_points[i].period);
+      dayMap.set(dk, (dayMap.get(dk) || 0) + history.data_points[i].net_delta);
+    }
 
-    var labels = [];
+    var sortedDays = Array.from(dayMap.keys()).sort();
+    var labels = formatDayLabels(sortedDays);
     var values = [];
     var running = history.starting_balance;
-    for (var i = 0; i < sorted.length; i++) {
-      running += sorted[i].net_delta;
-      labels.push(formatChartLabel(sorted[i].period));
+    for (var j = 0; j < sortedDays.length; j++) {
+      running += dayMap.get(sortedDays[j]);
       values.push(+(running / 1000).toFixed(2));
     }
 
@@ -217,24 +231,23 @@
     var models = new Set();
     for (var i = 0; i < dataPoints.length; i++) {
       var dp = dataPoints[i];
+      var dk = dayKey(dp.period);
       models.add(dp.model_identifier);
-      if (!periodMap.has(dp.period)) periodMap.set(dp.period, new Map());
-      var existing = periodMap.get(dp.period).get(dp.model_identifier) || 0;
-      periodMap
-        .get(dp.period)
-        .set(dp.model_identifier, existing + dp.total_requests);
+      if (!periodMap.has(dk)) periodMap.set(dk, new Map());
+      var existing = periodMap.get(dk).get(dp.model_identifier) || 0;
+      periodMap.get(dk).set(dp.model_identifier, existing + dp.total_requests);
     }
 
-    var sortedPeriods = Array.from(periodMap.keys()).sort();
-    var labels = sortedPeriods.map(formatChartLabel);
+    var sortedDays = Array.from(periodMap.keys()).sort();
+    var labels = formatDayLabels(sortedDays);
     var modelList = Array.from(models);
 
     var theme = readThemeColors();
     var datasets = modelList.map(function (model, idx) {
       return {
         label: model,
-        data: sortedPeriods.map(function (p) {
-          return periodMap.get(p).get(model) || 0;
+        data: sortedDays.map(function (d) {
+          return periodMap.get(d).get(model) || 0;
         }),
         backgroundColor: theme.modelColors[idx % theme.modelColors.length],
       };
@@ -283,22 +296,23 @@
     var periodMap = new Map();
     for (var i = 0; i < dataPoints.length; i++) {
       var dp = dataPoints[i];
-      if (!periodMap.has(dp.period))
-        periodMap.set(dp.period, {
+      var dk = dayKey(dp.period);
+      if (!periodMap.has(dk))
+        periodMap.set(dk, {
           success: 0,
           clientError: 0,
           serverError: 0,
           processing: 0,
         });
-      var entry = periodMap.get(dp.period);
+      var entry = periodMap.get(dk);
       entry.success += dp.success_requests;
       entry.clientError += dp.client_error_requests;
       entry.serverError += dp.server_error_requests;
       entry.processing += dp.processing_requests;
     }
 
-    var sortedPeriods = Array.from(periodMap.keys()).sort();
-    var labels = sortedPeriods.map(formatChartLabel);
+    var sortedDays = Array.from(periodMap.keys()).sort();
+    var labels = formatDayLabels(sortedDays);
 
     var theme = readThemeColors();
     charts.requestStatus = new Chart(canvas, {
@@ -308,29 +322,29 @@
         datasets: [
           {
             label: "Success",
-            data: sortedPeriods.map(function (p) {
-              return periodMap.get(p).success;
+            data: sortedDays.map(function (d) {
+              return periodMap.get(d).success;
             }),
             backgroundColor: theme.statusSuccess,
           },
           {
             label: "Server Error",
-            data: sortedPeriods.map(function (p) {
-              return periodMap.get(p).serverError;
+            data: sortedDays.map(function (d) {
+              return periodMap.get(d).serverError;
             }),
             backgroundColor: theme.statusServerError,
           },
           {
             label: "Client Error",
-            data: sortedPeriods.map(function (p) {
-              return periodMap.get(p).clientError;
+            data: sortedDays.map(function (d) {
+              return periodMap.get(d).clientError;
             }),
             backgroundColor: theme.statusClientError,
           },
           {
             label: "Processing",
-            data: sortedPeriods.map(function (p) {
-              return periodMap.get(p).processing;
+            data: sortedDays.map(function (d) {
+              return periodMap.get(d).processing;
             }),
             backgroundColor: theme.statusProcessing,
           },
