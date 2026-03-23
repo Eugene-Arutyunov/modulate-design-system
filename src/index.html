@@ -587,6 +587,183 @@ block content %}
   </div>
 </ids-nav-item>
 
+<ids-nav-item id="charts" label="Charts">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Charts</h2>
+
+    <div class="m__text-width">
+      <p>
+        Charts use Chart.js 4.x with a set of opinionated defaults that align
+        them with the design system's visual language. The following adjustments
+        are applied on top of the default Chart.js configuration:
+      </p>
+    </div>
+
+    <div class="m__sequence XL gap-M">
+      <div class="m__sequence-item">
+        <div class="m__widget">
+          <div class="chart-container">
+            <canvas id="ds-sample-line-chart"></canvas>
+          </div>
+        </div>
+        <div class="m__space S"></div>
+        <div class="m__widget">
+          <div class="chart-container">
+            <canvas id="ds-sample-bar-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="m__sequence-item">
+        <div class="m__text-width m__text-content">
+          <ol>
+            <li>
+              <strong>Tooltips are off.</strong
+              ><ids-footnote-link></ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  <code>plugins.tooltip.enabled:&nbsp;false</code>
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              <strong>Legend at the bottom</strong> with round 8&times;8
+              markers.<ids-footnote-link></ids-footnote-link> Shown only when
+              there is more than one dataset.<ids-footnote-link
+              ></ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  <code>position:&nbsp;"bottom"</code>,
+                  <code>labels.usePointStyle:&nbsp;true</code>,
+                  <code>labels.pointStyle:&nbsp;"circle"</code>,
+                  <code>labels.boxWidth:&nbsp;8</code>,
+                  <code>labels.boxHeight:&nbsp;8</code>.
+                </p>
+              </ids-footnote>
+              <ids-footnote>
+                <p>
+                  <code>plugins.legend.display:&nbsp;false</code> for
+                  single-dataset charts.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              <strong>X-axis labels stay horizontal.</strong
+              ><ids-footnote-link></ids-footnote-link> At narrow widths labels
+              are auto-skipped rather than rotated.
+              <ids-footnote>
+                <p>
+                  <code>ticks.maxRotation:&nbsp;0</code>
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              <strong>Bars fill the full category width</strong> with a small
+              gap between them.<ids-footnote-link></ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  <code>categoryPercentage:&nbsp;1</code>,
+                  <code>barPercentage:&nbsp;0.92</code> — set at the
+                  <code>options</code> level.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              <strong>All colors come from CSS tokens.</strong
+              ><ids-footnote-link></ids-footnote-link>
+              Chart-specific palette tokens use
+              the&nbsp;<code>--m__chart-*</code>&nbsp;prefix.
+              <ids-footnote>
+                <p>
+                  Grid and tick colors are read from
+                  <code>--m__text-color</code> and
+                  <code>--m__text-caption-color</code> via
+                  <code>getComputedStyle</code>. Grid color is derived as
+                  <code
+                    >color-mix(in&nbsp;srgb,&nbsp;--m__text-color&nbsp;12%,&nbsp;transparent)</code
+                  >. Palette tokens are defined in
+                  <code>tokens/colors.css</code>.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              <strong>One bar / label per time unit.</strong> Data arriving at
+              sub-day granularity is aggregated by day before rendering.
+            </li>
+
+            <li>
+              <strong>Smart date labels.</strong> The first label on the axis
+              and the first label of each new month include the abbreviated
+              month name; all other labels show only the day
+              number.<ids-footnote-link></ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  The formatter tracks the current month while iterating through
+                  sorted dates. On month change (or at index&nbsp;0) it outputs
+                  <code
+                    >toLocaleDateString("en-US",
+                    {&nbsp;month:&nbsp;"short",&nbsp;day:&nbsp;"numeric"&nbsp;})</code
+                  >; otherwise — <code>d.getDate()</code>.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              <strong
+                >Gradient fill when the axis does not start at zero.</strong
+              >
+              The filled area fades to transparent in the
+              bottom&nbsp;&frac13;.<ids-footnote-link></ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  A <code>CanvasGradient</code> runs from
+                  <code>chartArea.top</code> to
+                  <code>chartArea.bottom</code> with stops at
+                  <code>0&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0.35)</code>,
+                  <code>0.67&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0.35)</code>,
+                  <code>1&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0)</code>. Base color:
+                  <code>--m__chart-default-color</code>. Y-axis uses
+                  <code>grace:&nbsp;"25%"</code>.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              <strong>Animation is off.</strong
+              ><ids-footnote-link></ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  <code>animation:&nbsp;false</code> at the
+                  <code>options</code> level.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              <strong>Theme-aware re-rendering.</strong> When the theme class on
+              the body element changes, all charts are destroyed and re-created
+              with fresh colors from CSS variables.<ids-footnote-link
+              ></ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  A <code>MutationObserver</code> watches the
+                  <code>class</code> attribute on <code>&lt;body&gt;</code>.
+                </p>
+              </ids-footnote>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</ids-nav-item>
+
 <ids-nav-item id="animations" label="Animations">
   <div class="m__wrapper">
     <div class="m__space L"></div>

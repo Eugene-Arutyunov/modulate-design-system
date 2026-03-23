@@ -1,12 +1,7 @@
 (function () {
   "use strict";
 
-  var charts = {
-    creditBalance: null,
-    usageByModel: null,
-    requestStatus: null,
-  };
-
+  var charts = { line: null, bar: null };
   var fullData = null;
 
   function dayKey(isoString) {
@@ -32,11 +27,6 @@
       text: cssVar(style, "--m__text-caption-color"),
       grid: "color-mix(in srgb, " + textColor + " 12%, transparent)",
       chartDefault: cssVar(style, "--m__chart-default-color"),
-      modelColors: [
-        cssVar(style, "--m__chart-model-1-color"),
-        cssVar(style, "--m__chart-model-2-color"),
-        cssVar(style, "--m__chart-model-3-color"),
-      ],
       statusSuccess: cssVar(style, "--m__chart-status-success-color"),
       statusClientError: cssVar(style, "--m__chart-status-client-error-color"),
       statusServerError: cssVar(style, "--m__chart-status-server-error-color"),
@@ -87,85 +77,13 @@
     return base;
   }
 
-  function basePlugins(theme) {
-    return {
-      tooltip: { enabled: false },
-      legend: {
-        position: "bottom",
-        labels: {
-          color: theme.text,
-          usePointStyle: true,
-          pointStyle: "circle",
-          boxWidth: 8,
-          boxHeight: 8,
-        },
-      },
-    };
-  }
-
-  function periodCutoff(days) {
-    var now = new Date();
-    return new Date(now.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
-  }
-
-  function filterByPeriod(dataPoints, days) {
-    if (!days) return dataPoints;
-    var cutoff = periodCutoff(days);
-    return dataPoints.filter(function (dp) {
-      return dp.period >= cutoff;
-    });
-  }
-
-  function creditHistoryForPeriod(creditHistory, days) {
-    if (!creditHistory) return null;
-    var allPoints = creditHistory.data_points;
-    if (!days) {
-      return {
-        starting_balance: creditHistory.starting_balance,
-        data_points: allPoints,
-      };
-    }
-    var cutoff = periodCutoff(days);
-    var priorSum = 0;
-    var filtered = [];
-    for (var i = 0; i < allPoints.length; i++) {
-      if (allPoints[i].period < cutoff) {
-        priorSum += allPoints[i].net_delta;
-      } else {
-        filtered.push(allPoints[i]);
-      }
-    }
-    return {
-      starting_balance: creditHistory.starting_balance + priorSum,
-      data_points: filtered,
-    };
-  }
-
-  function daysFromToggle(chartName) {
-    var toggle = document.querySelector(
-      '.m__segmented-control[data-chart="' + chartName + '"]'
-    );
-    if (!toggle) return 7;
-    var checked = toggle.querySelector("input:checked");
-    return checked && checked.value === "30d" ? 30 : 7;
-  }
-
-  // --- Credit Balance ---
-
-  function renderCreditBalanceChart() {
-    if (charts.creditBalance) charts.creditBalance.destroy();
-    var canvas = document.getElementById("credit-balance-chart");
+  function renderLineChart() {
+    if (charts.line) charts.line.destroy();
+    var canvas = document.getElementById("ds-sample-line-chart");
     if (!canvas || !fullData) return;
 
-    var days = daysFromToggle("credit-balance");
-    var history = creditHistoryForPeriod(fullData.creditHistory, days);
-    if (!history || !history.data_points || !history.data_points.length) {
-      canvas.parentNode.querySelector(".chart-empty").hidden = false;
-      canvas.hidden = true;
-      return;
-    }
-    canvas.parentNode.querySelector(".chart-empty").hidden = true;
-    canvas.hidden = false;
+    var history = fullData.creditHistory;
+    if (!history || !history.data_points || !history.data_points.length) return;
 
     var dayMap = new Map();
     for (var i = 0; i < history.data_points.length; i++) {
@@ -184,7 +102,7 @@
     var theme = readThemeColors();
     var baseRgb = theme.chartDefault;
 
-    charts.creditBalance = new Chart(canvas, {
+    charts.line = new Chart(canvas, {
       type: "line",
       data: {
         labels: sortedDays,
@@ -198,10 +116,7 @@
               var area = context.chart.chartArea;
               if (!area) return solid;
               var grad = context.chart.ctx.createLinearGradient(
-                0,
-                area.top,
-                0,
-                area.bottom
+                0, area.top, 0, area.bottom
               );
               grad.addColorStop(0, solid);
               grad.addColorStop(0.67, solid);
@@ -229,90 +144,16 @@
     });
   }
 
-  // --- Usage by Model ---
-
-  function renderUsageByModelChart() {
-    if (charts.usageByModel) charts.usageByModel.destroy();
-    var canvas = document.getElementById("usage-by-model-chart");
+  function renderBarChart() {
+    if (charts.bar) charts.bar.destroy();
+    var canvas = document.getElementById("ds-sample-bar-chart");
     if (!canvas || !fullData) return;
 
-    var days = daysFromToggle("usage-by-model");
-    var dataPoints = filterByPeriod(
-      fullData.usageStats ? fullData.usageStats.data_points : [],
-      days
-    );
-    if (!dataPoints.length) {
-      canvas.parentNode.querySelector(".chart-empty").hidden = false;
-      canvas.hidden = true;
-      return;
-    }
-    canvas.parentNode.querySelector(".chart-empty").hidden = true;
-    canvas.hidden = false;
-
-    var periodMap = new Map();
-    var models = new Set();
-    for (var i = 0; i < dataPoints.length; i++) {
-      var dp = dataPoints[i];
-      var dk = dayKey(dp.period);
-      models.add(dp.model_identifier);
-      if (!periodMap.has(dk)) periodMap.set(dk, new Map());
-      var existing = periodMap.get(dk).get(dp.model_identifier) || 0;
-      periodMap.get(dk).set(dp.model_identifier, existing + dp.total_requests);
-    }
-
-    var sortedDays = Array.from(periodMap.keys()).sort();
-    var modelList = Array.from(models);
-
-    var theme = readThemeColors();
-    var datasets = modelList.map(function (model, idx) {
-      return {
-        label: model,
-        data: sortedDays.map(function (d) {
-          return periodMap.get(d).get(model) || 0;
-        }),
-        backgroundColor: theme.modelColors[idx % theme.modelColors.length],
-      };
-    });
-
-    charts.usageByModel = new Chart(canvas, {
-      type: "bar",
-      data: { labels: sortedDays, datasets: datasets },
-      options: {
-        responsive: true,
-        animation: false,
-        categoryPercentage: 1,
-        barPercentage: 0.92,
-        plugins: basePlugins(theme),
-        scales: {
-          x: xScaleOptions(theme, sortedDays, { stacked: true }),
-          y: Object.assign(
-            { stacked: true, beginAtZero: true },
-            baseScaleOptions(theme)
-          ),
-        },
-      },
-    });
-  }
-
-  // --- Requests by Status ---
-
-  function renderRequestStatusChart() {
-    if (charts.requestStatus) charts.requestStatus.destroy();
-    var canvas = document.getElementById("request-status-chart");
-    if (!canvas || !fullData) return;
-
-    var days = daysFromToggle("request-status");
-    var dataPoints = filterByPeriod(
-      fullData.usageStats ? fullData.usageStats.data_points : [],
-      days
-    );
-    if (!dataPoints.length) {
-      canvas.parentNode.querySelector(".chart-empty").hidden = false;
-      canvas.hidden = true;
-      return;
-    }
-    canvas.parentNode.querySelector(".chart-empty").hidden = true;
-    canvas.hidden = false;
+    var dataPoints =
+      fullData.usageStats && fullData.usageStats.data_points
+        ? fullData.usageStats.data_points
+        : [];
+    if (!dataPoints.length) return;
 
     var periodMap = new Map();
     for (var i = 0; i < dataPoints.length; i++) {
@@ -335,7 +176,8 @@
     var sortedDays = Array.from(periodMap.keys()).sort();
 
     var theme = readThemeColors();
-    charts.requestStatus = new Chart(canvas, {
+
+    charts.bar = new Chart(canvas, {
       type: "bar",
       data: {
         labels: sortedDays,
@@ -375,7 +217,19 @@
         animation: false,
         categoryPercentage: 1,
         barPercentage: 0.92,
-        plugins: basePlugins(theme),
+        plugins: {
+          tooltip: { enabled: false },
+          legend: {
+            position: "bottom",
+            labels: {
+              color: theme.text,
+              usePointStyle: true,
+              pointStyle: "circle",
+              boxWidth: 8,
+              boxHeight: 8,
+            },
+          },
+        },
         scales: {
           x: xScaleOptions(theme, sortedDays, { stacked: true }),
           y: Object.assign(
@@ -387,35 +241,10 @@
     });
   }
 
-  // --- Toggle wiring ---
-
-  var renderMap = {
-    "credit-balance": renderCreditBalanceChart,
-    "usage-by-model": renderUsageByModelChart,
-    "request-status": renderRequestStatusChart,
-  };
-
-  function wireToggles() {
-    var toggles = document.querySelectorAll(".m__segmented-control");
-    for (var i = 0; i < toggles.length; i++) {
-      (function (toggle) {
-        var chartName = toggle.getAttribute("data-chart");
-        var render = renderMap[chartName];
-        if (!render) return;
-        toggle.addEventListener("change", function () {
-          render();
-        });
-      })(toggles[i]);
-    }
-  }
-
-  // --- Init ---
-
   function renderAll() {
     if (!fullData) return;
-    renderCreditBalanceChart();
-    renderUsageByModelChart();
-    renderRequestStatusChart();
+    renderLineChart();
+    renderBarChart();
   }
 
   new MutationObserver(function (mutations) {
@@ -434,9 +263,8 @@
     .then(function (data) {
       fullData = data;
       renderAll();
-      wireToggles();
     })
     .catch(function (err) {
-      console.error("Failed to load dashboard chart data:", err);
+      console.error("Failed to load chart data:", err);
     });
 })();
