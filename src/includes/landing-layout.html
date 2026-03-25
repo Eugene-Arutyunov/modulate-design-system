@@ -13,9 +13,21 @@
     <link rel="stylesheet" href="/bundle.css" />
   </head>
   <body class="ids">
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem("prototype-internal-nav-hidden") === "1") {
+            document.body.classList.add("prototype-hide-internal-nav");
+          }
+        } catch (e) {
+          /* ignore */
+        }
+      })();
+    </script>
     {% include 'assets/svg-icons-sprite.html' %} {% set isLanding = true %} {%
     include 'header.html' %} {% block content %}{% endblock %} {% include
     'footer.html' %}
     <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/prototype-internal-nav-toggle.js"></script>
   </body>
 </html>

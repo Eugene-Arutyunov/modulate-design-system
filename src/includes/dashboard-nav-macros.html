@@ -1,0 +1,279 @@
+{% macro primary_nav(variant) %} {% if variant == "bar" %}
+<a href="/conversations/" class="prototype-header__link">Conversations</a>
+<a href="/playground/" class="prototype-header__link">Playground</a>
+<a href="/docs/" class="prototype-header__link">Docs</a>
+<a href="/dashboard/overview/" class="prototype-header__link">Dashboard</a>
+{% elif variant == "landing" %}
+<a href="/playground/" class="prototype-header__link">Playground</a>
+<a href="/docs/" class="prototype-header__link">Docs</a>
+{% else %}
+<a
+  href="/conversations/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Conversations' }}"
+  role="menuitem"
+  >Conversations</a
+>
+<a
+  href="/playground/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Playground' }}"
+  role="menuitem"
+  >Playground</a
+>
+<a
+  href="/docs/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Documentation' }}"
+  role="menuitem"
+  >Docs</a
+>
+<a
+  href="/dashboard/overview/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Overview' }}"
+  role="menuitem"
+  >Dashboard</a
+>
+{% endif %} {% endmacro %} {% macro dashboard_nav_meta(variant) %} {% if variant
+== "sidebar" %}
+<a
+  href="/dashboard/account/"
+  class="nav-sidebar__link {{ 'active' if pageTitle == 'Account' }}"
+  ><span class="nav-sidebar__link-caption">e@intuition.team</span></a
+>
+<a
+  href="/dashboard/organization/"
+  class="nav-sidebar__link {{ 'active' if pageTitle == 'Organization' }}"
+  ><span class="nav-sidebar__link-caption"
+    >Eugene’s Personal Organization, 99&nbsp;users</span
+  ></a
+>
+{% else %}
+<a
+  href="/dashboard/account/"
+  class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Account' }}"
+  role="menuitem">
+  <span class="prototype-header__popover-meta-caption">e@intuition.team</span>
+</a>
+<a
+  href="/dashboard/organization/"
+  class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Organization' }}"
+  role="menuitem">
+  <span class="prototype-header__popover-meta-caption"
+    >Eugene’s Personal Organization, 99&nbsp;users</span
+  >
+</a>
+{% endif %} {% endmacro %} {% macro dashboard_nav_main(variant) %} {% if variant
+== "sidebar" %}
+<a
+  href="/dashboard/overview/"
+  class="nav-sidebar__link {{ 'active' if pageTitle == 'Overview' }}"
+  ><svg class="nav-sidebar__link-icon" viewBox="0 0 32 32" aria-hidden="true">
+    <use href="#overview"></use>
+  </svg>
+  <span>Overview</span></a
+>
+<a
+  href="/dashboard/api-keys/"
+  class="nav-sidebar__link {{ 'active' if pageTitle == 'API Keys' }}"
+  ><svg class="nav-sidebar__link-icon" viewBox="0 0 32 32" aria-hidden="true">
+    <use href="#api-key"></use>
+  </svg>
+  <span>API Keys</span></a
+>
+<a
+  href="/dashboard/models/"
+  class="nav-sidebar__link {{ 'active' if pageTitle == 'Models' }}"
+  ><svg class="nav-sidebar__link-icon" viewBox="0 0 32 32" aria-hidden="true">
+    <use href="#models"></use>
+  </svg>
+  <span>Models</span></a
+>
+<a
+  href="/dashboard/usage/"
+  class="nav-sidebar__link {{ 'active' if pageTitle == 'Usage' }}"
+  ><svg class="nav-sidebar__link-icon" viewBox="0 0 32 32" aria-hidden="true">
+    <use href="#usage"></use>
+  </svg>
+  <span>Usage</span></a
+>
+<a
+  href="/dashboard/behaviors/"
+  class="nav-sidebar__link {{ 'active' if pageTitle == 'Behaviors' }}"
+  ><svg class="nav-sidebar__link-icon" viewBox="0 0 32 32" aria-hidden="true">
+    <use href="#behaviors"></use>
+  </svg>
+  <span>Behaviors</span></a
+>
+<a
+  href="/dashboard/billing/"
+  class="nav-sidebar__link {{ 'active' if pageTitle == 'Billing' }}"
+  ><svg class="nav-sidebar__link-icon" viewBox="0 0 32 32" aria-hidden="true">
+    <use href="#billing"></use>
+  </svg>
+  <span>Billing</span></a
+>
+<div class="prototype-internal-nav">
+  <a
+    href="/internal/users/"
+    class="nav-sidebar__link {{ 'active' if pageTitle == 'Users & Organizations' }}"
+    ><span class="nav-sidebar__link-caption">Users &amp; Organizations</span></a
+  >
+  <a
+    href="/internal/data/"
+    class="nav-sidebar__link {{ 'active' if pageTitle == 'Data Management' }}"
+    ><span class="nav-sidebar__link-caption">Data Management</span></a
+  >
+  <a
+    href="/internal/invites/"
+    class="nav-sidebar__link {{ 'active' if pageTitle == 'Invites & Credits' }}"
+    ><span class="nav-sidebar__link-caption">Invites &amp; Credits</span></a
+  >
+  <a
+    href="/internal/usage/"
+    class="nav-sidebar__link {{ 'active' if pageTitle == 'Platform Usage' }}"
+    ><span class="nav-sidebar__link-caption">Platform Usage</span></a
+  >
+  <a
+    href="/internal/overrides/"
+    class="nav-sidebar__link {{ 'active' if pageTitle == 'Org Overrides' }}"
+    ><span class="nav-sidebar__link-caption">Org Overrides</span></a
+  >
+  <a
+    href="/internal/reports/"
+    class="nav-sidebar__link {{ 'active' if pageTitle == 'Reports' }}"
+    ><span class="nav-sidebar__link-caption">Reports</span></a
+  >
+  <a
+    href="/internal/models/"
+    class="nav-sidebar__link {{ 'active' if pageTitle == 'Model Management' }}"
+    ><span class="nav-sidebar__link-caption">Model Management</span></a
+  >
+</div>
+{% else %}
+<a
+  href="/dashboard/overview/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Overview' }}"
+  role="menuitem"
+  ><svg
+    class="prototype-header__popover-link-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true">
+    <use href="#overview"></use>
+  </svg>
+  <span>Overview</span></a
+>
+<a
+  href="/dashboard/api-keys/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'API Keys' }}"
+  role="menuitem"
+  ><svg
+    class="prototype-header__popover-link-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true">
+    <use href="#api-key"></use>
+  </svg>
+  <span>API Keys</span></a
+>
+<a
+  href="/dashboard/models/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Models' }}"
+  role="menuitem"
+  ><svg
+    class="prototype-header__popover-link-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true">
+    <use href="#models"></use>
+  </svg>
+  <span>Models</span></a
+>
+<a
+  href="/dashboard/usage/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Usage' }}"
+  role="menuitem"
+  ><svg
+    class="prototype-header__popover-link-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true">
+    <use href="#usage"></use>
+  </svg>
+  <span>Usage</span></a
+>
+<a
+  href="/dashboard/behaviors/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Behaviors' }}"
+  role="menuitem"
+  ><svg
+    class="prototype-header__popover-link-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true">
+    <use href="#behaviors"></use>
+  </svg>
+  <span>Behaviors</span></a
+>
+<a
+  href="/dashboard/billing/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Billing' }}"
+  role="menuitem"
+  ><svg
+    class="prototype-header__popover-link-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true">
+    <use href="#billing"></use>
+  </svg>
+  <span>Billing</span></a
+>
+<div class="prototype-internal-nav">
+  <a
+    href="/internal/users/"
+    class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Users & Organizations' }}"
+    role="menuitem"
+    ><span class="prototype-header__popover-meta-caption"
+      >Users &amp; Organizations</span
+    ></a
+  >
+  <a
+    href="/internal/data/"
+    class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Data Management' }}"
+    role="menuitem"
+    ><span class="prototype-header__popover-meta-caption"
+      >Data Management</span
+    ></a
+  >
+  <a
+    href="/internal/invites/"
+    class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Invites & Credits' }}"
+    role="menuitem"
+    ><span class="prototype-header__popover-meta-caption"
+      >Invites &amp; Credits</span
+    ></a
+  >
+  <a
+    href="/internal/usage/"
+    class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Platform Usage' }}"
+    role="menuitem"
+    ><span class="prototype-header__popover-meta-caption"
+      >Platform Usage</span
+    ></a
+  >
+  <a
+    href="/internal/overrides/"
+    class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Org Overrides' }}"
+    role="menuitem"
+    ><span class="prototype-header__popover-meta-caption"
+      >Org Overrides</span
+    ></a
+  >
+  <a
+    href="/internal/reports/"
+    class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Reports' }}"
+    role="menuitem"
+    ><span class="prototype-header__popover-meta-caption">Reports</span></a
+  >
+  <a
+    href="/internal/models/"
+    class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Model Management' }}"
+    role="menuitem"
+    ><span class="prototype-header__popover-meta-caption"
+      >Model Management</span
+    ></a
+  >
+</div>
+{% endif %} {% endmacro %}

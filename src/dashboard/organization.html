@@ -1,0 +1,53 @@
+---
+pageTitle: Organization
+permalink: /dashboard/organization/
+---
+
+{% extends 'layout.html' %} {% block content %}
+
+<div class="dashboard-wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <aside class="nav-sidebar">
+      <nav>{% include 'dashboard-nav-sidebar.html' %}</nav>
+    </aside>
+
+    <main class="dashboard-content">
+      <h1 class="dashboard-page-title">Organization</h1>
+
+      <div class="dashboard-section m__text-content">
+        <p>
+          Settings and membership for Eugene’s Personal Organization. API keys,
+          usage, and billing are scoped to this organization.
+        </p>
+      </div>
+
+      <div class="dashboard-section m__text-content">
+        <h2>Organization details</h2>
+        <p>
+          Name, type, and billing identifiers for the organization. Invoice-only
+          mode and monthly credit limits appear here when configured.
+        </p>
+      </div>
+
+      <div class="dashboard-section m__text-content">
+        <h2>Members</h2>
+        <p>
+          People who belong to this organization and their roles. Invite or
+          remove members from this list.
+        </p>
+      </div>
+
+      <div class="dashboard-section m__text-content">
+        <h2>Pending invites</h2>
+        <p>
+          Invitations that have been sent but not yet accepted. Resend or revoke
+          an invite from this section.
+        </p>
+      </div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

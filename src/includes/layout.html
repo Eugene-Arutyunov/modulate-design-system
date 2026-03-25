@@ -22,11 +22,21 @@
           document.body.classList.add("dark-mode");
         }
       })();
+      (function () {
+        try {
+          if (localStorage.getItem("prototype-internal-nav-hidden") === "1") {
+            document.body.classList.add("prototype-hide-internal-nav");
+          }
+        } catch (e) {
+          /* ignore */
+        }
+      })();
     </script>
     {% include 'header.html' %} {% block content %}{% endblock %} {% include
     'footer.html' %}
     <script src="/assets/js/theme-toggle.js"></script>
     <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/prototype-internal-nav-toggle.js"></script>
     {% if chartJs %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="/assets/js/dashboard-charts.js"></script>

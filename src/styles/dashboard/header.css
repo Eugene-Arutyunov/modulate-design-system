@@ -61,7 +61,7 @@
     top: 100%;
     right: 0;
     margin-top: 0.5rem;
-    min-width: 12rem;
+    min-width: 16rem;
     padding: 0.2rem 0.2rem 0.6rem 0.2rem;
     background-color: var(--m__background-color);
     border-radius: var(--m__widget-radius);
@@ -88,10 +88,10 @@
       flex-direction: column;
       gap: 0.25rem;
       padding-top: 0.25rem;
-      margin-top: 0.25rem;
+      margin-top: 0.4rem;
       border-top: 1px solid var(--m__ui-border-color);
       padding-bottom: 0.25rem;
-      margin-bottom: 0rem;
+      margin-bottom: 0.4rem;
     }
 
     & .prototype-header__popover-divider {
@@ -127,29 +127,39 @@
     transition-duration: var(--m__hover-transition-duration);
   }
 
-  & .prototype-header__popover-user {
+  & .prototype-header__popover-link.active {
+    background-color: var(--m__bg-surface-color);
+    font-weight: 500;
+  }
+
+  & .prototype-header__popover-meta-link {
     display: block;
-    padding: 0.45rem 0.75rem;
+    padding: 0.22rem 0.75rem;
     border-radius: 0.5rem;
     color: var(--m__text-color);
     text-decoration: none;
     font-size: 0.9em;
     transition: background-color var(--m__unhover-transition-duration)
       var(--m__transition-easing);
+
+    &:hover {
+      background-color: var(--m__bg-surface-color);
+      transition-duration: var(--m__hover-transition-duration);
+    }
+
+    &.active {
+      background-color: var(--m__bg-surface-color);
+      font-weight: 500;
+    }
   }
 
-  & .prototype-header__popover-user:hover {
-    background-color: var(--m__bg-surface-color);
-    transition-duration: var(--m__hover-transition-duration);
+  &
+    .prototype-header__popover
+    > .prototype-header__popover-meta-link:first-child {
+    padding-top: 0.42rem;
   }
 
-  & .prototype-header__popover-name {
-    display: block;
-    font-weight: 500;
-  }
-
-  & .prototype-header__popover-email {
-    display: block;
+  & .prototype-header__popover-meta-caption {
     font-size: var(--m__font-size-s);
     color: var(--m__text-caption-color);
   }

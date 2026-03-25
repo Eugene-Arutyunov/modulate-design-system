@@ -22,6 +22,12 @@ aside.nav-sidebar {
     gap: 0.1rem;
   }
 
+  & .nav-sidebar__divider {
+    margin: 0.4rem 0 0.1rem;
+    border: none;
+    border-top: 1px solid var(--m__ui-border-color);
+  }
+
   & .nav-sidebar__link {
     display: flex;
     align-items: center;
@@ -51,6 +57,20 @@ aside.nav-sidebar {
       background-color: var(--m__bg-surface-color);
       font-weight: 500;
     }
+
+    & .nav-sidebar__link-caption {
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
+    }
+
+    &:has(.nav-sidebar__link-caption) {
+      padding-top: 0.22rem;
+      padding-bottom: 0.22rem;
+    }
+  }
+
+  & nav > .nav-sidebar__link:has(.nav-sidebar__link-caption):first-child {
+    padding-top: 0.42rem;
   }
 }
 
@@ -282,4 +302,12 @@ button.m__button-secondary-compact {
     opacity: 0;
     pointer-events: none;
   }
+}
+
+.prototype-internal-nav {
+  display: contents;
+}
+
+body.prototype-hide-internal-nav .prototype-internal-nav {
+  display: none;
 }

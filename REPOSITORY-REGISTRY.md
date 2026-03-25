@@ -14,13 +14,26 @@ Switches between light and dark theme. Supports multiple `.theme-toggle` element
 
 ---
 
+## Prototype internal nav toggle
+
+**Script:** `src/assets/js/prototype-internal-nav-toggle.js`  
+**Markup:** `src/includes/dashboard-nav-macros.html` wraps `/internal/…` links in `.prototype-internal-nav`.  
+**Styles:** `src/styles/dashboard/layout.css` (`body.prototype-hide-internal-nav` hides that wrapper); `src/styles/footer.css` (`.footer-prototype-tools__switch` matches the theme-toggle look).  
+**Used in:** `src/includes/layout.html` and `src/includes/landing-layout.html` (inline class restore from `localStorage` before paint + script tag), `src/includes/footer.html` (technical panel with DS links and the switch). The script always syncs `body.prototype-hide-internal-nav` from storage even when the current page has no internal nav links (e.g. landing). The switch label is a `<label for="…">` so the text toggles the control too.
+
+The footer panel under the Modulate blurb lists **Modulate Design System** (`/`) and **UI Architecture** (`/ui/`), plus a switch **Internal admin links** (same pill control as the theme toggle, but not using the `.theme-toggle` class so `theme-toggle.js` does not bind to it). State persists in `localStorage` under `prototype-internal-nav-hidden` (`1` = hidden). Default is links visible (`aria-checked="true"` on the switch).
+
+---
+
+https://modulate-developer-apis.com/api/velma-2-stt-batch
+
 ## Header user menu
 
 **Script:** `src/assets/js/header-menu.js`  
-**Markup:** `src/includes/header.html` (user trigger + popover).  
+**Markup:** `src/includes/header.html` (user trigger + popover), `src/includes/dashboard-nav-macros.html` (shared nav macros consumed by the header popover and sidebar).  
 **Styles:** `src/styles/dashboard/header.css` (`.prototype-header__user-*`, `.prototype-header__popover*`).
 
-Dropdown menu: trigger shows user name + chevron; click opens popover (Account link, Appearance + theme toggle, Log out). Popover aligned to right, below trigger with gap. On mobile, Dashboard/Playground links are hidden; user menu and theme toggle remain. Close on outside click or Escape. Theme toggle in popover and in header both bound by theme-toggle.js.
+Dropdown menu: trigger shows user name + chevron; click opens popover. Account and organization lines and the full dashboard/internal link list come from the same Nunjucks macros as the desktop sidebar (`dashboard_nav_meta`, `dashboard_nav_main`). On viewports under 768px, `.prototype-header__popover-nav` also renders the primary header links (Conversations, Playground, Docs, Dashboard) ahead of that list, matching the hidden top bar. Appearance + theme toggle and Log out follow. Popover aligned to right, below trigger with gap. Close on outside click or Escape. Theme toggle in popover and in header both bound by theme-toggle.js.
 
 ---
 
@@ -65,10 +78,47 @@ Raw SVG files are normalized into one hidden sprite include. The generator remov
 
 ## Dashboard navigation icons
 
-**Markup:** `src/includes/dashboard-nav-sidebar.html`, `src/includes/header.html`  
+**Markup:** `src/includes/dashboard-nav-sidebar.html` (imports macros), `src/includes/dashboard-nav-macros.html` (single source for sidebar + mobile menu links), `src/includes/header.html` (imports the same macros for the bar and popover).  
 **Styles:** `src/styles/dashboard/layout.css`, `src/styles/dashboard/header.css`.
 
-Dashboard page navigation in the prototype uses the shared SVG sprite for page icons. The prototype header logo also uses sprite symbol `#mod-icon`. Current page-icon mapping is explicit in markup so each link stays easy to read and reorder.
+Dashboard page navigation in the prototype uses the shared SVG sprite for page icons. Link targets and order are defined once in `dashboard-nav-macros.html` (`dashboard_nav_meta` + `dashboard_nav_main` with variant `sidebar` or `popover`). The sidebar starts with two caption-style links, then dashboard icon links, then internal tool links; the prototype header logo uses sprite symbol `#mod-icon`. Primary header links are defined in `primary_nav('bar'|'popover'|'landing')`: full bar + popover on signed-in pages; **landing** (`index-landing`, `isLanding`) shows only Playground and Docs before Sign in.
+
+---
+
+## Docs page
+
+**Page:** `src/docs.html`  
+**Permalink:** `/docs/`
+
+Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Sign in), light theme, no dashboard sidebar.
+
+---
+
+## Playground page
+
+**Page:** `src/playground.html`  
+**Permalink:** `/playground/`
+
+Placeholder page for the interactive API playground. Uses `landing-layout.html` — unauthenticated header, light theme. Playground link in all nav variants now points to `/playground/` instead of `#`.
+
+---
+
+## Conversations page
+
+**Page:** `src/conversations.html`  
+**Permalink:** `/conversations/`
+
+Empty placeholder page for conversations. Uses `layout.html`.
+
+---
+
+## Organization dashboard page
+
+**Page:** `src/dashboard/organization.html`  
+**Permalink:** `/dashboard/organization/`  
+**UI structure:** `ui.yaml` (`dashboard-organization`).
+
+Dashboard page with sidebar; placeholder sections for organization intro, details, members, and pending invites.
 
 ---
 

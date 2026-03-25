@@ -1,3 +1,4 @@
+{% import 'dashboard-nav-macros.html' as dash_nav %}
 <header class="prototype-header">
   <a
     href="/index-landing/"
@@ -9,14 +10,9 @@
   </a>
   <div class="prototype-header__right">
     <nav class="prototype-header__links">
-      <a href="/" class="prototype-header__link">←</a>
-      <a href="/dashboard/overview/" class="prototype-header__link"
-        >Dashboard</a
-      >
-      <a href="#" class="prototype-header__link">Playground</a>
-      {% if isLanding %}
+      {% if isLanding %} {{ dash_nav.primary_nav('landing') }}
       <a href="/auth/login/" class="m__button-compact">Sign in</a>
-      {% endif %}
+      {% else %} {{ dash_nav.primary_nav('bar') }} {% endif %}
     </nav>
     {% if not isLanding %}
     <div class="prototype-header__user-wrap">
@@ -46,113 +42,10 @@
         role="menu"
         aria-labelledby="header-user-trigger"
         hidden>
-        <a
-          href="/dashboard/account/"
-          class="prototype-header__popover-user"
-          role="menuitem">
-          <span class="prototype-header__popover-name">Eugene Arutyunov</span>
-          <span class="prototype-header__popover-email">e@intuition.team</span>
-        </a>
+        {{ dash_nav.dashboard_nav_meta('popover') }}
         <nav class="prototype-header__popover-nav" aria-label="Main">
-          <a href="#" class="prototype-header__popover-link" role="menuitem"
-            >Playground</a
-          >
-          <a
-            href="/dashboard/overview/"
-            class="prototype-header__popover-link"
-            role="menuitem"
-            ><svg
-              class="prototype-header__popover-link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#overview"></use>
-            </svg>
-            <span>Dashboard</span></a
-          >
-          <a
-            href="/dashboard/api-keys/"
-            class="prototype-header__popover-link"
-            role="menuitem"
-            ><svg
-              class="prototype-header__popover-link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#api-key"></use>
-            </svg>
-            <span>API Keys</span></a
-          >
-          <a
-            href="/dashboard/models/"
-            class="prototype-header__popover-link"
-            role="menuitem"
-            ><svg
-              class="prototype-header__popover-link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#models"></use>
-            </svg>
-            <span>Models</span></a
-          >
-          <a
-            href="/dashboard/documentation/"
-            class="prototype-header__popover-link"
-            role="menuitem"
-            ><svg
-              class="prototype-header__popover-link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#api-docs"></use>
-            </svg>
-            <span>Documentation</span></a
-          >
-          <a
-            href="/dashboard/usage/"
-            class="prototype-header__popover-link"
-            role="menuitem"
-            ><svg
-              class="prototype-header__popover-link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#usage"></use>
-            </svg>
-            <span>Usage</span></a
-          >
-          <a
-            href="/dashboard/behaviors/"
-            class="prototype-header__popover-link"
-            role="menuitem"
-            ><svg
-              class="prototype-header__popover-link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#behaviors"></use>
-            </svg>
-            <span>Behaviors</span></a
-          >
-          <a
-            href="/dashboard/billing/"
-            class="prototype-header__popover-link"
-            role="menuitem"
-            ><svg
-              class="prototype-header__popover-link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#billing"></use>
-            </svg>
-            <span>Billing</span></a
-          >
-          <a
-            href="/dashboard/account/"
-            class="prototype-header__popover-link"
-            role="menuitem"
-            ><svg
-              class="prototype-header__popover-link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#account"></use>
-            </svg>
-            <span>Account</span></a
-          >
+          {{ dash_nav.primary_nav('popover') }} {{
+          dash_nav.dashboard_nav_main('popover') }}
         </nav>
         <div class="prototype-header__popover-divider" aria-hidden="true"></div>
         <div
