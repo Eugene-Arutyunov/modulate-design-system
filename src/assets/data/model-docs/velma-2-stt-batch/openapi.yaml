@@ -1,0 +1,124 @@
+openapi: "3.1.0"
+info:
+  title: Velma-2 Batch
+  version: "2.0"
+  description: |
+    Multilingual batch speech-to-text API. Accepts audio files up to 100 MB and
+    returns a full transcript with optional speaker diarization, emotion detection,
+    accent identification, and PII/PHI tagging.
+
+servers:
+  - url: https://modulate-developer-apis.com/api/velma-2-stt-batch
+
+security:
+  - ApiKeyHeader: []
+
+paths:
+  /transcribe:
+    post:
+      summary: Submit a transcription job
+      operationId: transcribe
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - audio
+              properties:
+                audio:
+                  type: string
+                  format: binary
+                  description: Audio file (AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM; max 100 MB).
+                language:
+                  type: string
+                  description: BCP-47 language tag. Auto-detected if omitted.
+                  example: en-US
+                diarization:
+                  type: boolean
+                  default: false
+                  description: Enable speaker diarization.
+                emotion:
+                  type: boolean
+                  default: false
+                  description: Enable per-segment emotion detection.
+                accent:
+                  type: boolean
+                  default: false
+                  description: Enable accent identification.
+                pii_redaction:
+                  type: boolean
+                  default: false
+                  description: Redact PII/PHI from the transcript.
+      responses:
+        "200":
+          description: Transcription result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TranscriptionResult"
+        "400":
+          description: Invalid request
+        "401":
+          description: Missing or invalid API key
+        "413":
+          description: Audio file exceeds 100 MB limit
+        "429":
+          description: Concurrency or usage quota exceeded
+
+components:
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    TranscriptionResult:
+      type: object
+      required:
+        - transcript
+        - segments
+        - language
+        - duration_seconds
+      properties:
+        transcript:
+          type: string
+          description: Full plain-text transcript.
+        language:
+          type: string
+          description: Detected or specified BCP-47 language tag.
+        duration_seconds:
+          type: number
+          description: Duration of the processed audio in seconds.
+        segments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Segment"
+
+    Segment:
+      type: object
+      required:
+        - start
+        - end
+        - text
+      properties:
+        start:
+          type: number
+          description: Segment start time in seconds.
+        end:
+          type: number
+          description: Segment end time in seconds.
+        text:
+          type: string
+          description: Transcribed text for this segment.
+        speaker:
+          type: string
+          description: Speaker label (present when diarization is enabled).
+        emotion:
+          type: string
+          description: Detected emotion (present when emotion is enabled).
+        accent:
+          type: string
+          description: Detected accent (present when accent is enabled).

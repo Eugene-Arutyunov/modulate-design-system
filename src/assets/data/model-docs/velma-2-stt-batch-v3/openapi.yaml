@@ -1,0 +1,115 @@
+openapi: "3.1.0"
+info:
+  title: Velma-2 Batch v3 (Preview)
+  version: "3.0-preview"
+  description: |
+    Next-generation batch speech-to-text with improved accuracy across 90+
+    languages and enhanced emotion granularity. Currently in limited preview.
+    API surface is compatible with Velma-2 Batch with additional fields.
+
+servers:
+  - url: https://modulate-developer-apis.com/api/velma-2-stt-batch-v3
+
+security:
+  - ApiKeyHeader: []
+
+paths:
+  /transcribe:
+    post:
+      summary: Submit a transcription job
+      operationId: transcribe
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - audio
+              properties:
+                audio:
+                  type: string
+                  format: binary
+                  description: Audio file (AAC, FLAC, MP3, MP4, OGG, Opus, WAV, WebM; max 100 MB).
+                language:
+                  type: string
+                  description: BCP-47 language tag. Auto-detected if omitted.
+                diarization:
+                  type: boolean
+                  default: false
+                emotion:
+                  type: boolean
+                  default: false
+                  description: Returns fine-grained emotion scores (v3 enhancement).
+                accent:
+                  type: boolean
+                  default: false
+                pii_redaction:
+                  type: boolean
+                  default: false
+      responses:
+        "200":
+          description: Transcription result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TranscriptionResult"
+        "401":
+          description: Missing or invalid API key
+        "403":
+          description: Model not available for your organization (preview access required)
+        "429":
+          description: Concurrency or usage quota exceeded
+
+components:
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    TranscriptionResult:
+      type: object
+      required:
+        - transcript
+        - segments
+        - language
+        - duration_seconds
+      properties:
+        transcript:
+          type: string
+        language:
+          type: string
+        duration_seconds:
+          type: number
+        segments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Segment"
+
+    Segment:
+      type: object
+      required:
+        - start
+        - end
+        - text
+      properties:
+        start:
+          type: number
+        end:
+          type: number
+        text:
+          type: string
+        speaker:
+          type: string
+        emotion:
+          type: string
+          description: Primary detected emotion.
+        emotion_scores:
+          type: object
+          description: Fine-grained emotion scores (v3 only, when emotion=true).
+          additionalProperties:
+            type: number
+        accent:
+          type: string

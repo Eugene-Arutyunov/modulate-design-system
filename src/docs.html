@@ -3,73 +3,62 @@ pageTitle: Documentation
 permalink: /docs/
 ---
 
-{% extends 'landing-layout.html' %} {% block content %}
+{% extends 'landing-layout.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" />
+{% endblock %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <h1>Documentation</h1>
+  <p class="loud">
+    Explore Velma-2's voice models, get started with the API, and browse example
+    projects.
+  </p>
+  <div class="m__space S"></div>
+</div>
 
 <div class="dashboard-wrapper">
-  <div class="m__space XL"></div>
-  <main class="dashboard-content">
-    <h1 class="dashboard-page-title">Documentation</h1>
-    <div class="dashboard-section">
-      <p>
-        Explore Velma-2's voice models, get started with the API, and browse
-        example projects.
-      </p>
-    </div>
+  <div class="dashboard-layout">
+    <aside class="nav-sidebar">
+      <nav id="docs-model-list" aria-label="Models">
+        <div class="docs-loading">Loading models…</div>
+      </nav>
+    </aside>
 
-    <div class="dashboard-section">
-      <h2>Velma-2 Models</h2>
-      <p>
-        Velma-2 handles transcription, emotion, accent, and engagement detection
-        across 70+ languages. Choose the model that fits your use case.
-      </p>
-      <p>
-        <strong>Velma-2 Batch</strong> — best-in-class multilingual batch
-        transcription in 70+ languages with speaker diarization, emotion
-        detection, accent identification, and PII/PHI tagging. Supports AAC,
-        AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, and WebM up to 100MB. REST
-        API.
-      </p>
-      <p>
-        <strong>Velma-2 Batch English Fast</strong> — English-only batch
-        transcription with extremely high throughput and automatic
-        capitalization and punctuation. Opus format audio only. Ideal for
-        high-scale batch processing. REST API.
-      </p>
-      <p>
-        <strong>Velma-2 Streaming</strong> — real-time streaming transcription
-        via WebSocket with full voice-native understanding: multilingual
-        support, speaker diarization, emotion, accent, and PII/PHI tagging.
-        WebSocket.
-      </p>
-    </div>
+    <main class="dashboard-content">
+      <div id="docs-placeholder">
+        <div class="docs-loading">Select a model from the list.</div>
+      </div>
 
-    <div class="dashboard-section">
-      <h2>Feature comparison</h2>
-      <p>
-        Transcription — supported in all three models. Speaker diarization —
-        Velma-2 Batch and Streaming. Emotion detection — Velma-2 Batch and
-        Streaming. Accent identification — Velma-2 Batch and Streaming. PII/PHI
-        tagging — Velma-2 Batch and Streaming. Multilingual — Velma-2 Batch and
-        Streaming. Auto capitalization and punctuation — all three models.
-        Real-time — Velma-2 Streaming only.
-      </p>
-    </div>
-
-    <div class="dashboard-section">
-      <h2>Authentication &amp; rate limits</h2>
-      <p>
-        REST endpoints require an API key via the
-        <code>X-API-Key</code> header. The WebSocket endpoint uses an
-        <code>api_key</code> query parameter.
-      </p>
-      <p>
-        Per-model concurrency and monthly usage quotas. Credit-based billing
-        with free tier included. Usage tracked in real time via the
-        <a href="/dashboard/usage/">Usage Dashboard</a>.
-      </p>
-    </div>
-  </main>
+      <div id="docs-panel" hidden>
+        <div class="dashboard-section">
+          <h1 class="dashboard-page-title" id="docs-panel-title"></h1>
+          <div class="m__segmented-control">
+            <label>
+              <input type="radio" name="doc-tab" value="overview" checked />
+              Overview
+            </label>
+            <label>
+              <input type="radio" name="doc-tab" value="api-docs" />
+              API Spec
+            </label>
+            <label>
+              <input type="radio" name="doc-tab" value="quickstart" />
+              Quickstart
+            </label>
+          </div>
+          <div id="docs-doc-content"></div>
+        </div>
+      </div>
+    </main>
+  </div>
   <div class="m__space XL"></div>
 </div>
 
+{% endblock %} {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="/assets/js/docs.js"></script>
 {% endblock %}

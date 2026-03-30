@@ -74,6 +74,8 @@ function normalizeRouteList(routes) {
     id: r.id ?? r.route ?? '',
     route: r.route ?? '',
     title: r.title ?? '',
+    title_deprecated:
+      typeof r.title_deprecated === 'string' ? r.title_deprecated : '',
     sections: (r.sections ?? []).map(normalizeSection),
   }));
 }
@@ -172,13 +174,22 @@ function renderUIStructure(data) {
     const targetRoute = targetById.get(routeId);
     const route = targetRoute ?? currentRoute;
     const title = route?.title ?? routeId;
+    const titleDeprecated = route?.title_deprecated ?? '';
 
     const tr = document.createElement('tr');
 
     const tdPage = document.createElement('td');
     const titleEl = document.createElement('code');
     titleEl.className = 'ui-viz__route-title';
-    titleEl.textContent = title;
+    if (titleDeprecated) {
+      const del = document.createElement('del');
+      del.textContent = titleDeprecated;
+      titleEl.appendChild(del);
+      titleEl.appendChild(document.createTextNode(' '));
+      titleEl.appendChild(document.createTextNode(title));
+    } else {
+      titleEl.textContent = title;
+    }
     tdPage.appendChild(titleEl);
     tr.appendChild(tdPage);
 

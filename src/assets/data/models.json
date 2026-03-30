@@ -1,0 +1,83 @@
+{
+  "models": [
+    {
+      "model_uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "model_display_label": "Velma-2 Batch",
+      "model_identifier": "velma-2-stt-batch",
+      "status": "released",
+      "model_type": "speech-to-text",
+      "description": "Best-in-class multilingual batch transcription in 70+ languages with speaker diarization, emotion detection, accent identification, and PII/PHI tagging.",
+      "api_url": "https://modulate-developer-apis.com/api/velma-2-stt-batch",
+      "concurrency_quota": 10,
+      "usage_quota": 500,
+      "cost_dollars_per_thousand_hours": 250,
+      "feature_costs": [
+        { "feature_name": "Speaker diarization", "cost_dollars_per_thousand_hours": 50 },
+        { "feature_name": "PII/PHI tagging", "cost_dollars_per_thousand_hours": 75 }
+      ],
+      "accepted_media_formats": ["AAC", "AIFF", "FLAC", "MOV", "MP3", "MP4", "OGG", "Opus", "WAV", "WebM"],
+      "example_project_links": [
+        { "title": "Batch transcription quickstart (Python)", "url": "https://github.com/modulate-dev/velma-2-batch-python-example" },
+        { "title": "Call center analytics demo", "url": "https://github.com/modulate-dev/call-center-demo" }
+      ]
+    },
+    {
+      "model_uuid": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "model_display_label": "Velma-2 Batch English Fast",
+      "model_identifier": "velma-2-stt-batch-fast-en",
+      "status": "released",
+      "model_type": "speech-to-text",
+      "description": "English-only batch transcription with extremely high throughput and automatic capitalization and punctuation. Opus format audio only. Ideal for high-scale batch processing.",
+      "api_url": "https://modulate-developer-apis.com/api/velma-2-stt-batch-fast-en",
+      "concurrency_quota": 50,
+      "usage_quota": 2000,
+      "cost_dollars_per_thousand_hours": 120,
+      "feature_costs": [],
+      "accepted_media_formats": ["Opus"],
+      "example_project_links": [
+        { "title": "High-throughput batch demo (Python)", "url": "https://github.com/modulate-dev/velma-2-batch-fast-python-example" }
+      ]
+    },
+    {
+      "model_uuid": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "model_display_label": "Velma-2 Streaming",
+      "model_identifier": "velma-2-stt-streaming",
+      "status": "released",
+      "model_type": "speech-to-text",
+      "description": "Real-time streaming transcription via WebSocket with full voice-native understanding: multilingual support, speaker diarization, emotion, accent, and PII/PHI tagging.",
+      "api_url": "wss://modulate-developer-apis.com/api/velma-2-stt-streaming",
+      "concurrency_quota": 5,
+      "usage_quota": 200,
+      "cost_dollars_per_thousand_hours": 400,
+      "feature_costs": [
+        { "feature_name": "Speaker diarization", "cost_dollars_per_thousand_hours": 60 },
+        { "feature_name": "Emotion detection", "cost_dollars_per_thousand_hours": 40 },
+        { "feature_name": "PII/PHI tagging", "cost_dollars_per_thousand_hours": 90 }
+      ],
+      "accepted_media_formats": ["PCM", "Opus", "WebM"],
+      "example_project_links": [
+        { "title": "Real-time transcription demo (JavaScript)", "url": "https://github.com/modulate-dev/velma-2-streaming-js-example" },
+        { "title": "Live captioning demo", "url": "https://github.com/modulate-dev/live-captioning-demo" }
+      ]
+    },
+    {
+      "model_uuid": "d4e5f6a7-b8c9-0123-defa-234567890123",
+      "model_display_label": "Velma-2 Batch v3",
+      "model_identifier": "velma-2-stt-batch-v3",
+      "status": "preview",
+      "model_type": "speech-to-text",
+      "description": "Next-generation batch model with improved accuracy across 90+ languages and enhanced emotion granularity. Currently in limited preview.",
+      "api_url": "https://modulate-developer-apis.com/api/velma-2-stt-batch-v3",
+      "concurrency_quota": 3,
+      "usage_quota": 100,
+      "cost_dollars_per_thousand_hours": 300,
+      "feature_costs": [
+        { "feature_name": "Speaker diarization", "cost_dollars_per_thousand_hours": 50 },
+        { "feature_name": "PII/PHI tagging", "cost_dollars_per_thousand_hours": 75 },
+        { "feature_name": "Emotion granularity", "cost_dollars_per_thousand_hours": 60 }
+      ],
+      "accepted_media_formats": ["AAC", "FLAC", "MP3", "MP4", "OGG", "Opus", "WAV", "WebM"],
+      "example_project_links": []
+    }
+  ]
+}

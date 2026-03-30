@@ -1,11 +1,13 @@
 {% macro primary_nav(variant) %} {% if variant == "bar" %}
-<a href="/conversations/" class="prototype-header__link">Conversations</a>
-<a href="/playground/" class="prototype-header__link">Playground</a>
 <a href="/docs/" class="prototype-header__link">Docs</a>
+<a href="/pricing/" class="prototype-header__link">Pricing</a>
+<a href="/playground/" class="prototype-header__link">Playground</a>
+<a href="/conversations/" class="prototype-header__link">Conversations</a>
 <a href="/dashboard/overview/" class="prototype-header__link">Dashboard</a>
 {% elif variant == "landing" %}
-<a href="/playground/" class="prototype-header__link">Playground</a>
 <a href="/docs/" class="prototype-header__link">Docs</a>
+<a href="/pricing/" class="prototype-header__link">Pricing</a>
+<a href="/playground/" class="prototype-header__link">Playground</a>
 {% else %}
 <a
   href="/conversations/"
@@ -14,16 +16,22 @@
   >Conversations</a
 >
 <a
-  href="/playground/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Playground' }}"
-  role="menuitem"
-  >Playground</a
->
-<a
   href="/docs/"
   class="prototype-header__popover-link {{ 'active' if pageTitle == 'Documentation' }}"
   role="menuitem"
   >Docs</a
+>
+<a
+  href="/pricing/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Pricing' }}"
+  role="menuitem"
+  >Pricing</a
+>
+<a
+  href="/playground/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Playground' }}"
+  role="menuitem"
+  >Playground</a
 >
 <a
   href="/dashboard/overview/"
@@ -33,11 +41,6 @@
 >
 {% endif %} {% endmacro %} {% macro dashboard_nav_meta(variant) %} {% if variant
 == "sidebar" %}
-<a
-  href="/dashboard/account/"
-  class="nav-sidebar__link {{ 'active' if pageTitle == 'Account' }}"
-  ><span class="nav-sidebar__link-caption">e@intuition.team</span></a
->
 <a
   href="/dashboard/organization/"
   class="nav-sidebar__link {{ 'active' if pageTitle == 'Organization' }}"

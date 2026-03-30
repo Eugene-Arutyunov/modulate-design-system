@@ -25,8 +25,6 @@ The footer panel under the Modulate blurb lists **Modulate Design System** (`/`)
 
 ---
 
-https://modulate-developer-apis.com/api/velma-2-stt-batch
-
 ## Header user menu
 
 **Script:** `src/assets/js/header-menu.js`  
@@ -40,11 +38,11 @@ Dropdown menu: trigger shows user name + chevron; click opens popover. Account a
 ## UI structure visualizer
 
 **Script:** `src/assets/js/ui-visualizer.js`  
-**Data:** `ui.yaml` with two root keys: **product** (actual structure in the product) and **prototype** (target structure for this repo). Each is an array of routes; every section is a node `section:` with **widget**, **widgets**, or **text-content**.  
+**Data:** `ui.yaml` with two root keys: **current** (product) and **target** (prototype for this repo). Each is an array of routes; every section is a node `section:` with **widget**, **widgets**, or **text-content**. Optional per route: **title_deprecated** (string) — shown struck through before **title** in the Route column when set.  
 **Page:** `src/ui.html` (UI Architecture).  
 **Styles:** `.ui-viz` + `.ui-viz__*` in `src/styles/ui-visualizer.css`.
 
-Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders two columns per route (product vs prototype). Prototype is the target structure for this repository; when the product catches up, update the `product` block in `ui.yaml`. Static diagram: `src/includes/ui-arch-diagram.html` (aside with both columns), `ui-arch-diagram-structure.html` (left: route + list), `ui-arch-diagram-layout.html` (right: 4 section blocks). Full diagram on `src/ui.html`; index uses only the layout include inside `<aside class="ui-arch-diagram ui-arch-diagram--layout-only">`. Styles in `ui-visualizer.css` under `.ui-arch-diagram`.
+Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders three columns per row (Route title, Current, Target). Static diagram: `src/includes/ui-arch-diagram.html` (aside with both columns), `ui-arch-diagram-structure.html` (left: route + list), `ui-arch-diagram-layout.html` (right: 4 section blocks). Full diagram on `src/ui.html`; index uses only the layout include inside `<aside class="ui-arch-diagram ui-arch-diagram--layout-only">`. Styles in `ui-visualizer.css` under `.ui-arch-diagram`.
 
 ---
 
@@ -81,16 +79,47 @@ Raw SVG files are normalized into one hidden sprite include. The generator remov
 **Markup:** `src/includes/dashboard-nav-sidebar.html` (imports macros), `src/includes/dashboard-nav-macros.html` (single source for sidebar + mobile menu links), `src/includes/header.html` (imports the same macros for the bar and popover).  
 **Styles:** `src/styles/dashboard/layout.css`, `src/styles/dashboard/header.css`.
 
-Dashboard page navigation in the prototype uses the shared SVG sprite for page icons. Link targets and order are defined once in `dashboard-nav-macros.html` (`dashboard_nav_meta` + `dashboard_nav_main` with variant `sidebar` or `popover`). The sidebar starts with two caption-style links, then dashboard icon links, then internal tool links; the prototype header logo uses sprite symbol `#mod-icon`. Primary header links are defined in `primary_nav('bar'|'popover'|'landing')`: full bar + popover on signed-in pages; **landing** (`index-landing`, `isLanding`) shows only Playground and Docs before Sign in.
+Dashboard page navigation in the prototype uses the shared SVG sprite for page icons. Link targets and order are defined once in `dashboard-nav-macros.html` (`dashboard_nav_meta` + `dashboard_nav_main` with variant `sidebar` or `popover`). The sidebar starts with one caption-style link (organization); the account email link appears only in the header popover. Then dashboard icon links, then internal tool links; the prototype header logo uses sprite symbol `#mod-icon`. Primary header links are defined in `primary_nav('bar'|'popover'|'landing')`: full bar + popover on signed-in pages; **landing** (`index-landing`, `isLanding`) shows only Playground and Docs before Sign in.
 
 ---
 
 ## Docs page
 
 **Page:** `src/docs.html`  
-**Permalink:** `/docs/`
+**Permalink:** `/docs/`  
+**Script:** `src/assets/js/docs.js`  
+**Styles:** `src/styles/docs.css`
 
-Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Sign in), light theme, no dashboard sidebar.
+Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. Two-column layout (`dashboard-layout`): left sidebar lists models loaded from `/assets/data/models.json` with `.m__badge` status labels; right panel shows per-model tabs (Overview / API Spec / Quickstart) via `.m__segmented-control`. Overview is rendered from cached model data. API Spec fetches `/assets/data/model-docs/{identifier}/openapi.yaml` and shows it in `.docs-code-block` with a download button. Quickstart fetches `/assets/data/model-docs/{identifier}/quickstart.md` → `marked.parse()` → `hljs.highlightElement()`; example links come from `models.json`. Marked and highlight.js loaded from CDN via `{% block scripts %}`. Works fully without a backend.
+
+---
+
+## Model documentation data files
+
+**Data:** `src/assets/data/models.json` — model list with all metadata and example project links.  
+**Docs:** `src/assets/data/model-docs/{model_identifier}/openapi.yaml` and `quickstart.md` — one directory per model.
+
+Static files committed to the repo; served as-is by Eleventy passthrough copy (`src/assets`). To add a model: add an entry to `models.json` and create the corresponding `model-docs/{identifier}/` directory.
+
+---
+
+## Pricing page
+
+**Page:** `src/pricing.html`  
+**Permalink:** `/pricing/`  
+**Script:** `src/assets/js/pricing.js`  
+**Styles:** `src/styles/docs.css` (shared with docs)
+
+Public pricing page. Uses `landing-layout.html`. Loads model list from `/assets/data/models.json` and renders one `.pricing-card` per model with base cost, feature costs, quotas, and accepted formats. Pricing appears in all three nav variants (landing, bar, popover). Works fully without a backend.
+
+---
+
+## Badge component
+
+**Styles:** `src/styles/dashboard/layout.css`  
+**Class:** `.m__badge`
+
+Inline status/label pill. Variants: `.m__badge--released` (green tint), `.m__badge--preview` (amber tint). Used in the docs model sidebar and docs overview tab.
 
 ---
 

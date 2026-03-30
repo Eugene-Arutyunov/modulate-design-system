@@ -1,0 +1,114 @@
+openapi: "3.1.0"
+info:
+  title: Velma-2 Streaming
+  version: "2.0"
+  description: |
+    Real-time streaming speech-to-text via WebSocket. Supports multilingual
+    input, speaker diarization, emotion detection, accent identification, and
+    PII/PHI tagging with low-latency partial results.
+
+servers:
+  - url: wss://modulate-developer-apis.com/api/velma-2-stt-streaming
+
+security:
+  - ApiKeyQuery: []
+
+paths:
+  /stream:
+    get:
+      summary: Open a streaming transcription session
+      operationId: stream
+      description: |
+        Upgrade to a WebSocket connection. Send audio chunks as binary frames;
+        receive partial and final transcript events as JSON text frames.
+      parameters:
+        - name: api_key
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Your API key.
+        - name: language
+          in: query
+          schema:
+            type: string
+          description: BCP-47 language tag. Auto-detected if omitted.
+          example: en-US
+        - name: diarization
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - name: emotion
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - name: accent
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - name: pii_redaction
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        "101":
+          description: Switching Protocols — WebSocket connection established
+        "401":
+          description: Missing or invalid API key
+        "429":
+          description: Concurrency quota exceeded
+
+components:
+  securitySchemes:
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+
+  schemas:
+    PartialTranscript:
+      type: object
+      required:
+        - type
+        - text
+      properties:
+        type:
+          type: string
+          enum: [partial]
+        text:
+          type: string
+          description: In-progress transcript text, subject to revision.
+
+    FinalTranscript:
+      type: object
+      required:
+        - type
+        - text
+        - start
+        - end
+      properties:
+        type:
+          type: string
+          enum: [final]
+        text:
+          type: string
+          description: Finalized transcript text for this segment.
+        start:
+          type: number
+          description: Segment start time in seconds.
+        end:
+          type: number
+          description: Segment end time in seconds.
+        speaker:
+          type: string
+          description: Speaker label (present when diarization is enabled).
+        emotion:
+          type: string
+          description: Detected emotion (present when emotion is enabled).
+        accent:
+          type: string
+          description: Detected accent (present when accent is enabled).

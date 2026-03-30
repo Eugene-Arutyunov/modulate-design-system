@@ -211,7 +211,6 @@ button.m__button-secondary-compact {
     font-size: var(--m__font-size-xl);
     font-weight: var(--m__font-weight-bold);
   }
-
   & .dashboard-section {
     margin-bottom: 0.5rem;
 
@@ -301,6 +300,36 @@ button.m__button-secondary-compact {
     position: absolute;
     opacity: 0;
     pointer-events: none;
+  }
+}
+
+.m__badge {
+  display: inline-block;
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-medium);
+  line-height: 1;
+  padding: 0.2em 0.45em;
+  border-radius: 0.25rem;
+  background-color: var(--m__bg-surface-color);
+  color: var(--m__text-caption-color);
+  white-space: nowrap;
+
+  &.m__badge--released {
+    background-color: color-mix(
+      in srgb,
+      var(--m__ui-success-color) 15%,
+      transparent
+    );
+    color: color-mix(
+      in srgb,
+      var(--m__ui-success-color) 70%,
+      var(--m__text-color)
+    );
+  }
+
+  &.m__badge--preview {
+    background-color: color-mix(in srgb, rgb(255, 160, 30) 15%, transparent);
+    color: color-mix(in srgb, rgb(200, 120, 0) 80%, var(--m__text-color));
   }
 }
 
