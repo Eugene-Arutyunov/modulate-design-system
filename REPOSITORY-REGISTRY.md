@@ -190,11 +190,29 @@ Label + input pair. Label sits above the input. Input uses `--m__ui-control-colo
 
 ## Auth screens
 
-**Pages:** `src/auth/login.html`, `src/auth/signup.html`, `src/auth/reset-password.html`  
+**Pages:** `src/auth/login.html`, `src/auth/signup.html`, `src/auth/reset-password.html`, `src/auth/org-select.html`  
 **Layout:** `src/includes/auth-layout.html`  
-**UI structure:** `ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`).
+**UI structure:** `ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`, `/auth/org-select/`).
 
-Three auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link".
+Four auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link". Select organization shows an `.m__option-list` of orgs with `.m__tag` role labels, and a form to create a new org with a secondary button.
+
+---
+
+## Option list component
+
+**Styles:** `src/styles/option-list.css`  
+**Class:** `.m__option-list`
+
+A group of interactive list items that share a single rounded border. Functionally a set of buttons (each item navigates immediately on click); visually the border-radius applies to the group container, not individual rows. Rows are separated by a border-bottom. Each item is a flex row with a label (`__item-label`) and an optional tag cluster (`__item-tags`) pushed to the right. Hover state uses `--m__ui-control-color`.
+
+---
+
+## Tag component
+
+**Styles:** `src/styles/tag.css`  
+**Class:** `.m__tag`
+
+Small inline label for metadata like roles or categories. Uses compact padding and `--m__radius-s`. No color variants at this stage; renders with `--m__ui-control-color` background and `--m__ui-border-color` border.
 
 ---
 

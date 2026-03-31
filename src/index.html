@@ -394,6 +394,51 @@ block content %}
           </td>
         </tr>
         <tr>
+          <td><code>.m__option-list</code></td>
+          <td>
+            <div class="m__option-list" style="max-width: 20rem">
+              <a href="#" class="m__option-list__item">
+                <span class="m__option-list__item-label">Personal</span>
+                <span class="m__option-list__item-tags">
+                  <span class="m__tag">Admin</span>
+                </span>
+              </a>
+              <a href="#" class="m__option-list__item">
+                <span class="m__option-list__item-label">Sinelnikov Corp.</span>
+                <span class="m__option-list__item-tags">
+                  <span class="m__tag">Admin</span>
+                  <span class="m__tag">Internal</span>
+                </span>
+              </a>
+            </div>
+          </td>
+          <td>
+            <code>--m__radius-m</code><br />
+            <code>--m__button-padding</code><br />
+            <code>--m__space-xs</code><br />
+            <code>--m__space-xxs</code><br />
+            <code>--m__ui-border-color</code><br />
+            <code>--m__ui-control-color</code><br />
+            <code>--m__text-color</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__tag</code></td>
+          <td>
+            <span style="display: inline-flex; gap: var(--m__space-xxs)">
+              <span class="m__tag">Admin</span>
+              <span class="m__tag">Internal</span>
+            </span>
+          </td>
+          <td>
+            <code>--m__button-compact-padding</code><br />
+            <code>--m__radius-xs</code><br />
+            <code>--m__font-size-s</code><br />
+            <code>--m__ui-border-color</code><br />
+            <code>--m__text-color</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>.m__textfield</code></td>
           <td>
             <div class="m__textfield" style="max-width: 16rem">
@@ -595,11 +640,11 @@ block content %}
 
     <div class="m__text-width">
       <p>
-        Charts use Chart.js 4.x with a set of opinionated defaults that align
-        them with the design system's visual language. The following adjustments
-        are applied on top of the default Chart.js configuration:
+        Charts use <a href="https://www.chartjs.org/">Chart.js</a> with a set of opinionated defaults that align
+        them with the design system's visual language.
       </p>
     </div>
+    <div class="m__space M"></div>
 
     <div class="m__sequence XL gap-M">
       <div class="m__sequence-item">
@@ -617,10 +662,14 @@ block content %}
       </div>
       <div class="m__sequence-item">
         <div class="m__text-width m__text-content">
-          <ol>
+          <p>
+            The following adjustments are applied on top of the default Chart.js
+            configuration:
+          </p>
+          <ul>
             <li>
-              <strong>Tooltips are off.</strong
-              ><ids-footnote-link></ids-footnote-link>
+              Tooltips
+              <ids-footnote-link>are off.</ids-footnote-link>
               <ids-footnote>
                 <p>
                   <code>plugins.tooltip.enabled:&nbsp;false</code>
@@ -629,10 +678,69 @@ block content %}
             </li>
 
             <li>
-              <strong>Legend at the bottom</strong> with round 8&times;8
-              markers.<ids-footnote-link></ids-footnote-link> Shown only when
-              there is more than one dataset.<ids-footnote-link
-              ></ids-footnote-link>
+              Animation <ids-footnote-link>is off.</ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  <code>animation:&nbsp;false</code> at the
+                  <code>options</code> level.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              One bar / label per time unit. For example, data arriving at
+              sub-day granularity is aggregated by day before rendering.
+            </li>
+
+            <li>
+              Bars fill the full category width with a small
+              gap between <ids-footnote-link>them.</ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  <code>categoryPercentage:&nbsp;1</code>,
+                  <code>barPercentage:&nbsp;0.92</code> — set at the
+                  <code>options</code> level.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              All colors come from CSS <ids-footnote-link>tokens.</ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  Chart-specific palette tokens use
+                  the&nbsp;<code>--m__chart-*</code>&nbsp;prefix.</p>
+                <p>
+                  Grid and tick colors are read from
+                  <code>--m__text-color</code> and
+                  <code>--m__text-caption-color</code> via
+                  <code>getComputedStyle</code>. Grid color is derived as
+                  <code
+                    >color-mix(in&nbsp;srgb,&nbsp;--m__text-color&nbsp;12%,&nbsp;transparent)</code
+                  >. Palette tokens are defined in
+                  <code>tokens/colors.css</code>.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              Theme-aware re-rendering. When the theme class on
+              the body element <ids-footnote-link
+              >changes,</ids-footnote-link> all charts are destroyed and re-created
+              with fresh colors from CSS variables.
+              <ids-footnote>
+                <p>
+                  A <code>MutationObserver</code> watches the
+                  <code>class</code> attribute on <code>&lt;body&gt;</code>.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              Legend at the bottom with round 8&times;8
+              <ids-footnote-link>markers</ids-footnote-link> shown only when
+              there is more than one
+              <ids-footnote-link>dataset.</ids-footnote-link>
               <ids-footnote>
                 <p>
                   <code>position:&nbsp;"bottom"</code>,
@@ -651,8 +759,8 @@ block content %}
             </li>
 
             <li>
-              <strong>X-axis labels stay horizontal.</strong
-              ><ids-footnote-link></ids-footnote-link> At narrow widths labels
+              X-axis labels stay </strong
+              ><ids-footnote-link>horizontal.</ids-footnote-link> At narrow widths labels
               are auto-skipped rather than rotated.
               <ids-footnote>
                 <p>
@@ -661,47 +769,12 @@ block content %}
               </ids-footnote>
             </li>
 
-            <li>
-              <strong>Bars fill the full category width</strong> with a small
-              gap between them.<ids-footnote-link></ids-footnote-link>
-              <ids-footnote>
-                <p>
-                  <code>categoryPercentage:&nbsp;1</code>,
-                  <code>barPercentage:&nbsp;0.92</code> — set at the
-                  <code>options</code> level.
-                </p>
-              </ids-footnote>
-            </li>
 
             <li>
-              <strong>All colors come from CSS tokens.</strong
-              ><ids-footnote-link></ids-footnote-link>
-              Chart-specific palette tokens use
-              the&nbsp;<code>--m__chart-*</code>&nbsp;prefix.
-              <ids-footnote>
-                <p>
-                  Grid and tick colors are read from
-                  <code>--m__text-color</code> and
-                  <code>--m__text-caption-color</code> via
-                  <code>getComputedStyle</code>. Grid color is derived as
-                  <code
-                    >color-mix(in&nbsp;srgb,&nbsp;--m__text-color&nbsp;12%,&nbsp;transparent)</code
-                  >. Palette tokens are defined in
-                  <code>tokens/colors.css</code>.
-                </p>
-              </ids-footnote>
-            </li>
-
-            <li>
-              <strong>One bar / label per time unit.</strong> Data arriving at
-              sub-day granularity is aggregated by day before rendering.
-            </li>
-
-            <li>
-              <strong>Smart date labels.</strong> The first label on the axis
+              Smart X-axis labels. The first label on the axis
               and the first label of each new month include the abbreviated
               month name; all other labels show only the day
-              number.<ids-footnote-link></ids-footnote-link>
+              <ids-footnote-link>number.</ids-footnote-link>
               <ids-footnote>
                 <p>
                   The formatter tracks the current month while iterating through
@@ -713,13 +786,15 @@ block content %}
                 </p>
               </ids-footnote>
             </li>
+            
+
+
+
 
             <li>
-              <strong
-                >Gradient fill when the axis does not start at zero.</strong
-              >
+              Gradient fill when the axis does not start at zero.
               The filled area fades to transparent in the
-              bottom&nbsp;&frac13;.<ids-footnote-link></ids-footnote-link>
+              <ids-footnote-link>bottom 1/3.</ids-footnote-link>
               <ids-footnote>
                 <p>
                   A <code>CanvasGradient</code> runs from
@@ -733,31 +808,13 @@ block content %}
                 </p>
               </ids-footnote>
             </li>
+            <li>TODO: Status bar</li>
+            <li>TODO: Hover</li>
 
-            <li>
-              <strong>Animation is off.</strong
-              ><ids-footnote-link></ids-footnote-link>
-              <ids-footnote>
-                <p>
-                  <code>animation:&nbsp;false</code> at the
-                  <code>options</code> level.
-                </p>
-              </ids-footnote>
-            </li>
 
-            <li>
-              <strong>Theme-aware re-rendering.</strong> When the theme class on
-              the body element changes, all charts are destroyed and re-created
-              with fresh colors from CSS variables.<ids-footnote-link
-              ></ids-footnote-link>
-              <ids-footnote>
-                <p>
-                  A <code>MutationObserver</code> watches the
-                  <code>class</code> attribute on <code>&lt;body&gt;</code>.
-                </p>
-              </ids-footnote>
-            </li>
-          </ol>
+
+
+          </ul>
         </div>
       </div>
     </div>

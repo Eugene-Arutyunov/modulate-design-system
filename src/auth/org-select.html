@@ -1,0 +1,49 @@
+---
+pageTitle: Select organization
+permalink: /auth/org-select/
+---
+
+{% extends 'auth-layout.html' %} {% block content %}
+
+<div class="auth-form">
+  <h1>Select Organization</h1>
+  <div class="m__space XS"></div>
+
+  <div class="m__option-list">
+    <a href="/dashboard/overview/" class="m__option-list__item">
+      <span class="m__option-list__item-label">Personal</span>
+      <span class="m__option-list__item-tags">
+        <span class="m__tag">Admin</span>
+      </span>
+    </a>
+    <a href="/dashboard/overview/" class="m__option-list__item">
+      <span class="m__option-list__item-label">Sinelnikov Corp.</span>
+      <span class="m__option-list__item-tags">
+        <span class="m__tag">Admin</span>
+        <span class="m__tag">Internal</span>
+      </span>
+    </a>
+  </div>
+
+  <div class="m__space XS"></div>
+
+  <form action="#" method="post" novalidate>
+    <div class="m__textfield">
+      <label for="org-name">New Organization</label>
+      <input
+        type="text"
+        id="org-name"
+        name="org_name"
+        placeholder="Organization name"
+        autocomplete="organization" />
+    </div>
+
+    <div class="auth-form__actions">
+      <a href="/dashboard/overview/" class="m__button-secondary">
+        Create Organization
+      </a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
