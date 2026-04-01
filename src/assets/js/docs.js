@@ -24,7 +24,7 @@ function formatCost(n) {
   return n.toFixed(2);
 }
 
-function badgeClass(status) {
+function tagClass(status) {
   if (status === "released") return "m__badge--released";
   if (status === "preview") return "m__badge--preview";
   return "";
@@ -50,21 +50,34 @@ function renderModelList(models, list) {
   list.innerHTML = "";
   const released = models.filter((m) => m.status === "released");
   const preview = models.filter((m) => m.status !== "released");
-  for (const m of released) list.appendChild(createModelItem(m));
+
+  if (released.length > 0) {
+    const group = document.createElement("div");
+    group.className = "docs-model-nav__group";
+    for (const m of released) group.appendChild(createModelItem(m));
+    list.appendChild(group);
+  }
+
   if (preview.length > 0) {
+    const spacer = document.createElement("div");
+    spacer.className = "m__space XS";
+    list.appendChild(spacer);
     const label = document.createElement("div");
-    label.className = "docs-model-list__section-label";
+    label.className = "docs-model-nav__section-label";
     label.textContent = "Preview";
     list.appendChild(label);
-    for (const m of preview) list.appendChild(createModelItem(m));
+    const group = document.createElement("div");
+    group.className = "docs-model-nav__group";
+    for (const m of preview) group.appendChild(createModelItem(m));
+    list.appendChild(group);
   }
 }
 
 function createModelItem(model) {
   const btn = document.createElement("button");
-  btn.className = "nav-sidebar__link";
+  btn.className = "docs-model-nav__link";
   btn.dataset.modelUuid = model.model_uuid;
-  btn.innerHTML = `<span>${escapeHtml(model.model_display_label)}</span><span class="m__badge ${badgeClass(model.status)}">${escapeHtml(model.status)}</span>`;
+  btn.innerHTML = `<span>${escapeHtml(model.model_display_label)}</span>`;
   btn.addEventListener("click", () => selectModel(model.model_uuid));
   return btn;
 }
@@ -72,13 +85,10 @@ function createModelItem(model) {
 function selectModel(uuid) {
   selectedModelUuid = uuid;
   document
-    .querySelectorAll("#docs-model-list .nav-sidebar__link")
+    .querySelectorAll("#docs-model-list .docs-model-nav__link")
     .forEach((el) => {
       el.classList.toggle("active", el.dataset.modelUuid === uuid);
     });
-  const model = docsModelsById.get(uuid);
-  document.getElementById("docs-panel-title").textContent =
-    model?.model_display_label ?? "";
   document.getElementById("docs-placeholder").hidden = true;
   document.getElementById("docs-panel").hidden = false;
   renderTab(uuid);
@@ -128,20 +138,21 @@ function renderOverview(uuid, content) {
           .join(" ")
       : "—";
   content.innerHTML = `
-    <table class="docs-overview-table">
-      <tbody>
-        <tr><th>Endpoint</th><td><code>${escapeHtml(m.api_url)}</code></td></tr>
-        <tr><th>Model identifier</th><td><code>${escapeHtml(m.model_identifier)}</code></td></tr>
-        <tr><th>Type</th><td>${escapeHtml(m.model_type)}</td></tr>
-        <tr><th>Status</th><td><span class="m__badge ${badgeClass(m.status)}">${escapeHtml(m.status)}</span></td></tr>
-        <tr><th>Description</th><td>${escapeHtml(m.description)}</td></tr>
-        <tr><th>Accepted formats</th><td>${formats}</td></tr>
-        <tr><th>Concurrency quota</th><td>${m.concurrency_quota.toLocaleString()} concurrent requests</td></tr>
-        <tr><th>Monthly usage quota</th><td>${m.usage_quota.toLocaleString()} hours</td></tr>
-        <tr><th>Cost</th><td>${cost}</td></tr>
-        ${featureRows}
-      </tbody>
-    </table>`;
+    <div class="m__text-content">
+      <table>
+        <tbody>
+          <tr><th>Endpoint</th><td><code>${escapeHtml(m.api_url)}</code></td></tr>
+          <tr><th>Model identifier</th><td><code>${escapeHtml(m.model_identifier)}</code></td></tr>
+          <tr><th>Type</th><td>${escapeHtml(m.model_type)}</td></tr>
+          <tr><th>Status</th><td><span class="m__badge ${tagClass(m.status)}">${escapeHtml(m.status)}</span></td></tr>
+          <tr><th>Accepted formats</th><td>${formats}</td></tr>
+          <tr><th>Concurrency quota</th><td>${m.concurrency_quota.toLocaleString()} concurrent requests</td></tr>
+          <tr><th>Monthly usage quota</th><td>${m.usage_quota.toLocaleString()} hours</td></tr>
+          <tr><th>Cost</th><td>${cost}</td></tr>
+          ${featureRows}
+        </tbody>
+      </table>
+    </div>`;
 }
 
 async function renderApiDocs(uuid, content) {
@@ -161,8 +172,9 @@ async function renderApiDocs(uuid, content) {
   const yaml = await resp.text();
   const filename = `${model.model_identifier}-openapi.yaml`;
   content.innerHTML = `
-    <div class="docs-code-block">
-      <div class="docs-code-block__toolbar">
+    <div class="m__code-block">
+      <div class="m__code-block__toolbar">
+        <span>${escapeHtml(filename)}</span>
         <button class="m__button-secondary-compact" id="docs-download-btn">Download</button>
       </div>
       <pre><code>${escapeHtml(yaml)}</code></pre>
@@ -192,14 +204,21 @@ async function renderQuickstart(uuid, content) {
     const md = await resp.text();
     // Model docs are Modulate-authored content, not user input, so XSS is not a concern here.
     const markedLib = window.marked;
-    html += `<div class="docs-markdown m__text-content">${markedLib ? markedLib.parse(md) : `<pre><code>${escapeHtml(md)}</code></pre>`}</div>`;
+    if (markedLib) {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = markedLib.parse(md);
+      tmp.querySelector("h1, h2, h3, h4, h5, h6")?.remove();
+      html += `<div class="m__text-content">${tmp.innerHTML}</div>`;
+    } else {
+      html += `<div class="m__text-content"><pre><code>${escapeHtml(md)}</code></pre></div>`;
+    }
   } else {
     html += '<div class="docs-loading">Failed to load quickstart.</div>';
   }
   const links = model.example_project_links ?? [];
   if (links.length > 0) {
     html +=
-      '<div class="docs-markdown m__text-content"><h6>Example projects</h6><ul>';
+      '<div class="m__text-content"><h6>Example projects</h6><ul>';
     for (const l of links) {
       html += `<li><a href="${escapeHtml(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.title)}</a></li>`;
     }
@@ -216,11 +235,11 @@ async function renderQuickstart(uuid, content) {
 }
 
 function setupTabs() {
-  document.querySelectorAll('[name="doc-tab"]').forEach((input) => {
-    input.addEventListener("change", () => {
-      activeTab = input.value;
+  document.getElementById("docs-panel")?.addEventListener("change", (e) => {
+    if (e.target.matches('[name="doc-tab"]')) {
+      activeTab = e.target.value;
       if (selectedModelUuid) renderTab(selectedModelUuid);
-    });
+    }
   });
 }
 

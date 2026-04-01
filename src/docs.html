@@ -11,48 +11,44 @@ permalink: /docs/
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
-  <h1>Documentation</h1>
-  <p class="loud">
-    Explore Velma-2's voice models, get started with the API, and browse example
-    projects.
-  </p>
-  <div class="m__space S"></div>
+  <div class="m__text-content">
+    <h1 class="loud">Documentation</h1>
+    <p class="loud">
+      Explore Velma-2's voice AI models, get started with the API, and browse
+      example projects.
+    </p>
+  </div>
+  <div class="m__space L"></div>
 </div>
 
 <div class="dashboard-wrapper">
   <div class="dashboard-layout">
-    <aside class="nav-sidebar">
-      <nav id="docs-model-list" aria-label="Models">
-        <div class="docs-loading">Loading models…</div>
-      </nav>
-    </aside>
+    {% include 'docs-model-nav.html' %}
 
-    <main class="dashboard-content">
+    <div>
       <div id="docs-placeholder">
-        <div class="docs-loading">Select a model from the list.</div>
+        <p class="loud">Select a model from the list.</p>
       </div>
 
       <div id="docs-panel" hidden>
-        <div class="dashboard-section">
-          <h1 class="dashboard-page-title" id="docs-panel-title"></h1>
-          <div class="m__segmented-control">
-            <label>
-              <input type="radio" name="doc-tab" value="overview" checked />
-              Overview
-            </label>
-            <label>
-              <input type="radio" name="doc-tab" value="api-docs" />
-              API Spec
-            </label>
-            <label>
-              <input type="radio" name="doc-tab" value="quickstart" />
-              Quickstart
-            </label>
-          </div>
-          <div id="docs-doc-content"></div>
+        <div class="m__segmented-control">
+          <label>
+            <input type="radio" name="doc-tab" value="overview" checked />
+            Overview
+          </label>
+          <label>
+            <input type="radio" name="doc-tab" value="api-docs" />
+            API Spec
+          </label>
+          <label>
+            <input type="radio" name="doc-tab" value="quickstart" />
+            Quickstart
+          </label>
         </div>
+
+        <div id="docs-doc-content"></div>
       </div>
-    </main>
+    </div>
   </div>
   <div class="m__space XL"></div>
 </div>

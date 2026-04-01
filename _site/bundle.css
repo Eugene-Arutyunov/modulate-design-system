@@ -35,6 +35,14 @@ img {
 /* Fonts */
 
 @font-face {
+  font-family: "CoFo Gothic";
+  src: url("fonts/CoFoGothic-VF-Trial.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Inter";
   font-style: normal;
   font-display: swap;
@@ -170,6 +178,7 @@ body {
   --m__font-size-xl: 1.25rem;
   --m__font-size-xxl: 1.4rem;
   --m__font-size-xxxl: 2rem;
+  --m__font-size-display: 4rem;
 
   --m__font-weight-regular: 400;
   --m__font-weight-bold: 600;
@@ -405,6 +414,14 @@ body {
     font-size: var(--m__font-size-xxxl);
   }
 
+  & h1.loud {
+    font-size: var(--m__font-size-display);
+    font-family: "CoFo Gothic", sans-serif;
+    font-weight: var(--m__font-weight-bold);
+    color: var(--m__text-color);
+    line-height: 1.1;
+  }
+
   & h2 {
     font-size: var(--m__font-size-xxl);
   }
@@ -466,6 +483,49 @@ body {
         left: 0;
         content: "⋅ ";
       }
+    }
+  }
+
+  & table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--m__font-size-s);
+    margin-bottom: var(--m__default-margin-bottom);
+
+    & th,
+    & td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--m__ui-border-color);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    & th {
+      color: var(--m__text-caption-color);
+      font-weight: var(--m__font-weight-regular);
+    }
+
+    & tbody tr:last-child th,
+    & tbody tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  & pre {
+    background-color: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-s);
+    padding: var(--m__space-m);
+    overflow-x: auto;
+    margin-bottom: var(--m__default-margin-bottom);
+
+    & code {
+      font-family: "Inter";
+      font-size: var(--m__font-size-s);
+      line-height: 1.6;
+      background: none;
+      border: none;
+      padding: 0;
+      color: inherit;
     }
   }
 }
@@ -2436,6 +2496,10 @@ aside.ui-arch-diagram {
     color: var(--m__text-color);
     text-decoration: none;
     font-size: 0.9em;
+
+    &.active {
+      font-weight: 700;
+    }
   }
 
   & .prototype-header__link:hover {
@@ -2457,10 +2521,14 @@ aside.ui-arch-diagram {
 .dashboard-layout {
   display: grid;
   grid-template-columns: 1fr 3fr;
-  gap: 2rem;
+  gap: 1.5rem;
 
   @media (width < 767px) {
     grid-template-columns: 1fr;
+  }
+
+  & > * {
+    min-width: 0;
   }
 }
 
@@ -2753,9 +2821,7 @@ button.m__button-secondary-compact {
   }
 
   & input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
+    display: none;
   }
 }
 
@@ -2880,12 +2946,6 @@ body.prototype-hide-internal-nav .prototype-internal-nav {
       transition-duration: var(--m__hover-transition-duration);
 
       & .m__tag {
-        color: inherit;
-        border-color: color-mix(
-          in srgb,
-          currentColor 25%,
-          var(--m__background-color)
-        );
         transition-duration: var(--m__hover-transition-duration);
       }
     }
@@ -2911,8 +2971,8 @@ body.prototype-hide-internal-nav .prototype-internal-nav {
   font-weight: 500;
   line-height: 1;
   background-color: transparent;
-  border: 1px solid var(--m__ui-border-color);
-  color: var(--m__text-color);
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  color: currentColor;
 }
 
 .auth-layout {
@@ -3070,57 +3130,85 @@ body.prototype-hide-internal-nav .prototype-internal-nav {
   }
 }
 
-.landing {
-  padding-bottom: var(--m__space-xl);
+
+.docs-model-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin-bottom: var(--m__default-margin-bottom);
 }
 
-.landing__hero {
-  padding: var(--m__space-xl) 0;
-
-  & .landing__hero-inner {
-    & h1 {
-    }
-
-    & p {
-    }
-  }
-}
-
-.landing__code-label {
-  font-size: var(--m__font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.docs-model-nav__loading {
+  padding: var(--m__textfield-padding);
   color: var(--m__text-caption-color);
-  margin-bottom: var(--m__space-xs);
-}
-
-.landing__code {
-  background-color: var(--m__bg-surface-color);
-  border-radius: var(--m__radius-s);
-  padding: var(--m__space-m);
-  font-family: "Inter";
   font-size: var(--m__font-size-s);
-  line-height: 1.6;
-  overflow-x: auto;
-  margin: 0;
-  color: var(--m__text-color);
-
-  & code {
-    font-family: inherit;
-    font-size: inherit;
-    background: none;
-    border: none;
-    padding: 0;
-    color: inherit;
-  }
 }
 
-/* Prominent intro paragraph */
-.loud {
-  font-size: var(--m__font-size-l);
+.docs-model-nav__section-label {
+  margin-bottom: var(--m__space-xxs);
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--m__text-caption-color);
-  margin: 0 0 var(--m__default-margin-bottom);
-  line-height: var(--m__line-height-base);
+}
+
+.docs-model-nav__group {
+  display: flex;
+  flex-direction: column;
+}
+
+.docs-model-nav__link {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: var(--m__textfield-padding);
+  background: none;
+  border: 1px solid
+    color-mix(in srgb, currentColor 25%, var(--m__background-color));
+  font: inherit;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  color: var(--m__text-color);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:not(:first-child) {
+    margin-top: -1px;
+  }
+
+  &:first-child {
+    border-radius: var(--m__radius-m) var(--m__radius-m) 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 var(--m__radius-m) var(--m__radius-m);
+  }
+
+  &:first-child:last-child {
+    border-radius: var(--m__radius-m);
+  }
+
+  &:hover {
+    position: relative;
+    z-index: 1;
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  &.active {
+    position: relative;
+    z-index: 1;
+    background-color: color-mix(
+      in srgb,
+      var(--m__text-link-color) 8%,
+      transparent
+    );
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
 /* Button-style model items in the docs sidebar (resets native button styles) */
@@ -3151,45 +3239,21 @@ aside.nav-sidebar button.nav-sidebar__link {
   text-align: center;
 }
 
-/* Overview table */
-.docs-overview-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--m__font-size-s);
-  margin-bottom: var(--m__default-margin-bottom);
-
-  & th,
-  & td {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--m__ui-border-color);
-    text-align: left;
-    vertical-align: top;
-  }
-
-  & th {
-    width: 38%;
-    color: var(--m__text-caption-color);
-    font-weight: var(--m__font-weight-regular);
-  }
-
-  & tbody tr:last-child th,
-  & tbody tr:last-child td {
-    border-bottom: none;
-  }
-}
-
-/* Code block with toolbar (API Spec) */
-.docs-code-block {
+/* Code block component — use standalone or inside m__text-content */
+.m__code-block {
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__radius-m);
   overflow: hidden;
   margin-bottom: var(--m__default-margin-bottom);
 
-  & .docs-code-block__toolbar {
+  & .m__code-block__toolbar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     padding: 0.4rem 0.6rem;
     border-bottom: 1px solid var(--m__ui-border-color);
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
   }
 
   & pre {
@@ -3209,25 +3273,19 @@ aside.nav-sidebar button.nav-sidebar__link {
   }
 }
 
-/* Quickstart markdown output */
-.docs-markdown {
-  & pre {
-    background-color: var(--m__bg-surface-color);
-    border-radius: var(--m__radius-m);
-    padding: var(--m__space-m);
-    overflow-x: auto;
-    margin-bottom: var(--m__default-margin-bottom);
+/* Model category switcher on the pricing page */
+.pricing-deepfake-section {
+  display: none;
+}
 
-    & code {
-      font-family: "Inter";
-      font-size: var(--m__font-size-s);
-      line-height: 1.6;
-      background: none;
-      border: none;
-      padding: 0;
-      color: var(--m__text-color);
-    }
-  }
+.pricing-model-switcher:has([value="deepfake"]:checked)
+  .pricing-deepfake-section {
+  display: block;
+}
+
+.pricing-model-switcher:has([value="deepfake"]:checked)
+  .pricing-transcription-section {
+  display: none;
 }
 
 /* Pricing comparison table */

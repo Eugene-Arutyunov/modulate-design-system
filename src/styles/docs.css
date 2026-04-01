@@ -1,11 +1,3 @@
-/* Prominent intro paragraph */
-.loud {
-  font-size: var(--m__font-size-l);
-  color: var(--m__text-caption-color);
-  margin: 0 0 var(--m__default-margin-bottom);
-  line-height: var(--m__line-height-base);
-}
-
 /* Button-style model items in the docs sidebar (resets native button styles) */
 aside.nav-sidebar button.nav-sidebar__link {
   background: none;
@@ -34,45 +26,21 @@ aside.nav-sidebar button.nav-sidebar__link {
   text-align: center;
 }
 
-/* Overview table */
-.docs-overview-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--m__font-size-s);
-  margin-bottom: var(--m__default-margin-bottom);
-
-  & th,
-  & td {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--m__ui-border-color);
-    text-align: left;
-    vertical-align: top;
-  }
-
-  & th {
-    width: 38%;
-    color: var(--m__text-caption-color);
-    font-weight: var(--m__font-weight-regular);
-  }
-
-  & tbody tr:last-child th,
-  & tbody tr:last-child td {
-    border-bottom: none;
-  }
-}
-
-/* Code block with toolbar (API Spec) */
-.docs-code-block {
+/* Code block component — use standalone or inside m__text-content */
+.m__code-block {
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__radius-m);
   overflow: hidden;
   margin-bottom: var(--m__default-margin-bottom);
 
-  & .docs-code-block__toolbar {
+  & .m__code-block__toolbar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     padding: 0.4rem 0.6rem;
     border-bottom: 1px solid var(--m__ui-border-color);
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
   }
 
   & pre {
@@ -92,25 +60,19 @@ aside.nav-sidebar button.nav-sidebar__link {
   }
 }
 
-/* Quickstart markdown output */
-.docs-markdown {
-  & pre {
-    background-color: var(--m__bg-surface-color);
-    border-radius: var(--m__radius-m);
-    padding: var(--m__space-m);
-    overflow-x: auto;
-    margin-bottom: var(--m__default-margin-bottom);
+/* Model category switcher on the pricing page */
+.pricing-deepfake-section {
+  display: none;
+}
 
-    & code {
-      font-family: "Inter";
-      font-size: var(--m__font-size-s);
-      line-height: 1.6;
-      background: none;
-      border: none;
-      padding: 0;
-      color: var(--m__text-color);
-    }
-  }
+.pricing-model-switcher:has([value="deepfake"]:checked)
+  .pricing-deepfake-section {
+  display: block;
+}
+
+.pricing-model-switcher:has([value="deepfake"]:checked)
+  .pricing-transcription-section {
+  display: none;
 }
 
 /* Pricing comparison table */

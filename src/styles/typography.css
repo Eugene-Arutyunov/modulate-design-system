@@ -53,6 +53,14 @@
     font-size: var(--m__font-size-xxxl);
   }
 
+  & h1.loud {
+    font-size: var(--m__font-size-display);
+    font-family: "CoFo Gothic", sans-serif;
+    font-weight: var(--m__font-weight-bold);
+    color: var(--m__text-color);
+    line-height: 1.1;
+  }
+
   & h2 {
     font-size: var(--m__font-size-xxl);
   }
@@ -114,6 +122,49 @@
         left: 0;
         content: "⋅ ";
       }
+    }
+  }
+
+  & table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--m__font-size-s);
+    margin-bottom: var(--m__default-margin-bottom);
+
+    & th,
+    & td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--m__ui-border-color);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    & th {
+      color: var(--m__text-caption-color);
+      font-weight: var(--m__font-weight-regular);
+    }
+
+    & tbody tr:last-child th,
+    & tbody tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  & pre {
+    background-color: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-s);
+    padding: var(--m__space-m);
+    overflow-x: auto;
+    margin-bottom: var(--m__default-margin-bottom);
+
+    & code {
+      font-family: "Inter";
+      font-size: var(--m__font-size-s);
+      line-height: 1.6;
+      background: none;
+      border: none;
+      padding: 0;
+      color: inherit;
     }
   }
 }

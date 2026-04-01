@@ -6,108 +6,66 @@ permalink: /index-landing/
 
 {% extends 'landing-layout.html' %} {% block content %}
 
-<div class="landing">
-  <section class="landing__hero">
-    <div class="m__wrapper">
-      <div class="landing__hero-inner m__text-content">
-        <h1>Build with Velma-2</h1>
-        <p>
-          Velma-2 transcribes speech in 70+ languages and natively detects
-          emotion, accent, speaker identity, and engagement directly from audio.
-        </p>
-        <a href="/auth/signup/" class="m__button">Get Started For Free</a>
-      </div>
-    </div>
-  </section>
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="m__text-content">
+    <h1 class="loud">Build with Velma-2</h1>
+    <p class="loud">
+      Velma-2 transcribes speech in 70+ languages and natively detects emotion,
+      accent, speaker identity, and engagement directly from audio.
+    </p>
+    <a href="/auth/signup/" class="m__button">Get Started For Free</a>
+  </div>
 
-  <div class="m__wrapper">
-    <div class="m__sequence L gap-M">
-      <div class="m__sequence-item landing__feature m__text-content">
-        <h5>Best-in-Class Transcription</h5>
-        <p>
-          Transcription in 70+ languages with specialized vocabulary for
-          medical, geographic, and political terms. Low cost per audio hour.
-        </p>
-      </div>
-      <div class="m__sequence-item landing__feature m__text-content">
-        <h5>Voice-Native Understanding</h5>
-        <p>
-          Velma-2 reads emotion, sentiment, energy, and engagement directly from
-          the audio signal, not from text.
-        </p>
-      </div>
-      <div class="m__sequence-item landing__feature m__text-content">
-        <h5>Ensemble Listening</h5>
-        <p>
-          Combine transcription, emotion, and engagement signals in a single API
-          call for full conversation analysis.
-        </p>
-      </div>
+  <div class="m__space XL"></div>
+
+  <div class="m__sequence L gap-M">
+    <div class="m__sequence-item m__text-content">
+      <h5>Best-in-Class Transcription</h5>
+      <p>
+        Transcription in 70+ languages with specialized vocabulary for medical,
+        geographic, and political terms. Low cost per audio hour.
+      </p>
+    </div>
+    <div class="m__sequence-item m__text-content">
+      <h5>Voice-Native Understanding</h5>
+      <p>
+        Velma-2 reads emotion, sentiment, energy, and engagement directly from
+        the audio signal, not from text.
+      </p>
+    </div>
+    <div class="m__sequence-item m__text-content">
+      <h5>Ensemble Listening</h5>
+      <p>
+        Combine transcription, emotion, and engagement signals in a single API
+        call for full conversation analysis.
+      </p>
     </div>
   </div>
 
-  <section>
-    <div class="m__wrapper">
-      <div class="m__space XL"></div>
-      <div class="m__sequence XL gap-L">
-        <div class="m__sequence-item m__text-content">
-          <h2>Built for Developers</h2>
-          <ul>
-            <li>REST and WebSocket APIs</li>
-            <li>Simple API key authentication</li>
-            <li>Credit-based pricing with free tier</li>
-            <li>Usage dashboard and billing controls</li>
-          </ul>
-        </div>
-        <div class="m__sequence-item">
-          <p class="landing__code-label">Example API call</p>
-          <pre class="landing__code"><code>curl -X POST \
+  <div class="m__space XL"></div>
+
+  <div class="m__sequence XL gap-L">
+    <div class="m__sequence-item m__text-content">
+      <h2>Built for Developers</h2>
+      <ul>
+        <li>REST and WebSocket APIs</li>
+        <li>Simple API key authentication</li>
+        <li>Credit-based pricing with free tier</li>
+        <li>Usage dashboard and billing controls</li>
+      </ul>
+    </div>
+    <div class="m__sequence-item m__widget">
+      <pre><code>curl -X POST \
   https://modulate-developer-apis.com/api/velma-2-stt-batch \
   -H "X-API-Key: YOUR_API_KEY" \
   -F "upload_file=@audio.mp3" \
   -F "speaker_diarization=true" \
   -F "emotion_signal=true"</code></pre>
-        </div>
-      </div>
-      <div class="m__space XL"></div>
     </div>
-  </section>
+  </div>
 
-  <section>
-    <div class="m__wrapper">
-      <div class="m__space XL"></div>
-      <div class="m__text-content">
-        <h2>Learn More</h2>
-        <ul>
-          <li>
-            <a href="https://modulate.ai">Modulate.ai</a> — Learn about
-            Modulate's mission and technology
-          </li>
-          <li>
-            <a href="#">Ensemble Listening Models</a> — Multi-model voice
-            analysis for conversations
-          </li>
-          <li>
-            <a href="#">Velma Preview</a> — Try Modulate's voice analysis in the
-            browser
-          </li>
-        </ul>
-      </div>
-      <div class="m__space XL"></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="m__wrapper">
-      <div class="m__space XL"></div>
-      <div class="m__text-content">
-        <h2>Ready to Build?</h2>
-        <p>Create a free account and start making API calls in minutes.</p>
-        <a href="/auth/signup/" class="m__button">Get Started</a>
-      </div>
-      <div class="m__space XL"></div>
-    </div>
-  </section>
+  <div class="m__space XL"></div>
 </div>
 
 {% endblock %}

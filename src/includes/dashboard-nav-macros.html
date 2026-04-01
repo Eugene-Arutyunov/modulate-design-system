@@ -1,41 +1,84 @@
-{% macro primary_nav(variant) %} {% if variant == "bar" %}
-<a href="/docs/" class="prototype-header__link">Docs</a>
-<a href="/pricing/" class="prototype-header__link">Pricing</a>
-<a href="/playground/" class="prototype-header__link">Playground</a>
-<a href="/conversations/" class="prototype-header__link">Conversations</a>
-<a href="/dashboard/overview/" class="prototype-header__link">Dashboard</a>
-{% elif variant == "landing" %}
-<a href="/docs/" class="prototype-header__link">Docs</a>
-<a href="/pricing/" class="prototype-header__link">Pricing</a>
-<a href="/playground/" class="prototype-header__link">Playground</a>
-{% else %}
+{% macro primary_nav(variant, currentUrl) %} {% if variant == "bar" %} {% if
+currentUrl == '/docs/' %}<span class="prototype-header__link active">Docs</span
+>{% else %}<a
+  href="/docs/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/docs/') }}"
+  >Docs</a
+>{% endif %} {% if currentUrl == '/pricing/' %}<span
+  class="prototype-header__link active"
+  >Pricing</span
+>{% else %}<a
+  href="/pricing/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/pricing/') }}"
+  >Pricing</a
+>{% endif %} {% if currentUrl == '/playground/' %}<span
+  class="prototype-header__link active"
+  >Playground</span
+>{% else %}<a
+  href="/playground/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/playground/') }}"
+  >Playground</a
+>{% endif %} {% if currentUrl == '/conversations/' %}<span
+  class="prototype-header__link active"
+  >Conversations</span
+>{% else %}<a
+  href="/conversations/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/conversations/') }}"
+  >Conversations</a
+>{% endif %} {% if currentUrl == '/dashboard/overview/' %}<span
+  class="prototype-header__link active"
+  >Dashboard</span
+>{% else %}<a
+  href="/dashboard/overview/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/dashboard/') }}"
+  >Dashboard</a
+>{% endif %} {% elif variant == "landing" %} {% if currentUrl == '/docs/'
+%}<span class="prototype-header__link active">Docs</span>{% else %}<a
+  href="/docs/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/docs/') }}"
+  >Docs</a
+>{% endif %} {% if currentUrl == '/pricing/' %}<span
+  class="prototype-header__link active"
+  >Pricing</span
+>{% else %}<a
+  href="/pricing/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/pricing/') }}"
+  >Pricing</a
+>{% endif %} {% if currentUrl == '/playground/' %}<span
+  class="prototype-header__link active"
+  >Playground</span
+>{% else %}<a
+  href="/playground/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/playground/') }}"
+  >Playground</a
+>{% endif %} {% else %}
 <a
   href="/conversations/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Conversations' }}"
+  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/conversations/') }}"
   role="menuitem"
   >Conversations</a
 >
 <a
   href="/docs/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Documentation' }}"
+  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/docs/') }}"
   role="menuitem"
   >Docs</a
 >
 <a
   href="/pricing/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Pricing' }}"
+  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/pricing/') }}"
   role="menuitem"
   >Pricing</a
 >
 <a
   href="/playground/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Playground' }}"
+  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/playground/') }}"
   role="menuitem"
   >Playground</a
 >
 <a
   href="/dashboard/overview/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Overview' }}"
+  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/dashboard/') }}"
   role="menuitem"
   >Dashboard</a
 >

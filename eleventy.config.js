@@ -1,4 +1,5 @@
 module.exports = function (conf) {
+  conf.addFilter("startsWith", (str, prefix) => str.startsWith(prefix));
   conf.addPassthroughCopy("./src/ids");
   conf.addPassthroughCopy("./src/index.js");
   conf.addPassthroughCopy("./src/assets");

@@ -1,10 +1,14 @@
 .dashboard-layout {
   display: grid;
   grid-template-columns: 1fr 3fr;
-  gap: 2rem;
+  gap: 1.5rem;
 
   @media (width < 767px) {
     grid-template-columns: 1fr;
+  }
+
+  & > * {
+    min-width: 0;
   }
 }
 
@@ -297,9 +301,7 @@ button.m__button-secondary-compact {
   }
 
   & input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
+    display: none;
   }
 }
 

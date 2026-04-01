@@ -10,9 +10,9 @@
   </a>
   <div class="prototype-header__right">
     <nav class="prototype-header__links">
-      {% if isLanding %} {{ dash_nav.primary_nav('landing') }}
+      {% if isLanding %} {{ dash_nav.primary_nav('landing', page.url) }}
       <a href="/auth/login/" class="m__button-compact">Sign in</a>
-      {% else %} {{ dash_nav.primary_nav('bar') }} {% endif %}
+      {% else %} {{ dash_nav.primary_nav('bar', page.url) }} {% endif %}
     </nav>
     {% if not isLanding %}
     <div class="prototype-header__user-wrap">
@@ -44,7 +44,7 @@
         hidden>
         {{ dash_nav.dashboard_nav_meta('popover') }}
         <nav class="prototype-header__popover-nav" aria-label="Main">
-          {{ dash_nav.primary_nav('popover') }} {{
+          {{ dash_nav.primary_nav('popover', page.url) }} {{
           dash_nav.dashboard_nav_main('popover') }}
         </nav>
         <div class="prototype-header__popover-divider" aria-hidden="true"></div>
