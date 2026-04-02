@@ -439,6 +439,24 @@ block content %}
           </td>
         </tr>
         <tr>
+          <td><code>.m__badge</code></td>
+          <td>
+            <span style="display: inline-flex; gap: var(--m__space-xxs)">
+              <span class="m__badge">default</span>
+              <span class="m__badge m__badge--released">released</span>
+              <span class="m__badge m__badge--preview">preview</span>
+            </span>
+          </td>
+          <td>
+            <code>--m__font-size-xs</code><br />
+            <code>--m__font-weight-medium</code><br />
+            <code>--m__bg-surface-color</code><br />
+            <code>--m__text-caption-color</code><br />
+            <code>--m__ui-success-color</code><br />
+            <code>--m__text-color</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>.m__textfield</code></td>
           <td>
             <div class="m__textfield" style="max-width: 16rem">
@@ -649,15 +667,11 @@ block content %}
     <div class="m__sequence XL gap-M">
       <div class="m__sequence-item">
         <div class="m__widget">
-          <div class="chart-container">
-            <canvas id="ds-sample-line-chart"></canvas>
-          </div>
+          {% include 'widgets/chart-line.html' %}
         </div>
         <div class="m__space S"></div>
         <div class="m__widget">
-          <div class="chart-container">
-            <canvas id="ds-sample-bar-chart"></canvas>
-          </div>
+          {% include 'widgets/chart-bar.html' %}
         </div>
       </div>
       <div class="m__sequence-item">
@@ -816,6 +830,33 @@ block content %}
 
           </ul>
         </div>
+      </div>
+    </div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="stats" label="Stats">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Stats</h2>
+
+    <div class="m__text-width">
+      <p>
+        Stat widgets display a single key metric with optional supporting
+        details. They use the widget container as a surface and add inner
+        elements for the value and metadata.
+      </p>
+    </div>
+    <div class="m__space M"></div>
+
+    <div class="m__sequence L gap-M">
+      <div class="m__sequence-item">
+        <div class="m__widget">
+          {% include 'widgets/stat.html' %}
+        </div>
+      </div>
+      <div class="m__sequence-item">
       </div>
     </div>
   </div>

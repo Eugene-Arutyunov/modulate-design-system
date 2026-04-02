@@ -1,0 +1,91 @@
+a.m__button,
+button.m__button,
+a.m__button-secondary,
+button.m__button-secondary,
+a.m__button-compact,
+button.m__button-compact,
+a.m__button-secondary-compact,
+button.m__button-secondary-compact {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--m__space-xxs);
+  border-radius: var(--m__radius-m);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.m__button__icon {
+  display: block;
+  position: relative;
+  width: var(--m__button-icon-size);
+  height: var(--m__button-icon-size);
+  flex-shrink: 0;
+  overflow: hidden;
+  align-self: end;
+}
+
+a.m__button,
+button.m__button {
+  padding: var(--m__button-padding);
+  background-color: var(--m__bg-accent-color);
+  color: var(--m__text-inverted-color);
+  border: none;
+  transition: background-color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    background-color: var(--m__bg-hover-color);
+    color: var(--m__text-inverted-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-secondary,
+button.m__button-secondary {
+  padding: var(--m__button-padding);
+  background-color: transparent;
+  color: var(--m__text-color);
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-compact,
+button.m__button-compact {
+  padding: var(--m__button-compact-padding);
+  border-radius: var(--m__radius-s);
+  background-color: var(--m__bg-accent-color);
+  color: var(--m__text-inverted-color);
+  border: none;
+  transition: background-color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    background-color: var(--m__bg-hover-color);
+    color: var(--m__text-inverted-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-secondary-compact,
+button.m__button-secondary-compact {
+  padding: var(--m__button-compact-padding);
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  color: var(--m__text-color);
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
