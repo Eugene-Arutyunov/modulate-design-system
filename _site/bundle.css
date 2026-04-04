@@ -100,6 +100,7 @@ body {
   --m__ui-control-color: var(--m__bg-surface-color);
   --m__ui-border-color: rgb(220, 220, 230);
   --m__ui-error-color: rgb(255, 53, 84);
+  --m__ui-warning-color: rgb(255, 160, 30);
   --m__ui-success-color: rgb(21, 207, 135);
 
   /* CHARTS */
@@ -146,6 +147,7 @@ body {
     var(--m__bg-surface-color)
   );
   --m__ui-error-color: rgb(255, 53, 84);
+  --m__ui-warning-color: rgb(255, 160, 30);
   --m__ui-success-color: rgb(21, 207, 135);
 
   /* CHARTS */
@@ -2732,8 +2734,16 @@ button.m__button-secondary-compact {
   }
 
   &.m__badge--preview {
-    background-color: color-mix(in srgb, rgb(255, 160, 30) 15%, transparent);
-    color: color-mix(in srgb, rgb(200, 120, 0) 80%, var(--m__text-color));
+    background-color: color-mix(
+      in srgb,
+      var(--m__ui-warning-color) 15%,
+      transparent
+    );
+    color: color-mix(
+      in srgb,
+      var(--m__ui-warning-color) 70%,
+      var(--m__text-color)
+    );
   }
 }
 
