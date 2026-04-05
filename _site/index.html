@@ -136,10 +136,75 @@
   <div class="m__text-width">
     <p>
       This document defines the visual language of Modulate product interfaces
-      for web: color, typography, UI components, and principles of layout
-      structure and interactive behavior.
+      for web. It operates on four layers of abstraction.
     </p>
   </div>
+  <div class="m__space S"></div>
+  <table>
+    <colgroup>
+      <col style="width: 15%" />
+      <col style="width: 55%" />
+      <col style="width: 30%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>What it is</th>
+        <th>Developer’s rule</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Token</td>
+        <td>
+          A named CSS variable storing a single property value — color, size,
+          duration, and so on. Token
+          values can be updated at any moment — this is the foundation of
+          scalability.
+        </td>
+        <td>
+          Use tokens as-is: don’t rename, don’t alias, don’t generalize. 
+        </td>
+      </tr>
+      <tr>
+        <td>Component</td>
+        <td>
+          A styled UI element implemented for prototyping convenience. The
+          design system shows it as an example, not a prescription — the
+          technology and approach are the developer’s choice.
+        </td>
+        <td>
+          Preserve component structure and naming so that updates remain
+          possible, even if not automatic.
+        </td>
+      </tr>
+      <tr>
+        <td>Widget</td>
+        <td>
+          An interactive prototype of an isolated block, used in place of a
+          static mockup. Each widget is accompanied by a specification; an
+          updated widget is treated as a new version, not a patch.
+        </td>
+        <td>
+          Use as reference only. The design system does not regulate widget
+          logic or internal structure.
+        </td>
+      </tr>
+      <tr>
+        <td>Layout</td>
+        <td>
+          CSS classes for composing pages and handling mobile adaptation. The the developer’s code may differ
+          depending on their stack, but the visual result must match exactly.
+        </td>
+        <td>
+         
+          The tokens the layout relies on follow the same immutability rule as
+          all other tokens.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="m__space S"></div>
   <ids-navbar></ids-navbar>
 </div>
 
@@ -532,6 +597,9 @@
     <div class="m__space L"></div>
 
     <h2>Layout</h2>
+    <div class="m__space S"></div>
+
+    <h3>Units</h3>
     <div class="m__text-width">
       <p>
         The main unit is
@@ -546,8 +614,11 @@
         The system supports two layout modes: desktop and mobile. Media queries
         look at viewport width rather than device type.
       </p>
-      <div class="m__space S"></div>
-      <h3>Page composition</h3>
+    </div>
+    <div class="m__space S"></div>
+
+    <h3>Page composition</h3>
+    <div class="m__text-width">
       <p>
         Pages are composed of stacked full-width sections,
         <ids-footnote-link>not column grids</ids-footnote-link>. Each section
@@ -568,7 +639,7 @@
             <strong>Text-content</strong>. A Widget contains an interactive
             element or a purpose-built widget for presenting data. Text-content
             is free-form HTML text with shared styles for selected tags; see the
-            Typography section for the supported text elements.
+            Text section for the supported text elements.
           </p>
           <p>
             A section may contain: one or several Widgets, or one Text-content
@@ -610,7 +681,7 @@
       </div>
     </div>
     <div class="m__space L"></div>
-    <table class="docs-component-table">
+    <table>
       <colgroup>
         <col style="width: 15%" />
         <col style="width: 60%" />
@@ -662,14 +733,9 @@
         </tr>
       </tbody>
     </table>
-  </div>
-</ids-nav-item>
+    <div class="m__space S"></div>
 
-<ids-nav-item id="spacing" label="Spacing">
-  <div class="m__wrapper">
-    <div class="m__space L"></div>
-
-    <h2>Spacing</h2>
+    <h3>Spacing</h3>
     <div class="m__text-width">
       <ul>
         <li>
@@ -681,20 +747,24 @@
         <li>
           Spacing between sections or before headings is handled with explicit
           spacer elements (<code>.m__space</code>), not margins on content
-          elements. The idea behind this is that content elements can't know
-          what spacing is appropriate in every context — that's why the spacer
+          elements. The idea behind this is that content elements can’t know
+          what spacing is appropriate in every context — that’s why the spacer
           should be placed by whoever assembles the layout.
         </li>
       </ul>
     </div>
+    <div class="m__space S"></div>
   </div>
 </ids-nav-item>
 
-<ids-nav-item id="typography" label="Typography">
+<ids-nav-item id="components" label="Components">
   <div class="m__wrapper">
     <div class="m__space L"></div>
 
-    <h2>Typography</h2>
+    <h2>Components</h2>
+    <div class="m__space S"></div>
+
+    <h3>Text</h3>
     <div class="m__text-width">
       <p>
         The supported text elements (headings, paragraphs, links, lists, inline
@@ -704,7 +774,7 @@
       </p>
     </div>
     <div class="m__space M"></div>
-    <table class="docs-component-table">
+    <table>
       <colgroup>
         <col style="width: 15%" />
         <col style="width: 60%" />
@@ -786,15 +856,10 @@
         </tr>
       </tbody>
     </table>
-  </div>
-</ids-nav-item>
+    <div class="m__space S"></div>
 
-<ids-nav-item id="ui-components" label="UI Components">
-  <div class="m__wrapper">
-    <div class="m__space L"></div>
-
-    <h2>UI Components</h2>
-    <table class="docs-component-table">
+    <h3>Interactive</h3>
+    <table>
       <colgroup>
         <col style="width: 15%" />
         <col style="width: 60%" />
@@ -994,19 +1059,55 @@
         </tr>
       </tbody>
     </table>
+    <div class="m__space S"></div>
+    <div class="m__text-width">
+      <aside>
+        <h4>Hover area and clickability</h4>
+        <p>
+          Every clickable element must change on hover. No non-clickable element
+          should. The hover area and the click area must be identical — and
+          where possible, both should be larger than the visual size of the
+          element to make targeting comfortable.
+        </p>
+      </aside>
+    </div>
+    <div class="m__text-width">
+      <aside>
+        <h4>Acceptable hover states</h4>
+        <p>
+          Acceptable hover changes: recoloring text or underline (including
+          opacity), brightening an image, elevating a block. Avoid inverting
+          color or contrast, zooming an image inside a block, or hiding existing
+          content.
+        </p>
+      </aside>
+    </div>
+    <div class="m__text-width">
+      <aside>
+        <h4>Hover timing</h4>
+        <p>
+          Hover always responds instantly — zero transition, no exceptions.
+          Unhover animates back, 0.3–0.5s. All elements within a block animate
+          in sync, in both directions.
+        </p>
+      </aside>
+    </div>
+    <div class="m__space S"></div>
   </div>
 </ids-nav-item>
 
-<ids-nav-item id="icons" label="Icons">
+<ids-nav-item id="graphics" label="Graphics">
   <div class="m__wrapper">
     <div class="m__space L"></div>
 
-    <h2>Icons & Graphics</h2>
+    <h2>Graphics</h2>
+    <div class="m__space S"></div>
 
+    <h3>Icons</h3>
     <div class="m__text-width">
       <p>
         Icons are collected into one hidden SVG sprite and then reused through
-        <code>&lt;use&gt;</code>. This keeps each icon defined once, avoids
+        <code>&lt;use&gt;</code>. This keeps each icon defined once, avoids
         duplicated SVG markup, and makes color inheritance and updates easier to
         manage.
       </p>
@@ -1135,23 +1236,17 @@
       <div class="m__space S"></div>
       <p>
         Brand icons are colored — they render in their trademark colors and do
-        not respond to <code>color</code> or <code>fill</code> on the parent
+        not respond to <code>color</code> or <code>fill</code> on the parent
         element.
       </p>
     </div>
-  </div>
-</ids-nav-item>
+    <div class="m__space S"></div>
 
-<ids-nav-item id="charts" label="Charts">
-  <div class="m__wrapper">
-    <div class="m__space L"></div>
-
-    <h2>Charts</h2>
-
+    <h3>Charts</h3>
     <div class="m__text-width">
       <p>
         Charts use <a href="https://www.chartjs.org/">Chart.js</a> with a set of opinionated defaults that align
-        them with the design system's visual language.
+        them with the design system’s visual language.
       </p>
     </div>
     <div class="m__space M"></div>
@@ -1281,7 +1376,6 @@
               </ids-footnote>
             </li>
 
-
             <li>
               Smart X-axis labels. The first label on the axis
               and the first label of each new month include the abbreviated
@@ -1298,10 +1392,6 @@
                 </p>
               </ids-footnote>
             </li>
-            
-
-
-
 
             <li>
               Gradient fill when the axis does not start at zero.
@@ -1322,53 +1412,11 @@
             </li>
             <li>TODO: Status bar</li>
             <li>TODO: Hover</li>
-
-
-
-
           </ul>
         </div>
       </div>
     </div>
-  </div>
-</ids-nav-item>
-
-<ids-nav-item id="stats" label="Stats">
-  <div class="m__wrapper">
-    <div class="m__space L"></div>
-
-    <h2>Stats</h2>
-
-    <div class="m__text-width">
-      <p>
-        Stat widgets display a single key metric with optional supporting
-        details. They use the widget container as a surface and add inner
-        elements for the value and metadata.
-      </p>
-    </div>
-    <div class="m__space M"></div>
-
-    <div class="m__sequence L gap-M">
-      <div class="m__sequence-item">
-        <div class="m__widget">
-          <h2>Credit Balance</h2>
-<p class="m__widget__value">1,000</p>
-<div class="m__widget__meta-list">
-  <p class="m__widget__meta-item">
-    <span class="m__widget__meta-label">All-Time Credits Used</span>
-    <strong class="m__widget__meta-value">0</strong>
-  </p>
-  <p class="m__widget__meta-item">
-    <span class="m__widget__meta-label">All-Time Hours</span>
-    <strong class="m__widget__meta-value">0.0</strong>
-  </p>
-</div>
-
-        </div>
-      </div>
-      <div class="m__sequence-item">
-      </div>
-    </div>
+    <div class="m__space S"></div>
   </div>
 </ids-nav-item>
 
@@ -1384,7 +1432,7 @@
         prescribe which CSS properties should be included in a transition.
       </p>
     </div>
-    <table class="docs-component-table">
+    <table>
       <colgroup>
         <col style="width: 15%" />
         <col style="width: 60%" />
@@ -1429,43 +1477,20 @@
         </tr>
       </tbody>
     </table>
-  </div>
-</ids-nav-item>
-
-<ids-nav-item id="principles" label="Principles">
-  <div class="m__wrapper">
-    <div class="m__space L"></div>
-
-    <h2>Principles</h2>
+    <div class="m__space S"></div>
     <div class="m__text-width">
-      <p>This section is a work in progress.</p>
-      <ul>
-        <li>
-          Every clickable element must change on hover. No non-clickable element
-          should. The hover area and the click area must be identical — and
-          where possible, both should be larger than the visual size of the
-          element to make targeting comfortable.
-        </li>
-        <li>
-          Acceptable hover changes: recoloring text or underline (including
-          opacity), brightening an image, elevating a block. Avoid inverting
-          color or contrast, zooming an image inside a block, or hiding existing
-          content.
-        </li>
-        <li>
-          Hover always responds instantly — zero transition, no exceptions.
-          Unhover animates back, 0.3–0.5s. All elements within a block animate
-          in sync, in both directions.
-        </li>
-        <li>
+      <aside>
+        <h4>Scroll-triggered animation</h4>
+        <p>
           If an element is meant to animate on scroll, then: entering the
           viewport transitions it to its active state (≈0.3s); leaving returns
           it to its initial state (≈0.1s); this can repeat indefinitely. Scroll
           position only triggers the state switch — it never drives the
           animation phase directly.
-        </li>
-      </ul>
+        </p>
+      </aside>
     </div>
+    <div class="m__space S"></div>
   </div>
 </ids-nav-item>
  <footer class="footer m__text-content">

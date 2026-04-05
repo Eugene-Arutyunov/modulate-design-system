@@ -112,43 +112,34 @@
   }
 }
 
-/* Docs component tables (Layout, Typography, etc.) */
-.docs-component-table {
+/* Default table styles */
+table {
+  width: 100%;
   border-spacing: 0;
   background-color: inherit;
 
-  & thead {
-    background-color: inherit;
+  & td {
+    padding: 0.3rem 0.5rem 0.7rem 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--m__text-color) 12%, transparent);
   }
 
-  & tr {
-    background-color: inherit;
-
-    & th {
-      text-align: left;
-      font-size: 0.75em;
-      font-weight: 400;
-      border-bottom: 1px solid
-        color-mix(in srgb, var(--m__text-color) 30%, transparent);
-      padding: 0.3em 0.5em 0.3em 0;
-      background-color: var(--m__background-color);
-      z-index: 1;
-    }
-
-    & td {
-      padding: 0.8em 0.5em 1em 0;
-      border-bottom: 1px solid
-        color-mix(in srgb, var(--m__text-color) 12%, transparent);
-      vertical-align: top;
-    }
-
-    & td:nth-child(2),
-    & th:nth-child(2) {
-      padding-right: 2em;
-    }
+  & th {
+    padding: 0.3rem 0.5rem 0.3rem 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--m__text-color) 12%, transparent);
+    font-weight: var(--m__font-weight-medium);
+    position: sticky;
+    top: 0;
+    background-color: var(--m__background-color);
   }
 
-  & tbody tr:last-child td {
+  & tbody tr:last-child td,
+  & tbody tr:last-child th {
     border-bottom: none;
   }
 }
