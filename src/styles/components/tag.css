@@ -1,12 +1,25 @@
-.m__tag {
+.m__tag,
+.m__tag-flat {
   display: inline-flex;
   align-items: center;
+  color: currentColor;
+  font-weight: var(--m__font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.m__tag {
   padding: var(--m__button-compact-padding);
   border-radius: var(--m__radius-xs);
   font-size: var(--m__font-size-s);
-  font-weight: 500;
-  line-height: 1;
   background-color: transparent;
   border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-  color: currentColor;
+}
+
+.m__tag-flat {
+  font-size: var(--m__font-size-xs);
+  padding: 0.2em 0.45em;
+  border-radius: var(--m__radius-s);
+  background-color: color-mix(in srgb, currentColor 15%, transparent);
+  color: var(--m__text-caption-color);
 }
