@@ -5,15 +5,15 @@ block content %}
   <div class="m__text-width">
     <p>
       This document defines the visual language of Modulate product interfaces
-      for web. It operates on four layers of abstraction.
+      for web. Its core is a combination of tokens and components.
     </p>
   </div>
   <div class="m__space S"></div>
   <table>
     <colgroup>
       <col style="width: 15%" />
-      <col style="width: 55%" />
-      <col style="width: 30%" />
+      <col style="width: 45%" />
+      <col style="width: 40%" />
     </colgroup>
     <thead>
       <tr>
@@ -24,36 +24,27 @@ block content %}
     </thead>
     <tbody>
       <tr>
+        <td><code>Component</code></td>
+        <td>A styled UI element, static or interactive.</td>
+        <td>
+          Preserve component structure and naming, implement in your own stack.
+        </td>
+      </tr>
+      <tr>
         <td><code class="accent">Token</code></td>
         <td>
           A named CSS variable storing a single property value — color, size,
-          duration, and so on. Token values can be updated at any moment — this
-          is the foundation of scalability.
+          duration, and so on.
         </td>
         <td>Use tokens as-is: don’t rename, don’t alias, don’t generalize.</td>
-      </tr>
-      <tr>
-        <td><code>Component</code></td>
-        <td>
-          A styled UI element implemented for prototyping convenience. The
-          design system shows it as an example, not a prescription — the
-          technology and approach are the developer’s choice.
-        </td>
-        <td>
-          Preserve component structure and naming so that updates remain
-          possible, even if not automatic.
-        </td>
       </tr>
     </tbody>
   </table>
   <div class="m__space S"></div>
   <div class="m__text-width">
     <p>
-      Beyond tokens and components, the design system also addresses layouts,
-      page structure, text blocks, and widgets. This knowledge is conveyed
-      through prototypes rather than written specifications. A prototype does
-      not prescribe implementation or define markup structure — it provides a
-      reference sample of the intended result.
+      Beyond this, the design system also addresses color, layouts, page
+      composition, graphics, animations and some principles.
     </p>
   </div>
   <div class="m__space S"></div>
@@ -62,7 +53,7 @@ block content %}
 
 <ids-nav-item id="color" label="Color">
   <div class="m__wrapper">
-    <div class="m__space L"></div>
+    <div class="m__space XL"></div>
 
     <h2>Color</h2>
     <div class="m__text-width">
@@ -520,9 +511,14 @@ block content %}
             <div class="m__space S"></div>
             <div class="m__textfield" style="max-width: 16rem">
               <label for="docs-tf-invalid">Email</label>
-              <input type="email" id="docs-tf-invalid" name="email" aria-invalid="true" aria-describedby="docs-tf-invalid-error" />
+              <input
+                type="email"
+                id="docs-tf-invalid"
+                name="email"
+                aria-invalid="true"
+                aria-describedby="docs-tf-invalid-error" />
               <div class="m__textfield__message" id="docs-tf-invalid-error">
-                <span>Enter a valid email</span>
+                <span>Enter a valid email address</span>
               </div>
             </div>
           </td>
@@ -532,7 +528,11 @@ block content %}
             <code class="accent">--m__font-size-s</code><br />
             <code class="accent">--m__ui-control-color</code><br />
             <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__text-color</code>
+            <code class="accent">--m__text-color</code><br />
+            <code class="accent">--m__text-caption-color</code><br />
+            <code class="accent">--m__text-hover-color</code><br />
+            <code class="accent">--m__bg-hover-color</code><br />
+            <code class="accent">--m__ui-error-color</code>
           </td>
         </tr>
         <tr>
@@ -564,8 +564,9 @@ block content %}
         <h4>Button vs anchor</h4>
         <p>
           Use <code>&lt;button&gt;</code> for actions (submit, toggle, delete).
-          Use <code>&lt;a&gt;</code> for links, navigation to a URL.
-          Some actions may result in navigation, the distinction is a link could be shared or saved to bookmarks.
+          Use <code>&lt;a&gt;</code> for links, navigation to a URL. Some
+          actions may result in navigation, the distinction is a link could be
+          shared or saved to bookmarks.
         </p>
       </aside>
     </div>
