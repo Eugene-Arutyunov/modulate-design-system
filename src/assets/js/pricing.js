@@ -17,9 +17,9 @@ function formatCost(n) {
   return n.toFixed(2);
 }
 
-function badgeClass(status) {
-  if (status === "released") return "m__badge--released";
-  if (status === "preview") return "m__badge--preview";
+function statusColor(status) {
+  if (status === "released") return "var(--m__ui-success-color)";
+  if (status === "preview") return "rgb(255, 160, 30)";
   return "";
 }
 
@@ -65,7 +65,7 @@ function createPricingCard(m) {
   card.innerHTML = `
     <div class="pricing-card__header">
       <h2 class="pricing-card__name">${escapeHtml(m.model_display_label)}</h2>
-      <span class="m__badge ${badgeClass(m.status)}">${escapeHtml(m.status)}</span>
+      <span class="m__tag-flat" style="color: ${statusColor(m.status)}">${escapeHtml(m.status)}</span>
     </div>
     <p class="pricing-card__description">${escapeHtml(m.description)}</p>
     <table class="docs-overview-table">

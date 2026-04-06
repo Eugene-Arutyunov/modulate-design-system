@@ -1,6 +1,6 @@
 /**
  * Documentation page client logic.
- * Loads model list from static JSON, renders sidebar with status badges,
+ * Loads model list from static JSON, renders sidebar with status tags,
  * handles Overview / API Spec / Quickstart tab switching.
  * All data files live under /assets/data/ and require no backend.
  */
@@ -24,9 +24,9 @@ function formatCost(n) {
   return n.toFixed(2);
 }
 
-function tagClass(status) {
-  if (status === "released") return "m__badge--released";
-  if (status === "preview") return "m__badge--preview";
+function statusColor(status) {
+  if (status === "released") return "var(--m__ui-success-color)";
+  if (status === "preview") return "rgb(255, 160, 30)";
   return "";
 }
 
@@ -144,7 +144,7 @@ function renderOverview(uuid, content) {
           <tr><td>Endpoint</td><td><code>${escapeHtml(m.api_url)}</code></td></tr>
           <tr><td>Model identifier</td><td><code>${escapeHtml(m.model_identifier)}</code></td></tr>
           <tr><td>Type</td><td>${escapeHtml(m.model_type)}</td></tr>
-          <tr><td>Status</td><td><span class="m__badge ${tagClass(m.status)}">${escapeHtml(m.status)}</span></td></tr>
+          <tr><td>Status</td><td><span class="m__tag-flat" style="color: ${statusColor(m.status)}">${escapeHtml(m.status)}</span></td></tr>
           <tr><td>Accepted formats</td><td>${formats}</td></tr>
           <tr><td>Concurrency quota</td><td>${m.concurrency_quota.toLocaleString()} concurrent requests</td></tr>
           <tr><td>Monthly usage quota</td><td>${m.usage_quota.toLocaleString()} hours</td></tr>

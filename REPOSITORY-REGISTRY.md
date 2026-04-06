@@ -90,7 +90,7 @@ Dashboard page navigation in the prototype uses the shared SVG sprite for page i
 **Script:** `src/assets/js/docs.js`  
 **Styles:** `src/styles/docs.css`
 
-Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. Two-column layout (`dashboard-layout`): left sidebar lists models loaded from `/assets/data/models.json` with `.m__badge` status labels; right panel shows per-model tabs (Overview / API Spec / Quickstart) via `.m__segmented-control`. Overview is rendered from cached model data. API Spec fetches `/assets/data/model-docs/{identifier}/openapi.yaml` and shows it in `.docs-code-block` with a download button. Quickstart fetches `/assets/data/model-docs/{identifier}/quickstart.md` → `marked.parse()` → `hljs.highlightElement()`; example links come from `models.json`. Marked and highlight.js loaded from CDN via `{% block scripts %}`. Works fully without a backend.
+Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. Two-column layout (`dashboard-layout`): left sidebar lists models loaded from `/assets/data/models.json` with `.m__tag-flat` status labels; right panel shows per-model tabs (Overview / API Spec / Quickstart) via `.m__segmented-control`. Overview is rendered from cached model data. API Spec fetches `/assets/data/model-docs/{identifier}/openapi.yaml` and shows it in `.docs-code-block` with a download button. Quickstart fetches `/assets/data/model-docs/{identifier}/quickstart.md` → `marked.parse()` → `hljs.highlightElement()`; example links come from `models.json`. Marked and highlight.js loaded from CDN via `{% block scripts %}`. Works fully without a backend.
 
 ---
 
@@ -113,13 +113,6 @@ Static files committed to the repo; served as-is by Eleventy passthrough copy (`
 Public pricing page. Uses `landing-layout.html`. Loads model list from `/assets/data/models.json` and renders one `.pricing-card` per model with base cost, feature costs, quotas, and accepted formats. Pricing appears in all three nav variants (landing, bar, popover). Works fully without a backend.
 
 ---
-
-## Badge component
-
-**Styles:** `src/styles/dashboard/layout.css`  
-**Class:** `.m__badge`
-
-Inline status/label pill. Variants: `.m__badge--released` (green tint), `.m__badge--preview` (amber tint). Used in the docs model sidebar and docs overview tab.
 
 ---
 
@@ -209,10 +202,10 @@ A group of interactive list items that share a single rounded border. Functional
 
 ## Tag component
 
-**Styles:** `src/styles/tag.css`  
-**Class:** `.m__tag`
+**Styles:** `src/styles/components/tag.css`  
+**Class:** `.m__tag`, `.m__tag-flat`
 
-Small inline label for metadata like roles or categories. Uses compact padding and `--m__radius-s`. No color variants at this stage; renders with `--m__ui-control-color` background and `--m__ui-border-color` border.
+Small inline label for metadata. `.m__tag` shows a bordered outline using `currentColor`. `.m__tag-flat` shows a tinted background derived from `currentColor` — wrap in a parent with an explicit color for semantic variants (e.g. success for "released" status). Default color is `--m__text-caption-color`.
 
 ---
 
