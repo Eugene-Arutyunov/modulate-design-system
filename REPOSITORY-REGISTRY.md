@@ -57,7 +57,7 @@ Shared tag styling for unstructured HTML text blocks: headings, paragraphs, link
 
 ## Interaction timing tokens
 
-**Styles:** `src/styles/animations.css`.
+**Styles:** `src/styles/tokens/animations.css`.
 
 Shared timing tokens for hover behavior. The system defines instant hover, animated unhover, and shared easing as tokens, while leaving the exact transitioned properties up to the component author.
 
