@@ -507,12 +507,20 @@ block content %}
           <td>
             <div class="m__textfield" style="max-width: 16rem">
               <label for="docs-tf-email">Email</label>
-              <input type="email" id="docs-tf-email" name="email" />
+              <input type="email" id="docs-tf-email" name="email" required aria-describedby="docs-tf-email-error" />
+              <div class="m__textfield__message" id="docs-tf-email-error">
+                <span>Enter a valid email</span>
+              </div>
             </div>
             <div class="m__space S"></div>
             <div class="m__textfield" style="max-width: 16rem">
               <label for="docs-tf-password">Password</label>
               <input type="password" id="docs-tf-password" name="password" />
+            </div>
+            <div class="m__space S"></div>
+            <div class="m__textfield" style="max-width: 16rem">
+              <label for="docs-tf-disabled">Disabled</label>
+              <input type="text" id="docs-tf-disabled" disabled />
             </div>
           </td>
           <td>
@@ -558,7 +566,6 @@ block content %}
         </p>
       </aside>
     </div>
-    <div class="m__space S"></div>
     <div class="m__text-width">
       <aside>
         <h4>Hover area and clickability</h4>

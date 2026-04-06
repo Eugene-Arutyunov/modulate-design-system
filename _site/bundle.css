@@ -561,6 +561,7 @@ body {
   --m__hover-transition-duration: 0s;
   --m__unhover-transition-duration: 0.3s;
   --m__transition-easing: ease;
+  --m__reveal-duration: 350ms;
 }
 
 .theme-toggle {
@@ -2629,13 +2630,13 @@ button.m__button-secondary-compact:active {
 .m__textfield {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
   margin-bottom: var(--m__default-margin-bottom);
 
   & label {
     font-size: var(--m__font-size-s);
     font-weight: 500;
     color: var(--m__text-color);
+    margin-block-end: 0.3rem;
   }
 
   & input {
@@ -2661,6 +2662,50 @@ button.m__button-secondary-compact:active {
       );
       color: var(--m__text-hover-color);
     }
+
+    &:user-invalid:not(:focus-visible) {
+      border-color: var(--m__ui-error-color);
+      color: var(--m__ui-error-color);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      border-color: color-mix(
+        in srgb,
+        var(--m__ui-border-color) 40%,
+        transparent
+      );
+      background-color: color-mix(
+        in srgb,
+        var(--m__ui-control-color) 40%,
+        transparent
+      );
+      color: var(--m__text-caption-color);
+    }
+  }
+
+  & .m__textfield__message {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows var(--m__reveal-duration) var(--m__transition-easing),
+      opacity calc(var(--m__reveal-duration) / 2) var(--m__transition-easing);
+
+    & > span {
+      overflow: hidden;
+      color: var(--m__ui-error-color);
+      font-size: var(--m__font-size-s);
+      padding-top: 0.3rem;
+    }
+  }
+
+  & input:user-invalid ~ .m__textfield__message {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition:
+      grid-template-rows var(--m__reveal-duration) var(--m__transition-easing),
+      opacity var(--m__reveal-duration) var(--m__transition-easing) calc(var(--m__reveal-duration) / 3);
   }
 }
 
