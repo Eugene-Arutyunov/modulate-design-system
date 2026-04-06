@@ -34,10 +34,16 @@
       color: var(--m__text-hover-color);
     }
 
-    &:user-invalid:not(:focus-visible),
-    &[aria-invalid="true"]:not(:focus-visible) {
+    &:user-invalid[data-touched],
+    /* aria-invalid is for static demos only */
+    &[aria-invalid="true"] {
       border-color: var(--m__ui-error-color);
       color: var(--m__ui-error-color);
+    }
+
+    &:user-invalid[data-touched]:focus-visible,
+    &[aria-invalid="true"]:focus-visible {
+      outline-color: var(--m__ui-error-color);
     }
 
     &:disabled {
@@ -72,7 +78,7 @@
     }
   }
 
-  & input:user-invalid ~ .m__textfield__message,
+  & input:user-invalid[data-touched] ~ .m__textfield__message,
   & input[aria-invalid="true"] ~ .m__textfield__message {
     grid-template-rows: 1fr;
     opacity: 1;
