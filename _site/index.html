@@ -1041,6 +1041,19 @@
               <label for="docs-tf-password">Password</label>
               <input type="password" id="docs-tf-password" name="password" />
             </div>
+            <div class="m__space S"></div>
+            <div class="m__textfield" style="max-width: 16rem">
+              <label for="docs-tf-disabled">Email</label>
+              <input type="email" id="docs-tf-disabled" disabled />
+            </div>
+            <div class="m__space S"></div>
+            <div class="m__textfield" style="max-width: 16rem">
+              <label for="docs-tf-invalid">Email</label>
+              <input type="email" id="docs-tf-invalid" name="email" aria-invalid="true" aria-describedby="docs-tf-invalid-error" />
+              <div class="m__textfield__message" id="docs-tf-invalid-error">
+                <span>Enter a valid email</span>
+              </div>
+            </div>
           </td>
           <td>
             <code class="accent">--m__textfield-padding</code><br />
@@ -1075,7 +1088,16 @@
         </tr>
       </tbody>
     </table>
-    <div class="m__space S"></div>
+    <div class="m__text-width">
+      <aside>
+        <h4>Button vs anchor</h4>
+        <p>
+          Use <code>&lt;button&gt;</code> for actions (submit, toggle, delete).
+          Use <code>&lt;a&gt;</code> for links, navigation to a URL.
+          Some actions may result in navigation, the distinction is a link could be shared or saved to bookmarks.
+        </p>
+      </aside>
+    </div>
     <div class="m__text-width">
       <aside>
         <h4>Hover area and clickability</h4>
