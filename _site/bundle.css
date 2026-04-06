@@ -84,6 +84,7 @@ body {
   --m__text-color: rgb(30, 30, 35);
   --m__text-link-color: rgb(50, 50, 70);
   --m__text-hover-color: rgb(40, 95, 235);
+  --m__text-active-color: rgb(20, 60, 180);
   --m__text-caption-color: rgb(150, 150, 170);
   --m__text-inverted-color: rgb(242, 242, 246);
   --m__text-accent-color: rgb(20, 20, 50);
@@ -95,6 +96,7 @@ body {
   --m__bg-surface-color: rgb(242, 242, 246);
   --m__bg-accent-color: rgb(20, 20, 50);
   --m__bg-hover-color: var(--m__text-hover-color);
+  --m__bg-active-color: rgb(30, 50, 160);
   --m__bg-mark-color: rgb(255, 200, 29);
 
   /* UI */
@@ -119,6 +121,7 @@ body {
   --m__text-color: rgb(180, 180, 190);
   --m__text-link-color: rgb(180, 180, 190);
   --m__text-hover-color: rgb(255, 255, 255);
+  --m__text-active-color: rgb(200, 200, 210);
   --m__text-caption-color: color-mix(
     in srgb,
     var(--m__text-color) 65%,
@@ -134,6 +137,7 @@ body {
   --m__bg-surface-color: rgb(27, 27, 39);
   --m__bg-accent-color: rgb(220, 220, 250);
   --m__bg-hover-color: rgb(100, 110, 140);
+  --m__bg-active-color: rgb(140, 140, 170);
   --m__bg-mark-color: rgb(255, 200, 29);
 
   /* UI */
@@ -2550,6 +2554,18 @@ button.m__button-secondary-compact {
     color: var(--m__text-hover-color);
     transition-duration: var(--m__hover-transition-duration);
   }
+}
+
+button.m__button:active,
+button.m__button-compact:active {
+  background-color: var(--m__bg-active-color);
+  transition-duration: var(--m__hover-transition-duration);
+}
+
+button.m__button-secondary:active,
+button.m__button-secondary-compact:active {
+  color: var(--m__text-active-color);
+  transition-duration: var(--m__hover-transition-duration);
 }
 
 .m__segmented-control {
