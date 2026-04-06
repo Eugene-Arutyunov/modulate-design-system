@@ -140,7 +140,7 @@
     </p>
   </div>
   <div class="m__space S"></div>
-  <table>
+  <table class="compact">
     <colgroup>
       <col style="width: 15%" />
       <col style="width: 55%" />
@@ -155,7 +155,7 @@
     </thead>
     <tbody>
       <tr>
-        <td>Token</td>
+        <td><code class="accent">Token</code></td>
         <td>
           A named CSS variable storing a single property value — color, size,
           duration, and so on. Token
@@ -167,7 +167,7 @@
         </td>
       </tr>
       <tr>
-        <td>Component</td>
+        <td><code>Component</code></td>
         <td>
           A styled UI element implemented for prototyping convenience. The
           design system shows it as an example, not a prescription — the
@@ -190,18 +190,7 @@
           logic or internal structure.
         </td>
       </tr>
-      <tr>
-        <td>Layout</td>
-        <td>
-          CSS classes for composing pages and handling mobile adaptation. The the developer’s code may differ
-          depending on their stack, but the visual result must match exactly.
-        </td>
-        <td>
-         
-          The tokens the layout relies on follow the same immutability rule as
-          all other tokens.
-        </td>
-      </tr>
+      
     </tbody>
   </table>
   <div class="m__space S"></div>
@@ -252,7 +241,7 @@
       class="guide-color-plate"
       style="
         background-color: var(--m__text-hover-color);
-        color: var(--m__text-color);
+        color: var(--m__text-inverted-color);
       ">
       <p>text-hover</p>
       <button class="guide-color-plate__value"></button>
@@ -287,8 +276,32 @@
     <div
       class="guide-color-plate"
       style="
-        background-color: var(--m__bg-hover-color);
+        background-color: var(--m__code-accent-color);
+        color: var(--m__text-inverted-color);
+      ">
+      <p>code-accent</p>
+      <button class="guide-color-plate__value"></button>
+    </div>
+  </div>
+
+  <div class="m__sequence-item">
+    <div
+      class="guide-color-plate"
+      style="
+        background-color: var(--m__code-color);
         color: var(--m__text-color);
+      ">
+      <p>code</p>
+      <button class="guide-color-plate__value"></button>
+    </div>
+  </div>
+
+  <div class="m__sequence-item">
+    <div
+      class="guide-color-plate"
+      style="
+        background-color: var(--m__bg-hover-color);
+        color: var(--m__text-inverted-color);
       ">
       <p>bg-hover</p>
       <button class="guide-color-plate__value"></button>
@@ -704,8 +717,8 @@
             </div>
           </td>
           <td>
-            <code>--m__widget-radius</code><br />
-            <code>--m__widget-padding</code>
+            <code class="accent">--m__widget-radius</code><br />
+            <code class="accent">--m__widget-padding</code>
           </td>
         </tr>
         <tr>
@@ -889,13 +902,13 @@
             </button>
           </td>
           <td>
-            <code>--m__button-padding</code><br />
-            <code>--m__radius-m</code><br />
-            <code>--m__space-xxs</code><br />
-            <code>--m__button-icon-size</code><br />
-            <code>--m__bg-accent-color</code><br />
-            <code>--m__bg-hover-color</code><br />
-            <code>--m__text-inverted-color</code>
+            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__bg-accent-color</code><br />
+            <code class="accent">--m__bg-hover-color</code><br />
+            <code class="accent">--m__text-inverted-color</code>
           </td>
         </tr>
         <tr>
@@ -914,12 +927,12 @@
             </button>
           </td>
           <td>
-            <code>--m__button-padding</code><br />
-            <code>--m__radius-m</code><br />
-            <code>--m__space-xxs</code><br />
-            <code>--m__button-icon-size</code><br />
-            <code>--m__text-color</code><br />
-            <code>--m__text-hover-color</code>
+            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__text-color</code><br />
+            <code class="accent">--m__text-hover-color</code>
           </td>
         </tr>
         <tr>
@@ -930,11 +943,11 @@
             </button>
           </td>
           <td>
-            <code>--m__button-compact-padding</code><br />
-            <code>--m__radius-s</code><br />
-            <code>--m__bg-accent-color</code><br />
-            <code>--m__bg-hover-color</code><br />
-            <code>--m__text-inverted-color</code>
+            <code class="accent">--m__button-compact-padding</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__bg-accent-color</code><br />
+            <code class="accent">--m__bg-hover-color</code><br />
+            <code class="accent">--m__text-inverted-color</code>
           </td>
         </tr>
         <tr>
@@ -943,10 +956,10 @@
             <a href="#" class="m__button-secondary-compact">Sign in</a>
           </td>
           <td>
-            <code>--m__button-compact-padding</code><br />
-            <code>--m__radius-s</code><br />
-            <code>--m__text-color</code><br />
-            <code>--m__text-hover-color</code>
+            <code class="accent">--m__button-compact-padding</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__text-color</code><br />
+            <code class="accent">--m__text-hover-color</code>
           </td>
         </tr>
         <tr>
@@ -969,13 +982,13 @@
             </div>
           </td>
           <td>
-            <code>--m__radius-m</code><br />
-            <code>--m__button-padding</code><br />
-            <code>--m__space-xs</code><br />
-            <code>--m__space-xxs</code><br />
-            <code>--m__ui-border-color</code><br />
-            <code>--m__ui-control-color</code><br />
-            <code>--m__text-color</code>
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__space-xs</code><br />
+            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__ui-border-color</code><br />
+            <code class="accent">--m__ui-control-color</code><br />
+            <code class="accent">--m__text-color</code>
           </td>
         </tr>
         <tr>
@@ -987,11 +1000,11 @@
             </span>
           </td>
           <td>
-            <code>--m__button-compact-padding</code><br />
-            <code>--m__radius-xs</code><br />
-            <code>--m__font-size-s</code><br />
-            <code>--m__ui-border-color</code><br />
-            <code>--m__text-color</code>
+            <code class="accent">--m__button-compact-padding</code><br />
+            <code class="accent">--m__radius-xs</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__ui-border-color</code><br />
+            <code class="accent">--m__text-color</code>
           </td>
         </tr>
         <tr>
@@ -1004,13 +1017,13 @@
             </span>
           </td>
           <td>
-            <code>--m__font-size-xs</code><br />
-            <code>--m__font-weight-medium</code><br />
-            <code>--m__bg-surface-color</code><br />
-            <code>--m__text-caption-color</code><br />
-            <code>--m__ui-success-color</code><br />
-            <code>--m__ui-warning-color</code><br />
-            <code>--m__text-color</code>
+            <code class="accent">--m__font-size-xs</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-surface-color</code><br />
+            <code class="accent">--m__text-caption-color</code><br />
+            <code class="accent">--m__ui-success-color</code><br />
+            <code class="accent">--m__ui-warning-color</code><br />
+            <code class="accent">--m__text-color</code>
           </td>
         </tr>
         <tr>
@@ -1027,12 +1040,12 @@
             </div>
           </td>
           <td>
-            <code>--m__textfield-padding</code><br />
-            <code>--m__radius-s</code><br />
-            <code>--m__font-size-s</code><br />
-            <code>--m__ui-control-color</code><br />
-            <code>--m__ui-border-color</code><br />
-            <code>--m__text-color</code>
+            <code class="accent">--m__textfield-padding</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__ui-control-color</code><br />
+            <code class="accent">--m__ui-border-color</code><br />
+            <code class="accent">--m__text-color</code>
           </td>
         </tr>
         <tr>
@@ -1050,11 +1063,11 @@
             </fieldset>
           </td>
           <td>
-            <code>--m__segmented-control-padding</code><br />
-            <code>--m__radius-s</code><br />
-            <code>--m__text-color</code><br />
-            <code>--m__text-hover-color</code><br />
-            <code>--m__text-link-color</code>
+            <code class="accent">--m__segmented-control-padding</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__text-color</code><br />
+            <code class="accent">--m__text-hover-color</code><br />
+            <code class="accent">--m__text-link-color</code>
           </td>
         </tr>
       </tbody>
@@ -1316,11 +1329,11 @@
               <ids-footnote>
                 <p>
                   Chart-specific palette tokens use
-                  the&nbsp;<code>--m__chart-*</code>&nbsp;prefix.</p>
+                  the&nbsp;<code class="accent">--m__chart-*</code>&nbsp;prefix.</p>
                 <p>
                   Grid and tick colors are read from
-                  <code>--m__text-color</code> and
-                  <code>--m__text-caption-color</code> via
+                  <code class="accent">--m__text-color</code> and
+                  <code class="accent">--m__text-caption-color</code> via
                   <code>getComputedStyle</code>. Grid color is derived as
                   <code
                     >color-mix(in&nbsp;srgb,&nbsp;--m__text-color&nbsp;12%,&nbsp;transparent)</code
@@ -1405,7 +1418,7 @@
                   <code>0&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0.35)</code>,
                   <code>0.67&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0.35)</code>,
                   <code>1&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0)</code>. Base color:
-                  <code>--m__chart-default-color</code>. Y-axis uses
+                  <code class="accent">--m__chart-default-color</code>. Y-axis uses
                   <code>grace:&nbsp;"25%"</code>.
                 </p>
               </ids-footnote>
@@ -1470,9 +1483,9 @@
             </div>
           </td>
           <td>
-            <code>--m__hover-transition-duration</code><br />
-            <code>--m__unhover-transition-duration</code><br />
-            <code>--m__transition-easing</code>
+            <code class="accent">--m__hover-transition-duration</code><br />
+            <code class="accent">--m__unhover-transition-duration</code><br />
+            <code class="accent">--m__transition-easing</code>
           </td>
         </tr>
       </tbody>

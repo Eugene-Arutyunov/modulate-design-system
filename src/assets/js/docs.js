@@ -128,7 +128,7 @@ function renderOverview(uuid, content) {
   const featureRows = m.feature_costs
     .map(
       (fc) =>
-        `<tr><th>${escapeHtml(fc.feature_name)}</th><td>$${formatCost(fc.cost_dollars_per_thousand_hours / 1000)} / hr</td></tr>`,
+        `<tr><td>${escapeHtml(fc.feature_name)}</td><td>$${formatCost(fc.cost_dollars_per_thousand_hours / 1000)} / hr</td></tr>`,
     )
     .join("");
   const formats =
@@ -141,14 +141,14 @@ function renderOverview(uuid, content) {
     <div class="m__text-content">
       <table>
         <tbody>
-          <tr><th>Endpoint</th><td><code>${escapeHtml(m.api_url)}</code></td></tr>
-          <tr><th>Model identifier</th><td><code>${escapeHtml(m.model_identifier)}</code></td></tr>
-          <tr><th>Type</th><td>${escapeHtml(m.model_type)}</td></tr>
-          <tr><th>Status</th><td><span class="m__badge ${tagClass(m.status)}">${escapeHtml(m.status)}</span></td></tr>
-          <tr><th>Accepted formats</th><td>${formats}</td></tr>
-          <tr><th>Concurrency quota</th><td>${m.concurrency_quota.toLocaleString()} concurrent requests</td></tr>
-          <tr><th>Monthly usage quota</th><td>${m.usage_quota.toLocaleString()} hours</td></tr>
-          <tr><th>Cost</th><td>${cost}</td></tr>
+          <tr><td>Endpoint</td><td><code>${escapeHtml(m.api_url)}</code></td></tr>
+          <tr><td>Model identifier</td><td><code>${escapeHtml(m.model_identifier)}</code></td></tr>
+          <tr><td>Type</td><td>${escapeHtml(m.model_type)}</td></tr>
+          <tr><td>Status</td><td><span class="m__badge ${tagClass(m.status)}">${escapeHtml(m.status)}</span></td></tr>
+          <tr><td>Accepted formats</td><td>${formats}</td></tr>
+          <tr><td>Concurrency quota</td><td>${m.concurrency_quota.toLocaleString()} concurrent requests</td></tr>
+          <tr><td>Monthly usage quota</td><td>${m.usage_quota.toLocaleString()} hours</td></tr>
+          <tr><td>Cost</td><td>${cost}</td></tr>
           ${featureRows}
         </tbody>
       </table>

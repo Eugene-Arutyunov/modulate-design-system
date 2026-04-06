@@ -87,7 +87,8 @@ body {
   --m__text-caption-color: rgb(150, 150, 170);
   --m__text-inverted-color: rgb(242, 242, 246);
   --m__text-accent-color: rgb(20, 20, 50);
-  --m__code-color: rgb(124, 58, 237);
+  --m__code-color: var(--m__text-caption-color);
+  --m__code-accent-color: rgb(124, 58, 237);
 
   /* BACKGROUND */
   --m__background-color: rgb(255, 255, 255);
@@ -126,7 +127,8 @@ body {
   );
   --m__text-inverted-color: rgb(20, 20, 30);
   --m__text-accent-color: rgb(180, 180, 190);
-  --m__code-color: rgb(167, 139, 250);
+  --m__code-color: var(--m__text-caption-color);
+  --m__code-accent-color: rgb(167, 139, 250);
 
   /* BACKGROUND */
   --m__background-color: rgb(20, 20, 25);
@@ -455,6 +457,20 @@ body {
     color: var(--m__code-color);
     border: 1px solid color-mix(in srgb, var(--m__code-color) 10%, transparent);
     background: color-mix(in srgb, var(--m__code-color) 10%, transparent);
+
+    &.accent {
+      color: var(--m__code-accent-color);
+      border-color: color-mix(
+        in srgb,
+        var(--m__code-accent-color) 10%,
+        transparent
+      );
+      background: color-mix(
+        in srgb,
+        var(--m__code-accent-color) 10%,
+        transparent
+      );
+    }
   }
 
   & ul,
@@ -1764,38 +1780,6 @@ div.pswp__img--placeholder,
   }
 }
 
-/* Default table styles */
-table {
-  width: 100%;
-  border-spacing: 0;
-  background-color: inherit;
-
-  & td {
-    padding: 0.3rem 0.5rem 0.7rem 0;
-    text-align: left;
-    vertical-align: top;
-    border-bottom: 1px solid
-      color-mix(in srgb, var(--m__text-color) 12%, transparent);
-  }
-
-  & th {
-    padding: 0.3rem 0.5rem 0.3rem 0;
-    text-align: left;
-    vertical-align: top;
-    border-bottom: 1px solid
-      color-mix(in srgb, var(--m__text-color) 12%, transparent);
-    font-weight: var(--m__font-weight-medium);
-    position: sticky;
-    top: 0;
-    background-color: var(--m__background-color);
-  }
-
-  & tbody tr:last-child td,
-  & tbody tr:last-child th {
-    border-bottom: none;
-  }
-}
-
 .docs-icon-row {
   display: flex;
   flex-wrap: wrap;
@@ -2777,6 +2761,51 @@ button.m__button-secondary-compact {
   background-color: transparent;
   border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
   color: currentColor;
+}
+
+table {
+  width: 100%;
+  border-spacing: 0;
+  background-color: inherit;
+
+  & td {
+    padding: 0.3rem 0.5rem 0.7rem 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--m__text-color) 12%, transparent);
+  }
+
+  & th {
+    padding: 0.3rem 0.5rem 0.3rem 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--m__text-color) 12%, transparent);
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+    font-weight: var(--m__font-weight-medium);
+    position: sticky;
+    top: 0;
+    background-color: var(--m__background-color);
+  }
+
+  & tbody tr:last-child td,
+  & tbody tr:last-child th {
+    border-bottom: none;
+  }
+}
+
+table.compact {
+  font-size: var(--m__font-size-s);
+
+  & td {
+    padding: 0.2rem 0.5rem 0.3rem 0;
+  }
+
+  & th {
+    padding: 0.15rem 0.5rem 0.15rem 0;
+  }
 }
 
 .dashboard-layout {
