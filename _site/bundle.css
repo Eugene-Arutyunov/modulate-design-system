@@ -2663,7 +2663,8 @@ button.m__button-secondary-compact:active {
       color: var(--m__text-hover-color);
     }
 
-    &:user-invalid:not(:focus-visible) {
+    &:user-invalid:not(:focus-visible),
+    &[aria-invalid="true"]:not(:focus-visible) {
       border-color: var(--m__ui-error-color);
       color: var(--m__ui-error-color);
     }
@@ -2700,7 +2701,8 @@ button.m__button-secondary-compact:active {
     }
   }
 
-  & input:user-invalid ~ .m__textfield__message {
+  & input:user-invalid ~ .m__textfield__message,
+  & input[aria-invalid="true"] ~ .m__textfield__message {
     grid-template-rows: 1fr;
     opacity: 1;
     transition:
