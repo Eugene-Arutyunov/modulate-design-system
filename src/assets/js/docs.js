@@ -217,8 +217,7 @@ async function renderQuickstart(uuid, content) {
   }
   const links = model.example_project_links ?? [];
   if (links.length > 0) {
-    html +=
-      '<div class="m__text-content"><h6>Example projects</h6><ul>';
+    html += '<div class="m__text-content"><h6>Example projects</h6><ul>';
     for (const l of links) {
       html += `<li><a href="${escapeHtml(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.title)}</a></li>`;
     }
