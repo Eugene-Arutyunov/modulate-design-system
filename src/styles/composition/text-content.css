@@ -1,159 +1,157 @@
-.m__text-content {
-  & p {
-    font-size: var(--m__font-size-m);
-    margin: 0 0 var(--m__default-margin-bottom);
-  }
+p {
+  font-size: var(--m__font-size-m);
+  margin: 0 0 var(--m__default-margin-bottom);
+}
 
-  & strong,
-  & b {
-    font-weight: 600;
-  }
+strong,
+b {
+  font-weight: 600;
+}
 
-  & a {
-    color: var(--m__text-link-color);
-    text-decoration: underline;
-    will-change: color;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
-    text-decoration-skip-ink: none;
+a {
+  color: var(--m__text-link-color);
+  text-decoration: underline;
+  will-change: color;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-skip-ink: none;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--m__text-link-color) 20%,
+    transparent
+  );
+  transition:
+    color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    text-decoration-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
     text-decoration-color: color-mix(
       in srgb,
-      var(--m__text-link-color) 20%,
+      var(--m__text-hover-color) 20%,
       transparent
     );
-    transition:
-      color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      text-decoration-color var(--m__unhover-transition-duration)
-        var(--m__transition-easing);
-
-    &:hover {
-      color: var(--m__text-hover-color);
-      text-decoration-color: color-mix(
-        in srgb,
-        var(--m__text-hover-color) 20%,
-        transparent
-      );
-      transition-duration:
-        var(--m__hover-transition-duration), var(--m__hover-transition-duration);
-    }
+    transition-duration:
+      var(--m__hover-transition-duration), var(--m__hover-transition-duration);
   }
+}
 
-  & h1,
-  & h2,
-  & h3,
-  & h4,
-  & h5,
-  & h6 {
-    margin: 0 0 var(--m__default-margin-bottom);
-    font-weight: var(--m__font-weight-bold);
-    line-height: var(--m__line-height-base);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 var(--m__default-margin-bottom);
+  font-weight: var(--m__font-weight-bold);
+  line-height: var(--m__line-height-base);
+}
+
+h1 {
+  font-size: var(--m__font-size-xxxl);
+}
+
+h1.loud {
+  font-size: var(--m__font-size-display);
+  font-family: "CoFo Gothic", sans-serif;
+  font-weight: var(--m__font-weight-bold);
+  color: var(--m__text-color);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: var(--m__font-size-xxl);
+}
+
+h3 {
+  font-size: var(--m__font-size-l);
+}
+
+h4 {
+  font-size: var(--m__font-size-m);
+}
+
+h5 {
+  font-size: var(--m__font-size-m);
+}
+
+h6 {
+  font-size: var(--m__font-size-s);
+  text-transform: uppercase;
+}
+
+code {
+  font-size: var(--m__font-size-s);
+  font-family: "Inter";
+  letter-spacing: 0.02em;
+  font-weight: var(--m__font-weight-medium);
+  padding: 0.1rem 0.25rem;
+  border-radius: 0.2rem;
+  color: var(--m__code-color);
+  border: 1px solid color-mix(in srgb, var(--m__code-color) 10%, transparent);
+  background: color-mix(in srgb, var(--m__code-color) 10%, transparent);
+
+  &.accent {
+    color: var(--m__code-accent-color);
+    border-color: color-mix(
+      in srgb,
+      var(--m__code-accent-color) 10%,
+      transparent
+    );
+    background: color-mix(
+      in srgb,
+      var(--m__code-accent-color) 10%,
+      transparent
+    );
   }
+}
 
-  & h1 {
-    font-size: var(--m__font-size-xxxl);
+ul,
+ol {
+  margin: 0 0 var(--m__default-margin-bottom) 0;
+  padding: 0;
+
+  & li {
+    position: relative;
+    margin-bottom: var(--m__default-margin-bottom);
   }
+}
 
-  & h1.loud {
-    font-size: var(--m__font-size-display);
-    font-family: "CoFo Gothic", sans-serif;
-    font-weight: var(--m__font-weight-bold);
-    color: var(--m__text-color);
-    line-height: 1.1;
+ol {
+  & li {
+    list-style: decimal inside none;
   }
+}
 
-  & h2 {
-    font-size: var(--m__font-size-xxl);
-  }
-
-  & h3 {
-    font-size: var(--m__font-size-l);
-  }
-
-  & h4 {
-    font-size: var(--m__font-size-m);
-  }
-
-  & h5 {
-    font-size: var(--m__font-size-m);
-  }
-
-  & h6 {
-    font-size: var(--m__font-size-s);
-    text-transform: uppercase;
-  }
-
-  & code {
-    font-size: var(--m__font-size-s);
-    font-family: "Inter";
-    letter-spacing: 0.02em;
-    font-weight: var(--m__font-weight-medium);
-    padding: 0.1rem 0.25rem;
-    border-radius: 0.2rem;
-    color: var(--m__code-color);
-    border: 1px solid color-mix(in srgb, var(--m__code-color) 10%, transparent);
-    background: color-mix(in srgb, var(--m__code-color) 10%, transparent);
-
-    &.accent {
-      color: var(--m__code-accent-color);
-      border-color: color-mix(
-        in srgb,
-        var(--m__code-accent-color) 10%,
-        transparent
-      );
-      background: color-mix(
-        in srgb,
-        var(--m__code-accent-color) 10%,
-        transparent
-      );
-    }
-  }
-
-  & ul,
-  & ol {
-    margin: 0 0 var(--m__default-margin-bottom) 0;
-    padding: 0;
-
-    & li {
-      position: relative;
-      margin-bottom: var(--m__default-margin-bottom);
-    }
-  }
-
-  & ol {
-    & li {
-      list-style: decimal inside none;
-    }
-  }
-
-  & ul {
-    & li {
-      list-style-type: none;
-      padding-left: 0.8rem;
-      margin-bottom: var(--m__default-margin-bottom);
-
-      &:before {
-        position: absolute;
-        left: 0;
-        content: "⋅ ";
-      }
-    }
-  }
-
-  & pre {
-    background-color: var(--m__bg-surface-color);
-    border-radius: var(--m__radius-s);
-    padding: var(--m__space-m);
-    overflow-x: auto;
+ul {
+  & li {
+    list-style-type: none;
+    padding-left: 0.8rem;
     margin-bottom: var(--m__default-margin-bottom);
 
-    & code {
-      font-family: "Inter";
-      font-size: var(--m__font-size-s);
-      line-height: 1.6;
-      background: none;
-      border: none;
-      padding: 0;
-      color: inherit;
+    &:before {
+      position: absolute;
+      left: 0;
+      content: "⋅ ";
     }
+  }
+}
+
+pre {
+  background-color: var(--m__bg-surface-color);
+  border-radius: var(--m__radius-s);
+  padding: var(--m__space-m);
+  overflow-x: auto;
+  margin-bottom: var(--m__default-margin-bottom);
+
+  & code {
+    font-family: "Inter";
+    font-size: var(--m__font-size-s);
+    line-height: 1.6;
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
   }
 }

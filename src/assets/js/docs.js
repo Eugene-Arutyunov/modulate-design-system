@@ -138,7 +138,7 @@ function renderOverview(uuid, content) {
           .join(" ")
       : "—";
   content.innerHTML = `
-    <div class="m__text-content">
+    <div>
       <table>
         <tbody>
           <tr><td>Endpoint</td><td><code>${escapeHtml(m.api_url)}</code></td></tr>
@@ -208,16 +208,16 @@ async function renderQuickstart(uuid, content) {
       const tmp = document.createElement("div");
       tmp.innerHTML = markedLib.parse(md);
       tmp.querySelector("h1, h2, h3, h4, h5, h6")?.remove();
-      html += `<div class="m__text-content">${tmp.innerHTML}</div>`;
+      html += `<div>${tmp.innerHTML}</div>`;
     } else {
-      html += `<div class="m__text-content"><pre><code>${escapeHtml(md)}</code></pre></div>`;
+      html += `<div><pre><code>${escapeHtml(md)}</code></pre></div>`;
     }
   } else {
     html += '<div class="docs-loading">Failed to load quickstart.</div>';
   }
   const links = model.example_project_links ?? [];
   if (links.length > 0) {
-    html += '<div class="m__text-content"><h6>Example projects</h6><ul>';
+    html += '<div><h6>Example projects</h6><ul>';
     for (const l of links) {
       html += `<li><a href="${escapeHtml(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.title)}</a></li>`;
     }

@@ -48,10 +48,9 @@ Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders three colu
 
 ## Shared text content styles
 
-**Styles:** `src/styles/typography.css`  
-**Class:** `.m__text-content`.
+**Styles:** `src/styles/composition/text-content.css`
 
-Shared tag styling for unstructured HTML text blocks: headings, paragraphs, links, inline code, and lists. Use this class for dashboard/text-content sections and footer copy so prose renders consistently across docs and product pages.
+Global tag-level styles for prose elements: headings, paragraphs, links, inline code, lists, and preformatted blocks. Rules apply to bare HTML tags and cover the entire page; no wrapper class is required.
 
 ---
 

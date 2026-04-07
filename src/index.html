@@ -32,10 +32,7 @@ block content %}
       </tr>
       <tr>
         <td><code class="accent">Token</code></td>
-        <td>
-          A named CSS variable storing a single property value — color, size,
-          duration, and so on.
-        </td>
+        <td>A named CSS variable storing a single property value.</td>
         <td>Use tokens as-is: don’t rename, don’t alias, don’t generalize.</td>
       </tr>
     </tbody>
@@ -145,12 +142,12 @@ block content %}
       <div class="m__sequence XL gap-M">
         <div class="m__sequence-item">
           <p>
-            Section content can be of two kinds: <strong>Widget</strong> or
-            <strong>Text-content</strong>. A Widget contains an interactive
-            element or a purpose-built widget for presenting data. Text-content
-            is free-form HTML text with shared styles for selected tags; see the
-            Text section for the supported text elements.
+            Section content is either a <strong>Widget</strong> or
+            <strong>Text-content</strong>. A widget is an interactive element or
+            a dedicated component for presenting data. It's normally presented
+            as a card with rounded corners.
           </p>
+          <p>Text-content is free-form HTML with shared styles applied.</p>
           <p>
             A section may contain: one or several Widgets, or one Text-content
             block (which always spans the full width).
@@ -191,50 +188,25 @@ block content %}
             <code class="accent">--m__widget-padding</code>
           </td>
         </tr>
-        <tr>
-          <td><code>.m__text-content</code></td>
-          <td>
-            <div class="m__text-content">
-              <h4>Text content section</h4>
-              <p>
-                This is for documentation-style copy with
-                <a href="https://modulate.ai">links</a>, inline
-                <code>code</code>, headings, and lists, when the content is
-                mostly unstructured HTML rather than a purpose-built UI widget.
-              </p>
-              <p>Supported tags include:</p>
-              <ul>
-                <li><code>strong</code> for emphasis</li>
-                <li><code>a</code> for links</li>
-                <li><code>h1...h6</code>for headings</li>
-                <li><code>ul li</code> and <code>ol li</code> for lists</li>
-                <li><code>code</code> for inline code</li>
-              </ul>
-            </div>
-          </td>
-          <td></td>
-        </tr>
       </tbody>
     </table>
     <div class="m__space S"></div>
 
     <h3>Spacing</h3>
     <div class="m__text-width">
-      <ul>
-        <li>
-          Components carry a default bottom margin
-          (<code>var(--m__default-margin-bottom)</code>) and no top margin. This
-          keeps vertical stacking predictable and makes it easy to top-align
-          elements placed side by side.
-        </li>
-        <li>
-          Spacing between sections or before headings is handled with explicit
-          spacer elements (<code>.m__space</code>), not margins on content
-          elements. The idea behind this is that content elements can’t know
-          what spacing is appropriate in every context — that’s why the spacer
-          should be placed by whoever assembles the layout.
-        </li>
-      </ul>
+      <p>
+        Components carry a default bottom margin (<code class="accent"
+          >--m__default-margin-bottom</code
+        >) and no top margin. This keeps vertical stacking predictable and makes
+        it easy to top-align elements placed side by side.
+      </p>
+      <p>
+        Spacing between sections or before headings is handled with explicit
+        spacer elements (<code>.m__space</code>), not margins on content
+        elements. The idea behind this is that content elements can’t know what
+        spacing is appropriate in every context — that’s why the spacer should
+        be placed by whoever assembles the layout.
+      </p>
     </div>
     <div class="m__space S"></div>
   </div>
@@ -250,10 +222,25 @@ block content %}
     <h3>Text</h3>
     <div class="m__text-width">
       <p>
-        The supported text elements (headings, paragraphs, links, lists, inline
-        code) are styled when they appear inside a container with the
-        <code>.m__text-content</code> class. A Text-content section uses this
-        class on its wrapper so the shared typography applies.
+        In this repository, the supported text elements (headings, paragraphs,
+        links, lists, inline code) are styled through their HTML tags. In
+        production, especially when combining different versions or styling
+        systems, that approach can let styles leak inward or
+        <ids-footnote-link>outward</ids-footnote-link>.
+      </p>
+      <ids-footnote>
+        <p>
+          Common responses include:</p>
+          <ul>
+              <li>scoping styles at the component boundary, using class-based selectors instead of bare tags where outward leakage is a concern,</li>
+              <li>adding component-level CSS resets where inward leakage is a concern,</li>
+              <li>or another approach that fits the stack.</li>
+            </ul>
+        </p>
+      </ids-footnote>
+      <p>
+        The same elements show up inside interactive components and inside
+        widgets, and on their own as unstructured HTML in Text-content sections.
       </p>
     </div>
     <div class="m__space M"></div>
@@ -769,7 +756,7 @@ block content %}
         <div class="m__widget">{% include 'widgets/chart-bar.html' %}</div>
       </div>
       <div class="m__sequence-item">
-        <div class="m__text-width m__text-content">
+        <div class="m__text-width">
           <p>
             The following adjustments are applied on top of the default Chart.js
             configuration:
@@ -954,7 +941,7 @@ block content %}
           <td><code>hover</code></td>
           <td>
             <div class="docs-animation-samples">
-              <div class="m__text-content docs-animation-samples__text">
+              <div class="docs-animation-samples__text">
                 <p><a href="https://modulate.ai">Text link</a></p>
               </div>
               <button type="button" class="m__button">Button</button>
