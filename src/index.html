@@ -84,16 +84,13 @@ block content %}
       </p>
     </div>
     <div class="m__text-width">
-      <aside class="code">
-        <h4>CSS</h4>
-        <p><code>color: var(--m__accent-color);</code></p>
-        <p>
-          <code
-            >color: color-mix(in srgb, var(--m__accent-color) 50%,
-            transparent);</code
-          >
-        </p>
-      </aside>
+      <div class="m__code-block">
+        <div class="m__code-block__toolbar">
+          <span>CSS</span>
+        </div>
+        <pre><code>color: var(--m__accent-color);
+color: color-mix(in srgb, var(--m__accent-color) 50%, transparent);</code></pre>
+      </div>
     </div>
     <div class="m__space S"></div>
   </div>
@@ -360,6 +357,28 @@ block content %}
           <td>
             <code class="accent">--m__font-size-s</code><br />
             <code class="accent">--m__text-caption-color</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__code-block</code></td>
+          <td>
+            <div class="m__code-block">
+              <div class="m__code-block__toolbar">
+                <span>example.yaml</span>
+              </div>
+              <pre><code>endpoint: /api/velma-2-stt-batch
+method: POST</code></pre>
+            </div>
+            <div class="m__code-block">
+              <pre><code>curl -X POST https://api.modulate.ai \
+  -H "X-API-Key: your_key"</code></pre>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__bg-surface-color</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__font-mono</code><br />
+            <code class="accent">--m__font-size-mono-m</code>
           </td>
         </tr>
       </tbody>

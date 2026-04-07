@@ -208,7 +208,7 @@ async function renderQuickstart(uuid, content) {
       const tmp = document.createElement("div");
       tmp.innerHTML = markedLib.parse(md);
       tmp.querySelector("h1, h2, h3, h4, h5, h6")?.remove();
-      html += `<div>${tmp.innerHTML}</div>`;
+      html += `<div class="docs-quickstart-content">${tmp.innerHTML}</div>`;
     } else {
       html += `<div><pre><code>${escapeHtml(md)}</code></pre></div>`;
     }

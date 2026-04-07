@@ -29,7 +29,7 @@ aside.nav-sidebar button.nav-sidebar__link {
 /* Code block component */
 .m__code-block {
   background-color: var(--m__bg-surface-color);
-  border-radius: var(--m__radius-m);
+  border-radius: var(--m__radius-s);
   overflow: hidden;
   margin-bottom: var(--m__default-margin-bottom);
 
@@ -37,7 +37,7 @@ aside.nav-sidebar button.nav-sidebar__link {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.4rem 0.6rem;
+    padding: var(--m__code-block-toolbar-padding);
     border-bottom: 1px solid var(--m__ui-border-color);
     font-size: var(--m__font-size-s);
     color: var(--m__text-caption-color);
@@ -45,7 +45,7 @@ aside.nav-sidebar button.nav-sidebar__link {
 
   & pre {
     margin: 0;
-    padding: var(--m__space-m);
+    padding: 0.5rem 0.7rem;
     overflow-x: auto;
 
     & code {
@@ -55,7 +55,7 @@ aside.nav-sidebar button.nav-sidebar__link {
       background: none;
       border: none;
       padding: 0;
-      color: var(--m__text-color);
+      color: inherit;
     }
   }
 }
@@ -75,29 +75,16 @@ aside.nav-sidebar button.nav-sidebar__link {
   display: none;
 }
 
+.docs-quickstart-content h2,
+.docs-quickstart-content h3,
+.docs-quickstart-content h4,
+.docs-quickstart-content h5,
+.docs-quickstart-content h6 {
+  margin-top: var(--m__space-l);
+}
+
 /* Pricing comparison table */
 .pricing-table-wrap {
   overflow-x: auto;
   margin-bottom: var(--m__default-margin-bottom);
-}
-
-.pricing-code-dark {
-  background-color: var(--m__bg-accent-color);
-  color: var(--m__text-inverted-color);
-  border-radius: var(--m__radius-s);
-  padding: var(--m__space-m);
-  font-family: "Inter";
-  font-size: var(--m__font-size-s);
-  line-height: 1.6;
-  overflow-x: auto;
-  margin: 0.5rem 0 0;
-
-  & code {
-    font-family: inherit;
-    font-size: inherit;
-    background: none;
-    border: none;
-    padding: 0;
-    color: inherit;
-  }
 }
