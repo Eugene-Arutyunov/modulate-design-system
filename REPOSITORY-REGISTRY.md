@@ -48,9 +48,9 @@ Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders three colu
 
 ## Shared text content styles
 
-**Styles:** `src/styles/composition/text-content.css`
+**Styles:** `src/styles/page-composition/text-components.css`
 
-Global tag-level styles for prose elements: headings, paragraphs, links, inline code, lists, and preformatted blocks. Rules apply to bare HTML tags and cover the entire page; no wrapper class is required.
+Global tag-level styles for prose elements: headings, paragraphs, links, inline code, lists, and preformatted blocks. Rules apply to bare HTML tags and cover the entire page; no wrapper class is required. Also defines `.caption` — a utility class for secondary/meta text at `--m__font-size-s` with `--m__text-caption-color`.
 
 ---
 
