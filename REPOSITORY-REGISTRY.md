@@ -173,7 +173,7 @@ Standalone two-column layout for auth screens. No dashboard header or footer. Le
 ## Textfield component
 
 **Styles:** `src/styles/textfield.css`  
-**Tokens:** `--m__textfield-padding`, `--m__textfield-radius`, `--m__textfield-label-size` in `src/styles/tokens/ui-components.css`.  
+**Tokens:** `--m__control-inset-padding`, `--m__textfield-radius`, `--m__textfield-label-size` in `src/styles/tokens/ui-components.css`.  
 **Class:** `.m__textfield`
 
 Label + input pair. Label sits above the input. Input uses `--m__ui-control-color` background, `--m__ui-border-color` border, and focus outline via `--m__text-hover-color`. Works with `type="email"` and `type="password"`.
