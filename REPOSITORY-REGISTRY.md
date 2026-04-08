@@ -54,6 +54,16 @@ Global tag-level styles for prose elements: headings, paragraphs, links, inline 
 
 ---
 
+## Docs chrome (navbar + footnotes)
+
+**Styles:** `src/styles/ids-components/navbar.css`, `src/styles/ids-components/footnotes.css`  
+**Scripts:** `src/assets/js/navbar.js`, `src/assets/js/footnotes.js`  
+**Bundle:** included from `src/css-bundle.njk`; `main.js` imports the scripts on design-system pages (`ds-layout.html`).
+
+Segmented docs nav (`ids-navbar` / `ids-nav-item`) and footnote popovers (`ids-footnote-link` / `ids-footnote`). Class names keep the `ids-` prefix for historical reasons; there is no page-level `.ids` wrapper.
+
+---
+
 ## Interaction timing tokens
 
 **Styles:** `src/styles/tokens/animations.css`.
