@@ -5,10 +5,12 @@ const browserslist = require('browserslist');
 
 const tokenFiles = [
   'colors.css',
+  'emotion-colors.css',
   'typography.css',
   'spacers.css',
   'layout.css',
   'ui-components.css',
+  'animations.css',
 ];
 
 const srcDir = path.join(__dirname, '../src/styles/tokens');
