@@ -1,6 +1,6 @@
 ---
-pageTitle: Pricing
-permalink: /pricing/
+pageTitle: Models
+permalink: /models/
 ---
 
 {% extends 'landing-layout.html' %} {% block content %}
@@ -14,322 +14,312 @@ permalink: /pricing/
       across 70+ languages. Choose the model that fits your use case.
     </p>
 
-    <div class="m__space M"></div>
-
-    <div class="pricing-model-switcher">
-      <div class="m__segmented-control">
-        <label>
-          <input
-            type="radio"
-            name="pricing-category"
-            value="transcription"
-            checked />
-          Transcription
-        </label>
-        <label>
-          <input type="radio" name="pricing-category" value="deepfake" />
-          Deepfake Detection
-        </label>
-      </div>
-
-      <div class="pricing-transcription-section">
-        <div class="pricing-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Model Comparison</th>
-                <th>Batch English Fast</th>
-                <th>Batch Multilingual</th>
-                <th>Streaming Multilingual</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Description</td>
-                <td>
-                  High-throughput English batch processing with &gt;200x
-                  real-time speed
-                </td>
-                <td>
-                  Multilingual batch transcription in 70+ languages with full
-                  feature set
-                </td>
-                <td>
-                  Real-time streaming transcription in 70+ languages via
-                  WebSocket
-                </td>
-              </tr>
-
-              <tr>
-                <td>Endpoint</td>
-                <td><code>/api/velma-2-stt-batch-english-vfast</code></td>
-                <td><code>/api/velma-2-stt-batch</code></td>
-                <td><code>/api/velma-2-stt-streaming</code></td>
-              </tr>
-
-              <tr>
-                <td>Type</td>
-                <td>Batch</td>
-                <td>Batch</td>
-                <td>Streaming</td>
-              </tr>
-
-              <tr>
-                <td>API</td>
-                <td>REST API</td>
-                <td>REST API</td>
-                <td>WebSocket</td>
-              </tr>
-
-              <tr>
-                <td>Accepted Files</td>
-                <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
-                <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
-                <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
-              </tr>
-
-              <tr>
-                <td>Pricing</td>
-                <td><strong>$0.025 / hour</strong></td>
-                <td><strong>$0.03 / hour</strong></td>
-                <td><strong>$0.06 / hour</strong></td>
-              </tr>
-
-              <tr>
-                <td colspan="4">Built-in features</td>
-              </tr>
-
-              <tr>
-                <td>Transcription</td>
-                <td>✓</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Auto Capitalization</td>
-                <td>✓</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Auto Punctuation</td>
-                <td>✓</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Language</td>
-                <td>English</td>
-                <td>70+ languages</td>
-                <td>70+ languages</td>
-              </tr>
-
-              <tr>
-                <td>Real-Time</td>
-                <td>−</td>
-                <td>−</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td colspan="4">Optional features</td>
-              </tr>
-
-              <tr>
-                <td>Speaker Diarization</td>
-                <td>−</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Emotion Detection</td>
-                <td>−</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Accent Identification</td>
-                <td>−</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>PII/PHI Tagging</td>
-                <td>−</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="pricing-deepfake-section">
-        <p>
-          Velma-2's synthetic voice detection models achieve state-of-the-art
-          performance detecting speech deepfakes on single-speaker audio.
-        </p>
-        <div class="pricing-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Model Comparison</th>
-                <th>Deepfake Batch</th>
-                <th>Deepfake Streaming</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Description</td>
-                <td>
-                  Speech deepfake prediction for audio files with a single
-                  speaker
-                </td>
-                <td>
-                  Real-time speech deepfake detection for streaming audio with a
-                  single speaker
-                </td>
-              </tr>
-
-              <tr>
-                <td>Accuracy</td>
-                <td>
-                  98.9% average \u2014 #1 on
-                  <a
-                    href="https://huggingface.co/spaces/Speech-Arena-2025/Speech-DF-Arena"
-                    target="_blank"
-                    rel="noopener"
-                    >Speech DF Arena</a
-                  >
-                </td>
-                <td>
-                  98.9% average \u2014 #1 on
-                  <a
-                    href="https://huggingface.co/spaces/Speech-Arena-2025/Speech-DF-Arena"
-                    target="_blank"
-                    rel="noopener"
-                    >Speech DF Arena</a
-                  >
-                </td>
-              </tr>
-
-              <tr>
-                <td>Endpoint</td>
-                <td>
-                  <code>/api/velma-2-synthetic-voice-detection-batch</code>
-                </td>
-                <td>
-                  <code>/api/velma-2-synthetic-voice-detection-streaming</code>
-                </td>
-              </tr>
-
-              <tr>
-                <td>Type</td>
-                <td>Deepfake Batch</td>
-                <td>Deepfake Streaming</td>
-              </tr>
-
-              <tr>
-                <td>API</td>
-                <td>REST API</td>
-                <td>WebSocket</td>
-              </tr>
-
-              <tr>
-                <td>Accepted Files</td>
-                <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
-                <td>Raw 16kHz mono PCM (int16 LE)</td>
-              </tr>
-
-              <tr>
-                <td>Pricing</td>
-                <td><strong>$0.25 / hour</strong></td>
-                <td><strong>$0.25 / hour</strong></td>
-              </tr>
-
-              <tr>
-                <td colspan="3">Built-in features</td>
-              </tr>
-
-              <tr>
-                <td>Per-Window Prediction</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Confidence Scoring</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Silence Detection</td>
-                <td>✓</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Flexible Chunk Size</td>
-                <td>−</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>Real-Time</td>
-                <td>−</td>
-                <td>✓</td>
-              </tr>
-
-              <tr>
-                <td>First Prediction</td>
-                <td>After full file upload</td>
-                <td>At 500ms of audio</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
     <div class="m__space L"></div>
 
-    <h2>Authentication &amp; Rate Limits</h2>
-
-    <div class="m__sequence XL gap-M">
-      <div class="m__sequence-item m__widget">
-        <h3>Authentication</h3>
-        <p>
-          REST endpoints require an API key via the
-          <code>X-API-Key</code> header. The WebSocket endpoint uses an
-          <code>api_key</code> query parameter.
-        </p>
-        <div class="m__code-block">
-          <pre><code>REST:      X-API-Key: your_api_key_here
-WebSocket: wss://...?api_key=your_api_key_here</code></pre>
-        </div>
-      </div>
-
-      <div class="m__sequence-item m__widget">
-        <h3>Rate Limits &amp; Billing</h3>
-        <ul>
-          <li>Per-model concurrency and monthly usage quotas</li>
-          <li>Credit-based billing with free tier included</li>
-          <li>
-            Usage tracked in real time via the
-            <a href="/dashboard/usage/">Usage Dashboard</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <ids-navbar></ids-navbar>
   </main>
-  <div class="m__space XL"></div>
 </div>
 
+<ids-nav-item id="transcription" label="Transcription">
+  <div class="m__wrapper">
+    <div class="m__space M"></div>
+
+    <h2>Transcription</h2>
+    <div class="pricing-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model Comparison</th>
+            <th>Batch English Fast</th>
+            <th>Batch Multilingual</th>
+            <th>Streaming Multilingual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Description</td>
+            <td>
+              High-throughput English batch processing with &gt;200x real-time
+              speed
+            </td>
+            <td>
+              Multilingual batch transcription in 70+ languages with full
+              feature set
+            </td>
+            <td>
+              Real-time streaming transcription in 70+ languages via WebSocket
+            </td>
+          </tr>
+
+          <tr>
+            <td>Endpoint</td>
+            <td><code>/api/velma-2-stt-batch-english-vfast</code></td>
+            <td><code>/api/velma-2-stt-batch</code></td>
+            <td><code>/api/velma-2-stt-streaming</code></td>
+          </tr>
+
+          <tr>
+            <td>Type</td>
+            <td>Batch</td>
+            <td>Batch</td>
+            <td>Streaming</td>
+          </tr>
+
+          <tr>
+            <td>API</td>
+            <td>REST API</td>
+            <td>REST API</td>
+            <td>WebSocket</td>
+          </tr>
+
+          <tr>
+            <td>Accepted Files</td>
+            <td colspan="3">
+              AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM
+            </td>
+          </tr>
+
+          <tr>
+            <td>Concurrency Quota</td>
+            <td>25 concurrent requests</td>
+            <td>5 concurrent requests</td>
+            <td>5 concurrent requests</td>
+          </tr>
+
+          <tr>
+            <td>Monthly Usage Quota</td>
+            <td>10,000 hours</td>
+            <td>1,000 hours</td>
+            <td>1,000 hours</td>
+          </tr>
+
+          <tr>
+            <td>Pricing</td>
+            <td><strong>$0.025 / hour</strong></td>
+            <td><strong>$0.03 / hour</strong></td>
+            <td><strong>$0.06 / hour</strong></td>
+          </tr>
+
+          <tr>
+            <td colspan="4">Built-in features</td>
+          </tr>
+
+          <tr>
+            <td>Transcription</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Auto Capitalization</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Auto Punctuation</td>
+            <td>✓</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Language</td>
+            <td>English</td>
+            <td>70+ languages</td>
+            <td>70+ languages</td>
+          </tr>
+
+          <tr>
+            <td>Real-Time</td>
+            <td>−</td>
+            <td>−</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td colspan="4">Optional features</td>
+          </tr>
+
+          <tr>
+            <td>Speaker Diarization</td>
+            <td>−</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Emotion Detection</td>
+            <td>−</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Accent Identification</td>
+            <td>−</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>PII/PHI Tagging</td>
+            <td>−</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="deepfake-detection" label="Deepfake Detection">
+  <div class="m__wrapper">
+    <div class="m__space M"></div>
+
+    <h2>Deepfake Detection</h2>
+    <p>
+      Velma-2's synthetic voice detection models achieve state-of-the-art
+      performance detecting speech deepfakes on single-speaker audio.
+    </p>
+    <div class="pricing-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model Comparison</th>
+            <th>Deepfake Batch</th>
+            <th>Deepfake Streaming</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Description</td>
+            <td>
+              Speech deepfake prediction for audio files with a single speaker
+            </td>
+            <td>
+              Real-time speech deepfake detection for streaming audio with a
+              single speaker
+            </td>
+          </tr>
+
+          <tr>
+            <td>Accuracy</td>
+            <td>
+              98.9% average — #1 on
+              <a
+                href="https://huggingface.co/spaces/Speech-Arena-2025/Speech-DF-Arena"
+                target="_blank"
+                rel="noopener"
+                >Speech DF Arena</a
+              >
+            </td>
+            <td>
+              98.9% average — #1 on
+              <a
+                href="https://huggingface.co/spaces/Speech-Arena-2025/Speech-DF-Arena"
+                target="_blank"
+                rel="noopener"
+                >Speech DF Arena</a
+              >
+            </td>
+          </tr>
+
+          <tr>
+            <td>Endpoint</td>
+            <td>
+              <code>/api/velma-2-synthetic-voice-detection-batch</code>
+            </td>
+            <td>
+              <code>/api/velma-2-synthetic-voice-detection-streaming</code>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Type</td>
+            <td>Deepfake Batch</td>
+            <td>Deepfake Streaming</td>
+          </tr>
+
+          <tr>
+            <td>API</td>
+            <td>REST API</td>
+            <td>WebSocket</td>
+          </tr>
+
+          <tr>
+            <td>Accepted Files</td>
+            <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
+            <td>Raw 16kHz mono PCM (int16 LE)</td>
+          </tr>
+
+          <tr>
+            <td>Concurrency Quota</td>
+            <td>3 concurrent requests</td>
+            <td>3 concurrent requests</td>
+          </tr>
+
+          <tr>
+            <td>Monthly Usage Quota</td>
+            <td>1,000 hours</td>
+            <td>1,000 hours</td>
+          </tr>
+
+          <tr>
+            <td>Pricing</td>
+            <td><strong>$0.25 / hour</strong></td>
+            <td><strong>$0.25 / hour</strong></td>
+          </tr>
+
+          <tr>
+            <td colspan="3">Built-in features</td>
+          </tr>
+
+          <tr>
+            <td>Per-Window Prediction</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Confidence Scoring</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Silence Detection</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Flexible Chunk Size</td>
+            <td>−</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Real-Time</td>
+            <td>−</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>First Prediction</td>
+            <td>After full file upload</td>
+            <td>At 500ms of audio</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="m__space XL"></div>
+  </div>
+</ids-nav-item>
+
+{% endblock %} {% block scripts %}
+<script type="module" src="/assets/js/navbar.js"></script>
 {% endblock %}

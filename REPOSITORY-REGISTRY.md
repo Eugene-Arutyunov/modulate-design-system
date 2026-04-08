@@ -122,14 +122,14 @@ Static files committed to the repo; served as-is by Eleventy passthrough copy (`
 
 ---
 
-## Pricing page
+## Models page
 
-**Page:** `src/pricing.html`  
-**Permalink:** `/pricing/`  
-**Script:** `src/assets/js/pricing.js`  
+**Page:** `src/models.html`  
+**Permalink:** `/models/`  
+**Script:** `src/assets/js/models.js`  
 **Styles:** `src/styles/docs.css` (shared with docs)
 
-Public pricing page. Uses `landing-layout.html`. Loads model list from `/assets/data/models.json` and renders one `.pricing-card` per model with base cost, feature costs, quotas, and accepted formats. Pricing appears in all three nav variants (landing, bar, popover). Works fully without a backend.
+Public models/pricing page. Uses `landing-layout.html`. Loads model list from `/assets/data/models.json` and renders one `.pricing-card` per model with base cost, feature costs, quotas, and accepted formats. The nav item is called "Models" in all three nav variants (landing, bar, popover). Works fully without a backend.
 
 ---
 

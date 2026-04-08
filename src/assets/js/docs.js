@@ -1,14 +1,14 @@
 /**
  * Documentation page client logic.
  * Loads model list from static JSON, renders sidebar with status tags,
- * handles Overview / API Spec / Quickstart tab switching.
+ * handles Quickstart / API Spec tab switching.
  * All data files live under /assets/data/ and require no backend.
  */
 
 /** @type {Map<string, object>} */
 const docsModelsById = new Map();
 let selectedModelUuid = null;
-let activeTab = "overview";
+let activeTab = "quickstart";
 
 function escapeHtml(str) {
   return String(str)
@@ -16,18 +16,6 @@ function escapeHtml(str) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
-}
-
-function formatCost(n) {
-  if (n < 0.001) return n.toFixed(5);
-  if (n < 0.01) return n.toFixed(4);
-  return n.toFixed(2);
-}
-
-function statusColor(status) {
-  if (status === "released") return "var(--m__ui-success-color)";
-  if (status === "preview") return "rgb(255, 160, 30)";
-  return "";
 }
 
 async function loadModels() {
@@ -89,6 +77,13 @@ function selectModel(uuid) {
     .forEach((el) => {
       el.classList.toggle("active", el.dataset.modelUuid === uuid);
     });
+  const m = docsModelsById.get(uuid);
+  if (m) {
+    document.getElementById("docs-model-name").textContent =
+      m.model_display_label;
+    document.getElementById("docs-model-description").textContent =
+      m.description;
+  }
   document.getElementById("docs-placeholder").hidden = true;
   document.getElementById("docs-panel").hidden = false;
   renderTab(uuid);
@@ -99,9 +94,6 @@ async function renderTab(uuid) {
   content.innerHTML = '<div class="docs-loading">Loading…</div>';
   try {
     switch (activeTab) {
-      case "overview":
-        renderOverview(uuid, content);
-        break;
       case "api-docs":
         await renderApiDocs(uuid, content);
         break;
@@ -113,48 +105,6 @@ async function renderTab(uuid) {
     content.innerHTML =
       '<div class="docs-loading">Failed to load content.</div>';
   }
-}
-
-function renderOverview(uuid, content) {
-  const m = docsModelsById.get(uuid);
-  if (!m) {
-    content.innerHTML = "";
-    return;
-  }
-  const cost =
-    m.cost_dollars_per_thousand_hours === 0
-      ? "Free"
-      : `$${formatCost(m.cost_dollars_per_thousand_hours / 1000)} per hour`;
-  const featureRows = m.feature_costs
-    .map(
-      (fc) =>
-        `<tr><td>${escapeHtml(fc.feature_name)}</td><td>$${formatCost(fc.cost_dollars_per_thousand_hours / 1000)} / hr</td></tr>`,
-    )
-    .join("");
-  const formats =
-    m.accepted_media_formats.length > 0
-      ? m.accepted_media_formats
-          .map((f) => `<code>${escapeHtml(f)}</code>`)
-          .join(" ")
-      : "—";
-  content.innerHTML = `
-    <div>
-      <table>
-        <tbody>
-          <tr><td>Name</td><td>${escapeHtml(m.model_display_label)}</td></tr>
-          <tr><td>Endpoint</td><td><code>${escapeHtml(m.api_url)}</code></td></tr>
-          <tr><td>Model identifier</td><td><code>${escapeHtml(m.model_identifier)}</code></td></tr>
-          <tr><td>Status</td><td><span class="m__tag-flat" style="color: ${statusColor(m.status)}">${escapeHtml(m.status)}</span></td></tr>
-          <tr><td>Type</td><td>${escapeHtml(m.model_type)}</td></tr>
-          <tr><td>Accepted formats</td><td>${formats}</td></tr>
-          <tr><td>Description</td><td>${escapeHtml(m.description)}</td></tr>
-          <tr><td>Concurrency quota</td><td>${m.concurrency_quota.toLocaleString()} concurrent requests</td></tr>
-          <tr><td>Monthly usage quota</td><td>${m.usage_quota.toLocaleString()} hours</td></tr>
-          <tr><td>Cost</td><td>${cost}</td></tr>
-          ${featureRows}
-        </tbody>
-      </table>
-    </div>`;
 }
 
 async function renderApiDocs(uuid, content) {
