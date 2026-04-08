@@ -1,9 +1,5 @@
 # Synthetic Voice Detection Batch API - Quickstart Guide
 
-Speech deepfake prediction for audio files with a single speaker. 
-Returns the probability of each 4-second chunk
-being a synthetic voice, along with a categorical verdict.
-
 ## Endpoint
 
 ```
@@ -29,10 +25,10 @@ will not be processed.
 
 ## Request
 
-| Parameter | Type | Required | Description |
-|---|---|---|---|
-| `upload_file` | `multipart/form-data` | Yes | Audio file to analyze |
-| `X-API-Key` | Header | Yes | Your API key |
+| Parameter     | Type                  | Required | Description           |
+| ------------- | --------------------- | -------- | --------------------- |
+| `upload_file` | `multipart/form-data` | Yes      | Audio file to analyze |
+| `X-API-Key`   | Header                | Yes      | Your API key          |
 
 ## Response
 
@@ -57,23 +53,23 @@ will not be processed.
 }
 ```
 
-| Field | Type | Description |
-|---|---|---|
-| `filename` | string \| null | Name of the submitted audio file, or null if not provided |
-| `frames` | list | Per-frame analysis results in chronological order |
-| `frames[].start_time_ms` | int | Start of detected speech within the frame (ms) |
-| `frames[].end_time_ms` | int | End of detected speech within the frame (ms) |
-| `frames[].verdict` | string | Classification result: `"synthetic"`, `"non-synthetic"`, or `"no-content"` |
-| `frames[].confidence` | float | Model confidence in the stated verdict (0–1). Higher = more confident |
-| `duration_ms` | int | Total duration of the audio file in milliseconds |
+| Field                    | Type           | Description                                                                |
+| ------------------------ | -------------- | -------------------------------------------------------------------------- |
+| `filename`               | string \| null | Name of the submitted audio file, or null if not provided                  |
+| `frames`                 | list           | Per-frame analysis results in chronological order                          |
+| `frames[].start_time_ms` | int            | Start of detected speech within the frame (ms)                             |
+| `frames[].end_time_ms`   | int            | End of detected speech within the frame (ms)                               |
+| `frames[].verdict`       | string         | Classification result: `"synthetic"`, `"non-synthetic"`, or `"no-content"` |
+| `frames[].confidence`    | float          | Model confidence in the stated verdict (0–1). Higher = more confident      |
+| `duration_ms`            | int            | Total duration of the audio file in milliseconds                           |
 
 ### Verdict values
 
-| Verdict | Meaning |
-|---|---|
-| `synthetic` | The frame likely contains AI-generated speech |
-| `non-synthetic` | The frame likely contains natural human speech |
-| `no-content` | The frame is silent or contains no usable audio content |
+| Verdict         | Meaning                                                 |
+| --------------- | ------------------------------------------------------- |
+| `synthetic`     | The frame likely contains AI-generated speech           |
+| `non-synthetic` | The frame likely contains natural human speech          |
+| `no-content`    | The frame is silent or contains no usable audio content |
 
 ## Behavior Notes
 
@@ -83,15 +79,15 @@ will not be processed.
 
 ## Error Responses
 
-| Status | Meaning |
-|---|---|
-| `400` | Bad request — empty file or unsupported format |
-| `403` | Invalid or unauthorized API key |
-| `422` | Audio too short for analysis |
-| `500` | Internal server error during inference |
-| `502` | Usage check service unavailable — please retry |
-| `503` | Server is temporarily overloaded — please retry |
-| `504` | Request timed out |
+| Status | Meaning                                         |
+| ------ | ----------------------------------------------- |
+| `400`  | Bad request — empty file or unsupported format  |
+| `403`  | Invalid or unauthorized API key                 |
+| `422`  | Audio too short for analysis                    |
+| `500`  | Internal server error during inference          |
+| `502`  | Usage check service unavailable — please retry  |
+| `503`  | Server is temporarily overloaded — please retry |
+| `504`  | Request timed out                               |
 
 ## Example: cURL
 
@@ -171,7 +167,8 @@ import fs from "fs";
 import path from "path";
 import FormData from "form-data";
 
-const API_URL = "https://modulate-developer-apis.com/api/velma-2-synthetic-voice-detection-batch";
+const API_URL =
+  "https://modulate-developer-apis.com/api/velma-2-synthetic-voice-detection-batch";
 const API_KEY = "YOUR_API_KEY";
 
 async function analyzeAudio(filePath) {
@@ -202,8 +199,8 @@ console.log(`Duration: ${result.duration_ms}ms`);
 for (const frame of result.frames) {
   console.log(
     `  ${frame.start_time_ms}ms – ${frame.end_time_ms}ms  ` +
-    `verdict=${frame.verdict}, ` +
-    `confidence=${frame.confidence.toFixed(4)}`
+      `verdict=${frame.verdict}, ` +
+      `confidence=${frame.confidence.toFixed(4)}`,
   );
 }
 ```

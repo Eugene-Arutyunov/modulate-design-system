@@ -1,9 +1,5 @@
 # Quickstart: Velma-2 Batch v3 (Preview)
 
-Next-generation batch transcription with improved multilingual accuracy and
-fine-grained emotion scores. The API surface is compatible with Velma-2 Batch —
-existing integrations can switch by updating the endpoint URL.
-
 ## Preview access
 
 Velma-2 Batch v3 is currently in limited preview. Contact us to request access

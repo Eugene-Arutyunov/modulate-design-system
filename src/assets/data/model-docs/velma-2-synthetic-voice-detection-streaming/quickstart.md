@@ -1,8 +1,5 @@
 # Synthetic Voice Detection Streaming API - Quickstart Guide
 
-Real-time speech deepfake detection for single-speaker audio over WebSocket. Stream audio and
-receive per-frame verdicts incrementally as they become available.
-
 ## Endpoint
 
 ```
@@ -31,7 +28,7 @@ Supported raw formats: `s8`, `s16le`, `s16be`, `s24le`, `s24be`, `s32le`,
 Common examples:
 
 | Use case               | `audio_format` | `sample_rate` | `num_channels` |
-|------------------------|----------------|---------------|----------------|
+| ---------------------- | -------------- | ------------- | -------------- |
 | Default / native app   | `s16le`        | `16000`       | `1`            |
 | Web Audio AudioWorklet | `f32le`        | `48000`       | `1`            |
 | Native stereo capture  | `s16le`        | `48000`       | `2`            |
@@ -64,10 +61,10 @@ automatically.
 
 ### Client → Server
 
-| Frame type | Content              | Meaning                     |
-|------------|----------------------|-----------------------------|
-| Binary     | Audio bytes          | Audio data in declared format |
-| Text       | `""` (empty string)  | Signals end of audio stream |
+| Frame type | Content             | Meaning                       |
+| ---------- | ------------------- | ----------------------------- |
+| Binary     | Audio bytes         | Audio data in declared format |
+| Text       | `""` (empty string) | Signals end of audio stream   |
 
 ### Server → Client
 
@@ -89,12 +86,12 @@ Emitted each time a sliding window of audio has been analysed.
 }
 ```
 
-| Field                  | Type   | Description                                         |
-|------------------------|--------|-----------------------------------------------------|
-| `frame.start_time_ms`  | int    | Window start time in the original audio (ms)        |
-| `frame.end_time_ms`    | int    | Window end time in the original audio (ms)          |
-| `frame.verdict`        | string | `"synthetic"`, `"non-synthetic"`, or `"no-content"` |
-| `frame.confidence`     | float  | Confidence in the stated verdict (0–1)              |
+| Field                 | Type   | Description                                         |
+| --------------------- | ------ | --------------------------------------------------- |
+| `frame.start_time_ms` | int    | Window start time in the original audio (ms)        |
+| `frame.end_time_ms`   | int    | Window end time in the original audio (ms)          |
+| `frame.verdict`       | string | `"synthetic"`, `"non-synthetic"`, or `"no-content"` |
+| `frame.confidence`    | float  | Confidence in the stated verdict (0–1)              |
 
 #### `done` — Analysis complete
 
@@ -110,7 +107,7 @@ end-of-stream signal. The server closes the connection after this message.
 ```
 
 | Field         | Type | Description                           |
-|---------------|------|---------------------------------------|
+| ------------- | ---- | ------------------------------------- |
 | `duration_ms` | int  | Total duration of streamed audio (ms) |
 | `frame_count` | int  | Total number of frames analysed       |
 
@@ -129,7 +126,7 @@ an internal error. The server closes the connection after this message.
 ### Verdict Values
 
 | Verdict         | Meaning                                         |
-|-----------------|-------------------------------------------------|
+| --------------- | ----------------------------------------------- |
 | `synthetic`     | The frame likely contains AI-generated speech   |
 | `non-synthetic` | The frame likely contains natural human speech  |
 | `no-content`    | The frame is silent or contains no usable audio |
@@ -151,19 +148,19 @@ for the entire audio to be sent before receiving verdicts.
 
 ## Error Handling
 
-| Scenario                          | Behavior                                       |
-|-----------------------------------|-------------------------------------------------|
-| Missing `audio_format`            | `error` message sent, connection closed (`1003`) |
-| Invalid `audio_format`            | `error` message sent, connection closed (`1003`) |
+| Scenario                                           | Behavior                                         |
+| -------------------------------------------------- | ------------------------------------------------ |
+| Missing `audio_format`                             | `error` message sent, connection closed (`1003`) |
+| Invalid `audio_format`                             | `error` message sent, connection closed (`1003`) |
 | Raw format missing `sample_rate` or `num_channels` | `error` message sent, connection closed (`1003`) |
-| Invalid `sample_rate`             | `error` message sent, connection closed (`1003`) |
-| Invalid `num_channels`            | `error` message sent, connection closed (`1003`) |
-| Data doesn't match declared format | `error` message sent, connection closed (`4002`) |
-| Invalid or denied API key         | Connection closed with code `4003` before accept |
-| Server overloaded                 | `error` message sent, connection closed          |
-| Inference timeout                 | `error` message sent, connection closed          |
-| Inference failure                 | `error` message sent, connection closed          |
-| Client disconnects mid-stream     | Server cancels pending inference and cleans up   |
+| Invalid `sample_rate`                              | `error` message sent, connection closed (`1003`) |
+| Invalid `num_channels`                             | `error` message sent, connection closed (`1003`) |
+| Data doesn't match declared format                 | `error` message sent, connection closed (`4002`) |
+| Invalid or denied API key                          | Connection closed with code `4003` before accept |
+| Server overloaded                                  | `error` message sent, connection closed          |
+| Inference timeout                                  | `error` message sent, connection closed          |
+| Inference failure                                  | `error` message sent, connection closed          |
+| Client disconnects mid-stream                      | Server cancels pending inference and cleans up   |
 
 ## Example: Python (aiohttp, from file)
 
@@ -241,12 +238,14 @@ asyncio.run(stream_audio("/path/to/audio.raw"))
 
 > **Note:** The file must already be in the format you declared. To produce
 > raw 16 kHz mono int16 LE PCM with ffmpeg:
+>
 > ```bash
 > ffmpeg -i input.mp3 -ar 16000 -ac 1 -f s16le -acodec pcm_s16le output.raw
 > ```
 >
 > Alternatively, send the MP3 directly using `audio_format=mp3` (no
 > `sample_rate` or `num_channels` needed):
+>
 > ```python
 > params = {"api_key": API_KEY, "audio_format": "mp3"}
 > ```
@@ -343,6 +342,7 @@ asyncio.run(stream_microphone())
 > **Tip:** To capture audio in a different format, change the `sounddevice`
 > parameters and query parameters to match. For example, to send float32
 > at 48 kHz:
+>
 > ```python
 > AUDIO_FORMAT = "f32le"
 > SAMPLE_RATE = 48000
@@ -360,7 +360,8 @@ asyncio.run(stream_microphone())
 ## Example: JavaScript (Browser)
 
 ```javascript
-const API_URL = "wss://modulate-developer-apis.com/api/velma-2-synthetic-voice-detection-streaming";
+const API_URL =
+  "wss://modulate-developer-apis.com/api/velma-2-synthetic-voice-detection-streaming";
 const API_KEY = "YOUR_API_KEY";
 const SAMPLE_RATE = 16000;
 
@@ -379,7 +380,7 @@ async function streamMicrophone() {
       const f = msg.frame;
       console.log(
         `${f.start_time_ms}ms – ${f.end_time_ms}ms  ` +
-        `verdict=${f.verdict}, confidence=${f.confidence.toFixed(4)}`
+          `verdict=${f.verdict}, confidence=${f.confidence.toFixed(4)}`,
       );
     } else if (msg.type === "done") {
       console.log(`Done: ${msg.duration_ms}ms, ${msg.frame_count} frame(s)`);
@@ -400,7 +401,10 @@ async function streamMicrophone() {
     const float32 = e.inputBuffer.getChannelData(0);
     const int16 = new Int16Array(float32.length);
     for (let i = 0; i < float32.length; i++) {
-      int16[i] = Math.max(-32768, Math.min(32767, Math.round(float32[i] * 32768)));
+      int16[i] = Math.max(
+        -32768,
+        Math.min(32767, Math.round(float32[i] * 32768)),
+      );
     }
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(int16.buffer);
@@ -417,7 +421,7 @@ async function streamMicrophone() {
     stream.getTracks().forEach((t) => t.stop());
     audioCtx.close();
     if (ws.readyState === WebSocket.OPEN) {
-      ws.send("");  // signal end of stream
+      ws.send(""); // signal end of stream
     }
   };
 }
@@ -430,6 +434,7 @@ async function streamMicrophone() {
 
 > **Tip:** To skip the manual float32-to-int16 conversion in JavaScript,
 > you can send float32 directly and let the server convert:
+>
 > ```javascript
 > const params = new URLSearchParams({
 >   api_key: API_KEY,
@@ -438,6 +443,7 @@ async function streamMicrophone() {
 >   num_channels: "1",
 > });
 > ```
+>
 > Then send `float32.buffer` directly instead of converting to int16.
 
 ## Rate Limits

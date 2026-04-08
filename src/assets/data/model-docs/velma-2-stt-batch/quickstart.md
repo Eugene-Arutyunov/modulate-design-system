@@ -1,7 +1,5 @@
 # Velma-2 STT Batch API - Quickstart Guide
 
-Multilingual batch speech-to-text with speaker diarization, emotion detection, accent detection, and PII/PHI tagging. Best for pre-recorded files where you need rich transcription metadata.
-
 ## Endpoint
 
 ```
@@ -18,12 +16,12 @@ X-API-Key: YOUR_API_KEY
 
 ## Features
 
-| Feature | Form Field | Default | Description |
-|---------|-----------|---------|-------------|
-| Speaker Diarization | `speaker_diarization` | `true` | Identifies different speakers (1-indexed) |
-| Emotion Detection | `emotion_signal` | `false` | Detects emotional tone per utterance |
-| Accent Detection | `accent_signal` | `false` | Detects speaker accent per utterance |
-| PII/PHI Tagging | `pii_phi_tagging` | `false` | Tags personally identifiable / health information |
+| Feature             | Form Field            | Default | Description                                       |
+| ------------------- | --------------------- | ------- | ------------------------------------------------- |
+| Speaker Diarization | `speaker_diarization` | `true`  | Identifies different speakers (1-indexed)         |
+| Emotion Detection   | `emotion_signal`      | `false` | Detects emotional tone per utterance              |
+| Accent Detection    | `accent_signal`       | `false` | Detects speaker accent per utterance              |
+| PII/PHI Tagging     | `pii_phi_tagging`     | `false` | Tags personally identifiable / health information |
 
 ## Supported Audio Formats
 
@@ -35,13 +33,13 @@ Maximum file size: **100 MB**
 
 Send a `multipart/form-data` POST with the audio file and optional feature flags:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `upload_file` | file (binary) | Yes | Audio file to transcribe |
-| `speaker_diarization` | boolean | No | Enable speaker diarization (default: `true`) |
-| `emotion_signal` | boolean | No | Enable emotion detection (default: `false`) |
-| `accent_signal` | boolean | No | Enable accent detection (default: `false`) |
-| `pii_phi_tagging` | boolean | No | Enable PII/PHI tagging (default: `false`) |
+| Field                 | Type          | Required | Description                                  |
+| --------------------- | ------------- | -------- | -------------------------------------------- |
+| `upload_file`         | file (binary) | Yes      | Audio file to transcribe                     |
+| `speaker_diarization` | boolean       | No       | Enable speaker diarization (default: `true`) |
+| `emotion_signal`      | boolean       | No       | Enable emotion detection (default: `false`)  |
+| `accent_signal`       | boolean       | No       | Enable accent detection (default: `false`)   |
+| `pii_phi_tagging`     | boolean       | No       | Enable PII/PHI tagging (default: `false`)    |
 
 ## Response
 
@@ -78,24 +76,24 @@ Send a `multipart/form-data` POST with the audio file and optional feature flags
 
 ### Response Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `text` | string | Full concatenated transcript |
-| `duration_ms` | integer | Total audio duration in milliseconds |
-| `utterances` | array | Individual speech segments with metadata |
+| Field         | Type    | Description                              |
+| ------------- | ------- | ---------------------------------------- |
+| `text`        | string  | Full concatenated transcript             |
+| `duration_ms` | integer | Total audio duration in milliseconds     |
+| `utterances`  | array   | Individual speech segments with metadata |
 
 ### Utterance Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `utterance_uuid` | string (UUID) | Unique identifier |
-| `text` | string | Transcribed text for this segment |
-| `start_ms` | integer | Start time in ms from beginning of audio |
-| `duration_ms` | integer | Duration of utterance in ms |
-| `speaker` | integer | Speaker number (1-indexed) |
-| `language` | string | Detected language code (e.g. `"en"`, `"fr"`, `"es"`) |
-| `emotion` | string or null | Detected emotion (null if disabled) |
-| `accent` | string or null | Detected accent (null if disabled) |
+| Field            | Type           | Description                                          |
+| ---------------- | -------------- | ---------------------------------------------------- |
+| `utterance_uuid` | string (UUID)  | Unique identifier                                    |
+| `text`           | string         | Transcribed text for this segment                    |
+| `start_ms`       | integer        | Start time in ms from beginning of audio             |
+| `duration_ms`    | integer        | Duration of utterance in ms                          |
+| `speaker`        | integer        | Speaker number (1-indexed)                           |
+| `language`       | string         | Detected language code (e.g. `"en"`, `"fr"`, `"es"`) |
+| `emotion`        | string or null | Detected emotion (null if disabled)                  |
+| `accent`         | string or null | Detected accent (null if disabled)                   |
 
 **Possible emotion values:** Neutral, Calm, Happy, Amused, Excited, Proud, Affectionate, Interested, Hopeful, Frustrated, Angry, Contemptuous, Concerned, Afraid, Sad, Ashamed, Bored, Tired, Surprised, Anxious, Stressed, Disgusted, Disappointed, Confused, Relieved, Confident
 
@@ -103,12 +101,12 @@ Send a `multipart/form-data` POST with the audio file and optional feature flags
 
 ## Error Responses
 
-| Status | Meaning |
-|--------|---------|
-| `400` | Invalid file format or empty file |
-| `401` | Invalid or missing API key |
-| `403` | Model access not enabled for your organization |
-| `429` | Rate limit exceeded (monthly usage or concurrent requests) |
+| Status | Meaning                                                    |
+| ------ | ---------------------------------------------------------- |
+| `400`  | Invalid file format or empty file                          |
+| `401`  | Invalid or missing API key                                 |
+| `403`  | Model access not enabled for your organization             |
+| `429`  | Rate limit exceeded (monthly usage or concurrent requests) |
 
 ## Example: cURL
 
@@ -215,7 +213,11 @@ const AUDIO_FILE = "recording.mp3";
 
 async function transcribe() {
   const formData = new FormData();
-  formData.append("upload_file", new Blob([fs.readFileSync(AUDIO_FILE)]), path.basename(AUDIO_FILE));
+  formData.append(
+    "upload_file",
+    new Blob([fs.readFileSync(AUDIO_FILE)]),
+    path.basename(AUDIO_FILE),
+  );
   formData.append("speaker_diarization", "true");
   formData.append("emotion_signal", "true");
   formData.append("accent_signal", "false");
@@ -227,7 +229,7 @@ async function transcribe() {
       method: "POST",
       headers: { "X-API-Key": API_KEY },
       body: formData,
-    }
+    },
   );
 
   if (!response.ok) {
@@ -243,7 +245,7 @@ async function transcribe() {
   for (const u of result.utterances) {
     console.log(
       `[Speaker ${u.speaker}] (${u.language}) ` +
-      `${u.start_ms}-${u.start_ms + u.duration_ms}ms: ${u.text}`
+        `${u.start_ms}-${u.start_ms + u.duration_ms}ms: ${u.text}`,
     );
   }
 }

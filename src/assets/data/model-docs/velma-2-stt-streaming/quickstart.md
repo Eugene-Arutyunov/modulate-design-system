@@ -1,7 +1,5 @@
 # Velma-2 STT Streaming API - Quickstart Guide
 
-Real-time speech-to-text via WebSocket with speaker diarization, emotion detection, accent detection, and PII/PHI tagging.
-
 ## Endpoint
 
 ```
@@ -18,12 +16,12 @@ wss://modulate-developer-apis.com/api/velma-2-stt-streaming?api_key=YOUR_API_KEY
 
 ## Features
 
-| Feature | Query Parameter | Default | Description |
-|---------|----------------|---------|-------------|
-| Speaker Diarization | `speaker_diarization` | `true` | Identifies different speakers (1-indexed) |
-| Emotion Detection | `emotion_signal` | `false` | Detects emotional tone per utterance |
-| Accent Detection | `accent_signal` | `false` | Detects speaker accent per utterance |
-| PII/PHI Tagging | `pii_phi_tagging` | `false` | Tags personally identifiable / health information |
+| Feature             | Query Parameter       | Default | Description                                       |
+| ------------------- | --------------------- | ------- | ------------------------------------------------- |
+| Speaker Diarization | `speaker_diarization` | `true`  | Identifies different speakers (1-indexed)         |
+| Emotion Detection   | `emotion_signal`      | `false` | Detects emotional tone per utterance              |
+| Accent Detection    | `accent_signal`       | `false` | Detects speaker accent per utterance              |
+| PII/PHI Tagging     | `pii_phi_tagging`     | `false` | Tags personally identifiable / health information |
 
 ## Supported Audio Formats
 
@@ -62,16 +60,16 @@ Sent when a segment of speech is transcribed:
 }
 ```
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `utterance_uuid` | string (UUID) | Unique identifier for this utterance |
-| `text` | string | Transcribed text |
-| `start_ms` | integer | Start time in ms from beginning of stream |
-| `duration_ms` | integer | Duration of utterance in ms |
-| `speaker` | integer | Speaker number (1-indexed) |
-| `language` | string | Detected language code (e.g. `"en"`, `"fr"`) |
-| `emotion` | string or null | Detected emotion (null if disabled) |
-| `accent` | string or null | Detected accent (null if disabled) |
+| Field            | Type           | Description                                  |
+| ---------------- | -------------- | -------------------------------------------- |
+| `utterance_uuid` | string (UUID)  | Unique identifier for this utterance         |
+| `text`           | string         | Transcribed text                             |
+| `start_ms`       | integer        | Start time in ms from beginning of stream    |
+| `duration_ms`    | integer        | Duration of utterance in ms                  |
+| `speaker`        | integer        | Speaker number (1-indexed)                   |
+| `language`       | string         | Detected language code (e.g. `"en"`, `"fr"`) |
+| `emotion`        | string or null | Detected emotion (null if disabled)          |
+| `accent`         | string or null | Detected accent (null if disabled)           |
 
 **Possible emotion values:** Neutral, Calm, Happy, Amused, Excited, Proud, Affectionate, Interested, Hopeful, Frustrated, Angry, Contemptuous, Concerned, Afraid, Sad, Ashamed, Bored, Tired, Surprised, Anxious, Stressed, Disgusted, Disappointed, Confused, Relieved, Confident
 
@@ -101,11 +99,11 @@ Sent if something goes wrong during transcription:
 
 ## WebSocket Close Codes
 
-| Code | Meaning |
-|------|---------|
-| `4001` | Invalid API key |
+| Code   | Meaning                                        |
+| ------ | ---------------------------------------------- |
+| `4001` | Invalid API key                                |
 | `4003` | Model access not enabled for your organization |
-| `4029` | Rate limit exceeded (monthly or concurrent) |
+| `4029` | Rate limit exceeded (monthly or concurrent)    |
 
 ## Example: Python (aiohttp)
 
@@ -202,7 +200,9 @@ const API_KEY = "YOUR_API_KEY";
 const AUDIO_FILE = "recording.opus";
 const CHUNK_SIZE = 8192;
 
-const url = new URL("wss://modulate-developer-apis.com/api/velma-2-stt-streaming");
+const url = new URL(
+  "wss://modulate-developer-apis.com/api/velma-2-stt-streaming",
+);
 url.searchParams.set("api_key", API_KEY);
 url.searchParams.set("speaker_diarization", "true");
 url.searchParams.set("emotion_signal", "true");

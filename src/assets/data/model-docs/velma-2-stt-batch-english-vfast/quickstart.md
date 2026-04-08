@@ -1,7 +1,5 @@
 # Velma-2 STT Batch English VFast API - Quickstart Guide
 
-High-speed English-only batch transcription optimized for throughput. Ideal for large-scale batch processing of English audio.
-
 ## Endpoint
 
 ```
@@ -18,16 +16,16 @@ X-API-Key: YOUR_API_KEY
 
 ## Key Differences from the Full Batch API
 
-| | Batch English VFast | Batch (Full) |
-|---|---|---|
-| **Languages** | English only | Multilingual with auto-detection |
-| **Audio format** | Opus (`.opus`) only | AAC, AIFF, FLAC, MP3, MP4, MOV, OGG, Opus, WAV, WebM |
-| **Speaker diarization** | No | Yes |
-| **Emotion detection** | No | Yes |
-| **Accent detection** | No | Yes |
-| **PII/PHI tagging** | No | Yes |
-| **Utterance-level data** | No | Yes |
-| **Speed** | Fastest | Standard |
+|                          | Batch English VFast | Batch (Full)                                         |
+| ------------------------ | ------------------- | ---------------------------------------------------- |
+| **Languages**            | English only        | Multilingual with auto-detection                     |
+| **Audio format**         | Opus (`.opus`) only | AAC, AIFF, FLAC, MP3, MP4, MOV, OGG, Opus, WAV, WebM |
+| **Speaker diarization**  | No                  | Yes                                                  |
+| **Emotion detection**    | No                  | Yes                                                  |
+| **Accent detection**     | No                  | Yes                                                  |
+| **PII/PHI tagging**      | No                  | Yes                                                  |
+| **Utterance-level data** | No                  | Yes                                                  |
+| **Speed**                | Fastest             | Standard                                             |
 
 Use this API when you need maximum speed and throughput for English audio and don't require speaker diarization, emotion/accent detection, or utterance-level detail.
 
@@ -41,9 +39,9 @@ Maximum file size: **100 MB**
 
 Send a `multipart/form-data` POST with the audio file:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `upload_file` | file (binary) | Yes | Opus audio file (`.opus`) |
+| Field         | Type          | Required | Description               |
+| ------------- | ------------- | -------- | ------------------------- |
+| `upload_file` | file (binary) | Yes      | Opus audio file (`.opus`) |
 
 No additional parameters -- this API is streamlined for speed.
 
@@ -58,12 +56,13 @@ No additional parameters -- this API is streamlined for speed.
 }
 ```
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `text` | string | Full transcript with automatic capitalization and punctuation |
-| `duration_ms` | integer | Total audio duration in milliseconds |
+| Field         | Type    | Description                                                   |
+| ------------- | ------- | ------------------------------------------------------------- |
+| `text`        | string  | Full transcript with automatic capitalization and punctuation |
+| `duration_ms` | integer | Total audio duration in milliseconds                          |
 
 The API automatically applies:
+
 - Sentence capitalization
 - Named entity capitalization (via NER)
 - First-person pronoun "I" capitalization
@@ -71,14 +70,14 @@ The API automatically applies:
 
 ## Error Responses
 
-| Status | Meaning |
-|--------|---------|
-| `400` | Invalid file format (only `.opus` supported), empty file, or decode error |
-| `401` | Invalid or missing API key |
-| `403` | Model access not enabled for your organization |
-| `429` | Rate limit exceeded (monthly usage or concurrent requests) |
-| `503` | Server overloaded, try again later |
-| `504` | Processing timeout (60-second limit exceeded) |
+| Status | Meaning                                                                   |
+| ------ | ------------------------------------------------------------------------- |
+| `400`  | Invalid file format (only `.opus` supported), empty file, or decode error |
+| `401`  | Invalid or missing API key                                                |
+| `403`  | Model access not enabled for your organization                            |
+| `429`  | Rate limit exceeded (monthly usage or concurrent requests)                |
+| `503`  | Server overloaded, try again later                                        |
+| `504`  | Processing timeout (60-second limit exceeded)                             |
 
 ## Example: cURL
 
@@ -200,7 +199,11 @@ const AUDIO_FILE = "recording.opus";
 
 async function transcribe() {
   const formData = new FormData();
-  formData.append("upload_file", new Blob([fs.readFileSync(AUDIO_FILE)]), "recording.opus");
+  formData.append(
+    "upload_file",
+    new Blob([fs.readFileSync(AUDIO_FILE)]),
+    "recording.opus",
+  );
 
   const response = await fetch(
     "https://modulate-developer-apis.com/api/velma-2-stt-batch-english-vfast",
@@ -208,7 +211,7 @@ async function transcribe() {
       method: "POST",
       headers: { "X-API-Key": API_KEY },
       body: formData,
-    }
+    },
   );
 
   if (!response.ok) {
