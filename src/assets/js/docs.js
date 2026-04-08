@@ -141,11 +141,13 @@ function renderOverview(uuid, content) {
     <div>
       <table>
         <tbody>
+          <tr><td>Name</td><td>${escapeHtml(m.model_display_label)}</td></tr>
           <tr><td>Endpoint</td><td><code>${escapeHtml(m.api_url)}</code></td></tr>
           <tr><td>Model identifier</td><td><code>${escapeHtml(m.model_identifier)}</code></td></tr>
-          <tr><td>Type</td><td>${escapeHtml(m.model_type)}</td></tr>
           <tr><td>Status</td><td><span class="m__tag-flat" style="color: ${statusColor(m.status)}">${escapeHtml(m.status)}</span></td></tr>
+          <tr><td>Type</td><td>${escapeHtml(m.model_type)}</td></tr>
           <tr><td>Accepted formats</td><td>${formats}</td></tr>
+          <tr><td>Description</td><td>${escapeHtml(m.description)}</td></tr>
           <tr><td>Concurrency quota</td><td>${m.concurrency_quota.toLocaleString()} concurrent requests</td></tr>
           <tr><td>Monthly usage quota</td><td>${m.usage_quota.toLocaleString()} hours</td></tr>
           <tr><td>Cost</td><td>${cost}</td></tr>
@@ -214,14 +216,6 @@ async function renderQuickstart(uuid, content) {
     }
   } else {
     html += '<div class="docs-loading">Failed to load quickstart.</div>';
-  }
-  const links = model.example_project_links ?? [];
-  if (links.length > 0) {
-    html += '<div><h6>Example projects</h6><ul>';
-    for (const l of links) {
-      html += `<li><a href="${escapeHtml(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.title)}</a></li>`;
-    }
-    html += "</ul></div>";
   }
   content.innerHTML =
     html || '<div class="docs-loading">Failed to load quickstart.</div>';

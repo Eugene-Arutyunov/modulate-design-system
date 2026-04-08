@@ -1,0 +1,385 @@
+asyncapi: 3.0.0
+info:
+  title: Velma 2 Synthetic Voice Detection Streaming API
+  version: 1.0.0
+  description: |
+    Real-time synthetic voice detection for single-speaker audio over WebSocket. 
+    The client streams audio and receives per-frame verdicts as they become available.
+
+    ## Connection
+
+    Connect with your API key and audio format as query parameters:
+    ```
+    wss://modulate-developer-apis.com/api/velma-2-synthetic-voice-detection-streaming?api_key=YOUR_API_KEY&audio_format=s16le&sample_rate=16000&num_channels=1
+    ```
+
+    ## Audio Format
+
+    The `audio_format` query parameter is **required**. The server supports
+    both raw PCM formats and container formats.
+
+    ### Raw formats
+
+    Raw formats send headerless audio samples as binary WebSocket frames.
+    When using a raw format, `sample_rate` and `num_channels` are also
+    **required**.
+
+    Supported raw formats:
+    `s8`, `s16le`, `s16be`, `s24le`, `s24be`, `s32le`, `s32be`,
+    `u8`, `u16le`, `u16be`, `u24le`, `u24be`, `u32le`, `u32be`,
+    `f32le`, `f32be`, `f64le`, `f64be`, `mulaw`, `alaw`
+
+    Common examples:
+    | Use case              | `audio_format` | `sample_rate` | `num_channels` |
+    |-----------------------|----------------|---------------|----------------|
+    | Default / native app  | `s16le`        | `16000`       | `1`            |
+    | Web Audio AudioWorklet| `f32le`        | `48000`       | `1`            |
+    | Native stereo capture | `s16le`        | `48000`       | `2`            |
+    | Telephony (mu-law)    | `mulaw`        | `8000`        | `1`            |
+    | Telephony (A-law)     | `alaw`         | `8000`        | `1`            |
+
+    ### Container formats
+
+    Container formats include metadata (sample rate, channels, codec) in
+    the stream itself, so `sample_rate` and `num_channels` are not required.
+
+    Supported container formats:
+    `wav`, `mp3`, `ogg`, `flac`, `webm`, `aac`, `aiff`
+
+    Example:
+    ```
+    ...?api_key=YOUR_API_KEY&audio_format=webm
+    ```
+
+    ### Conversion
+
+    All audio is internally converted to 16 kHz mono for analysis. When the
+    input is already `s16le` at 16 kHz mono, no conversion is performed
+    (zero-cost passthrough). All other formats are decoded and resampled
+    via ffmpeg.
+
+    ## Windowing
+
+    1. The first prediction is emitted once the minimum audio duration is reached.
+    2. Each subsequent prediction fires one second later, growing from time 0.
+    3. Once the window reaches the full clip length, the start slides forward so
+       the window size stays constant (sliding window).
+
+    ## End-of-Stream
+
+    Send an **empty text frame** (`""`) to signal that all audio has been sent.
+    The server will finish processing any remaining audio, deliver outstanding
+    frame results, and send a `done` message before closing the connection.
+
+servers:
+  production:
+    host: modulate-developer-apis.com
+    protocol: wss
+    description: Modulate Synthetic Voice Detection Streaming Server
+
+channels:
+  streaming-detection:
+    address: /api/velma-2-synthetic-voice-detection-streaming
+    bindings:
+      ws:
+        query:
+          type: object
+          required:
+            - api_key
+            - audio_format
+          properties:
+            api_key:
+              type: string
+              description: API key used for authentication and usage tracking.
+            audio_format:
+              type: string
+              description: |
+                Audio encoding format. Required for all connections.
+
+                **Raw formats** (headerless samples — `sample_rate` and
+                `num_channels` are also required):
+                `s8`, `s16le`, `s16be`, `s24le`, `s24be`, `s32le`, `s32be`,
+                `u8`, `u16le`, `u16be`, `u24le`, `u24be`, `u32le`, `u32be`,
+                `f32le`, `f32be`, `f64le`, `f64be`, `mulaw`, `alaw`
+
+                **Container formats** (metadata in the stream):
+                `wav`, `mp3`, `ogg`, `flac`, `webm`, `aac`, `aiff`
+              enum:
+                - s8
+                - s16le
+                - s16be
+                - s24le
+                - s24be
+                - s32le
+                - s32be
+                - u8
+                - u16le
+                - u16be
+                - u24le
+                - u24be
+                - u32le
+                - u32be
+                - f32le
+                - f32be
+                - f64le
+                - f64be
+                - mulaw
+                - alaw
+                - wav
+                - mp3
+                - ogg
+                - flac
+                - webm
+                - aac
+                - aiff
+              examples:
+                - s16le
+                - f32le
+                - mulaw
+                - webm
+            sample_rate:
+              type: integer
+              description: |
+                Sample rate in Hz. **Required** when `audio_format` is a raw
+                format. Must not be specified without `audio_format`.
+              enum:
+                - 8000
+                - 11025
+                - 16000
+                - 22050
+                - 32000
+                - 44100
+                - 48000
+                - 96000
+              examples:
+                - 16000
+                - 48000
+            num_channels:
+              type: integer
+              description: |
+                Number of audio channels. **Required** when `audio_format` is
+                a raw format. Must be between 1 and 8. Must not be specified
+                without `audio_format`.
+              minimum: 1
+              maximum: 8
+              examples:
+                - 1
+                - 2
+    messages:
+      audioData:
+        $ref: "#/components/messages/audioData"
+      endOfStream:
+        $ref: "#/components/messages/endOfStream"
+      frameResult:
+        $ref: "#/components/messages/frameResult"
+      done:
+        $ref: "#/components/messages/done"
+      error:
+        $ref: "#/components/messages/error"
+
+operations:
+  sendAudio:
+    action: send
+    channel:
+      $ref: "#/channels/streaming-detection"
+    summary: Stream audio data to the server.
+    description: |
+      Send binary frames containing audio data in the format declared by
+      the `audio_format` query parameter. Frames can be any size; the
+      server buffers and windows internally.
+    messages:
+      - $ref: "#/channels/streaming-detection/messages/audioData"
+
+  signalEnd:
+    action: send
+    channel:
+      $ref: "#/channels/streaming-detection"
+    summary: Signal end of audio stream.
+    description: |
+      Send an empty text frame (`""`) to indicate all audio has been sent.
+      The server will process any remaining buffered audio, deliver final
+      results, and send a `done` message.
+    messages:
+      - $ref: "#/channels/streaming-detection/messages/endOfStream"
+
+  receiveFrameResult:
+    action: receive
+    channel:
+      $ref: "#/channels/streaming-detection"
+    summary: Receive a per-frame detection result.
+    description: |
+      Emitted each time a sliding window of audio has been analysed.
+      Results arrive in chronological order but are streamed incrementally
+      as inference completes.
+    messages:
+      - $ref: "#/channels/streaming-detection/messages/frameResult"
+
+  receiveDone:
+    action: receive
+    channel:
+      $ref: "#/channels/streaming-detection"
+    summary: Receive the final summary when analysis is complete.
+    description: |
+      Sent after all frames have been delivered, in response to the client's
+      end-of-stream signal. The server closes the connection after this message.
+    messages:
+      - $ref: "#/channels/streaming-detection/messages/done"
+
+  receiveError:
+    action: receive
+    channel:
+      $ref: "#/channels/streaming-detection"
+    summary: Receive an error notification.
+    description: |
+      Sent if the audio format is invalid, inference fails, or the server
+      encounters an internal error. The server closes the connection after
+      this message.
+    messages:
+      - $ref: "#/channels/streaming-detection/messages/error"
+
+components:
+  messages:
+    audioData:
+      name: audioData
+      title: Audio Data
+      summary: A binary frame containing audio samples.
+      contentType: application/octet-stream
+      payload:
+        type: string
+        format: binary
+        description: |
+          Audio data in the format declared by the `audio_format` query
+          parameter. For raw formats this is headerless samples; for
+          container formats this is the encoded byte stream. Frames may
+          be any size; the server buffers internally.
+
+    endOfStream:
+      name: endOfStream
+      title: End of Stream
+      summary: An empty text frame signalling that the client has finished sending audio.
+      contentType: text/plain
+      payload:
+        type: string
+        const: ""
+
+    frameResult:
+      name: frameResult
+      title: Frame Result
+      summary: A single frame detection result.
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/FrameResultMessage"
+
+    done:
+      name: done
+      title: Done
+      summary: Analysis complete — all frames have been delivered.
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/DoneMessage"
+
+    error:
+      name: error
+      title: Error
+      summary: An error occurred during connection or analysis.
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/ErrorMessage"
+
+  schemas:
+    FrameResultMessage:
+      type: object
+      required:
+        - type
+        - frame
+      properties:
+        type:
+          type: string
+          const: frame
+        frame:
+          $ref: "#/components/schemas/Frame"
+
+    Frame:
+      type: object
+      required:
+        - start_time_ms
+        - end_time_ms
+        - verdict
+        - confidence
+      properties:
+        start_time_ms:
+          type: integer
+          description: Frame start time in the original audio stream (ms).
+          examples: [0]
+        end_time_ms:
+          type: integer
+          description: Frame end time in the original audio stream (ms).
+          examples: [4000]
+        verdict:
+          type: string
+          enum:
+            - synthetic
+            - non-synthetic
+            - no-content
+          description: |
+            - `synthetic` — the frame likely contains AI-generated speech.
+            - `non-synthetic` — the frame likely contains natural human speech.
+            - `no-content` — the frame is silent or contains no usable audio.
+          examples: ["synthetic"]
+        confidence:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: Confidence in the stated verdict (0–1).
+          examples: [0.9732]
+
+    DoneMessage:
+      type: object
+      required:
+        - type
+        - duration_ms
+        - frame_count
+      properties:
+        type:
+          type: string
+          const: done
+        duration_ms:
+          type: integer
+          description: Total duration of the streamed audio in milliseconds.
+          examples: [12500]
+        frame_count:
+          type: integer
+          description: Total number of frames analysed.
+          examples: [10]
+
+    ErrorMessage:
+      type: object
+      required:
+        - type
+        - error
+      properties:
+        type:
+          type: string
+          const: error
+        error:
+          type: string
+          description: Human-readable error description.
+          examples:
+            - "Internal server error"
+            - "Invalid audio_format='mp4'. Valid values: ['aac', 'aiff', 'alaw', ...]"
+            - "Raw audio formats require sample_rate and num_channels query parameters"
+            - "Invalid sample_rate=50000. Valid values: [8000, 11025, 16000, ...]"
+            - "Audio data appears to be WAV, not raw PCM. Send raw s16le PCM data without container headers."
+
+    CloseCodeTable:
+      description: |
+        ## WebSocket Close Codes
+
+        | Code   | Meaning                                                          |
+        |--------|------------------------------------------------------------------|
+        | `1000` | Normal closure after successful `done` message                   |
+        | `1003` | Invalid query parameters (bad format, sample rate, or channels)  |
+        | `4002` | Audio data does not match declared format (first-chunk check)    |
+        | `4003` | Authentication failed or usage denied                            |
+        | `1011` | Server error during streaming                                    |

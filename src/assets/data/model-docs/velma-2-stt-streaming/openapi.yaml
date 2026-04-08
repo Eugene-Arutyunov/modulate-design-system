@@ -1,114 +1,494 @@
-openapi: "3.1.0"
+asyncapi: 3.1.0
+
 info:
-  title: Velma-2 Streaming
-  version: "2.0"
+  title: Modulate STT Streaming Server
+  version: 0.0.0
   description: |
-    Real-time streaming speech-to-text via WebSocket. Supports multilingual
-    input, speaker diarization, emotion detection, accent identification, and
-    PII/PHI tagging with low-latency partial results.
+    API for streaming speech-to-text via WebSocket. This service
+    provides live transcription with automatic language detection,
+    including speaker diarization, emotion/accent detection, and PII/PHI tagging.
+
+    **Features:**
+    - Real-time streaming transcription via WebSocket
+    - Multilingual automatic transcription with language detection
+    - Speaker diarization (identifies different speakers)
+    - Emotion and accent detection per utterance
+    - PII/PHI tagging for privacy-sensitive content
+    - Utterance-level results delivered as they are completed
+    - Optional partial (interim) results for low-latency text preview
+    - Live audio streaming with immediate results
+
+    **Connection Protocol:**
+    1. Client connects to WebSocket endpoint with authentication
+    2. Client streams raw audio data as binary frames
+    3. Server sends JSON messages with completed utterances
+    3a. If partial_results is enabled, server also sends partial_utterance messages with in-progress text
+    4. Client sends empty text frame to signal end of audio
+    5. Server sends final completion message and closes connection
+
+    **Audio Format:**
+    - Send audio data as binary WebSocket frames
+    - **Self-describing formats** (AAC, AIFF, FLAC, MP3, OGG, WAV, WebM) are auto-detected
+      from their headers — no additional parameters are needed. These include container
+      formats (AIFF, OGG, WAV, WebM) and codecs whose streams carry per-frame headers
+      (AAC/ADTS, FLAC, MP3). You may optionally set `audio_format` to override
+      auto-detection, but do not set `sample_rate` or `num_channels` because the
+      headers already carry this metadata.
+    - **Raw/headerless formats** (PCM, mu-law, A-law) have no headers, so all three
+      parameters are required: `audio_format` (e.g. `s16le`, `mulaw`), `sample_rate`,
+      and `num_channels`. Omitting any of these for a raw format is an error.
+    - OGG is a container that may hold Opus-encoded audio — use `audio_format=ogg` (not "opus")
+    - Send audio chunks as they become available for real-time processing
+
+    **Authentication:**
+    Authentication is provided via the `api_key` query parameter when establishing the
+    WebSocket connection.
+
+    **Rate Limiting:**
+    - Concurrent connection limits apply per organization and model
+    - Monthly usage limits (in audio hours) apply per organization and model
+    - Connections exceeding limits will be rejected during handshake
 
 servers:
-  - url: wss://modulate-developer-apis.com/api/velma-2-stt-streaming
+  production:
+    host: modulate-developer-apis.com
+    protocol: wss
+    description: Modulate STT Streaming Server
 
-security:
-  - ApiKeyQuery: []
+channels:
+  velma2SttStreaming:
+    address: /api/velma-2-stt-streaming
+    description: |
+      Establish a WebSocket connection for real-time transcription with automatic language
+      detection. The service automatically detects the language for each utterance in
+      real-time. Different utterances within the same stream may be identified as different
+      languages if code-switching occurs.
 
-paths:
-  /stream:
-    get:
-      summary: Open a streaming transcription session
-      operationId: stream
-      description: |
-        Upgrade to a WebSocket connection. Send audio chunks as binary frames;
-        receive partial and final transcript events as JSON text frames.
-      parameters:
-        - name: api_key
-          in: query
-          required: true
-          schema:
-            type: string
-          description: Your API key.
-        - name: language
-          in: query
-          schema:
-            type: string
-          description: BCP-47 language tag. Auto-detected if omitted.
-          example: en-US
-        - name: diarization
-          in: query
-          schema:
-            type: boolean
-            default: false
-        - name: emotion
-          in: query
-          schema:
-            type: boolean
-            default: false
-        - name: accent
-          in: query
-          schema:
-            type: boolean
-            default: false
-        - name: pii_redaction
-          in: query
-          schema:
-            type: boolean
-            default: false
-      responses:
-        "101":
-          description: Switching Protocols — WebSocket connection established
-        "401":
-          description: Missing or invalid API key
-        "429":
-          description: Concurrency quota exceeded
+      **Connection Flow:**
+      1. Connect with `api_key` and optional query parameters
+      2. Connection will be accepted if authentication succeeds and limits are not exceeded
+      3. Stream audio data as binary WebSocket frames
+      4. Receive utterance results as JSON messages
+      5. Send empty text frame ("") when audio stream ends
+      6. Receive final "done" message with total audio duration
+      7. Connection closes automatically after completion
+
+      **Error Handling:**
+      If an error occurs during transcription, the server sends an error message and closes
+      the connection. Connection rejections during handshake use WebSocket close codes.
+
+      **WebSocket Close Codes:**
+      - `4001`: Invalid API key. The provided API key is not valid.
+      - `4003`: Access to this model is not enabled for your organization.
+      - `4029`: Rate limit exceeded. Either monthly usage limit has been exceeded or too
+        many concurrent connections are active.
+    parameters:
+      api_key:
+        $ref: '#/components/parameters/api_key'
+      speaker_diarization:
+        $ref: '#/components/parameters/speaker_diarization'
+      emotion_signal:
+        $ref: '#/components/parameters/emotion_signal'
+      accent_signal:
+        $ref: '#/components/parameters/accent_signal'
+      pii_phi_tagging:
+        $ref: '#/components/parameters/pii_phi_tagging'
+      audio_format:
+        $ref: '#/components/parameters/audio_format'
+      sample_rate:
+        $ref: '#/components/parameters/sample_rate'
+      num_channels:
+        $ref: '#/components/parameters/num_channels'
+      partial_results:
+        $ref: '#/components/parameters/partial_results'
+    messages:
+      audioChunk:
+        $ref: '#/components/messages/AudioChunk'
+      endOfStream:
+        $ref: '#/components/messages/EndOfStream'
+      utteranceResult:
+        $ref: '#/components/messages/UtteranceResult'
+      errorResult:
+        $ref: '#/components/messages/ErrorResult'
+      doneResult:
+        $ref: '#/components/messages/DoneResult'
+      partialUtteranceResult:
+        $ref: '#/components/messages/PartialUtteranceResult'
+
+operations:
+  streamAudio:
+    action: send
+    channel:
+      $ref: '#/channels/velma2SttStreaming'
+    summary: Stream audio for real-time transcription with automatic language detection
+    messages:
+      - $ref: '#/channels/velma2SttStreaming/messages/audioChunk'
+      - $ref: '#/channels/velma2SttStreaming/messages/endOfStream'
+
+  receiveTranscription:
+    action: receive
+    channel:
+      $ref: '#/channels/velma2SttStreaming'
+    summary: Receive transcription results from the server
+    messages:
+      - $ref: '#/channels/velma2SttStreaming/messages/utteranceResult'
+      - $ref: '#/channels/velma2SttStreaming/messages/partialUtteranceResult'
+      - $ref: '#/channels/velma2SttStreaming/messages/errorResult'
+      - $ref: '#/channels/velma2SttStreaming/messages/doneResult'
 
 components:
-  securitySchemes:
-    ApiKeyQuery:
-      type: apiKey
-      in: query
-      name: api_key
+  parameters:
+    api_key:
+      description: |
+        Your API key for authentication. Must be provided as a query parameter when
+        establishing the WebSocket connection.
+      schema:
+        type: string
+
+    speaker_diarization:
+      description: |
+        Enable speaker diarization to identify different speakers in the audio stream.
+        When enabled, each utterance includes a speaker identifier (1-indexed integer).
+      default: "true"
+      enum:
+        - "true"
+        - "false"
+
+    emotion_signal:
+      description: |
+        Enable emotion detection for each utterance. When enabled, the `emotion` field
+        in each utterance will contain the detected emotional tone of the speaker.
+      default: "false"
+      enum:
+        - "true"
+        - "false"
+
+    accent_signal:
+      description: |
+        Enable accent detection for each utterance. When enabled, the `accent` field
+        in each utterance will contain the detected accent of the speaker.
+      default: "false"
+      enum:
+        - "true"
+        - "false"
+
+    pii_phi_tagging:
+      description: |
+        Enable PII/PHI tagging. When enabled, personally identifiable information and
+        personal health information in the transcribed text will be wrapped with
+        appropriate tags.
+      default: "false"
+      enum:
+        - "true"
+        - "false"
+
+    audio_format:
+      description: |
+        Audio encoding format. Determines how the service interprets incoming audio data.
+
+        **Self-describing formats** (`wav`, `mp3`, `ogg`, `flac`, `webm`, `aac`, `aiff`):
+        These include container formats (AIFF, OGG, WAV, WebM) and codecs whose streams
+        carry per-frame headers (AAC/ADTS, FLAC, MP3). When omitted (default), the service
+        auto-detects the format from these headers. You may specify the format explicitly
+        to override auto-detection. Do not specify `sample_rate` or `num_channels` for
+        self-describing formats — the headers already carry this metadata.
+
+        **Raw/headerless formats** (`s8`..`f64be`, `mulaw`, `alaw`):
+        These formats are raw sample data with no headers. When using a raw format, you
+        must also specify `sample_rate` and `num_channels` so the service knows how to
+        interpret the byte stream. Omitting either will result in an error.
+      enum:
+        - "s8"
+        - "s16le"
+        - "s16be"
+        - "s24le"
+        - "s24be"
+        - "s32le"
+        - "s32be"
+        - "u8"
+        - "u16le"
+        - "u16be"
+        - "u24le"
+        - "u24be"
+        - "u32le"
+        - "u32be"
+        - "f32le"
+        - "f32be"
+        - "f64le"
+        - "f64be"
+        - "mulaw"
+        - "alaw"
+        - "wav"
+        - "mp3"
+        - "ogg"
+        - "flac"
+        - "webm"
+        - "aac"
+        - "aiff"
+
+    sample_rate:
+      description: |
+        Audio sample rate in Hz. Required when `audio_format` is a raw/headerless format
+        (PCM, mu-law, A-law). Do not specify for self-describing formats (WAV, MP3, OGG,
+        etc.) — their headers already include this metadata. Cannot be specified without
+        `audio_format`.
+      enum:
+        - "8000"
+        - "11025"
+        - "16000"
+        - "22050"
+        - "32000"
+        - "44100"
+        - "48000"
+        - "96000"
+
+    num_channels:
+      description: |
+        Number of audio channels (1-8). Required when `audio_format` is a raw/headerless
+        format (PCM, mu-law, A-law). Do not specify for self-describing formats (WAV, MP3,
+        OGG, etc.) — their headers already include this metadata. Use 1 for mono, 2 for
+        stereo. Cannot be specified without `audio_format`.
+
+    partial_results:
+      description: |
+        Enable partial (interim) transcription results. When enabled, the server sends
+        `partial_utterance` messages containing in-progress text as speech is being
+        recognized, in addition to the finalized `utterance` messages. Partial results
+        are fast previews that have not been processed through the full analysis pipeline
+        (no emotion, accent, or PII/PHI processing). Each partial replaces the previous
+        partial; when the finalized `utterance` arrives, it supersedes all preceding
+        partials.
+      default: "false"
+      enum:
+        - "true"
+        - "false"
+
+  messages:
+    AudioChunk:
+      name: audioChunk
+      title: Audio Data Chunk
+      summary: Raw audio data chunk for real-time transcription
+      contentType: application/octet-stream
+      payload:
+        type: string
+        format: binary
+
+    EndOfStream:
+      name: endOfStream
+      title: End of Audio Stream
+      summary: Empty text frame signaling end of audio stream
+      contentType: text/plain
+      payload:
+        type: string
+        enum: [""]
+      examples:
+        - name: endSignal
+          payload: ""
+
+    UtteranceResult:
+      name: utteranceResult
+      title: Utterance Result
+      summary: A completed utterance with detected language
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - utterance
+        properties:
+          type:
+            type: string
+            enum: [utterance]
+          utterance:
+            $ref: '#/components/schemas/StreamingUtterance'
+      examples:
+        - name: frenchUtterance
+          payload:
+            type: utterance
+            utterance:
+              utterance_uuid: "b2c3d4e5-f6a7-8901-bcde-f12345678901"
+              text: "Bonjour, comment allez-vous?"
+              start_ms: 0
+              duration_ms: 2800
+              speaker: 1
+              language: "fr"
+              emotion: null
+              accent: null
+
+    PartialUtteranceResult:
+      name: partialUtteranceResult
+      title: Partial Utterance Result
+      summary: In-progress transcription text (interim, not yet finalized)
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - partial_utterance
+        properties:
+          type:
+            type: string
+            enum: [partial_utterance]
+          partial_utterance:
+            $ref: '#/components/schemas/PartialUtterance'
+      examples:
+        - name: partialExample
+          payload:
+            type: partial_utterance
+            partial_utterance:
+              text: "Hello, how are"
+              start_ms: 0
+              speaker: 1
+
+    ErrorResult:
+      name: errorResult
+      title: Error
+      summary: An error occurred during transcription
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - error
+        properties:
+          type:
+            type: string
+            enum: [error]
+          error:
+            type: string
+            description: Human-readable error message
+      examples:
+        - name: internalError
+          payload:
+            type: error
+            error: "Internal server error"
+
+    DoneResult:
+      name: doneResult
+      title: Transcription Complete
+      summary: Transcription completed successfully
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - duration_ms
+        properties:
+          type:
+            type: string
+            enum: [done]
+          duration_ms:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total duration of audio processed in milliseconds
+      examples:
+        - name: completionExample
+          payload:
+            type: done
+            duration_ms: 45000
 
   schemas:
-    PartialTranscript:
+    StreamingUtterance:
       type: object
       required:
-        - type
+        - utterance_uuid
         - text
+        - start_ms
+        - duration_ms
+        - speaker
+        - language
+        - emotion
+        - accent
       properties:
-        type:
+        utterance_uuid:
           type: string
-          enum: [partial]
+          format: uuid
+          description: |
+            Unique identifier for this utterance. Can be used for tracking and correlating
+            utterances across systems.
+          example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
         text:
           type: string
-          description: In-progress transcript text, subject to revision.
-
-    FinalTranscript:
-      type: object
-      required:
-        - type
-        - text
-        - start
-        - end
-      properties:
-        type:
-          type: string
-          enum: [final]
-        text:
-          type: string
-          description: Finalized transcript text for this segment.
-        start:
-          type: number
-          description: Segment start time in seconds.
-        end:
-          type: number
-          description: Segment end time in seconds.
+          description: |
+            The transcribed text for this utterance. Represents a single continuous segment
+            of speech detected in the audio stream. May contain PII/PHI tags if tagging
+            is enabled.
+          example: "Hello, how are you today?"
+        start_ms:
+          type: integer
+          format: int32
+          minimum: 0
+          description: |
+            The start time of this utterance in milliseconds, relative to the beginning
+            of the audio stream. Allows precise synchronization with the original audio timing.
+          example: 0
+        duration_ms:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The duration of this utterance in milliseconds.
+          example: 2500
         speaker:
+          type: integer
+          description: |
+            Speaker identifier for this utterance (1-indexed). When speaker diarization is
+            enabled, this identifies which speaker produced this utterance. Speaker numbers
+            are consistent within a single connection but may vary between different connections.
+          example: 1
+        language:
           type: string
-          description: Speaker label (present when diarization is enabled).
+          description: |
+            The automatically detected language code for this utterance (e.g., "en" for English,
+            "fr" for French).
+          example: "en"
         emotion:
           type: string
-          description: Detected emotion (present when emotion is enabled).
+          nullable: true
+          description: |
+            The detected emotional tone of the speaker for this utterance. Only present when
+            `emotion_signal` is enabled. Possible values include: Neutral, Calm, Happy, Amused,
+            Excited, Proud, Affectionate, Interested, Hopeful, Frustrated, Angry, Contemptuous,
+            Concerned, Afraid, Sad, Ashamed, Bored, Tired, Surprised, Anxious, Stressed,
+            Disgusted, Disappointed, Confused, Relieved, Confident.
+          example: "Neutral"
         accent:
           type: string
-          description: Detected accent (present when accent is enabled).
+          nullable: true
+          description: |
+            The detected accent of the speaker for this utterance. Only present when
+            `accent_signal` is enabled. Possible values include: American, British, Australian,
+            Southern, Indian, Irish, Scottish, Eastern_European, African, Asian,
+            Latin_American, Middle_Eastern, Unknown.
+          example: "American"
+
+    PartialUtterance:
+      type: object
+      required:
+        - text
+        - start_ms
+        - speaker
+      properties:
+        text:
+          type: string
+          description: |
+            In-progress transcription text. This is a preview that may change as more
+            audio is processed. Each new partial replaces the previous one. The finalized
+            utterance supersedes all preceding partials.
+          example: "Hello, how are you"
+        start_ms:
+          type: integer
+          format: int32
+          minimum: 0
+          nullable: true
+          description: |
+            Start time of the in-progress speech segment in milliseconds, relative to the
+            beginning of the audio stream. May be null if timing data is not yet available.
+          example: 0
+        speaker:
+          type: integer
+          nullable: true
+          description: |
+            Speaker identifier (1-indexed). Matches the speaker numbering used in
+            finalized utterances. May be null if speaker has not yet been identified.
+          example: 1

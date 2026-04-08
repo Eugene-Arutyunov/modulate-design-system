@@ -1,0 +1,200 @@
+openapi: 3.1.0
+info:
+  title: Velma 2 Synthetic Voice Detection API
+  description: |
+    Batch endpoint for detecting synthetic (AI-generated) speech in 
+    single-speaker audio files.
+    Audio is split into windowed frames, each independently classified as
+    synthetic, non-synthetic, or no-content (silence).
+
+    ## Behavior Notes
+
+    - **Silence trimming:** Leading and trailing silence is trimmed before
+      windowing. Frame timestamps reflect positions in the original file,
+      accounting for any trimmed silence offset.
+    - **Silent chunks:** Frames that contain only silence or no usable audio
+      are assigned a `no-content` verdict with confidence `1.0` and are not
+      sent through the model.
+    - **Short audio:** Files shorter than one full 4-second window are padded
+      before inference.
+
+    ## Rate Limits
+
+    - Concurrent request limits apply per organization.
+    - Monthly usage limits (in audio hours) apply per organization.
+    - Exceeding either limit returns a `403` status code.
+  version: 1.0.0
+
+servers:
+  - url: https://modulate-developer-apis.com
+    description: Modulate Synthetic Voice Detection Batch Server
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /api/velma-2-synthetic-voice-detection-batch:
+    post:
+      operationId: detectSyntheticVoice
+      summary: Detect synthetic voice in an audio file
+      description: |
+        Audio file to analyse. Must be non-empty and meet the minimum duration requirement.
+
+        Supported formats: `.aac`, `.aiff`, `.flac`, `.mov`, `.mp3`, `.mp4`, `.ogg`, `.opus`, `.wav`, `.webm`.
+
+        Maximum file size: 100 MB. Recommended audio length: 4–60 seconds.
+        Files shorter than 0.5 seconds will be rejected with a 422.
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - upload_file
+              properties:
+                upload_file:
+                  type: string
+                  format: binary
+                  description: Audio file to analyse. Must be non-empty and meet the minimum duration requirement.
+      responses:
+        "200":
+          description: Detection completed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetectionAPIResponse"
+        "400":
+          description: Bad request — empty file or invalid upload.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: "Empty file provided."
+        "403":
+          description: Forbidden — API key invalid or usage denied.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: "Usage denied: quota exceeded."
+        "422":
+          description: Unprocessable entity — audio is too short for analysis.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: "Audio too short for analysis."
+        "500":
+          description: Internal server error during inference.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: "Internal server error"
+        "502":
+          description: Bad gateway — upstream usage-check service failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: "Usage check service unavailable."
+        "503":
+          description: Service unavailable — inference queue is overloaded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: "Server is overloaded. Please try again later."
+        "504":
+          description: Gateway timeout — inference did not complete in time.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                detail: "Request timed out."
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key used for authentication and usage tracking.
+
+  schemas:
+    DetectionAPIResponse:
+      type: object
+      required:
+        - filename
+        - frames
+        - duration_ms
+      properties:
+        filename:
+          type: string
+          nullable: true
+          description: Original filename of the uploaded audio.
+          example: "recording.wav"
+        frames:
+          type: array
+          description: Ordered list of per-frame detection results covering the full audio duration.
+          items:
+            $ref: "#/components/schemas/FrameResult"
+        duration_ms:
+          type: integer
+          description: Total duration of the audio in milliseconds.
+          example: 34500
+
+    FrameResult:
+      type: object
+      required:
+        - start_time_ms
+        - end_time_ms
+        - verdict
+        - confidence
+      properties:
+        start_time_ms:
+          type: integer
+          description: Frame start time in milliseconds.
+          example: 0
+        end_time_ms:
+          type: integer
+          description: Frame end time in milliseconds.
+          example: 3000
+        verdict:
+          type: string
+          enum:
+            - synthetic
+            - non-synthetic
+            - no-content
+          description: |
+            Classification for this frame:
+            - `synthetic` — the frame likely contains AI-generated speech.
+            - `non-synthetic` — the frame likely contains natural human speech.
+            - `no-content` — the frame is silent or contains no usable audio.
+          example: "synthetic"
+        confidence:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: Confidence in the stated verdict, from 0 (lowest) to 1 (highest).
+          example: 0.9732
+
+    ErrorResponse:
+      type: object
+      required:
+        - detail
+      properties:
+        detail:
+          type: string
+          description: Human-readable error message.
