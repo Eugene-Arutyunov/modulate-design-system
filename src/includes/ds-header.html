@@ -1,17 +1,9 @@
-{% macro navLink(url, label) %} {% if url == page.url %}<span class="nav-link"
-  >{{ label }}</span
->
-{% else %}<a href="{{ url }}" class="nav-link">{{ label }}</a>
-{% endif %} {% endmacro %}
-
+{% if '/' != page.url %}
 <div class="m__wrapper">
   <header class="header">
     <nav class="nav">
-      {{ navLink('/', 'Modulate Design System') }}
-      <div class="nav-spacer"></div>
-      {{ navLink('/ui-playground/', 'Samples') }} {{
-      navLink('/dashboard/overview/', 'Prototype') }} {{ navLink('/ui/', 'UI
-      Architecture') }}
+      <a href="/" class="nav-link">Modulate Design System</a>
     </nav>
   </header>
 </div>
+{% endif %}

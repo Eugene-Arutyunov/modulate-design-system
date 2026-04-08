@@ -7,10 +7,20 @@ Index of notable functional blocks for developer navigation. Add a short descrip
 ## Theme toggle
 
 **Script:** `src/assets/js/theme-toggle.js`  
-**Styles:** `src/styles/theme-toggle.css` (shared control), `src/styles/ds-theme-toggle.css` (fixed docs placement).  
-**Used in:** `src/includes/header.html` (prototype toggle control), `src/includes/layout.html` (script tag), `src/includes/ds-layout.html` (fixed docs toggle + script tag).
+**Styles:** `src/styles/theme-toggle.css` (shared control).  
+**Used in:** `src/includes/header.html` (prototype popover toggle), `src/includes/nav-island.html` (DS pages), `src/includes/layout.html` (script tag), `src/includes/ds-layout.html` (script tag).
 
-Switches between light and dark theme. Supports multiple `.theme-toggle` elements at once, so the prototype header toggle and the fixed docs toggle stay in sync. The storage key is taken from `body[data-theme-storage-key]`, which keeps prototype pages and design-system pages independent (`prototype-theme` vs `design-system-theme`). The initial theme is applied by a small inline script right after `<body>` in layouts so the correct theme is set before first paint (avoids flash).
+Switches between light and dark theme. Supports multiple `.theme-toggle` elements at once. The storage key is taken from `body[data-theme-storage-key]`, which keeps prototype pages and design-system pages independent (`prototype-theme` vs `design-system-theme`). The initial theme is applied by a small inline script right after `<body>` in layouts so the correct theme is set before first paint (avoids flash). Landing pages (index-landing, docs, pricing) are intentionally light-only and have no theme toggle.
+
+---
+
+## Navigation island
+
+**Markup:** `src/includes/nav-island.html`  
+**Styles:** `src/styles/nav-island.css`  
+**Used in:** `src/includes/ds-layout.html`, `src/includes/layout.html`, `src/includes/landing-layout.html`.
+
+Fixed-position element in the bottom-left corner of every page. Contains four icon-links for cross-navigation between the design system (`/`), prototype landing (`/index-landing/`), dashboard (`/dashboard/overview/`), and UI Architecture (`/ui/`). On DS pages the include also renders the theme toggle (controlled by the Nunjucks variable `islandThemeToggle`). The island is semi-transparent at rest and becomes fully opaque on hover, using `backdrop-filter` and `opacity` transition with the shared timing tokens.
 
 ---
 
@@ -21,7 +31,7 @@ Switches between light and dark theme. Supports multiple `.theme-toggle` element
 **Styles:** `src/styles/dashboard/layout.css` (`body.prototype-hide-internal-nav` hides that wrapper); `src/styles/footer.css` (`.footer-prototype-tools__switch` matches the theme-toggle look).  
 **Used in:** `src/includes/layout.html` and `src/includes/landing-layout.html` (inline class restore from `localStorage` before paint + script tag), `src/includes/footer.html` (technical panel with DS links and the switch). The script always syncs `body.prototype-hide-internal-nav` from storage even when the current page has no internal nav links (e.g. landing). The switch label is a `<label for="…">` so the text toggles the control too.
 
-The footer panel under the Modulate blurb lists **Modulate Design System** (`/`) and **UI Architecture** (`/ui/`), plus a switch **Internal admin links** (same pill control as the theme toggle, but not using the `.theme-toggle` class so `theme-toggle.js` does not bind to it). State persists in `localStorage` under `prototype-internal-nav-hidden` (`1` = hidden). Default is links visible (`aria-checked="true"` on the switch).
+The footer panel under the Modulate blurb contains a switch **Internal admin links** (same pill control as the theme toggle, but not using the `.theme-toggle` class so `theme-toggle.js` does not bind to it). State persists in `localStorage` under `prototype-internal-nav-hidden` (`1` = hidden). Default is links visible (`aria-checked="true"` on the switch). Cross-navigation links (DS main, UI Architecture) were moved to the nav island.
 
 ---
 

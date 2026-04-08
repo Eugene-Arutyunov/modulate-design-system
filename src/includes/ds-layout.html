@@ -25,17 +25,8 @@
         }
       })();
     </script>
-    <button
-      type="button"
-      class="theme-toggle ds-theme-toggle"
-      role="switch"
-      aria-checked="true"
-      aria-label="Dark theme">
-      <span class="theme-toggle__track">
-        <span class="theme-toggle__thumb"></span>
-      </span>
-    </button>
-    {% include 'ds-header.html' %} {% block content %}{% endblock %} {% include
+    {% set islandThemeToggle = true %} {% include 'nav-island.html' %} {%
+    include 'ds-header.html' %} {% block content %}{% endblock %} {% include
     'ds-footer.html' %}
 
     <script src="/assets/js/theme-toggle.js"></script>
