@@ -27,14 +27,18 @@ ids-footnote-link {
   font-size: 0.65em;
   line-height: 1;
   place-content: center;
+  box-sizing: border-box;
 
   /* Not selected state: outlined circle */
   background: transparent;
   border: 1px solid var(--m__text-color);
   color: var(--m__text-color);
 
-  &.enlarge {
-    font-size: 0.85em;
+  &.ids-footnote-link__button--pill {
+    width: auto;
+    min-width: 1.3em;
+    padding: 0 0.35em;
+    border-radius: 9999px;
   }
 
   /* Selected state: filled circle */
@@ -68,15 +72,18 @@ ids-footnote-link {
 }
 
 aside.ids-footnote {
+  /* Reset prose `aside` (page-composition); footnote is overlay UI, not a text block */
+  margin: 0;
+  background-color: var(--m__background-color);
+  border-radius: 0.3em;
+  padding: 0.975em;
+
   position: absolute;
   width: 20em;
-  padding: 0.975em;
   font-size: 0.8em;
   z-index: 150;
   box-shadow: 0 0.5em 1em
     color-mix(in srgb, var(--m__text-color) 30%, transparent);
-  background: var(--m__background-color);
-  border-radius: 0.3em;
 
   /* First paragraph badge - black filled circle */
   p:first-child::before {
@@ -94,8 +101,12 @@ aside.ids-footnote {
     vertical-align: middle;
   }
 
-  &.enlarge-number p:first-child::before {
-    font-size: 1.1em;
+  &.ids-footnote--pill-badge p:first-child::before {
+    width: auto;
+    min-width: 1.3em;
+    padding: 0 0.3em;
+    border-radius: 9999px;
+    box-sizing: border-box;
   }
 
   /* Scrollability */

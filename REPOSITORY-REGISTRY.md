@@ -42,15 +42,15 @@ Dropdown menu: trigger shows user name + chevron; click opens popover. Account a
 **Page:** `src/ui.html` (UI Architecture).  
 **Styles:** `.ui-viz` + `.ui-viz__*` in `src/styles/ui-visualizer.css`.
 
-Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders three columns per row (Route title, Current, Target). Static diagram: `src/includes/ui-arch-diagram.html` (aside with both columns), `ui-arch-diagram-structure.html` (left: route + list), `ui-arch-diagram-layout.html` (right: 4 section blocks). Full diagram on `src/ui.html`; index uses only the layout include inside `<aside class="ui-arch-diagram ui-arch-diagram--layout-only">`. Styles in `ui-visualizer.css` under `.ui-arch-diagram`.
+Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders three columns per row (Route title, Current, Target). Static diagram: `src/includes/ui-arch-diagram.html` (`<aside class="ui-arch-diagram">` with both columns), `ui-arch-diagram-structure.html` (left: route + list), `ui-arch-diagram-layout.html` (right: 4 section blocks). Full diagram on `src/ui.html`; index uses only the layout include inside `<aside class="ui-arch-diagram ui-arch-diagram--layout-only">`. Grid and `min-height` are in `ui-visualizer.css`; surface, padding, and radius come from the shared prose `aside` rule in `page-composition/wrappers.css`.
 
 ---
 
 ## Shared text content styles
 
-**Styles:** `src/styles/page-composition/text-components.css`
+**Styles:** `src/styles/components/text.css`
 
-Global tag-level styles for prose elements: headings, paragraphs, links, inline code, lists, and preformatted blocks. Rules apply to bare HTML tags and cover the entire page; no wrapper class is required. Also defines `.caption` — a utility class for secondary/meta text at `--m__font-size-s` with `--m__text-caption-color`.
+Global tag-level styles for prose elements: headings, paragraphs, links, inline code, lists, and preformatted blocks. Rules apply to bare HTML tags and cover the entire page; no wrapper class is required. Also defines `.caption` — secondary/meta text at `--m__font-size-s` with `--m__text-caption-color`; links inside use the same text color with an underline and `--m__text-hover-color` on hover (same timing as default links).
 
 ---
 
@@ -60,7 +60,7 @@ Global tag-level styles for prose elements: headings, paragraphs, links, inline 
 **Scripts:** `src/assets/js/navbar.js`, `src/assets/js/footnotes.js`  
 **Bundle:** included from `src/css-bundle.njk`; `main.js` imports the scripts on design-system pages (`ds-layout.html`).
 
-Segmented docs nav (`ids-navbar` / `ids-nav-item`) and footnote popovers (`ids-footnote-link` / `ids-footnote`). Class names keep the `ids-` prefix for historical reasons; there is no page-level `.ids` wrapper.
+Segmented docs nav (`ids-navbar` / `ids-nav-item`) and footnote popovers (`ids-footnote-link` / `ids-footnote`). The footnote `<aside class="ids-footnote">` resets the shared prose `aside` styling from `page-composition/wrappers.css` inside `footnotes.css`. Class names keep the `ids-` prefix for historical reasons; there is no page-level `.ids` wrapper.
 
 ---
 
