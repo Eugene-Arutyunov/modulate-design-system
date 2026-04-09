@@ -1,0 +1,128 @@
+/*
+ * Online docs are experimental. Doc-specific layout values and components live
+ * only in this file — do not add them to src/styles/tokens/ or other shared
+ * design-system modules until the pattern is promoted.
+ */
+
+.m__online-doc-wrapper {
+  --online-doc-title-bleed: 3rem;
+  --online-doc-title-padding-block: 1.5rem;
+  /* Print: same value as @page margin (each side). */
+  --online-doc-print-margin: 0.5in;
+  --online-doc-print-letter-height: 11in;
+  --online-doc-print-title-min-height: calc(
+    var(--online-doc-print-letter-height) - 2 * var(--online-doc-print-margin)
+  );
+
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 0 0.7rem;
+
+  @media (width < 767px) {
+    width: 100%;
+  }
+
+  & .m__text-width {
+    width: 85%;
+
+    @media (width < 767px) {
+      width: 100%;
+    }
+  }
+
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    break-after: avoid;
+  }
+
+  & table,
+  & .m__code-block,
+  & figure,
+  & .m__table {
+    break-inside: avoid;
+  }
+
+  & ul,
+  & ol,
+  & blockquote {
+    break-inside: avoid;
+  }
+
+  @media print {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.title-container {
+  background-color: var(--m__bg-accent-color);
+  color: var(--m__text-inverted-color);
+  border-radius: var(--m__radius-l);
+  margin-top: var(--m__space-l);
+  margin-left: calc(-1 * var(--online-doc-title-bleed));
+  margin-right: calc(-1 * var(--online-doc-title-bleed));
+  padding: var(--online-doc-title-padding-block) var(--online-doc-title-bleed);
+  display: flex;
+  flex-direction: column;
+
+  & h1,
+  & p,
+  & a {
+    color: inherit;
+  }
+
+  & .title-container__footer {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: auto;
+    padding-top: 3rem;
+    font-size: var(--m__font-size-s);
+    opacity: 0.7;
+  }
+
+  & .title-container__footer-logos {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-weight: var(--m__font-weight-bold);
+  }
+
+  & .title-container__footer-contacts {
+    margin-left: auto;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  @media print {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    padding: var(--online-doc-print-margin);
+    min-height: var(--online-doc-print-title-min-height);
+    box-sizing: border-box;
+    break-after: page;
+    break-inside: avoid;
+  }
+}
+
+@media print {
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  body {
+    font-size: 12pt;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

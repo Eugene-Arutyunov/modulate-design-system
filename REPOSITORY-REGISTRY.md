@@ -245,3 +245,14 @@ Three charts on the dashboard overview page: Credit Balance Over Time (line), Us
 **Library:** Chart.js 4.4.0 via CDN, loaded from `ds-layout.html`.
 
 Two sample charts (line and stacked bar) rendered with hardcoded data on the design-system documentation page. Demonstrates the opinionated Chart.js configuration that all product charts should follow. Re-renders on theme change via MutationObserver.
+
+---
+
+## Online Docs prototype
+
+**Page:** `src/online-docs.html`, `src/online-docs/toxmod.html`, `src/online-docs/prosocial.html`  
+**Permalink:** `/online-docs/`, `/online-docs/toxmod/`, `/online-docs/prosocial/`  
+**Layout:** `src/includes/online-docs-layout.html`  
+**Styles:** `src/styles/online-docs.css`
+
+Print-oriented document prototype. **Experimental / isolated:** doc-specific variables and components belong only in `online-docs.css`, not in `src/styles/tokens/` or other shared DS files, until the pattern is promoted. Uses `online-docs-layout.html` (no product header or footer). Wrapper `.m__online-doc-wrapper` is a centered reading column; `@page { size: letter }` with margins, break rules, `12pt` print body, and `print-color-adjust: exact`. Browser print headers/footers are turned off in the print dialog, not via CSS. Index links to two sample case studies.
