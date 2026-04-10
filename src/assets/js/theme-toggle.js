@@ -3,22 +3,24 @@
   var btns = document.querySelectorAll('.theme-toggle');
   if (!btns.length) return;
 
+  function isDark() {
+    return document.documentElement.style.colorScheme === 'dark';
+  }
+
   function updateToggles() {
-    var isDark = document.body.classList.contains('dark-mode');
     btns.forEach(function (btn) {
-      btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
+      btn.setAttribute('aria-checked', isDark() ? 'true' : 'false');
     });
   }
 
   updateToggles();
 
   function handleClick() {
-    var isDark = document.body.classList.contains('dark-mode');
-    if (isDark) {
-      document.body.classList.remove('dark-mode');
+    if (isDark()) {
+      document.documentElement.style.colorScheme = 'light';
       localStorage.setItem(KEY, 'light');
     } else {
-      document.body.classList.add('dark-mode');
+      document.documentElement.style.colorScheme = 'dark';
       localStorage.setItem(KEY, 'dark');
     }
     updateToggles();

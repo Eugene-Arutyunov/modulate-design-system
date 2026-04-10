@@ -1,86 +1,127 @@
-:root,
-.light-mode {
+:root {
+  /* Per-theme raw values */
+
   /* TEXT */
-  --m__text-color: rgb(30, 30, 35);
-  --m__text-link-color: rgb(50, 50, 70);
-  --m__text-hover-color: rgb(40, 95, 235);
-  --m__text-active-color: rgb(20, 60, 180);
-  --m__text-caption-color: rgb(150, 150, 170);
-  --m__text-inverted-color: rgb(242, 242, 246);
-  --m__text-accent-color: rgb(20, 20, 50);
-  --m__code-color: rgb(120, 120, 136);
-  --m__code-accent-color: rgb(124, 58, 237);
+  --m__text-color--light: rgb(30, 30, 35);
+  --m__text-color--dark: rgb(180, 180, 190);
+
+  --m__text-link-color--light: rgb(50, 50, 70);
+  --m__text-link-color--dark: rgb(180, 180, 190);
+
+  --m__text-hover-color--light: rgb(40, 95, 235);
+  --m__text-hover-color--dark: rgb(255, 255, 255);
+
+  --m__text-active-color--light: rgb(20, 60, 180);
+  --m__text-active-color--dark: rgb(200, 200, 210);
+
+  --m__text-caption-color--light: rgb(150, 150, 170);
+  --m__text-caption-color--dark: rgb(126, 126, 137);
+
+  --m__text-inverted-color--light: rgb(242, 242, 246);
+  --m__text-inverted-color--dark: rgb(20, 20, 30);
+
+  --m__text-accent-color--light: rgb(20, 20, 50);
+  --m__text-accent-color--dark: rgb(180, 180, 190);
+
+  --m__code-color--light: rgb(120, 120, 136);
+  --m__code-color--dark: rgb(126, 126, 137);
+
+  --m__code-accent-color--light: rgb(124, 58, 237);
+  --m__code-accent-color--dark: rgb(167, 139, 250);
 
   /* BACKGROUND */
-  --m__background-color: rgb(255, 255, 255);
-  --m__bg-surface-color: rgb(242, 242, 246);
-  --m__bg-accent-color: rgb(20, 20, 50);
-  --m__bg-hover-color: rgb(35, 84, 207);
-  --m__bg-active-color: rgb(30, 50, 160);
-  --m__bg-mark-color: rgb(255, 200, 29);
+  --m__background-color--light: rgb(255, 255, 255);
+  --m__background-color--dark: rgb(20, 20, 25);
+
+  --m__bg-surface-color--light: rgb(242, 242, 246);
+  --m__bg-surface-color--dark: rgb(27, 27, 39);
+
+  --m__bg-accent-color--light: rgb(20, 20, 50);
+  --m__bg-accent-color--dark: rgb(220, 220, 250);
+
+  --m__bg-hover-color--light: rgb(35, 84, 207);
+  --m__bg-hover-color--dark: rgb(100, 110, 140);
+
+  --m__bg-active-color--light: rgb(30, 50, 160);
+  --m__bg-active-color--dark: rgb(140, 140, 170);
+
+  --m__bg-mark-color--light: rgb(255, 200, 29);
+  --m__bg-mark-color--dark: rgb(255, 200, 29);
 
   /* UI */
-  --m__ui-control-color: var(--m__bg-surface-color);
-  --m__ui-border-color: rgb(220, 220, 230);
-  --m__ui-error-color: rgb(255, 53, 84);
-  --m__ui-success-color: rgb(21, 207, 135);
+  --m__ui-control-color--light: rgb(242, 242, 246);
+  --m__ui-control-color--dark: rgb(50, 50, 62);
+
+  --m__ui-border-color--light: rgb(220, 220, 230);
+  --m__ui-border-color--dark: rgb(50, 50, 62);
+
+  --m__ui-error-color--light: rgb(255, 53, 84);
+  --m__ui-error-color--dark: rgb(255, 53, 84);
+
+  --m__ui-success-color--light: rgb(21, 207, 135);
+  --m__ui-success-color--dark: rgb(21, 207, 135);
 
   /* CHARTS */
-  --m__chart-default-color: rgb(20, 20, 50);
-  --m__chart-model-1-color: rgb(124, 58, 237);
-  --m__chart-model-2-color: rgb(167, 120, 250);
-  --m__chart-model-3-color: rgb(196, 167, 255);
-  --m__chart-status-success-color: rgb(80, 210, 120);
-  --m__chart-status-server-error-color: rgb(255, 53, 84);
-  --m__chart-status-client-error-color: rgb(255, 120, 80);
-  --m__chart-status-processing-color: var(--m__text-caption-color);
-}
+  --m__chart-default-color--light: rgb(20, 20, 50);
+  --m__chart-default-color--dark: rgb(180, 180, 220);
 
-.dark-mode {
+  --m__chart-model-1-color--light: rgb(124, 58, 237);
+  --m__chart-model-1-color--dark: rgb(167, 139, 250);
+
+  --m__chart-model-2-color--light: rgb(167, 120, 250);
+  --m__chart-model-2-color--dark: rgb(196, 175, 255);
+
+  --m__chart-model-3-color--light: rgb(196, 167, 255);
+  --m__chart-model-3-color--dark: rgb(220, 208, 255);
+
+  --m__chart-status-success-color--light: rgb(80, 210, 120);
+  --m__chart-status-success-color--dark: rgb(100, 230, 150);
+
+  --m__chart-status-server-error-color--light: rgb(255, 53, 84);
+  --m__chart-status-server-error-color--dark: rgb(255, 90, 110);
+
+  --m__chart-status-client-error-color--light: rgb(255, 120, 80);
+  --m__chart-status-client-error-color--dark: rgb(255, 150, 110);
+
+  --m__chart-status-processing-color--light: rgb(150, 150, 170);
+  --m__chart-status-processing-color--dark: rgb(126, 126, 137);
+
+  /* Resolved semantic tokens via light-dark() */
+
+  color-scheme: light dark;
+
   /* TEXT */
-  --m__text-color: rgb(180, 180, 190);
-  --m__text-link-color: rgb(180, 180, 190);
-  --m__text-hover-color: rgb(255, 255, 255);
-  --m__text-active-color: rgb(200, 200, 210);
-  --m__text-caption-color: color-mix(
-    in srgb,
-    var(--m__text-color) 65%,
-    var(--m__bg-surface-color)
-  );
-  --m__text-inverted-color: rgb(20, 20, 30);
-  --m__text-accent-color: rgb(180, 180, 190);
-  --m__code-color: var(--m__text-caption-color);
-  --m__code-accent-color: rgb(167, 139, 250);
+  --m__text-color: light-dark(var(--m__text-color--light), var(--m__text-color--dark));
+  --m__text-link-color: light-dark(var(--m__text-link-color--light), var(--m__text-link-color--dark));
+  --m__text-hover-color: light-dark(var(--m__text-hover-color--light), var(--m__text-hover-color--dark));
+  --m__text-active-color: light-dark(var(--m__text-active-color--light), var(--m__text-active-color--dark));
+  --m__text-caption-color: light-dark(var(--m__text-caption-color--light), var(--m__text-caption-color--dark));
+  --m__text-inverted-color: light-dark(var(--m__text-inverted-color--light), var(--m__text-inverted-color--dark));
+  --m__text-accent-color: light-dark(var(--m__text-accent-color--light), var(--m__text-accent-color--dark));
+  --m__code-color: light-dark(var(--m__code-color--light), var(--m__code-color--dark));
+  --m__code-accent-color: light-dark(var(--m__code-accent-color--light), var(--m__code-accent-color--dark));
 
   /* BACKGROUND */
-  --m__background-color: rgb(20, 20, 25);
-  --m__bg-surface-color: rgb(27, 27, 39);
-  --m__bg-accent-color: rgb(220, 220, 250);
-  --m__bg-hover-color: rgb(100, 110, 140);
-  --m__bg-active-color: rgb(140, 140, 170);
-  --m__bg-mark-color: rgb(255, 200, 29);
+  --m__background-color: light-dark(var(--m__background-color--light), var(--m__background-color--dark));
+  --m__bg-surface-color: light-dark(var(--m__bg-surface-color--light), var(--m__bg-surface-color--dark));
+  --m__bg-accent-color: light-dark(var(--m__bg-accent-color--light), var(--m__bg-accent-color--dark));
+  --m__bg-hover-color: light-dark(var(--m__bg-hover-color--light), var(--m__bg-hover-color--dark));
+  --m__bg-active-color: light-dark(var(--m__bg-active-color--light), var(--m__bg-active-color--dark));
+  --m__bg-mark-color: light-dark(var(--m__bg-mark-color--light), var(--m__bg-mark-color--dark));
 
   /* UI */
-  --m__ui-control-color: color-mix(
-    in srgb,
-    var(--m__text-color) 15%,
-    var(--m__bg-surface-color)
-  );
-  --m__ui-border-color: color-mix(
-    in srgb,
-    var(--m__text-color) 15%,
-    var(--m__bg-surface-color)
-  );
-  --m__ui-error-color: rgb(255, 53, 84);
-  --m__ui-success-color: rgb(21, 207, 135);
+  --m__ui-control-color: light-dark(var(--m__ui-control-color--light), var(--m__ui-control-color--dark));
+  --m__ui-border-color: light-dark(var(--m__ui-border-color--light), var(--m__ui-border-color--dark));
+  --m__ui-error-color: light-dark(var(--m__ui-error-color--light), var(--m__ui-error-color--dark));
+  --m__ui-success-color: light-dark(var(--m__ui-success-color--light), var(--m__ui-success-color--dark));
 
   /* CHARTS */
-  --m__chart-default-color: rgb(180, 180, 220);
-  --m__chart-model-1-color: rgb(167, 139, 250);
-  --m__chart-model-2-color: rgb(196, 175, 255);
-  --m__chart-model-3-color: rgb(220, 208, 255);
-  --m__chart-status-success-color: rgb(100, 230, 150);
-  --m__chart-status-server-error-color: rgb(255, 90, 110);
-  --m__chart-status-client-error-color: rgb(255, 150, 110);
-  --m__chart-status-processing-color: var(--m__text-caption-color);
+  --m__chart-default-color: light-dark(var(--m__chart-default-color--light), var(--m__chart-default-color--dark));
+  --m__chart-model-1-color: light-dark(var(--m__chart-model-1-color--light), var(--m__chart-model-1-color--dark));
+  --m__chart-model-2-color: light-dark(var(--m__chart-model-2-color--light), var(--m__chart-model-2-color--dark));
+  --m__chart-model-3-color: light-dark(var(--m__chart-model-3-color--light), var(--m__chart-model-3-color--dark));
+  --m__chart-status-success-color: light-dark(var(--m__chart-status-success-color--light), var(--m__chart-status-success-color--dark));
+  --m__chart-status-server-error-color: light-dark(var(--m__chart-status-server-error-color--light), var(--m__chart-status-server-error-color--dark));
+  --m__chart-status-client-error-color: light-dark(var(--m__chart-status-client-error-color--light), var(--m__chart-status-client-error-color--dark));
+  --m__chart-status-processing-color: light-dark(var(--m__chart-status-processing-color--light), var(--m__chart-status-processing-color--dark));
 }
