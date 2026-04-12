@@ -126,22 +126,24 @@ permalink: /playground/
     flex-direction: column;
     gap: 0;
     padding: 0;
+    width: 100%;
   }
 
   .pg-histo-squares {
     display: flex;
     align-items: center;
-    gap: 1px;
-    padding: 3px 0;
+    gap: 0;
+    padding: 0;
+    width: 100%;
   }
   .pg-histo-axis {
     display: flex;
-    gap: 1px;
+    gap: 0;
+    width: 100%;
   }
 
   .pg-histo-tick {
-    flex: 0 0 auto;
-    width: 11px;
+    flex: 1;
     font-size: 0.6rem;
     color: var(--m__text-caption-color);
     text-align: left;
@@ -152,19 +154,20 @@ permalink: /playground/
   }
 
   .pg-histo-bar {
-    flex: 0 0 auto;
-    width: 11px;
-    aspect-ratio: 1 / 2;
-    border-radius: 2px;
+    flex: 1;
+    aspect-ratio: unset;
+    height: 1.2rem;
     cursor: pointer;
     position: relative;
-    transition: opacity 0.15s;
+        filter: brightness(1);
+
+        transition: filter var(--m__unhover-transition-duration) var(--m__transition-easing);
   }
 
   .pg-histo-bar:hover {
     z-index: 10;
-    filter: brightness(1.15);
-    outline: 1.5px solid var(--m__text-caption-color);
+    filter: brightness(1.1);
+    transition: filter var(--m__hover-transition-duration) var(--m__transition-easing);
     outline-offset: 0px;
   }
 
@@ -173,9 +176,6 @@ permalink: /playground/
   }
   .pg-histo-bar.authentic {
     background: var(--m__ui-success-color);
-  }
-  .pg-histo-bar.no-content {
-    background: var(--m__ui-border-color);
   }
 
   .pg-histo-bar.active {
@@ -199,11 +199,21 @@ permalink: /playground/
     z-index: 100;
   }
 
-  /* Results table ──────────────────────────────────────────────────────── */
+.deepfake-header h2 {
+  margin: 0;
+}
+
+  /* RESULT */
 
   .verdict-synthetic { color: var(--m__ui-error-color); }
   .verdict-authentic { color: var(--m__ui-success-color); }
   .verdict-no-content { color: var(--m__text-caption-color); }
+
+  .pg-results-table-section td:first-child,
+  .pg-results-table-section td:last-child,
+  .pg-confidence-cell span {
+    font-variant-numeric: tabular-nums;
+  }
 
   .pg-confidence-cell {
     display: flex;
@@ -857,7 +867,7 @@ permalink: /playground/
     </div>
   </div>
 
-  <div class="m__space M"></div>
+  <div class="m__space L"></div>
   <fieldset class="m__segmented-control" id="pg-tabs">
     <label><input type="radio" name="pg-tab" value="transcription" checked />Transcription</label>
     <label><input type="radio" name="pg-tab" value="deepfake" />Deepfake Detection</label>
@@ -866,7 +876,8 @@ permalink: /playground/
 
   <div class="pg-tab-panel" id="panel-transcription">
 
-      <div class="m__space S"></div>
+      <div class="m__space XS"></div>
+            <h2>Transcription</h2>
 
 
       <!-- Transcript -->
@@ -995,9 +1006,13 @@ permalink: /playground/
   </div>
 
   <div class="pg-tab-panel" id="panel-deepfake" hidden>
+      <div class="m__space XS"></div>
+      <div class="deepfake-header verdict-synthetic">
+      <h2>56% Deepfake</h2>
+      <span>14/25 deepfake segments. 3 segments with >98% conf.</span>
+      </div>
 
-      <div class="m__space S"></div>
-
+      <div class="m__space XS"></div>
       <div class="pg-histogram-section">
         <div class="pg-histogram-scroll">
           <div class="pg-histogram" id="histogram">
@@ -1073,7 +1088,7 @@ permalink: /playground/
                 title="0:14 · Authentic · 92%"
               ></div>
               <div
-                class="pg-histo-bar no-content"
+                class="pg-histo-bar authentic"
                 title="0:15 · No content"
               ></div>
             </div>
@@ -1092,7 +1107,7 @@ permalink: /playground/
               <div class="pg-histo-tick"></div>
               <div class="pg-histo-tick"></div>
               <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:15</div>
+              <div class="pg-histo-tick" style="text-align: right">0:15</div>
             </div>
           </div>
         </div>
@@ -1110,7 +1125,7 @@ permalink: /playground/
           </thead>
           <tbody id="results-tbody">
             <tr>
-              <td>0:01</td>
+              <td>0:00 – 0:04</td>
               <td>
                 <span class="m__tag verdict-authentic">Authentic</span>
               </td>
@@ -1127,7 +1142,7 @@ permalink: /playground/
               </td>
             </tr>
             <tr>
-              <td>0:03</td>
+              <td>0:04 – 0:08</td>
               <td>
                 <span class="m__tag verdict-authentic">Authentic</span>
               </td>
@@ -1144,7 +1159,7 @@ permalink: /playground/
               </td>
             </tr>
             <tr>
-              <td>0:05</td>
+              <td>0:08 – 0:12</td>
               <td>
                 <span class="m__tag verdict-authentic">Authentic</span>
               </td>
@@ -1161,7 +1176,7 @@ permalink: /playground/
               </td>
             </tr>
             <tr>
-              <td>0:07</td>
+              <td>0:12 – 0:16</td>
               <td>
                 <span class="m__tag verdict-synthetic">Synthetic</span>
               </td>
@@ -1178,7 +1193,7 @@ permalink: /playground/
               </td>
             </tr>
             <tr>
-              <td>0:09</td>
+              <td>0:16 – 0:20</td>
               <td>
                 <span class="m__tag verdict-synthetic">Synthetic</span>
               </td>
@@ -1195,7 +1210,7 @@ permalink: /playground/
               </td>
             </tr>
             <tr>
-              <td>0:11</td>
+              <td>0:20 – 0:24</td>
               <td>
                 <span class="m__tag verdict-synthetic">Synthetic</span>
               </td>
@@ -1212,7 +1227,7 @@ permalink: /playground/
               </td>
             </tr>
             <tr>
-              <td>0:13</td>
+              <td>0:24 – 0:28</td>
               <td>
                 <span class="m__tag verdict-authentic">Authentic</span>
               </td>
@@ -1234,7 +1249,7 @@ permalink: /playground/
   </div>
 
   <div class="pg-tab-panel" id="panel-debug-mode" hidden>
-    <div class="m__space S"></div>
+    <div class="m__space XS"></div>
 
     <h2 class="pg-stats-heading">General</h2>
     <table class="pg-stats-table">
@@ -1321,7 +1336,8 @@ permalink: /playground/
 
     <div class="m__space S"></div>
 
-    <div class="m__space S"></div>
+
+    <h2>JSON Response</h2>
     <div class="pg-json-container">
 
       <pre class="pg-json-pre"><span class="pg-json-brace">{</span>
