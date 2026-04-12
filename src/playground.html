@@ -204,10 +204,7 @@ permalink: /playground/
   }
 
   .pg-results-layout {
-    display: grid;
-    grid-template-columns: 1fr 240px;
-    gap: var(--m__space-l);
-    align-items: start;
+    display: block;
   }
 
   .pg-results-main {
@@ -1014,6 +1011,162 @@ permalink: /playground/
       font-size: var(--m__font-size-l);
     }
   }
+
+  /* ── Custom audio player (from modulate-design) ───────────────────────── */
+  .dark-mode {
+    --ids__background-RGB: 30, 30, 35;
+    --ids__bg-surface-RGB: 50, 50, 85;
+    --ids__bg-accent-RGB: 20, 20, 50;
+    --ids__text-RGB: 255, 255, 255;
+    --ids__text-caption-RGB: 128, 128, 128;
+    --ids__text-hover-RGB: 120, 180, 255;
+  }
+
+  :root {
+    --ids__radius: 1.5em;
+    --player-visualization-height: 75%;
+    --player-captions-top: calc(var(--player-visualization-height) + 1.4em);
+    --emotion-neutral-RGB: 90, 90, 110;
+    --emotion-calm-RGB: 110, 140, 190;
+    --emotion-confident-RGB: 110, 140, 190;
+    --emotion-interested-RGB: 110, 140, 190;
+    --emotion-happy-RGB: 255, 120, 80;
+  }
+
+  .ids__rounded { border-radius: var(--ids__radius); overflow: hidden; }
+
+  .pg-player-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    --padding: 0.2em;
+    --speaker-count: 2;
+    height: 9em;
+    background-color: rgba(var(--ids__bg-accent-RGB), 1);
+    margin-bottom: var(--m__space-s);
+  }
+
+  .pg-player-box .player-visualization {
+    position: relative;
+    background-color: rgba(var(--ids__bg-surface-RGB), 1);
+    height: var(--player-visualization-height);
+  }
+
+  .pg-player-box .transcript-clip {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    cursor: pointer;
+  }
+
+  .pg-player-box .clip-visualization {
+    position: absolute;
+    left: 0; right: 0;
+    height: calc(100% / var(--speaker-count));
+    background-color: rgba(var(--emotion-neutral-RGB), 1);
+  }
+
+  .pg-player-box .transcript-clip[data-speaker-index="1"] .clip-visualization { top: 0; }
+  .pg-player-box .transcript-clip[data-speaker-index="2"] .clip-visualization { top: calc(100% / var(--speaker-count)); }
+
+  .pg-player-box .transcript-clip.emotion-calm .clip-visualization      { background-color: rgba(var(--emotion-calm-RGB), 1); }
+  .pg-player-box .transcript-clip.emotion-confident .clip-visualization  { background-color: rgba(var(--emotion-confident-RGB), 1); }
+  .pg-player-box .transcript-clip.emotion-happy .clip-visualization     { background-color: rgba(var(--emotion-happy-RGB), 1); }
+  .pg-player-box .transcript-clip.emotion-interested .clip-visualization { background-color: rgba(var(--emotion-interested-RGB), 1); }
+
+  .pg-player-box .transcript-clip:hover .clip-visualization { filter: brightness(140%) saturate(115%); }
+
+  .pg-player-box .speaker-labels {
+    position: absolute;
+    width: 100%;
+    height: var(--player-visualization-height);
+    pointer-events: none;
+    font-size: 0.8em;
+  }
+
+  .pg-player-box .speaker-label {
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+    padding-left: 0.1em;
+    height: calc(100% / var(--speaker-count));
+  }
+
+  .pg-player-box .speaker-label[data-speaker-index="1"] { top: 0; }
+  .pg-player-box .speaker-label[data-speaker-index="2"] { top: calc(100% / var(--speaker-count)); }
+
+  .pg-player-box .speaker-label span {
+    background-color: rgba(var(--ids__bg-surface-RGB), 1);
+    padding: 0.1em 0.2em 0 0;
+    color: rgba(var(--ids__text-RGB), 0.3);
+  }
+
+  .pg-player-box .player-controls {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: calc(100% - var(--player-visualization-height));
+  }
+
+  .pg-player-box .player-control-center {
+    position: absolute;
+    left: 0; right: 0; top: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .pg-player-box .player-control-center:hover {
+    background-color: rgba(var(--ids__bg-surface-RGB), 0.3);
+    transition-duration: 0s;
+  }
+
+  .pg-player-box .player-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5em;
+    height: 1.5em;
+    transition: transform 0.2s ease;
+    text-decoration: none;
+  }
+
+  .pg-player-box .player-control-center:hover .player-icon { transform: scale(1.1); }
+  .pg-player-box .player-icon svg { width: 100%; height: 100%; fill: rgba(var(--ids__text-hover-RGB), 1); }
+
+  .pg-player-box .player-total-time {
+    position: absolute;
+    top: var(--player-captions-top);
+    right: var(--padding);
+    pointer-events: none;
+  }
+
+  .pg-player-box .player-total-time .total-time {
+    opacity: 0.5;
+    font-size: 0.8em;
+    color: rgba(var(--ids__text-RGB), 1);
+  }
+
+  .pg-player-box .player-position-indicator {
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .pg-player-box .player-position-caption {
+    position: absolute;
+    left: var(--padding);
+    top: var(--player-captions-top);
+  }
+
+  .pg-player-box .player-position-caption span {
+    font-size: 0.8em;
+    opacity: 0.5;
+    color: rgba(var(--ids__text-RGB), 1);
+  }
 </style>
 {% endblock %} {% block content %}
 
@@ -1124,8 +1277,32 @@ permalink: /playground/
 
         <h2 class="pg-results-filename" id="results-filename">interview-sample.mp3</h2>
 
-        <div class="pg-results-player">
-          <audio controls id="results-audio"></audio>
+        <!-- Custom audio player -->
+        <div class="pg-player-box ids__rounded dark-mode" id="audio-player" data-speaker-count="2">
+          <div class="player-visualization">
+            <!-- Speaker 0: Calm → Confident -->
+            <div class="transcript-clip emotion-calm"      data-speaker-index="1" style="left:0%;width:12%"><div class="clip-visualization"></div></div>
+            <div class="transcript-clip emotion-confident" data-speaker-index="1" style="left:28%;width:14%"><div class="clip-visualization"></div></div>
+            <div class="transcript-clip emotion-confident" data-speaker-index="1" style="left:62%;width:38%"><div class="clip-visualization"></div></div>
+            <!-- Speaker 1: Happy → Interested -->
+            <div class="transcript-clip emotion-happy"     data-speaker-index="2" style="left:12%;width:16%"><div class="clip-visualization"></div></div>
+            <div class="transcript-clip emotion-interested" data-speaker-index="2" style="left:42%;width:20%"><div class="clip-visualization"></div></div>
+          </div>
+          <div class="speaker-labels">
+            <div class="speaker-label" data-speaker-index="1"><span>Speaker 0</span></div>
+            <div class="speaker-label" data-speaker-index="2"><span>Speaker 1</span></div>
+          </div>
+          <div class="player-controls">
+            <div class="player-control-center" data-action="play-pause">
+              <a href="#" class="player-icon" data-playing="false">
+                <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg"><polygon fill="currentColor" points="40 30 40 190 190 110 40 30"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="player-total-time"><span class="total-time" data-total-time>0:54</span></div>
+          <div class="player-position-indicator">
+            <div class="player-position-caption"><span data-current-time>0:00</span></div>
+          </div>
         </div>
 
         <!-- Deepfake content (hidden in transcription mode) -->
@@ -1222,20 +1399,6 @@ permalink: /playground/
 
         <!-- Transcription content (visible by default) -->
         <div class="pg-transcript-container visible" id="transcript-container">
-          <!-- Speaker timeline chart -->
-          <div class="pg-stt-chart visible" id="stt-chart" style="margin-bottom:1rem">
-            <div class="pg-stt-chart-row">
-              <div class="pg-stt-chart-label">Speaker 0</div>
-              <div class="pg-stt-chart-bar" style="left:0%;width:12%;background:#42a5f5"></div>
-              <div class="pg-stt-chart-bar" style="left:28%;width:14%;background:#5c6bc0"></div>
-              <div class="pg-stt-chart-bar" style="left:62%;width:38%;background:#5c6bc0"></div>
-            </div>
-            <div class="pg-stt-chart-row">
-              <div class="pg-stt-chart-label">Speaker 1</div>
-              <div class="pg-stt-chart-bar" style="left:12%;width:16%;background:#66bb6a"></div>
-              <div class="pg-stt-chart-bar" style="left:42%;width:20%;background:#7986cb"></div>
-            </div>
-          </div>
           <div class="pg-transcript-list" id="transcript-list">
             <!-- Speaker 0 · Calm · American · Authentic -->
             <div class="pg-transcript-utterance speaker-left" style="--ec:#42a5f5">
@@ -1297,84 +1460,6 @@ permalink: /playground/
       </div>
       <!-- /.pg-results-main -->
 
-      <!-- Deepfake verdict sidebar (hidden in transcription mode) -->
-      <aside class="pg-results-verdict" id="results-verdict" style="display:none">
-        <div class="pg-verdict-ring synthetic" id="verdict-ring">
-          <div class="pg-verdict-ring-icon" id="verdict-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;color:var(--m__ui-error-color)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          </div>
-          <div class="pg-verdict-ring-label" id="verdict-label">Synthetic</div>
-          <div class="pg-verdict-ring-count" id="verdict-count">4 of 7 frames<br>flagged as deepfake</div>
-        </div>
-        <div class="pg-verdict-links">
-          <button class="pg-verdict-link" id="btn-show-stats">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="3" y="3" width="7" height="7" />
-              <rect x="14" y="3" width="7" height="7" />
-              <rect x="3" y="14" width="7" height="7" />
-              <rect x="14" y="14" width="7" height="7" />
-            </svg>
-            Full Statistics
-          </button>
-          <button class="pg-verdict-link" id="btn-show-json">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="16 18 22 12 16 6" />
-              <polyline points="8 6 2 12 8 18" />
-            </svg>
-            JSON Response
-          </button>
-        </div>
-      </aside>
-
-      <!-- Transcription sidebar (visible by default) -->
-      <aside class="pg-results-sidebar visible" id="results-sidebar">
-        <div class="pg-sidebar-links">
-          <button class="pg-verdict-link" id="btn-show-stats-stt">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="3" y="3" width="7" height="7" />
-              <rect x="14" y="3" width="7" height="7" />
-              <rect x="3" y="14" width="7" height="7" />
-              <rect x="14" y="14" width="7" height="7" />
-            </svg>
-            Full Statistics
-          </button>
-          <button class="pg-verdict-link" id="btn-show-json-stt">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="16 18 22 12 16 6" />
-              <polyline points="8 6 2 12 8 18" />
-            </svg>
-            JSON Response
-          </button>
-        </div>
-      </aside>
     </div>
     <!-- /.pg-results-layout -->
   </section>
@@ -1486,19 +1571,15 @@ permalink: /playground/
 {% block scripts %}
 <script>
 (function () {
-  var deepfakeContent   = document.getElementById('deepfake-content');
+  var deepfakeContent     = document.getElementById('deepfake-content');
   var transcriptContainer = document.getElementById('transcript-container');
-  var resultsVerdict    = document.getElementById('results-verdict');
-  var resultsSidebar    = document.getElementById('results-sidebar');
-  var sttOptions        = document.getElementById('stt-options');
+  var sttOptions          = document.getElementById('stt-options');
 
   document.querySelectorAll('input[name="mode"]').forEach(function (radio) {
     radio.addEventListener('change', function () {
       var isDeepfake = this.value === 'deepfake';
-      deepfakeContent.style.display   = isDeepfake ? '' : 'none';
-      resultsVerdict.style.display    = isDeepfake ? '' : 'none';
+      deepfakeContent.style.display = isDeepfake ? '' : 'none';
       transcriptContainer.classList.toggle('visible', !isDeepfake);
-      resultsSidebar.classList.toggle('visible', !isDeepfake);
       sttOptions.classList.toggle('visible', !isDeepfake);
     });
   });
