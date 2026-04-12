@@ -662,6 +662,39 @@ permalink: /playground/
     --ids__text-hover-RGB: 120, 180, 255;
     --ids__bg-hover-RGB: 100, 110, 140;
   }
+  /* Statistics ─────────────────────────────────────────────────────────── */
+
+  .pg-stats-table .pg-stats-label {
+    color: var(--m__text-caption-color);
+    font-weight: 500;
+    padding-right: var(--m__space-m);
+    white-space: nowrap;
+    width: 25%;
+  }
+
+  /* JSON Response ──────────────────────────────────────────────────────── */
+  .pg-json-container {
+    position: relative;
+  }
+
+  .pg-json-pre {
+    background: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-m);
+    padding: var(--m__space-m);
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--m__text-color);
+  }
+
+  .pg-json-key    { color: rgb(124, 58, 237); }
+  .pg-json-string { color: rgb(21, 150, 100); }
+  .pg-json-number { color: rgb(40, 95, 235); }
+  .pg-json-bool   { color: rgb(220, 80, 50); }
+  .pg-json-null   { color: var(--m__text-caption-color); }
+
   /* Demo recordings table ──────────────────────────────────────────────── */
   .pg-demo-recordings tbody tr {
     cursor: pointer;
@@ -1202,8 +1235,153 @@ permalink: /playground/
           </tbody>
         </table>
       </div>
-    </div>
   </ids-nav-item>
+
+  <ids-nav-item id="debug-mode" label="Debug Mode">
+    <div class="m__space S"></div>
+
+    <h2 class="pg-stats-heading">General</h2>
+    <table class="pg-stats-table">
+      <tbody>
+        <tr>
+          <td class="pg-stats-label">Speakers</td>
+          <td class="pg-stats-value">2</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Languages</td>
+          <td class="pg-stats-value">en</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Deepfake analyzed</td>
+          <td class="pg-stats-value">17 / 19 utterances</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Avg deepfake score</td>
+          <td class="pg-stats-value">0.6368</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Max deepfake score</td>
+          <td class="pg-stats-value">0.9810</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="m__space XS"></div>
+    <h2 class="pg-stats-heading">Audio</h2>
+    <table class="pg-stats-table">
+      <tbody>
+        <tr>
+          <td class="pg-stats-label">File Name</td>
+          <td class="pg-stats-value">AIAgentFrustration.mp3</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">File Size</td>
+          <td class="pg-stats-value">1.87 MB</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">File Type</td>
+          <td class="pg-stats-value">audio/mpeg</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Audio Duration</td>
+          <td class="pg-stats-value">1m 37.3s</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="m__space XS"></div>
+    <h2 class="pg-stats-heading">Performance</h2>
+    <table class="pg-stats-table">
+      <tbody>
+        <tr>
+          <td class="pg-stats-label">Processing Time</td>
+          <td class="pg-stats-value">2.66s</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Processing Factor</td>
+          <td class="pg-stats-value">36.6x real-time</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="m__space XS"></div>
+    <h2 class="pg-stats-heading">Request</h2>
+    <table class="pg-stats-table">
+      <tbody>
+        <tr>
+          <td class="pg-stats-label">HTTP</td>
+          <td class="pg-stats-value">200 OK</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Endpoint</td>
+          <td class="pg-stats-value">/api/velma-2-stt-batch</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Response Size</td>
+          <td class="pg-stats-value">5.8 KB</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="m__space S"></div>
+
+    <div class="m__space S"></div>
+    <div class="pg-json-container">
+
+      <pre class="pg-json-pre"><span class="pg-json-brace">{</span>
+  <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">0.9788</span>,
+  <span class="pg-json-key">"utterances"</span>: <span class="pg-json-brace">[</span>
+    <span class="pg-json-brace">{</span>
+      <span class="pg-json-key">"utterance_uid"</span>: <span class="pg-json-string">"ec69b9e7-8fac-4b3e-a4da-ea9773d56aed"</span>,
+      <span class="pg-json-key">"text"</span>: <span class="pg-json-string">"Track package."</span>,
+      <span class="pg-json-key">"start_ms"</span>: <span class="pg-json-number">91620</span>,
+      <span class="pg-json-key">"duration_ms"</span>: <span class="pg-json-number">960</span>,
+      <span class="pg-json-key">"speaker"</span>: <span class="pg-json-number">2</span>,
+      <span class="pg-json-key">"language"</span>: <span class="pg-json-string">"en"</span>,
+      <span class="pg-json-key">"emotion"</span>: <span class="pg-json-string">"Excited"</span>,
+      <span class="pg-json-key">"accent"</span>: <span class="pg-json-string">"American"</span>,
+      <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">1.1000000000000001</span>
+    <span class="pg-json-brace">}</span>,
+    <span class="pg-json-brace">{</span>
+      <span class="pg-json-key">"utterance_uid"</span>: <span class="pg-json-string">"4003b94d-b15d-46b1-9276-80366dc178fc"</span>,
+      <span class="pg-json-key">"text"</span>: <span class="pg-json-string">"Thank you. Did you say you'd like to place an order?"</span>,
+      <span class="pg-json-key">"start_ms"</span>: <span class="pg-json-number">3000</span>,
+      <span class="pg-json-key">"duration_ms"</span>: <span class="pg-json-number">3800</span>,
+      <span class="pg-json-key">"speaker"</span>: <span class="pg-json-number">1</span>,
+      <span class="pg-json-key">"language"</span>: <span class="pg-json-string">"en"</span>,
+      <span class="pg-json-key">"emotion"</span>: <span class="pg-json-string">"Interested"</span>,
+      <span class="pg-json-key">"accent"</span>: <span class="pg-json-string">"American"</span>,
+      <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">0.9723</span>
+    <span class="pg-json-brace">}</span>,
+    <span class="pg-json-brace">{</span>
+      <span class="pg-json-key">"utterance_uid"</span>: <span class="pg-json-string">"a1c82f3d-09e2-4f7a-b831-22de94a05c61"</span>,
+      <span class="pg-json-key">"text"</span>: <span class="pg-json-string">"I need to check on my delivery, it's been two weeks."</span>,
+      <span class="pg-json-key">"start_ms"</span>: <span class="pg-json-number">8200</span>,
+      <span class="pg-json-key">"duration_ms"</span>: <span class="pg-json-number">4100</span>,
+      <span class="pg-json-key">"speaker"</span>: <span class="pg-json-number">2</span>,
+      <span class="pg-json-key">"language"</span>: <span class="pg-json-string">"en"</span>,
+      <span class="pg-json-key">"emotion"</span>: <span class="pg-json-string">"Frustrated"</span>,
+      <span class="pg-json-key">"accent"</span>: <span class="pg-json-string">"American"</span>,
+      <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">0.1042</span>
+    <span class="pg-json-brace">}</span>,
+    <span class="pg-json-brace">{</span>
+      <span class="pg-json-key">"utterance_uid"</span>: <span class="pg-json-string">"7fd301ea-c44b-48d2-a96e-5b3c71d0f882"</span>,
+      <span class="pg-json-key">"text"</span>: <span class="pg-json-string">"I understand your frustration. Let me pull up your order right now."</span>,
+      <span class="pg-json-key">"start_ms"</span>: <span class="pg-json-number">12400</span>,
+      <span class="pg-json-key">"duration_ms"</span>: <span class="pg-json-number">3600</span>,
+      <span class="pg-json-key">"speaker"</span>: <span class="pg-json-number">1</span>,
+      <span class="pg-json-key">"language"</span>: <span class="pg-json-string">"en"</span>,
+      <span class="pg-json-key">"emotion"</span>: <span class="pg-json-string">"Calm"</span>,
+      <span class="pg-json-key">"accent"</span>: <span class="pg-json-string">"American"</span>,
+      <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">0.9812</span>
+    <span class="pg-json-brace">}</span>
+  <span class="pg-json-brace">]</span>
+<span class="pg-json-brace">}</span></pre>
+    </div>
+    <div class="m__space S"></div>
+  </ids-nav-item>
+
+</div>
 
   <div class="m__wrapper">
     <!-- Upload area -->
