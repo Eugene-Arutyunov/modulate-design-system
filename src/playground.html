@@ -3,17 +3,1505 @@ pageTitle: Playground
 permalink: /playground/
 ---
 
-{% extends 'landing-layout.html' %} {% block content %}
+{% extends 'landing-layout.html' %} {% block head %}
+<style>
+  .pg-mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--m__space-m);
+    margin-bottom: var(--m__space-xxs);
+  }
+
+  .pg-mode-toggle input[type="radio"] {
+    display: none;
+  }
+
+  .pg-mode-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0;
+    font-size: var(--m__font-size-xxl);
+    font-weight: 700;
+    color: var(--m__bg-accent-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    user-select: none;
+    letter-spacing: -0.02em;
+    border-bottom: 2.5px solid transparent;
+    padding-bottom: 0.1rem;
+  }
+
+  .pg-mode-toggle label:hover {
+    border-bottom-color: var(--m__chart-model-3-color);
+  }
+
+  .pg-mode-toggle input[type="radio"]:checked + label {
+    border-bottom-color: var(--m__chart-model-1-color);
+  }
+
+  /* Options row ────────────────────────────────────────────────────────── */
+  .pg-options-row {
+    min-height: calc(1rem + var(--m__space-xs) * 2 + var(--m__space-l));
+    display: flex;
+    align-items: flex-start;
+    padding-top: var(--m__space-xs);
+    padding-bottom: var(--m__space-m);
+  }
+
+  .pg-stt-options {
+    display: none;
+    flex-wrap: wrap;
+    gap: var(--m__space-xs) var(--m__space-m);
+  }
+
+  .pg-stt-options.visible {
+    display: flex;
+  }
+
+  .pg-stt-option-divider {
+    color: var(--m__text-caption-color);
+    padding: 0 0.1rem;
+    user-select: none;
+  }
+
+  .pg-stt-option {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--m__font-size-s);
+    font-weight: 500;
+    color: var(--m__text-color);
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+  }
+
+  .pg-stt-option::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--m__bg-accent-color);
+    color: var(--m__text-inverted-color);
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0s;
+    z-index: 50;
+  }
+
+  .pg-stt-option:hover::after {
+    opacity: 1;
+  }
+
+  .pg-stt-option input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--m__chart-model-1-color);
+    cursor: pointer;
+  }
+
+  /* Action bar ─────────────────────────────────────────────────────────── */
+  .pg-results-actions {
+    display: flex;
+    gap: var(--m__space-xs);
+    margin-bottom: var(--m__space-l);
+  }
+
+  .pg-results-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    flex: 1;
+    white-space: nowrap;
+    padding: 0.7rem 1.8rem;
+    font-size: var(--m__font-size-s);
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--m__text-color);
+    background: var(--m__bg-surface-color);
+    border: 1.5px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-m);
+    cursor: pointer;
+    transition:
+      border-color 0.2s,
+      background 0.2s,
+      box-shadow 0.2s;
+    position: relative;
+  }
+
+  .pg-results-action:hover {
+    border-color: var(--m__chart-model-3-color);
+    background: color-mix(
+      in srgb,
+      var(--m__chart-model-1-color) 4%,
+      transparent
+    );
+    box-shadow: 0 2px 8px
+      color-mix(in srgb, var(--m__chart-model-1-color) 8%, transparent);
+  }
+
+  .pg-results-action svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--m__chart-model-1-color);
+    flex-shrink: 0;
+  }
+
+  .pg-results-action-upload.drag-over {
+    border-color: var(--m__chart-model-1-color);
+    background: color-mix(
+      in srgb,
+      var(--m__chart-model-1-color) 8%,
+      transparent
+    );
+  }
+
+  .pg-results-action.recording {
+    border-color: var(--m__ui-error-color);
+    background: color-mix(in srgb, var(--m__ui-error-color) 6%, transparent);
+    animation: pg-pulse-recording 1.5s ease-in-out infinite;
+  }
+
+  .pg-results-action.recording svg {
+    color: var(--m__ui-error-color);
+  }
+
+  @keyframes pg-pulse-recording {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0
+        color-mix(in srgb, var(--m__ui-error-color) 40%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 6px transparent;
+    }
+  }
+
+  .pg-results-action .file-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .file-input {
+    display: none;
+  }
+
+  /* Results layout ─────────────────────────────────────────────────────── */
+  .pg-results-section {
+    margin-bottom: var(--m__space-xl);
+    flex: 1;
+  }
+
+  .pg-results-layout {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: var(--m__space-l);
+    align-items: start;
+  }
+
+  .pg-results-main {
+    min-width: 0;
+  }
+
+  .pg-results-filename {
+    font-size: var(--m__font-size-xxl);
+    font-weight: 700;
+    color: var(--m__bg-accent-color);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--m__space-xxs);
+    word-break: break-word;
+  }
+
+  .pg-results-player {
+    width: 100%;
+    margin-bottom: var(--m__space-s);
+    border-radius: var(--m__radius-m);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--m__background-color);
+    padding: var(--m__space-xs) 0;
+  }
+
+  .pg-results-player audio {
+    width: 100%;
+    height: 44px;
+    border-radius: var(--m__radius-m);
+  }
+
+  /* Histogram ──────────────────────────────────────────────────────────── */
+  .pg-histogram-section {
+    margin-bottom: var(--m__space-s);
+  }
+  .pg-histogram-scroll {
+    overflow-x: auto;
+  }
+  .pg-histogram {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+  }
+
+  .pg-histo-squares {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 3px 0;
+  }
+  .pg-histo-axis {
+    display: flex;
+    gap: 1px;
+  }
+
+  .pg-histo-tick {
+    flex: 0 0 auto;
+    width: 11px;
+    font-size: 0.6rem;
+    color: var(--m__text-caption-color);
+    text-align: left;
+    height: 1rem;
+    line-height: 1rem;
+    overflow: visible;
+    white-space: nowrap;
+  }
+
+  .pg-histo-bar {
+    flex: 0 0 auto;
+    width: 11px;
+    aspect-ratio: 1 / 2;
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    transition: opacity 0.15s;
+  }
+
+  .pg-histo-bar:hover {
+    z-index: 10;
+    filter: brightness(1.15);
+    outline: 1.5px solid var(--m__text-caption-color);
+    outline-offset: 0px;
+  }
+
+  .pg-histo-bar.synthetic {
+    background: var(--m__ui-error-color);
+  }
+  .pg-histo-bar.authentic {
+    background: var(--m__ui-success-color);
+  }
+  .pg-histo-bar.no-content {
+    background: var(--m__ui-border-color);
+  }
+
+  .pg-histo-bar.active {
+    outline: 2px solid var(--m__bg-accent-color);
+    outline-offset: 1px;
+    z-index: 5;
+    filter: none;
+  }
+
+  .pg-histo-bar-tooltip {
+    display: none;
+    position: fixed;
+    background: var(--m__bg-accent-color);
+    color: var(--m__text-inverted-color);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Results table ──────────────────────────────────────────────────────── */
+  .pg-results-table-section {
+    margin-bottom: var(--m__space-m);
+  }
+
+  .pg-verdict-pill {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 2rem;
+    font-size: var(--m__font-size-xs);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .pg-verdict-pill.synthetic {
+    background: color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
+    color: var(--m__ui-error-color);
+  }
+
+  .pg-verdict-pill.authentic {
+    background: color-mix(in srgb, var(--m__ui-success-color) 12%, transparent);
+    color: rgb(10, 150, 95);
+  }
+
+  .pg-verdict-pill.no-content,
+  .pg-verdict-pill.uncertain {
+    background: color-mix(in srgb, var(--m__ui-border-color) 40%, transparent);
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-verdict-pill.sm {
+    font-size: 0.65rem;
+    padding: 0.05rem 0.35rem;
+  }
+
+  .pg-confidence-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pg-confidence-bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--m__ui-border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 80px;
+  }
+
+  .pg-confidence-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .pg-confidence-bar-fill.synthetic {
+    background: var(--m__ui-error-color);
+  }
+  .pg-confidence-bar-fill.authentic {
+    background: var(--m__ui-success-color);
+  }
+  .pg-confidence-bar-fill.no-content {
+    background: var(--m__ui-border-color);
+  }
+
+  /* Verdict ring sidebar ───────────────────────────────────────────────── */
+  .pg-results-verdict {
+    text-align: center;
+    margin-top: 9.5rem;
+    padding: 0 var(--m__space-m);
+    position: sticky;
+    top: min(0.4rem, calc(100vh - 26rem));
+  }
+
+  .pg-verdict-ring {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    gap: 0.15rem;
+  }
+
+  .pg-verdict-ring.synthetic {
+    background: color-mix(in srgb, var(--m__ui-error-color) 6%, transparent);
+    box-shadow:
+      0 0 0 3px var(--m__ui-error-color),
+      0 0 50px color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
+  }
+
+  .pg-verdict-ring.authentic {
+    background: color-mix(in srgb, var(--m__ui-success-color) 6%, transparent);
+    box-shadow:
+      0 0 0 3px var(--m__ui-success-color),
+      0 0 50px color-mix(in srgb, var(--m__ui-success-color) 12%, transparent);
+  }
+
+  .pg-verdict-ring.pending {
+    background: color-mix(
+      in srgb,
+      var(--m__text-caption-color) 6%,
+      transparent
+    );
+    box-shadow:
+      0 0 0 3px var(--m__ui-border-color),
+      0 0 50px color-mix(in srgb, var(--m__text-caption-color) 8%, transparent);
+  }
+
+  .pg-verdict-ring-icon {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .pg-verdict-ring.synthetic .pg-verdict-ring-icon {
+    color: var(--m__ui-error-color);
+  }
+  .pg-verdict-ring.authentic .pg-verdict-ring-icon {
+    color: var(--m__ui-success-color);
+  }
+  .pg-verdict-ring.pending .pg-verdict-ring-icon {
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-verdict-ring-label {
+    font-size: var(--m__font-size-xl);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .pg-verdict-ring.synthetic .pg-verdict-ring-label {
+    color: var(--m__ui-error-color);
+  }
+  .pg-verdict-ring.authentic .pg-verdict-ring-label {
+    color: rgb(10, 150, 95);
+  }
+  .pg-verdict-ring.pending .pg-verdict-ring-label {
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-verdict-ring-count {
+    font-size: var(--m__font-size-xs);
+    font-weight: 500;
+    line-height: 1.3;
+    margin-top: 0.1rem;
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-verdict-links {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    margin-top: var(--m__space-s);
+  }
+
+  .pg-verdict-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: var(--m__font-size-xs);
+    font-weight: 500;
+    color: var(--m__text-caption-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+    transition: color 0.2s;
+  }
+
+  .pg-verdict-link:hover {
+    color: var(--m__chart-model-1-color);
+  }
+  .pg-verdict-link svg {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  /* Transcription ──────────────────────────────────────────────────────── */
+  .pg-transcript-container {
+    display: none;
+  }
+  .pg-transcript-container.visible {
+    display: block;
+  }
+
+  .pg-transcript-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pg-transcript-utterance {
+    background: var(--m__bg-surface-color);
+    border-radius: 2rem;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    transition: filter 0.15s;
+  }
+
+  .pg-transcript-utterance.speaker-left {
+    margin-right: 3rem;
+  }
+  .pg-transcript-utterance.speaker-right {
+    margin-left: 3rem;
+  }
+  .pg-transcript-utterance:hover {
+    filter: brightness(0.97);
+  }
+
+  .pg-transcript-utterance.active {
+    background: color-mix(
+      in srgb,
+      var(--ec, var(--m__chart-model-1-color)) 20%,
+      var(--m__bg-surface-color)
+    ) !important;
+  }
+
+  .pg-transcript-utterance-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.2rem;
+    font-size: var(--m__font-size-xs);
+    opacity: 0.8;
+  }
+
+  .pg-transcript-time {
+    font-variant-numeric: tabular-nums;
+  }
+  .pg-transcript-emotion {
+    color: #0078c8;
+    font-weight: 700;
+  }
+  .pg-transcript-accent {
+    color: var(--m__text-caption-color);
+  }
+  .pg-transcript-deepfake-score {
+    color: var(--m__text-caption-color);
+    font-family: monospace;
+    font-size: 0.75rem;
+  }
+  .pg-transcript-lang {
+    font-size: 0.7rem;
+    color: var(--m__text-caption-color);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .pg-transcript-text {
+    font-size: var(--m__font-size-m);
+    line-height: 1.6;
+    color: var(--m__text-color);
+  }
+  .pg-transcript-text.partial {
+    font-style: italic;
+    color: var(--m__text-caption-color);
+  }
+
+  .pii-blur {
+    filter: blur(5px);
+    transition: filter 0.2s;
+    cursor: help;
+    padding: 0 0.15em;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--m__ui-error-color) 8%, transparent);
+  }
+
+  .pii-blur:hover {
+    filter: none;
+    background: color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
+  }
+
+  .pg-transcript-empty {
+    text-align: center;
+    padding: var(--m__space-xl) var(--m__space-m);
+    color: var(--m__text-caption-color);
+    font-size: var(--m__font-size-s);
+  }
+
+  /* STT emotion chart ──────────────────────────────────────────────────── */
+  .pg-stt-chart {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: var(--m__space-s);
+  }
+  .pg-stt-chart.visible {
+    display: flex;
+  }
+
+  .pg-stt-chart-row {
+    position: relative;
+    height: 22px;
+  }
+
+  .pg-stt-chart-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 0.6rem;
+    color: #000;
+    font-weight: 600;
+    z-index: 2;
+    pointer-events: none;
+    padding-left: 0.2rem;
+  }
+
+  .pg-stt-chart-bar {
+    position: absolute;
+    top: 0;
+    height: 22px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    min-width: 3px;
+  }
+
+  .pg-stt-chart-bar:hover {
+    z-index: 10;
+    filter: brightness(1.15);
+    outline: 1.5px solid var(--m__text-caption-color);
+  }
+  .pg-stt-chart-bar.active {
+    outline: 2px solid var(--m__bg-accent-color);
+    outline-offset: 1px;
+    z-index: 5;
+  }
+
+  /* Transcription sidebar ──────────────────────────────────────────────── */
+  .pg-results-sidebar {
+    display: none;
+    padding: 0 var(--m__space-m);
+    position: sticky;
+    top: var(--m__space-m);
+    margin-top: calc(
+      48px + var(--m__space-l) + 37px + var(--m__space-xxs) + var(--m__space-xs)
+    );
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .pg-results-sidebar.visible {
+    display: block;
+  }
+
+  .pg-sidebar-links {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  /* Rate limit bar ─────────────────────────────────────────────────────── */
+  .pg-rate-limit-bar {
+    padding: var(--m__space-xs) 0;
+    text-align: center;
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-caption-color);
+  }
+
+  /* Modals ─────────────────────────────────────────────────────────────── */
+  .pg-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pg-modal-backdrop.visible {
+    display: flex;
+  }
+
+  .pg-modal {
+    background: var(--m__background-color);
+    border-radius: var(--m__radius-l);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    max-width: 640px;
+    width: 90vw;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .pg-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--m__space-m) var(--m__space-m) var(--m__space-s);
+    border-bottom: 1px solid var(--m__ui-border-color);
+  }
+
+  .pg-modal-header h3 {
+    font-size: var(--m__font-size-l);
+    font-weight: 700;
+    color: var(--m__bg-accent-color);
+  }
+
+  .pg-modal-close {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-m);
+    cursor: pointer;
+    color: var(--m__text-caption-color);
+    transition: background 0.15s;
+  }
+
+  .pg-modal-close:hover {
+    background: var(--m__ui-border-color);
+  }
+  .pg-modal-close svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .pg-modal-body {
+    padding: var(--m__space-m);
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  /* Stats table (inside modal) */
+  .pg-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--m__font-size-s);
+  }
+
+  .pg-stats-table tr.pg-stats-group-row td {
+    font-size: var(--m__font-size-xs);
+    font-weight: 600;
+    color: var(--m__text-caption-color);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: var(--m__space-m) 0 0.3rem;
+    border-bottom: none;
+    text-align: left;
+  }
+
+  .pg-stats-table tr.pg-stats-group-row:first-child td {
+    padding-top: 0;
+  }
+
+  .pg-stats-table td {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--m__ui-border-color) 50%, transparent);
+    vertical-align: baseline;
+  }
+
+  .pg-stats-label {
+    color: var(--m__text-caption-color);
+    font-weight: 500;
+    padding-right: var(--m__space-m);
+    white-space: nowrap;
+  }
+  .pg-stats-value {
+    font-weight: 600;
+    color: var(--m__bg-accent-color);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* JSON modal */
+  .pg-json-container {
+    position: relative;
+  }
+
+  .pg-json-pre {
+    background: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-m);
+    padding: var(--m__space-m);
+    font-family: var(--m__font-mono, monospace);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--m__text-color);
+    max-height: 60vh;
+  }
+
+  .pg-json-copy-btn {
+    position: absolute;
+    top: var(--m__space-xs);
+    right: var(--m__space-xs);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.7rem;
+    font-size: var(--m__font-size-xs);
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--m__text-color);
+    background: var(--m__background-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-s);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .pg-json-copy-btn:hover {
+    background: var(--m__ui-border-color);
+  }
+  .pg-json-copy-btn svg {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+
+  /* Error toast ────────────────────────────────────────────────────────── */
+  .pg-error-toast {
+    display: none;
+    position: fixed;
+    top: var(--m__space-l);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--m__ui-error-color);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--m__radius-m);
+    font-size: var(--m__font-size-s);
+    font-weight: 500;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .pg-error-toast.visible {
+    display: block;
+  }
+
+  /* Analysis overlay ───────────────────────────────────────────────────── */
+  .pg-analysis-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+  }
+
+  .pg-analysis-overlay.visible {
+    display: flex;
+  }
+
+  .pg-analysis-overlay .pg-overlay-header {
+    padding: var(--m__space-m);
+    display: flex;
+    align-items: center;
+    gap: var(--m__space-xs);
+    max-width: 1040px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .pg-analysis-overlay .pg-overlay-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--m__space-m);
+  }
+
+  .pg-analysis-overlay .pg-overlay-footer {
+    padding: var(--m__space-m) 0 var(--m__space-l);
+    text-align: center;
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-analysis-overlay h3 {
+    font-size: var(--m__font-size-xl);
+    font-weight: 700;
+    color: var(--m__bg-accent-color);
+  }
+  .pg-analysis-overlay p {
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-overlay-error {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--m__space-s);
+    width: 100%;
+    max-width: 640px;
+    margin-top: var(--m__space-s);
+  }
+
+  .pg-analysis-overlay.error .pg-overlay-error {
+    display: flex;
+  }
+
+  .pg-overlay-error-msg {
+    color: var(--m__ui-error-color) !important;
+    font-weight: 600;
+    font-size: var(--m__font-size-s) !important;
+    text-align: center;
+  }
+
+  .pg-overlay-error-json {
+    width: 100%;
+    max-height: 280px;
+    overflow: auto;
+    background: var(--m__bg-surface-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-m);
+    padding: var(--m__space-s);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    text-align: left;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--m__text-color);
+  }
+
+  .pg-overlay-dismiss-btn {
+    padding: 0.4rem 1.2rem;
+    border-radius: 2rem;
+    border: 1px solid var(--m__ui-border-color);
+    background: var(--m__background-color);
+    font-size: var(--m__font-size-s);
+    cursor: pointer;
+    color: var(--m__text-color);
+    font-family: inherit;
+  }
+
+  .pg-overlay-dismiss-btn:hover {
+    background: var(--m__bg-surface-color);
+  }
+
+  .pg-progress-track {
+    width: 320px;
+    height: 6px;
+    background: var(--m__ui-border-color);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .pg-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--m__chart-model-1-color);
+    border-radius: 3px;
+    transition: width 0.3s linear;
+  }
+
+  /* Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .pg-results-layout {
+      display: block;
+    }
+    .pg-results-verdict {
+      position: static;
+      margin-top: 0;
+      padding: var(--m__space-s) var(--m__space-m);
+    }
+    .pg-results-sidebar {
+      position: static;
+    }
+    .pg-verdict-ring {
+      width: 140px;
+      height: 140px;
+    }
+    .pg-verdict-ring-label {
+      font-size: var(--m__font-size-l);
+    }
+    .pg-results-actions {
+      flex-wrap: wrap;
+    }
+    .pg-mode-toggle label {
+      font-size: var(--m__font-size-l);
+    }
+  }
+</style>
+{% endblock %} {% block content %}
 
 <div class="m__wrapper">
-  <div class="m__space XL"></div>
-  <main>
-    <h1>Playground</h1>
+  <div class="m__space L"></div>
 
-    <p class="loud">Interactive API playground — coming soon.</p>
+  <!-- Mode Toggle -->
+  <div class="pg-mode-toggle">
+    <input
+      type="radio"
+      name="mode"
+      id="mode-transcription"
+      value="transcription"
+      checked
+    />
+    <label for="mode-transcription">Transcription</label>
+    <input type="radio" name="mode" id="mode-deepfake" value="deepfake" />
+    <label for="mode-deepfake">Deepfake Standalone</label>
+  </div>
 
-    <div class="m__space XL"></div>
-  </main>
+  <!-- Options row -->
+  <div class="pg-options-row" id="options-row">
+    <div class="pg-stt-options visible" id="stt-options">
+      <label
+        class="pg-stt-option"
+        data-tip="Identify different speakers in the audio"
+      >
+        <input type="checkbox" id="opt-diarization" checked /> Diarization
+      </label>
+      <label
+        class="pg-stt-option"
+        data-tip="Detect synthetic/AI-generated voice (deepfake) per utterance"
+      >
+        <input type="checkbox" id="opt-deepfake" checked /> Deepfake
+      </label>
+      <label
+        class="pg-stt-option"
+        data-tip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
+      >
+        <input type="checkbox" id="opt-emotion" checked /> Emotions
+      </label>
+      <label
+        class="pg-stt-option"
+        data-tip="Detect speaker accent (e.g. American, British)"
+      >
+        <input type="checkbox" id="opt-accent" checked /> Accent
+      </label>
+      <label
+        class="pg-stt-option"
+        data-tip="Tag personally identifiable and health information"
+      >
+        <input type="checkbox" id="opt-pii" checked /> PII/PHI
+      </label>
+      <span class="pg-stt-option-divider">|</span>
+      <label class="pg-stt-option" data-tip="Fast transcription, English only">
+        <input type="checkbox" id="opt-fast" /> Fast
+      </label>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <section class="pg-results-section" id="results-section">
+    <div class="pg-results-layout">
+      <div class="pg-results-main">
+        <!-- Action bar -->
+        <div class="pg-results-actions">
+          <div
+            class="pg-results-action pg-results-action-upload"
+            id="results-upload-action"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            <span>Upload or drop a file</span>
+            <input
+              type="file"
+              class="file-input"
+              id="results-file-input"
+              accept="audio/*,.wav,.mp3,.ogg,.flac,.aac,.mp4,.mov,.webm,.opus"
+            />
+          </div>
+          <div class="pg-results-action" id="results-record-action">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" />
+              <path d="M19 10v2a7 7 0 01-14 0v-2" />
+              <line x1="12" y1="19" x2="12" y2="23" />
+              <line x1="8" y1="23" x2="16" y2="23" />
+            </svg>
+            <span>Start streaming</span>
+          </div>
+        </div>
+
+        <h2 class="pg-results-filename" id="results-filename">interview-sample.mp3</h2>
+
+        <div class="pg-results-player">
+          <audio controls id="results-audio"></audio>
+        </div>
+
+        <!-- Deepfake content (hidden in transcription mode) -->
+        <div id="deepfake-content" style="display:none">
+          <div class="pg-histogram-section">
+            <div class="pg-histogram-scroll">
+              <div class="pg-histogram" id="histogram">
+                <div class="pg-histo-squares">
+                  <div class="pg-histo-bar authentic" style="opacity:.97" title="0:01 · Authentic · 97%"></div>
+                  <div class="pg-histo-bar authentic" style="opacity:.94" title="0:02 · Authentic · 94%"></div>
+                  <div class="pg-histo-bar authentic" style="opacity:.91" title="0:03 · Authentic · 91%"></div>
+                  <div class="pg-histo-bar authentic" style="opacity:.96" title="0:04 · Authentic · 96%"></div>
+                  <div class="pg-histo-bar authentic" style="opacity:.89" title="0:05 · Authentic · 89%"></div>
+                  <div class="pg-histo-bar authentic" style="opacity:.93" title="0:06 · Authentic · 93%"></div>
+                  <div class="pg-histo-bar synthetic" style="opacity:.78" title="0:07 · Synthetic · 78%"></div>
+                  <div class="pg-histo-bar synthetic" style="opacity:.94" title="0:08 · Synthetic · 94%"></div>
+                  <div class="pg-histo-bar synthetic" style="opacity:.97" title="0:09 · Synthetic · 97%"></div>
+                  <div class="pg-histo-bar synthetic" style="opacity:.91" title="0:10 · Synthetic · 91%"></div>
+                  <div class="pg-histo-bar synthetic" style="opacity:.88" title="0:11 · Synthetic · 88%"></div>
+                  <div class="pg-histo-bar synthetic" style="opacity:.95" title="0:12 · Synthetic · 95%"></div>
+                  <div class="pg-histo-bar authentic" style="opacity:.86" title="0:13 · Authentic · 86%"></div>
+                  <div class="pg-histo-bar authentic" style="opacity:.92" title="0:14 · Authentic · 92%"></div>
+                  <div class="pg-histo-bar no-content" title="0:15 · No content"></div>
+                </div>
+                <div class="pg-histo-axis">
+                  <div class="pg-histo-tick">0:00</div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick">0:05</div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick">0:10</div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick"></div>
+                  <div class="pg-histo-tick">0:15</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pg-results-table-section">
+            <table>
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Verdict</th>
+                  <th>Confidence</th>
+                </tr>
+              </thead>
+              <tbody id="results-tbody">
+                <tr>
+                  <td>0:01</td>
+                  <td><span class="pg-verdict-pill authentic">Authentic</span></td>
+                  <td><div class="pg-confidence-cell"><div class="pg-confidence-bar-track"><div class="pg-confidence-bar-fill authentic" style="width:97%"></div></div><span>97.0%</span></div></td>
+                </tr>
+                <tr>
+                  <td>0:03</td>
+                  <td><span class="pg-verdict-pill authentic">Authentic</span></td>
+                  <td><div class="pg-confidence-cell"><div class="pg-confidence-bar-track"><div class="pg-confidence-bar-fill authentic" style="width:91%"></div></div><span>91.2%</span></div></td>
+                </tr>
+                <tr>
+                  <td>0:05</td>
+                  <td><span class="pg-verdict-pill authentic">Authentic</span></td>
+                  <td><div class="pg-confidence-cell"><div class="pg-confidence-bar-track"><div class="pg-confidence-bar-fill authentic" style="width:93%"></div></div><span>93.4%</span></div></td>
+                </tr>
+                <tr>
+                  <td>0:07</td>
+                  <td><span class="pg-verdict-pill synthetic">Synthetic</span></td>
+                  <td><div class="pg-confidence-cell"><div class="pg-confidence-bar-track"><div class="pg-confidence-bar-fill synthetic" style="width:78%"></div></div><span>78.3%</span></div></td>
+                </tr>
+                <tr>
+                  <td>0:09</td>
+                  <td><span class="pg-verdict-pill synthetic">Synthetic</span></td>
+                  <td><div class="pg-confidence-cell"><div class="pg-confidence-bar-track"><div class="pg-confidence-bar-fill synthetic" style="width:97%"></div></div><span>96.8%</span></div></td>
+                </tr>
+                <tr>
+                  <td>0:11</td>
+                  <td><span class="pg-verdict-pill synthetic">Synthetic</span></td>
+                  <td><div class="pg-confidence-cell"><div class="pg-confidence-bar-track"><div class="pg-confidence-bar-fill synthetic" style="width:88%"></div></div><span>87.6%</span></div></td>
+                </tr>
+                <tr>
+                  <td>0:13</td>
+                  <td><span class="pg-verdict-pill authentic">Authentic</span></td>
+                  <td><div class="pg-confidence-cell"><div class="pg-confidence-bar-track"><div class="pg-confidence-bar-fill authentic" style="width:86%"></div></div><span>86.2%</span></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Transcription content (visible by default) -->
+        <div class="pg-transcript-container visible" id="transcript-container">
+          <!-- Speaker timeline chart -->
+          <div class="pg-stt-chart visible" id="stt-chart" style="margin-bottom:1rem">
+            <div class="pg-stt-chart-row">
+              <div class="pg-stt-chart-label">Speaker 0</div>
+              <div class="pg-stt-chart-bar" style="left:0%;width:12%;background:#42a5f5"></div>
+              <div class="pg-stt-chart-bar" style="left:28%;width:14%;background:#5c6bc0"></div>
+              <div class="pg-stt-chart-bar" style="left:62%;width:38%;background:#5c6bc0"></div>
+            </div>
+            <div class="pg-stt-chart-row">
+              <div class="pg-stt-chart-label">Speaker 1</div>
+              <div class="pg-stt-chart-bar" style="left:12%;width:16%;background:#66bb6a"></div>
+              <div class="pg-stt-chart-bar" style="left:42%;width:20%;background:#7986cb"></div>
+            </div>
+          </div>
+          <div class="pg-transcript-list" id="transcript-list">
+            <!-- Speaker 0 · Calm · American · Authentic -->
+            <div class="pg-transcript-utterance speaker-left" style="--ec:#42a5f5">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">0:00</span>
+                <span class="pg-transcript-speaker">Speaker 0</span>
+                <span class="pg-transcript-emotion" style="color:#42a5f5">Calm</span>
+                <span class="pg-transcript-accent" style="font-weight:700">American accent</span>
+                <span class="pg-verdict-pill sm authentic">Authentic</span>
+              </div>
+              <div class="pg-transcript-text">Welcome to today's demo. Could you start by telling us a bit about yourself and your background?</div>
+            </div>
+            <!-- Speaker 1 · Happy · British · Authentic -->
+            <div class="pg-transcript-utterance speaker-right" style="--ec:#66bb6a">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">0:06</span>
+                <span class="pg-transcript-speaker">Speaker 1</span>
+                <span class="pg-transcript-emotion" style="color:#66bb6a">Happy</span>
+                <span class="pg-transcript-accent" style="font-weight:700">British accent</span>
+                <span class="pg-verdict-pill sm authentic">Authentic</span>
+              </div>
+              <div class="pg-transcript-text">Of course! I've been working in audio processing for about seven years now, mostly focused on real-time voice analysis.</div>
+            </div>
+            <!-- Speaker 0 · Neutral · American · Authentic -->
+            <div class="pg-transcript-utterance speaker-left" style="--ec:#78909c">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">0:18</span>
+                <span class="pg-transcript-speaker">Speaker 0</span>
+                <span class="pg-transcript-emotion" style="color:#78909c">Neutral</span>
+                <span class="pg-transcript-accent" style="font-weight:700">American accent</span>
+                <span class="pg-verdict-pill sm authentic">Authentic</span>
+              </div>
+              <div class="pg-transcript-text">And what drew you specifically to deepfake detection as a research area?</div>
+            </div>
+            <!-- Speaker 1 · Interested · British · SYNTHETIC (active) -->
+            <div class="pg-transcript-utterance speaker-right active" style="--ec:#7986cb">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">0:24</span>
+                <span class="pg-transcript-speaker">Speaker 1</span>
+                <span class="pg-transcript-emotion" style="color:#7986cb">Interested</span>
+                <span class="pg-transcript-accent" style="font-weight:700">British accent</span>
+                <span class="pg-verdict-pill sm synthetic" title="Deepfake · 68% confidence">Deepfake</span>
+              </div>
+              <div class="pg-transcript-text">Well, it started when I noticed that existing systems were struggling with prosody-preserving synthesis. The gap between human and synthetic speech keeps narrowing.</div>
+            </div>
+            <!-- Speaker 0 · Confident · American · Authentic -->
+            <div class="pg-transcript-utterance speaker-left" style="--ec:#5c6bc0">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">0:42</span>
+                <span class="pg-transcript-speaker">Speaker 0</span>
+                <span class="pg-transcript-emotion" style="color:#5c6bc0">Confident</span>
+                <span class="pg-transcript-accent" style="font-weight:700">American accent</span>
+                <span class="pg-verdict-pill sm authentic">Authentic</span>
+              </div>
+              <div class="pg-transcript-text">That's a great point. The Modulate API combines frame-level analysis with utterance-level classification — giving you both granular and holistic verdicts.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.pg-results-main -->
+
+      <!-- Deepfake verdict sidebar (hidden in transcription mode) -->
+      <aside class="pg-results-verdict" id="results-verdict" style="display:none">
+        <div class="pg-verdict-ring synthetic" id="verdict-ring">
+          <div class="pg-verdict-ring-icon" id="verdict-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;color:var(--m__ui-error-color)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="pg-verdict-ring-label" id="verdict-label">Synthetic</div>
+          <div class="pg-verdict-ring-count" id="verdict-count">4 of 7 frames<br>flagged as deepfake</div>
+        </div>
+        <div class="pg-verdict-links">
+          <button class="pg-verdict-link" id="btn-show-stats">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+            </svg>
+            Full Statistics
+          </button>
+          <button class="pg-verdict-link" id="btn-show-json">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            JSON Response
+          </button>
+        </div>
+      </aside>
+
+      <!-- Transcription sidebar (visible by default) -->
+      <aside class="pg-results-sidebar visible" id="results-sidebar">
+        <div class="pg-sidebar-links">
+          <button class="pg-verdict-link" id="btn-show-stats-stt">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+            </svg>
+            Full Statistics
+          </button>
+          <button class="pg-verdict-link" id="btn-show-json-stt">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            JSON Response
+          </button>
+        </div>
+      </aside>
+    </div>
+    <!-- /.pg-results-layout -->
+  </section>
+
+  <!-- Rate limit indicator -->
+  <div class="pg-rate-limit-bar" id="rate-limit-bar">30 requests remaining today</div>
+</div>
+<!-- /.m__wrapper -->
+
+<!-- Stats Modal -->
+<div class="pg-modal-backdrop" id="stats-modal">
+  <div class="pg-modal">
+    <div class="pg-modal-header">
+      <h3 id="stats-modal-title">Detection Statistics</h3>
+      <button class="pg-modal-close" id="stats-modal-close">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="pg-modal-body"><div id="stats-grid"></div></div>
+  </div>
 </div>
 
+<!-- JSON Modal -->
+<div class="pg-modal-backdrop" id="json-modal">
+  <div class="pg-modal">
+    <div class="pg-modal-header">
+      <h3>API Response</h3>
+      <button class="pg-modal-close" id="json-modal-close">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="pg-modal-body">
+      <div class="pg-json-container">
+        <button class="pg-json-copy-btn" id="json-copy-btn">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" />
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+          </svg>
+          Copy
+        </button>
+        <pre class="pg-json-pre" id="json-pre"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Analysis Progress Overlay -->
+<div class="pg-analysis-overlay" id="analysis-overlay">
+  <div class="pg-overlay-header">
+    <span style="font-size: var(--m__font-size-s); font-weight: 600"
+      >Modulate Models Preview</span
+    >
+  </div>
+  <div class="pg-overlay-content">
+    <h3 id="analysis-title">Analyzing audio&hellip;</h3>
+    <p id="analysis-status">Processing audio</p>
+    <div class="pg-progress-track">
+      <div class="pg-progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="pg-overlay-error" id="overlay-error">
+      <p class="pg-overlay-error-msg" id="overlay-error-msg"></p>
+      <pre class="pg-overlay-error-json" id="overlay-error-json"></pre>
+      <button class="pg-overlay-dismiss-btn" id="overlay-dismiss-btn">
+        Dismiss
+      </button>
+    </div>
+  </div>
+  <div class="pg-overlay-footer">
+    Powered by
+    <a href="https://modulate.ai" target="_blank" rel="noopener">Modulate AI</a>
+  </div>
+</div>
+
+<!-- Error Toast -->
+<div class="pg-error-toast" id="error-toast"></div>
+
+<!-- Histogram tooltip -->
+<div class="pg-histo-bar-tooltip" id="histo-tooltip"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var deepfakeContent   = document.getElementById('deepfake-content');
+  var transcriptContainer = document.getElementById('transcript-container');
+  var resultsVerdict    = document.getElementById('results-verdict');
+  var resultsSidebar    = document.getElementById('results-sidebar');
+  var sttOptions        = document.getElementById('stt-options');
+
+  document.querySelectorAll('input[name="mode"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      var isDeepfake = this.value === 'deepfake';
+      deepfakeContent.style.display   = isDeepfake ? '' : 'none';
+      resultsVerdict.style.display    = isDeepfake ? '' : 'none';
+      transcriptContainer.classList.toggle('visible', !isDeepfake);
+      resultsSidebar.classList.toggle('visible', !isDeepfake);
+      sttOptions.classList.toggle('visible', !isDeepfake);
+    });
+  });
+}());
+</script>
 {% endblock %}
