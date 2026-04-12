@@ -5,40 +5,28 @@ permalink: /playground/
 
 {% extends 'landing-layout.html' %} {% block head %}
 <style>
-  /* Options row ────────────────────────────────────────────────────────── */
-  .pg-options-row {
-
-    display: flex;
-
-
-  }
-
+  /* CHECKBOXES */
   .pg-stt-options {
-    display: none;
+    display: flex;
     flex-wrap: wrap;
     gap: var(--m__space-xs) var(--m__space-m);
-  }
-
-  .pg-stt-options.visible {
-    display: flex;
-  }
-
-  .pg-stt-option-divider {
-    color: var(--m__text-caption-color);
-    padding: 0 0.1rem;
-    user-select: none;
   }
 
   .pg-stt-option {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--m__space-xxs);
     font-size: var(--m__font-size-s);
-    font-weight: 500;
     color: var(--m__text-color);
     cursor: pointer;
     user-select: none;
     position: relative;
+    transition: color 0.5s ease;
+  }
+
+  .pg-stt-option:hover {
+    color: var(--m__text-hover-color);
+    transition: color 0s ease;
   }
 
   .pg-stt-option::after {
@@ -50,9 +38,8 @@ permalink: /playground/
     background: var(--m__bg-accent-color);
     color: var(--m__text-inverted-color);
     font-size: 0.7rem;
-    font-weight: 500;
     padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    border-radius: var(--m__radius-xs);
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
@@ -60,107 +47,40 @@ permalink: /playground/
     z-index: 50;
   }
 
-  .pg-stt-option:hover::after {
-    opacity: 1;
-  }
-
   .pg-stt-option input[type="checkbox"] {
+    appearance: none;
     width: 1rem;
     height: 1rem;
-    accent-color: var(--m__chart-model-1-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-xs);
     cursor: pointer;
-  }
-
-  /* Action bar ─────────────────────────────────────────────────────────── */
-  .pg-results-actions {
-    display: flex;
-    gap: var(--m__space-xs);
-    margin-bottom: var(--m__space-l);
-  }
-
-  .pg-results-action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    flex: 1;
-    white-space: nowrap;
-    padding: 0.7rem 1.8rem;
-    font-size: var(--m__font-size-s);
-    font-weight: 600;
-    font-family: inherit;
-    color: var(--m__text-color);
-    background: var(--m__bg-surface-color);
-    border: 1.5px solid var(--m__ui-border-color);
-    border-radius: var(--m__radius-m);
-    cursor: pointer;
-    transition:
-      border-color 0.2s,
-      background 0.2s,
-      box-shadow 0.2s;
-    position: relative;
-  }
-
-  .pg-results-action:hover {
-    border-color: var(--m__chart-model-3-color);
-    background: color-mix(
-      in srgb,
-      var(--m__chart-model-1-color) 4%,
-      transparent
-    );
-    box-shadow: 0 2px 8px
-      color-mix(in srgb, var(--m__chart-model-1-color) 8%, transparent);
-  }
-
-  .pg-results-action svg {
-    width: 1.1rem;
-    height: 1.1rem;
-    color: var(--m__chart-model-1-color);
     flex-shrink: 0;
+    position: relative;
+    transition: background 0.5s ease, border-color 0.5s ease;
+  }
+  .pg-stt-option input[type="checkbox"]:hover {
+  border-color: var(--m__bg-hover-color);
+    transition: border-color 0s ease;
   }
 
-  .pg-results-action-upload.drag-over {
-    border-color: var(--m__chart-model-1-color);
-    background: color-mix(
-      in srgb,
-      var(--m__chart-model-1-color) 8%,
-      transparent
-    );
+  .pg-stt-option input[type="checkbox"]:checked {
+    background: var(--m__bg-accent-color);
+    border-color: var(--m__bg-accent-color);
+  }
+  .pg-stt-option input[type="checkbox"]:checked:hover {
+  background-color: var(--m__bg-hover-color);
+  border-color: var(--m__bg-hover-color);
+  transition: background 0s ease, border-color 0s ease;
   }
 
-  .pg-results-action.recording {
-    border-color: var(--m__ui-error-color);
-    background: color-mix(in srgb, var(--m__ui-error-color) 6%, transparent);
-    animation: pg-pulse-recording 1.5s ease-in-out infinite;
-  }
-
-  .pg-results-action.recording svg {
-    color: var(--m__ui-error-color);
-  }
-
-  @keyframes pg-pulse-recording {
-    0%,
-    100% {
-      box-shadow: 0 0 0 0
-        color-mix(in srgb, var(--m__ui-error-color) 40%, transparent);
-    }
-    50% {
-      box-shadow: 0 0 0 6px transparent;
-    }
-  }
-
-  .pg-results-action .file-input {
+  .pg-stt-option input[type="checkbox"]:checked::after {
+    content: '';
     position: absolute;
     inset: 0;
-    opacity: 0;
-    cursor: pointer;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='1.5,5 4,7.5 8.5,2.5' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat;
   }
 
-  .file-input {
-    display: none;
-  }
-
-  /* Results layout ─────────────────────────────────────────────────────── */
+  /* RESULT */
   .pg-results-section {
     margin-bottom: var(--m__space-xl);
     flex: 1;
@@ -1314,10 +1234,20 @@ permalink: /playground/
           >
             <input type="checkbox" id="opt-pii" checked /> PII/PHI
           </label>
-          <span class="pg-stt-option-divider">|</span>
-          <label class="pg-stt-option" data-tip="Fast transcription, English only">
-            <input type="checkbox" id="opt-fast" /> Fast
-          </label>
+          <span class="pg-stt-option" data-tip="Fast transcription, English only">
+            <button
+              type="button"
+              id="opt-fast"
+              class="theme-toggle pg-fast-toggle"
+              role="switch"
+              aria-checked="false"
+              aria-label="Fast transcription">
+              <span class="theme-toggle__track">
+                <span class="theme-toggle__thumb"></span>
+              </span>
+            </button>
+            Fast
+          </span>
         </div>
       </div>
 
