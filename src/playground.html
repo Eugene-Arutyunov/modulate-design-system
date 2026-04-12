@@ -673,7 +673,7 @@ permalink: /playground/
     height: 1.35em;
     border-radius: 3px;
     overflow: hidden;
-    background: color-mix(in srgb, var(--m__text-color) 6%, transparent);
+    background: var(--m__bg-accent-color);
     flex-shrink: 0;
   }
 
@@ -685,8 +685,7 @@ permalink: /playground/
 
   .pg-fp-time {
     color: var(--m__text-caption-color);
-    font-size: var(--m__font-size-xs);
-    flex-shrink: 0;
+    font-size: var(--m__font-size-s);
   }
 
   /* speaker rows inside fingerprint */
@@ -711,6 +710,10 @@ permalink: /playground/
   .pg-fp-clip.e-interested { background: var(--emotion-interested); }
   .pg-fp-clip.e-confident { background: var(--emotion-confident); }
   .pg-fp-clip.e-happy    { background: var(--emotion-happy); }
+  .pg-fp-clip.e-excited  { background: var(--emotion-excited); }
+  .pg-fp-clip.e-amused   { background: var(--emotion-amused); }
+  .pg-fp-clip.e-relieved { background: var(--emotion-relieved); }
+  .pg-fp-clip.e-confused { background: var(--emotion-confused); }
 </style>
 {% endblock %} {% block content %}
 
@@ -1200,7 +1203,7 @@ permalink: /playground/
       <div class="pg-upload-header">
         <h2>Try More Audio</h2>
         <span class="pg-upload-limits">
-      30 requests remaining today</span>
+      30 requests remaining</span>
       </div>
 
       <p>
@@ -1255,7 +1258,7 @@ permalink: /playground/
                 <span class="theme-toggle__thumb"></span>
               </span>
             </button>
-            Fast
+            Fast (English only)
           </span>
         </div>
       </div>
@@ -1302,18 +1305,37 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="2">
-                <div class="pg-fp-clip e-angry"     data-sp="1" style="left:0%;    width:14%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:0%;   width:14%"></div>
-                <div class="pg-fp-clip e-angry"     data-sp="1" style="left:15%;   width:13%"></div>
-                <div class="pg-fp-clip e-sad"        data-sp="2" style="left:15%;  width:13%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:29%;  width:13%"></div>
-                <div class="pg-fp-clip e-concerned"  data-sp="2" style="left:29%;  width:13%"></div>
-                <div class="pg-fp-clip e-angry"     data-sp="1" style="left:43%;   width:14%"></div>
-                <div class="pg-fp-clip e-sad"        data-sp="2" style="left:43%;  width:14%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:58%;  width:13%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:58%;  width:13%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="1" style="left:72%;  width:13%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:72%;  width:13%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:0.0%;width:2.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:2.5%;width:2.2%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:4.7%;width:2.2%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:6.9%;width:2.2%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:9.1%;width:1.9%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:11.0%;width:3.4%"></div>
+                <div class="pg-fp-clip e-confident" data-sp="2" style="left:14.4%;width:4.3%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:18.7%;width:2.8%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:21.5%;width:2.8%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:24.3%;width:2.2%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:26.5%;width:8.1%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:34.6%;width:5.6%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:40.2%;width:3.1%"></div>
+                <div class="pg-fp-clip e-amused" data-sp="1" style="left:43.3%;width:2.2%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:45.5%;width:3.4%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:48.9%;width:3.4%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:52.3%;width:4.7%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:57.0%;width:2.8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:59.8%;width:1.9%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:61.7%;width:2.8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:64.5%;width:1.9%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:66.4%;width:1.6%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:68.0%;width:3.1%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:71.1%;width:1.9%"></div>
+                <div class="pg-fp-clip e-amused" data-sp="1" style="left:73.0%;width:2.8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:75.8%;width:1.9%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:77.7%;width:1.9%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:79.6%;width:9.9%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:89.5%;width:2.2%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:91.7%;width:4.0%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:95.7%;width:4.3%"></div>
               </div>
               <span class="pg-fp-time">07:48</span>
             </div>
@@ -1326,16 +1348,32 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="2">
-                <div class="pg-fp-clip e-anxious"   data-sp="1" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-calm"      data-sp="2" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"   data-sp="2" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-anxious"   data-sp="1" style="left:33%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"      data-sp="2" style="left:33%;  width:15%"></div>
-                <div class="pg-fp-clip e-sad"       data-sp="1" style="left:49%;  width:16%"></div>
-                <div class="pg-fp-clip e-neutral"   data-sp="2" style="left:49%;  width:16%"></div>
-                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:66%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"      data-sp="2" style="left:66%;  width:15%"></div>
+                <div class="pg-fp-clip e-relieved" data-sp="2" style="left:0.0%;width:3.3%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:3.3%;width:2.0%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:5.3%;width:4.5%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:9.8%;width:6.6%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:16.4%;width:4.1%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:20.5%;width:3.7%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:24.2%;width:2.5%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:26.7%;width:4.1%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="2" style="left:30.8%;width:4.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:35.3%;width:3.7%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:39.0%;width:4.1%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:43.1%;width:2.9%"></div>
+                <div class="pg-fp-clip e-confused" data-sp="2" style="left:46.0%;width:3.3%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:49.3%;width:2.0%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:51.3%;width:2.9%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:54.2%;width:10.2%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:64.4%;width:2.9%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:67.3%;width:2.0%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:69.3%;width:2.0%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:71.3%;width:2.0%"></div>
+                <div class="pg-fp-clip e-confused" data-sp="2" style="left:73.3%;width:2.5%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:75.8%;width:3.3%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:79.1%;width:3.3%"></div>
+                <div class="pg-fp-clip e-confused" data-sp="2" style="left:82.4%;width:4.1%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:86.5%;width:4.9%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:91.4%;width:8.6%"></div>
               </div>
               <span class="pg-fp-time">05:33</span>
             </div>
@@ -1348,16 +1386,30 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="2">
-                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-stressed"   data-sp="1" style="left:33%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:33%;  width:15%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:49%;  width:16%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:49%;  width:16%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:66%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:66%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:0.0%;width:4.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:4.5%;width:5.0%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:9.5%;width:5.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:14.5%;width:4.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:19.0%;width:6.5%"></div>
+                <div class="pg-fp-clip e-confused" data-sp="2" style="left:25.5%;width:3.5%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:29.0%;width:3.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:32.0%;width:3.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:35.0%;width:3.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:38.0%;width:3.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:41.0%;width:4.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:45.0%;width:2.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:47.5%;width:3.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:51.0%;width:3.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:54.5%;width:3.0%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:57.5%;width:5.5%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:63.0%;width:8.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:71.0%;width:3.5%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:74.5%;width:5.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:79.5%;width:5.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:85.0%;width:6.5%"></div>
+                <div class="pg-fp-clip e-confused" data-sp="2" style="left:91.5%;width:3.5%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:95.0%;width:2.5%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:97.5%;width:2.5%"></div>
               </div>
               <span class="pg-fp-time">06:10</span>
             </div>
@@ -1370,16 +1422,23 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="2">
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:0%;   width:17%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:17%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:18%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:18%;  width:15%"></div>
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:34%;  width:16%"></div>
-                <div class="pg-fp-clip e-concerned"  data-sp="2" style="left:34%;  width:16%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:51%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:51%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="1" style="left:67%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:67%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:0.0%;width:4.5%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:4.5%;width:6.7%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:11.2%;width:5.2%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:16.4%;width:3.7%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:20.1%;width:5.2%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:25.3%;width:11.2%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:36.5%;width:6.0%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:42.5%;width:8.2%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:50.7%;width:7.5%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:58.2%;width:6.0%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:64.2%;width:8.2%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:72.4%;width:3.7%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="2" style="left:76.1%;width:3.7%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:79.8%;width:6.0%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:85.8%;width:3.7%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:89.5%;width:3.7%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:93.2%;width:6.8%"></div>
               </div>
               <span class="pg-fp-time">04:31</span>
             </div>
@@ -1392,11 +1451,20 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="1">
-                <div class="pg-fp-clip e-neutral"   data-sp="1" style="left:0%;   width:18%"></div>
-                <div class="pg-fp-clip e-stressed"  data-sp="1" style="left:19%;  width:17%"></div>
-                <div class="pg-fp-clip e-anxious"   data-sp="1" style="left:37%;  width:17%"></div>
-                <div class="pg-fp-clip e-sad"       data-sp="1" style="left:55%;  width:17%"></div>
-                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:73%;  width:17%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:0.0%;width:4.9%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:4.9%;width:10.5%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:15.4%;width:8.2%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:23.6%;width:3.4%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:27.0%;width:3.6%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:30.6%;width:3.2%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:33.8%;width:5.4%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:39.2%;width:8.8%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:48.0%;width:4.1%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:52.1%;width:5.8%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:57.9%;width:7.5%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:65.4%;width:3.2%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:68.6%;width:20.8%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:89.4%;width:10.6%"></div>
               </div>
               <span class="pg-fp-time">07:52</span>
             </div>
@@ -1409,19 +1477,21 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="4">
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:0%;   width:8%"></div>
-                <div class="pg-fp-clip e-sad"        data-sp="2" style="left:0%;   width:8%"></div>
-                <div class="pg-fp-clip e-angry"      data-sp="3" style="left:0%;   width:8%"></div>
-                <div class="pg-fp-clip e-concerned"  data-sp="4" style="left:0%;   width:8%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:9%;   width:8%"></div>
-                <div class="pg-fp-clip e-angry"      data-sp="2" style="left:9%;   width:8%"></div>
-                <div class="pg-fp-clip e-stressed"   data-sp="4" style="left:9%;   width:8%"></div>
-                <div class="pg-fp-clip e-angry"      data-sp="3" style="left:9%;   width:8%"></div>
-                <div class="pg-fp-clip e-sad"        data-sp="2" style="left:18%;  width:8%"></div>
-                <div class="pg-fp-clip e-concerned"  data-sp="4" style="left:18%;  width:8%"></div>
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:18%;  width:8%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="3" style="left:18%;  width:8%"></div>
-                <div class="pg-fp-clip e-concerned"  data-sp="1" style="left:27%;  width:8%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:0%;width:3.4%"></div>
+                <div class="pg-fp-clip e-sad" data-sp="2" style="left:0%;width:3.4%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="3" style="left:0%;width:3.4%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="4" style="left:0%;width:3.4%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:3.4%;width:2.8%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:3.4%;width:2.8%"></div>
+                <div class="pg-fp-clip e-stressed" data-sp="4" style="left:3.4%;width:2.8%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="3" style="left:3.4%;width:2.8%"></div>
+                <div class="pg-fp-clip e-sad" data-sp="2" style="left:6.2%;width:3.4%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="4" style="left:6.2%;width:2.6%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:9.6%;width:3.1%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:9.6%;width:2.8%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="3" style="left:9.6%;width:2.8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="4" style="left:9.6%;width:2.8%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="1" style="left:15.2%;width:3.4%"></div>
               </div>
               <span class="pg-fp-time">01:37</span>
             </div>
@@ -1434,14 +1504,23 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="2">
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-stressed"   data-sp="1" style="left:33%;  width:16%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:33%;  width:16%"></div>
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:50%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:50%;  width:15%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:0.0%;width:6.1%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:6.1%;width:5.0%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:11.1%;width:4.4%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:15.5%;width:2.8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:18.3%;width:6.6%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:24.9%;width:3.9%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:28.8%;width:8.3%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:37.1%;width:5.0%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:42.1%;width:16.6%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:58.7%;width:2.8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:61.5%;width:3.9%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:65.4%;width:6.6%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:72.0%;width:3.3%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:75.3%;width:4.4%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:79.7%;width:4.4%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:84.1%;width:8.3%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:92.4%;width:7.6%"></div>
               </div>
               <span class="pg-fp-time">03:49</span>
             </div>
@@ -1454,11 +1533,25 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="1">
-                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:0%;   width:18%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:19%;  width:18%"></div>
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:38%;  width:17%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:56%;  width:17%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:74%;  width:17%"></div>
+                <div class="pg-fp-clip e-excited" data-sp="1" style="left:0.0%;width:8.9%"></div>
+                <div class="pg-fp-clip e-confident" data-sp="1" style="left:8.9%;width:2.7%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:11.6%;width:3.6%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:15.2%;width:13.3%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:28.5%;width:5.3%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:33.8%;width:2.7%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:36.5%;width:12.9%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:49.4%;width:4.4%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:53.8%;width:8.4%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:62.2%;width:2.7%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:64.9%;width:2.2%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:67.1%;width:4.0%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:71.1%;width:4.0%"></div>
+                <div class="pg-fp-clip e-happy" data-sp="1" style="left:75.1%;width:4.4%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:79.5%;width:9.8%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:89.3%;width:2.2%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:91.5%;width:2.7%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:94.2%;width:2.7%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:96.9%;width:3.1%"></div>
               </div>
               <span class="pg-fp-time">04:24</span>
             </div>
@@ -1471,16 +1564,23 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="2">
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:33%;  width:16%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:33%;  width:16%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:50%;  width:15%"></div>
-                <div class="pg-fp-clip e-concerned"  data-sp="2" style="left:50%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:66%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:66%;  width:15%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:0.0%;width:3.9%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:3.9%;width:5.9%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:9.8%;width:8.9%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:18.7%;width:7.9%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:26.6%;width:6.4%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:33.0%;width:3.0%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:36.0%;width:7.9%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:43.9%;width:2.5%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:46.4%;width:5.9%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:52.3%;width:5.4%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:57.7%;width:2.5%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:60.2%;width:3.4%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:63.6%;width:3.9%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:67.5%;width:9.4%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:76.9%;width:5.4%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:82.3%;width:2.5%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:84.8%;width:15.2%"></div>
               </div>
               <span class="pg-fp-time">04:28</span>
             </div>
@@ -1493,16 +1593,31 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="2">
-                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:0%;   width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:15%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:16%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:16%;  width:15%"></div>
-                <div class="pg-fp-clip e-stressed"   data-sp="1" style="left:32%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:32%;  width:15%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:48%;  width:15%"></div>
-                <div class="pg-fp-clip e-concerned"  data-sp="2" style="left:48%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="1" style="left:64%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:64%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:0.0%;width:3.1%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:3.1%;width:2.1%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:5.2%;width:1.7%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:6.9%;width:3.4%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:10.3%;width:2.1%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:12.4%;width:1.7%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:14.1%;width:2.1%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:16.2%;width:2.4%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:18.6%;width:2.1%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:20.7%;width:2.8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:23.5%;width:4.1%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="1" style="left:27.6%;width:1.7%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:29.3%;width:2.1%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:31.4%;width:10.3%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="2" style="left:41.7%;width:10.7%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:52.4%;width:7.9%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:60.3%;width:6.9%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:67.2%;width:1.7%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:68.9%;width:6.6%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:75.5%;width:3.4%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:78.9%;width:6.9%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:85.8%;width:7.9%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:93.7%;width:2.1%"></div>
+                <div class="pg-fp-clip e-stressed" data-sp="1" style="left:95.8%;width:2.4%"></div>
+                <div class="pg-fp-clip e-relieved" data-sp="2" style="left:98.2%;width:1.8%"></div>
               </div>
               <span class="pg-fp-time">06:25</span>
             </div>
@@ -1515,16 +1630,28 @@ permalink: /playground/
           <td class="col-fp">
             <div class="pg-fp-wrapper">
               <div class="pg-fp" data-speakers="2">
-                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:16%"></div>
-                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:17%;  width:15%"></div>
-                <div class="pg-fp-clip e-stressed"   data-sp="1" style="left:33%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:33%;  width:15%"></div>
-                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:49%;  width:16%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:49%;  width:16%"></div>
-                <div class="pg-fp-clip e-concerned"  data-sp="1" style="left:66%;  width:15%"></div>
-                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:66%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:0.0%;width:2.8%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:2.8%;width:2.8%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:5.6%;width:3.2%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:8.8%;width:7.3%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:16.1%;width:4.6%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:20.7%;width:4.6%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:25.3%;width:3.7%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:29.0%;width:3.2%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:32.2%;width:4.1%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:36.3%;width:2.8%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:39.1%;width:4.1%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:43.2%;width:6.0%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:49.2%;width:2.8%"></div>
+                <div class="pg-fp-clip e-angry" data-sp="2" style="left:52.0%;width:4.1%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:56.1%;width:11.5%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:67.6%;width:4.1%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:71.7%;width:8.7%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:80.4%;width:5.0%"></div>
+                <div class="pg-fp-clip e-relieved" data-sp="2" style="left:85.4%;width:3.2%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:88.6%;width:2.3%"></div>
+                <div class="pg-fp-clip e-neutral" data-sp="2" style="left:90.9%;width:2.3%"></div>
+                <div class="pg-fp-clip e-calm" data-sp="1" style="left:93.2%;width:6.8%"></div>
               </div>
               <span class="pg-fp-time">05:14</span>
             </div>
