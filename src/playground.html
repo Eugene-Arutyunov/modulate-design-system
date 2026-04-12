@@ -21,12 +21,12 @@ permalink: /playground/
     cursor: pointer;
     user-select: none;
     position: relative;
-    transition: color 0.5s ease;
+    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
   }
 
   .pg-stt-option:hover {
     color: var(--m__text-hover-color);
-    transition: color 0s ease;
+    transition: color var(--m__hover-transition-duration) var(--m__transition-easing);
   }
 
   .pg-stt-option::after {
@@ -56,11 +56,11 @@ permalink: /playground/
     cursor: pointer;
     flex-shrink: 0;
     position: relative;
-    transition: background 0.5s ease, border-color 0.5s ease;
+    transition: background var(--m__unhover-transition-duration) var(--m__transition-easing), border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
   }
   .pg-stt-option input[type="checkbox"]:hover {
   border-color: var(--m__bg-hover-color);
-    transition: border-color 0s ease;
+    transition: border-color var(--m__hover-transition-duration) var(--m__transition-easing);
   }
 
   .pg-stt-option input[type="checkbox"]:checked {
@@ -70,7 +70,7 @@ permalink: /playground/
   .pg-stt-option input[type="checkbox"]:checked:hover {
   background-color: var(--m__bg-hover-color);
   border-color: var(--m__bg-hover-color);
-  transition: background 0s ease, border-color 0s ease;
+  transition: background var(--m__hover-transition-duration) var(--m__transition-easing), border-color var(--m__hover-transition-duration) var(--m__transition-easing);
   }
 
   .pg-stt-option input[type="checkbox"]:checked::after {
@@ -636,6 +636,15 @@ permalink: /playground/
     --ids__bg-hover-RGB: 100, 110, 140;
   }
   /* Demo recordings table ──────────────────────────────────────────────── */
+  .pg-demo-recordings tbody tr {
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .pg-demo-recordings tbody tr:hover {
+    color: var(--m__text-hover-color);
+    transition: color 0s;
+  }
 
   .pg-demo-recordings .col-category,
  .pg-demo-recordings .col-industry  {
@@ -1234,7 +1243,7 @@ permalink: /playground/
           >
             <input type="checkbox" id="opt-pii" checked /> PII/PHI
           </label>
-          <span class="pg-stt-option" data-tip="Fast transcription, English only">
+          <span class="pg-stt-option" data-tip="Fast transcription, English only" onclick="document.getElementById('opt-fast').click()">
             <button
               type="button"
               id="opt-fast"
@@ -1530,5 +1539,20 @@ permalink: /playground/
 
   {% endblock %} {% block scripts %}
   <script type="module" src="/assets/js/navbar.js"></script>
+  <script>
+    var fastBtn = document.getElementById('opt-fast');
+    var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]');
+
+    fastBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOn = fastBtn.getAttribute('aria-checked') === 'true';
+      fastBtn.setAttribute('aria-checked', isOn ? 'false' : 'true');
+      checkboxes.forEach(function (cb) {
+        cb.disabled = !isOn;
+        cb.closest('.pg-stt-option').style.opacity = !isOn ? '0.4' : '';
+        cb.closest('.pg-stt-option').style.pointerEvents = !isOn ? 'none' : '';
+      });
+    });
+  </script>
   {% endblock %}
 </div>
