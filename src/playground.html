@@ -715,6 +715,73 @@ permalink: /playground/
     --ids__text-hover-RGB: 120, 180, 255;
     --ids__bg-hover-RGB: 100, 110, 140;
   }
+  /* Demo recordings table ──────────────────────────────────────────────── */
+
+  .pg-demo-recordings .col-category,
+ .pg-demo-recordings .col-industry  {
+        font-size: var(--m__font-size-s);
+  }
+
+  .pg-demo-recordings .col-fp {
+    width: 22%;
+    white-space: nowrap;
+  }
+
+  .pg-demo-recordings .col-category,
+  .pg-demo-recordings .col-industry {
+    width: 16%;
+  }
+
+  .pg-fp-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .pg-fp {
+    position: relative;
+    width: 100px;
+    height: 1.35em;
+    border-radius: 3px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--m__text-color) 6%, transparent);
+    flex-shrink: 0;
+  }
+
+  .pg-fp-clip {
+    position: absolute;
+    top: 0;
+    height: 100%;
+  }
+
+  .pg-fp-time {
+    color: var(--m__text-caption-color);
+    font-size: var(--m__font-size-xs);
+    flex-shrink: 0;
+  }
+
+  /* speaker rows inside fingerprint */
+  .pg-fp[data-speakers="1"] .pg-fp-clip { height: 100%; top: 0; }
+  .pg-fp[data-speakers="2"] .pg-fp-clip { height: 50%; }
+  .pg-fp[data-speakers="2"] .pg-fp-clip[data-sp="1"] { top: 0; }
+  .pg-fp[data-speakers="2"] .pg-fp-clip[data-sp="2"] { top: 50%; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip { height: 25%; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip[data-sp="1"] { top: 0; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip[data-sp="2"] { top: 25%; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip[data-sp="3"] { top: 50%; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip[data-sp="4"] { top: 75%; }
+
+  .pg-fp-clip.e-angry    { background: var(--emotion-angry); }
+  .pg-fp-clip.e-frustrated { background: var(--emotion-frustrated); }
+  .pg-fp-clip.e-stressed { background: var(--emotion-stressed); }
+  .pg-fp-clip.e-anxious  { background: var(--emotion-anxious); }
+  .pg-fp-clip.e-sad      { background: var(--emotion-sad); }
+  .pg-fp-clip.e-neutral  { background: var(--emotion-neutral); }
+  .pg-fp-clip.e-calm     { background: var(--emotion-calm); }
+  .pg-fp-clip.e-concerned { background: var(--emotion-concerned); }
+  .pg-fp-clip.e-interested { background: var(--emotion-interested); }
+  .pg-fp-clip.e-confident { background: var(--emotion-confident); }
+  .pg-fp-clip.e-happy    { background: var(--emotion-happy); }
 </style>
 {% endblock %} {% block content %}
 
@@ -1276,6 +1343,259 @@ permalink: /playground/
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="m__space XS"></div>
+
+  <div class="m__wrapper pg-demo-recordings">
+    <h2>Preloaded demo recordings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th class="col-fp">Emotion pattern</th>
+          <th class="col-title">Conversation</th>
+          <th class="col-category">Category</th>
+          <th class="col-industry">Industry</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip e-angry"     data-sp="1" style="left:0%;    width:14%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="2" style="left:0%;   width:14%"></div>
+                <div class="pg-fp-clip e-angry"     data-sp="1" style="left:15%;   width:13%"></div>
+                <div class="pg-fp-clip e-sad"        data-sp="2" style="left:15%;  width:13%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:29%;  width:13%"></div>
+                <div class="pg-fp-clip e-concerned"  data-sp="2" style="left:29%;  width:13%"></div>
+                <div class="pg-fp-clip e-angry"     data-sp="1" style="left:43%;   width:14%"></div>
+                <div class="pg-fp-clip e-sad"        data-sp="2" style="left:43%;  width:14%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:58%;  width:13%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:58%;  width:13%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="1" style="left:72%;  width:13%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:72%;  width:13%"></div>
+              </div>
+              <span class="pg-fp-time">07:48</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Gender-role argument ends the relationship</strong></td>
+          <td class="col-category">Social</td>
+          <td class="col-industry">Personal Relationships</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip e-anxious"   data-sp="1" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-calm"      data-sp="2" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"   data-sp="2" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-anxious"   data-sp="1" style="left:33%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"      data-sp="2" style="left:33%;  width:15%"></div>
+                <div class="pg-fp-clip e-sad"       data-sp="1" style="left:49%;  width:16%"></div>
+                <div class="pg-fp-clip e-neutral"   data-sp="2" style="left:49%;  width:16%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:66%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"      data-sp="2" style="left:66%;  width:15%"></div>
+              </div>
+              <span class="pg-fp-time">05:33</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Elderly caller needs login for surgery payment</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">Banking</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-stressed"   data-sp="1" style="left:33%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:33%;  width:15%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:49%;  width:16%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:49%;  width:16%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:66%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:66%;  width:15%"></div>
+              </div>
+              <span class="pg-fp-time">06:10</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Sales rep fumbles MFA setup with IT</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">IT services</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:0%;   width:17%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:17%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:18%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:18%;  width:15%"></div>
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:34%;  width:16%"></div>
+                <div class="pg-fp-clip e-concerned"  data-sp="2" style="left:34%;  width:16%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:51%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:51%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="1" style="left:67%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:67%;  width:15%"></div>
+              </div>
+              <span class="pg-fp-time">04:31</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Customer fights for refund in delivery fraud</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">E-commerce</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="1">
+                <div class="pg-fp-clip e-neutral"   data-sp="1" style="left:0%;   width:18%"></div>
+                <div class="pg-fp-clip e-stressed"  data-sp="1" style="left:19%;  width:17%"></div>
+                <div class="pg-fp-clip e-anxious"   data-sp="1" style="left:37%;  width:17%"></div>
+                <div class="pg-fp-clip e-sad"       data-sp="1" style="left:55%;  width:17%"></div>
+                <div class="pg-fp-clip e-concerned" data-sp="1" style="left:73%;  width:17%"></div>
+              </div>
+              <span class="pg-fp-time">07:52</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Youtuber describes personal stalker experience</strong></td>
+          <td class="col-category">Social</td>
+          <td class="col-industry">Online media</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="4">
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:0%;   width:8%"></div>
+                <div class="pg-fp-clip e-sad"        data-sp="2" style="left:0%;   width:8%"></div>
+                <div class="pg-fp-clip e-angry"      data-sp="3" style="left:0%;   width:8%"></div>
+                <div class="pg-fp-clip e-concerned"  data-sp="4" style="left:0%;   width:8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:9%;   width:8%"></div>
+                <div class="pg-fp-clip e-angry"      data-sp="2" style="left:9%;   width:8%"></div>
+                <div class="pg-fp-clip e-stressed"   data-sp="4" style="left:9%;   width:8%"></div>
+                <div class="pg-fp-clip e-angry"      data-sp="3" style="left:9%;   width:8%"></div>
+                <div class="pg-fp-clip e-sad"        data-sp="2" style="left:18%;  width:8%"></div>
+                <div class="pg-fp-clip e-concerned"  data-sp="4" style="left:18%;  width:8%"></div>
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:18%;  width:8%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="3" style="left:18%;  width:8%"></div>
+                <div class="pg-fp-clip e-concerned"  data-sp="1" style="left:27%;  width:8%"></div>
+              </div>
+              <span class="pg-fp-time">01:37</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>AI bot can't find customer's order</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">E-commerce</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-stressed"   data-sp="1" style="left:33%;  width:16%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:33%;  width:16%"></div>
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:50%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:50%;  width:15%"></div>
+              </div>
+              <span class="pg-fp-time">03:49</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>User demands MFA reset for drive access</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">IT services</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="1">
+                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:0%;   width:18%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:19%;  width:18%"></div>
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:38%;  width:17%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:56%;  width:17%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:74%;  width:17%"></div>
+              </div>
+              <span class="pg-fp-time">04:24</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Streamer rants on politics and censorship</strong></td>
+          <td class="col-category">Social</td>
+          <td class="col-industry">Media &amp; broadcasting</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-angry"      data-sp="1" style="left:33%;  width:16%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:33%;  width:16%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:50%;  width:15%"></div>
+                <div class="pg-fp-clip e-concerned"  data-sp="2" style="left:50%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:66%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:66%;  width:15%"></div>
+              </div>
+              <span class="pg-fp-time">04:28</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Angry caller demands update on late delivery</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">E-commerce</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:0%;   width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:15%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:16%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:16%;  width:15%"></div>
+                <div class="pg-fp-clip e-stressed"   data-sp="1" style="left:32%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:32%;  width:15%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:48%;  width:15%"></div>
+                <div class="pg-fp-clip e-concerned"  data-sp="2" style="left:48%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="1" style="left:64%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:64%;  width:15%"></div>
+              </div>
+              <span class="pg-fp-time">06:25</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Manager pushes IT for password reset</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">IT services</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:0%;   width:16%"></div>
+                <div class="pg-fp-clip e-frustrated" data-sp="1" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:17%;  width:15%"></div>
+                <div class="pg-fp-clip e-stressed"   data-sp="1" style="left:33%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="2" style="left:33%;  width:15%"></div>
+                <div class="pg-fp-clip e-neutral"    data-sp="1" style="left:49%;  width:16%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:49%;  width:16%"></div>
+                <div class="pg-fp-clip e-concerned"  data-sp="1" style="left:66%;  width:15%"></div>
+                <div class="pg-fp-clip e-calm"       data-sp="2" style="left:66%;  width:15%"></div>
+              </div>
+              <span class="pg-fp-time">05:14</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Customer tries account recovery without security steps</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">E-commerce</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   {% endblock %} {% block scripts %}
