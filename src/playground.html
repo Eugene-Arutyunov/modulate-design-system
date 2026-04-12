@@ -3,17 +3,1886 @@ pageTitle: Playground
 permalink: /playground/
 ---
 
-{% extends 'landing-layout.html' %} {% block content %}
+{% extends 'landing-layout.html' %} {% block head %}
+<style>
+  /* CHECKBOXES */
+  .pg-stt-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--m__space-xs) var(--m__space-m);
+  }
+
+  .pg-stt-option {
+    display: flex;
+    align-items: center;
+    gap: var(--m__space-xxs);
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-color);
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-stt-option:hover {
+    color: var(--m__text-hover-color);
+    transition: color var(--m__hover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-stt-option::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--m__bg-accent-color);
+    color: var(--m__text-inverted-color);
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--m__radius-xs);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0s;
+    z-index: 50;
+  }
+
+  .pg-stt-option input[type="checkbox"] {
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-xs);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: background var(--m__unhover-transition-duration) var(--m__transition-easing), border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+  .pg-stt-option input[type="checkbox"]:hover {
+  border-color: var(--m__bg-hover-color);
+    transition: border-color var(--m__hover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-stt-option input[type="checkbox"]:checked {
+    background: var(--m__bg-accent-color);
+    border-color: var(--m__bg-accent-color);
+  }
+  .pg-stt-option input[type="checkbox"]:checked:hover {
+  background-color: var(--m__bg-hover-color);
+  border-color: var(--m__bg-hover-color);
+  transition: background var(--m__hover-transition-duration) var(--m__transition-easing), border-color var(--m__hover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-stt-option input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='1.5,5 4,7.5 8.5,2.5' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat;
+  }
+
+  /* RESULT */
+  .pg-results-section {
+    margin-bottom: var(--m__space-xl);
+    flex: 1;
+  }
+
+  .pg-results-layout {
+    display: block;
+  }
+
+  .pg-results-main {
+    min-width: 0;
+  }
+
+  .pg-results-filename {
+    font-size: var(--m__font-size-xxl);
+    font-weight: 700;
+    color: var(--m__bg-accent-color);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--m__space-xxs);
+    word-break: break-word;
+  }
+
+  .pg-results-player {
+    width: 100%;
+    margin-bottom: var(--m__space-s);
+    border-radius: var(--m__radius-m);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--m__background-color);
+    padding: var(--m__space-xs) 0;
+  }
+
+  /* Histogram ──────────────────────────────────────────────────────────── */
+  .pg-histogram-section {
+    margin-bottom: var(--m__space-s);
+  }
+  .pg-histogram-scroll {
+    overflow-x: auto;
+  }
+  .pg-histogram {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .pg-histo-squares {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    width: 100%;
+  }
+  .pg-histo-axis {
+    display: flex;
+    gap: 0;
+    width: 100%;
+  }
+
+  .pg-histo-tick {
+    flex: 1;
+    font-size: 0.6rem;
+    color: var(--m__text-caption-color);
+    text-align: left;
+    height: 1rem;
+    line-height: 1rem;
+    overflow: visible;
+    white-space: nowrap;
+  }
+
+  .pg-histo-bar {
+    flex: 1;
+    aspect-ratio: unset;
+    height: 1.2rem;
+    cursor: pointer;
+    position: relative;
+        filter: brightness(1);
+
+        transition: filter var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-histo-bar:hover {
+    z-index: 10;
+    filter: brightness(1.1);
+    transition: filter var(--m__hover-transition-duration) var(--m__transition-easing);
+    outline-offset: 0px;
+  }
+
+  .pg-histo-bar.synthetic {
+    background: var(--m__ui-error-color);
+  }
+  .pg-histo-bar.authentic {
+    background: var(--m__ui-success-color);
+  }
+
+  .pg-histo-bar.active {
+    outline: 2px solid var(--m__bg-accent-color);
+    outline-offset: 1px;
+    z-index: 5;
+    filter: none;
+  }
+
+  .pg-histo-bar-tooltip {
+    display: none;
+    position: fixed;
+    background: var(--m__bg-accent-color);
+    color: var(--m__text-inverted-color);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+.deepfake-header h2 {
+  margin: 0;
+}
+
+  /* RESULT */
+
+  .verdict-synthetic { color: var(--m__ui-error-color); }
+  .verdict-authentic { color: var(--m__ui-success-color); }
+  .verdict-no-content { color: var(--m__text-caption-color); }
+
+  .pg-results-table-section td:first-child,
+  .pg-results-table-section td:last-child,
+  .pg-confidence-cell span {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pg-confidence-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pg-confidence-bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--m__ui-border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 80px;
+  }
+
+  .pg-confidence-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .pg-confidence-bar-fill.synthetic {
+    background: var(--m__ui-error-color);
+  }
+  .pg-confidence-bar-fill.authentic {
+    background: var(--m__ui-success-color);
+  }
+  .pg-confidence-bar-fill.no-content {
+    background: var(--m__ui-border-color);
+  }
+
+  /* Verdict ring sidebar ───────────────────────────────────────────────── */
+  .pg-results-verdict {
+    text-align: center;
+    margin-top: 9.5rem;
+    padding: 0 var(--m__space-m);
+    position: sticky;
+    top: min(0.4rem, calc(100vh - 26rem));
+  }
+
+  .pg-verdict-ring {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    gap: 0.15rem;
+  }
+
+  .pg-verdict-ring.synthetic {
+    background: color-mix(in srgb, var(--m__ui-error-color) 6%, transparent);
+    box-shadow:
+      0 0 0 3px var(--m__ui-error-color),
+      0 0 50px color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
+  }
+
+  .pg-verdict-ring.authentic {
+    background: color-mix(in srgb, var(--m__ui-success-color) 6%, transparent);
+    box-shadow:
+      0 0 0 3px var(--m__ui-success-color),
+      0 0 50px color-mix(in srgb, var(--m__ui-success-color) 12%, transparent);
+  }
+
+  .pg-verdict-ring.pending {
+    background: color-mix(
+      in srgb,
+      var(--m__text-caption-color) 6%,
+      transparent
+    );
+    box-shadow:
+      0 0 0 3px var(--m__ui-border-color),
+      0 0 50px color-mix(in srgb, var(--m__text-caption-color) 8%, transparent);
+  }
+
+  .pg-verdict-ring-icon {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .pg-verdict-ring.synthetic .pg-verdict-ring-icon {
+    color: var(--m__ui-error-color);
+  }
+  .pg-verdict-ring.authentic .pg-verdict-ring-icon {
+    color: var(--m__ui-success-color);
+  }
+  .pg-verdict-ring.pending .pg-verdict-ring-icon {
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-verdict-ring-label {
+    font-size: var(--m__font-size-xl);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .pg-verdict-ring.synthetic .pg-verdict-ring-label {
+    color: var(--m__ui-error-color);
+  }
+  .pg-verdict-ring.authentic .pg-verdict-ring-label {
+    color: rgb(10, 150, 95);
+  }
+  .pg-verdict-ring.pending .pg-verdict-ring-label {
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-verdict-ring-count {
+    font-size: var(--m__font-size-xs);
+    font-weight: 500;
+    line-height: 1.3;
+    margin-top: 0.1rem;
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-verdict-links {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    margin-top: var(--m__space-s);
+  }
+
+  .pg-verdict-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: var(--m__font-size-xs);
+    font-weight: 500;
+    color: var(--m__text-caption-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+    transition: color 0.2s;
+  }
+
+  .pg-verdict-link:hover {
+    color: var(--m__chart-model-1-color);
+  }
+  .pg-verdict-link svg {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  /* Transcription ──────────────────────────────────────────────────────── */
+  .pg-transcript-container {
+    display: none;
+  }
+  .pg-transcript-container.visible {
+    display: block;
+  }
+
+  .pg-transcript-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pg-transcript-utterance {
+    background: var(--m__bg-surface-color);
+    padding: 0.7em;
+    cursor: pointer;
+    transition: background var(--m__unhover-transition-duration) var(--m__transition-easing),
+    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-transcript-utterance.speaker-left {
+    margin-right: 3rem;
+  }
+  .pg-transcript-utterance.speaker-right {
+    margin-left: 3rem;
+  }
+  .pg-transcript-utterance:hover {
+    color: var(--m__text-hover-color);
+    background: color-mix(
+      in srgb,
+      var(--m__bg-hover-color) 15%,
+      transparent
+    );
+      transition: background var(--m__hover-transition-duration) var(--m__transition-easing),
+      color var(--m__hover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-transcript-utterance.active {
+    background: color-mix(
+      in srgb,
+      var(--ec, var(--m__chart-model-1-color)) 20%,
+      var(--m__bg-surface-color)
+    ) !important;
+  }
+
+  .pg-transcript-utterance.active:hover {
+    background: color-mix(
+      in srgb,
+      var(--ec, var(--m__hover-color)) 20%,
+      transparent
+    ) !important;
+  }
+
+  .pg-transcript-utterance-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.2rem;
+    font-size: var(--m__font-size-xs);
+
+  }
+
+  .pg-transcript-time {
+    font-variant-numeric: tabular-nums;
+  }
+  .pg-transcript-emotion {
+    color: var(--ec, #0078c8);
+  }
+
+  .ec-calm        { --ec: var(--emotion-calm); }
+  .ec-confident   { --ec: var(--emotion-confident); }
+  .ec-interested  { --ec: var(--emotion-interested); }
+  .ec-happy       { --ec: var(--emotion-happy); }
+  .ec-neutral     { --ec: var(--emotion-neutral); }
+  .ec-angry       { --ec: var(--emotion-angry); }
+  .ec-frustrated  { --ec: var(--emotion-frustrated); }
+  .ec-stressed    { --ec: var(--emotion-stressed); }
+  .ec-anxious     { --ec: var(--emotion-anxious); }
+  .ec-sad         { --ec: var(--emotion-sad); }
+  .ec-concerned   { --ec: var(--emotion-concerned); }
+  .pg-transcript-accent {
+    color: var(--m__text-caption-color);
+  }
+  .pg-transcript-deepfake-score {
+    color: var(--m__text-caption-color);
+    font-family: monospace;
+    font-size: 0.75rem;
+  }
+  .pg-transcript-lang {
+    font-size: 0.7rem;
+    color: var(--m__text-caption-color);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .pg-transcript-text {
+    font-size: var(--m__font-size-m);
+    line-height: 1.6;
+
+  }
+  .pg-transcript-text.partial {
+    font-style: italic;
+    color: var(--m__text-caption-color);
+  }
+
+  .pii-blur {
+    filter: blur(5px);
+    transition: filter 0.2s;
+    cursor: help;
+    padding: 0 0.15em;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--m__ui-error-color) 8%, transparent);
+  }
+
+  .pii-blur:hover {
+    filter: none;
+    background: color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
+  }
+
+  .pg-transcript-empty {
+    text-align: center;
+    padding: var(--m__space-xl) var(--m__space-m);
+    color: var(--m__text-caption-color);
+    font-size: var(--m__font-size-s);
+  }
+
+   .verdict-authentic, .verdict-synthetic {
+     margin-left: auto;
+   }
+
+  /* STT emotion chart ──────────────────────────────────────────────────── */
+  .pg-stt-chart {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: var(--m__space-s);
+  }
+  .pg-stt-chart.visible {
+    display: flex;
+  }
+
+  .pg-stt-chart-row {
+    position: relative;
+    height: 22px;
+  }
+
+  .pg-stt-chart-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 0.6rem;
+    color: #000;
+    font-weight: 600;
+    z-index: 2;
+    pointer-events: none;
+    padding-left: 0.2rem;
+  }
+
+  .pg-stt-chart-bar {
+    position: absolute;
+    top: 0;
+    height: 22px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    min-width: 3px;
+  }
+
+  .pg-stt-chart-bar:hover {
+    z-index: 10;
+    filter: brightness(1.15);
+    outline: 1.5px solid var(--m__text-caption-color);
+  }
+  .pg-stt-chart-bar.active {
+    outline: 2px solid var(--m__bg-accent-color);
+    outline-offset: 1px;
+    z-index: 5;
+  }
+
+  /* Transcription sidebar ──────────────────────────────────────────────── */
+  .pg-results-sidebar {
+    display: none;
+    padding: 0 var(--m__space-m);
+    position: sticky;
+    top: var(--m__space-m);
+    margin-top: calc(
+      48px + var(--m__space-l) + 37px + var(--m__space-xxs) + var(--m__space-xs)
+    );
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .pg-results-sidebar.visible {
+    display: block;
+  }
+
+  .pg-sidebar-links {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  /* Upload area ────────────────────────────────────────────────────────── */
+
+  .pg-upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--m__space-s);
+    padding: var(--m__space-xl) var(--m__space-l);
+    text-align: center;
+    background-color: rgba(var(--ids__bg-accent-RGB), 1);
+    color: rgba(var(--ids__text-RGB), 1);
+  }
+
+  .pg-upload-box p {
+    font-size: var(--m__font-size-m);
+    color: rgba(var(--ids__text-RGB), 0.7);
+    margin: 0;
+  }
+
+  .pg-upload-formats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--m__space-xxs);
+    justify-content: center;
+  }
+
+  .pg-upload-header {
+    display: flex;
+    gap: var(--m__space-xs);
+    align-items: baseline;
+  }
+
+  .pg-upload-limits {
+    color: var(--m__text-caption-color);
+        font-size: var(--m__font-size-xxl);
+  }
+
+  /* ── ids__ tokens required by player.css ─────────────────────────────── */
+  :root {
+    --ids__radius: 1.5em;
+    --ids__background-RGB: 255, 255, 255;
+    --ids__bg-surface-RGB: 242, 242, 246;
+    --ids__bg-accent-RGB: 20, 20, 50;
+    --ids__text-RGB: 30, 30, 35;
+    --ids__text-caption-RGB: 150, 150, 170;
+    --ids__text-hover-RGB: 40, 95, 235;
+    --ids__UI-border-RGB: 220, 220, 230;
+
+    /* emotion RGB tokens */
+    --emotion-attack-rejection-group-RGB: 255, 53, 84;
+    --emotion-threat-uncertainty-group-RGB: 180, 100, 200;
+    --emotion-excited-engaged-group-RGB: 255, 120, 80;
+    --emotion-low-energy-negative-group-RGB: 0, 120, 200;
+    --emotion-calm-grounded-group-RGB: 110, 140, 190;
+    --emotion-neutral-group-RGB: 90, 90, 110;
+
+    --emotion-angry-RGB: var(--emotion-attack-rejection-group-RGB);
+    --emotion-contemptuous-RGB: var(--emotion-attack-rejection-group-RGB);
+    --emotion-disgusted-RGB: var(--emotion-attack-rejection-group-RGB);
+    --emotion-afraid-RGB: var(--emotion-threat-uncertainty-group-RGB);
+    --emotion-anxious-RGB: var(--emotion-threat-uncertainty-group-RGB);
+    --emotion-stressed-RGB: var(--emotion-threat-uncertainty-group-RGB);
+    --emotion-surprised-RGB: var(--emotion-threat-uncertainty-group-RGB);
+    --emotion-ashamed-RGB: var(--emotion-threat-uncertainty-group-RGB);
+    --emotion-frustrated-RGB: var(--emotion-threat-uncertainty-group-RGB);
+    --emotion-fear-RGB: var(--emotion-threat-uncertainty-group-RGB);
+    --emotion-affectionate-RGB: var(--emotion-excited-engaged-group-RGB);
+    --emotion-amused-RGB: var(--emotion-excited-engaged-group-RGB);
+    --emotion-excited-RGB: var(--emotion-excited-engaged-group-RGB);
+    --emotion-happy-RGB: var(--emotion-excited-engaged-group-RGB);
+    --emotion-hopeful-RGB: var(--emotion-excited-engaged-group-RGB);
+    --emotion-proud-RGB: var(--emotion-excited-engaged-group-RGB);
+    --emotion-relieved-RGB: var(--emotion-excited-engaged-group-RGB);
+    --emotion-curious-RGB: var(--emotion-excited-engaged-group-RGB);
+    --emotion-disappointed-RGB: var(--emotion-low-energy-negative-group-RGB);
+    --emotion-bored-RGB: var(--emotion-low-energy-negative-group-RGB);
+    --emotion-tired-RGB: var(--emotion-low-energy-negative-group-RGB);
+    --emotion-concerned-RGB: var(--emotion-low-energy-negative-group-RGB);
+    --emotion-confused-RGB: var(--emotion-low-energy-negative-group-RGB);
+    --emotion-sad-RGB: var(--emotion-low-energy-negative-group-RGB);
+    --emotion-calm-RGB: var(--emotion-calm-grounded-group-RGB);
+    --emotion-confident-RGB: var(--emotion-calm-grounded-group-RGB);
+    --emotion-interested-RGB: var(--emotion-calm-grounded-group-RGB);
+    --emotion-neutral-RGB: var(--emotion-neutral-group-RGB);
+    --emotion-unknown-RGB: var(--emotion-neutral-group-RGB);
+  }
+
+  .dark-mode {
+    --ids__background-RGB: 20, 20, 50;
+    --ids__bg-surface-RGB: 50, 50, 85;
+    --ids__bg-accent-RGB: 20, 20, 50;
+    --ids__text-RGB: 255, 255, 255;
+    --ids__text-caption-RGB: 128, 128, 128;
+    --ids__text-hover-RGB: 120, 180, 255;
+    --ids__bg-hover-RGB: 100, 110, 140;
+  }
+
+  /* Statistics ─────────────────────────────────────────────────────────── */
+
+  .pg-stats-table .pg-stats-label {
+    color: var(--m__text-caption-color);
+    font-weight: 500;
+    padding-right: var(--m__space-m);
+    white-space: nowrap;
+    width: 25%;
+  }
+
+  /* JSON Response ──────────────────────────────────────────────────────── */
+  .pg-json-container {
+    position: relative;
+  }
+
+  .pg-json-pre {
+    background: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-m);
+    padding: var(--m__space-m);
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--m__text-color);
+  }
+
+  .pg-json-key    { color: rgb(124, 58, 237); }
+  .pg-json-string { color: rgb(21, 150, 100); }
+  .pg-json-number { color: rgb(40, 95, 235); }
+  .pg-json-bool   { color: rgb(220, 80, 50); }
+  .pg-json-null   { color: var(--m__text-caption-color); }
+
+  /* Demo recordings table ──────────────────────────────────────────────── */
+  .pg-demo-recordings tbody tr {
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+
+  .pg-demo-recordings tbody tr:hover {
+    color: var(--m__text-hover-color);
+    transition: color 0s;
+  }
+
+  .pg-demo-recordings .col-category,
+ .pg-demo-recordings .col-industry  {
+        font-size: var(--m__font-size-s);
+  }
+
+  .pg-demo-recordings .col-fp {
+    width: 22%;
+    white-space: nowrap;
+  }
+
+  .pg-demo-recordings .col-category,
+  .pg-demo-recordings .col-industry {
+    width: 16%;
+  }
+
+  .pg-fp-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .pg-fp {
+    position: relative;
+    width: 100px;
+    height: 1.35em;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--m__bg-accent-color);
+    flex-shrink: 0;
+  }
+
+  .pg-fp-clip {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: var(--emotion-color, transparent);
+  }
+
+  .pg-fp-time {
+    color: var(--m__text-caption-color);
+    font-size: var(--m__font-size-s);
+  }
+
+  /* speaker rows inside fingerprint */
+  .pg-fp[data-speakers="1"] .pg-fp-clip { height: 100%; top: 0; }
+  .pg-fp[data-speakers="2"] .pg-fp-clip { height: 50%; }
+  .pg-fp[data-speakers="2"] .pg-fp-clip[data-sp="1"] { top: 0; }
+  .pg-fp[data-speakers="2"] .pg-fp-clip[data-sp="2"] { top: 50%; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip { height: 25%; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip[data-sp="1"] { top: 0; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip[data-sp="2"] { top: 25%; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip[data-sp="3"] { top: 50%; }
+  .pg-fp[data-speakers="4"] .pg-fp-clip[data-sp="4"] { top: 75%; }
+
+</style>
+{% endblock %} {% block content %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
-  <main>
-    <h1>Playground</h1>
+  <h1>Playground</h1>
+  <div class="m__space S"></div>
+</div>
+  <!-- PLAYER -->
+  <div class="m__wrapper">
+  <div class="media-container">
+    <div
+      class="media-box m__rounded dark-mode"
+      id="audio-player"
+      data-speaker-count="2"
+    >
+      <div class="player-visualization">
+        <!-- Speaker 0: Calm → Confident -->
+        <div
+          class="transcript-clip emotion-calm"
+          data-speaker-index="1"
+          style="left: 0%; width: 12%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+        <div
+          class="transcript-clip emotion-confident"
+          data-speaker-index="1"
+          style="left: 28%; width: 14%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+        <div
+          class="transcript-clip emotion-confident"
+          data-speaker-index="1"
+          style="left: 62%; width: 38%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+        <!-- Speaker 1: Happy → Interested -->
+        <div
+          class="transcript-clip emotion-happy"
+          data-speaker-index="2"
+          style="left: 12%; width: 16%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+        <div
+          class="transcript-clip emotion-interested"
+          data-speaker-index="2"
+          style="left: 42%; width: 20%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+      </div>
+      <div class="speaker-labels">
+        <div class="speaker-label" data-speaker-index="1">
+          <span>Speaker 0</span>
+        </div>
+        <div class="speaker-label" data-speaker-index="2">
+          <span>Speaker 1</span>
+        </div>
+      </div>
+      <div class="behaviour-indicators"></div>
+      <div class="behaviour-labels" style="display: none"></div>
+      <div class="player-controls">
+        <div class="player-control-spacer"></div>
+        <div
+          class="player-control player-control-center"
+          data-action="play-pause"
+        >
+          <a href="#" class="player-icon" data-playing="false">
+            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <polygon
+                fill="currentColor"
+                points="40 30 40 190 190 110 40 30"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="clip-text-caption"><span></span></div>
+      <div class="player-status-caption">
+        <span class="emotion-caption"></span>
+      </div>
+      <div class="player-total-time">
+        <span class="total-time" data-total-time>0:54</span>
+      </div>
+      <div class="player-position-indicator">
+        <div class="player-position-line"></div>
+        <div class="player-position-caption">
+          <span data-current-time>0:00</span>
+        </div>
+      </div>
+      <div class="player-hover-position-indicator">
+        <div class="player-hover-position-line"></div>
+        <div class="player-hover-position-caption">
+          <span data-hover-time>0:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <p class="loud">Interactive API playground — coming soon.</p>
+  <div class="m__space L"></div>
+  <fieldset class="m__segmented-control" id="pg-tabs">
+    <label><input type="radio" name="pg-tab" value="transcription" checked />Transcription</label>
+    <label><input type="radio" name="pg-tab" value="deepfake" />Deepfake Detection</label>
+    <label><input type="radio" name="pg-tab" value="debug-mode" />Debug Mode</label>
+  </fieldset>
 
-    <div class="m__space XL"></div>
-  </main>
+  <div class="pg-tab-panel" id="panel-transcription">
+
+      <div class="m__space XS"></div>
+            <h2>Transcription</h2>
+
+
+      <!-- Transcript -->
+      <div class="pg-transcript-container visible" id="transcript-container">
+        <div class="pg-transcript-list" id="transcript-list">
+          <!-- Speaker 0 · Calm · American · Authentic -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-left ec-calm"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:00</span>
+              <span class="pg-transcript-speaker">Speaker 0</span>
+              <span class="pg-transcript-emotion"
+                >Calm</span
+              >
+              <span class="pg-transcript-accent"
+                >American accent</span
+              >
+              <span class="m__tag verdict-authentic">Authentic</span>
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              Welcome to today's demo. Could you start by telling us a bit about
+              yourself and your background?
+              </p>
+            </div>
+          </div>
+          <!-- Speaker 1 · Happy · British · Authentic -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-right ec-happy"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:06</span>
+              <span class="pg-transcript-speaker">Speaker 1</span>
+              <span class="pg-transcript-emotion"
+                >Happy</span
+              >
+              <span class="pg-transcript-accent"
+                >British accent</span
+              >
+              <span class="m__tag verdict-authentic">Authentic</span>
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              Of course! I've been working in audio processing for about seven
+              years now, mostly focused on real-time voice analysis.
+            </p>
+            </div>
+          </div>
+          <!-- Speaker 0 · Neutral · American · Authentic -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-left ec-neutral"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:18</span>
+              <span class="pg-transcript-speaker">Speaker 0</span>
+              <span class="pg-transcript-emotion"
+                >Neutral</span
+              >
+              <span class="pg-transcript-accent"
+                >American accent</span
+              >
+              <span class="m__tag verdict-authentic">Authentic</span>
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              And what drew you specifically to deepfake detection as a research
+              area?
+              </p>
+            </div>
+          </div>
+          <!-- Speaker 1 · Interested · British · SYNTHETIC -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-right active ec-interested"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:24</span>
+              <span class="pg-transcript-speaker">Speaker 1</span>
+              <span class="pg-transcript-emotion"
+                >Interested</span
+              >
+              <span class="pg-transcript-accent"
+                >British accent</span
+              >
+              <span
+                class="m__tag verdict-synthetic"
+                title="Deepfake · 68% confidence"
+                >Deepfake</span
+              >
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              Well, it started when I noticed that existing systems were
+              struggling with prosody-preserving synthesis. The gap between
+              human and synthetic speech keeps narrowing.
+              </p>
+            </div>
+          </div>
+          <!-- Speaker 0 · Confident · American · Authentic -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-left ec-confident"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:42</span>
+              <span class="pg-transcript-speaker">Speaker 0</span>
+              <span class="pg-transcript-emotion"
+                >Confident</span
+              >
+              <span class="pg-transcript-accent"
+                >American accent</span
+              >
+              <span class="m__tag verdict-authentic">Authentic</span>
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              That's a great point. The Modulate API combines frame-level
+              analysis with utterance-level classification — giving you both
+              granular and holistic verdicts.
+              </p>
+            </div>
+          </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="pg-tab-panel" id="panel-deepfake" hidden>
+      <div class="m__space XS"></div>
+      <div class="deepfake-header verdict-synthetic">
+      <h2>56% Deepfake</h2>
+      <span>14/25 deepfake segments. 3 segments with >98% conf.</span>
+      </div>
+
+      <div class="m__space XS"></div>
+      <div class="pg-histogram-section">
+        <div class="pg-histogram-scroll">
+          <div class="pg-histogram" id="histogram">
+            <div class="pg-histo-squares">
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.97"
+                title="0:01 · Authentic · 97%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.94"
+                title="0:02 · Authentic · 94%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.91"
+                title="0:03 · Authentic · 91%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.96"
+                title="0:04 · Authentic · 96%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.89"
+                title="0:05 · Authentic · 89%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.93"
+                title="0:06 · Authentic · 93%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.78"
+                title="0:07 · Synthetic · 78%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.94"
+                title="0:08 · Synthetic · 94%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.97"
+                title="0:09 · Synthetic · 97%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.91"
+                title="0:10 · Synthetic · 91%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.88"
+                title="0:11 · Synthetic · 88%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.95"
+                title="0:12 · Synthetic · 95%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.86"
+                title="0:13 · Authentic · 86%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.92"
+                title="0:14 · Authentic · 92%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                title="0:15 · No content"
+              ></div>
+            </div>
+            <div class="pg-histo-axis">
+              <div class="pg-histo-tick">0:00</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:05</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:10</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick" style="text-align: right">0:15</div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+      <div class="pg-results-table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Verdict</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="results-tbody">
+            <tr>
+              <td>0:00 – 0:04</td>
+              <td>
+                <span class="m__tag verdict-authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 97%"
+                    ></div>
+                  </div>
+                  <span>97.0%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:04 – 0:08</td>
+              <td>
+                <span class="m__tag verdict-authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 91%"
+                    ></div>
+                  </div>
+                  <span>91.2%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:08 – 0:12</td>
+              <td>
+                <span class="m__tag verdict-authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 93%"
+                    ></div>
+                  </div>
+                  <span>93.4%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:12 – 0:16</td>
+              <td>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 78%"
+                    ></div>
+                  </div>
+                  <span>78.3%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:16 – 0:20</td>
+              <td>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 97%"
+                    ></div>
+                  </div>
+                  <span>96.8%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:20 – 0:24</td>
+              <td>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 88%"
+                    ></div>
+                  </div>
+                  <span>87.6%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:24 – 0:28</td>
+              <td>
+                <span class="m__tag verdict-authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 86%"
+                    ></div>
+                  </div>
+                  <span>86.2%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <div class="pg-tab-panel" id="panel-debug-mode" hidden>
+    <div class="m__space XS"></div>
+
+    <h2 class="pg-stats-heading">General</h2>
+    <table class="pg-stats-table">
+      <tbody>
+        <tr>
+          <td class="pg-stats-label">Speakers</td>
+          <td class="pg-stats-value">2</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Languages</td>
+          <td class="pg-stats-value">en</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Deepfake analyzed</td>
+          <td class="pg-stats-value">17 / 19 utterances</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Avg deepfake score</td>
+          <td class="pg-stats-value">0.6368</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Max deepfake score</td>
+          <td class="pg-stats-value">0.9810</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="m__space XS"></div>
+    <h2 class="pg-stats-heading">Audio</h2>
+    <table class="pg-stats-table">
+      <tbody>
+        <tr>
+          <td class="pg-stats-label">File Name</td>
+          <td class="pg-stats-value">AIAgentFrustration.mp3</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">File Size</td>
+          <td class="pg-stats-value">1.87 MB</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">File Type</td>
+          <td class="pg-stats-value">audio/mpeg</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Audio Duration</td>
+          <td class="pg-stats-value">1m 37.3s</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="m__space XS"></div>
+    <h2 class="pg-stats-heading">Performance</h2>
+    <table class="pg-stats-table">
+      <tbody>
+        <tr>
+          <td class="pg-stats-label">Processing Time</td>
+          <td class="pg-stats-value">2.66s</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Processing Factor</td>
+          <td class="pg-stats-value">36.6x real-time</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="m__space XS"></div>
+    <h2 class="pg-stats-heading">Request</h2>
+    <table class="pg-stats-table">
+      <tbody>
+        <tr>
+          <td class="pg-stats-label">HTTP</td>
+          <td class="pg-stats-value">200 OK</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Endpoint</td>
+          <td class="pg-stats-value">/api/velma-2-stt-batch</td>
+        </tr>
+        <tr>
+          <td class="pg-stats-label">Response Size</td>
+          <td class="pg-stats-value">5.8 KB</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="m__space S"></div>
+
+
+    <h2>JSON Response</h2>
+    <div class="pg-json-container">
+
+      <pre class="pg-json-pre"><span class="pg-json-brace">{</span>
+  <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">0.9788</span>,
+  <span class="pg-json-key">"utterances"</span>: <span class="pg-json-brace">[</span>
+    <span class="pg-json-brace">{</span>
+      <span class="pg-json-key">"utterance_uid"</span>: <span class="pg-json-string">"ec69b9e7-8fac-4b3e-a4da-ea9773d56aed"</span>,
+      <span class="pg-json-key">"text"</span>: <span class="pg-json-string">"Track package."</span>,
+      <span class="pg-json-key">"start_ms"</span>: <span class="pg-json-number">91620</span>,
+      <span class="pg-json-key">"duration_ms"</span>: <span class="pg-json-number">960</span>,
+      <span class="pg-json-key">"speaker"</span>: <span class="pg-json-number">2</span>,
+      <span class="pg-json-key">"language"</span>: <span class="pg-json-string">"en"</span>,
+      <span class="pg-json-key">"emotion"</span>: <span class="pg-json-string">"Excited"</span>,
+      <span class="pg-json-key">"accent"</span>: <span class="pg-json-string">"American"</span>,
+      <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">1.1000000000000001</span>
+    <span class="pg-json-brace">}</span>,
+    <span class="pg-json-brace">{</span>
+      <span class="pg-json-key">"utterance_uid"</span>: <span class="pg-json-string">"4003b94d-b15d-46b1-9276-80366dc178fc"</span>,
+      <span class="pg-json-key">"text"</span>: <span class="pg-json-string">"Thank you. Did you say you'd like to place an order?"</span>,
+      <span class="pg-json-key">"start_ms"</span>: <span class="pg-json-number">3000</span>,
+      <span class="pg-json-key">"duration_ms"</span>: <span class="pg-json-number">3800</span>,
+      <span class="pg-json-key">"speaker"</span>: <span class="pg-json-number">1</span>,
+      <span class="pg-json-key">"language"</span>: <span class="pg-json-string">"en"</span>,
+      <span class="pg-json-key">"emotion"</span>: <span class="pg-json-string">"Interested"</span>,
+      <span class="pg-json-key">"accent"</span>: <span class="pg-json-string">"American"</span>,
+      <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">0.9723</span>
+    <span class="pg-json-brace">}</span>,
+    <span class="pg-json-brace">{</span>
+      <span class="pg-json-key">"utterance_uid"</span>: <span class="pg-json-string">"a1c82f3d-09e2-4f7a-b831-22de94a05c61"</span>,
+      <span class="pg-json-key">"text"</span>: <span class="pg-json-string">"I need to check on my delivery, it's been two weeks."</span>,
+      <span class="pg-json-key">"start_ms"</span>: <span class="pg-json-number">8200</span>,
+      <span class="pg-json-key">"duration_ms"</span>: <span class="pg-json-number">4100</span>,
+      <span class="pg-json-key">"speaker"</span>: <span class="pg-json-number">2</span>,
+      <span class="pg-json-key">"language"</span>: <span class="pg-json-string">"en"</span>,
+      <span class="pg-json-key">"emotion"</span>: <span class="pg-json-string">"Frustrated"</span>,
+      <span class="pg-json-key">"accent"</span>: <span class="pg-json-string">"American"</span>,
+      <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">0.1042</span>
+    <span class="pg-json-brace">}</span>,
+    <span class="pg-json-brace">{</span>
+      <span class="pg-json-key">"utterance_uid"</span>: <span class="pg-json-string">"7fd301ea-c44b-48d2-a96e-5b3c71d0f882"</span>,
+      <span class="pg-json-key">"text"</span>: <span class="pg-json-string">"I understand your frustration. Let me pull up your order right now."</span>,
+      <span class="pg-json-key">"start_ms"</span>: <span class="pg-json-number">12400</span>,
+      <span class="pg-json-key">"duration_ms"</span>: <span class="pg-json-number">3600</span>,
+      <span class="pg-json-key">"speaker"</span>: <span class="pg-json-number">1</span>,
+      <span class="pg-json-key">"language"</span>: <span class="pg-json-string">"en"</span>,
+      <span class="pg-json-key">"emotion"</span>: <span class="pg-json-string">"Calm"</span>,
+      <span class="pg-json-key">"accent"</span>: <span class="pg-json-string">"American"</span>,
+      <span class="pg-json-key">"deepfake_score"</span>: <span class="pg-json-number">0.9812</span>
+    <span class="pg-json-brace">}</span>
+  <span class="pg-json-brace">]</span>
+<span class="pg-json-brace">}</span></pre>
+    </div>
+  </div>
+
 </div>
 
-{% endblock %}
+    <div class="m__space XL"></div>
+  <div class="m__wrapper">
+
+    <div class="pg-upload-section">
+      <div class="pg-upload-header">
+        <h2>Try More Audio</h2>
+        <span class="pg-upload-limits">
+      30 requests remaining</span>
+      </div>
+
+      <p>
+        Velma-2 handles transcription, emotion, accent, and engagement detection across 70+ languages. Choose the options that fits your use case and upload voice.
+      </p>
+
+              <div class="m__space XS"></div>
+
+
+      <!-- Options row -->
+      <div class="pg-options-row">
+        <div class="pg-stt-options visible" id="stt-options">
+          <label
+            class="pg-stt-option"
+            data-tip="Identify different speakers in the audio"
+          >
+            <input type="checkbox" id="opt-diarization" checked /> Diarization
+          </label>
+          <label
+            class="pg-stt-option"
+            data-tip="Detect synthetic/AI-generated voice (deepfake) per utterance"
+          >
+            <input type="checkbox" id="opt-deepfake" checked /> Deepfake
+          </label>
+          <label
+            class="pg-stt-option"
+            data-tip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
+          >
+            <input type="checkbox" id="opt-emotion" checked /> Emotions
+          </label>
+          <label
+            class="pg-stt-option"
+            data-tip="Detect speaker accent (e.g. American, British)"
+          >
+            <input type="checkbox" id="opt-accent" checked /> Accent
+          </label>
+          <label
+            class="pg-stt-option"
+            data-tip="Tag personally identifiable and health information"
+          >
+            <input type="checkbox" id="opt-pii" checked /> PII/PHI
+          </label>
+          <span class="pg-stt-option" data-tip="Fast transcription, English only" onclick="document.getElementById('opt-fast').click()">
+            <button
+              type="button"
+              id="opt-fast"
+              class="theme-toggle pg-fast-toggle"
+              role="switch"
+              aria-checked="false"
+              aria-label="Fast transcription">
+              <span class="theme-toggle__track">
+                <span class="theme-toggle__thumb"></span>
+              </span>
+            </button>
+            Fast (English only)
+          </span>
+        </div>
+      </div>
+
+        <div class="m__space M"></div>
+
+      <div class="pg-upload-box m__rounded dark-mode">
+        <p>Drop your audio or video file here, or stream live voice</p>
+        <p>Supported formats up to 50 MB:</p>
+        <div class="pg-upload-formats">
+          <span class="m__tag">.aac</span>
+          <span class="m__tag">.flac</span>
+          <span class="m__tag">.m4a</span>
+          <span class="m__tag">.mp3</span>
+          <span class="m__tag">.mp4</span>
+          <span class="m__tag">.ogg</span>
+          <span class="m__tag">.opus</span>
+          <span class="m__tag">.wav</span>
+          <span class="m__tag">.webm</span>
+        </div>
+        <div>
+        <button class="m__button-secondary">Choose file…</button>
+                <button class="m__button-secondary">Start streaming</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="m__space L"></div>
+  <div class="m__wrapper pg-demo-recordings">
+    <h2>Preloaded demo recordings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th class="col-fp">Emotion pattern</th>
+          <th class="col-title">Conversation</th>
+          <th class="col-category">Category</th>
+          <th class="col-industry">Industry</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:0.0%;width:2.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:2.5%;width:2.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:4.7%;width:2.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:6.9%;width:2.2%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:9.1%;width:1.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:11.0%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-confident);left:14.4%;width:4.3%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:18.7%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:21.5%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:24.3%;width:2.2%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:26.5%;width:8.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:34.6%;width:5.6%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:40.2%;width:3.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-amused);left:43.3%;width:2.2%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:45.5%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:48.9%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:52.3%;width:4.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:57.0%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:59.8%;width:1.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:61.7%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:64.5%;width:1.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:66.4%;width:1.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:68.0%;width:3.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:71.1%;width:1.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-amused);left:73.0%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:75.8%;width:1.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:77.7%;width:1.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:79.6%;width:9.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:89.5%;width:2.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:91.7%;width:4.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:95.7%;width:4.3%"></div>
+              </div>
+              <span class="pg-fp-time">07:48</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Gender-role argument ends the relationship</strong></td>
+          <td class="col-category">Social</td>
+          <td class="col-industry">Personal Relationships</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-relieved);left:0.0%;width:3.3%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:3.3%;width:2.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:5.3%;width:4.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:9.8%;width:6.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:16.4%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:20.5%;width:3.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:24.2%;width:2.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:26.7%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-concerned);left:30.8%;width:4.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:35.3%;width:3.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:39.0%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:43.1%;width:2.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-confused);left:46.0%;width:3.3%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:49.3%;width:2.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:51.3%;width:2.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:54.2%;width:10.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:64.4%;width:2.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:67.3%;width:2.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:69.3%;width:2.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:71.3%;width:2.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-confused);left:73.3%;width:2.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:75.8%;width:3.3%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:79.1%;width:3.3%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-confused);left:82.4%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:86.5%;width:4.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:91.4%;width:8.6%"></div>
+              </div>
+              <span class="pg-fp-time">05:33</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Elderly caller needs login for surgery payment</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">Banking</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:0.0%;width:4.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:4.5%;width:5.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:9.5%;width:5.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:14.5%;width:4.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:19.0%;width:6.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-confused);left:25.5%;width:3.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:29.0%;width:3.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:32.0%;width:3.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:35.0%;width:3.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:38.0%;width:3.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:41.0%;width:4.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:45.0%;width:2.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:47.5%;width:3.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:51.0%;width:3.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:54.5%;width:3.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:57.5%;width:5.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:63.0%;width:8.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:71.0%;width:3.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:74.5%;width:5.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:79.5%;width:5.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:85.0%;width:6.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-confused);left:91.5%;width:3.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:95.0%;width:2.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:97.5%;width:2.5%"></div>
+              </div>
+              <span class="pg-fp-time">06:10</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Sales rep fumbles MFA setup with IT</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">IT services</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:0.0%;width:4.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:4.5%;width:6.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:11.2%;width:5.2%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:16.4%;width:3.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:20.1%;width:5.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:25.3%;width:11.2%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:36.5%;width:6.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:42.5%;width:8.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:50.7%;width:7.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:58.2%;width:6.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:64.2%;width:8.2%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:72.4%;width:3.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-concerned);left:76.1%;width:3.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:79.8%;width:6.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:85.8%;width:3.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:89.5%;width:3.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:93.2%;width:6.8%"></div>
+              </div>
+              <span class="pg-fp-time">04:31</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Customer fights for refund in delivery fraud</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">E-commerce</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="1">
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:0.0%;width:4.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:4.9%;width:10.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:15.4%;width:8.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:23.6%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:27.0%;width:3.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:30.6%;width:3.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:33.8%;width:5.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:39.2%;width:8.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:48.0%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:52.1%;width:5.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:57.9%;width:7.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:65.4%;width:3.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:68.6%;width:20.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:89.4%;width:10.6%"></div>
+              </div>
+              <span class="pg-fp-time">07:52</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Youtuber describes personal stalker experience</strong></td>
+          <td class="col-category">Social</td>
+          <td class="col-industry">Online media</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="4">
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:0%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-sad);left:0%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="3" style="--emotion-color:var(--emotion-angry);left:0%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="4" style="--emotion-color:var(--emotion-concerned);left:0%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:3.4%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:3.4%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="4" style="--emotion-color:var(--emotion-stressed);left:3.4%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="3" style="--emotion-color:var(--emotion-angry);left:3.4%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-sad);left:6.2%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="4" style="--emotion-color:var(--emotion-concerned);left:6.2%;width:2.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:9.6%;width:3.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:9.6%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="3" style="--emotion-color:var(--emotion-angry);left:9.6%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="4" style="--emotion-color:var(--emotion-frustrated);left:9.6%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-angry);left:15.2%;width:3.4%"></div>
+              </div>
+              <span class="pg-fp-time">01:37</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>AI bot can't find customer's order</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">E-commerce</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:0.0%;width:6.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:6.1%;width:5.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:11.1%;width:4.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:15.5%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:18.3%;width:6.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:24.9%;width:3.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:28.8%;width:8.3%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:37.1%;width:5.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:42.1%;width:16.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:58.7%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:61.5%;width:3.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:65.4%;width:6.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:72.0%;width:3.3%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:75.3%;width:4.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:79.7%;width:4.4%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:84.1%;width:8.3%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:92.4%;width:7.6%"></div>
+              </div>
+              <span class="pg-fp-time">03:49</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>User demands MFA reset for drive access</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">IT services</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="1">
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-excited);left:0.0%;width:8.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-confident);left:8.9%;width:2.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:11.6%;width:3.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:15.2%;width:13.3%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:28.5%;width:5.3%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:33.8%;width:2.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:36.5%;width:12.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:49.4%;width:4.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:53.8%;width:8.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:62.2%;width:2.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:64.9%;width:2.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:67.1%;width:4.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:71.1%;width:4.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-happy);left:75.1%;width:4.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-frustrated);left:79.5%;width:9.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:89.3%;width:2.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:91.5%;width:2.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:94.2%;width:2.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:96.9%;width:3.1%"></div>
+              </div>
+              <span class="pg-fp-time">04:24</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Streamer rants on politics and censorship</strong></td>
+          <td class="col-category">Social</td>
+          <td class="col-industry">Media &amp; broadcasting</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:0.0%;width:3.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:3.9%;width:5.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:9.8%;width:8.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:18.7%;width:7.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:26.6%;width:6.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:33.0%;width:3.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:36.0%;width:7.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:43.9%;width:2.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:46.4%;width:5.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:52.3%;width:5.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:57.7%;width:2.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:60.2%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:63.6%;width:3.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:67.5%;width:9.4%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:76.9%;width:5.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:82.3%;width:2.5%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:84.8%;width:15.2%"></div>
+              </div>
+              <span class="pg-fp-time">04:28</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Angry caller demands update on late delivery</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">E-commerce</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:0.0%;width:3.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:3.1%;width:2.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:5.2%;width:1.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:6.9%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:10.3%;width:2.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:12.4%;width:1.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:14.1%;width:2.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:16.2%;width:2.4%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:18.6%;width:2.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:20.7%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:23.5%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-neutral);left:27.6%;width:1.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:29.3%;width:2.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:31.4%;width:10.3%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-calm);left:41.7%;width:10.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:52.4%;width:7.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:60.3%;width:6.9%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-concerned);left:67.2%;width:1.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:68.9%;width:6.6%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:75.5%;width:3.4%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:78.9%;width:6.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:85.8%;width:7.9%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:93.7%;width:2.1%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-stressed);left:95.8%;width:2.4%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-relieved);left:98.2%;width:1.8%"></div>
+              </div>
+              <span class="pg-fp-time">06:25</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Manager pushes IT for password reset</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">IT services</td>
+        </tr>
+        <tr>
+          <td class="col-fp">
+            <div class="pg-fp-wrapper">
+              <div class="pg-fp" data-speakers="2">
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:0.0%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:2.8%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:5.6%;width:3.2%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:8.8%;width:7.3%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:16.1%;width:4.6%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:20.7%;width:4.6%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:25.3%;width:3.7%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:29.0%;width:3.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:32.2%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:36.3%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:39.1%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:43.2%;width:6.0%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:49.2%;width:2.8%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-angry);left:52.0%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:56.1%;width:11.5%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:67.6%;width:4.1%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-frustrated);left:71.7%;width:8.7%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:80.4%;width:5.0%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-relieved);left:85.4%;width:3.2%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:88.6%;width:2.3%"></div>
+                <div class="pg-fp-clip" data-sp="2" style="--emotion-color:var(--emotion-neutral);left:90.9%;width:2.3%"></div>
+                <div class="pg-fp-clip" data-sp="1" style="--emotion-color:var(--emotion-calm);left:93.2%;width:6.8%"></div>
+              </div>
+              <span class="pg-fp-time">05:14</span>
+            </div>
+          </td>
+          <td class="col-title"><strong>Customer tries account recovery without security steps</strong></td>
+          <td class="col-category">Support</td>
+          <td class="col-industry">E-commerce</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  {% endblock %} {% block scripts %}
+  <script>
+    var fastBtn = document.getElementById('opt-fast');
+    var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]');
+
+    fastBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOn = fastBtn.getAttribute('aria-checked') === 'true';
+      fastBtn.setAttribute('aria-checked', isOn ? 'false' : 'true');
+      checkboxes.forEach(function (cb) {
+        cb.disabled = !isOn;
+        cb.closest('.pg-stt-option').style.opacity = !isOn ? '0.4' : '';
+        cb.closest('.pg-stt-option').style.pointerEvents = !isOn ? 'none' : '';
+      });
+    });
+
+    document.getElementById('pg-tabs').addEventListener('change', function (e) {
+      var val = e.target.value;
+      document.querySelectorAll('.pg-tab-panel').forEach(function (panel) {
+        panel.hidden = panel.id !== 'panel-' + val;
+      });
+    });
+  </script>
+  {% endblock %}
+</div>

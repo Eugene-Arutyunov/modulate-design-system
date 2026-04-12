@@ -1,0 +1,853 @@
+:root {
+  --initial-height: 14em;
+  --stuck-height: 9em;
+  --player-visualization-height: 75%;
+  --player-visualization-mobile-height: 65%;
+
+  /* Captions top position - common for all time/emotion captions */
+  --player-captions-top: calc(var(--player-visualization-height) + 1.4em);
+  --player-captions-top-mobile: calc(
+    var(--player-visualization-mobile-height) + 1.3em
+  );
+
+  /* Emotion color animation timing */
+  --emotion-color-delay: 0s;
+  --emotion-color-duration: 0.2s;
+}
+
+@keyframes emotion-color-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.media-container {
+  position: sticky;
+  top: 0;
+  height: calc(var(--initial-height) + 0.5em);
+  z-index: 1;
+
+  & .media-space {
+    background-color: rgba(var(--ids__background-RGB), 1);
+    height: 5em;
+    margin-bottom: -4.5em;
+
+    @media (width < 768px) {
+      margin-bottom: -4.5em;
+    }
+  }
+
+  & .media-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    --padding: 0.2em;
+    --speaker-count: 2;
+
+    height: var(--initial-height);
+    background-color: rgba(var(--ids__bg-accent-RGB), 1);
+    box-shadow: 0 0.5em 0.5em 0 white;
+    transition: height 0.2s ease;
+
+    &[data-speaker-count="1"] { --speaker-count: 1; }
+    &[data-speaker-count="2"] { --speaker-count: 2; }
+    &[data-speaker-count="3"] { --speaker-count: 3; }
+    &[data-speaker-count="4"] { --speaker-count: 4; }
+    &[data-speaker-count="5"] { --speaker-count: 5; }
+  }
+
+  &.stuck {
+    pointer-events: none;
+
+    & .media-box {
+      height: var(--stuck-height);
+      transition: height 0.5s ease;
+      pointer-events: auto;
+
+      & .player-visualization {
+        height: var(--player-visualization-mobile-height);
+        transition: height 0.5s ease;
+      }
+    }
+
+    & .speaker-labels {
+      height: var(--player-visualization-mobile-height);
+      transition: height 0.5s ease;
+    }
+    & .behaviour-indicators {
+      height: var(--player-visualization-mobile-height);
+      transition: height 0.5s ease;
+    }
+    & .behaviour-labels {
+      height: var(--player-visualization-mobile-height);
+      transition: height 0.5s ease;
+    }
+    & .player-controls {
+      height: calc(100% - var(--player-visualization-mobile-height));
+      transition: height 0.5s ease;
+    }
+    & .player-icon {
+      transform: scale(0.8);
+      transition: transform 0.5s ease;
+    }
+    & .player-controls .player-control-center:hover .player-icon {
+      transform: scale(0.9);
+      transition: transform 0s ease;
+    }
+    & .player-controls .player-control-center:hover .player-icon:hover {
+      & svg,
+      & svg * {
+        fill: white;
+        transition: fill 0s ease;
+      }
+    }
+    & .clip-text-caption {
+      top: var(--player-visualization-mobile-height);
+      transition: top 0.5s ease;
+    }
+    & .player-status-caption {
+      top: var(--player-visualization-mobile-height);
+      transition: top 0.5s ease;
+    }
+    & .player-total-time {
+      top: var(--player-captions-top-mobile);
+      transition: top 0.5s ease;
+    }
+    & .player-position-indicator {
+      & .player-position-caption {
+        top: var(--player-captions-top-mobile);
+        transition: top 0.5s ease;
+      }
+    }
+    & .player-hover-position-indicator {
+      & .player-hover-position-caption {
+        top: var(--player-captions-top-mobile);
+        transition: top 0.5s ease;
+      }
+    }
+  }
+
+  /* Player visualization timeline */
+  & .player-visualization {
+    position: relative;
+    background-color: rgba(var(--ids__bg-surface-RGB), 1);
+    height: var(--player-visualization-height);
+    transition: height 0.2s ease;
+
+    & .transcript-clip {
+      position: absolute;
+      height: 100%;
+      top: 0;
+      cursor: pointer;
+
+      &:hover,
+      &.hover {
+        & .clip-visualization {
+          filter: brightness(140%) saturate(115%);
+          transition: filter 0s ease;
+
+          &::after {
+            filter: brightness(140%) saturate(115%);
+          }
+        }
+      }
+
+      & .clip-visualization {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: calc(100% / var(--speaker-count));
+        transition: filter 0.1s ease;
+        background-color: rgba(var(--emotion-neutral-RGB), 1);
+        border-color: rgba(var(--emotion-neutral-RGB), 1);
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          opacity: 0;
+          pointer-events: none;
+          animation: emotion-color-fade-in var(--emotion-color-duration) ease-in
+            var(--emotion-color-delay) forwards;
+        }
+      }
+
+      &[data-speaker-index="1"] .clip-visualization {
+        top: calc((1 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="2"] .clip-visualization {
+        top: calc((2 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="3"] .clip-visualization {
+        top: calc((3 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="4"] .clip-visualization {
+        top: calc((4 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="5"] .clip-visualization {
+        top: calc((5 - 1) * (100% / var(--speaker-count)));
+      }
+
+      & .clip-caption,
+      & .clip-text {
+        display: none;
+      }
+
+      & .clip-caption .behaviour {
+        &::after {
+          content: attr(data-behaviour-type);
+          display: none;
+        }
+      }
+
+      /* Emotion colors */
+      &.emotion-neutral .clip-visualization::after {
+        animation: none;
+      }
+      &.emotion-unknown .clip-visualization::after {
+        background-color: rgba(var(--emotion-unknown-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-angry .clip-visualization::after {
+        background-color: rgba(var(--emotion-angry-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-contemptuous .clip-visualization::after {
+        background-color: rgba(var(--emotion-contemptuous-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-disgusted .clip-visualization::after {
+        background-color: rgba(var(--emotion-disgusted-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-afraid .clip-visualization::after {
+        background-color: rgba(var(--emotion-afraid-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-anxious .clip-visualization::after {
+        background-color: rgba(var(--emotion-anxious-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-stressed .clip-visualization::after {
+        background-color: rgba(var(--emotion-stressed-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-surprised .clip-visualization::after {
+        background-color: rgba(var(--emotion-surprised-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-ashamed .clip-visualization::after {
+        background-color: rgba(var(--emotion-ashamed-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-frustrated .clip-visualization::after {
+        background-color: rgba(var(--emotion-frustrated-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-calm .clip-visualization::after {
+        background-color: rgba(var(--emotion-calm-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-confident .clip-visualization::after {
+        background-color: rgba(var(--emotion-confident-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-interested .clip-visualization::after {
+        background-color: rgba(var(--emotion-interested-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-affectionate .clip-visualization::after {
+        background-color: rgba(var(--emotion-affectionate-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-amused .clip-visualization::after {
+        background-color: rgba(var(--emotion-amused-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-excited .clip-visualization::after {
+        background-color: rgba(var(--emotion-excited-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-happy .clip-visualization::after {
+        background-color: rgba(var(--emotion-happy-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-hopeful .clip-visualization::after {
+        background-color: rgba(var(--emotion-hopeful-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-proud .clip-visualization::after {
+        background-color: rgba(var(--emotion-proud-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-relieved .clip-visualization::after {
+        background-color: rgba(var(--emotion-relieved-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-curious .clip-visualization::after {
+        background-color: rgba(var(--emotion-curious-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-sad .clip-visualization::after {
+        background-color: rgba(var(--emotion-sad-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-disappointed .clip-visualization::after {
+        background-color: rgba(var(--emotion-disappointed-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-bored .clip-visualization::after {
+        background-color: rgba(var(--emotion-bored-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-tired .clip-visualization::after {
+        background-color: rgba(var(--emotion-tired-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-concerned .clip-visualization::after {
+        background-color: rgba(var(--emotion-concerned-RGB), 1);
+        opacity: 1;
+      }
+      &.emotion-confused .clip-visualization::after {
+        background-color: rgba(var(--emotion-confused-RGB), 1);
+        opacity: 1;
+      }
+    }
+  }
+
+  & .speaker-labels {
+    position: absolute;
+    width: 100%;
+    height: var(--player-visualization-height);
+    transition: height 0.2s ease;
+    pointer-events: none;
+    font-size: 0.8em;
+
+    & .speaker-label {
+      position: absolute;
+      display: flex;
+      align-items: flex-end;
+      padding-left: 0.1em;
+      height: calc(100% / var(--speaker-count));
+
+      &[data-speaker-index="1"] {
+        top: calc((1 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="2"] {
+        top: calc((2 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="3"] {
+        top: calc((3 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="4"] {
+        top: calc((4 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="5"] {
+        top: calc((5 - 1) * (100% / var(--speaker-count)));
+      }
+
+      & span {
+        background-color: rgba(var(--ids__bg-surface-RGB), 1);
+        padding: 0.1em 0.2em 0 0;
+        color: rgba(var(--ids__text-RGB), 0.3);
+      }
+    }
+  }
+
+  & .behaviour-indicators {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--player-visualization-height);
+    transition: height 0.2s ease;
+    pointer-events: none;
+    z-index: 2;
+    overflow: visible;
+
+    & .behaviour-indicator {
+      position: absolute;
+      bottom: 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 0.1em;
+      font-size: 0.8em;
+      line-height: 1.2;
+      padding-bottom: 0;
+      z-index: 1;
+
+      &[data-speaker-index="1"] {
+        bottom: calc((var(--speaker-count) - 1) * (100% / var(--speaker-count)));
+        top: auto;
+      }
+      &[data-speaker-index="2"] {
+        bottom: calc((var(--speaker-count) - 2) * (100% / var(--speaker-count)));
+        top: auto;
+      }
+      &[data-speaker-index="3"] {
+        bottom: calc((var(--speaker-count) - 3) * (100% / var(--speaker-count)));
+        top: auto;
+      }
+      &[data-speaker-index="4"] {
+        bottom: calc((var(--speaker-count) - 4) * (100% / var(--speaker-count)));
+        top: auto;
+      }
+      &[data-speaker-index="5"] {
+        bottom: calc((var(--speaker-count) - 5) * (100% / var(--speaker-count)));
+        top: auto;
+      }
+
+      &[data-behaviour-index="1"] { transform: translateY(0); }
+      &[data-behaviour-index="2"] { transform: translateY(calc(-1 * 1.2em)); }
+      &[data-behaviour-index="3"] { transform: translateY(calc(-2 * 1.2em)); }
+
+      & .behaviour-icon {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        flex-shrink: 0;
+        order: 2;
+        position: relative;
+        z-index: 1;
+        margin-top: -1px;
+        transition: filter 0.1s ease;
+
+        & svg {
+          width: 100%;
+          height: 100%;
+          fill: white;
+        }
+
+        & .behaviour-icon__outline {
+          fill: transparent;
+        }
+      }
+
+      /* Emotion outline colors for behaviour icons */
+      &[data-emotion="angry"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-angry-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="contemptuous"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-contemptuous-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="disgusted"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-disgusted-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="afraid"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-afraid-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="anxious"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-anxious-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="stressed"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-stressed-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="surprised"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-surprised-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="ashamed"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-ashamed-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="frustrated"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-frustrated-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="fear"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-fear-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="affectionate"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-affectionate-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="amused"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-amused-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="excited"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-excited-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="happy"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-happy-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="hopeful"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-hopeful-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="proud"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-proud-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="relieved"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-relieved-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="curious"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-curious-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="calm"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-calm-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="confident"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-confident-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="interested"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-interested-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="sad"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-sad-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="disappointed"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-disappointed-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="bored"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-bored-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="tired"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-tired-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="concerned"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-concerned-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="confused"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-confused-RGB), 1); transition: fill 0.2s ease; }
+      &[data-emotion="neutral"] .behaviour-icon .behaviour-icon__outline { fill: rgba(var(--emotion-neutral-RGB), 1); transition: fill 0.2s ease; }
+
+      & .behaviour-label {
+        display: inline-block;
+        font-size: 0.9em;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        pointer-events: auto;
+        order: 1;
+        overflow: hidden;
+        max-width: 0;
+        transition: max-width 0.2s ease, opacity 0.2s ease;
+        opacity: 0;
+
+        & a {
+          pointer-events: auto;
+          text-decoration: none;
+          display: block;
+          border-bottom: 2px solid currentColor;
+          padding-bottom: 0.05em;
+          line-height: 1.2;
+          transition: color 0.5s ease, border-color 0.5s ease;
+
+          &:hover {
+            color: rgba(var(--ids__text-link-RGB), 1);
+            border-color: currentColor;
+            transition: color 0s ease, border-color 0s ease;
+
+            & span {
+              transform: translateX(0.2em);
+              transition: transform 0s ease;
+            }
+          }
+
+          & .behaviour-icon {
+            display: inline-block;
+            width: 0.9em;
+            height: 0.9em;
+            vertical-align: middle;
+          }
+
+          & .behaviour-icon--kiki,
+          & .behaviour-icon--buba {
+            position: relative;
+          }
+
+          & span {
+            display: inline-block;
+            font-weight: 600;
+            transition: transform 0.5s ease;
+          }
+        }
+      }
+    }
+  }
+
+  & .behaviour-labels {
+    position: absolute;
+    width: 100%;
+    height: var(--player-visualization-height);
+    transition: height 0.2s ease;
+    pointer-events: none;
+    z-index: 1;
+    display: none; /* Hidden, replaced by behaviour-indicators */
+
+    & .behaviour-label {
+      position: absolute;
+      font-size: 0.8em;
+      line-height: 1.1;
+      width: 10em;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 0.4em;
+      height: calc(100% / var(--speaker-count));
+
+      &:after {
+        content: "";
+        position: absolute;
+        width: 0.4em;
+        height: 0.4em;
+        border-radius: 50%;
+        background-color: white;
+        bottom: -0.2em;
+        left: 0;
+      }
+
+      &[data-speaker-index="1"] {
+        top: calc((1 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="2"] {
+        top: calc((2 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="3"] {
+        top: calc((3 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="4"] {
+        top: calc((4 - 1) * (100% / var(--speaker-count)));
+      }
+      &[data-speaker-index="5"] {
+        top: calc((5 - 1) * (100% / var(--speaker-count)));
+      }
+
+      & a {
+        pointer-events: auto;
+        text-decoration: none;
+        display: block;
+        border-bottom: 2px solid currentColor;
+        padding-bottom: 0.05em;
+        line-height: 1.2;
+        transition: color 0.5s ease, border-color 0.5s ease;
+
+        &:hover {
+          color: rgba(var(--ids__text-link-RGB), 1);
+          border-color: currentColor;
+          transition: color 0s ease, border-color 0s ease;
+
+          & span {
+            transform: translateX(0.2em);
+            transition: transform 0s ease;
+          }
+        }
+
+        & .behaviour-icon {
+          display: inline-block;
+          width: 0.9em;
+          height: 0.9em;
+          vertical-align: middle;
+        }
+
+        & .behaviour-icon--kiki,
+        & .behaviour-icon--buba {
+          position: relative;
+        }
+
+        & span {
+          display: inline-block;
+          font-weight: 600;
+          transition: transform 0.5s ease;
+        }
+      }
+    }
+  }
+
+  & .player-controls {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: calc(100% - var(--player-visualization-height));
+    transition: height 0.2s ease;
+    padding-top: 1em;
+
+    & .player-control-center {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0em;
+      bottom: 0;
+      padding-top: 0.8em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    & .player-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.5em;
+      height: 1.5em;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      & svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      & svg,
+      & svg * {
+        fill: rgba(var(--ids__text-hover-RGB), 1);
+        transition: fill 0.5s ease;
+      }
+    }
+
+    & .player-control-center:hover {
+      background-color: rgba(var(--ids__bg-surface-RGB), 0.3);
+      transition: background-color 0s ease;
+
+      & .player-icon {
+        transform: scale(1.1);
+        transition: transform 0s ease;
+      }
+    }
+
+    & .player-control-center:hover .player-icon:hover {
+      & svg,
+      & svg * {
+        fill: white;
+        transition: fill 0s ease;
+      }
+    }
+  }
+
+  & .clip-text-caption {
+    position: absolute;
+    top: var(--player-visualization-height);
+    transition: top 0.2s ease;
+    bottom: var(--padding);
+    left: 0.2em;
+    width: 80%;
+    color: rgba(var(--ids__text-caption-RGB), 1);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    overflow: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+
+    & span {
+      font-size: 0.8em;
+    }
+
+    &.visible {
+      opacity: 1;
+      transition: opacity 0s ease;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1em;
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(var(--ids__bg-accent-RGB), 1)
+      );
+      pointer-events: none;
+    }
+  }
+
+  & .player-status-caption {
+    position: absolute;
+    top: var(--player-visualization-height);
+    transition: top 0.2s ease;
+    bottom: var(--padding);
+    right: var(--padding);
+    pointer-events: none;
+
+    & .emotion-caption {
+      font-size: 0.8em;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+
+      &.visible {
+        opacity: 1;
+        transition: opacity 0s ease;
+      }
+    }
+  }
+
+  & .player-total-time {
+    position: absolute;
+    top: var(--player-captions-top);
+    transition: top 0.2s ease;
+    right: var(--padding);
+    pointer-events: none;
+
+    & .total-time {
+      opacity: 0.5;
+      font-size: 0.8em;
+    }
+  }
+
+  & .player-position-indicator {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    pointer-events: none;
+
+    & .player-position-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    & .player-position-caption {
+      position: absolute;
+      left: var(--padding);
+      top: var(--player-captions-top);
+      transition: top 0.2s ease;
+
+      & span {
+        font-size: 0.8em;
+        opacity: 0.5;
+        transition: opacity 0.2s ease;
+      }
+    }
+  }
+
+  /* Hide position caption when hover indicator is active */
+  &
+    .media-box:has(.player-hover-position-indicator.active)
+    .player-position-indicator
+    .player-position-caption,
+  .media-box.has-hover-indicator
+    .player-position-indicator
+    .player-position-caption {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* After playback started: show position line, full-opacity caption */
+  & .media-box[data-playback-started="true"] .player-position-indicator {
+    & .player-position-line {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    & .player-position-caption span {
+      opacity: 1;
+    }
+  }
+
+  /* Keep line visible even when hover indicator is active */
+  &
+    .media-box[data-playback-started="true"]:has(
+      .player-hover-position-indicator.active
+    )
+    .player-position-indicator
+    .player-position-line,
+  &
+    .media-box[data-playback-started="true"].has-hover-indicator
+    .player-position-indicator
+    .player-position-line {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  & .player-hover-position-indicator {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 2;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    & .player-hover-position-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    & .player-hover-position-caption {
+      position: absolute;
+      left: var(--padding);
+      top: var(--player-captions-top);
+      transition: top 0.2s ease;
+
+      & span {
+        font-size: 0.8em;
+        color: rgba(var(--ids__text-RGB), 1);
+        transition: color 0.2s ease;
+      }
+    }
+  }
+
+  /* After playback started: hover caption white */
+  & .media-box[data-playback-started="true"] .player-hover-position-indicator {
+    & .player-hover-position-caption span {
+      color: rgba(255, 255, 255, 1);
+    }
+  }
+}
