@@ -200,9 +200,6 @@ permalink: /playground/
   }
 
   /* Results table ──────────────────────────────────────────────────────── */
-  .pg-results-table-section {
-    margin-bottom: var(--m__space-m);
-  }
 
   .verdict-synthetic { color: var(--m__ui-error-color); }
   .verdict-authentic { color: var(--m__ui-success-color); }
@@ -562,10 +559,6 @@ permalink: /playground/
   }
 
   /* Upload area ────────────────────────────────────────────────────────── */
-  .pg-upload-section {
-    margin-top: var(--m__space-xl);
-    margin-bottom: var(--m__space-l);
-  }
 
   .pg-upload-box {
     display: flex;
@@ -662,6 +655,7 @@ permalink: /playground/
     --ids__text-hover-RGB: 120, 180, 255;
     --ids__bg-hover-RGB: 100, 110, 140;
   }
+
   /* Statistics ─────────────────────────────────────────────────────────── */
 
   .pg-stats-table .pg-stats-label {
@@ -864,10 +858,13 @@ permalink: /playground/
   </div>
 
   <div class="m__space M"></div>
-  <ids-navbar></ids-navbar>
+  <fieldset class="m__segmented-control" id="pg-tabs">
+    <label><input type="radio" name="pg-tab" value="transcription" checked />Transcription</label>
+    <label><input type="radio" name="pg-tab" value="deepfake" />Deepfake Detection</label>
+    <label><input type="radio" name="pg-tab" value="debug-mode" />Debug Mode</label>
+  </fieldset>
 
-
-  <ids-nav-item id="transcription" label="Transcription">
+  <div class="pg-tab-panel" id="panel-transcription">
 
       <div class="m__space S"></div>
 
@@ -994,11 +991,10 @@ permalink: /playground/
 
       </div>
 
-      <div class="m__space L"></div>
     </div>
-  </ids-nav-item>
+  </div>
 
-  <ids-nav-item id="deepfake" label="Deepfake Detection">
+  <div class="pg-tab-panel" id="panel-deepfake" hidden>
 
       <div class="m__space S"></div>
 
@@ -1235,9 +1231,9 @@ permalink: /playground/
           </tbody>
         </table>
       </div>
-  </ids-nav-item>
+  </div>
 
-  <ids-nav-item id="debug-mode" label="Debug Mode">
+  <div class="pg-tab-panel" id="panel-debug-mode" hidden>
     <div class="m__space S"></div>
 
     <h2 class="pg-stats-heading">General</h2>
@@ -1378,13 +1374,13 @@ permalink: /playground/
   <span class="pg-json-brace">]</span>
 <span class="pg-json-brace">}</span></pre>
     </div>
-    <div class="m__space S"></div>
-  </ids-nav-item>
+  </div>
 
 </div>
 
+    <div class="m__space XL"></div>
   <div class="m__wrapper">
-    <!-- Upload area -->
+
     <div class="pg-upload-section">
       <div class="pg-upload-header">
         <h2>Try More Audio</h2>
@@ -1473,8 +1469,7 @@ permalink: /playground/
     </div>
   </div>
 
-  <div class="m__space XS"></div>
-
+  <div class="m__space L"></div>
   <div class="m__wrapper pg-demo-recordings">
     <h2>Preloaded demo recordings</h2>
     <table>
@@ -1851,7 +1846,6 @@ permalink: /playground/
   </div>
 
   {% endblock %} {% block scripts %}
-  <script type="module" src="/assets/js/navbar.js"></script>
   <script>
     var fastBtn = document.getElementById('opt-fast');
     var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]');
@@ -1864,6 +1858,13 @@ permalink: /playground/
         cb.disabled = !isOn;
         cb.closest('.pg-stt-option').style.opacity = !isOn ? '0.4' : '';
         cb.closest('.pg-stt-option').style.pointerEvents = !isOn ? 'none' : '';
+      });
+    });
+
+    document.getElementById('pg-tabs').addEventListener('change', function (e) {
+      var val = e.target.value;
+      document.querySelectorAll('.pg-tab-panel').forEach(function (panel) {
+        panel.hidden = panel.id !== 'panel-' + val;
       });
     });
   </script>
