@@ -476,8 +476,7 @@ permalink: /playground/
 
   .pg-transcript-utterance {
     background: var(--m__bg-surface-color);
-    border-radius: 2rem;
-    padding: 0.7rem 1rem;
+    padding: 0.7em;
     cursor: pointer;
     transition: filter 0.15s;
   }
@@ -514,7 +513,6 @@ permalink: /playground/
   }
   .pg-transcript-emotion {
     color: #0078c8;
-    font-weight: 700;
   }
   .pg-transcript-accent {
     color: var(--m__text-caption-color);
@@ -1035,570 +1033,580 @@ permalink: /playground/
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <h1>Playground</h1>
-
   <div class="m__space S"></div>
-  <main>
-    <!-- Custom audio player -->
-    <div class="media-container">
-      <div
-        class="media-box m__rounded dark-mode"
-        id="audio-player"
-        data-speaker-count="2"
-      >
-        <div class="player-visualization">
-          <!-- Speaker 0: Calm → Confident -->
-          <div
-            class="transcript-clip emotion-calm"
-            data-speaker-index="1"
-            style="left: 0%; width: 12%"
-          >
-            <div class="clip-visualization"></div>
-          </div>
-          <div
-            class="transcript-clip emotion-confident"
-            data-speaker-index="1"
-            style="left: 28%; width: 14%"
-          >
-            <div class="clip-visualization"></div>
-          </div>
-          <div
-            class="transcript-clip emotion-confident"
-            data-speaker-index="1"
-            style="left: 62%; width: 38%"
-          >
-            <div class="clip-visualization"></div>
-          </div>
-          <!-- Speaker 1: Happy → Interested -->
-          <div
-            class="transcript-clip emotion-happy"
-            data-speaker-index="2"
-            style="left: 12%; width: 16%"
-          >
-            <div class="clip-visualization"></div>
-          </div>
-          <div
-            class="transcript-clip emotion-interested"
-            data-speaker-index="2"
-            style="left: 42%; width: 20%"
-          >
-            <div class="clip-visualization"></div>
-          </div>
-        </div>
-        <div class="speaker-labels">
-          <div class="speaker-label" data-speaker-index="1">
-            <span>Speaker 0</span>
-          </div>
-          <div class="speaker-label" data-speaker-index="2">
-            <span>Speaker 1</span>
-          </div>
-        </div>
-        <div class="behaviour-indicators"></div>
-        <div class="behaviour-labels" style="display: none"></div>
-        <div class="player-controls">
-          <div class="player-control-spacer"></div>
-          <div
-            class="player-control player-control-center"
-            data-action="play-pause"
-          >
-            <a href="#" class="player-icon" data-playing="false">
-              <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-                <polygon
-                  fill="currentColor"
-                  points="40 30 40 190 190 110 40 30"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-        <div class="clip-text-caption"><span></span></div>
-        <div class="player-status-caption">
-          <span class="emotion-caption"></span>
-        </div>
-        <div class="player-total-time">
-          <span class="total-time" data-total-time>0:54</span>
-        </div>
-        <div class="player-position-indicator">
-          <div class="player-position-line"></div>
-          <div class="player-position-caption">
-            <span data-current-time>0:00</span>
-          </div>
-        </div>
-        <div class="player-hover-position-indicator">
-          <div class="player-hover-position-line"></div>
-          <div class="player-hover-position-caption">
-            <span data-hover-time>0:00</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="m__space L"></div>
-
-    <ids-navbar></ids-navbar>
-
-    <ids-nav-item id="transcription" label="Transcription">
-      <div class="m__wrapper">
-        <div class="m__space M"></div>
-
-        <!-- Transcript -->
-        <div class="pg-transcript-container visible" id="transcript-container">
-          <div class="pg-transcript-list" id="transcript-list">
-            <!-- Speaker 0 · Calm · American · Authentic -->
-            <div
-              class="pg-transcript-utterance speaker-left"
-              style="--ec: #42a5f5"
-            >
-              <div class="pg-transcript-utterance-header">
-                <span class="pg-transcript-time">0:00</span>
-                <span class="pg-transcript-speaker">Speaker 0</span>
-                <span class="pg-transcript-emotion" style="color: #42a5f5"
-                  >Calm</span
-                >
-                <span class="pg-transcript-accent" style="font-weight: 700"
-                  >American accent</span
-                >
-                <span class="pg-verdict-pill sm authentic">Authentic</span>
-              </div>
-              <div class="pg-transcript-text">
-                Welcome to today's demo. Could you start by telling us a bit
-                about yourself and your background?
-              </div>
-            </div>
-            <!-- Speaker 1 · Happy · British · Authentic -->
-            <div
-              class="pg-transcript-utterance speaker-right"
-              style="--ec: #66bb6a"
-            >
-              <div class="pg-transcript-utterance-header">
-                <span class="pg-transcript-time">0:06</span>
-                <span class="pg-transcript-speaker">Speaker 1</span>
-                <span class="pg-transcript-emotion" style="color: #66bb6a"
-                  >Happy</span
-                >
-                <span class="pg-transcript-accent" style="font-weight: 700"
-                  >British accent</span
-                >
-                <span class="pg-verdict-pill sm authentic">Authentic</span>
-              </div>
-              <div class="pg-transcript-text">
-                Of course! I've been working in audio processing for about seven
-                years now, mostly focused on real-time voice analysis.
-              </div>
-            </div>
-            <!-- Speaker 0 · Neutral · American · Authentic -->
-            <div
-              class="pg-transcript-utterance speaker-left"
-              style="--ec: #78909c"
-            >
-              <div class="pg-transcript-utterance-header">
-                <span class="pg-transcript-time">0:18</span>
-                <span class="pg-transcript-speaker">Speaker 0</span>
-                <span class="pg-transcript-emotion" style="color: #78909c"
-                  >Neutral</span
-                >
-                <span class="pg-transcript-accent" style="font-weight: 700"
-                  >American accent</span
-                >
-                <span class="pg-verdict-pill sm authentic">Authentic</span>
-              </div>
-              <div class="pg-transcript-text">
-                And what drew you specifically to deepfake detection as a
-                research area?
-              </div>
-            </div>
-            <!-- Speaker 1 · Interested · British · SYNTHETIC -->
-            <div
-              class="pg-transcript-utterance speaker-right active"
-              style="--ec: #7986cb"
-            >
-              <div class="pg-transcript-utterance-header">
-                <span class="pg-transcript-time">0:24</span>
-                <span class="pg-transcript-speaker">Speaker 1</span>
-                <span class="pg-transcript-emotion" style="color: #7986cb"
-                  >Interested</span
-                >
-                <span class="pg-transcript-accent" style="font-weight: 700"
-                  >British accent</span
-                >
-                <span
-                  class="pg-verdict-pill sm synthetic"
-                  title="Deepfake · 68% confidence"
-                  >Deepfake</span
-                >
-              </div>
-              <div class="pg-transcript-text">
-                Well, it started when I noticed that existing systems were
-                struggling with prosody-preserving synthesis. The gap between
-                human and synthetic speech keeps narrowing.
-              </div>
-            </div>
-            <!-- Speaker 0 · Confident · American · Authentic -->
-            <div
-              class="pg-transcript-utterance speaker-left"
-              style="--ec: #5c6bc0"
-            >
-              <div class="pg-transcript-utterance-header">
-                <span class="pg-transcript-time">0:42</span>
-                <span class="pg-transcript-speaker">Speaker 0</span>
-                <span class="pg-transcript-emotion" style="color: #5c6bc0"
-                  >Confident</span
-                >
-                <span class="pg-transcript-accent" style="font-weight: 700"
-                  >American accent</span
-                >
-                <span class="pg-verdict-pill sm authentic">Authentic</span>
-              </div>
-              <div class="pg-transcript-text">
-                That's a great point. The Modulate API combines frame-level
-                analysis with utterance-level classification — giving you both
-                granular and holistic verdicts.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="m__space L"></div>
-      </div>
-    </ids-nav-item>
-
-    <ids-nav-item id="deepfake" label="Deepfake Standalone">
-      <div class="m__wrapper">
-        <div class="m__space S"></div>
-
-        <div class="pg-histogram-section">
-          <div class="pg-histogram-scroll">
-            <div class="pg-histogram" id="histogram">
-              <div class="pg-histo-squares">
-                <div
-                  class="pg-histo-bar authentic"
-                  style="opacity: 0.97"
-                  title="0:01 · Authentic · 97%"
-                ></div>
-                <div
-                  class="pg-histo-bar authentic"
-                  style="opacity: 0.94"
-                  title="0:02 · Authentic · 94%"
-                ></div>
-                <div
-                  class="pg-histo-bar authentic"
-                  style="opacity: 0.91"
-                  title="0:03 · Authentic · 91%"
-                ></div>
-                <div
-                  class="pg-histo-bar authentic"
-                  style="opacity: 0.96"
-                  title="0:04 · Authentic · 96%"
-                ></div>
-                <div
-                  class="pg-histo-bar authentic"
-                  style="opacity: 0.89"
-                  title="0:05 · Authentic · 89%"
-                ></div>
-                <div
-                  class="pg-histo-bar authentic"
-                  style="opacity: 0.93"
-                  title="0:06 · Authentic · 93%"
-                ></div>
-                <div
-                  class="pg-histo-bar synthetic"
-                  style="opacity: 0.78"
-                  title="0:07 · Synthetic · 78%"
-                ></div>
-                <div
-                  class="pg-histo-bar synthetic"
-                  style="opacity: 0.94"
-                  title="0:08 · Synthetic · 94%"
-                ></div>
-                <div
-                  class="pg-histo-bar synthetic"
-                  style="opacity: 0.97"
-                  title="0:09 · Synthetic · 97%"
-                ></div>
-                <div
-                  class="pg-histo-bar synthetic"
-                  style="opacity: 0.91"
-                  title="0:10 · Synthetic · 91%"
-                ></div>
-                <div
-                  class="pg-histo-bar synthetic"
-                  style="opacity: 0.88"
-                  title="0:11 · Synthetic · 88%"
-                ></div>
-                <div
-                  class="pg-histo-bar synthetic"
-                  style="opacity: 0.95"
-                  title="0:12 · Synthetic · 95%"
-                ></div>
-                <div
-                  class="pg-histo-bar authentic"
-                  style="opacity: 0.86"
-                  title="0:13 · Authentic · 86%"
-                ></div>
-                <div
-                  class="pg-histo-bar authentic"
-                  style="opacity: 0.92"
-                  title="0:14 · Authentic · 92%"
-                ></div>
-                <div
-                  class="pg-histo-bar no-content"
-                  title="0:15 · No content"
-                ></div>
-              </div>
-              <div class="pg-histo-axis">
-                <div class="pg-histo-tick">0:00</div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick">0:05</div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick">0:10</div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick"></div>
-                <div class="pg-histo-tick">0:15</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="pg-results-table-section">
-          <table>
-            <thead>
-              <tr>
-                <th>Timestamp</th>
-                <th>Verdict</th>
-                <th>Confidence</th>
-              </tr>
-            </thead>
-            <tbody id="results-tbody">
-              <tr>
-                <td>0:01</td>
-                <td>
-                  <span class="pg-verdict-pill authentic">Authentic</span>
-                </td>
-                <td>
-                  <div class="pg-confidence-cell">
-                    <div class="pg-confidence-bar-track">
-                      <div
-                        class="pg-confidence-bar-fill authentic"
-                        style="width: 97%"
-                      ></div>
-                    </div>
-                    <span>97.0%</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>0:03</td>
-                <td>
-                  <span class="pg-verdict-pill authentic">Authentic</span>
-                </td>
-                <td>
-                  <div class="pg-confidence-cell">
-                    <div class="pg-confidence-bar-track">
-                      <div
-                        class="pg-confidence-bar-fill authentic"
-                        style="width: 91%"
-                      ></div>
-                    </div>
-                    <span>91.2%</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>0:05</td>
-                <td>
-                  <span class="pg-verdict-pill authentic">Authentic</span>
-                </td>
-                <td>
-                  <div class="pg-confidence-cell">
-                    <div class="pg-confidence-bar-track">
-                      <div
-                        class="pg-confidence-bar-fill authentic"
-                        style="width: 93%"
-                      ></div>
-                    </div>
-                    <span>93.4%</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>0:07</td>
-                <td>
-                  <span class="pg-verdict-pill synthetic">Synthetic</span>
-                </td>
-                <td>
-                  <div class="pg-confidence-cell">
-                    <div class="pg-confidence-bar-track">
-                      <div
-                        class="pg-confidence-bar-fill synthetic"
-                        style="width: 78%"
-                      ></div>
-                    </div>
-                    <span>78.3%</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>0:09</td>
-                <td>
-                  <span class="pg-verdict-pill synthetic">Synthetic</span>
-                </td>
-                <td>
-                  <div class="pg-confidence-cell">
-                    <div class="pg-confidence-bar-track">
-                      <div
-                        class="pg-confidence-bar-fill synthetic"
-                        style="width: 97%"
-                      ></div>
-                    </div>
-                    <span>96.8%</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>0:11</td>
-                <td>
-                  <span class="pg-verdict-pill synthetic">Synthetic</span>
-                </td>
-                <td>
-                  <div class="pg-confidence-cell">
-                    <div class="pg-confidence-bar-track">
-                      <div
-                        class="pg-confidence-bar-fill synthetic"
-                        style="width: 88%"
-                      ></div>
-                    </div>
-                    <span>87.6%</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>0:13</td>
-                <td>
-                  <span class="pg-verdict-pill authentic">Authentic</span>
-                </td>
-                <td>
-                  <div class="pg-confidence-cell">
-                    <div class="pg-confidence-bar-track">
-                      <div
-                        class="pg-confidence-bar-fill authentic"
-                        style="width: 86%"
-                      ></div>
-                    </div>
-                    <span>86.2%</span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="m__space L"></div>
-      </div>
-    </ids-nav-item>
-
-    <div class="m__wrapper">
-      <!-- Rate limit indicator -->
-      <div class="pg-rate-limit-bar" id="rate-limit-bar">
-        30 requests remaining today
-      </div>
-
-      <!-- Upload area -->
-      <div class="pg-upload-section">
-        <h2>Give it a try</h2>
-
-        <!-- Options row -->
-        <div class="pg-options-row" id="options-row">
-          <div class="pg-stt-options visible" id="stt-options">
-            <label
-              class="pg-stt-option"
-              data-tip="Identify different speakers in the audio"
-            >
-              <input type="checkbox" id="opt-diarization" checked /> Diarization
-            </label>
-            <label
-              class="pg-stt-option"
-              data-tip="Detect synthetic/AI-generated voice (deepfake) per utterance"
-            >
-              <input type="checkbox" id="opt-deepfake" checked /> Deepfake
-            </label>
-            <label
-              class="pg-stt-option"
-              data-tip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
-            >
-              <input type="checkbox" id="opt-emotion" checked /> Emotions
-            </label>
-            <label
-              class="pg-stt-option"
-              data-tip="Detect speaker accent (e.g. American, British)"
-            >
-              <input type="checkbox" id="opt-accent" checked /> Accent
-            </label>
-            <label
-              class="pg-stt-option"
-              data-tip="Tag personally identifiable and health information"
-            >
-              <input type="checkbox" id="opt-pii" checked /> PII/PHI
-            </label>
-            <span class="pg-stt-option-divider">|</span>
-            <label
-              class="pg-stt-option"
-              data-tip="Fast transcription, English only"
-            >
-              <input type="checkbox" id="opt-fast" /> Fast
-            </label>
-          </div>
-        </div>
-        <div class="pg-upload-box dark-mode">
-          <p>Drop your audio or video file here!</p>
-          <p>Supported formats up to 50 MB:</p>
-          <div class="pg-upload-formats">
-            <span class="m__tag">.aac</span>
-            <span class="m__tag">.flac</span>
-            <span class="m__tag">.m4a</span>
-            <span class="m__tag">.mp3</span>
-            <span class="m__tag">.mp4</span>
-            <span class="m__tag">.ogg</span>
-            <span class="m__tag">.opus</span>
-            <span class="m__tag">.wav</span>
-            <span class="m__tag">.webm</span>
-          </div>
-          <button class="m__button-secondary">Choose file…</button>
-        </div>
-      </div>
-    </div>
-    <!-- /.m__wrapper -->
-
-    <!-- Stats Modal -->
-    <div class="pg-modal-backdrop" id="stats-modal">
-      <div class="pg-modal">
-        <div class="pg-modal-header">
-          <h3 id="stats-modal-title">Detection Statistics</h3>
-          <button class="pg-modal-close" id="stats-modal-close">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-        <div class="pg-modal-body"><div id="stats-grid"></div></div>
-      </div>
-    </div>
-  </main>
 </div>
+  <!-- PLAYER -->
+  <div class="m__wrapper">
+  <div class="media-container">
+    <div
+      class="media-box m__rounded dark-mode"
+      id="audio-player"
+      data-speaker-count="2"
+    >
+      <div class="player-visualization">
+        <!-- Speaker 0: Calm → Confident -->
+        <div
+          class="transcript-clip emotion-calm"
+          data-speaker-index="1"
+          style="left: 0%; width: 12%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+        <div
+          class="transcript-clip emotion-confident"
+          data-speaker-index="1"
+          style="left: 28%; width: 14%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+        <div
+          class="transcript-clip emotion-confident"
+          data-speaker-index="1"
+          style="left: 62%; width: 38%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+        <!-- Speaker 1: Happy → Interested -->
+        <div
+          class="transcript-clip emotion-happy"
+          data-speaker-index="2"
+          style="left: 12%; width: 16%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+        <div
+          class="transcript-clip emotion-interested"
+          data-speaker-index="2"
+          style="left: 42%; width: 20%"
+        >
+          <div class="clip-visualization"></div>
+        </div>
+      </div>
+      <div class="speaker-labels">
+        <div class="speaker-label" data-speaker-index="1">
+          <span>Speaker 0</span>
+        </div>
+        <div class="speaker-label" data-speaker-index="2">
+          <span>Speaker 1</span>
+        </div>
+      </div>
+      <div class="behaviour-indicators"></div>
+      <div class="behaviour-labels" style="display: none"></div>
+      <div class="player-controls">
+        <div class="player-control-spacer"></div>
+        <div
+          class="player-control player-control-center"
+          data-action="play-pause"
+        >
+          <a href="#" class="player-icon" data-playing="false">
+            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <polygon
+                fill="currentColor"
+                points="40 30 40 190 190 110 40 30"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="clip-text-caption"><span></span></div>
+      <div class="player-status-caption">
+        <span class="emotion-caption"></span>
+      </div>
+      <div class="player-total-time">
+        <span class="total-time" data-total-time>0:54</span>
+      </div>
+      <div class="player-position-indicator">
+        <div class="player-position-line"></div>
+        <div class="player-position-caption">
+          <span data-current-time>0:00</span>
+        </div>
+      </div>
+      <div class="player-hover-position-indicator">
+        <div class="player-hover-position-line"></div>
+        <div class="player-hover-position-caption">
+          <span data-hover-time>0:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-{% endblock %} {% block scripts %}
-<script type="module" src="/assets/js/navbar.js"></script>
-{% endblock %}
+  <div class="m__space M"></div>
+  <ids-navbar></ids-navbar>
+
+
+  <ids-nav-item id="transcription" label="Transcription">
+
+      <div class="m__space S"></div>
+
+
+      <!-- Transcript -->
+      <div class="pg-transcript-container visible" id="transcript-container">
+        <div class="pg-transcript-list" id="transcript-list">
+          <!-- Speaker 0 · Calm · American · Authentic -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-left"
+            style="--ec: #42a5f5"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:00</span>
+              <span class="pg-transcript-speaker">Speaker 0</span>
+              <span class="pg-transcript-emotion" style="color: #42a5f5"
+                >Calm</span
+              >
+              <span class="pg-transcript-accent"
+                >American accent</span
+              >
+              <span class="pg-verdict-pill sm authentic">Authentic</span>
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              Welcome to today's demo. Could you start by telling us a bit about
+              yourself and your background?
+              </p>
+            </div>
+          </div>
+          <!-- Speaker 1 · Happy · British · Authentic -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-right"
+            style="--ec: #66bb6a"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:06</span>
+              <span class="pg-transcript-speaker">Speaker 1</span>
+              <span class="pg-transcript-emotion" style="color: #66bb6a"
+                >Happy</span
+              >
+              <span class="pg-transcript-accent"
+                >British accent</span
+              >
+              <span class="pg-verdict-pill sm authentic">Authentic</span>
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              Of course! I've been working in audio processing for about seven
+              years now, mostly focused on real-time voice analysis.
+            </p>
+            </div>
+          </div>
+          <!-- Speaker 0 · Neutral · American · Authentic -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-left"
+            style="--ec: #78909c"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:18</span>
+              <span class="pg-transcript-speaker">Speaker 0</span>
+              <span class="pg-transcript-emotion" style="color: #78909c"
+                >Neutral</span
+              >
+              <span class="pg-transcript-accent"
+                >American accent</span
+              >
+              <span class="pg-verdict-pill sm authentic">Authentic</span>
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              And what drew you specifically to deepfake detection as a research
+              area?
+              </p>
+            </div>
+          </div>
+          <!-- Speaker 1 · Interested · British · SYNTHETIC -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-right active"
+            style="--ec: #7986cb"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:24</span>
+              <span class="pg-transcript-speaker">Speaker 1</span>
+              <span class="pg-transcript-emotion" style="color: #7986cb"
+                >Interested</span
+              >
+              <span class="pg-transcript-accent"
+                >British accent</span
+              >
+              <span
+                class="pg-verdict-pill sm synthetic"
+                title="Deepfake · 68% confidence"
+                >Deepfake</span
+              >
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              Well, it started when I noticed that existing systems were
+              struggling with prosody-preserving synthesis. The gap between
+              human and synthetic speech keeps narrowing.
+              </p>
+            </div>
+          </div>
+          <!-- Speaker 0 · Confident · American · Authentic -->
+          <div
+            class="pg-transcript-utterance m__rounded speaker-left"
+            style="--ec: #5c6bc0"
+          >
+            <div class="pg-transcript-utterance-header">
+              <span class="pg-transcript-time">0:42</span>
+              <span class="pg-transcript-speaker">Speaker 0</span>
+              <span class="pg-transcript-emotion" style="color: #5c6bc0"
+                >Confident</span
+              >
+              <span class="pg-transcript-accent"
+                >American accent</span
+              >
+              <span class="pg-verdict-pill sm authentic">Authentic</span>
+            </div>
+            <div class="pg-transcript-text">
+              <p>
+              That's a great point. The Modulate API combines frame-level
+              analysis with utterance-level classification — giving you both
+              granular and holistic verdicts.
+              </p>
+            </div>
+          </div>
+
+      </div>
+
+      <div class="m__space L"></div>
+    </div>
+  </ids-nav-item>
+
+  <ids-nav-item id="deepfake" label="Deepfake Detection">
+
+      <div class="m__space S"></div>
+
+      <div class="pg-histogram-section">
+        <div class="pg-histogram-scroll">
+          <div class="pg-histogram" id="histogram">
+            <div class="pg-histo-squares">
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.97"
+                title="0:01 · Authentic · 97%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.94"
+                title="0:02 · Authentic · 94%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.91"
+                title="0:03 · Authentic · 91%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.96"
+                title="0:04 · Authentic · 96%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.89"
+                title="0:05 · Authentic · 89%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.93"
+                title="0:06 · Authentic · 93%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.78"
+                title="0:07 · Synthetic · 78%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.94"
+                title="0:08 · Synthetic · 94%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.97"
+                title="0:09 · Synthetic · 97%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.91"
+                title="0:10 · Synthetic · 91%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.88"
+                title="0:11 · Synthetic · 88%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.95"
+                title="0:12 · Synthetic · 95%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.86"
+                title="0:13 · Authentic · 86%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.92"
+                title="0:14 · Authentic · 92%"
+              ></div>
+              <div
+                class="pg-histo-bar no-content"
+                title="0:15 · No content"
+              ></div>
+            </div>
+            <div class="pg-histo-axis">
+              <div class="pg-histo-tick">0:00</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:05</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:10</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:15</div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+      <div class="pg-results-table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Verdict</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="results-tbody">
+            <tr>
+              <td>0:01</td>
+              <td>
+                <span class="pg-verdict-pill authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 97%"
+                    ></div>
+                  </div>
+                  <span>97.0%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:03</td>
+              <td>
+                <span class="pg-verdict-pill authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 91%"
+                    ></div>
+                  </div>
+                  <span>91.2%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:05</td>
+              <td>
+                <span class="pg-verdict-pill authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 93%"
+                    ></div>
+                  </div>
+                  <span>93.4%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:07</td>
+              <td>
+                <span class="pg-verdict-pill synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 78%"
+                    ></div>
+                  </div>
+                  <span>78.3%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:09</td>
+              <td>
+                <span class="pg-verdict-pill synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 97%"
+                    ></div>
+                  </div>
+                  <span>96.8%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:11</td>
+              <td>
+                <span class="pg-verdict-pill synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 88%"
+                    ></div>
+                  </div>
+                  <span>87.6%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:13</td>
+              <td>
+                <span class="pg-verdict-pill authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 86%"
+                    ></div>
+                  </div>
+                  <span>86.2%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="m__space L"></div>
+    </div>
+  </ids-nav-item>
+
+  <div class="m__wrapper">
+    <!-- Rate limit indicator -->
+    <div class="pg-rate-limit-bar" id="rate-limit-bar">
+      30 requests remaining today
+    </div>
+
+    <!-- Upload area -->
+    <div class="pg-upload-section">
+      <h2>Try More Audio</h2>
+
+
+      <!-- Options row -->
+      <div class="pg-options-row" id="options-row">
+        <div class="pg-stt-options visible" id="stt-options">
+          <label
+            class="pg-stt-option"
+            data-tip="Identify different speakers in the audio"
+          >
+            <input type="checkbox" id="opt-diarization" checked /> Diarization
+          </label>
+          <label
+            class="pg-stt-option"
+            data-tip="Detect synthetic/AI-generated voice (deepfake) per utterance"
+          >
+            <input type="checkbox" id="opt-deepfake" checked /> Deepfake
+          </label>
+          <label
+            class="pg-stt-option"
+            data-tip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
+          >
+            <input type="checkbox" id="opt-emotion" checked /> Emotions
+          </label>
+          <label
+            class="pg-stt-option"
+            data-tip="Detect speaker accent (e.g. American, British)"
+          >
+            <input type="checkbox" id="opt-accent" checked /> Accent
+          </label>
+          <label
+            class="pg-stt-option"
+            data-tip="Tag personally identifiable and health information"
+          >
+            <input type="checkbox" id="opt-pii" checked /> PII/PHI
+          </label>
+          <span class="pg-stt-option-divider">|</span>
+          <label class="pg-stt-option" data-tip="Fast transcription, English only">
+            <input type="checkbox" id="opt-fast" /> Fast
+          </label>
+        </div>
+      </div>
+
+      <div class="pg-upload-box dark-mode">
+        <p>Drop your audio or video file here!</p>
+        <p>Supported formats up to 50 MB:</p>
+        <div class="pg-upload-formats">
+          <span class="m__tag">.aac</span>
+          <span class="m__tag">.flac</span>
+          <span class="m__tag">.m4a</span>
+          <span class="m__tag">.mp3</span>
+          <span class="m__tag">.mp4</span>
+          <span class="m__tag">.ogg</span>
+          <span class="m__tag">.opus</span>
+          <span class="m__tag">.wav</span>
+          <span class="m__tag">.webm</span>
+        </div>
+        <button class="m__button-secondary">Choose file…</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Modal -->
+  <div class="pg-modal-backdrop" id="stats-modal">
+    <div class="pg-modal">
+      <div class="pg-modal-header">
+        <h3 id="stats-modal-title">Detection Statistics</h3>
+        <button class="pg-modal-close" id="stats-modal-close">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div class="pg-modal-body"><div id="stats-grid"></div></div>
+    </div>
+  </div>
+
+
+  {% endblock %} {% block scripts %}
+  <script type="module" src="/assets/js/navbar.js"></script>
+  {% endblock %}
+</div>
