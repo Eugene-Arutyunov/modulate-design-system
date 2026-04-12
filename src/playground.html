@@ -7,11 +7,10 @@ permalink: /playground/
 <style>
   /* Options row ────────────────────────────────────────────────────────── */
   .pg-options-row {
-    min-height: calc(1rem + var(--m__space-xs) * 2 + var(--m__space-l));
+
     display: flex;
-    align-items: flex-start;
-    padding-top: var(--m__space-xs);
-    padding-bottom: var(--m__space-m);
+
+
   }
 
   .pg-stt-options {
@@ -285,35 +284,9 @@ permalink: /playground/
     margin-bottom: var(--m__space-m);
   }
 
-  .pg-verdict-pill {
-    display: inline-block;
-    padding: 0.15rem 0.55rem;
-    border-radius: 2rem;
-    font-size: var(--m__font-size-xs);
-    font-weight: 600;
-    line-height: 1.4;
-  }
-
-  .pg-verdict-pill.synthetic {
-    background: color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
-    color: var(--m__ui-error-color);
-  }
-
-  .pg-verdict-pill.authentic {
-    background: color-mix(in srgb, var(--m__ui-success-color) 12%, transparent);
-    color: rgb(10, 150, 95);
-  }
-
-  .pg-verdict-pill.no-content,
-  .pg-verdict-pill.uncertain {
-    background: color-mix(in srgb, var(--m__ui-border-color) 40%, transparent);
-    color: var(--m__text-caption-color);
-  }
-
-  .pg-verdict-pill.sm {
-    font-size: 0.65rem;
-    padding: 0.05rem 0.35rem;
-  }
+  .verdict-synthetic { color: var(--m__ui-error-color); }
+  .verdict-authentic { color: var(--m__ui-success-color); }
+  .verdict-no-content { color: var(--m__text-caption-color); }
 
   .pg-confidence-cell {
     display: flex;
@@ -561,6 +534,10 @@ permalink: /playground/
     font-size: var(--m__font-size-s);
   }
 
+   .verdict-authentic, .verdict-synthetic {
+     margin-left: auto;
+   }
+
   /* STT emotion chart ──────────────────────────────────────────────────── */
   .pg-stt-chart {
     display: none;
@@ -668,304 +645,15 @@ permalink: /playground/
     justify-content: center;
   }
 
-  /* Rate limit bar ─────────────────────────────────────────────────────── */
-  .pg-rate-limit-bar {
-    padding: var(--m__space-xs) 0;
-    text-align: center;
-    font-size: var(--m__font-size-xs);
-    color: var(--m__text-caption-color);
-  }
-
-  /* Modals ─────────────────────────────────────────────────────────────── */
-  .pg-modal-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 300;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
-    align-items: center;
-    justify-content: center;
-  }
-
-  .pg-modal-backdrop.visible {
+  .pg-upload-header {
     display: flex;
-  }
-
-  .pg-modal {
-    background: var(--m__background-color);
-    border-radius: var(--m__radius-l);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-    max-width: 640px;
-    width: 90vw;
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .pg-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--m__space-m) var(--m__space-m) var(--m__space-s);
-    border-bottom: 1px solid var(--m__ui-border-color);
-  }
-
-  .pg-modal-header h3 {
-    font-size: var(--m__font-size-l);
-    font-weight: 700;
-    color: var(--m__bg-accent-color);
-  }
-
-  .pg-modal-close {
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: var(--m__bg-surface-color);
-    border-radius: var(--m__radius-m);
-    cursor: pointer;
-    color: var(--m__text-caption-color);
-    transition: background 0.15s;
-  }
-
-  .pg-modal-close:hover {
-    background: var(--m__ui-border-color);
-  }
-  .pg-modal-close svg {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .pg-modal-body {
-    padding: var(--m__space-m);
-    overflow-y: auto;
-    flex: 1;
-  }
-
-  /* Stats table (inside modal) */
-  .pg-stats-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--m__font-size-s);
-  }
-
-  .pg-stats-table tr.pg-stats-group-row td {
-    font-size: var(--m__font-size-xs);
-    font-weight: 600;
-    color: var(--m__text-caption-color);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: var(--m__space-m) 0 0.3rem;
-    border-bottom: none;
-    text-align: left;
-  }
-
-  .pg-stats-table tr.pg-stats-group-row:first-child td {
-    padding-top: 0;
-  }
-
-  .pg-stats-table td {
-    padding: 0.35rem 0;
-    border-bottom: 1px solid
-      color-mix(in srgb, var(--m__ui-border-color) 50%, transparent);
-    vertical-align: baseline;
-  }
-
-  .pg-stats-label {
-    color: var(--m__text-caption-color);
-    font-weight: 500;
-    padding-right: var(--m__space-m);
-    white-space: nowrap;
-  }
-  .pg-stats-value {
-    font-weight: 600;
-    color: var(--m__bg-accent-color);
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* JSON modal */
-  .pg-json-container {
-    position: relative;
-  }
-
-  .pg-json-pre {
-    background: var(--m__bg-surface-color);
-    border-radius: var(--m__radius-m);
-    padding: var(--m__space-m);
-    font-family: var(--m__font-mono, monospace);
-    font-size: 0.78rem;
-    line-height: 1.5;
-    overflow-x: auto;
-    white-space: pre;
-    color: var(--m__text-color);
-    max-height: 60vh;
-  }
-
-  .pg-json-copy-btn {
-    position: absolute;
-    top: var(--m__space-xs);
-    right: var(--m__space-xs);
-  }
-  .pg-json-copy-btn svg {
-    width: 0.8rem;
-    height: 0.8rem;
-  }
-
-  /* Error toast ────────────────────────────────────────────────────────── */
-  .pg-error-toast {
-    display: none;
-    position: fixed;
-    top: var(--m__space-l);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--m__ui-error-color);
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: var(--m__radius-m);
-    font-size: var(--m__font-size-s);
-    font-weight: 500;
-    z-index: 200;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-
-  .pg-error-toast.visible {
-    display: block;
-  }
-
-  /* Analysis overlay ───────────────────────────────────────────────────── */
-  .pg-analysis-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    flex-direction: column;
-  }
-
-  .pg-analysis-overlay.visible {
-    display: flex;
-  }
-
-  .pg-analysis-overlay .pg-overlay-header {
-    padding: var(--m__space-m);
-    display: flex;
-    align-items: center;
     gap: var(--m__space-xs);
-    max-width: 1040px;
-    width: 100%;
-    margin: 0 auto;
+    align-items: baseline;
   }
 
-  .pg-analysis-overlay .pg-overlay-content {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: var(--m__space-m);
-  }
-
-  .pg-analysis-overlay .pg-overlay-footer {
-    padding: var(--m__space-m) 0 var(--m__space-l);
-    text-align: center;
-    font-size: var(--m__font-size-xs);
-    color: var(--m__text-caption-color);
-  }
-
-  .pg-analysis-overlay h3 {
-    font-size: var(--m__font-size-xl);
-    font-weight: 700;
-    color: var(--m__bg-accent-color);
-  }
-  .pg-analysis-overlay p {
+  .pg-upload-limits {
     font-size: var(--m__font-size-s);
     color: var(--m__text-caption-color);
-  }
-
-  .pg-overlay-error {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--m__space-s);
-    width: 100%;
-    max-width: 640px;
-    margin-top: var(--m__space-s);
-  }
-
-  .pg-analysis-overlay.error .pg-overlay-error {
-    display: flex;
-  }
-
-  .pg-overlay-error-msg {
-    color: var(--m__ui-error-color) !important;
-    font-weight: 600;
-    font-size: var(--m__font-size-s) !important;
-    text-align: center;
-  }
-
-  .pg-overlay-error-json {
-    width: 100%;
-    max-height: 280px;
-    overflow: auto;
-    background: var(--m__bg-surface-color);
-    border: 1px solid var(--m__ui-border-color);
-    border-radius: var(--m__radius-m);
-    padding: var(--m__space-s);
-    font-size: 0.72rem;
-    line-height: 1.5;
-    text-align: left;
-    white-space: pre-wrap;
-    word-break: break-all;
-    color: var(--m__text-color);
-  }
-
-  .pg-progress-track {
-    width: 320px;
-    height: 6px;
-    background: var(--m__ui-border-color);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .pg-progress-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--m__chart-model-1-color);
-    border-radius: 3px;
-    transition: width 0.3s linear;
-  }
-
-  /* Responsive ─────────────────────────────────────────────────────────── */
-  @media (max-width: 768px) {
-    .pg-results-layout {
-      display: block;
-    }
-    .pg-results-verdict {
-      position: static;
-      margin-top: 0;
-      padding: var(--m__space-s) var(--m__space-m);
-    }
-    .pg-results-sidebar {
-      position: static;
-    }
-    .pg-verdict-ring {
-      width: 140px;
-      height: 140px;
-    }
-    .pg-verdict-ring-label {
-      font-size: var(--m__font-size-l);
-    }
-    .pg-results-actions {
-      flex-wrap: wrap;
-    }
-    .pg-mode-toggle label {
-      font-size: var(--m__font-size-l);
-    }
   }
 
   /* ── ids__ tokens required by player.css ─────────────────────────────── */
@@ -1156,7 +844,7 @@ permalink: /playground/
               <span class="pg-transcript-accent"
                 >American accent</span
               >
-              <span class="pg-verdict-pill sm authentic">Authentic</span>
+              <span class="m__tag verdict-authentic">Authentic</span>
             </div>
             <div class="pg-transcript-text">
               <p>
@@ -1179,7 +867,7 @@ permalink: /playground/
               <span class="pg-transcript-accent"
                 >British accent</span
               >
-              <span class="pg-verdict-pill sm authentic">Authentic</span>
+              <span class="m__tag verdict-authentic">Authentic</span>
             </div>
             <div class="pg-transcript-text">
               <p>
@@ -1202,7 +890,7 @@ permalink: /playground/
               <span class="pg-transcript-accent"
                 >American accent</span
               >
-              <span class="pg-verdict-pill sm authentic">Authentic</span>
+              <span class="m__tag verdict-authentic">Authentic</span>
             </div>
             <div class="pg-transcript-text">
               <p>
@@ -1226,7 +914,7 @@ permalink: /playground/
                 >British accent</span
               >
               <span
-                class="pg-verdict-pill sm synthetic"
+                class="m__tag verdict-synthetic"
                 title="Deepfake · 68% confidence"
                 >Deepfake</span
               >
@@ -1253,7 +941,7 @@ permalink: /playground/
               <span class="pg-transcript-accent"
                 >American accent</span
               >
-              <span class="pg-verdict-pill sm authentic">Authentic</span>
+              <span class="m__tag verdict-authentic">Authentic</span>
             </div>
             <div class="pg-transcript-text">
               <p>
@@ -1388,7 +1076,7 @@ permalink: /playground/
             <tr>
               <td>0:01</td>
               <td>
-                <span class="pg-verdict-pill authentic">Authentic</span>
+                <span class="m__tag verdict-authentic">Authentic</span>
               </td>
               <td>
                 <div class="pg-confidence-cell">
@@ -1405,7 +1093,7 @@ permalink: /playground/
             <tr>
               <td>0:03</td>
               <td>
-                <span class="pg-verdict-pill authentic">Authentic</span>
+                <span class="m__tag verdict-authentic">Authentic</span>
               </td>
               <td>
                 <div class="pg-confidence-cell">
@@ -1422,7 +1110,7 @@ permalink: /playground/
             <tr>
               <td>0:05</td>
               <td>
-                <span class="pg-verdict-pill authentic">Authentic</span>
+                <span class="m__tag verdict-authentic">Authentic</span>
               </td>
               <td>
                 <div class="pg-confidence-cell">
@@ -1439,7 +1127,7 @@ permalink: /playground/
             <tr>
               <td>0:07</td>
               <td>
-                <span class="pg-verdict-pill synthetic">Synthetic</span>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
               </td>
               <td>
                 <div class="pg-confidence-cell">
@@ -1456,7 +1144,7 @@ permalink: /playground/
             <tr>
               <td>0:09</td>
               <td>
-                <span class="pg-verdict-pill synthetic">Synthetic</span>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
               </td>
               <td>
                 <div class="pg-confidence-cell">
@@ -1473,7 +1161,7 @@ permalink: /playground/
             <tr>
               <td>0:11</td>
               <td>
-                <span class="pg-verdict-pill synthetic">Synthetic</span>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
               </td>
               <td>
                 <div class="pg-confidence-cell">
@@ -1490,7 +1178,7 @@ permalink: /playground/
             <tr>
               <td>0:13</td>
               <td>
-                <span class="pg-verdict-pill authentic">Authentic</span>
+                <span class="m__tag verdict-authentic">Authentic</span>
               </td>
               <td>
                 <div class="pg-confidence-cell">
@@ -1507,24 +1195,27 @@ permalink: /playground/
           </tbody>
         </table>
       </div>
-
-      <div class="m__space L"></div>
     </div>
   </ids-nav-item>
 
   <div class="m__wrapper">
-    <!-- Rate limit indicator -->
-    <div class="pg-rate-limit-bar" id="rate-limit-bar">
-      30 requests remaining today
-    </div>
-
     <!-- Upload area -->
     <div class="pg-upload-section">
-      <h2>Try More Audio</h2>
+      <div class="pg-upload-header">
+        <h2>Try More Audio</h2>
+        <span class="pg-upload-limits">
+      30 requests remaining today</span>
+      </div>
+
+      <p>
+        Velma-2 handles transcription, emotion, accent, and engagement detection across 70+ languages. Choose the options that fits your use case and upload voice.
+      </p>
+
+              <div class="m__space XS"></div>
 
 
       <!-- Options row -->
-      <div class="pg-options-row" id="options-row">
+      <div class="pg-options-row">
         <div class="pg-stt-options visible" id="stt-options">
           <label
             class="pg-stt-option"
@@ -1563,8 +1254,10 @@ permalink: /playground/
         </div>
       </div>
 
+        <div class="m__space M"></div>
+
       <div class="pg-upload-box dark-mode">
-        <p>Drop your audio or video file here!</p>
+        <p>Drop your audio or video file here, or stream live voice</p>
         <p>Supported formats up to 50 MB:</p>
         <div class="pg-upload-formats">
           <span class="m__tag">.aac</span>
@@ -1577,34 +1270,13 @@ permalink: /playground/
           <span class="m__tag">.wav</span>
           <span class="m__tag">.webm</span>
         </div>
+        <div>
         <button class="m__button-secondary">Choose file…</button>
+                <button class="m__button-secondary">Start streaming</button>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Stats Modal -->
-  <div class="pg-modal-backdrop" id="stats-modal">
-    <div class="pg-modal">
-      <div class="pg-modal-header">
-        <h3 id="stats-modal-title">Detection Statistics</h3>
-        <button class="pg-modal-close" id="stats-modal-close">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-      </div>
-      <div class="pg-modal-body"><div id="stats-grid"></div></div>
-    </div>
-  </div>
-
 
   {% endblock %} {% block scripts %}
   <script type="module" src="/assets/js/navbar.js"></script>
