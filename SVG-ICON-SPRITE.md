@@ -1,6 +1,6 @@
 # SVG icon sprite flow
 
-Source icons live in `src/assets/images/svg-icons-source/` as raw SVG files.
+Source icons live in `src/assets/service/images/svg-icons-source/` as raw SVG files.
 
 ## What gets generated
 
@@ -12,7 +12,7 @@ npm run icons:build
 
 This generates:
 
-- `src/includes/assets/svg-icons-sprite.html`
+- `src/includes/service/svg-icons-sprite.html`
 
 That file is a hidden SVG sprite. Each source SVG becomes one `<symbol>`:
 
@@ -63,14 +63,15 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 
 ## How to add or update icons
 
-1. Put the raw SVG file into `src/assets/images/svg-icons-source/`.
+1. Put the raw SVG file into `src/assets/service/images/svg-icons-source/`.
 2. Keep the filename stable, because it becomes the symbol id.
 3. Run `npm run icons:build`.
 4. Use the icon with `<use href="#file-name">`.
 
 ## Notes
 
+- **`overview-muted.svg`** → **`#overview-muted`**: same three bars as **`overview.svg`**, with **`fill-opacity="0.3"`** on the top two rectangles and full opacity on the bottom bar. Used in online docs only; not listed on the design-system icon grid.
 - The build script is `scripts/generate-svg-sprite.js`.
 - `npm run build`, `npm run build:clean`, and `npm run dev` regenerate the sprite automatically before running.
-- Do not edit `src/includes/assets/svg-icons-sprite.html` by hand. It is generated.
+- Do not edit `src/includes/service/svg-icons-sprite.html` by hand. It is generated.
 - Colored icon symbols render identically regardless of CSS `color` or `fill` on the parent element.

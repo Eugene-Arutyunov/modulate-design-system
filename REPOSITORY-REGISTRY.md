@@ -84,9 +84,9 @@ Shared timing tokens for hover behavior. The system defines instant hover, anima
 
 ## SVG icon sprite flow
 
-**Source:** `src/assets/images/svg-icons-source/*.svg`  
+**Source:** `src/assets/service/images/svg-icons-source/*.svg`  
 **Build script:** `scripts/generate-svg-sprite.js`  
-**Generated include:** `src/includes/assets/svg-icons-sprite.html`  
+**Generated include:** `src/includes/service/svg-icons-sprite.html`  
 **Usage docs:** `SVG-ICON-SPRITE.md`.
 
 Raw SVG files are normalized into one hidden sprite include. The generator removes internal SVG styles and presentational attributes, drops helper shapes with `fill: none`, assigns symbol ids from filenames, and sets icons up for `currentColor`. Layouts include the sprite globally, and icons are rendered via `<use href="#icon-name">`.
@@ -252,7 +252,9 @@ Two sample charts (line and stacked bar) rendered with hardcoded data on the des
 
 **Page:** `src/online-docs.html`, `src/online-docs/toxmod.html`, `src/online-docs/prosocial.html`  
 **Permalink:** `/online-docs/`, `/online-docs/toxmod/`, `/online-docs/prosocial/`  
-**Layout:** `src/includes/online-docs-layout.html`  
-**Styles:** `src/styles/online-docs.css`
+**Layout:** `src/includes/prototypes/online-docs-layout.html` (includes `service/svg-icons-sprite.html` for `<use>` icons in case study markup).  
+**Styles:** `src/styles/prototypes/online-docs.css`  
+**Include:** `src/includes/assets/activision-logo.html` (Activision wordmark SVG, `currentColor`, used on the ToxMod case study footer).  
+**Wrapper:** `.m__online-doc-wrapper` sets default body ink **`rgb(20, 20, 50)`** and `a { color: inherit }` (title hero keeps its own theme). **`p.accent`** and **`aside.online-doc-callout`** body copy use accent blue **`rgb(40, 95, 235)`**; links in the callout use **`rgb(35, 84, 207)`** with hover **`rgb(40, 95, 235)`**. **`h1`** in the wrapper uses `--m__font-mono`. **`h4.online-doc-kicker`** — uppercase kicker. **`m__text-width`** — **80%** / **100%** mobile. **`aside.online-doc-callout`**: **2× right padding**; **`online-doc-callout-block`** — **`margin-bottom: 1.5rem`**; first grid class **`online-doc-callout-sequence`** with **`online-doc-callout-item`** (icon + **`__body`**) and sprite **`#behaviors`**, **`#overview-muted`**, **`#done`**, **`#decrease`** (prosocial case study); second grid has **`mark`** + thick blue underline on headline figures; **`m__sequence`** **two columns**, **`--m__font-size-xl`**, **`strong`** mono; **print:** page breaks + letter sheet like `.title-container`. **`.title-container__footer`**: one flex row (**`align-items: baseline`**), **`title-container__footer-spacer`** (`flex: 1`) pushes contact links right; on narrow viewports the spacer line-breaks so links sit on the next row. **`title-container__logo-slot--activision`**: **`bottom: -0.35em`** (visual nudge vs. text links).
 
 Print-oriented document prototype. **Experimental / isolated:** doc-specific variables and components belong only in `online-docs.css`, not in `src/styles/tokens/` or other shared DS files, until the pattern is promoted. Uses `online-docs-layout.html` (no product header or footer). Wrapper `.m__online-doc-wrapper` is a centered reading column; `@page { size: letter }` with margins, break rules, `12pt` print body, and `print-color-adjust: exact`. Browser print headers/footers are turned off in the print dialog, not via CSS. Index links to two sample case studies.
