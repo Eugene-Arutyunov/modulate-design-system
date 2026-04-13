@@ -1,4 +1,4 @@
 // Custom elements and components (side-effect imports)
-import './navbar.js';
-import './footnotes.js';
+import './ids-navbar.js';
+import './ids-footnotes.js';
 import './sleepy.js';

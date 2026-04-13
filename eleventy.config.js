@@ -6,7 +6,6 @@ module.exports = function (conf) {
   conf.addPassthroughCopy("./ui.yaml");
   conf.addPassthroughCopy("./dashboard-charts.json");
 
-  conf.addWatchTarget("./src/index.css");
   conf.addWatchTarget("./src/styles/");
 
   return {

@@ -2,7 +2,7 @@
  * Documentation page client logic.
  * Loads model list from static JSON, renders sidebar with status tags,
  * handles Quickstart / API Spec tab switching.
- * All data files live under /assets/data/ and require no backend.
+ * All data files live under /assets/prototypes/data/ and require no backend.
  */
 
 /** @type {Map<string, object>} */
@@ -21,7 +21,7 @@ function escapeHtml(str) {
 async function loadModels() {
   const list = document.getElementById("docs-model-list");
   try {
-    const resp = await fetch("/assets/data/models.json");
+    const resp = await fetch("/assets/prototypes/data/models.json");
     if (!resp.ok) throw new Error("Failed");
     const { models } = await resp.json();
     docsModelsById.clear();
@@ -114,7 +114,7 @@ async function renderApiDocs(uuid, content) {
     return;
   }
   const resp = await fetch(
-    `/assets/data/model-docs/${model.model_identifier}/openapi.yaml`,
+    `/assets/prototypes/data/model-docs/${model.model_identifier}/openapi.yaml`,
   );
   if (!resp.ok) {
     content.innerHTML =
@@ -149,7 +149,7 @@ async function renderQuickstart(uuid, content) {
     return;
   }
   const resp = await fetch(
-    `/assets/data/model-docs/${model.model_identifier}/quickstart.md`,
+    `/assets/prototypes/data/model-docs/${model.model_identifier}/quickstart.md`,
   );
   let html = "";
   if (resp.ok) {

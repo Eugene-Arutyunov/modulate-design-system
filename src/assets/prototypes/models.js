@@ -26,7 +26,7 @@ function statusColor(status) {
 async function loadPricing() {
   const container = document.getElementById("pricing-model-list");
   try {
-    const resp = await fetch("/assets/data/models.json");
+    const resp = await fetch("/assets/prototypes/data/models.json");
     if (!resp.ok) throw new Error("Failed");
     const { models } = await resp.json();
     renderPricing(models, container);
