@@ -1,0 +1,27 @@
+---
+pageTitle: Reset password
+permalink: /auth/invite-org/
+---
+
+{% extends 'prototypes/auth-layout.html' %} {% block content %}
+
+<form class="auth-form" action="#" method="post" novalidate>
+  <h1>Organization invite</h1>
+  <p>You've been invited to join “Personal” as Developer.</p>
+  <div class="m__space XS"></div>
+
+  <!-- Invite cancelled -->
+  <div class="m__alert-error">This invite has been cancelled.</div>
+  <div class="m__space XS"></div>
+  <!-- End invite cancelled -->
+
+  <div class="auth-form__actions">
+    <a href="/dashboard/overview/" class="m__button">Join</a>
+  </div>
+
+  <div class="auth-form__actions">
+    <a href="/dashboard/overview/" class="m__button-secondary">Cancel</a>
+  </div>
+</form>
+
+{% endblock %}
