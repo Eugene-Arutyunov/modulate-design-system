@@ -1,0 +1,75 @@
+---
+pageTitle: Create account
+permalink: /auth/signup-complete/
+---
+
+{% extends 'prototypes/auth-layout.html' %} {% block content %}
+
+<form class="auth-form" action="#" method="post" novalidate>
+  <h1>Create account</h1>
+  <div class="m__space XS"></div>
+
+  <div class="m__textfield">
+    <label for="signup-email">Your email</label>
+    <input
+      type="email"
+      id="signup-email"
+      name="email"
+      autocomplete="email"
+      placeholder="example@domains.com"
+      aria-describedby="auth-tf-email-invalid-error"
+      disabled
+    />
+    <div class="m__textfield__message" id="auth-tf-email-invalid-error">
+      <span>Enter a valid email address</span>
+    </div>
+  </div>
+
+  <div class="m__textfield">
+    <label for="signup-name">Name</label>
+    <input
+      type="text"
+      id="signup-name"
+      name="name"
+      autocomplete="name"
+      aria-describedby="auth-tf-name-invalid-error"
+    />
+  </div>
+
+  <div class="m__textfield">
+    <label for="signup-password">New password</label>
+    <input
+      type="password"
+      id="signup-password"
+      name="password"
+      autocomplete="new-password"
+    />
+  </div>
+
+  <div class="m__textfield">
+    <label for="signup-password">Confirm password</label>
+    <input
+      type="password"
+      id="signup-password"
+      name="password"
+      autocomplete="confirm-password"
+    />
+    <div class="m__textfield__message" id="auth-tf-password-invalid-error">
+      <span>Passwords do not match</span>
+    </div>
+  </div>
+
+  <div class="auth-form__actions">
+    <a href="/dashboard/overview/" class="m__button">Continue</a>
+  </div>
+
+  <!-- Check email -->
+  <div class="m__alert-success">Check your email for a verification link.</div>
+  <div class="m__space XS"></div>
+
+  <div class="auth-form__links">
+    <a href="/auth/login/">Already have an account? Sign in</a>
+  </div>
+</form>
+
+{% endblock %}
