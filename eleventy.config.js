@@ -2,7 +2,7 @@ module.exports = function (conf) {
   conf.addFilter("startsWith", (str, prefix) => str.startsWith(prefix));
   conf.addPassthroughCopy("./src/index.js");
   conf.addPassthroughCopy("./src/assets");
-  conf.addPassthroughCopy({ "./src/service/fonts": "fonts" });
+  conf.addPassthroughCopy({ "./src/assets/service/fonts": "fonts" });
   conf.addPassthroughCopy("./ui.yaml");
   conf.addPassthroughCopy("./dashboard-charts.json");
 
