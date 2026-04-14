@@ -99,8 +99,8 @@ Canary builds (pre-release packages published per PR) are available to maintaine
 
 Index of internal docs and process guides for contributors and agents working in this repo.
 
-`src/assets/service/SVG-ICON-SPRITE.md` — describes SVG icon sprite flow.
-`src/assets/service/REPOSITORY-REGISTRY.md` — index of notable functional blocks for developer navigation.
+- `src/assets/service/SVG-ICON-SPRITE.md` — describes SVG icon sprite flow.
+- `src/assets/service/REPOSITORY-REGISTRY.md` — index of notable functional blocks for developer navigation.
 
 ## License
 
