@@ -4,10 +4,25 @@ CSS design tokens for Modulate.
 
 ## Table of contents
 
+- [Architectural layers of the repo](#architectural-layers-of-the-repo)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Available modules](#available-modules)
 - [Contributing](#contributing)
+- [Developer reference](#developer-reference)
+
+## Architectural layers of the project
+
+The repository is organised into six layers.
+
+| Layer                | Purpose                                                            |
+|----------------------|--------------------------------------------------------------------|
+| **Tokens**           | Design values as CSS custom properties.                            |
+| **Components**       | Self-contained UI elements with a single, discrete function.       |
+| **Widgets**          | Composite UI patterns, representing a reusable piece of interface. |
+| **Page composition** | Page scaffolding, element structure, and responsiveness.           |
+| **Service**          | Code and assets that support the design system itself.             |
+| **Prototypes**       | Code used by prototypes.                                           |
 
 ## Installation
 
@@ -59,6 +74,7 @@ Import the full token set or individual modules:
 @import "@eugene-arutyunov/modulate-design-system/spacers";
 @import "@eugene-arutyunov/modulate-design-system/layout";
 @import "@eugene-arutyunov/modulate-design-system/ui-components";
+@import "@eugene-arutyunov/modulate-design-system/animations";
 ```
 
 ## Available modules
@@ -71,12 +87,20 @@ Import the full token set or individual modules:
 | Spacers       | `@eugene-arutyunov/modulate-design-system/spacers`       |
 | Layout        | `@eugene-arutyunov/modulate-design-system/layout`        |
 | UI Components | `@eugene-arutyunov/modulate-design-system/ui-components` |
+| Animations    | `@eugene-arutyunov/modulate-design-system/animations`    |
 
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full workflow: branching strategy, canary builds, and how to submit changes.
 
 Canary builds (pre-release packages published per PR) are available to maintainers with write access only. External contributors can open PRs as usual — a maintainer can publish a canary build on their behalf if needed.
+
+## Developer reference
+
+Index of internal docs and process guides for contributors and agents working in this repo.
+
+`src/assets/service/SVG-ICON-SPRITE.md` — describes SVG icon sprite flow.
+`src/assets/service/REPOSITORY-REGISTRY.md` — index of notable functional blocks for developer navigation.
 
 ## License
 

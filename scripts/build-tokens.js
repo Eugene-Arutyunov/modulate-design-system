@@ -5,7 +5,6 @@ const browserslist = require('browserslist');
 
 const tokenFiles = [
   'colors.css',
-  'emotion-colors.css',
   'typography.css',
   'spacers.css',
   'layout.css',

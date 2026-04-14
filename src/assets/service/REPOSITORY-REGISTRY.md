@@ -48,7 +48,7 @@ Dropdown menu: trigger shows user name + chevron; click opens popover. Account a
 ## UI structure visualizer
 
 **Script:** `src/assets/service/ui-visualizer.js`  
-**Data:** `ui.yaml` with two root keys: **current** (product) and **target** (prototype for this repo). Each is an array of routes; every section is a node `section:` with **widget**, **widgets**, or **text-content**. Optional per route: **title_deprecated** (string) — shown struck through before **title** in the Route column when set.  
+**Data:** `src/assets/service/ui.yaml` with two root keys: **current** (product) and **target** (prototype for this repo). Each is an array of routes; every section is a node `section:` with **widget**, **widgets**, or **text-content**. Optional per route: **title_deprecated** (string) — shown struck through before **title** in the Route column when set.  
 **Page:** `src/service/ui.html` (UI Architecture).  
 **Styles:** `.ui-viz` + `.ui-viz__*` in `src/styles/service/ui-visualizer.css`.
 
@@ -87,7 +87,7 @@ Shared timing tokens for hover behavior. The system defines instant hover, anima
 **Source:** `src/assets/service/images/svg-icons-source/*.svg`  
 **Build script:** `scripts/generate-svg-sprite.js`  
 **Generated include:** `src/includes/service/svg-icons-sprite.html`  
-**Usage docs:** `SVG-ICON-SPRITE.md`.
+**Usage docs:** `src/assets/service/SVG-ICON-SPRITE.md`.
 
 Raw SVG files are normalized into one hidden sprite include. The generator removes internal SVG styles and presentational attributes, drops helper shapes with `fill: none`, assigns symbol ids from filenames, and sets icons up for `currentColor`. Layouts include the sprite globally, and icons are rendered via `<use href="#icon-name">`.
 
@@ -157,7 +157,7 @@ Empty placeholder page for conversations. Uses `layout.html`.
 
 **Page:** `src/prototypes/platform/dashboard/organization.html`  
 **Permalink:** `/dashboard/organization/`  
-**UI structure:** `ui.yaml` (`dashboard-organization`).
+**UI structure:** `src/assets/service/ui.yaml` (`dashboard-organization`).
 
 Dashboard page with sidebar; placeholder sections for organization intro, details, members, and pending invites.
 
@@ -166,7 +166,7 @@ Dashboard page with sidebar; placeholder sections for organization intro, detail
 ## Behaviors dashboard page
 
 **Page:** `src/prototypes/platform/dashboard/behaviors.html`  
-**UI structure:** `ui.yaml`.
+**UI structure:** `src/assets/service/ui.yaml`.
 
 Placeholder dashboard page added to use the existing `behaviors` icon and keep dashboard navigation aligned with the available icon set.
 
@@ -204,7 +204,7 @@ Label + input pair. Label sits above the input. Input uses `--m__ui-control-colo
 
 **Pages:** `src/prototypes/platform/auth/login.html`, `src/prototypes/platform/auth/signup.html`, `src/prototypes/platform/auth/reset-password.html`, `src/prototypes/platform/auth/org-select.html`  
 **Layout:** `src/includes/prototypes/auth-layout.html`  
-**UI structure:** `ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`, `/auth/org-select/`).
+**UI structure:** `src/assets/service/ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`, `/auth/org-select/`).
 
 Four auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link". Select organization shows an `.m__option-list` of orgs with `.m__tag` role labels, and a form to create a new org with a secondary button.
 
@@ -231,7 +231,7 @@ Small inline label for metadata. `.m__tag` shows a bordered outline using `curre
 ## Dashboard charts
 
 **Script:** `src/assets/prototypes/dashboard-charts.js`  
-**Data:** `dashboard-charts.json` (static snapshot with 30 days of data, passthrough-copied to site root).  
+**Data:** `src/asstts/prototypes/dashboard-charts.json` (static snapshot with 30 days of data, passthrough-copied to site root).  
 **Includes:** `src/includes/prototypes/dashboard/overview/credit-balance-over-time.html`, `usage-by-model.html`, `requests-by-status.html`.  
 **Styles:** `.chart-container`, `.chart-empty`, `.m__segmented-control` in `src/styles/prototypes/layout.css`.  
 **Library:** Chart.js 4.4.0 via CDN, loaded conditionally with `chartJs: true` in page front matter.
