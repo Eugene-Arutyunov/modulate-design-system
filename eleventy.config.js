@@ -21,7 +21,11 @@ module.exports = function (conf) {
       if (stem.startsWith("/prototypes/")) {
         return stem.slice("/prototypes".length) + "/index.html";
       }
-      return stem + "/index.html";
+      return (
+        stem.endsWith("/index")
+        ? stem + ".html"
+        : stem + "/index.html"
+      );
     };
   });
 
