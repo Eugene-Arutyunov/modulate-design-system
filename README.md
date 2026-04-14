@@ -4,7 +4,7 @@ CSS design tokens for Modulate.
 
 ## Table of contents
 
-- [Architectural layers of the repo](#architectural-layers-of-the-repo)
+- [Architectural layers of the project](#architectural-layers-of-the-project)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Available modules](#available-modules)
