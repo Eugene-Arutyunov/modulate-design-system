@@ -1,0 +1,651 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Tables' %} {% block
+content %}
+
+<div class="m__wrapper">
+  <div class="m__space L"></div>
+  <h1>Tables</h1>
+  <div class="m__space L"></div>
+
+  <!-- ─── 1. Base table ─────────────────────────────────────── -->
+  <h2>Base</h2>
+  <div class="m__space XS"></div>
+  <table>
+    <colgroup>
+      <col style="width: 20%" />
+      <col style="width: 40%" />
+      <col style="width: 40%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>What it is</th>
+        <th>Developer's rule</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Component</code></td>
+        <td>A styled UI element, static or interactive.</td>
+        <td>
+          Preserve component structure and naming, implement in your own stack.
+        </td>
+      </tr>
+      <tr>
+        <td><code class="accent">Token</code></td>
+        <td>A named CSS variable storing a single property value.</td>
+        <td>Use tokens as-is: don't rename, don't alias, don't generalize.</td>
+      </tr>
+      <tr>
+        <td><code>Pattern</code></td>
+        <td>A recurring composition of components and tokens.</td>
+        <td>Follow the pattern's intent; extend only at the edges.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 2. Component catalogue table ─────────────────────── -->
+  <h2>Component catalogue</h2>
+  <p class="caption">Three columns: name, sample, tokens.</p>
+  <div class="m__space XS"></div>
+  <table>
+    <colgroup>
+      <col style="width: 15%" />
+      <col style="width: 60%" />
+      <col style="width: 25%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Sample</th>
+        <th>Tokens</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>.m__button</code></td>
+        <td>
+          <button type="button" class="m__button">Create API key</button>
+          &ensp;
+        </td>
+        <td>
+          <code class="accent">--m__button-padding</code><br />
+          <code class="accent">--m__radius-m</code>
+        </td>
+      </tr>
+      <tr>
+        <td><code>.m__button-secondary</code></td>
+        <td>
+          <button type="button" class="m__button-secondary">Sign in</button>
+        </td>
+        <td>
+          <code class="accent">--m__button-padding</code><br />
+          <code class="accent">--m__radius-m</code>
+        </td>
+      </tr>
+      <tr>
+        <td><code>.m__widget</code></td>
+        <td>
+          <div class="m__widget">
+            Interactive data widget with surface background.
+          </div>
+        </td>
+        <td>
+          <code class="accent">--m__widget-radius</code><br />
+          <code class="accent">--m__widget-padding</code>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 3. Comparison / pricing table ─────────────────────── -->
+  <h2>Comparison</h2>
+  <p class="caption">
+    Wide table with colspan header rows for section grouping.
+  </p>
+  <div class="m__space XS"></div>
+  <div class="pricing-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Model Comparison</th>
+          <th>Batch English Fast</th>
+          <th>Batch Multilingual</th>
+          <th>Streaming Multilingual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Description</td>
+          <td>
+            High-throughput English batch processing with &gt;200x real-time
+            speed
+          </td>
+          <td>
+            Multilingual batch transcription in 70+ languages with full feature
+            set
+          </td>
+          <td>
+            Real-time streaming transcription in 70+ languages via WebSocket
+          </td>
+        </tr>
+        <tr>
+          <td>Endpoint</td>
+          <td><code>/api/velma-2-stt-batch-english-vfast</code></td>
+          <td><code>/api/velma-2-stt-batch</code></td>
+          <td><code>/api/velma-2-stt-streaming</code></td>
+        </tr>
+        <tr>
+          <td>Type</td>
+          <td>Batch</td>
+          <td>Batch</td>
+          <td>Streaming</td>
+        </tr>
+        <tr>
+          <td>Pricing</td>
+          <td><strong>$0.025 / hour</strong></td>
+          <td><strong>$0.03 / hour</strong></td>
+          <td><strong>$0.06 / hour</strong></td>
+        </tr>
+        <tr>
+          <td colspan="4">Built-in features</td>
+        </tr>
+        <tr>
+          <td>Transcription</td>
+          <td>✓</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Auto Punctuation</td>
+          <td>✓</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Real-Time</td>
+          <td>−</td>
+          <td>−</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td colspan="4">Optional features</td>
+        </tr>
+        <tr>
+          <td>Speaker Diarization</td>
+          <td>−</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>Emotion Detection</td>
+          <td>−</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+        <tr>
+          <td>PII/PHI Tagging</td>
+          <td>−</td>
+          <td>✓</td>
+          <td>✓</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 4. Two-column key–value table ─────────────────────── -->
+  <h2>Key–value</h2>
+  <p class="caption">Narrow two-column layout for metadata or settings.</p>
+  <div class="m__space XS"></div>
+  <table>
+    <colgroup>
+      <col style="width: 30%" />
+      <col style="width: 70%" />
+    </colgroup>
+    <tbody>
+      <tr>
+        <th>Account ID</th>
+        <td><code>acc_01HX9…</code></td>
+      </tr>
+      <tr>
+        <th>Plan</th>
+        <td>Pro</td>
+      </tr>
+      <tr>
+        <th>Billing cycle</th>
+        <td>Monthly · renews 1 May 2026</td>
+      </tr>
+      <tr>
+        <th>Seat limit</th>
+        <td>10</td>
+      </tr>
+      <tr>
+        <th>Created</th>
+        <td>12 Jan 2025</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 5. Inside .m__widget surface ─────────────────────── -->
+  <h2>Inside widget surface</h2>
+  <p class="caption">
+    Table rendered on the <code>.m__widget</code> background.
+  </p>
+  <div class="m__space XS"></div>
+  <div class="m__widget">
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Created</th>
+          <th>Last used</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>sk_live_aX9…</code></td>
+          <td>12 Jan 2025</td>
+          <td>14 Apr 2026</td>
+          <td>Active</td>
+        </tr>
+        <tr>
+          <td><code>sk_live_bZ3…</code></td>
+          <td>3 Mar 2025</td>
+          <td>1 Apr 2026</td>
+          <td>Active</td>
+        </tr>
+        <tr>
+          <td><code>sk_live_cQ1…</code></td>
+          <td>22 Aug 2024</td>
+          <td>Never</td>
+          <td>Inactive</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 6. Widget table with empty state ─────────────────── -->
+  <h2>Widget + empty state</h2>
+  <p class="caption">Table inside a widget card when there is no data yet.</p>
+  <div class="m__space XS"></div>
+  <div class="m__widget">
+    <h3>Recent Usage</h3>
+    <div class="m__space XS"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>API Key</th>
+          <th>Status</th>
+          <th>Submitted</th>
+          <th>Completed</th>
+          <th>Duration</th>
+          <th>Credits</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td
+            colspan="7"
+            style="
+              text-align: center;
+              padding-block: 1.5rem;
+              color: var(--m__text-caption-color);
+            "
+          >
+            No usage records found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space L"></div>
+
+  <p class="caption">Тот же шаблон с данными.</p>
+  <div class="m__space XS"></div>
+  <div class="m__widget">
+    <h3>Recent Usage</h3>
+    <div class="m__space XS"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>API Key</th>
+          <th>Status</th>
+          <th>Submitted</th>
+          <th>Completed</th>
+          <th>Duration</th>
+          <th>Credits</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>velma-2-stt-batch</td>
+          <td><code>sk_live_aX9…</code></td>
+          <td><span class="m__tag-flat">success</span></td>
+          <td>15 Apr 2026, 09:12</td>
+          <td>15 Apr 2026, 09:14</td>
+          <td>1m 48s</td>
+          <td>0.045</td>
+        </tr>
+        <tr>
+          <td>velma-2-stt-streaming</td>
+          <td><code>sk_live_bZ3…</code></td>
+          <td><span class="m__tag-flat">success</span></td>
+          <td>15 Apr 2026, 08:55</td>
+          <td>15 Apr 2026, 08:57</td>
+          <td>2m 03s</td>
+          <td>0.122</td>
+        </tr>
+        <tr>
+          <td>velma-2-stt-batch</td>
+          <td><code>sk_live_aX9…</code></td>
+          <td><span class="m__tag-flat">error</span></td>
+          <td>14 Apr 2026, 17:30</td>
+          <td>14 Apr 2026, 17:30</td>
+          <td>—</td>
+          <td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 7. Tabbed table + icon empty states ───────────────── -->
+  <h2>Tabs + icon empty state</h2>
+  <p class="caption">Segmented control switching between two table views.</p>
+  <div class="m__space XS"></div>
+
+  <div class="m__segmented-control" role="group">
+    <label>
+      <input type="radio" name="api-keys-tabs" checked />
+      Active
+    </label>
+    <label>
+      <input type="radio" name="api-keys-tabs" />
+      Inactive
+    </label>
+  </div>
+
+  <div class="m__widget">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Limits</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="6">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+                padding-block: 2.5rem;
+              "
+            >
+              <svg
+                width="32"
+                height="32"
+                aria-hidden="true"
+                style="opacity: 0.35"
+              >
+                <use href="#api-key"></use>
+              </svg>
+              <p style="margin: 0; text-align: center">
+                No active API keys. Create your first key to start making API
+                requests.
+              </p>
+              <button type="button" class="m__button">Create API Key</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space L"></div>
+  <p class="caption">Вкладка Inactive — пустое состояние без CTA.</p>
+  <div class="m__space XS"></div>
+
+  <div class="m__segmented-control" role="group">
+    <label>
+      <input type="radio" name="api-keys-tabs-b" />
+      Active
+    </label>
+    <label>
+      <input type="radio" name="api-keys-tabs-b" checked />
+      Inactive
+    </label>
+  </div>
+
+  <div class="m__widget">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Limits</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="6">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+                padding-block: 2.5rem;
+              "
+            >
+              <svg
+                width="32"
+                height="32"
+                aria-hidden="true"
+                style="opacity: 0.35"
+              >
+                <use href="#api-key"></use>
+              </svg>
+              <p style="margin: 0; color: var(--m__text-caption-color)">
+                No inactive API keys.
+              </p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 8. Model detail — key-value with badges ───────────── -->
+  <h2>Detail view — key-value with badges</h2>
+  <p class="caption">
+    Model metadata table: left column as label, right as rich value.
+  </p>
+  <div class="m__space XS"></div>
+  <table>
+    <colgroup>
+      <col style="width: 22%" />
+      <col style="width: 78%" />
+    </colgroup>
+    <tbody>
+      <tr>
+        <th>Name</th>
+        <td>Velma-2 STT Batch</td>
+      </tr>
+      <tr>
+        <th>Endpoint URL</th>
+        <td>
+          <code style="color: var(--m__text-link-color)"
+            >https://modulate-developer-apis.com/api/velma-2-stt-batch</code
+          >
+        </td>
+      </tr>
+      <tr>
+        <th>Model Identifier</th>
+        <td>
+          <code style="color: var(--m__text-link-color)"
+            >velma-2-stt-batch</code
+          >
+        </td>
+      </tr>
+      <tr>
+        <th>Status</th>
+        <td><span class="m__tag">released</span></td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td><span class="m__tag">batch</span></td>
+      </tr>
+      <tr>
+        <th>Accepted Media Formats</th>
+        <td>
+          <span class="m__tag-flat">aac</span>
+          <span class="m__tag-flat">aiff</span>
+          <span class="m__tag-flat">flac</span>
+          <span class="m__tag-flat">mov</span>
+          <span class="m__tag-flat">mp3</span>
+          <span class="m__tag-flat">mp4</span>
+          <span class="m__tag-flat">ogg</span>
+          <span class="m__tag-flat">opus</span>
+          <span class="m__tag-flat">wav</span>
+          <span class="m__tag-flat">webm</span>
+        </td>
+      </tr>
+      <tr>
+        <th>Description</th>
+        <td>
+          Velma-2's powerful and flexible batch transcription model, supporting
+          over 70 languages with features such as speaker diarization, accent
+          detection, emotion detection, PII/PHI tagging, and more.
+        </td>
+      </tr>
+      <tr>
+        <th>Concurrency Quota</th>
+        <td>5 concurrent requests</td>
+      </tr>
+      <tr>
+        <th>Monthly Usage Quota</th>
+        <td>1,000 hours</td>
+      </tr>
+      <tr>
+        <th>Cost</th>
+        <td>$0.030 per hour</td>
+      </tr>
+      <tr>
+        <th>Feature Costs</th>
+        <td>
+          <ul style="margin: 0; padding-left: 1.1em">
+            <li>deepfake_signal: $0.25/hr</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 9. Table with filter bar ─────────────────────────── -->
+  <h2>Table with filter bar</h2>
+  <p class="caption">Form controls above the table for filtering.</p>
+  <div class="m__space XS"></div>
+
+  <div class="m__space XS"></div>
+
+  <div class="m__widget">
+    <div
+      style="
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr auto;
+        gap: 1rem;
+        align-items: flex-end;
+        margin-bottom: 1rem;
+      "
+    >
+      <div class="m__textfield" style="margin: 0">
+        <label for="filter-start">Start Date</label>
+        <input type="date" id="filter-start" value="2026-03-16" />
+      </div>
+      <div class="m__textfield" style="margin: 0">
+        <label for="filter-end">End Date</label>
+        <input type="date" id="filter-end" value="2026-04-15" />
+      </div>
+      <div class="m__textfield" style="margin: 0">
+        <label for="filter-model">Model</label>
+        <input type="text" id="filter-model" placeholder="All Models" />
+      </div>
+      <button type="button" class="m__button">Apply</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>API Key</th>
+          <th>Status</th>
+          <th>Submitted</th>
+          <th>Completed</th>
+          <th>Duration</th>
+          <th>Credits</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="7">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+                padding-block: 2.5rem;
+              "
+            >
+              <svg
+                width="32"
+                height="32"
+                aria-hidden="true"
+                style="opacity: 0.35"
+              >
+                <use href="#usage"></use>
+              </svg>
+              <p style="margin: 0; text-align: center; max-width: 28rem">
+                No usage records found for this date range. Usage appears here
+                after you make API calls.
+              </p>
+              <a href="#" class="m__button-secondary">View Quickstart Guide</a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}
