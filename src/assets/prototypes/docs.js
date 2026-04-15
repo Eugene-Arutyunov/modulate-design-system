@@ -36,36 +36,46 @@ async function loadModels() {
 
 function renderModelList(models, list) {
   list.innerHTML = "";
-  const released = models.filter((m) => m.status === "released");
-  const preview = models.filter((m) => m.status !== "released");
-
-  if (released.length > 0) {
-    const group = document.createElement("div");
-    group.className = "docs-model-nav__group";
-    for (const m of released) group.appendChild(createModelItem(m));
-    list.appendChild(group);
+  // Group all models by nav_group, preserving original order
+  const groups = [];
+  const groupIndex = new Map();
+  for (const m of models) {
+    const key = m.nav_group ?? "";
+    if (!groupIndex.has(key)) {
+      groupIndex.set(key, groups.length);
+      groups.push({ label: key, models: [] });
+    }
+    groups[groupIndex.get(key)].models.push(m);
   }
 
-  if (preview.length > 0) {
-    const spacer = document.createElement("div");
-    spacer.className = "m__space XS";
-    list.appendChild(spacer);
-    const label = document.createElement("div");
-    label.className = "docs-model-nav__section-label";
-    label.textContent = "Preview";
-    list.appendChild(label);
+  groups.forEach(({ label, models: groupModels }, i) => {
+    if (i > 0) {
+      const spacer = document.createElement("div");
+      spacer.className = "m__space XS";
+      list.appendChild(spacer);
+    }
     const group = document.createElement("div");
     group.className = "docs-model-nav__group";
-    for (const m of preview) group.appendChild(createModelItem(m));
+    groupModels.forEach((m, j) => {
+      group.appendChild(createModelItem(m, j === 0 ? label : null));
+    });
     list.appendChild(group);
-  }
+  });
+
 }
 
-function createModelItem(model) {
+function createModelItem(model, groupLabel = null) {
   const btn = document.createElement("button");
   btn.className = "docs-model-nav__link";
   btn.dataset.modelUuid = model.model_uuid;
-  btn.innerHTML = `<span>${escapeHtml(model.model_display_label)}</span>`;
+  const iconId = model.model_type === "streaming" ? "streaming" : "batch";
+  const labelHtml = groupLabel
+    ? `<span class="docs-model-nav__group-label">${escapeHtml(groupLabel)}</span>`
+    : "";
+  btn.innerHTML = `${labelHtml}<span class="docs-model-nav__item-row">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#${iconId}"></use></svg>
+    <span>${escapeHtml(model.nav_label ?? model.model_display_label)}</span>
+  </span>`;
   btn.addEventListener("click", () => selectModel(model.model_uuid));
   return btn;
 }

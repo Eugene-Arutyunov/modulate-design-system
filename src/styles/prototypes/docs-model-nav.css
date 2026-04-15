@@ -11,15 +11,6 @@
   font-size: var(--m__font-size-s);
 }
 
-.docs-model-nav__section-label {
-  margin-bottom: var(--m__space-xxs);
-  font-size: var(--m__font-size-xs);
-  font-weight: var(--m__font-weight-medium);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--m__text-caption-color);
-}
-
 .docs-model-nav__group {
   display: flex;
   flex-direction: column;
@@ -29,7 +20,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.25rem;
+  gap: 0.2rem;
   padding: var(--m__control-inset-padding);
   background: none;
   border: 1px solid
@@ -76,5 +67,23 @@
     );
     cursor: default;
     pointer-events: none;
+  }
+
+  & .docs-model-nav__group-label {
+    display: block;
+    font-weight: var(--m__font-weight-bold);
+    margin-bottom: 0.1rem;
+  }
+
+  & .docs-model-nav__item-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    & svg {
+      flex-shrink: 0;
+      width: 0.9em;
+      height: 0.9em;
+    }
   }
 }

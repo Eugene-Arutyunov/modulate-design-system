@@ -1,0 +1,446 @@
+<style>
+  .jmock {
+    display: grid;
+    grid-template-columns: 220px 1fr 360px;
+    min-height: 600px;
+    font-family: Inter, system-ui, sans-serif;
+    color: var(--m__text-color);
+  }
+
+  /* ── Column 1: sidebar nav ── */
+  .jmock-nav {
+    padding: 0.5rem 0.3rem;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .jmock-nav nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .jmock-nav__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 0.5rem;
+    color: var(--m__text-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+  }
+
+  .jmock-nav__item:hover {
+    background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  .jmock-nav__item.active {
+    background-color: var(--m__bg-surface-color);
+    font-weight: var(--m__font-weight-medium);
+  }
+
+  .jmock-nav__chevron {
+    color: var(--m__text-caption-color);
+    flex-shrink: 0;
+    font-style: normal;
+  }
+
+  .jmock-nav__subitem {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem 0.4rem 1.5rem;
+    border-radius: 0.5rem;
+    color: var(--m__text-caption-color);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+  }
+
+  .jmock-nav__subitem:hover {
+    background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-color);
+  }
+
+  /* Method tags in nav — use .m__tag-flat, color overridden locally */
+  .jmock-tag-get {
+    color: #1d7a3e;
+  }
+  .jmock-tag-post {
+    color: #1a5db5;
+  }
+  .jmock-tag-patch {
+    color: #856404;
+  }
+  .jmock-tag-ok {
+    color: #1d7a3e;
+  }
+
+  /* ── Column 2: main content ── */
+  .jmock-content {
+    padding: 2rem 2.5rem;
+    border-left: 1px solid var(--m__ui-border-color);
+    border-right: 1px solid var(--m__ui-border-color);
+    overflow-x: hidden;
+  }
+
+  .jmock-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+  }
+
+  .jmock-download-btn {
+    display: inline-block;
+    padding: 0.25em 0.7em;
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-s);
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-color);
+    text-decoration: none;
+    background: var(--m__background-color);
+  }
+
+  .jmock-meta-link {
+    color: var(--m__text-hover-color);
+    text-decoration: none;
+  }
+
+  .jmock-meta-link:hover {
+    text-decoration: underline;
+  }
+
+  .jmock-meta-sep {
+    color: var(--m__ui-border-color);
+  }
+
+  .jmock-warning {
+    background: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-m);
+    padding: 0.75rem 1rem;
+    margin-bottom: var(--m__default-margin-bottom);
+  }
+
+  /* ── Column 3: API panel ── */
+  .jmock-panel {
+    padding: 1.25rem 1rem;
+    overflow-x: hidden;
+  }
+
+  .jmock-endpoint-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .jmock-endpoint-path {
+    font-family: var(--m__font-mono);
+    font-size: var(--m__font-size-mono-m);
+  }
+
+  .jmock-panel-h {
+    font-weight: var(--m__font-weight-bold);
+    margin: 0 0 0.75rem;
+  }
+
+  .jmock-tabs {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.85rem;
+  }
+
+  .jmock-content-type-label {
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+    margin-bottom: 0.2rem;
+  }
+
+  .jmock-content-type-value {
+    font-family: var(--m__font-mono);
+    font-size: var(--m__font-size-mono-m);
+    display: block;
+    margin-bottom: 0.85rem;
+  }
+
+  .jmock-json-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+  }
+
+  .jmock-json-wrap {
+    background: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-m);
+    padding: 0.75rem;
+    overflow-x: auto;
+  }
+
+  .jmock-json-wrap pre {
+    margin: 0;
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    font-family: var(--m__font-mono);
+    font-size: 0.78rem;
+    color: var(--m__text-color);
+  }
+
+  .jmock-json-str {
+    color: #1d7a3e;
+  }
+  .jmock-json-num {
+    color: var(--m__text-hover-color);
+  }
+  .jmock-json-punct {
+    color: var(--m__text-caption-color);
+  }
+
+  .jmock-tree-toggle {
+    color: var(--m__text-caption-color);
+    font-style: normal;
+    margin-right: 0.2rem;
+  }
+</style>
+
+<div class="jmock">
+  <!-- Col 1: sidebar nav -->
+  <nav class="jmock-nav" aria-label="API docs navigation">
+    <nav>
+      <a href="#" class="jmock-nav__item">Overview</a>
+      <a href="#" class="jmock-nav__item"
+        >Please Read: This is an Early Access Version</a
+      >
+      <a href="#" class="jmock-nav__item">Authentication</a>
+      <a href="#" class="jmock-nav__item">Workflow</a>
+      <a href="#" class="jmock-nav__item active">
+        Jobs
+        <i class="jmock-nav__chevron" aria-hidden="true">›</i>
+      </a>
+      <a href="#" class="jmock-nav__subitem">
+        <span class="m__tag-flat jmock-tag-get">get</span>
+        List all jobs
+      </a>
+      <a href="#" class="jmock-nav__subitem">
+        <span class="m__tag-flat jmock-tag-post">post</span>
+        Create a new job
+      </a>
+      <a href="#" class="jmock-nav__subitem">
+        <span class="m__tag-flat jmock-tag-get">get</span>
+        Get a job by ID
+      </a>
+      <a href="#" class="jmock-nav__subitem">
+        <span class="m__tag-flat jmock-tag-patch">patch</span>
+        Update a job
+      </a>
+      <a href="#" class="jmock-nav__item">
+        Sources
+        <i class="jmock-nav__chevron" aria-hidden="true">›</i>
+      </a>
+      <a href="#" class="jmock-nav__item">
+        Media files
+        <i class="jmock-nav__chevron" aria-hidden="true">›</i>
+      </a>
+      <a href="#" class="jmock-nav__item">
+        Clips
+        <i class="jmock-nav__chevron" aria-hidden="true">›</i>
+      </a>
+      <a href="#" class="jmock-nav__item">
+        Clip queue
+        <i class="jmock-nav__chevron" aria-hidden="true">›</i>
+      </a>
+      <a href="#" class="jmock-nav__item">
+        Analysis results
+        <i class="jmock-nav__chevron" aria-hidden="true">›</i>
+      </a>
+    </nav>
+  </nav>
+
+  <!-- Col 2: main content -->
+  <div class="jmock-content">
+    <h1>
+      Modulate Platform API
+      <small
+        style="
+          font-size: 0.6em;
+          font-weight: 400;
+          color: var(--m__text-caption-color);
+        "
+        >(0.2.0)</small
+      >
+    </h1>
+
+    <div class="jmock-meta">
+      <span>Download OpenAPI specification:</span>
+      <a href="#" class="jmock-download-btn">Download</a>
+    </div>
+    <div class="jmock-meta">
+      <span
+        >URL:
+        <a href="#" class="jmock-meta-link"
+          >https://modulate.ai/contact</a
+        ></span
+      >
+      <span class="jmock-meta-sep">|</span>
+      <span>License: Proprietary</span>
+    </div>
+
+    <h2>Overview</h2>
+    <p>
+      High-performance API that transforms spoken audio into sharp, actionable
+      insights: detecting fraud, surfacing social toxicity, and spotlighting
+      positive human behavior with impressive speed and precision.
+    </p>
+
+    <h2>Please Read: This is an Early Access Version</h2>
+    <div class="jmock-warning">
+      <p>
+        <strong
+          >This documentation is for a version of the Modulate Platform API that
+          is not yet publicly accessible. Furthermore, until version 1.0.0 is
+          released, we will do our best to communicate about changes and to
+          minimize high-impact, breaking changes, but please be advised that any
+          part of this API is subject to change at any time (especially the
+          shapes of analysis result responses).</strong
+        >
+      </p>
+    </div>
+
+    <h2>Authentication</h2>
+    <p>
+      All endpoints require HTTP <code>Basic</code> authentication via the
+      <code>Authorization</code> header, as follows:
+    </p>
+    <ul>
+      <li>The username should be equal to your account ID.</li>
+      <li>The password should be equal to your API key.</li>
+    </ul>
+
+    <h2>Workflow</h2>
+    <p>
+      This section is intentionally high-level. For exact payload shapes, media
+      types, and field constraints, consult endpoint-level docs (especially
+      <code>POST /jobs</code> and <code>PATCH /job/{job_id}</code>).
+    </p>
+    <ol>
+      <li>
+        <strong
+          >Create a job with a <code>POST</code> to <code>/jobs</code> and keep
+          the returned <code>job_id</code>.</strong
+        >
+        <ul>
+          <li>Choose between a file-based job and a realtime job.</li>
+          <li>Set analysis types.</li>
+          <li>Pick <code>results_deliveries</code>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Submit audio to the job.</strong>
+        <ul>
+          <li>
+            <strong>For a file-based job:</strong> media files can be added to
+            the job via a <code>POST</code> to
+            <code>/job/{job_id}/sources/media-files</code>.
+          </li>
+          <li>
+            <strong>For a realtime job:</strong> connect to WebSocket stream
+            endpoints via a <code>GET</code> to
+            <code>/job/{job_id}/sources/streams/{alias}</code>.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Finalize processing.</strong> Jobs can finalize automatically
+        based on one or more <code>finalization_trigger</code> options, or
+        explicitly via a <code>PATCH</code> to <code>/job/{job_id}</code>.
+      </li>
+      <li>
+        <strong>Retrieve results.</strong> Poll
+        <code>GET /job/{job_id}</code> and results endpoints, or receive webhook
+        deliveries via <code>results_deliveries</code>.
+      </li>
+    </ol>
+    <p>
+      <strong
+        >If uploading media files in multiple batches, avoid premature
+        finalization by using a manual finalization strategy and finalize only
+        after the last upload.</strong
+      >
+    </p>
+    <p>
+      Jobs move through three statuses: <code>active</code> →
+      <code>finalizing</code> → <code>finalized</code>.
+    </p>
+    <p>Retrieve results via:</p>
+    <ul>
+      <li>
+        <strong>Polling:</strong> <code>GET /job/{job_id}</code> to check
+        <code>status</code>, then <code>GET /job/{job_id}/results</code> for
+        full results.
+      </li>
+      <li>
+        <strong>Webhook:</strong> Provide a
+        <code>results_deliveries</code> entry at job creation to receive results
+        as they are processed.
+      </li>
+    </ul>
+  </div>
+
+  <!-- Col 3: API detail panel -->
+  <div class="jmock-panel">
+    <div class="jmock-endpoint-heading">
+      <span class="m__tag-flat jmock-tag-get">GET</span>
+      <span class="jmock-endpoint-path">/jobs</span>
+    </div>
+    <p class="jmock-panel-h">Response samples</p>
+    <div class="jmock-tabs">
+      <span class="m__tag-flat jmock-tag-ok">200</span>
+      <span class="m__tag-flat">400</span>
+      <span class="m__tag-flat">401</span>
+      <span class="m__tag-flat">403</span>
+      <span class="m__tag-flat">500</span>
+    </div>
+    <p class="jmock-content-type-label">Content type</p>
+    <span class="jmock-content-type-value"
+      >application/vnd.modulate.v0+json</span
+    >
+    <div class="jmock-json-toolbar">
+      <span>Copy</span>
+      <span>Expand all</span>
+      <span>Collapse all</span>
+    </div>
+    <div class="jmock-json-wrap">
+      <pre><code><span class="jmock-json-punct">{</span>
+  <i class="jmock-tree-toggle">−</i> <span class="jmock-json-key">"meta"</span><span class="jmock-json-punct">: {</span>
+        <span class="jmock-json-key">"total_count"</span><span class="jmock-json-punct">:</span> <span class="jmock-json-num">150</span><span class="jmock-json-punct">,</span>
+        <span class="jmock-json-key">"per_page"</span><span class="jmock-json-punct">:</span> <span class="jmock-json-num">20</span>
+  <span class="jmock-json-punct">},</span>
+  <i class="jmock-tree-toggle">−</i> <span class="jmock-json-key">"links"</span><span class="jmock-json-punct">: {</span>
+        <span class="jmock-json-key">"prev"</span><span class="jmock-json-punct">:</span> <span class="jmock-json-str">"https://api.modulate.ai/jobs?cursor=…"</span><span class="jmock-json-punct">,</span>
+        <span class="jmock-json-key">"self"</span><span class="jmock-json-punct">:</span> <span class="jmock-json-str">"https://api.modulate.ai/jobs?cursor=…"</span><span class="jmock-json-punct">,</span>
+        <span class="jmock-json-key">"next"</span><span class="jmock-json-punct">:</span> <span class="jmock-json-str">"https://api.modulate.ai/jobs?cursor=…"</span>
+  <span class="jmock-json-punct">},</span>
+  <i class="jmock-tree-toggle">−</i> <span class="jmock-json-key">"data"</span><span class="jmock-json-punct">: [</span>
+    <i class="jmock-tree-toggle">+</i> <span class="jmock-json-punct">{ … }</span>
+  <span class="jmock-json-punct">]</span>
+<span class="jmock-json-punct">}</span></code></pre>
+    </div>
+  </div>
+</div>
