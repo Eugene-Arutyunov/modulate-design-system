@@ -1,6 +1,6 @@
 # SVG icon sprite flow
 
-Source icons live in `src/assets/service/images/svg-icons-source/` as raw SVG files.
+Source icons live in `src/assets/images/svg-icons-source/` as raw SVG files.
 
 ## What gets generated
 
@@ -63,7 +63,7 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 
 ## How to add or update icons
 
-1. Put the raw SVG file into `src/assets/service/images/svg-icons-source/`.
+1. Put the raw SVG file into `src/assets/images/svg-icons-source/`.
 2. Keep the filename stable, because it becomes the symbol id.
 3. Run `npm run icons:build`.
 4. Use the icon with `<use href="#file-name">`.

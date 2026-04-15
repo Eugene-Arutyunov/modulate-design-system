@@ -6,7 +6,6 @@ const SOURCE_DIR = path.join(
   ROOT_DIR,
   "src",
   "assets",
-  "service",
   "images",
   "svg-icons-source",
 );

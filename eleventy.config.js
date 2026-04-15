@@ -3,9 +3,9 @@ module.exports = function (conf) {
   conf.addPassthroughCopy("./src/index.js");
   conf.addPassthroughCopy("./src/assets");
   conf.addPassthroughCopy({
-    "./src/assets/service/fonts": "fonts",
+    "./src/assets/fonts": "fonts",
     "./src/assets/prototypes/data/dashboard-charts.json": "dashboard-charts.json",
-    "./src/assets/service/ui.yaml": "ui.yaml",
+    "./src/service/ui.yaml": "ui.yaml",
   });
 
   conf.addWatchTarget("./src/styles/");
