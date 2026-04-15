@@ -1,6 +1,6 @@
 current:
   - id: landing
-    route: /web/landing.html
+    route: /web/landing
     title: Landing
     sections:
       - section:
@@ -21,7 +21,7 @@ current:
           widget: cta
 
   - id: docs-models-api
-    route: /models-api-docs/
+    route: /web/docs#model-docs
     title: Models API
     sections:
       - section:
@@ -30,9 +30,20 @@ current:
           widget: model-info
 
   - id: docs-jobs-api
-    route: /jobs-api-docs/
+    route: —
     title: Jobs API
     sections: []
+
+  - id: docs-models-overview
+    route: /web/docs#models
+    title: Models Overview
+    sections:
+      - section:
+          text-content: deepfake-detection-models
+      - section:
+          text-content: transcription-models
+      - section:
+          text-content: authentication-rate-limits
 
   - id: playground
     route: —
@@ -63,7 +74,7 @@ current:
           widget: recent-usage
 
   - id: dashboard-api-keys
-    route: /web/api-keys.html
+    route: /web/api-keys
     title: API Keys
     sections:
       - section:
@@ -72,7 +83,7 @@ current:
           widget: api-keys-table
 
   - id: dashboard-models
-    route: /web/models.html
+    route: /web/models
     title: Models
     sections:
       - section:
@@ -87,7 +98,7 @@ current:
           widget: model-recent-requests
 
   - id: dashboard-usage
-    route: /web/usage.html
+    route: /web/usage
     title: Usage
     sections:
       - section:
@@ -103,7 +114,7 @@ current:
     sections: []
 
   - id: dashboard-billing
-    route: /web/billing.html
+    route: /web/billing
     title: Billing
     sections:
       - section:
@@ -150,7 +161,7 @@ current:
           text-content: pending-invites
 
   - id: internal-users
-    route: /web/internal-users.html
+    route: /web/internal-users
     title: Users & Organizations
     sections:
       - section:
@@ -159,7 +170,7 @@ current:
           widget: users-table
 
   - id: internal-data
-    route: /web/internal-data.html
+    route: /web/internal-data
     title: Data Management
     sections:
       - section:
@@ -168,7 +179,7 @@ current:
           widget: data-export
 
   - id: internal-invites
-    route: /web/internal-invites.html
+    route: /web/internal-invites
     title: Invites & Credits
     sections:
       - section:
@@ -177,7 +188,7 @@ current:
           widget: invites-table
 
   - id: internal-usage
-    route: /web/internal-usage.html
+    route: /web/internal-usage
     title: Platform Usage
     sections:
       - section:
@@ -197,7 +208,7 @@ current:
             - credit-consumption
 
   - id: internal-overrides
-    route: /web/internal-overrides.html
+    route: /web/internal-overrides
     title: Org Overrides
     sections:
       - section:
@@ -208,7 +219,7 @@ current:
           widget: bulk-tag-overrides
 
   - id: internal-reports
-    route: /web/internal-reports.html
+    route: /web/internal-reports
     title: Reports
     sections:
       - section:
@@ -217,7 +228,7 @@ current:
           widget: report-generator
 
   - id: internal-models
-    route: /web/internal-models.html
+    route: /web/internal-models
     title: Model Management
     sections:
       - section:
@@ -243,56 +254,56 @@ current:
           widget: api-spec-viewer
 
   - id: auth-login
-    route: /web/login.html
+    route: /web/login
     title: Sign in
     sections:
       - section:
           widget: login-form
 
   - id: auth-signup
-    route: /web/signup-request.html
+    route: /web/signup-request
     title: Create account
     sections:
       - section:
           widget: signup-form
 
   - id: auth-reset-password
-    route: /web/password-reset-request.html
+    route: /web/password-reset-request
     title: Reset password
     sections:
       - section:
           widget: reset-password-form
 
   - id: auth-reset-password-complete
-    route: /web/password-reset-complete.html
+    route: /web/password-reset-complete
     title: Set new password
     sections:
       - section:
           widget: set-password-form
 
   - id: auth-signup-complete
-    route: /web/signup-complete.html
+    route: /web/signup-complete
     title: Create account
     sections:
       - section:
           widget: signup-complete-form
 
   - id: auth-invite
-    route: /web/invite.html
+    route: /web/invite
     title: Accept invite
     sections:
       - section:
           widget: invite-form
 
   - id: auth-invite-org
-    route: /web/org-invite.html
+    route: /web/org-invite
     title: Organization invite
     sections:
       - section:
           widget: org-invite-form
 
   - id: auth-org-select
-    route: /web/org-select.html
+    route: /web/org-select
     title: Select organization
     sections:
       - section:
@@ -331,7 +342,18 @@ target:
   - id: docs-jobs-api
     route: /jobs-api-docs/
     title: Jobs API
-    sections: []
+    sections:
+      - section:
+          widget: redocly-include
+
+  - id: docs-models-overview
+    route: /models
+    title: Models Overview
+    sections:
+      - section:
+          text-content: deepfake-detection-models
+      - section:
+          text-content: transcription-models
 
   - id: playground
     route: /playground

@@ -64,6 +64,16 @@ Global tag-level styles for prose elements: headings, paragraphs, links, inline 
 
 ---
 
+## Design system main page layout
+
+**Styles:** `src/styles/service/ds-main-page.css`  
+**Used in:** `src/index.html` (e.g. Graphics → Icons `.docs-icon-row`, Animations `.docs-animation-samples`).  
+**Bundle:** `src/service/css-bundle.njk`.
+
+Section-specific layout for the long home page; kept separate from `color-palette.css` (swatches and emotion showcase).
+
+---
+
 ## Docs chrome (navbar + footnotes)
 
 **Styles:** `src/styles/service/ids-navbar.css`, `src/styles/service/ids-footnotes.css`  

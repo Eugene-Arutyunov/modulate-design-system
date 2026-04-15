@@ -1,0 +1,54 @@
+/* Design system home (`src/index.html`) — section layout not tied to color samples */
+
+.docs-icon-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 1rem;
+
+  & .docs-icon-row__item {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: var(--m__widget-radius);
+    background-color: var(--m__bg-surface-color);
+  }
+
+  & .docs-icon-row__icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    color: var(--m__text-color);
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  & .docs-icon-row__label {
+    max-width: 100%;
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.docs-animation-samples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+
+  & .docs-animation-samples__text {
+    & p {
+      margin: 0;
+    }
+  }
+
+  & .docs-animation-samples__sidebar {
+    min-width: 10rem;
+  }
+}
