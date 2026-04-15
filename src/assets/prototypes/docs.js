@@ -100,7 +100,7 @@ function selectModel(uuid) {
 }
 
 async function renderTab(uuid) {
-  const content = document.getElementById("docs-doc-content");
+  const content = document.getElementById("docs-content");
   content.innerHTML = '<div class="docs-loading">Loading…</div>';
   try {
     switch (activeTab) {
@@ -158,27 +158,43 @@ async function renderQuickstart(uuid, content) {
     content.innerHTML = '<div class="docs-loading">Model not found.</div>';
     return;
   }
+  const mdFilename = `${model.model_display_label.replace(/\s+/g, "-")}-quickstart.md`;
   const resp = await fetch(
     `/assets/prototypes/data/model-docs/${model.model_identifier}/quickstart.md`,
   );
-  let html = "";
-  if (resp.ok) {
-    const md = await resp.text();
-    // Model docs are Modulate-authored content, not user input, so XSS is not a concern here.
-    const markedLib = window.marked;
-    if (markedLib) {
-      const tmp = document.createElement("div");
-      tmp.innerHTML = markedLib.parse(md);
-      tmp.querySelector("h1, h2, h3, h4, h5, h6")?.remove();
-      html += `<div class="docs-quickstart-content">${tmp.innerHTML}</div>`;
-    } else {
-      html += `<div><pre><code>${escapeHtml(md)}</code></pre></div>`;
-    }
-  } else {
-    html += '<div class="docs-loading">Failed to load quickstart.</div>';
+  if (!resp.ok) {
+    content.innerHTML = '<div class="docs-loading">Failed to load quickstart.</div>';
+    return;
   }
-  content.innerHTML =
-    html || '<div class="docs-loading">Failed to load quickstart.</div>';
+  const md = await resp.text();
+  // Model docs are Modulate-authored content, not user input, so XSS is not a concern here.
+  const markedLib = window.marked;
+  let bodyHtml;
+  if (markedLib) {
+    const tmp = document.createElement("div");
+    tmp.innerHTML = markedLib.parse(md);
+    tmp.querySelector("h1, h2, h3, h4, h5, h6")?.remove();
+    bodyHtml = `<div class="docs-quickstart-content">${tmp.innerHTML}</div>`;
+  } else {
+    bodyHtml = `<pre><code>${escapeHtml(md)}</code></pre>`;
+  }
+  content.innerHTML = `
+    <div class="docs-panel">
+      <div class="docs-panel__toolbar">
+        <span>${escapeHtml(mdFilename)}</span>
+        <button class="m__button-secondary-compact" id="docs-quickstart-download-btn">Download</button>
+      </div>
+      <div class="docs-panel__body">${bodyHtml}</div>
+    </div>`;
+  document.getElementById("docs-quickstart-download-btn").addEventListener("click", () => {
+    const blob = new Blob([md], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = mdFilename;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
   const hljs = window.hljs;
   if (hljs) {
     content.querySelectorAll("pre code").forEach((block) => {
