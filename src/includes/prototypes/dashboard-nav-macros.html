@@ -1,8 +1,10 @@
 {% macro primary_nav(variant, currentUrl) %} {% if variant == "bar" %} {% if
-currentUrl == '/docs/' %}<span class="prototype-header__link active">Docs</span
+currentUrl == '/models-api-docs/' or currentUrl == '/jobs-api-docs/' %}<span
+  class="prototype-header__link active"
+  >Docs</span
 >{% else %}<a
-  href="/docs/"
-  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/docs/') }}"
+  href="/models-api-docs/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
   >Docs</a
 >{% endif %} {% if currentUrl == '/models/' %}<span
   class="prototype-header__link active"
@@ -32,10 +34,13 @@ currentUrl == '/docs/' %}<span class="prototype-header__link active">Docs</span
   href="/dashboard/overview/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/dashboard/') }}"
   >Dashboard</a
->{% endif %} {% elif variant == "landing" %} {% if currentUrl == '/docs/'
-%}<span class="prototype-header__link active">Docs</span>{% else %}<a
-  href="/docs/"
-  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/docs/') }}"
+>{% endif %} {% elif variant == "landing" %} {% if currentUrl ==
+'/models-api-docs/' or currentUrl == '/jobs-api-docs/' %}<span
+  class="prototype-header__link active"
+  >Docs</span
+>{% else %}<a
+  href="/models-api-docs/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
   >Docs</a
 >{% endif %} {% if currentUrl == '/models/' %}<span
   class="prototype-header__link active"
@@ -59,8 +64,8 @@ currentUrl == '/docs/' %}<span class="prototype-header__link active">Docs</span
   >Conversations</a
 >
 <a
-  href="/docs/"
-  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/docs/') }}"
+  href="/models-api-docs/"
+  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
   role="menuitem"
   >Docs</a
 >
