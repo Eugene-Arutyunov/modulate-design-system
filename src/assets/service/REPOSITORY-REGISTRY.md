@@ -191,6 +191,14 @@ Two separate page wrappers:
 
 ---
 
+## Full-bleed wrapper band
+
+**Styles:** `src/styles/page-composition/wrappers.css` — `.m__wrapper.full-width` is full viewport width with horizontal padding matching `.prototype-header` (`1rem` via `--m__wrapper-full-width-outer-pad`). Child `.m__wrapper__surface` is a full-width panel (`--m__bg-surface-color`, `--m__widget-radius`). Nested `.m__wrapper__inset` uses `width` / `margin-inline` math so its content column aligns with a plain `.m__wrapper` (1050px cap and `0.7rem` side padding).
+
+**Pages:** `src/prototypes/models-api-docs.html`, `src/prototypes/jobs-api-docs.html`.
+
+---
+
 ## Auth layout
 
 **Markup:** `src/includes/prototypes/auth-layout.html`  
