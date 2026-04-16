@@ -32,18 +32,16 @@ permalink: /dashboard/organization/
 
       <div class="dashboard-section">
         <h2>Members</h2>
-        <p>
-          People who belong to this organization and their roles. Invite or
-          remove members from this list.
-        </p>
+        {% set rows = [
+          { name: 'Evgeniy Vlasov', email: 'foxsoqa@icloud.com', role: 'Admin', isCurrentUser: true }
+        ] %}
+        {% include 'service/table-members.html' %}
       </div>
 
       <div class="dashboard-section">
         <h2>Pending invites</h2>
-        <p>
-          Invitations that have been sent but not yet accepted. Resend or revoke
-          an invite from this section.
-        </p>
+        {% set rows = [] %}
+        {% include 'service/table-pending-invites.html' %}
       </div>
     </main>
   </div>

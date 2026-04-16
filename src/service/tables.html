@@ -283,7 +283,7 @@ content %}
 
   <div class="m__space L"></div>
 
-  <p class="caption">Тот же шаблон с данными.</p>
+  <p class="caption">With data.</p>
   <div class="m__space XS"></div>
   {% set rows = [
     { model: 'velma-2-stt-batch',     key: 'sk_live_aX9…', status: 'success', submitted: '15 Apr 2026, 09:12', completed: '15 Apr 2026, 09:14', duration: '1m 48s', credits: '0.045' },
@@ -304,7 +304,7 @@ content %}
   {% include 'service/table-api-keys.html' %}
 
   <div class="m__space L"></div>
-  <p class="caption">Вкладка Inactive — пустое состояние без CTA.</p>
+  <p class="caption">Inactive tab — empty state, no CTA.</p>
   <div class="m__space XS"></div>
   {% set rows = [] %}
   {% set activeTab = 'inactive' %}
@@ -312,7 +312,7 @@ content %}
   {% include 'service/table-api-keys.html' %}
 
   <div class="m__space L"></div>
-  <p class="caption">Вкладка Active — заполненное состояние.</p>
+  <p class="caption">Active tab — with data.</p>
   <div class="m__space XS"></div>
   {% set rows = [
     { name: 'Test 2', type: 'Console Admin', limits: '',                         status: 'active',   created: '16 Apr 2026, 22:06' },
@@ -419,6 +419,94 @@ content %}
   {% set rows = [] %}
   {% set showFilters = true %}
   {% include 'service/table-usage-log.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set showFilters = true %}
+  {% set rows = [
+    { model: 'velma-2-stt-batch-english-vfast', key: 'sk_live_aX9…', status: 'success', submitted: '16 Apr 2026, 22:27', completed: '16 Apr 2026, 22:27', duration: '5s',     credits: '0.002' },
+    { model: 'velma-2-stt-batch',               key: 'sk_live_bZ3…', status: 'success', submitted: '16 Apr 2026, 21:05', completed: '16 Apr 2026, 21:07', duration: '2m 03s', credits: '0.122' },
+    { model: 'velma-2-stt-streaming',            key: 'sk_live_aX9…', status: 'error',   submitted: '15 Apr 2026, 17:30', completed: '15 Apr 2026, 17:30', duration: '—',      credits: '0' }
+  ] %}
+  {% include 'service/table-usage-log.html' %}
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 10. Recent Requests variant ─────────────────────── -->
+  <h2>Recent Requests</h2>
+  <p class="caption">То же что Recent Usage, но в контексте конкретной модели.</p>
+  <div class="m__space XS"></div>
+  {% set title = 'Recent Requests' %}
+  {% set emptyMessage = 'No requests found for this model.' %}
+  {% set rows = [] %}
+  {% include 'service/table-recent-usage.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set title = 'Recent Requests' %}
+  {% set emptyMessage = 'No requests found for this model.' %}
+  {% set rows = [
+    { model: 'velma-2-stt-batch-english-vfast', key: 'sk_live_aX9…', status: 'success', submitted: '16 Apr 2026, 22:27', completed: '16 Apr 2026, 22:27', duration: '5s',     credits: '0.002' },
+    { model: 'velma-2-stt-batch-english-vfast', key: 'sk_live_bZ3…', status: 'error',   submitted: '15 Apr 2026, 17:30', completed: '15 Apr 2026, 17:30', duration: '—',      credits: '0' }
+  ] %}
+  {% include 'service/table-recent-usage.html' %}
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 11. Billing history table ───────────────────────── -->
+  <h2>Billing history</h2>
+  <p class="caption">Credit additions with icon empty state.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [] %}
+  {% include 'service/table-billing-history.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [
+    { date: '6 Mar 2026, 19:01', type: 'new_account_grant', credits: '+1,000', description: 'New account credits' },
+    { date: '1 Apr 2026, 12:00', type: 'purchase',          credits: '+500',   description: 'Credit purchase via Stripe' },
+    { date: '10 Apr 2026, 09:30', type: 'invite_grant',     credits: '+250',   description: 'Referral invite bonus' }
+  ] %}
+  {% include 'service/table-billing-history.html' %}
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 12. Members table ────────────────────────────────── -->
+  <h2>Members</h2>
+  <p class="caption">Organisation members with roles and actions.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [] %}
+  {% include 'service/table-members.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [
+    { name: 'Evgeniy Vlasov', email: 'foxsoqa@icloud.com', role: 'Admin',     isCurrentUser: true },
+    { name: 'Alex Neeson',    email: 'xneeson@ya.ru',      role: 'Developer', isCurrentUser: false }
+  ] %}
+  {% include 'service/table-members.html' %}
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 11. Pending invites table ───────────────────────── -->
+  <h2>Pending invites</h2>
+  <p class="caption">Invitations sent but not yet accepted.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [] %}
+  {% include 'service/table-pending-invites.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [
+    { email: 'xneeson@ya.ru',   role: 'Developer', invited: '16 Apr 2026, 22:28', expires: '23 Apr 2026, 22:28' },
+    { email: 'maria@studio.io', role: 'Read-Only',  invited: '15 Apr 2026, 10:00', expires: '22 Apr 2026, 10:00' }
+  ] %}
+  {% include 'service/table-pending-invites.html' %}
 
   <div class="m__space XL"></div>
 </div>
