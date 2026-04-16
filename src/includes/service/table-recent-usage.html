@@ -1,0 +1,38 @@
+<div class="m__widget">
+  <h3>Recent Usage</h3>
+  <div class="m__space XS"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>API Key</th>
+        <th>Status</th>
+        <th>Submitted</th>
+        <th>Completed</th>
+        <th>Duration</th>
+        <th>Credits</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if rows | length %}
+        {% for row in rows %}
+        <tr>
+          <td>{{ row.model }}</td>
+          <td><code>{{ row.key }}</code></td>
+          <td><span class="m__tag-flat">{{ row.status }}</span></td>
+          <td>{{ row.submitted }}</td>
+          <td>{{ row.completed }}</td>
+          <td>{{ row.duration }}</td>
+          <td>{{ row.credits }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="7" style="text-align: center; padding-block: 1.5rem; color: var(--m__text-caption-color);">
+            No usage records found.
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
