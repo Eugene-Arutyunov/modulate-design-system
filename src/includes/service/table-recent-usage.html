@@ -1,0 +1,47 @@
+<div class="m__widget">
+  <h2>{{ title if title else 'Recent Usage' }}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>API Key</th>
+        <th>Status</th>
+        <th>Submitted</th>
+        <th>Completed</th>
+        <th>Duration</th>
+        <th>Credits</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if rows | length %}
+        {% for row in rows %}
+        <tr>
+          <td>{{ row.model }}</td>
+          <td><code>{{ row.key }}</code></td>
+          <td>
+            {% if row.status === 'success' %}
+            <span class="m__tag" style="color: var(--m__ui-success-color)">Success</span>
+            {% elif row.status === 'error' %}
+            <span class="m__tag" style="color: var(--m__ui-error-color)">Error</span>
+            {% elif row.status === 'processing' %}
+            <span class="m__tag" style="color: var(--m__text-caption-color)">Processing</span>
+            {% else %}
+            <span class="m__tag-flat">{{ row.status }}</span>
+            {% endif %}
+          </td>
+          <td>{{ row.submitted }}</td>
+          <td>{{ row.completed }}</td>
+          <td>{{ row.duration }}</td>
+          <td>{{ row.credits }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="7" style="text-align: center; padding-block: 1.5rem; color: var(--m__text-caption-color);">
+            {{ emptyMessage if emptyMessage else 'No usage records found.' }}
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>

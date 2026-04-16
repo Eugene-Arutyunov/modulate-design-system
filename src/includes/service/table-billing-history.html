@@ -1,0 +1,38 @@
+<div class="m__widget">
+  <h2>Billing History</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Credits</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if rows | length %}
+        {% for row in rows %}
+        <tr>
+          <td>{{ row.date }}</td>
+          <td><span class="m__tag-flat">{{ row.type }}</span></td>
+          <td>{{ row.credits }}</td>
+          <td>{{ row.description }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="4">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding-block: 2.5rem;">
+              <svg width="32" height="32" aria-hidden="true" style="color: var(--m__bg-hover-color); opacity: 0.7">
+                <use href="#billing"></use>
+              </svg>
+              <p style="margin: 0; text-align: center; max-width: 28rem; color: var(--m__text-caption-color)">
+                No billing history yet. Credit additions from purchases, codes, and invites will appear here.
+              </p>
+            </div>
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>

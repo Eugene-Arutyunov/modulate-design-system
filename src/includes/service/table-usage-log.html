@@ -1,0 +1,63 @@
+<div class="m__widget">
+  {% if showFilters %}
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
+    <div class="m__textfield" style="margin: 0">
+      <label for="filter-start">Start Date</label>
+      <input type="date" id="filter-start" value="2026-03-16" />
+    </div>
+    <div class="m__textfield" style="margin: 0">
+      <label for="filter-end">End Date</label>
+      <input type="date" id="filter-end" value="2026-04-15" />
+    </div>
+    <div class="m__textfield" style="margin: 0">
+      <label for="filter-model">Model</label>
+      <input type="text" id="filter-model" placeholder="All Models" />
+    </div>
+    <button type="button" class="m__button">Apply</button>
+  </div>
+  {% endif %}
+  <table>
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>API Key</th>
+        <th>Status</th>
+        <th>Submitted</th>
+        <th>Completed</th>
+        <th>Duration</th>
+        <th>Credits</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if rows | length %}
+        {% for row in rows %}
+        <tr>
+          <td>{{ row.model }}</td>
+          <td><code>{{ row.key }}</code></td>
+          <td><span class="m__tag-flat">{{ row.status }}</span></td>
+          <td>{{ row.submitted }}</td>
+          <td>{{ row.completed }}</td>
+          <td>{{ row.duration }}</td>
+          <td>{{ row.credits }}</td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="7">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding-block: 2.5rem;">
+              <svg width="32" height="32" aria-hidden="true" style="opacity: 0.35">
+                <use href="#usage"></use>
+              </svg>
+              <p style="margin: 0; text-align: center; max-width: 28rem">
+                No usage records found{% if showFilters %} for this date range. Usage appears here after you make API calls{% endif %}.
+              </p>
+              {% if showFilters %}
+              <a href="#" class="m__button-secondary">View Quickstart Guide</a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>

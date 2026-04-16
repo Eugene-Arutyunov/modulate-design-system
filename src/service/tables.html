@@ -278,88 +278,19 @@ content %}
   <h2>Widget + empty state</h2>
   <p class="caption">Table inside a widget card when there is no data yet.</p>
   <div class="m__space XS"></div>
-  <div class="m__widget">
-    <h3>Recent Usage</h3>
-    <div class="m__space XS"></div>
-    <table>
-      <thead>
-        <tr>
-          <th>Model</th>
-          <th>API Key</th>
-          <th>Status</th>
-          <th>Submitted</th>
-          <th>Completed</th>
-          <th>Duration</th>
-          <th>Credits</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td
-            colspan="7"
-            style="
-              text-align: center;
-              padding-block: 1.5rem;
-              color: var(--m__text-caption-color);
-            "
-          >
-            No usage records found.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  {% set rows = [] %}
+  {% include 'service/table-recent-usage.html' %}
 
   <div class="m__space L"></div>
 
-  <p class="caption">Тот же шаблон с данными.</p>
+  <p class="caption">With data.</p>
   <div class="m__space XS"></div>
-  <div class="m__widget">
-    <h3>Recent Usage</h3>
-    <div class="m__space XS"></div>
-    <table>
-      <thead>
-        <tr>
-          <th>Model</th>
-          <th>API Key</th>
-          <th>Status</th>
-          <th>Submitted</th>
-          <th>Completed</th>
-          <th>Duration</th>
-          <th>Credits</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>velma-2-stt-batch</td>
-          <td><code>sk_live_aX9…</code></td>
-          <td><span class="m__tag-flat">success</span></td>
-          <td>15 Apr 2026, 09:12</td>
-          <td>15 Apr 2026, 09:14</td>
-          <td>1m 48s</td>
-          <td>0.045</td>
-        </tr>
-        <tr>
-          <td>velma-2-stt-streaming</td>
-          <td><code>sk_live_bZ3…</code></td>
-          <td><span class="m__tag-flat">success</span></td>
-          <td>15 Apr 2026, 08:55</td>
-          <td>15 Apr 2026, 08:57</td>
-          <td>2m 03s</td>
-          <td>0.122</td>
-        </tr>
-        <tr>
-          <td>velma-2-stt-batch</td>
-          <td><code>sk_live_aX9…</code></td>
-          <td><span class="m__tag-flat">error</span></td>
-          <td>14 Apr 2026, 17:30</td>
-          <td>14 Apr 2026, 17:30</td>
-          <td>—</td>
-          <td>0</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  {% set rows = [
+    { model: 'velma-2-stt-batch',     key: 'sk_live_aX9…', status: 'success', submitted: '15 Apr 2026, 09:12', completed: '15 Apr 2026, 09:14', duration: '1m 48s', credits: '0.045' },
+    { model: 'velma-2-stt-streaming', key: 'sk_live_bZ3…', status: 'success', submitted: '15 Apr 2026, 08:55', completed: '15 Apr 2026, 08:57', duration: '2m 03s', credits: '0.122' },
+    { model: 'velma-2-stt-batch',     key: 'sk_live_aX9…', status: 'error',   submitted: '14 Apr 2026, 17:30', completed: '14 Apr 2026, 17:30', duration: '—',       credits: '0' }
+  ] %}
+  {% include 'service/table-recent-usage.html' %}
 
   <div class="m__space XL"></div>
 
@@ -367,118 +298,29 @@ content %}
   <h2>Tabs + icon empty state</h2>
   <p class="caption">Segmented control switching between two table views.</p>
   <div class="m__space XS"></div>
-
-  <div class="m__segmented-control" role="group">
-    <label>
-      <input type="radio" name="api-keys-tabs" checked />
-      Active
-    </label>
-    <label>
-      <input type="radio" name="api-keys-tabs" />
-      Inactive
-    </label>
-  </div>
-
-  <div class="m__widget">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Limits</th>
-          <th>Status</th>
-          <th>Created</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="6">
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.75rem;
-                padding-block: 2.5rem;
-              "
-            >
-              <svg
-                width="32"
-                height="32"
-                aria-hidden="true"
-                style="opacity: 0.35"
-              >
-                <use href="#api-key"></use>
-              </svg>
-              <p style="margin: 0; text-align: center">
-                No active API keys. Create your first key to start making API
-                requests.
-              </p>
-              <button type="button" class="m__button">Create API Key</button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  {% set rows = [] %}
+  {% set activeTab = 'active' %}
+  {% set tabsName = 'api-keys-tabs' %}
+  {% include 'service/table-api-keys.html' %}
 
   <div class="m__space L"></div>
-  <p class="caption">Вкладка Inactive — пустое состояние без CTA.</p>
+  <p class="caption">Inactive tab — empty state, no CTA.</p>
   <div class="m__space XS"></div>
+  {% set rows = [] %}
+  {% set activeTab = 'inactive' %}
+  {% set tabsName = 'api-keys-tabs-b' %}
+  {% include 'service/table-api-keys.html' %}
 
-  <div class="m__segmented-control" role="group">
-    <label>
-      <input type="radio" name="api-keys-tabs-b" />
-      Active
-    </label>
-    <label>
-      <input type="radio" name="api-keys-tabs-b" checked />
-      Inactive
-    </label>
-  </div>
-
-  <div class="m__widget">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Limits</th>
-          <th>Status</th>
-          <th>Created</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="6">
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.75rem;
-                padding-block: 2.5rem;
-              "
-            >
-              <svg
-                width="32"
-                height="32"
-                aria-hidden="true"
-                style="opacity: 0.35"
-              >
-                <use href="#api-key"></use>
-              </svg>
-              <p style="margin: 0; color: var(--m__text-caption-color)">
-                No inactive API keys.
-              </p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="m__space L"></div>
+  <p class="caption">Active tab — with data.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [
+    { name: 'Test 2', type: 'Console Admin', limits: '',                         status: 'active',   created: '16 Apr 2026, 22:06' },
+    { name: 'Test',   type: 'Model',         limits: 'Models: velma-2-stt-batch', status: 'active',   created: '16 Apr 2026, 22:05' }
+  ] %}
+  {% set activeTab = 'active' %}
+  {% set tabsName = 'api-keys-tabs-c' %}
+  {% include 'service/table-api-keys.html' %}
 
   <div class="m__space XL"></div>
 
@@ -574,76 +416,97 @@ content %}
   <h2>Table with filter bar</h2>
   <p class="caption">Form controls above the table for filtering.</p>
   <div class="m__space XS"></div>
+  {% set rows = [] %}
+  {% set showFilters = true %}
+  {% include 'service/table-usage-log.html' %}
 
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
   <div class="m__space XS"></div>
+  {% set showFilters = true %}
+  {% set rows = [
+    { model: 'velma-2-stt-batch-english-vfast', key: 'sk_live_aX9…', status: 'success', submitted: '16 Apr 2026, 22:27', completed: '16 Apr 2026, 22:27', duration: '5s',     credits: '0.002' },
+    { model: 'velma-2-stt-batch',               key: 'sk_live_bZ3…', status: 'success', submitted: '16 Apr 2026, 21:05', completed: '16 Apr 2026, 21:07', duration: '2m 03s', credits: '0.122' },
+    { model: 'velma-2-stt-streaming',            key: 'sk_live_aX9…', status: 'error',   submitted: '15 Apr 2026, 17:30', completed: '15 Apr 2026, 17:30', duration: '—',      credits: '0' }
+  ] %}
+  {% include 'service/table-usage-log.html' %}
 
-  <div class="m__widget">
-    <div
-      style="
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr auto;
-        gap: 1rem;
-        align-items: flex-end;
-        margin-bottom: 1rem;
-      "
-    >
-      <div class="m__textfield" style="margin: 0">
-        <label for="filter-start">Start Date</label>
-        <input type="date" id="filter-start" value="2026-03-16" />
-      </div>
-      <div class="m__textfield" style="margin: 0">
-        <label for="filter-end">End Date</label>
-        <input type="date" id="filter-end" value="2026-04-15" />
-      </div>
-      <div class="m__textfield" style="margin: 0">
-        <label for="filter-model">Model</label>
-        <input type="text" id="filter-model" placeholder="All Models" />
-      </div>
-      <button type="button" class="m__button">Apply</button>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Model</th>
-          <th>API Key</th>
-          <th>Status</th>
-          <th>Submitted</th>
-          <th>Completed</th>
-          <th>Duration</th>
-          <th>Credits</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="7">
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.75rem;
-                padding-block: 2.5rem;
-              "
-            >
-              <svg
-                width="32"
-                height="32"
-                aria-hidden="true"
-                style="opacity: 0.35"
-              >
-                <use href="#usage"></use>
-              </svg>
-              <p style="margin: 0; text-align: center; max-width: 28rem">
-                No usage records found for this date range. Usage appears here
-                after you make API calls.
-              </p>
-              <a href="#" class="m__button-secondary">View Quickstart Guide</a>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="m__space XL"></div>
+
+  <!-- ─── 10. Recent Requests variant ─────────────────────── -->
+  <h2>Recent Requests</h2>
+  <p class="caption">То же что Recent Usage, но в контексте конкретной модели.</p>
+  <div class="m__space XS"></div>
+  {% set title = 'Recent Requests' %}
+  {% set emptyMessage = 'No requests found for this model.' %}
+  {% set rows = [] %}
+  {% include 'service/table-recent-usage.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set title = 'Recent Requests' %}
+  {% set emptyMessage = 'No requests found for this model.' %}
+  {% set rows = [
+    { model: 'velma-2-stt-batch-english-vfast', key: 'sk_live_aX9…', status: 'success', submitted: '16 Apr 2026, 22:27', completed: '16 Apr 2026, 22:27', duration: '5s',     credits: '0.002' },
+    { model: 'velma-2-stt-batch-english-vfast', key: 'sk_live_bZ3…', status: 'error',   submitted: '15 Apr 2026, 17:30', completed: '15 Apr 2026, 17:30', duration: '—',      credits: '0' }
+  ] %}
+  {% include 'service/table-recent-usage.html' %}
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 11. Billing history table ───────────────────────── -->
+  <h2>Billing history</h2>
+  <p class="caption">Credit additions with icon empty state.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [] %}
+  {% include 'service/table-billing-history.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [
+    { date: '6 Mar 2026, 19:01', type: 'new_account_grant', credits: '+1,000', description: 'New account credits' },
+    { date: '1 Apr 2026, 12:00', type: 'purchase',          credits: '+500',   description: 'Credit purchase via Stripe' },
+    { date: '10 Apr 2026, 09:30', type: 'invite_grant',     credits: '+250',   description: 'Referral invite bonus' }
+  ] %}
+  {% include 'service/table-billing-history.html' %}
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 12. Members table ────────────────────────────────── -->
+  <h2>Members</h2>
+  <p class="caption">Organisation members with roles and actions.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [] %}
+  {% include 'service/table-members.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [
+    { name: 'Evgeniy Vlasov', email: 'foxsoqa@icloud.com', role: 'Admin',     isCurrentUser: true },
+    { name: 'Alex Neeson',    email: 'xneeson@ya.ru',      role: 'Developer', isCurrentUser: false }
+  ] %}
+  {% include 'service/table-members.html' %}
+
+  <div class="m__space XL"></div>
+
+  <!-- ─── 11. Pending invites table ───────────────────────── -->
+  <h2>Pending invites</h2>
+  <p class="caption">Invitations sent but not yet accepted.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [] %}
+  {% include 'service/table-pending-invites.html' %}
+
+  <div class="m__space L"></div>
+  <p class="caption">With data.</p>
+  <div class="m__space XS"></div>
+  {% set rows = [
+    { email: 'xneeson@ya.ru',   role: 'Developer', invited: '16 Apr 2026, 22:28', expires: '23 Apr 2026, 22:28' },
+    { email: 'maria@studio.io', role: 'Read-Only',  invited: '15 Apr 2026, 10:00', expires: '22 Apr 2026, 10:00' }
+  ] %}
+  {% include 'service/table-pending-invites.html' %}
 
   <div class="m__space XL"></div>
 </div>

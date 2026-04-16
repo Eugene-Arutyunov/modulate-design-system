@@ -25,19 +25,9 @@ permalink: /dashboard/usage/
       </div>
 
       <div class="dashboard-section">
-        <h2>Filters</h2>
-        <p>
-          Start date — End date — Model (all models). Apply filters to update
-          the log below.
-        </p>
-      </div>
-
-      <div class="dashboard-section">
-        <h2>Request log</h2>
-        <p>
-          No usage records found for this date range. Usage appears here after
-          you make API calls.
-        </p>
+        {% set rows = [] %}
+        {% set showFilters = true %}
+        {% include 'service/table-usage-log.html' %}
       </div>
     </main>
   </div>
