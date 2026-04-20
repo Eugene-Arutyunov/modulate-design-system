@@ -1,6 +1,9 @@
 (function () {
   var createBackdrop = document.getElementById('modal-create-api-key');
   var editBackdrop = document.getElementById('modal-edit-api-key');
+  var deactivateBackdrop = document.getElementById('modal-deactivate-api-key');
+  var deleteBackdrop = document.getElementById('modal-delete-api-key');
+  var activateBackdrop = document.getElementById('modal-activate-api-key');
 
   var keyTypeHints = {
     'model': 'Model keys access inference endpoints.',
@@ -46,6 +49,9 @@
 
     if (e.target === createBackdrop) closeModal(createBackdrop);
     if (e.target === editBackdrop) closeModal(editBackdrop);
+    if (e.target === deactivateBackdrop) closeModal(deactivateBackdrop);
+    if (e.target === deleteBackdrop) closeModal(deleteBackdrop);
+    if (e.target === activateBackdrop) closeModal(activateBackdrop);
 
     if (e.target.closest('[data-api-key-create]')) {
       openModal(createBackdrop);
@@ -60,6 +66,33 @@
       if (nameInput) nameInput.value = name;
       if (descInput) descInput.value = '';
       openModal(editBackdrop);
+      return;
+    }
+
+    var deactivateBtn = e.target.closest('[data-api-key-deactivate]');
+    if (deactivateBtn) {
+      var name = deactivateBtn.dataset.apiKeyName || '';
+      var nameSpan = deactivateBackdrop && deactivateBackdrop.querySelector('[data-deactivate-key-name]');
+      if (nameSpan) nameSpan.textContent = name;
+      openModal(deactivateBackdrop);
+      return;
+    }
+
+    var deleteBtn = e.target.closest('[data-api-key-delete]');
+    if (deleteBtn) {
+      var name = deleteBtn.dataset.apiKeyName || '';
+      var nameSpan = deleteBackdrop && deleteBackdrop.querySelector('[data-delete-key-name]');
+      if (nameSpan) nameSpan.textContent = name;
+      openModal(deleteBackdrop);
+      return;
+    }
+
+    var activateBtn = e.target.closest('[data-api-key-activate]');
+    if (activateBtn) {
+      var name = activateBtn.dataset.apiKeyName || '';
+      var nameSpan = activateBackdrop && activateBackdrop.querySelector('[data-activate-key-name]');
+      if (nameSpan) nameSpan.textContent = name;
+      openModal(activateBackdrop);
     }
   });
 
@@ -67,6 +100,9 @@
     if (e.key !== 'Escape') return;
     if (createBackdrop && !createBackdrop.hidden) closeModal(createBackdrop);
     if (editBackdrop && !editBackdrop.hidden) closeModal(editBackdrop);
+    if (deactivateBackdrop && !deactivateBackdrop.hidden) closeModal(deactivateBackdrop);
+    if (deleteBackdrop && !deleteBackdrop.hidden) closeModal(deleteBackdrop);
+    if (activateBackdrop && !activateBackdrop.hidden) closeModal(activateBackdrop);
   });
 
   if (createBackdrop) {

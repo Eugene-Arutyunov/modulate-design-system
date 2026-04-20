@@ -32,6 +32,10 @@
     &:hover:not(:disabled) {
       border-color: var(--m__bg-hover-color);
       transition-duration: var(--m__hover-transition-duration);
+
+      .dark-mode & {
+        border-color: var(--m__text-hover-color);
+      }
     }
 
     &:checked {
@@ -42,6 +46,11 @@
         background-color: var(--m__bg-hover-color);
         border-color: var(--m__bg-hover-color);
         transition-duration: var(--m__hover-transition-duration);
+
+        .dark-mode & {
+          background-color: var(--m__text-hover-color);
+          border-color: var(--m__text-hover-color);
+        }
       }
 
       &::after {
