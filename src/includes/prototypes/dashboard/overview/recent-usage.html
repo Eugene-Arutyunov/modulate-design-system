@@ -1,4 +1,10 @@
 <section class="dashboard-section" data-component="recent-usage">
-  {% set rows = [] %}
+  {% set rows = [
+    { model: 'velma-2-stt-batch',             key: 'Production Key', status: 'success',    submitted: '15 Apr 2026, 09:12', completed: '15 Apr 2026, 09:14', duration: '1m 48s', credits: '0.045' },
+    { model: 'velma-2-stt-streaming',         key: 'Dev Key',        status: 'success',    submitted: '15 Apr 2026, 08:55', completed: '15 Apr 2026, 08:57', duration: '2m 03s', credits: '0.122' },
+    { model: 'velma-2-stt-batch',             key: 'Production Key', status: 'error',      submitted: '14 Apr 2026, 17:30', completed: '14 Apr 2026, 17:30', duration: '—',       credits: '0' },
+    { model: 'velma-2-stt-batch-english-vfast', key: 'CI Key',       status: 'success',    submitted: '14 Apr 2026, 14:22', completed: '14 Apr 2026, 14:25', duration: '3m 11s', credits: '0.198' },
+    { model: 'velma-2-stt-streaming',         key: 'Dev Key',        status: 'processing', submitted: '14 Apr 2026, 11:08', completed: '—',                   duration: '—',       credits: '—' }
+  ] %}
   {% include 'service/table-recent-usage.html' %}
 </section>
