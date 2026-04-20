@@ -1,10 +1,32 @@
-<div class="m__modal-backdrop" id="modal-create-api-key" hidden aria-modal="true" role="dialog" aria-labelledby="modal-create-api-key-title">
+<div
+  class="m__modal-backdrop"
+  id="modal-create-api-key"
+  hidden
+  aria-modal="true"
+  role="dialog"
+  aria-labelledby="modal-create-api-key-title"
+>
   <div class="m__modal">
     <div class="m__modal__header">
-      <h2 class="m__modal__title" id="modal-create-api-key-title">Create API Key</h2>
-      <button type="button" class="m__modal__close" aria-label="Close" data-modal-close="modal-create-api-key">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M3 3l10 10M13 3L3 13"/>
+      <h2 class="m__modal__title" id="modal-create-api-key-title">
+        Create API Key
+      </h2>
+      <button
+        type="button"
+        class="m__modal__close"
+        aria-label="Close"
+        data-modal-close="modal-create-api-key"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path d="M3 3l10 10M13 3L3 13" />
         </svg>
       </button>
     </div>
@@ -12,15 +34,29 @@
     <div class="m__modal__body">
       <div class="m__textfield">
         <label for="create-key-name">Name</label>
-        <input type="text" id="create-key-name" name="name" autocomplete="off" />
+        <input
+          type="text"
+          id="create-key-name"
+          name="name"
+          autocomplete="off"
+        />
       </div>
+
+      <div class="m__space XS"></div>
 
       <div class="m__textfield">
         <label for="create-key-description">Description</label>
-        <input type="text" id="create-key-description" name="description" autocomplete="off" />
+        <input
+          type="text"
+          id="create-key-description"
+          name="description"
+          autocomplete="off"
+        />
       </div>
 
-      <div class="m__select" style="margin-bottom: var(--m__default-margin-bottom);">
+      <div class="m__space XS"></div>
+
+      <div class="m__select">
         <label for="create-key-type">Key Type</label>
         <div class="m__select__control">
           <select id="create-key-type" name="type" data-key-type-select>
@@ -28,40 +64,120 @@
             <option value="console-admin">Console Admin</option>
             <option value="console-read-only">Console Read-Only</option>
           </select>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
-            <path d="M2 4.5l4 4 4-4"/>
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+            aria-hidden="true"
+          >
+            <path d="M2 4.5l4 4 4-4" />
           </svg>
         </div>
       </div>
-      <p class="m__modal__field-hint" data-key-type-hint>Model keys access inference endpoints.</p>
+      <p
+        class="m__modal__field-hint"
+        data-key-type-hint
+        style="margin-top: 0.3rem"
+      >
+        Model keys access inference endpoints.
+      </p>
+
+      <div class="m__space XS"></div>
 
       <div class="m__datepicker">
         <label for="create-key-expires">Expires At (optional)</label>
-        <input type="datetime-local" id="create-key-expires" name="expires_at" />
+        <input type="date" id="create-key-expires" name="expires_at" />
       </div>
+
+      <div class="m__space XS"></div>
 
       <div class="m__textfield">
         <label for="create-key-limit">Usage Limit in Credits (optional)</label>
-        <input type="number" id="create-key-limit" name="usage_limit" min="0" step="0.5" placeholder="e.g. 10.5" />
+        <input
+          type="number"
+          id="create-key-limit"
+          name="usage_limit"
+          min="0"
+          step="0.5"
+          placeholder="e.g. 10.5"
+        />
       </div>
-      <p class="m__modal__field-hint">1 credit = $0.01 USD. Leave blank for no limit.</p>
+      <p class="m__modal__field-hint" style="margin-top: 0.3rem">
+        1 credit = $0.01 USD. Leave blank for no limit.
+      </p>
 
-      <div class="m__modal__multiselect">
-        <label for="create-key-models">Allowed Models (optional)</label>
-        <select id="create-key-models" name="allowed_models" multiple>
-          <option>velma-2-stt-batch</option>
-          <option>velma-2-stt-batch-english-vfast</option>
-          <option>velma-2-stt-streaming</option>
-          <option>velma-2-synthetic-voice-detection-batch</option>
-          <option>velma-2-synthetic-voice-detection-streaming</option>
-          <option>velma-3-stt-batch</option>
-          <option>velma-3-stt-streaming</option>
-        </select>
-        <p class="m__modal__field-hint">Leave empty to allow all models your organization can access. Hold Ctrl/Cmd to select multiple.</p>
+      <div class="m__space S"></div>
+
+      <div class="m__modal__checklist">
+        <p class="m__modal__checklist-label">Allowed Models (optional)</p>
+        <p class="m__modal__field-hint">
+          Leave empty to allow all models your organization can access.
+        </p>
+        <div class="m__space XS"></div>
+        <div class="m__modal__checklist-box">
+          <label class="m__checkbox"
+            ><input
+              type="checkbox"
+              name="allowed_models"
+              value="velma-2-stt-batch"
+            /><span>velma-2-stt-batch</span></label
+          >
+          <label class="m__checkbox"
+            ><input
+              type="checkbox"
+              name="allowed_models"
+              value="velma-2-stt-batch-english-vfast"
+            /><span>velma-2-stt-batch-english-vfast</span></label
+          >
+          <label class="m__checkbox"
+            ><input
+              type="checkbox"
+              name="allowed_models"
+              value="velma-2-stt-streaming"
+            /><span>velma-2-stt-streaming</span></label
+          >
+          <label class="m__checkbox"
+            ><input
+              type="checkbox"
+              name="allowed_models"
+              value="velma-2-synthetic-voice-detection-batch"
+            /><span>velma-2-synthetic-voice-detection-batch</span></label
+          >
+          <label class="m__checkbox"
+            ><input
+              type="checkbox"
+              name="allowed_models"
+              value="velma-2-synthetic-voice-detection-streaming"
+            /><span>velma-2-synthetic-voice-detection-streaming</span></label
+          >
+          <label class="m__checkbox"
+            ><input
+              type="checkbox"
+              name="allowed_models"
+              value="velma-3-stt-batch"
+            /><span>velma-3-stt-batch</span></label
+          >
+          <label class="m__checkbox"
+            ><input
+              type="checkbox"
+              name="allowed_models"
+              value="velma-3-stt-streaming"
+            /><span>velma-3-stt-streaming</span></label
+          >
+        </div>
       </div>
     </div>
     <div class="m__modal__footer">
-      <button type="button" class="m__button-secondary" data-modal-close="modal-create-api-key">Cancel</button>
+      <button
+        type="button"
+        class="m__button-secondary"
+        data-modal-close="modal-create-api-key"
+      >
+        Cancel
+      </button>
       <button type="button" class="m__button">Create</button>
     </div>
   </div>

@@ -87,9 +87,11 @@
 .m__modal__body {
   padding: 1.25rem 1.5rem;
 
-  & .m__textfield:last-child,
-  & .m__select:last-child,
-  & .m__datepicker:last-child {
+  & .m__textfield,
+  & .m__select,
+  & .m__datepicker,
+  & .m__modal__checklist,
+  & .m__modal__field-hint {
     margin-bottom: 0;
   }
 
@@ -125,50 +127,24 @@
   margin-bottom: var(--m__default-margin-bottom);
 }
 
-.m__modal__multiselect {
+.m__modal__checklist {
+  margin-bottom: var(--m__default-margin-bottom);
+}
+
+.m__modal__checklist-label {
+  font-size: var(--m__font-size-s);
+  font-weight: 500;
+  color: var(--m__text-color);
+  margin: 0 0 0.3rem;
+}
+
+.m__modal__checklist-box {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--m__default-margin-bottom);
+  gap: 0.5rem;
 
-  & > label {
+  & .m__checkbox {
     font-size: var(--m__font-size-s);
-    font-weight: 500;
-    color: var(--m__text-color);
-    margin-block-end: 0.3rem;
-    cursor: pointer;
-  }
-
-  & select[multiple] {
-    background-color: var(--m__ui-control-color);
-    border: 1px solid var(--m__ui-border-color);
-    border-radius: var(--m__radius-s);
-    padding: 0.3rem;
-    color: var(--m__text-color);
-    width: 100%;
-    height: 7rem;
-    font: inherit;
-    font-size: var(--m__font-size-s);
-
-    & option {
-      background-color: var(--m__bg-surface-color);
-      color: var(--m__text-color);
-      padding: 0.2rem 0.35rem;
-      border-radius: var(--m__radius-xs);
-    }
-
-    & option:checked {
-      background-color: color-mix(in srgb, var(--m__bg-hover-color) 15%, var(--m__bg-surface-color));
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--m__text-hover-color);
-      outline-offset: -1px;
-    }
-  }
-
-  & .m__modal__field-hint {
-    margin-top: 0.25rem;
-    margin-bottom: 0;
   }
 }
 
