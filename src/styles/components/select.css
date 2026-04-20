@@ -1,30 +1,76 @@
 .m__select {
   position: relative;
   display: inline-flex;
-  align-items: stretch;
+  align-items: center;
+  width: 100%;
+  background-color: var(--m__ui-control-color);
+  border: 1px solid var(--m__ui-border-color);
+  border-radius: var(--m__radius-s);
 
-  & select {
-    appearance: none;
+  &:has(> label) {
+    flex-direction: column;
+    align-items: stretch;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+  }
+
+  & > label {
+    font-size: var(--m__font-size-s);
+    font-weight: 500;
+    color: var(--m__text-color);
+    margin-block-end: 0.3rem;
+    cursor: pointer;
+  }
+
+  & .m__select__control {
+    position: relative;
+    display: flex;
+    align-items: center;
     background-color: var(--m__ui-control-color);
     border: 1px solid var(--m__ui-border-color);
     border-radius: var(--m__radius-s);
+
+    &:focus-within {
+      outline: 2px solid var(--m__text-hover-color);
+      outline-offset: -1px;
+    }
+
+    & > svg {
+      position: absolute;
+      right: 0.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--m__text-caption-color);
+    }
+  }
+
+  & select {
+    appearance: none;
+    background: none;
+    border: none;
     padding: var(--m__control-inset-padding);
     padding-right: calc(var(--m__control-inset-padding) + 1.4em);
     color: var(--m__text-color);
-    width: 100%;
+    flex: 1;
     cursor: pointer;
     font-size: inherit;
     line-height: var(--m__line-height-base);
 
     &:focus-visible {
-      outline: 2px solid var(--m__text-hover-color);
-      outline-offset: -1px;
+      outline: none;
     }
 
     & option {
       background-color: var(--m__bg-surface-color);
       color: var(--m__text-color);
     }
+  }
+
+  &:not(:has(> label)):focus-within {
+    outline: 2px solid var(--m__text-hover-color);
+    outline-offset: -1px;
   }
 
   & > svg {
@@ -83,15 +129,26 @@
     }
   }
 
+  &:focus-within {
+    outline: 2px solid var(--m__text-hover-color);
+    outline-offset: -1px;
+  }
+
   & .m__select {
-    /* reset standalone positioning so the overlay select is
-       contained by .m__select-compact (which is position: relative) */
     position: static;
+    background: none;
+    border: none;
+    border-radius: 0;
+    width: auto;
     display: flex;
     align-items: center;
     flex: 1;
     min-width: 0;
     gap: 0.35em;
+
+    &:focus-within {
+      outline: none;
+    }
 
     & .m__select__value {
       flex: 1;
