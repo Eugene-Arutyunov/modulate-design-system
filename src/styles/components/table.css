@@ -1,9 +1,24 @@
 .m__table-filters {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
+  grid-template-columns: 2fr 1fr auto;
   gap: 0.4rem;
   align-items: center;
   margin-bottom: 1rem;
+
+  @container (width < 700px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.m__table-filters__dates {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+
+  & > * {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 table {
