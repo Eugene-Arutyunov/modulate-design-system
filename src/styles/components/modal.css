@@ -1,13 +1,17 @@
 .m__modal-backdrop {
   position: fixed;
   inset: 0;
-  background-color: color-mix(in srgb, var(--m__bg-accent-color) 55%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--m__bg-accent-color) 55%,
+    transparent
+  );
   z-index: 1000;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   overflow-y: auto;
-  padding: 1rem;
+  padding: var(--m__modal-padding);
 
   @media (width < 480px) {
     padding: 0;
@@ -48,7 +52,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 1.5rem;
+  padding: var(--m__modal-padding) var(--m__modal-padding) 0
+    var(--m__modal-padding);
   flex-shrink: 0;
 }
 
@@ -69,7 +74,8 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--m__radius-s);
-  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
   flex-shrink: 0;
 
   &:hover {
@@ -78,14 +84,8 @@
   }
 }
 
-.m__modal__divider {
-  height: 1px;
-  background-color: var(--m__ui-border-color);
-  flex-shrink: 0;
-}
-
 .m__modal__body {
-  padding: 1.25rem 1.5rem;
+  padding: var(--m__modal-padding);
 
   & .m__textfield,
   & .m__select,
@@ -114,7 +114,11 @@
     &:focus-visible {
       outline: 2px solid var(--m__text-hover-color);
       outline-offset: -1px;
-      background-color: color-mix(in srgb, var(--m__bg-hover-color) 8%, transparent);
+      background-color: color-mix(
+        in srgb,
+        var(--m__bg-hover-color) 8%,
+        transparent
+      );
       color: var(--m__text-hover-color);
     }
   }
@@ -153,7 +157,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
-  padding: 1rem 1.5rem;
+  padding: 0 var(--m__modal-padding) var(--m__modal-padding)
+    var(--m__modal-padding);
   flex-shrink: 0;
-  border-top: 1px solid var(--m__ui-border-color);
 }
