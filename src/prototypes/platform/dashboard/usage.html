@@ -26,8 +26,18 @@ permalink: /dashboard/usage/
       <div class="m__space XS"></div>
 
       <div class="dashboard-section">
-        {% set rows = [] %} {% set showFilters = true %} {% include
-        'service/table-usage-log.html' %}
+        {% set rows = [
+          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'success',    submitted: '15 Apr 2026, 09:12', completed: '15 Apr 2026, 09:14', duration: '1m 48s', credits: '0.045' },
+          { model: 'velma-2-stt-streaming',  key: 'Dev Key',        status: 'success',    submitted: '15 Apr 2026, 08:55', completed: '15 Apr 2026, 08:57', duration: '2m 03s', credits: '0.122' },
+          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'error',      submitted: '14 Apr 2026, 17:30', completed: '14 Apr 2026, 17:30', duration: '—',       credits: '0' },
+          { model: 'velma-2-stt-streaming',  key: 'CI Key',         status: 'success',    submitted: '14 Apr 2026, 14:22', completed: '14 Apr 2026, 14:25', duration: '3m 11s', credits: '0.198' },
+          { model: 'velma-2-stt-batch',      key: 'Dev Key',        status: 'processing', submitted: '14 Apr 2026, 11:08', completed: '—',                   duration: '—',       credits: '—' },
+          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'success',    submitted: '13 Apr 2026, 16:44', completed: '13 Apr 2026, 16:46', duration: '1m 55s', credits: '0.051' },
+          { model: 'velma-2-stt-streaming',  key: 'CI Key',         status: 'error',      submitted: '13 Apr 2026, 10:30', completed: '13 Apr 2026, 10:30', duration: '—',       credits: '0' },
+          { model: 'velma-2-stt-batch',      key: 'Dev Key',        status: 'success',    submitted: '12 Apr 2026, 15:17', completed: '12 Apr 2026, 15:19', duration: '2m 22s', credits: '0.087' }
+        ] %}
+        {% set showFilters = true %}
+        {% include 'service/table-usage-log.html' %}
       </div>
     </main>
   </div>

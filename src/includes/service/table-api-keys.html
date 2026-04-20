@@ -37,7 +37,7 @@
             <span class="m__tag">{{ row.type }}</span>
             {% endif %}
           </td>
-          <td>{{ row.limits if row.limits else '—' }}</td>
+          <td {% if not row.limits %}class="muted"{% endif %}>{{ row.limits if row.limits else '—' }}</td>
           <td>
             {% if row.status === 'active' %}
             <span class="m__tag" style="color: var(--m__ui-success-color)">Active</span>
