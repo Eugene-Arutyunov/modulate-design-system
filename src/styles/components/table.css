@@ -1,3 +1,11 @@
+.m__table-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 table {
   width: 100%;
   border-spacing: 0;
@@ -28,6 +36,21 @@ table {
   & tbody tr:last-child td,
   & tbody tr:last-child th {
     border-bottom: none;
+  }
+
+  & .m__table-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding-block: 2.5rem;
+    text-align: center;
+    color: var(--m__text-caption-color);
+
+    & p {
+      margin: 0;
+      max-width: 28rem;
+    }
   }
 
   & .m__col-actions {

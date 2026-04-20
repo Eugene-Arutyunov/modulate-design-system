@@ -1,18 +1,28 @@
 <div class="m__widget">
   {% if showFilters %}
-  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 0.75rem; align-items: center; margin-bottom: 1rem;">
-    <div class="m__textfield m__textfield--inline" style="margin: 0">
-      <label for="filter-start">Start</label>
+  <div class="m__table-filters">
+    <label class="m__textfield m__textfield--inline" for="filter-start" style="margin: 0">
+      <span>Start</span>
       <input type="text" id="filter-start" value="16.03.2026" />
-    </div>
-    <div class="m__textfield m__textfield--inline" style="margin: 0">
-      <label for="filter-end">End</label>
+    </label>
+    <label class="m__textfield m__textfield--inline" for="filter-end" style="margin: 0">
+      <span>End</span>
       <input type="text" id="filter-end" value="15.04.2026" />
-    </div>
-    <div class="m__textfield m__textfield--inline" style="margin: 0">
-      <label for="filter-model">Model</label>
-      <input type="text" id="filter-model" placeholder="All" />
-    </div>
+    </label>
+    <label class="m__textfield m__textfield--inline" style="margin: 0">
+      <span>Model</span>
+      <div class="m__select">
+        <span class="m__select__value">All</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+          <path d="M2 4.5l4 4 4-4"/>
+        </svg>
+        <select id="filter-model">
+          <option>All</option>
+          <option>velma-2-stt-batch</option>
+          <option>velma-2-stt-streaming</option>
+        </select>
+      </div>
+    </label>
     <button type="button" class="m__button-compact">Apply</button>
   </div>
   {% endif %}
@@ -45,13 +55,8 @@
       {% else %}
         <tr>
           <td colspan="7">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding-block: 2.5rem;">
-              <svg width="32" height="32" aria-hidden="true" style="opacity: 0.35">
-                <use href="#usage"></use>
-              </svg>
-              <p style="margin: 0; text-align: center; max-width: 28rem">
-                No usage records found{% if showFilters %} for this date range. Usage appears here after you make API calls{% endif %}.
-              </p>
+            <div class="m__table-empty">
+              <p>No usage records found{% if showFilters %} for this date range. Usage appears here after you make API calls{% endif %}.</p>
               {% if showFilters %}
               <a href="#" class="m__button-secondary">View Quickstart Guide</a>
               {% endif %}

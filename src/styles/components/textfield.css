@@ -90,6 +90,41 @@
     }
   }
 
+  &.m__textfield--inline .m__select {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    gap: 0.35em;
+
+    & .m__select__value {
+      flex: 1;
+      min-width: 0;
+      color: var(--m__text-color);
+    }
+
+    & select {
+      appearance: none;
+      background: none;
+      border: none;
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+
+      & option {
+        background-color: var(--m__bg-surface-color);
+        color: var(--m__text-color);
+      }
+    }
+
+    & svg {
+      pointer-events: none;
+      color: var(--m__text-caption-color);
+      flex-shrink: 0;
+    }
+  }
+
   &.m__textfield--inline {
     flex-direction: row;
     align-items: center;
@@ -97,16 +132,21 @@
     border: 1px solid var(--m__ui-border-color);
     border-radius: var(--m__radius-s);
     padding: var(--m__button-compact-padding);
+    cursor: pointer;
+    position: relative;
 
-    & label {
-      color: var(--m__text-caption-color);
+    & label,
+    & > span:first-child {
       white-space: nowrap;
       margin-block-end: 0;
-      font-size: var(--m__font-size-s);
+      font-weight: normal;
+      font-size: inherit;
+      color: var(--m__text-caption-color);
+      cursor: pointer;
 
       &::after {
-        content: ':';
-        margin-right: 0.35em;
+        content: ":";
+        margin-right: 0.2em;
       }
     }
 
@@ -115,7 +155,8 @@
       border: none;
       padding: 0;
       border-radius: 0;
-      font-size: var(--m__font-size-s);
+      width: auto;
+      flex: 1;
       min-width: 0;
 
       &:focus-visible {
