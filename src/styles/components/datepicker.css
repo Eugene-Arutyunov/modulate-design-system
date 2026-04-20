@@ -1,5 +1,46 @@
 .m__datepicker {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--m__default-margin-bottom);
+
+  & > label {
+    font-size: var(--m__font-size-s);
+    font-weight: 500;
+    color: var(--m__text-color);
+    margin-block-end: 0.3rem;
+    cursor: pointer;
+  }
+
+  & input[type="date"] {
+    background-color: var(--m__ui-control-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-s);
+    padding: var(--m__control-inset-padding);
+    color: var(--m__text-color);
+    font-size: inherit;
+    line-height: var(--m__line-height-base);
+    width: 100%;
+
+    &:focus-visible {
+      outline: 2px solid var(--m__text-hover-color);
+      outline-offset: -1px;
+      background-color: color-mix(in srgb, var(--m__bg-hover-color) 8%, transparent);
+    }
+
+    &::-webkit-calendar-picker-indicator {
+      opacity: 0.45;
+      cursor: pointer;
+    }
+
+    .dark-mode &::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      opacity: 0.4;
+    }
+  }
+}
+
+.m__datepicker-compact {
+  display: flex;
   flex-direction: row;
   align-items: center;
   background-color: var(--m__ui-control-color);
@@ -10,9 +51,9 @@
 
   & > span:first-child {
     white-space: nowrap;
-    font-weight: normal;
     font-size: inherit;
     color: var(--m__text-caption-color);
+    font-weight: 500;
 
     &::after {
       content: ":";
@@ -39,5 +80,21 @@
     &:focus-visible {
       outline: none;
     }
+
+    &::-webkit-calendar-picker-indicator {
+      opacity: 0.45;
+      cursor: pointer;
+    }
+
+    .dark-mode &::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      opacity: 0.4;
+    }
+  }
+
+  &:focus-within {
+    outline: 2px solid var(--m__text-hover-color);
+    outline-offset: -1px;
+    background-color: color-mix(in srgb, var(--m__bg-hover-color) 8%, transparent);
   }
 }
