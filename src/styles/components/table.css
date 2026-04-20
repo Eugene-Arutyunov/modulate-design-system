@@ -6,7 +6,8 @@ table {
   & td {
     padding: 0.3rem 0.5rem 0.7rem 0;
     text-align: left;
-    vertical-align: top;
+    vertical-align: baseline;
+    font-size: var(--m__font-size-s);
     border-bottom: 1px solid
       color-mix(in srgb, var(--m__text-color) 12%, transparent);
   }
@@ -14,7 +15,7 @@ table {
   & th {
     padding: 0.3rem 0.5rem 0.3rem 0;
     text-align: left;
-    vertical-align: top;
+    vertical-align: baseline;
     border-bottom: 1px solid
       color-mix(in srgb, var(--m__text-color) 12%, transparent);
     font-size: var(--m__font-size-s);
@@ -28,5 +29,11 @@ table {
   & tbody tr:last-child td,
   & tbody tr:last-child th {
     border-bottom: none;
+  }
+
+  & td:last-child,
+  & th:last-child {
+    text-align: right;
+    padding-right: 0;
   }
 }
