@@ -1,5 +1,5 @@
 document.addEventListener('change', (e) => {
-  if (e.target.matches('.m__textfield--inline select')) {
+  if (e.target.matches('.m__select-compact select')) {
     const valueEl = e.target.closest('.m__select')?.querySelector('.m__select__value');
     if (valueEl) valueEl.textContent = e.target.options[e.target.selectedIndex].text;
   }

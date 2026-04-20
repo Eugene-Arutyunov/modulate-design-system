@@ -1,0 +1,125 @@
+.m__select {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+
+  & select {
+    appearance: none;
+    background-color: var(--m__ui-control-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-s);
+    padding: var(--m__control-inset-padding);
+    padding-right: calc(var(--m__control-inset-padding) + 1.4em);
+    color: var(--m__text-color);
+    width: 100%;
+    cursor: pointer;
+    font-size: inherit;
+    line-height: var(--m__line-height-base);
+
+    &:focus-visible {
+      outline: 2px solid var(--m__text-hover-color);
+      outline-offset: -1px;
+    }
+
+    & option {
+      background-color: var(--m__bg-surface-color);
+      color: var(--m__text-color);
+    }
+  }
+
+  & > svg {
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--m__text-caption-color);
+  }
+}
+
+.m__select-compact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--m__ui-control-color);
+  border: 1px solid var(--m__ui-border-color);
+  border-radius: var(--m__radius-s);
+  padding: var(--m__button-compact-padding);
+  cursor: pointer;
+  position: relative;
+
+  & > span:first-child,
+  & > label:first-child {
+    white-space: nowrap;
+    font-weight: normal;
+    font-size: inherit;
+    color: var(--m__text-caption-color);
+    cursor: pointer;
+    font-weight: 500;
+
+    &::after {
+      content: ":";
+      margin-right: 0.2em;
+    }
+  }
+
+  & input {
+    background: none;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    flex: 1;
+    min-width: 0;
+    color: var(--m__text-color);
+    font-size: inherit;
+    line-height: var(--m__line-height-base);
+
+    &::placeholder {
+      color: var(--m__text-caption-color);
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  & .m__select {
+    /* reset standalone positioning so the overlay select is
+       contained by .m__select-compact (which is position: relative) */
+    position: static;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    gap: 0.35em;
+
+    & .m__select__value {
+      flex: 1;
+      min-width: 0;
+      color: var(--m__text-color);
+    }
+
+    & select {
+      appearance: none;
+      background: none;
+      border: none;
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+
+      & option {
+        background-color: var(--m__bg-surface-color);
+        color: var(--m__text-color);
+      }
+    }
+
+    & > svg {
+      position: static;
+      transform: none;
+      pointer-events: none;
+      color: var(--m__text-caption-color);
+      flex-shrink: 0;
+    }
+  }
+}
