@@ -1,3 +1,28 @@
+.m__table-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  min-width: 0;
+
+  @media (width < 700px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.m__table-filters__dates {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  min-width: 0;
+
+  & > * {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 table {
   width: 100%;
   border-spacing: 0;
@@ -6,7 +31,7 @@ table {
   & td {
     padding: 0.3rem 0.5rem 0.7rem 0;
     text-align: left;
-    vertical-align: top;
+    vertical-align: baseline;
     border-bottom: 1px solid
       color-mix(in srgb, var(--m__text-color) 12%, transparent);
   }
@@ -14,10 +39,10 @@ table {
   & th {
     padding: 0.3rem 0.5rem 0.3rem 0;
     text-align: left;
-    vertical-align: top;
+    vertical-align: baseline;
     border-bottom: 1px solid
       color-mix(in srgb, var(--m__text-color) 12%, transparent);
-    font-size: var(--m__font-size-s);
+    font-size: inherit;
     color: var(--m__text-caption-color);
     font-weight: var(--m__font-weight-medium);
     position: sticky;
@@ -28,5 +53,27 @@ table {
   & tbody tr:last-child td,
   & tbody tr:last-child th {
     border-bottom: none;
+  }
+
+  & .m__table-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding-block: 2.5rem;
+    text-align: center;
+    color: var(--m__text-caption-color);
+
+    & p {
+      margin: 0;
+      max-width: 28rem;
+    }
+  }
+
+  & .m__col-actions {
+    text-align: right;
+    padding-right: 0;
+    width: 1%;
+    white-space: nowrap;
   }
 }

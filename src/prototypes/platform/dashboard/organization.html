@@ -22,26 +22,79 @@ permalink: /dashboard/organization/
         </p>
       </div>
 
+      <div class="m__space XS"></div>
+
       <div class="dashboard-section">
-        <h2>Organization details</h2>
-        <p>
-          Name, type, and billing identifiers for the organization. Invoice-only
-          mode and monthly credit limits appear here when configured.
-        </p>
+        <table class="org-details">
+          <tbody>
+            <tr>
+              <th>Organization Name</th>
+              <td>Eugene’s Personal Organization</td>
+              <td>
+                <button type="button" class="m__button-secondary-compact">
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>Standard</td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Your Role</th>
+              <td>
+                <span class="m__tag" style="color: var(--m__ui-success-color)"
+                  >Admin</span
+                >
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Invoice Only</th>
+              <td>
+                <span style="color: var(--m__text-caption-color)"
+                  >Disabled</span
+                >
+              </td>
+              <td>
+                <button type="button" class="m__button-secondary-compact">
+                  Enable
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th>Monthly Credits Spent</th>
+              <td>0 credits</td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Monthly Credit Limit</th>
+              <td>
+                <span style="color: var(--m__text-caption-color)">Not set</span>
+              </td>
+              <td>
+                <button type="button" class="m__button-secondary-compact">
+                  Set Limit
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        {% set showInviteButton = true %} {% set rows = [ { name: 'Eugene
+        Arutyunov', email: 'e@intuition.team', role: 'Admin', isCurrentUser:
+        true } ] %} {% include 'service/table-members.html' %}
       </div>
 
       <div class="dashboard-section">
-        <h2>Members</h2>
-        {% set rows = [
-          { name: 'Evgeniy Vlasov', email: 'foxsoqa@icloud.com', role: 'Admin', isCurrentUser: true }
-        ] %}
-        {% include 'service/table-members.html' %}
-      </div>
-
-      <div class="dashboard-section">
-        <h2>Pending invites</h2>
-        {% set rows = [] %}
-        {% include 'service/table-pending-invites.html' %}
+        {% set rows = [ { email: 'xneeson@ya.ru', role: 'Developer', invited:
+        '16/04/2026, 22:28:22', expires: '23/04/2026, 22:28:22' } ] %} {%
+        include 'service/table-pending-invites.html' %}
       </div>
     </main>
   </div>

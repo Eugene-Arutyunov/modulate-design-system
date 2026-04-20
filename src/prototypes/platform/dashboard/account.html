@@ -23,55 +23,96 @@ permalink: /dashboard/account/
         </p>
       </div>
 
-      <div class="dashboard-section">
-        <h2>Display Name</h2>
-        <p>Cursor Eugene</p>
-      </div>
+      <div class="m__space XS"></div>
 
       <div class="dashboard-section">
-        <h2>Email</h2>
-        <p>e+cursor@intuition.team</p>
+        <style>
+          .account-details th,
+          .account-details td {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+          }
+        </style>
+        <table class="org-details account-details">
+          <tbody>
+            <tr>
+              <th>Display Name</th>
+              <td colspan="2" style="text-align: left">
+                <div class="m__textfield" style="margin: 0 0 0.5rem">
+                  <input type="text" value="Evgeniy Vlasov" />
+                </div>
+                <button type="button" class="m__button">Save</button>
+                <div class="m__space XS"></div>
+              </td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>foxsoqa@icloud.com</td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Password</th>
+              <td colspan="2" style="text-align: left">
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.4rem;
+                    margin-bottom: 0.4rem;
+                  "
+                >
+                  <div class="m__textfield" style="margin: 0">
+                    <input type="password" placeholder="Current password" />
+                  </div>
+                  <div class="m__textfield" style="margin: 0">
+                    <input type="password" placeholder="New password" />
+                  </div>
+                  <div class="m__textfield" style="margin: 0">
+                    <input type="password" placeholder="Confirm new password" />
+                  </div>
+                </div>
+                <button type="button" class="m__button">Change</button>
+                <div class="m__space XS"></div>
+              </td>
+            </tr>
+            <tr>
+              <th>Training Data Opt-Out</th>
+              <td colspan="2" style="text-align: left">
+                <label class="m__toggle">
+                  <input type="checkbox" disabled />
+                  Opt out of training data usage
+                </label>
+                <p
+                  class="muted"
+                  style="font-size: var(--m__font-size-s); margin: 0.3rem 0 0"
+                >
+                  Available after purchasing credits.
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div class="dashboard-section">
-        <h2>Change Password</h2>
-        <p>
-          Enter your current password and choose a new one. Passwords must be at
-          least 8 characters.
-        </p>
-      </div>
+      <div class="m__space L"></div>
 
       <div class="dashboard-section">
-        <h2>Training Data Opt-Out</h2>
-        <p>
-          Opt out of training data usage. Available after purchasing credits.
-        </p>
-      </div>
-
-      <div class="dashboard-section">
-        <h2>Delete Account</h2>
-        <p>
-          Permanently delete your account and all associated data. This action
-          cannot be undone.
-        </p>
-      </div>
-
-      <div class="dashboard-section">
-        <h2>Organization</h2>
-        <p>
-          Your organization groups your account, API keys, usage, and credit
-          balance. A personal organization was created automatically when you
-          signed up.
-        </p>
-      </div>
-
-      <div class="dashboard-section">
-        <h2>Organization details</h2>
-        <p>
-          Organization Name: Personal. Type: Standard. Member: Cursor Eugene
-          (e+cursor@intuition.team). Invoice Only: Disabled. Monthly Credits
-          Spent: 0 credits. Monthly Credit Limit: Not set.
-        </p>
+        <div
+          class="m__widget"
+          style="
+            border: 2px solid
+              color-mix(in srgb, var(--m__ui-error-color) 40%, transparent);
+            background: none;
+            color: var(--m__ui-error-color);
+          "
+        >
+          <h2 style="margin-bottom: 0.4rem">Danger Zone</h2>
+          <p style="margin-bottom: 0.75rem; opacity: 0.8">
+            Permanently delete your account and all associated data. This action
+            cannot be undone.
+          </p>
+          <button type="button" class="m__button-danger">Delete Account</button>
+        </div>
       </div>
     </main>
   </div>

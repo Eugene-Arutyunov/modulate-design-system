@@ -56,9 +56,16 @@
 }
 
 .m__widget {
+  container-type: inline-size;
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__widget-radius);
   padding: var(--m__widget-padding);
+
+  & h2 {
+    font-size: var(--m__font-size-m);
+    font-weight: var(--m__font-weight-bold);
+    margin: 0 0 0.4rem 0;
+  }
 
   & .m__widget__value {
     font-size: var(--m__font-size-xxl);
@@ -95,6 +102,14 @@
 
   th {
     background-color: var(--m__bg-surface-color);
+  }
+
+  & table {
+    font-size: var(--m__font-size-s);
+  }
+
+  & table :is(.m__button, .m__button-secondary) {
+    font-size: revert;
   }
 }
 

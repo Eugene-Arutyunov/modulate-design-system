@@ -22,13 +22,17 @@ permalink: /dashboard/api-keys/
           not modify it. Key values are shown once at creation and cannot be
           retrieved later.
         </p>
-        <p>
-          <button type="button" class="m__button">Create API key</button>
-        </p>
       </section>
 
+      <div class="m__space XS"></div>
+
       <section class="dashboard-section" data-component="api-keys-table">
-        {% set rows = [] %}
+        {% set rows = [
+          { name: 'Production Key',  type: 'Model',              limits: 'Models: velma-2-stt-batch', status: 'active',   created: '12 Jan 2025, 10:00' },
+          { name: 'Dev Key',         type: 'Model',              limits: '',                          status: 'active',   created: '3 Mar 2025, 14:22' },
+          { name: 'CI Key',          type: 'Console Read-Only',  limits: '',                          status: 'active',   created: '7 Jul 2025, 09:15' },
+          { name: 'Admin Key',       type: 'Console Admin',      limits: '',                          status: 'inactive', created: '22 Aug 2024, 17:30' }
+        ] %}
         {% set activeTab = 'active' %}
         {% set tabsName = 'api-keys-tabs' %}
         {% include 'service/table-api-keys.html' %}

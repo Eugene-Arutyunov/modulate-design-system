@@ -1,21 +1,34 @@
 <div class="m__widget">
   {% if showFilters %}
-  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
-    <div class="m__textfield" style="margin: 0">
-      <label for="filter-start">Start Date</label>
-      <input type="date" id="filter-start" value="2026-03-16" />
+  <div class="m__table-filters">
+    <div class="m__table-filters__dates">
+      <label class="m__datepicker-compact" for="filter-start" style="margin: 0">
+        <span>Start</span>
+        <input type="date" id="filter-start" value="2026-03-16" />
+      </label>
+      <label class="m__datepicker-compact" for="filter-end" style="margin: 0">
+        <span>End</span>
+        <input type="date" id="filter-end" value="2026-04-15" />
+      </label>
     </div>
-    <div class="m__textfield" style="margin: 0">
-      <label for="filter-end">End Date</label>
-      <input type="date" id="filter-end" value="2026-04-15" />
-    </div>
-    <div class="m__textfield" style="margin: 0">
-      <label for="filter-model">Model</label>
-      <input type="text" id="filter-model" placeholder="All Models" />
-    </div>
-    <button type="button" class="m__button">Apply</button>
+    <label class="m__select-compact" style="margin: 0">
+      <span>Model</span>
+      <div class="m__select">
+        <span class="m__select__value">All</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+          <path d="M2 4.5l4 4 4-4"/>
+        </svg>
+        <select id="filter-model">
+          <option>All</option>
+          <option>velma-2-stt-batch</option>
+          <option>velma-2-stt-streaming</option>
+        </select>
+      </div>
+    </label>
+    <button type="button" class="m__button-compact">Apply</button>
   </div>
   {% endif %}
+  <div style="overflow-x: auto;">
   <table>
     <thead>
       <tr>
@@ -34,23 +47,28 @@
         <tr>
           <td>{{ row.model }}</td>
           <td><code>{{ row.key }}</code></td>
-          <td><span class="m__tag-flat">{{ row.status }}</span></td>
+          <td>
+            {% if row.status == 'success' %}
+              <span class="m__tag" style="color: var(--m__ui-success-color)">Success</span>
+            {% elif row.status == 'error' %}
+              <span class="m__tag" style="color: var(--m__ui-error-color)">Error</span>
+            {% elif row.status == 'processing' %}
+              <span class="m__tag" style="color: var(--m__text-caption-color)">Processing</span>
+            {% else %}
+              <span class="m__tag-flat">{{ row.status }}</span>
+            {% endif %}
+          </td>
           <td>{{ row.submitted }}</td>
-          <td>{{ row.completed }}</td>
-          <td>{{ row.duration }}</td>
-          <td>{{ row.credits }}</td>
+          <td {% if row.completed == '—' %}class="muted"{% endif %}>{{ row.completed }}</td>
+          <td {% if row.duration == '—' %}class="muted"{% endif %}>{{ row.duration }}</td>
+          <td {% if row.credits == '—' or row.credits == '0' %}class="muted"{% endif %}>{{ row.credits }}</td>
         </tr>
         {% endfor %}
       {% else %}
         <tr>
           <td colspan="7">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding-block: 2.5rem;">
-              <svg width="32" height="32" aria-hidden="true" style="opacity: 0.35">
-                <use href="#usage"></use>
-              </svg>
-              <p style="margin: 0; text-align: center; max-width: 28rem">
-                No usage records found{% if showFilters %} for this date range. Usage appears here after you make API calls{% endif %}.
-              </p>
+            <div class="m__table-empty">
+              <p>No usage records found{% if showFilters %} for this date range. Usage appears here after you make API calls{% endif %}.</p>
               {% if showFilters %}
               <a href="#" class="m__button-secondary">View Quickstart Guide</a>
               {% endif %}
@@ -60,4 +78,5 @@
       {% endif %}
     </tbody>
   </table>
+  </div>
 </div>

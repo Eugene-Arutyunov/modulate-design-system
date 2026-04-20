@@ -1,0 +1,58 @@
+.m__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  &:has(input:disabled) {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  & input[type="checkbox"] {
+    appearance: none;
+    position: relative;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 1.1rem;
+    border-radius: 999px;
+    background-color: var(--m__ui-border-color);
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0.15rem;
+      transform: translateY(-50%);
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      background-color: var(--m__background-color);
+      transition: left var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+
+    &:checked {
+      background-color: var(--m__bg-accent-color);
+
+      &::after {
+        left: calc(100% - 0.15rem - 0.75rem);
+      }
+    }
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--m__ui-border-color) 70%, var(--m__text-color));
+      transition-duration: var(--m__hover-transition-duration);
+
+      &:checked {
+        background-color: var(--m__bg-hover-color);
+      }
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
