@@ -1,21 +1,22 @@
 <div class="m__widget">
   {% if showFilters %}
-  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
-    <div class="m__textfield" style="margin: 0">
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 0.75rem; align-items: flex-end; margin-bottom: 1rem;">
+    <div class="m__textfield m__textfield--compact" style="margin: 0">
       <label for="filter-start">Start Date</label>
-      <input type="date" id="filter-start" value="2026-03-16" />
+      <input type="text" id="filter-start" value="16.03.2026" />
     </div>
-    <div class="m__textfield" style="margin: 0">
+    <div class="m__textfield m__textfield--compact" style="margin: 0">
       <label for="filter-end">End Date</label>
-      <input type="date" id="filter-end" value="2026-04-15" />
+      <input type="text" id="filter-end" value="15.04.2026" />
     </div>
-    <div class="m__textfield" style="margin: 0">
+    <div class="m__textfield m__textfield--compact" style="margin: 0">
       <label for="filter-model">Model</label>
       <input type="text" id="filter-model" placeholder="All Models" />
     </div>
-    <button type="button" class="m__button">Apply</button>
+    <button type="button" class="m__button-compact">Apply</button>
   </div>
   {% endif %}
+  <div style="overflow-x: auto;">
   <table>
     <thead>
       <tr>
@@ -60,4 +61,5 @@
       {% endif %}
     </tbody>
   </table>
+  </div>
 </div>
