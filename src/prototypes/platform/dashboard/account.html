@@ -26,12 +26,19 @@ permalink: /dashboard/account/
       <div class="m__space XS"></div>
 
       <div class="dashboard-section">
-        <table class="org-details">
+        <style>
+          .account-details th,
+          .account-details td {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+          }
+        </style>
+        <table class="org-details account-details">
           <tbody>
             <tr>
               <th>Display Name</th>
-              <td colspan="2" style="text-align: left;">
-                <div class="m__textfield" style="margin: 0 0 0.5rem;">
+              <td colspan="2" style="text-align: left">
+                <div class="m__textfield" style="margin: 0 0 0.5rem">
                   <input type="text" value="Evgeniy Vlasov" />
                 </div>
                 <button type="button" class="m__button">Save</button>
@@ -44,8 +51,15 @@ permalink: /dashboard/account/
             </tr>
             <tr>
               <th>Password</th>
-              <td colspan="2" style="text-align: left;">
-                <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.4rem;">
+              <td colspan="2" style="text-align: left">
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.4rem;
+                    margin-bottom: 0.4rem;
+                  "
+                >
                   <div class="m__textfield" style="margin: 0">
                     <input type="password" placeholder="Current password" />
                   </div>
@@ -61,12 +75,17 @@ permalink: /dashboard/account/
             </tr>
             <tr>
               <th>Training Data Opt-Out</th>
-              <td colspan="2" style="text-align: left;">
+              <td colspan="2" style="text-align: left">
                 <label class="m__toggle">
                   <input type="checkbox" disabled />
                   Opt out of training data usage
                 </label>
-                <p class="muted" style="font-size: var(--m__font-size-s); margin: 0.3rem 0 0;">Available after purchasing credits.</p>
+                <p
+                  class="muted"
+                  style="font-size: var(--m__font-size-s); margin: 0.3rem 0 0"
+                >
+                  Available after purchasing credits.
+                </p>
               </td>
             </tr>
           </tbody>
@@ -85,7 +104,7 @@ permalink: /dashboard/account/
             color: var(--m__ui-error-color);
           "
         >
-          <h2 style="margin-bottom: 0.4rem">Delete Account</h2>
+          <h2 style="margin-bottom: 0.4rem">Danger Zone</h2>
           <p style="margin-bottom: 0.75rem; opacity: 0.8">
             Permanently delete your account and all associated data. This action
             cannot be undone.
