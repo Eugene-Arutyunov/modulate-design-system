@@ -14,9 +14,173 @@ permalink: /dashboard/behaviors/
 
     <main class="dashboard-content">
       <h1 class="dashboard-page-title">Behaviors</h1>
+
       <div class="dashboard-section">
-        <p>This page is intentionally empty for now.</p>
+        <p>
+          Configure default API behaviors for your organization. These settings
+          apply to all requests unless overridden per-request.
+        </p>
       </div>
+
+      <div class="m__space XS"></div>
+
+      <div class="dashboard-section">
+        <style>
+          .behaviors-table th,
+          .behaviors-table td {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            vertical-align: top;
+          }
+          .behaviors-table td:first-of-type {
+            width: 100%;
+          }
+          .behaviors-table .behavior-desc {
+            font-size: var(--m__font-size-s);
+            color: var(--m__text-caption-color);
+            margin: 0.2rem 0 0;
+          }
+        </style>
+
+        <h2 class="dashboard-section-title">Transcription</h2>
+        <table class="org-details behaviors-table">
+          <tbody>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" checked />
+                  Diarization
+                </label>
+                <p class="behavior-desc">Identify different speakers in the audio by default.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" />
+                  Deepfake Detection
+                </label>
+                <p class="behavior-desc">Detect synthetic or AI-generated voice per utterance.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" />
+                  Emotion Analysis
+                </label>
+                <p class="behavior-desc">Detect emotional tone (e.g. Calm, Happy, Frustrated) for each speaker turn.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" />
+                  Accent Detection
+                </label>
+                <p class="behavior-desc">Detect speaker accent (e.g. American, British).</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" checked />
+                  PII/PHI Redaction
+                </label>
+                <p class="behavior-desc">Automatically tag and redact personally identifiable and health information.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        <h2 class="dashboard-section-title">Output</h2>
+        <table class="org-details behaviors-table">
+          <tbody>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" checked />
+                  Timestamps
+                </label>
+                <p class="behavior-desc">Include word-level timestamps in all transcription responses.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" />
+                  Confidence Scores
+                </label>
+                <p class="behavior-desc">Return per-word confidence scores alongside transcription output.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display: flex; gap: var(--m__space-m); flex-wrap: wrap;">
+                  <label class="m__checkbox">
+                    <input type="checkbox" checked />
+                    JSON
+                  </label>
+                  <label class="m__checkbox">
+                    <input type="checkbox" />
+                    SRT
+                  </label>
+                  <label class="m__checkbox">
+                    <input type="checkbox" />
+                    VTT
+                  </label>
+                  <label class="m__checkbox">
+                    <input type="checkbox" />
+                    TXT
+                  </label>
+                </div>
+                <p class="behavior-desc">Default output formats returned with each transcription request.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        <h2 class="dashboard-section-title">Moderation</h2>
+        <table class="org-details behaviors-table">
+          <tbody>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" checked />
+                  Profanity Filter
+                </label>
+                <p class="behavior-desc">Mask profanity in transcription output by default.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="m__toggle">
+                  <input type="checkbox" />
+                  Content Warnings
+                </label>
+                <p class="behavior-desc">Append a content warning flag to responses containing sensitive material.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div style="display: flex; gap: var(--m__space-xs);">
+        <button type="button" class="m__button">Save Changes</button>
+        <button type="button" class="m__button-secondary">Reset to Defaults</button>
+      </div>
+
+      <div class="m__space XL"></div>
     </main>
   </div>
   <div class="m__space XL"></div>
