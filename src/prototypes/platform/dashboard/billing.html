@@ -18,38 +18,153 @@ permalink: /dashboard/billing/
         <p>
           Credits fund your API usage. 1 credit = $0.01 USD, consumed based on
           audio duration and model cost rate. Purchase credits via Stripe, apply
-          a credit code, or receive credits through an invite link. The billing
-          history below shows all credit additions to your account.
+          a credit code, or receive credits through an invite link.
         </p>
       </div>
 
-      <div class="dashboard-stats">
+      <div class="m__space XS"></div>
+
+      <div class="dashboard-stats" style="margin-bottom: 0.5rem">
         <div class="m__widget">
           <h2>Credit Balance</h2>
           <p class="m__widget__value">1,000</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">All-Time Credits Used</span>
+              <strong class="m__widget__meta-value">542</strong>
+            </p>
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">All-Time Hours</span>
+              <strong class="m__widget__meta-value">90.3</strong>
+            </p>
+          </div>
         </div>
-        <div class="m__widget">
-          <h2>Lifetime Paid Spend</h2>
-          <p class="m__widget__value">0</p>
+
+        <div class="m__widget" style="display: flex; flex-direction: column;">
+          <h2>Apply Credit Code</h2>
+          <p
+            style="
+              font-size: var(--m__font-size-s);
+              color: var(--m__text-caption-color);
+              margin-bottom: 0;
+              flex: 1;
+            "
+          >
+            Enter a credit code to add credits to your balance.
+          </p>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+            <div class="m__textfield" style="flex: 1; margin: 0">
+              <input type="text" placeholder="Enter credit code" />
+            </div>
+            <button type="button" class="m__button">Apply Code</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="m__widget" style="margin-bottom: 0.5rem">
+        <h2>Purchase Credits</h2>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+          "
+        >
+          <div>
+            <p
+              style="
+                font-size: var(--m__font-size-s);
+                font-weight: var(--m__font-weight-medium);
+                margin-bottom: 0.5rem;
+              "
+            >
+              100 API Credits
+            </p>
+            <p
+              style="
+                font-size: var(--m__font-size-xxxl);
+                font-weight: var(--m__font-weight-bold);
+                margin: 0;
+                line-height: 1;
+              "
+            >
+              100
+            </p>
+            <p
+              class="muted"
+              style="font-size: var(--m__font-size-s); margin-bottom: 0.75rem"
+            >
+              credits
+            </p>
+            <button type="button" class="m__button-compact">Buy $1</button>
+          </div>
+          <div>
+            <p
+              style="
+                font-size: var(--m__font-size-s);
+                font-weight: var(--m__font-weight-medium);
+                margin-bottom: 0.5rem;
+              "
+            >
+              1,000 API Credits
+            </p>
+            <p
+              style="
+                font-size: var(--m__font-size-xxxl);
+                font-weight: var(--m__font-weight-bold);
+                margin: 0;
+                line-height: 1;
+              "
+            >
+              1,000
+            </p>
+            <p
+              class="muted"
+              style="font-size: var(--m__font-size-s); margin-bottom: 0.75rem"
+            >
+              credits
+            </p>
+            <button type="button" class="m__button-compact">Buy $10</button>
+          </div>
+          <div>
+            <p
+              style="
+                font-size: var(--m__font-size-s);
+                font-weight: var(--m__font-weight-medium);
+                margin-bottom: 0.5rem;
+              "
+            >
+              10,000 API Credits
+            </p>
+            <p
+              style="
+                font-size: var(--m__font-size-xxxl);
+                font-weight: var(--m__font-weight-bold);
+                margin: 0;
+                line-height: 1;
+              "
+            >
+              10,000
+            </p>
+            <p
+              class="muted"
+              style="font-size: var(--m__font-size-s); margin-bottom: 0.75rem"
+            >
+              credits
+            </p>
+            <button type="button" class="m__button-compact">Buy $100</button>
+          </div>
         </div>
       </div>
 
       <div class="dashboard-section">
-        <h2>Apply credit code</h2>
-        <p>Enter a credit code to add credits to your balance.</p>
-      </div>
-
-      <div class="dashboard-section">
-        <h2>Purchase credits</h2>
-        <p>
-          100 API Credits — $1.00. 1,000 API Credits — $10.00. 10,000 API
-          Credits — $100.00.
-        </p>
-      </div>
-
-      <div class="dashboard-section">
-        {% set rows = [] %}
-        {% include 'service/table-billing-history.html' %}
+        {% set rows = [ { date: '6 Mar 2026, 19:01', type: 'new_account_grant',
+        credits: '+1,000', description: 'New account credits' }, { date: '1 Apr
+        2026, 12:00', type: 'purchase', credits: '+500', description: 'Credit
+        purchase via Stripe' }, { date: '10 Apr 2026, 09:30', type:
+        'invite_grant', credits: '+250', description: 'Referral invite bonus' }
+        ] %} {% include 'service/table-billing-history.html' %}
       </div>
     </main>
   </div>
