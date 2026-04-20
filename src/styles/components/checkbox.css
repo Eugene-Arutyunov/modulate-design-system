@@ -3,6 +3,13 @@
   align-items: center;
   gap: 0.4rem;
   cursor: pointer;
+  color: var(--m__text-color);
+  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover:not(:has(input:disabled)) {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
 
   &:has(input:disabled) {
     cursor: not-allowed;
@@ -22,19 +29,28 @@
       background var(--m__unhover-transition-duration) var(--m__transition-easing),
       border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
 
-    &:hover {
+    &:hover:not(:disabled) {
       border-color: var(--m__bg-hover-color);
       transition-duration: var(--m__hover-transition-duration);
+
+      .dark-mode & {
+        border-color: var(--m__text-hover-color);
+      }
     }
 
     &:checked {
       background: var(--m__bg-accent-color);
       border-color: var(--m__bg-accent-color);
 
-      &:hover {
+      &:hover:not(:disabled) {
         background-color: var(--m__bg-hover-color);
         border-color: var(--m__bg-hover-color);
         transition-duration: var(--m__hover-transition-duration);
+
+        .dark-mode & {
+          background-color: var(--m__text-hover-color);
+          border-color: var(--m__text-hover-color);
+        }
       }
 
       &::after {

@@ -10,7 +10,7 @@
         Inactive
       </label>
     </div>
-    <button type="button" class="m__button-compact">Create API Key</button>
+    <button type="button" class="m__button-compact" data-api-key-create>Create API Key</button>
   </div>
   <div style="overflow-x: auto;">
   <table>
@@ -42,14 +42,14 @@
           </td>
           <td>{{ row.created }}</td>
           <td class="m__col-actions">
-            <div style="display: flex; gap: 0.375rem; align-items: center;">
-              <button type="button" class="m__button-secondary-compact">Edit</button>
+            <div style="display: flex; gap: 0.375rem; align-items: center; justify-content: flex-end;">
+              <button type="button" class="m__button-secondary-compact" data-api-key-edit data-api-key-name="{{ row.name }}">Edit</button>
               {% if row.status === 'active' %}
-              <button type="button" class="m__button-secondary-compact">Deactivate</button>
+              <button type="button" class="m__button-secondary-compact" data-api-key-deactivate data-api-key-name="{{ row.name }}">Deactivate</button>
               {% else %}
-              <button type="button" class="m__button-secondary-compact" style="color: var(--m__ui-success-color);">Activate</button>
+              <button type="button" class="m__button-secondary-compact" style="color: var(--m__ui-success-color);" data-api-key-activate data-api-key-name="{{ row.name }}">Activate</button>
               {% endif %}
-              <button type="button" class="m__button-danger-compact">Delete</button>
+              <button type="button" class="m__button-danger-compact" data-api-key-delete data-api-key-name="{{ row.name }}">Delete</button>
             </div>
           </td>
         </tr>

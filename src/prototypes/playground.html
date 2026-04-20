@@ -5,7 +5,7 @@ permalink: /playground/
 
 {% extends 'prototypes/landing-layout.html' %} {% block head %}
 <style>
-  /* CHECKBOXES */
+  /* OPTIONS */
   .pg-stt-options {
     display: flex;
     flex-wrap: wrap;
@@ -13,20 +13,9 @@ permalink: /playground/
   }
 
   .pg-stt-option {
-    display: flex;
-    align-items: center;
-    gap: var(--m__space-xxs);
-    font-size: var(--m__font-size-s);
-    color: var(--m__text-color);
-    cursor: pointer;
-    user-select: none;
     position: relative;
-    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
-  }
-
-  .pg-stt-option:hover {
-    color: var(--m__text-hover-color);
-    transition: color var(--m__hover-transition-duration) var(--m__transition-easing);
+    font-size: var(--m__font-size-s);
+    user-select: none;
   }
 
   .pg-stt-option::after {
@@ -43,41 +32,13 @@ permalink: /playground/
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0s;
+    transition: opacity var(--m__unhover-transition-duration) var(--m__transition-easing);
     z-index: 50;
   }
 
-  .pg-stt-option input[type="checkbox"] {
-    appearance: none;
-    width: 1rem;
-    height: 1rem;
-    border: 1px solid var(--m__ui-border-color);
-    border-radius: var(--m__radius-xs);
-    cursor: pointer;
-    flex-shrink: 0;
-    position: relative;
-    transition: background var(--m__unhover-transition-duration) var(--m__transition-easing), border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
-  }
-  .pg-stt-option input[type="checkbox"]:hover {
-  border-color: var(--m__bg-hover-color);
-    transition: border-color var(--m__hover-transition-duration) var(--m__transition-easing);
-  }
-
-  .pg-stt-option input[type="checkbox"]:checked {
-    background: var(--m__bg-accent-color);
-    border-color: var(--m__bg-accent-color);
-  }
-  .pg-stt-option input[type="checkbox"]:checked:hover {
-  background-color: var(--m__bg-hover-color);
-  border-color: var(--m__bg-hover-color);
-  transition: background var(--m__hover-transition-duration) var(--m__transition-easing), border-color var(--m__hover-transition-duration) var(--m__transition-easing);
-  }
-
-  .pg-stt-option input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='1.5,5 4,7.5 8.5,2.5' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat;
+  .pg-stt-option:hover::after {
+    opacity: 1;
+    transition-duration: var(--m__hover-transition-duration);
   }
 
   /* RESULT */
@@ -1415,49 +1376,42 @@ permalink: /playground/
       <div class="pg-options-row">
         <div class="pg-stt-options visible" id="stt-options">
           <label
-            class="pg-stt-option"
+            class="m__checkbox pg-stt-option"
             data-tip="Identify different speakers in the audio"
           >
             <input type="checkbox" id="opt-diarization" checked /> Diarization
           </label>
           <label
-            class="pg-stt-option"
+            class="m__checkbox pg-stt-option"
             data-tip="Detect synthetic/AI-generated voice (deepfake) per utterance"
           >
             <input type="checkbox" id="opt-deepfake" checked /> Deepfake
           </label>
           <label
-            class="pg-stt-option"
+            class="m__checkbox pg-stt-option"
             data-tip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
           >
             <input type="checkbox" id="opt-emotion" checked /> Emotions
           </label>
           <label
-            class="pg-stt-option"
+            class="m__checkbox pg-stt-option"
             data-tip="Detect speaker accent (e.g. American, British)"
           >
             <input type="checkbox" id="opt-accent" checked /> Accent
           </label>
           <label
-            class="pg-stt-option"
+            class="m__checkbox pg-stt-option"
             data-tip="Tag personally identifiable and health information"
           >
             <input type="checkbox" id="opt-pii" checked /> PII/PHI
           </label>
-          <span class="pg-stt-option" data-tip="Fast transcription, English only" onclick="document.getElementById('opt-fast').click()">
-            <button
-              type="button"
-              id="opt-fast"
-              class="theme-toggle pg-fast-toggle"
-              role="switch"
-              aria-checked="false"
-              aria-label="Fast transcription">
-              <span class="theme-toggle__track">
-                <span class="theme-toggle__thumb"></span>
-              </span>
-            </button>
+          <label
+            class="m__toggle pg-stt-option"
+            data-tip="Fast transcription, English only"
+          >
+            <input type="checkbox" id="opt-fast" />
             Fast (English only)
-          </span>
+          </label>
         </div>
       </div>
 
@@ -1863,17 +1817,14 @@ permalink: /playground/
 
   {% endblock %} {% block scripts %}
   <script>
-    var fastBtn = document.getElementById('opt-fast');
-    var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]');
+    var fastToggle = document.getElementById('opt-fast');
+    var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]:not(#opt-fast)');
 
-    fastBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var isOn = fastBtn.getAttribute('aria-checked') === 'true';
-      fastBtn.setAttribute('aria-checked', isOn ? 'false' : 'true');
+    fastToggle.addEventListener('change', function () {
       checkboxes.forEach(function (cb) {
-        cb.disabled = !isOn;
-        cb.closest('.pg-stt-option').style.opacity = !isOn ? '0.4' : '';
-        cb.closest('.pg-stt-option').style.pointerEvents = !isOn ? 'none' : '';
+        cb.disabled = fastToggle.checked;
+        cb.closest('.pg-stt-option').style.opacity = fastToggle.checked ? '0.4' : '';
+        cb.closest('.pg-stt-option').style.pointerEvents = fastToggle.checked ? 'none' : '';
       });
     });
 

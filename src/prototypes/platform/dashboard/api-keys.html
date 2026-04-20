@@ -27,19 +27,25 @@ permalink: /dashboard/api-keys/
       <div class="m__space XS"></div>
 
       <section class="dashboard-section" data-component="api-keys-table">
-        {% set rows = [
-          { name: 'Production Key',  type: 'Model',              limits: 'Models: velma-2-stt-batch', status: 'active',   created: '12 Jan 2025, 10:00' },
-          { name: 'Dev Key',         type: 'Model',              limits: '',                          status: 'active',   created: '3 Mar 2025, 14:22' },
-          { name: 'CI Key',          type: 'Console Read-Only',  limits: '',                          status: 'active',   created: '7 Jul 2025, 09:15' },
-          { name: 'Admin Key',       type: 'Console Admin',      limits: '',                          status: 'inactive', created: '22 Aug 2024, 17:30' }
-        ] %}
-        {% set activeTab = 'active' %}
-        {% set tabsName = 'api-keys-tabs' %}
-        {% include 'service/table-api-keys.html' %}
+        {% set rows = [ { name: 'Production Key', type: 'Model', limits:
+        'Models: velma-2-stt-batch', status: 'active', created: '12 Jan 2025,
+        10:00' }, { name: 'Dev Key', type: 'Model', limits: '', status:
+        'active', created: '3 Mar 2025, 14:22' }, { name: 'CI Key', type:
+        'Console Read-Only', limits: '', status: 'active', created: '7 Jul 2025,
+        09:15' }, { name: 'Admin Key', type: 'Console Admin', limits: '',
+        status: 'inactive', created: '22 Aug 2024, 17:30' } ] %} {% set
+        activeTab = 'active' %} {% set tabsName = 'api-keys-tabs' %} {% include
+        'service/table-api-keys.html' %}
       </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
 
+{% include 'service/modal-api-key-create.html' %} {% include
+'service/modal-api-key-edit.html' %} {% include
+'service/modal-api-key-deactivate.html' %} {% include
+'service/modal-api-key-delete.html' %} {% include
+'service/modal-api-key-activate.html' %}
+<script src="/assets/prototypes/api-keys-modals.js"></script>
 {% endblock %}

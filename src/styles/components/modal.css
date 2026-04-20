@@ -1,0 +1,167 @@
+.m__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: color-mix(
+    in srgb,
+    var(--m__bg-accent-color) 55%,
+    transparent
+  );
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: var(--m__modal-padding);
+
+  @media (width < 480px) {
+    padding: 0;
+    align-items: flex-end;
+
+    & .m__modal {
+      margin-top: auto;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.dark-mode .m__modal-backdrop {
+  background-color: color-mix(in srgb, #000 70%, transparent);
+}
+
+.m__modal-backdrop[hidden] {
+  display: none;
+}
+
+.m__modal {
+  background-color: var(--m__background-color);
+  border-radius: var(--m__radius-l);
+  box-shadow: 0 8px 32px color-mix(in srgb, #000 18%, transparent);
+  width: 100%;
+  max-width: 28rem;
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3rem;
+
+  @media (width < 768px) {
+    max-width: 100%;
+    border-radius: var(--m__radius-l) var(--m__radius-l) 0 0;
+    margin: 0;
+  }
+}
+
+.m__modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--m__modal-padding) var(--m__modal-padding) 0
+    var(--m__modal-padding);
+  flex-shrink: 0;
+}
+
+.m__modal__title {
+  font-size: var(--m__font-size-l);
+  font-weight: var(--m__font-weight-bold);
+  color: var(--m__text-color);
+  margin: 0;
+}
+
+.m__modal__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--m__text-caption-color);
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--m__radius-s);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+  flex-shrink: 0;
+  margin: -0.4rem;
+
+  &:hover {
+    color: var(--m__text-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+.m__modal__body {
+  padding: var(--m__modal-padding);
+
+  & .m__textfield,
+  & .m__select,
+  & .m__datepicker,
+  & .m__modal__checklist,
+  & .m__modal__field-hint {
+    margin-bottom: 0;
+  }
+
+  & textarea {
+    background-color: var(--m__ui-control-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-s);
+    padding: var(--m__control-inset-padding);
+    color: var(--m__text-color);
+    width: 100%;
+    line-height: var(--m__line-height-base);
+    font: inherit;
+    resize: vertical;
+    min-height: 4.5rem;
+
+    &::placeholder {
+      color: var(--m__text-caption-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--m__text-hover-color);
+      outline-offset: -1px;
+      background-color: color-mix(
+        in srgb,
+        var(--m__bg-hover-color) 8%,
+        transparent
+      );
+      color: var(--m__text-hover-color);
+    }
+  }
+}
+
+.m__modal__field-hint {
+  font-size: var(--m__font-size-s);
+  color: var(--m__text-caption-color);
+  margin-top: -0.25rem;
+  margin-bottom: var(--m__default-margin-bottom);
+}
+
+.m__modal__checklist {
+  margin-bottom: var(--m__default-margin-bottom);
+}
+
+.m__modal__checklist-label {
+  font-size: var(--m__font-size-s);
+  font-weight: 500;
+  color: var(--m__text-color);
+  margin: 0 0 0.3rem;
+}
+
+.m__modal__checklist-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  & .m__checkbox {
+    font-size: var(--m__font-size-s);
+  }
+}
+
+.m__modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0 var(--m__modal-padding) var(--m__modal-padding)
+    var(--m__modal-padding);
+  flex-shrink: 0;
+}
