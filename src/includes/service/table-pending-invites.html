@@ -1,5 +1,6 @@
 <div class="m__widget">
   <h2>{{ tableTitle if tableTitle else 'Pending Invites' }}</h2>
+  <div style="overflow-x: auto;">
   <table>
     <thead>
       <tr>
@@ -27,7 +28,7 @@
           <td>{{ row.invited }}</td>
           <td>{{ row.expires }}</td>
           <td>
-            <button type="button" class="m__button-secondary-compact" style="color: var(--m__ui-error-color);">Cancel</button>
+            <button type="button" class="m__button-danger-compact">Cancel</button>
           </td>
         </tr>
         {% endfor %}
@@ -40,4 +41,5 @@
       {% endif %}
     </tbody>
   </table>
+  </div>
 </div>
