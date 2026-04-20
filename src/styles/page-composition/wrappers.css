@@ -1,11 +1,15 @@
 .m__wrapper {
+  --m__wrapper-pad: 1rem;
+
   position: relative;
   width: 100%;
   margin: 0 auto;
   max-width: 1050px;
-  padding: 0 0.7rem;
+  padding-inline: var(--m__wrapper-pad);
 
   @media (width < 767px) {
+    --m__wrapper-pad: 0.7rem;
+
     width: 100%;
   }
 
@@ -19,27 +23,34 @@
 
   /* Full-bleed band: outer padding matches `.prototype-header`; inner column matches a plain `.m__wrapper`. */
   &.full-width {
-    --m__wrapper-full-width-outer-pad: 1rem; /* keep in sync with `.prototype-header` padding */
-    --m__wrapper-inline-pad: 0.7rem;
+    --m__wrapper-surface-pad: 0.7rem;
 
     max-width: none;
     margin-inline: 0;
-    padding-inline: var(--m__wrapper-full-width-outer-pad);
+    padding-inline: var(--m__wrapper-pad);
     padding-block: 0;
     box-sizing: border-box;
 
     & .m__wrapper__surface {
       background-color: var(--m__bg-surface-color);
+      padding-inline: var(--m__wrapper-surface-pad);
+
+      @media (width < 767px) {
+        padding-inline: 0;
+      }
     }
 
     & .m__wrapper__inset {
       box-sizing: border-box;
-      width: min(
-        1050px,
-        calc(100% + 2 * var(--m__wrapper-full-width-outer-pad))
-      );
-      margin-inline: calc((100% - min(1050px, 100vw)) / 2);
-      padding-inline: var(--m__wrapper-inline-pad);
+      width: min(1050px, 100%);
+      margin-inline: auto;
+      padding-inline: var(--m__wrapper-pad);
+      padding-block-start: var(--m__space-xl);
+      padding-block-end: var(--m__space-m);
+
+      @media (width < 767px) {
+        padding-block: var(--m__wrapper-pad);
+      }
     }
   }
 }

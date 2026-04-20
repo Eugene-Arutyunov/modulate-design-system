@@ -26,10 +26,10 @@ Fixed-position element in the bottom-left corner of every page. Contains four ic
 
 ## Prototype internal nav toggle
 
-**Script:** `src/assets/js/prototype-internal-nav-toggle.js`  
+**Script:** `src/assets/prototypes/prototype-internal-nav-toggle.js`  
 **Markup:** `src/includes/prototypes/dashboard-nav-macros.html` wraps `/internal/…` links in `.prototype-internal-nav`.  
 **Styles:** `src/styles/prototypes/layout.css` (`body.prototype-hide-internal-nav` hides that wrapper); `src/styles/service/footer.css` (`.footer-prototype-tools__switch` matches the theme-toggle look).  
-**Used in:** `src/includes/prototypes/layout.html` and `src/includes/prototypes/landing-layout.html` (inline class restore from `localStorage` before paint + script tag), `src/includes/footer.html` (technical panel with DS links and the switch). The script always syncs `body.prototype-hide-internal-nav` from storage even when the current page has no internal nav links (e.g. landing). The switch label is a `<label for="…">` so the text toggles the control too.
+**Used in:** `src/includes/prototypes/layout.html` and `src/includes/prototypes/landing-layout.html` (inline class restore from `localStorage` before paint + script tag), `src/includes/prototypes/footer.html` (technical panel with DS links and the switch). The script always syncs `body.prototype-hide-internal-nav` from storage even when the current page has no internal nav links (e.g. landing). The switch label is a `<label for="…">` so the text toggles the control too.
 
 The footer panel under the Modulate blurb contains a switch **Internal admin links** (same pill control as the theme toggle, but not using the `.theme-toggle` class so `theme-toggle.js` does not bind to it). State persists in `localStorage` under `prototype-internal-nav-hidden` (`1` = hidden). Default is links visible (`aria-checked="true"` on the switch). Cross-navigation links (DS main, UI Architecture) were moved to the nav island.
 
@@ -48,7 +48,7 @@ Dropdown menu: trigger shows user name + chevron; click opens popover. Account a
 ## UI structure visualizer
 
 **Script:** `src/assets/service/ui-visualizer.js`  
-**Data:** `src/assets/service/ui.yaml` with two root keys: **current** (product) and **target** (prototype for this repo). Each is an array of routes; every section is a node `section:` with **widget**, **widgets**, or **text-content**. Optional per route: **title_deprecated** (string) — shown struck through before **title** in the Route column when set.  
+**Data:** `src/service/ui.yaml` with two root keys: **current** (product) and **target** (prototype for this repo). Each is an array of routes; every section is a node `section:` with **widget**, **widgets**, or **text-content**. Optional per route: **title_deprecated** (string) — shown struck through before **title** in the Route column when set.  
 **Page:** `src/service/ui.html` (UI Architecture).  
 **Styles:** `.ui-viz` + `.ui-viz__*` in `src/styles/service/ui-visualizer.css`.
 
@@ -68,7 +68,7 @@ Global tag-level styles for prose elements: headings, paragraphs, links, inline 
 
 **Styles:** `src/styles/service/ds-main-page.css`  
 **Used in:** `src/index.html` (e.g. Graphics → Icons `.docs-icon-row`, Animations `.docs-animation-samples`).  
-**Bundle:** `src/service/css-bundle.njk`.
+**Bundle:** `src/css-bundle.njk`.
 
 Section-specific layout for the long home page; kept separate from `color-palette.css` (swatches and emotion showcase).
 
@@ -78,7 +78,7 @@ Section-specific layout for the long home page; kept separate from `color-palett
 
 **Styles:** `src/styles/service/ids-navbar.css`, `src/styles/service/ids-footnotes.css`  
 **Scripts:** `src/assets/service/ids-navbar.js`, `src/assets/service/ids-footnotes.js`  
-**Bundle:** included from `src/service/css-bundle.njk`; `main.js` imports the scripts on design-system pages (`ds-layout.html`).
+**Bundle:** included from `src/css-bundle.njk`; `main.js` imports the scripts on design-system pages (`service/layout.html`).
 
 Segmented docs nav (`ids-navbar` / `ids-nav-item`) and footnote popovers (`ids-footnote-link` / `ids-footnote`). The footnote `<aside class="ids-footnote">` resets the shared prose `aside` styling from `page-composition/wrappers.css` inside `footnotes.css`. Class names keep the `ids-` prefix for historical reasons; there is no page-level `.ids` wrapper.
 
@@ -94,7 +94,7 @@ Shared timing tokens for hover behavior. The system defines instant hover, anima
 
 ## SVG icon sprite flow
 
-**Source:** `src/assets/service/images/svg-icons-source/*.svg`  
+**Source:** `src/assets/images/svg-icons-source/*.svg`  
 **Build script:** `scripts/generate-svg-sprite.js`  
 **Generated include:** `src/includes/service/svg-icons-sprite.html`  
 **Usage docs:** `src/assets/service/SVG-ICON-SPRITE.md`.
@@ -167,7 +167,7 @@ Empty placeholder page for conversations. Uses `layout.html`.
 
 **Page:** `src/prototypes/platform/dashboard/organization.html`  
 **Permalink:** `/dashboard/organization/`  
-**UI structure:** `src/assets/service/ui.yaml` (`dashboard-organization`).
+**UI structure:** `src/service/ui.yaml` (`dashboard-organization`).
 
 Dashboard page with sidebar; placeholder sections for organization intro, details, members, and pending invites.
 
@@ -176,7 +176,7 @@ Dashboard page with sidebar; placeholder sections for organization intro, detail
 ## Behaviors dashboard page
 
 **Page:** `src/prototypes/platform/dashboard/behaviors.html`  
-**UI structure:** `src/assets/service/ui.yaml`.
+**UI structure:** `src/service/ui.yaml`.
 
 Placeholder dashboard page added to use the existing `behaviors` icon and keep dashboard navigation aligned with the available icon set.
 
@@ -210,7 +210,7 @@ Standalone two-column layout for auth screens. No dashboard header or footer. Le
 
 ## Textfield component
 
-**Styles:** `src/styles/textfield.css`  
+**Styles:** `src/styles/components/textfield.css`  
 **Tokens:** `--m__control-inset-padding`, `--m__textfield-radius`, `--m__textfield-label-size` in `src/styles/tokens/ui-components.css`.  
 **Class:** `.m__textfield`
 
@@ -222,7 +222,7 @@ Label + input pair. Label sits above the input. Input uses `--m__ui-control-colo
 
 **Pages:** `src/prototypes/platform/auth/login.html`, `src/prototypes/platform/auth/signup.html`, `src/prototypes/platform/auth/reset-password.html`, `src/prototypes/platform/auth/org-select.html`  
 **Layout:** `src/includes/prototypes/auth-layout.html`  
-**UI structure:** `src/assets/service/ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`, `/auth/org-select/`).
+**UI structure:** `src/service/ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`, `/auth/org-select/`).
 
 Four auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link". Select organization shows an `.m__option-list` of orgs with `.m__tag` role labels, and a form to create a new org with a secondary button.
 
@@ -249,7 +249,7 @@ Small inline label for metadata. `.m__tag` shows a bordered outline using `curre
 ## Dashboard charts
 
 **Script:** `src/assets/prototypes/dashboard-charts.js`  
-**Data:** `src/asstts/prototypes/dashboard-charts.json` (static snapshot with 30 days of data, passthrough-copied to site root).  
+**Data:** `src/assets/prototypes/data/dashboard-charts.json` (static snapshot with 30 days of data, passthrough-copied to site root).  
 **Includes:** `src/includes/prototypes/dashboard/overview/credit-balance-over-time.html`, `usage-by-model.html`, `requests-by-status.html`.  
 **Styles:** `.chart-container`, `.chart-empty`, `.m__segmented-control` in `src/styles/prototypes/layout.css`.  
 **Library:** Chart.js 4.4.0 via CDN, loaded conditionally with `chartJs: true` in page front matter.
@@ -272,7 +272,7 @@ Two sample charts (line and stacked bar) rendered with hardcoded data on the des
 **Permalink:** `/online-docs/`, `/online-docs/toxmod/`, `/online-docs/prosocial/`  
 **Layout:** `src/includes/prototypes/online-docs-layout.html` (includes `service/svg-icons-sprite.html` for `<use>` icons in case study markup).  
 **Styles:** `src/styles/prototypes/online-docs.css`  
-**Include:** `src/includes/assets/activision-logo.html` (Activision wordmark SVG, `currentColor`, used on the ToxMod case study footer).  
+**Include:** `src/includes/prototypes/activision-logo.html` (Activision wordmark SVG, `currentColor`, used on the ToxMod case study footer).  
 **Wrapper:** `.m__online-doc-wrapper` sets default body ink **`rgb(20, 20, 50)`** and `a { color: inherit }` (title hero keeps its own theme). **`p.accent`** and **`aside.online-doc-callout`** body copy use accent blue **`rgb(40, 95, 235)`**; links in the callout use **`rgb(35, 84, 207)`** with hover **`rgb(40, 95, 235)`**. **`h1`** in the wrapper uses `--m__font-mono`. **`h4.online-doc-kicker`** — uppercase kicker. **`m__text-width`** — **80%** / **100%** mobile. **`aside.online-doc-callout`**: **2× right padding**; **`online-doc-callout-block`** — **`margin-bottom: 1.5rem`**; first grid class **`online-doc-callout-sequence`** with **`online-doc-callout-item`** (icon + **`__body`**) and sprite **`#behaviors`**, **`#overview-muted`**, **`#done`**, **`#decrease`** (prosocial case study); second grid has **`mark`** + thick blue underline on headline figures; **`m__sequence`** **two columns** on screen (**`--columns: 1`** / full-width items when **`width < 767px`**), **`--m__font-size-xl`**, **`strong`** mono; **print:** page breaks + letter sheet like `.title-container`. **`.title-container`**: when **`width < 767px`**, no horizontal negative margins; horizontal **`padding`** matches vertical (**`--online-doc-title-padding-block`**); hero **`h1`** **`font-size: 3em`** (wider viewports use **`3.5em`** from the wrapper rule). **`.title-container__footer`**: one flex row (**`align-items: baseline`**), **`title-container__footer-spacer`** (`flex: 1`) pushes contact links right; on narrow viewports the spacer line-breaks so links sit on the next row. **`title-container__logo-slot--activision`**: **`bottom: -0.35em`** (visual nudge vs. text links).
 
 Print-oriented document prototype. **Experimental / isolated:** doc-specific variables and components belong only in `online-docs.css`, not in `src/styles/tokens/` or other shared DS files, until the pattern is promoted. Uses `online-docs-layout.html` (no product header or footer). Wrapper `.m__online-doc-wrapper` is a centered reading column; `@page { size: letter }` with margins, break rules, `12pt` print body, and `print-color-adjust: exact`. Browser print headers/footers are turned off in the print dialog, not via CSS. Index links to two sample case studies.

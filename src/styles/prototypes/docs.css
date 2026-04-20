@@ -38,6 +38,66 @@
   font-size: var(--m__font-size-l);
 }
 
+/* Doc content panel — code-block-style wrapper for both quickstart and API spec */
+.docs-panel {
+  background-color: var(--m__bg-surface-color);
+  border-radius: var(--m__radius-s);
+  overflow: hidden;
+  margin-bottom: var(--m__default-margin-bottom);
+
+  & .docs-panel__toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--m__code-block-toolbar-padding);
+    border-bottom: 1px solid var(--m__ui-border-color);
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+  }
+
+  & .docs-panel__body {
+    padding: 0.5rem 0.7rem;
+
+    & pre {
+      border: 1px solid var(--m__ui-border-color);
+    }
+
+    & code {
+      font-family: var(--m__font-mono);
+      color: var(--m__code-color);
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    & pre code {
+      color: inherit;
+    }
+
+    & h2 {
+      font-size: 1rem;
+    }
+
+    & h3 {
+      font-size: 1rem;
+      font-weight: var(--m__font-weight-regular);
+    }
+
+    & table {
+      margin-bottom: var(--m__default-margin-bottom);
+    }
+
+    & table td {
+      font-size: var(--m__font-size-s);
+    }
+
+    & table th {
+      background-color: transparent;
+      font-weight: var(--m__font-weight-regular);
+    }
+  }
+}
+
 /* Pricing comparison table */
 .pricing-table-wrap {
   overflow-x: auto;
