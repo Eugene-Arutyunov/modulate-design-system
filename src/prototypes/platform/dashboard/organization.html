@@ -23,25 +23,79 @@ permalink: /dashboard/organization/
       </div>
 
       <div class="dashboard-section">
-        <h2>Organization details</h2>
-        <p>
-          Name, type, and billing identifiers for the organization. Invoice-only
-          mode and monthly credit limits appear here when configured.
-        </p>
+        <div class="m__widget">
+          <dl class="org-details">
+            <div class="org-details__row">
+              <dt>Organization Name</dt>
+              <dd>
+                Vlasov
+                <button
+                  type="button"
+                  class="m__button-secondary-compact"
+                  style=""
+                >
+                  Edit
+                </button>
+              </dd>
+            </div>
+            <div class="org-details__row">
+              <dt>Type</dt>
+              <dd>Standard</dd>
+            </div>
+            <div class="org-details__row">
+              <dt>Your Role</dt>
+              <dd>
+                <span class="m__tag" style="color: var(--m__ui-success-color)"
+                  >Admin</span
+                >
+              </dd>
+            </div>
+            <div class="org-details__row">
+              <dt>Invoice Only</dt>
+              <dd>
+                <span style="color: var(--m__text-caption-color)"
+                  >Disabled</span
+                >
+                <button
+                  type="button"
+                  class="m__button-secondary-compact"
+                  style=""
+                >
+                  Enable
+                </button>
+              </dd>
+            </div>
+            <div class="org-details__row">
+              <dt>Monthly Credits Spent</dt>
+              <dd>0 credits</dd>
+            </div>
+            <div class="org-details__row">
+              <dt>Monthly Credit Limit</dt>
+              <dd>
+                <span style="color: var(--m__text-caption-color)">Not set</span>
+                <button
+                  type="button"
+                  class="m__button-secondary-compact"
+                  style=""
+                >
+                  Set Limit
+                </button>
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
 
       <div class="dashboard-section">
-        <h2>Members</h2>
-        {% set rows = [
-          { name: 'Evgeniy Vlasov', email: 'foxsoqa@icloud.com', role: 'Admin', isCurrentUser: true }
-        ] %}
-        {% include 'service/table-members.html' %}
+        {% set showInviteButton = true %} {% set rows = [ { name: 'Evgeniy
+        Vlasov', email: 'foxsoqa@icloud.com', role: 'Admin', isCurrentUser: true
+        } ] %} {% include 'service/table-members.html' %}
       </div>
 
       <div class="dashboard-section">
-        <h2>Pending invites</h2>
-        {% set rows = [] %}
-        {% include 'service/table-pending-invites.html' %}
+        {% set rows = [ { email: 'xneeson@ya.ru', role: 'Developer', invited:
+        '16/04/2026, 22:28:22', expires: '23/04/2026, 22:28:22' } ] %} {%
+        include 'service/table-pending-invites.html' %}
       </div>
     </main>
   </div>
