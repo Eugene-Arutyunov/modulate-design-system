@@ -1,41 +1,18 @@
-<div
-  class="m__modal-backdrop"
-  id="modal-cancel-invite"
-  hidden
-  aria-modal="true"
-  role="dialog"
-  aria-labelledby="modal-cancel-invite-title"
->
-  <div class="m__modal">
-    <div class="m__modal__header">
-      <h2 class="m__modal__title" id="modal-cancel-invite-title">
-        Cancel Invite
-      </h2>
-      <button
-        type="button"
-        class="m__modal__close"
-        aria-label="Close"
-        data-modal-close="modal-cancel-invite"
-      >
-        <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
-          <use href="#close"></use>
-        </svg>
-      </button>
-    </div>
-    <div class="m__modal__body">
-      <p>
-        Cancel the pending invite for <strong data-cancel-invite-email></strong>?
-      </p>
-    </div>
-    <div class="m__modal__footer">
-      <button
-        type="button"
-        class="m__button-secondary-compact"
-        data-modal-close="modal-cancel-invite"
-      >
-        Keep Invite
-      </button>
-      <button type="button" class="m__button-danger-compact">Cancel Invite</button>
-    </div>
-  </div>
+{% from 'service/modal-wrapper.njk' import modal %}
+{% call modal("modal-cancel-invite", "Cancel Invite") %}
+<div class="m__modal__body">
+  <p>
+    Cancel the pending invite for <strong data-cancel-invite-email></strong>?
+  </p>
 </div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-secondary-compact"
+    data-modal-close="modal-cancel-invite"
+  >
+    Keep Invite
+  </button>
+  <button type="button" class="m__button-danger-compact">Cancel Invite</button>
+</div>
+{% endcall %}

@@ -1,66 +1,43 @@
-<div
-  class="m__modal-backdrop"
-  id="modal-invite-member"
-  hidden
-  aria-modal="true"
-  role="dialog"
-  aria-labelledby="modal-invite-member-title"
->
-  <div class="m__modal">
-    <div class="m__modal__header">
-      <h2 class="m__modal__title" id="modal-invite-member-title">
-        Invite Member
-      </h2>
-      <button
-        type="button"
-        class="m__modal__close"
-        aria-label="Close"
-        data-modal-close="modal-invite-member"
-      >
-        <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
-          <use href="#close"></use>
-        </svg>
-      </button>
-    </div>
-    <div class="m__modal__body">
-      <div class="m__textfield">
-        <label for="invite-email">Email</label>
-        <input type="email" id="invite-email" name="email" autocomplete="off" />
-      </div>
+{% from 'service/modal-wrapper.njk' import modal %}
+{% call modal("modal-invite-member", "Invite Member") %}
+<div class="m__modal__body">
+  <div class="m__textfield">
+    <label for="invite-email">Email</label>
+    <input type="email" id="invite-email" name="email" autocomplete="off" />
+  </div>
 
-      <div class="m__space XS"></div>
+  <div class="m__space XS"></div>
 
-      <div class="m__select">
-        <label for="invite-role">Role</label>
-        <div class="m__select__control">
-          <select id="invite-role" name="role">
-            <option value="developer">Developer</option>
-            <option value="read-only">Read-Only</option>
-            <option value="admin">Admin</option>
-          </select>
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1"
-            aria-hidden="true"
-          >
-            <path d="M2 4.5l4 4 4-4" />
-          </svg>
-        </div>
-      </div>
-    </div>
-    <div class="m__modal__footer">
-      <button
-        type="button"
-        class="m__button-secondary-compact"
-        data-modal-close="modal-invite-member"
+  <div class="m__select">
+    <label for="invite-role">Role</label>
+    <div class="m__select__control">
+      <select id="invite-role" name="role">
+        <option value="developer">Developer</option>
+        <option value="read-only">Read-Only</option>
+        <option value="admin">Admin</option>
+      </select>
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+        aria-hidden="true"
       >
-        Cancel
-      </button>
-      <button type="button" class="m__button-compact">Send Invite</button>
+        <path d="M2 4.5l4 4 4-4" />
+      </svg>
     </div>
   </div>
 </div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-secondary-compact"
+    data-modal-close="modal-invite-member"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-compact">Send Invite</button>
+</div>
+{% endcall %}

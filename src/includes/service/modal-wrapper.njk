@@ -1,0 +1,27 @@
+{% macro modal(id, title) %}
+<div
+  class="m__modal-backdrop"
+  id="{{ id }}"
+  hidden
+  aria-modal="true"
+  role="dialog"
+  aria-labelledby="{{ id }}-title"
+>
+  <div class="m__modal">
+    <div class="m__modal__header">
+      <h2 class="m__modal__title" id="{{ id }}-title">{{ title }}</h2>
+      <button
+        type="button"
+        class="m__modal__close"
+        aria-label="Close"
+        data-modal-close="{{ id }}"
+      >
+        <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+          <use href="#close"></use>
+        </svg>
+      </button>
+    </div>
+    {{ caller() }}
+  </div>
+</div>
+{% endmacro %}
