@@ -120,11 +120,7 @@ button.m__button-danger {
   }
 
   &:active {
-    background-color: color-mix(
-      in srgb,
-      var(--m__ui-error-color) 20%,
-      transparent
-    );
+    background-color: var(--m__bg-active-color);
     transition-duration: var(--m__hover-transition-duration);
   }
 }
@@ -133,7 +129,6 @@ a.m__button-danger-compact,
 button.m__button-danger-compact {
   padding: var(--m__control-compact-padding);
   border-radius: var(--m__radius-s);
-
   background-color: transparent;
   color: var(--m__ui-error-color);
   border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
@@ -148,11 +143,9 @@ button.m__button-danger-compact {
   }
 
   &:active {
-    background-color: color-mix(
-      in srgb,
-      var(--m__ui-error-color) 20%,
-      transparent
-    );
+    background-color: transparent;
+    color: var(--m__ui-error-color);
+    border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
     transition-duration: var(--m__hover-transition-duration);
   }
 }
