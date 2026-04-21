@@ -480,6 +480,28 @@ method: POST</code></pre>
           </td>
         </tr>
         <tr>
+          <td><code>.m__button-preset</code></td>
+          <td>
+            <div class="docs-preset-group" style="display: flex; gap: 0.375rem;">
+              <button type="button" class="m__button-preset" aria-pressed="false">
+                <span class="m__widget__value">100</span>
+                <span class="caption">Credits · $1.00</span>
+              </button>
+              <button type="button" class="m__button-preset" aria-pressed="true">
+                <span class="m__widget__value">1,000</span>
+                <span class="caption">Credits · $10.00</span>
+              </button>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__control-compact-padding</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__text-color</code><br />
+            <code class="accent">--m__text-hover-color</code><br />
+            <code class="accent">--m__bg-hover-color</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>.m__button-danger</code></td>
           <td>
             <button type="button" class="m__button-danger">Delete</button>
@@ -1344,4 +1366,16 @@ method: POST</code></pre>
     <div class="m__space S"></div>
   </div>
 </ids-nav-item>
+<script>
+  document.querySelectorAll('.docs-preset-group').forEach(function (group) {
+    group.addEventListener('click', function (e) {
+      var btn = e.target.closest('.m__button-preset');
+      if (!btn) return;
+      group.querySelectorAll('.m__button-preset').forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.setAttribute('aria-pressed', 'true');
+    });
+  });
+</script>
 {% endblock %}

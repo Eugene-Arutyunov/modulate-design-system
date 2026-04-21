@@ -6,6 +6,7 @@ a.m__button-compact,
 button.m__button-compact,
 a.m__button-secondary-compact,
 button.m__button-secondary-compact,
+button.m__button-preset,
 a.m__button-danger,
 button.m__button-danger,
 a.m__button-danger-compact,
@@ -156,6 +157,41 @@ button.m__button-secondary:active,
 button.m__button-secondary-compact:active {
   color: var(--m__text-active-color);
   transition-duration: var(--m__hover-transition-duration);
+}
+
+button.m__button-preset {
+  padding: var(--m__control-compact-padding);
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  color: var(--m__text-color);
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.05em;
+  line-height: 1.2;
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  &:active {
+    color: var(--m__text-active-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  &[aria-pressed="true"] {
+    color: var(--m__text-hover-color);
+    outline: 2px solid color-mix(in srgb, currentColor 100%, transparent);
+    outline-offset: -1px;
+    background-color: color-mix(
+      in srgb,
+      var(--m__bg-hover-color) 8%,
+      transparent
+    );
+  }
 }
 
 a.m__button-success,
