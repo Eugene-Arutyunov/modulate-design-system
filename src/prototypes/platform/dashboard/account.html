@@ -36,7 +36,9 @@ permalink: /dashboard/account/
             <tr>
               <th>Display Name</th>
               <td colspan="2">
-                <div class="m__textfield m__textfield--compact account-name-field">
+                <div
+                  class="m__textfield m__textfield--compact account-name-field"
+                >
                   <input type="text" value="Evgeniy Vlasov" />
                 </div>
                 <button type="button" class="m__button-compact">Save</button>
@@ -62,8 +64,10 @@ permalink: /dashboard/account/
               </td>
             </tr>
             <tr>
-              <th class="account-details__th--baseline">Training Data Opt-Out</th>
-              <td colspan="2">
+              <th class="account-details__th--baseline">
+                Training Data Opt-Out
+              </th>
+              <td colspan="2" class="account-details__td--baseline">
                 <label class="m__toggle">
                   <input type="checkbox" disabled />
                   Opt out of training data usage
@@ -86,7 +90,11 @@ permalink: /dashboard/account/
             Permanently delete your account and all associated data. This action
             cannot be undone.
           </p>
-          <button type="button" class="m__button-danger-compact" data-modal-open="modal-delete-account">
+          <button
+            type="button"
+            class="m__button-danger-compact"
+            data-modal-open="modal-delete-account"
+          >
             Delete Account
           </button>
         </div>
@@ -96,5 +104,4 @@ permalink: /dashboard/account/
   <div class="m__space XL"></div>
 </div>
 
-{% include 'service/modal-delete-account.html' %}
-{% endblock %}
+{% include 'service/modal-delete-account.html' %} {% endblock %}

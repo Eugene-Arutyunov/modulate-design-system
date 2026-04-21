@@ -272,12 +272,24 @@ table.org-details {
   padding-bottom: 1rem;
 }
 
-.account-details td[colspan] {
+.account-details td[colspan],
+table.account-details td:last-child {
   text-align: left;
+  width: auto;
+  white-space: normal;
 }
 
-.account-details__th--baseline {
+.account-details__th--baseline,
+.account-details__td--baseline {
   vertical-align: baseline;
+}
+
+.account-details__td--baseline .m__toggle {
+  align-items: baseline;
+
+  & input[type="checkbox"] {
+    align-self: center;
+  }
 }
 
 .account-name-field {
@@ -298,7 +310,7 @@ table.org-details {
 }
 
 .account-opt-out-note {
-  font-size: var(--m__font-size-s);
+  font-size: var(--m__font-size-xs);
   margin: 0.3rem 0 0;
 }
 
