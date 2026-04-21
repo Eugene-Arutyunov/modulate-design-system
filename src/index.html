@@ -1283,8 +1283,44 @@ method: POST</code></pre>
                 </p>
               </ids-footnote>
             </li>
-            <li>TODO: Status bar</li>
-            <li>TODO: Hover</li>
+            <li>
+              Hover interaction. Moving the cursor over a chart activates a
+              vertical index zone spanning the full chart height — the active
+              position corresponds to a single day, not to individual shapes or
+              points. On line charts a
+              <ids-footnote-link>dot</ids-footnote-link> appears at the data
+              point; on bar charts the hovered column is
+              <ids-footnote-link>highlighted.</ids-footnote-link>
+              <ids-footnote>
+                <p>
+                  <code>pointHoverRadius:&nbsp;5</code> with
+                  <code>pointRadius:&nbsp;0</code> on the dataset; hover color
+                  matches <code>--m__chart-default-color</code>.
+                </p>
+              </ids-footnote>
+              <ids-footnote>
+                <p>
+                  <code>interaction:&nbsp;{&nbsp;mode:&nbsp;"index",&nbsp;intersect:&nbsp;false&nbsp;}</code>
+                  on all charts.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              Status bar below the
+              <ids-footnote-link>chart.</ids-footnote-link> While hovering, a
+              single line under the legend shows the date and all dataset values
+              for that position. The bar disappears when the cursor leaves the
+              chart area.
+              <ids-footnote>
+                <p>
+                  A <code>&lt;p class="chart-status-bar"&gt;</code> element is
+                  toggled via <code>hidden</code> on <code>mousemove</code> /
+                  <code>mouseleave</code>. Values are read with
+                  <code>chart.getElementsAtEventForMode(e,&nbsp;"index",&nbsp;{&nbsp;intersect:&nbsp;false&nbsp;})</code>.
+                </p>
+              </ids-footnote>
+            </li>
           </ul>
         </div>
       </div>

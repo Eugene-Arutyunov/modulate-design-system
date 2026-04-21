@@ -251,10 +251,12 @@ Small inline label for metadata. `.m__tag` shows a bordered outline using `curre
 **Script:** `src/assets/prototypes/dashboard-charts.js`  
 **Data:** `src/assets/prototypes/data/dashboard-charts.json` (static snapshot with 30 days of data, passthrough-copied to site root).  
 **Includes:** `src/includes/prototypes/dashboard/overview/credit-balance-over-time.html`, `usage-by-model.html`, `requests-by-status.html`.  
-**Styles:** `.chart-container`, `.chart-empty`, `.m__segmented-control` in `src/styles/prototypes/layout.css`.  
+**Styles:** `.chart-container`, `.chart-empty`, `.chart-status-bar`, `.m__segmented-control` in `src/styles/prototypes/dashboard/layout.css` and `src/styles/page-composition/wrappers.css`.  
 **Library:** Chart.js 4.4.0 via CDN, loaded conditionally with `chartJs: true` in page front matter.
 
-Three charts on the dashboard overview page: Credit Balance Over Time (line), Usage by Model (stacked bar), Requests by Status (stacked bar). Each chart has a "Last 7 days / 30 days" radio toggle that filters data client-side. The script fetches the full JSON data file at runtime, filters by selected period, and renders Chart.js canvases. Chart instances are stored and destroyed on re-render. Theme-aware: reads CSS custom properties for grid and label colors.
+Three charts on the dashboard overview page: Credit Balance Over Time (line), Usage by Model (stacked bar), Requests by Status (stacked bar). Each chart has a "Last 7 days / 30 days" radio toggle that filters data client-side. The script fetches the full JSON data file at runtime, filters by selected period, and renders Chart.js canvases. Chart instances are stored and destroyed on re-render. Theme-aware: reads CSS custom properties for grid and label colors. Date filtering uses `fetchedAt` from the JSON as the anchor so mock data remains visible regardless of the current date.
+
+Hover interaction uses `interaction: { mode: "index", intersect: false }` on all charts — the active zone covers the full chart height at each day position. On the line chart, `pointHoverRadius: 5` shows a dot on hover; bar charts use Chart.js default column highlighting. A `<p class="chart-status-bar">` element below each chart shows the date and dataset values for the hovered position via `mousemove` / `mouseleave` listeners attached once per canvas via `attachStatusBar`.
 
 ## Design-system chart samples
 
