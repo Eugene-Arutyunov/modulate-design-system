@@ -27,14 +27,19 @@ permalink: /dashboard/organization/
       <div class="dashboard-section">
         <table class="org-details">
           <tbody>
-            <tr>
+            <tr data-org-row="name">
               <th>Organization Name</th>
-              <td>Eugene’s Personal Organization</td>
               <td>
-                <button type="button" class="m__button-secondary-compact">
-                  Edit
-                </button>
+                <span data-org-value>Eugene’s Personal Organization</span>
+                <div data-org-edit-form style="display: none; gap: 0.35rem; align-items: center; width: 100%;">
+                  <div class="m__textfield m__textfield--compact" style="margin: 0; flex: 1;">
+                    <input type="text" value="Eugene’s Personal Organization" />
+                  </div>
+                  <button type="button" class="m__button-compact" data-org-save>Save</button>
+                  <button type="button" class="m__button-secondary-compact" data-org-cancel>Cancel</button>
+                </div>
               </td>
+              <td><button type="button" class="m__button-secondary-compact" data-org-edit-btn>Edit</button></td>
             </tr>
             <tr>
               <th>Type</th>
@@ -68,16 +73,19 @@ permalink: /dashboard/organization/
               <td>0 credits</td>
               <td></td>
             </tr>
-            <tr>
+            <tr data-org-row="limit">
               <th>Monthly Credit Limit</th>
               <td>
-                <span style="color: var(--m__text-caption-color)">Not set</span>
+                <span data-org-value style="color: var(--m__text-caption-color)">Not set</span>
+                <div data-org-edit-form style="display: none; gap: 0.35rem; align-items: center; width: 100%;">
+                  <div class="m__textfield m__textfield--compact" style="margin: 0; flex: 1;">
+                    <input type="number" min="0" step="1" placeholder="Credits (0 to clear)" />
+                  </div>
+                  <button type="button" class="m__button-compact" data-org-save>Save</button>
+                  <button type="button" class="m__button-secondary-compact" data-org-cancel>Cancel</button>
+                </div>
               </td>
-              <td>
-                <button type="button" class="m__button-secondary-compact">
-                  Set Limit
-                </button>
-              </td>
+              <td><button type="button" class="m__button-secondary-compact" data-org-edit-btn>Set Limit</button></td>
             </tr>
           </tbody>
         </table>
