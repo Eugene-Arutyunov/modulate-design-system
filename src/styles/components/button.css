@@ -9,7 +9,11 @@ button.m__button-secondary-compact,
 a.m__button-danger,
 button.m__button-danger,
 a.m__button-danger-compact,
-button.m__button-danger-compact {
+button.m__button-danger-compact,
+a.m__button-success,
+button.m__button-success,
+a.m__button-success-compact,
+button.m__button-success-compact {
   display: inline-flex;
   align-items: baseline;
   justify-content: center;
@@ -83,7 +87,6 @@ a.m__button-secondary-compact,
 button.m__button-secondary-compact {
   padding: var(--m__control-compact-padding);
   border-radius: var(--m__radius-s);
-
   background-color: transparent;
   color: var(--m__text-color);
   border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
@@ -105,22 +108,22 @@ button.m__button-compact:active {
 a.m__button-danger,
 button.m__button-danger {
   padding: var(--m__button-padding);
-
   background-color: transparent;
-  color: var(--m__ui-error-color);
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  color: color-mix(in srgb, var(--m__ui-error-color) 85%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
     color var(--m__unhover-transition-duration) var(--m__transition-easing),
     border-color var(--m__unhover-transition-duration)
       var(--m__transition-easing);
 
   &:hover {
-    border-color: color-mix(in srgb, currentColor 50%, transparent);
+    color: var(--m__ui-error-hover-color);
     transition-duration: var(--m__hover-transition-duration);
   }
 
   &:active {
-    background-color: var(--m__bg-active-color);
+    background-color: transparent;
+    color: color-mix(in srgb, var(--m__ui-error-color) 80%, transparent);
     transition-duration: var(--m__hover-transition-duration);
   }
 }
@@ -130,22 +133,21 @@ button.m__button-danger-compact {
   padding: var(--m__control-compact-padding);
   border-radius: var(--m__radius-s);
   background-color: transparent;
-  color: var(--m__ui-error-color);
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  color: color-mix(in srgb, var(--m__ui-error-color) 80%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
     color var(--m__unhover-transition-duration) var(--m__transition-easing),
     border-color var(--m__unhover-transition-duration)
       var(--m__transition-easing);
 
   &:hover {
-    border-color: color-mix(in srgb, currentColor 50%, transparent);
+    color: var(--m__ui-error-hover-color);
     transition-duration: var(--m__hover-transition-duration);
   }
 
   &:active {
     background-color: transparent;
-    color: var(--m__ui-error-color);
-    border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+    color: color-mix(in srgb, var(--m__ui-error-color) 80%, transparent);
     transition-duration: var(--m__hover-transition-duration);
   }
 }
@@ -154,4 +156,52 @@ button.m__button-secondary:active,
 button.m__button-secondary-compact:active {
   color: var(--m__text-active-color);
   transition-duration: var(--m__hover-transition-duration);
+}
+
+a.m__button-success,
+button.m__button-success {
+  padding: var(--m__button-padding);
+
+  background-color: transparent;
+  color: color-mix(in srgb, var(--m__ui-success-color) 80%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  transition:
+    color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    border-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__ui-success-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  &:active {
+    background-color: transparent;
+    color: color-mix(in srgb, var(--m__ui-success-color) 80%, transparent);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-success-compact,
+button.m__button-success-compact {
+  padding: var(--m__control-compact-padding);
+  border-radius: var(--m__radius-s);
+
+  background-color: transparent;
+  color: color-mix(in srgb, var(--m__ui-success-color) 80%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  transition:
+    color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    border-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__ui-success-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  &:active {
+    color: color-mix(in srgb, var(--m__ui-success-color) 80%, transparent);
+    transition-duration: var(--m__hover-transition-duration);
+  }
 }
