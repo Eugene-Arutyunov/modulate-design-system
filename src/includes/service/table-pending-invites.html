@@ -1,6 +1,6 @@
 <div class="m__widget">
   <h2>{{ tableTitle if tableTitle else 'Pending Invites' }}</h2>
-  <div style="overflow-x: auto;">
+  <div class="m__table-wrapper">
   <table>
     <thead>
       <tr>
@@ -18,11 +18,11 @@
           <td>{{ row.email }}</td>
           <td>
             {% if row.role === 'Admin' %}
-            <span class="m__tag" style="color: var(--m__ui-success-color)">{{ row.role }}</span>
+            <span class="m__tag m__tag--success">{{ row.role }}</span>
             {% elif row.role === 'Developer' %}
-            <span class="m__tag" style="color: var(--m__bg-hover-color)">{{ row.role }}</span>
+            <span class="m__tag m__tag--secondary">{{ row.role }}</span>
             {% else %}
-            <span class="m__tag" style="color: var(--m__text-caption-color)">{{ row.role }}</span>
+            <span class="m__tag m__tag--muted">{{ row.role }}</span>
             {% endif %}
           </td>
           <td>{{ row.invited }}</td>
@@ -34,8 +34,10 @@
         {% endfor %}
       {% else %}
         <tr>
-          <td colspan="5" style="text-align: center; padding-block: 1.5rem; color: var(--m__text-caption-color);">
-            No pending invites.
+          <td colspan="5">
+            <div class="m__table-empty">
+              <p>No pending invites.</p>
+            </div>
           </td>
         </tr>
       {% endif %}

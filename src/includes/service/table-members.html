@@ -1,11 +1,11 @@
 <div class="m__widget">
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-    <h2 style="margin: 0;">{{ tableTitle if tableTitle else 'Members' }}</h2>
+  <div class="m__table-toolbar">
+    <h2>{{ tableTitle if tableTitle else 'Members' }}</h2>
     {% if showInviteButton %}
     <button type="button" class="m__button-compact" data-modal-open="modal-invite-member">Invite Member</button>
     {% endif %}
   </div>
-  <div style="overflow-x: auto;">
+  <div class="m__table-wrapper">
   <table>
     <thead>
       <tr>
@@ -23,16 +23,16 @@
           <td>{{ row.email }}</td>
           <td>
             {% if row.role === 'Admin' %}
-            <span class="m__tag" style="color: var(--m__ui-success-color)">{{ row.role }}</span>
+            <span class="m__tag m__tag--success">{{ row.role }}</span>
             {% elif row.role === 'Developer' %}
-            <span class="m__tag" style="color: var(--m__bg-hover-color)">{{ row.role }}</span>
+            <span class="m__tag m__tag--secondary">{{ row.role }}</span>
             {% else %}
-            <span class="m__tag" style="color: var(--m__text-caption-color)">{{ row.role }}</span>
+            <span class="m__tag m__tag--muted">{{ row.role }}</span>
             {% endif %}
           </td>
           <td class="m__col-actions">
             {% if row.isCurrentUser %}
-            <span style="color: var(--m__text-caption-color)">You</span>
+            <span class="muted">You</span>
             {% else %}
             <button type="button" class="m__button-danger-compact">Remove</button>
             {% endif %}
@@ -41,8 +41,10 @@
         {% endfor %}
       {% else %}
         <tr>
-          <td colspan="4" style="text-align: center; padding-block: 1.5rem; color: var(--m__text-caption-color);">
-            No members found.
+          <td colspan="4">
+            <div class="m__table-empty">
+              <p>No members found.</p>
+            </div>
           </td>
         </tr>
       {% endif %}

@@ -1,6 +1,6 @@
 <div class="m__widget">
   <h2>{{ title if title else 'Recent Usage' }}</h2>
-  <div style="overflow-x: auto;">
+  <div class="m__table-wrapper">
   <table>
     <thead>
       <tr>
@@ -21,11 +21,11 @@
           <td><code>{{ row.key }}</code></td>
           <td>
             {% if row.status === 'success' %}
-            <span class="m__tag" style="color: var(--m__ui-success-color)">Success</span>
+            <span class="m__tag m__tag--success">Success</span>
             {% elif row.status === 'error' %}
-            <span class="m__tag" style="color: var(--m__ui-error-color)">Error</span>
+            <span class="m__tag m__tag--error">Error</span>
             {% elif row.status === 'processing' %}
-            <span class="m__tag" style="color: var(--m__text-caption-color)">Processing</span>
+            <span class="m__tag m__tag--muted">Processing</span>
             {% else %}
             <span class="m__tag-flat">{{ row.status }}</span>
             {% endif %}
@@ -38,8 +38,10 @@
         {% endfor %}
       {% else %}
         <tr>
-          <td colspan="7" style="text-align: center; padding-block: 1.5rem; color: var(--m__text-caption-color);">
-            {{ emptyMessage if emptyMessage else 'No usage records found.' }}
+          <td colspan="7">
+            <div class="m__table-empty">
+              <p>{{ emptyMessage if emptyMessage else 'No usage records found.' }}</p>
+            </div>
           </td>
         </tr>
       {% endif %}

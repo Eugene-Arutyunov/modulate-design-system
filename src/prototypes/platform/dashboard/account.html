@@ -26,13 +26,6 @@ permalink: /dashboard/account/
       <div class="m__space XS"></div>
 
       <div class="dashboard-section">
-        <style>
-          .account-details th,
-          .account-details td {
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-          }
-        </style>
         <table class="org-details account-details">
           <tbody>
             <tr>
@@ -42,10 +35,9 @@ permalink: /dashboard/account/
             </tr>
             <tr>
               <th>Display Name</th>
-              <td colspan="2" style="text-align: left">
+              <td colspan="2">
                 <div
-                  class="m__textfield m__textfield--compact"
-                  style="margin: 0 0 0.5rem; max-width: 16rem"
+                  class="m__textfield m__textfield--compact account-name-field"
                 >
                   <input type="text" value="Evgeniy Vlasov" />
                 </div>
@@ -55,32 +47,15 @@ permalink: /dashboard/account/
             </tr>
             <tr>
               <th>Password</th>
-              <td colspan="2" style="text-align: left">
-                <div
-                  style="
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.4rem;
-                    margin-bottom: 0.4rem;
-                    max-width: 16rem;
-                  "
-                >
-                  <div
-                    class="m__textfield m__textfield--compact"
-                    style="margin: 0"
-                  >
+              <td colspan="2">
+                <div class="account-password-fields">
+                  <div class="m__textfield m__textfield--compact">
                     <input type="password" placeholder="Current password" />
                   </div>
-                  <div
-                    class="m__textfield m__textfield--compact"
-                    style="margin: 0"
-                  >
+                  <div class="m__textfield m__textfield--compact">
                     <input type="password" placeholder="New password" />
                   </div>
-                  <div
-                    class="m__textfield m__textfield--compact"
-                    style="margin: 0"
-                  >
+                  <div class="m__textfield m__textfield--compact">
                     <input type="password" placeholder="Confirm new password" />
                   </div>
                 </div>
@@ -89,16 +64,15 @@ permalink: /dashboard/account/
               </td>
             </tr>
             <tr>
-              <th style="vertical-align: baseline">Training Data Opt-Out</th>
-              <td colspan="2" style="text-align: left">
+              <th class="account-details__th--baseline">
+                Training Data Opt-Out
+              </th>
+              <td colspan="2" class="account-details__td--baseline">
                 <label class="m__toggle">
                   <input type="checkbox" disabled />
                   Opt out of training data usage
                 </label>
-                <p
-                  class="muted"
-                  style="font-size: var(--m__font-size-s); margin: 0.3rem 0 0"
-                >
+                <p class="muted account-opt-out-note">
                   Available after purchasing credits.
                 </p>
               </td>
@@ -110,21 +84,17 @@ permalink: /dashboard/account/
       <div class="m__space L"></div>
 
       <div class="dashboard-section">
-        <div
-          class="m__widget"
-          style="
-            border: 2px solid
-              color-mix(in srgb, var(--m__ui-error-color) 40%, transparent);
-            background: none;
-            color: var(--m__ui-error-color);
-          "
-        >
-          <h2 style="margin-bottom: 0.4rem">Danger Zone</h2>
-          <p style="margin-bottom: 0.75rem; opacity: 0.8">
+        <div class="m__widget m__widget--danger">
+          <h2>Danger Zone</h2>
+          <p>
             Permanently delete your account and all associated data. This action
             cannot be undone.
           </p>
-          <button type="button" class="m__button-danger-compact" data-modal-open="modal-delete-account">
+          <button
+            type="button"
+            class="m__button-danger-compact"
+            data-modal-open="modal-delete-account"
+          >
             Delete Account
           </button>
         </div>
@@ -134,5 +104,4 @@ permalink: /dashboard/account/
   <div class="m__space XL"></div>
 </div>
 
-{% include 'service/modal-delete-account.html' %}
-{% endblock %}
+{% include 'service/modal-delete-account.html' %} {% endblock %}

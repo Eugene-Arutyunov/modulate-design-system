@@ -84,7 +84,12 @@
       grid-template-columns: 12rem 1fr auto;
       gap: 0;
 
-      @media (width < 700px) {
+      & .m__select-compact,
+      & .m__datepicker-compact {
+        margin: 0;
+      }
+
+      @media (width < 768px) {
         grid-template-columns: 1fr;
 
         & :is(.m__select-compact, .m__datepicker-compact)::after {
@@ -279,4 +284,10 @@ aside {
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__widget-radius);
   padding: var(--m__widget-padding);
+}
+
+.m__widget--danger {
+  border: 2px solid color-mix(in srgb, var(--m__ui-error-color) 40%, transparent);
+  background: none;
+  color: var(--m__ui-error-color);
 }
