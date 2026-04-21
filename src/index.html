@@ -1290,34 +1290,57 @@ method: POST</code></pre>
               points. On line charts a
               <ids-footnote-link>dot</ids-footnote-link> appears at the data
               point; on bar charts the hovered column is
-              <ids-footnote-link>highlighted.</ids-footnote-link>
+              <ids-footnote-link>brightened.</ids-footnote-link>
               <ids-footnote>
                 <p>
-                  <code>pointHoverRadius:&nbsp;5</code> with
+                  <code>pointHoverRadius:&nbsp;2.5</code> with
                   <code>pointRadius:&nbsp;0</code> on the dataset; hover color
-                  matches <code>--m__chart-default-color</code>.
+                  is <code>rgbToRgba(baseRgb,&nbsp;0.9)</code>.
                 </p>
               </ids-footnote>
               <ids-footnote>
                 <p>
                   <code>interaction:&nbsp;{&nbsp;mode:&nbsp;"index",&nbsp;intersect:&nbsp;false&nbsp;}</code>
-                  on all charts.
+                  on all charts. Bar hover color uses
+                  <code>hoverBackgroundColor:&nbsp;lightenColor(color,&nbsp;0.35)</code>
+                  — mixes the base color with white to brighten consistently in
+                  both light and dark themes.
                 </p>
               </ids-footnote>
             </li>
 
             <li>
-              Status bar below the
-              <ids-footnote-link>chart.</ids-footnote-link> While hovering, a
-              single line under the legend shows the date and all dataset values
-              for that position. The bar disappears when the cursor leaves the
+              Status bar on line
+              <ids-footnote-link>charts.</ids-footnote-link> While hovering, a
+              reserved single line below the chart shows the date and value for
+              that position. The line is empty when the cursor is outside the
               chart area.
               <ids-footnote>
                 <p>
-                  A <code>&lt;p class="chart-status-bar"&gt;</code> element is
-                  toggled via <code>hidden</code> on <code>mousemove</code> /
+                  A <code>&lt;p class="chart-status-bar"&gt;</code> element sits
+                  below the chart container; its <code>innerHTML</code> is
+                  replaced on <code>mousemove</code> and cleared on
                   <code>mouseleave</code>. Values are read with
                   <code>chart.getElementsAtEventForMode(e,&nbsp;"index",&nbsp;{&nbsp;intersect:&nbsp;false&nbsp;})</code>.
+                  <code>min-height:&nbsp;1.3em</code> reserves the space so the
+                  widget height does not change.
+                </p>
+              </ids-footnote>
+            </li>
+
+            <li>
+              Merged legend and status bar on bar
+              <ids-footnote-link>charts.</ids-footnote-link> The legend below
+              the chart doubles as a hover status bar: by default it shows
+              colored dots with dataset labels; while hovering it transforms to
+              show the date followed by each label with its colored value.
+              <ids-footnote>
+                <p>
+                  A <code>&lt;div class="chart-legend"&gt;</code> element is
+                  populated with <code>innerHTML</code> on every render and
+                  updated on <code>mousemove</code> /
+                  <code>mouseleave</code>. Chart.js built-in legend is disabled
+                  (<code>plugins.legend.display:&nbsp;false</code>).
                 </p>
               </ids-footnote>
             </li>

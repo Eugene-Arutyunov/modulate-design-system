@@ -20,6 +20,15 @@
     );
   }
 
+  function lightenColor(rgbStr, factor) {
+    var match = rgbStr.match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+    if (!match) return rgbStr;
+    var r = Math.round(parseInt(match[1]) + (255 - parseInt(match[1])) * factor);
+    var g = Math.round(parseInt(match[2]) + (255 - parseInt(match[2])) * factor);
+    var b = Math.round(parseInt(match[3]) + (255 - parseInt(match[3])) * factor);
+    return "rgb(" + r + ", " + g + ", " + b + ")";
+  }
+
   function readThemeColors() {
     var style = getComputedStyle(document.body);
     var textColor = cssVar(style, "--m__text-color");
@@ -77,6 +86,99 @@
     return base;
   }
 
+  function attachStatusBar(canvas, getChart, formatFn) {
+    if (canvas._statusBarAttached) return;
+    canvas._statusBarAttached = true;
+
+    var statusBar = canvas.parentNode.parentNode.querySelector(".chart-status-bar");
+    if (!statusBar) return;
+
+    canvas.addEventListener("mousemove", function (e) {
+      var chart = getChart();
+      if (!chart) return;
+      var elements = chart.getElementsAtEventForMode(
+        e,
+        "index",
+        { intersect: false },
+        true
+      );
+      statusBar.innerHTML = elements.length
+        ? formatFn(elements[0].index, chart)
+        : "";
+    });
+
+    canvas.addEventListener("mouseleave", function () {
+      statusBar.innerHTML = "";
+    });
+  }
+
+  function formatCreditStatusBar(index, chart) {
+    var label = formatDateTick(chart.data.labels[index]);
+    var value = chart.data.datasets[0].data[index];
+    return label + " \u00b7 " + value.toLocaleString("en-US") + " credits";
+  }
+
+  function buildDefaultLegendHTML(chart) {
+    var parts = [];
+    for (var i = 0; i < chart.data.datasets.length; i++) {
+      var ds = chart.data.datasets[i];
+      var color = typeof ds.backgroundColor === "string" ? ds.backgroundColor : "";
+      parts.push(
+        '<span class="chart-legend-item">' +
+        '<span class="chart-legend-dot" style="background:' + color + '"></span>' +
+        ds.label +
+        "</span>"
+      );
+    }
+    return parts.join("");
+  }
+
+  function buildHoverLegendHTML(index, chart) {
+    var label = formatDateTick(chart.data.labels[index]);
+    var parts = ['<span class="chart-legend-date">' + label + "</span>"];
+    for (var i = 0; i < chart.data.datasets.length; i++) {
+      var ds = chart.data.datasets[i];
+      var color = typeof ds.backgroundColor === "string" ? ds.backgroundColor : "inherit";
+      parts.push(
+        '<span class="chart-legend-item">' +
+        ds.label +
+        ' <span class="chart-legend-value" style="color:' + color + '">' + ds.data[index] + "</span>" +
+        "</span>"
+      );
+    }
+    return parts.join("");
+  }
+
+  function attachCustomLegend(canvas, getChart) {
+    var legendEl = canvas.parentNode.parentNode.querySelector(".chart-legend");
+    if (!legendEl) return;
+
+    var chart = getChart();
+    if (chart) legendEl.innerHTML = buildDefaultLegendHTML(chart);
+
+    if (canvas._legendAttached) return;
+    canvas._legendAttached = true;
+
+    canvas.addEventListener("mousemove", function (e) {
+      var c = getChart();
+      if (!c) return;
+      var elements = c.getElementsAtEventForMode(
+        e,
+        "index",
+        { intersect: false },
+        true
+      );
+      legendEl.innerHTML = elements.length
+        ? buildHoverLegendHTML(elements[0].index, c)
+        : buildDefaultLegendHTML(c);
+    });
+
+    canvas.addEventListener("mouseleave", function () {
+      var c = getChart();
+      if (c) legendEl.innerHTML = buildDefaultLegendHTML(c);
+    });
+  }
+
   function renderLineChart() {
     if (charts.line) charts.line.destroy();
     var canvas = document.getElementById("ds-sample-line-chart");
@@ -126,12 +228,16 @@
             fill: true,
             tension: 0.15,
             pointRadius: 0,
+            pointHoverRadius: 2.5,
+            pointHoverBackgroundColor: rgbToRgba(baseRgb, 0.9),
+            pointHoverBorderWidth: 0,
           },
         ],
       },
       options: {
         responsive: true,
         animation: false,
+        interaction: { mode: "index", intersect: false },
         plugins: {
           tooltip: { enabled: false },
           legend: { display: false },
@@ -142,6 +248,12 @@
         },
       },
     });
+
+    attachStatusBar(
+      canvas,
+      function () { return charts.line; },
+      formatCreditStatusBar
+    );
   }
 
   function renderBarChart() {
@@ -188,6 +300,7 @@
               return periodMap.get(d).success;
             }),
             backgroundColor: theme.statusSuccess,
+            hoverBackgroundColor: lightenColor(theme.statusSuccess, 0.35),
           },
           {
             label: "Server Error",
@@ -195,6 +308,7 @@
               return periodMap.get(d).serverError;
             }),
             backgroundColor: theme.statusServerError,
+            hoverBackgroundColor: lightenColor(theme.statusServerError, 0.35),
           },
           {
             label: "Client Error",
@@ -202,6 +316,7 @@
               return periodMap.get(d).clientError;
             }),
             backgroundColor: theme.statusClientError,
+            hoverBackgroundColor: lightenColor(theme.statusClientError, 0.35),
           },
           {
             label: "Processing",
@@ -209,26 +324,19 @@
               return periodMap.get(d).processing;
             }),
             backgroundColor: theme.statusProcessing,
+            hoverBackgroundColor: lightenColor(theme.statusProcessing, 0.35),
           },
         ],
       },
       options: {
         responsive: true,
         animation: false,
+        interaction: { mode: "index", intersect: false },
         categoryPercentage: 1,
         barPercentage: 0.92,
         plugins: {
           tooltip: { enabled: false },
-          legend: {
-            position: "bottom",
-            labels: {
-              color: theme.text,
-              usePointStyle: true,
-              pointStyle: "circle",
-              boxWidth: 8,
-              boxHeight: 8,
-            },
-          },
+          legend: { display: false },
         },
         scales: {
           x: xScaleOptions(theme, sortedDays, { stacked: true }),
@@ -239,6 +347,8 @@
         },
       },
     });
+
+    attachCustomLegend(canvas, function () { return charts.bar; });
   }
 
   function renderAll() {

@@ -136,9 +136,7 @@
   }
 
   function daysFromToggle(chartName) {
-    var toggle = document.querySelector(
-      '.m__segmented-control[data-chart="' + chartName + '"]'
-    );
+    var toggle = document.querySelector('[data-chart="' + chartName + '"]');
     if (!toggle) return 7;
     var checked = toggle.querySelector("input:checked");
     return checked && checked.value === "30d" ? 30 : 7;
@@ -507,7 +505,7 @@
   };
 
   function wireToggles() {
-    var toggles = document.querySelectorAll(".m__segmented-control");
+    var toggles = document.querySelectorAll("[data-chart]");
     for (var i = 0; i < toggles.length; i++) {
       (function (toggle) {
         var chartName = toggle.getAttribute("data-chart");
