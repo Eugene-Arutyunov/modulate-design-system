@@ -63,73 +63,75 @@ permalink: /dashboard/billing/
 
       <div class="m__widget" style="margin-bottom: 0.5rem">
         <h2>Purchase Credits</h2>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-            margin-top: 0.75rem;
-          "
-        >
-          <div>
-            <p
-              style="
-                font-size: var(--m__font-size-xxxl);
-                font-weight: var(--m__font-weight-bold);
-                margin: 0;
-                line-height: 1;
-              "
-            >
-              100
-            </p>
-            <p
-              class="muted"
-              style="font-size: var(--m__font-size-s); margin-bottom: 0.75rem"
-            >
-              API Credits
-            </p>
-            <button type="button" class="m__button-compact">Pay $1</button>
+        <div style="margin-top: 0.75rem;">
+          <div style="display: flex; gap: 0.375rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+            <button type="button" class="m__button-preset" data-credits-preset="100">
+              <span class="m__widget__value">100</span>
+              <span class="caption">Credits · $1.00</span>
+            </button>
+            <button type="button" class="m__button-preset" data-credits-preset="1000">
+              <span class="m__widget__value">1,000</span>
+              <span class="caption">Credits · $10.00</span>
+            </button>
+            <button type="button" class="m__button-preset" data-credits-preset="10000">
+              <span class="m__widget__value">10,000</span>
+              <span class="caption">Credits · $100.00</span>
+            </button>
           </div>
-          <div>
-            <p
-              style="
-                font-size: var(--m__font-size-xxxl);
-                font-weight: var(--m__font-weight-bold);
-                margin: 0;
-                line-height: 1;
-              "
-            >
-              1,000
-            </p>
-            <p
-              class="muted"
-              style="font-size: var(--m__font-size-s); margin-bottom: 0.75rem"
-            >
-              API Credits
-            </p>
-            <button type="button" class="m__button-compact">Pay $10</button>
-          </div>
-          <div>
-            <p
-              style="
-                font-size: var(--m__font-size-xxxl);
-                font-weight: var(--m__font-weight-bold);
-                margin: 0;
-                line-height: 1;
-              "
-            >
-              10,000
-            </p>
-            <p
-              class="muted"
-              style="font-size: var(--m__font-size-s); margin-bottom: 0.75rem"
-            >
-              API Credits
-            </p>
-            <button type="button" class="m__button-compact">Pay $100</button>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div class="m__textfield m__textfield--compact" style="margin-bottom: 0; flex: 1;">
+              <input
+                type="number"
+                id="credits-amount"
+                min="100"
+                value="1000"
+                data-credits-input
+                style="appearance: textfield; -moz-appearance: textfield;"
+              />
+            </div>
+            <button type="button" class="m__button-compact" data-credits-pay style="min-width: 7.5rem;">Pay <span data-credits-pay-label>$10.00</span></button>
           </div>
         </div>
       </div>
+      <script>
+        (function () {
+          var input = document.querySelector('[data-credits-input]');
+          var payLabelEl = document.querySelector('[data-credits-pay-label]');
+
+          function formatUSD(credits) {
+            return '$' + (credits * 0.01).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          }
+
+          function update() {
+            var val = Math.max(0, parseInt(input.value, 10) || 0);
+            payLabelEl.textContent = formatUSD(val);
+          }
+
+          var presetBtns = document.querySelectorAll('[data-credits-preset]');
+
+          function updatePresetActive() {
+            presetBtns.forEach(function (btn) {
+              btn.setAttribute('aria-pressed', btn.dataset.creditsPreset === input.value ? 'true' : 'false');
+            });
+          }
+
+          input.addEventListener('input', function () {
+            update();
+            updatePresetActive();
+          });
+
+          presetBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              input.value = btn.dataset.creditsPreset;
+              update();
+              updatePresetActive();
+            });
+          });
+
+          update();
+          updatePresetActive();
+        })();
+      </script>
 
       <div class="dashboard-section">
         {% set rows = [ { date: '6 Mar 2026, 19:01', type: 'new_account_grant',

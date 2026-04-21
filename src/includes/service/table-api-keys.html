@@ -1,6 +1,6 @@
 <div class="m__widget">
   <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 1rem;">
-    <div class="m__segmented-control" role="group" style="margin: 0;">
+    <div class="m__segmented-control-compact" role="group" style="margin: 0;">
       <label>
         <input type="radio" name="{{ tabsName }}" {% if activeTab !== 'inactive' %}checked{% endif %} />
         Active
@@ -47,7 +47,7 @@
               {% if row.status === 'active' %}
               <button type="button" class="m__button-secondary-compact" data-api-key-deactivate data-api-key-name="{{ row.name }}">Deactivate</button>
               {% else %}
-              <button type="button" class="m__button-secondary-compact" style="color: var(--m__ui-success-color);" data-api-key-activate data-api-key-name="{{ row.name }}">Activate</button>
+              <button type="button" class="m__button-success-compact" data-api-key-activate data-api-key-name="{{ row.name }}">Activate</button>
               {% endif %}
               <button type="button" class="m__button-danger-compact" data-api-key-delete data-api-key-name="{{ row.name }}">Delete</button>
             </div>
