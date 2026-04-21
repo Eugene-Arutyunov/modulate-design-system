@@ -73,9 +73,99 @@
     font-size: var(--m__font-size-s);
     color: var(--m__text-caption-color);
 
+    &:has(.m__table-filters) {
+      padding: 0;
+    }
+
     & .m__table-filters {
       margin-bottom: 0;
       flex: 1;
+      display: grid;
+      grid-template-columns: 12rem 1fr auto;
+      gap: 0;
+
+      @media (width < 700px) {
+        grid-template-columns: 1fr;
+
+        & :is(.m__select-compact, .m__datepicker-compact)::after {
+          display: none;
+        }
+
+        & .m__table-filters__dates {
+          flex-direction: column;
+        }
+
+        &
+          :is(
+            .m__table-filters__dates,
+            .m__table-filters__dates .m__datepicker-compact:last-child
+          ) {
+          background-image: linear-gradient(
+            to right,
+            transparent var(--m__widget-padding),
+            var(--m__ui-border-color) var(--m__widget-padding),
+            var(--m__ui-border-color) calc(100% - var(--m__widget-padding)),
+            transparent calc(100% - var(--m__widget-padding))
+          );
+          background-size: 100% 1px;
+          background-position: top;
+          background-repeat: no-repeat;
+        }
+
+        & > .m__button-compact {
+          box-sizing: border-box;
+          margin: 0.2rem var(--m__widget-padding) 0.8rem auto;
+          width: calc(100% - 2 * var(--m__widget-padding));
+          justify-content: center;
+        }
+      }
+    }
+
+    & .m__table-filters__dates {
+      display: flex;
+      gap: 0;
+
+      & > * {
+        flex: 1;
+      }
+    }
+
+    & .m__select-compact .m__select__value {
+      flex: 0 1 auto;
+    }
+
+    & :is(.m__datepicker-compact, .m__select-compact) {
+      background-color: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0.55rem var(--m__widget-padding);
+      position: relative;
+
+      &:focus-within {
+        outline: none;
+        background-color: transparent;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 40%;
+        background-color: var(--m__ui-border-color);
+      }
+    }
+
+    & .m__table-filters__dates :is(.m__datepicker-compact):last-child::after {
+      display: none;
+    }
+
+    @media (width >= 700px) {
+      & .m__table-filters > .m__button-compact {
+        margin: 0.4rem var(--m__widget-padding) 0.4rem auto;
+      }
     }
   }
 
@@ -133,7 +223,6 @@
   & :is(.m__button, .m__button-secondary) {
     font-size: var(--m__font-size-s);
   }
-
 
   .m__segmented-control label {
     font-size: var(--m__font-size-s);
