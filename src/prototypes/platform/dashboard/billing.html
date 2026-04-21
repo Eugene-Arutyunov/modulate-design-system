@@ -53,10 +53,10 @@ permalink: /dashboard/billing/
             Enter a credit code to add credits to your balance.
           </p>
           <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem">
-            <div class="m__textfield" style="flex: 1; margin: 0">
-              <input type="text" placeholder="Enter credit code" />
+            <div class="m__textfield m__textfield--compact" style="flex: 1; margin: 0">
+              <input type="text" placeholder="Enter credit code" data-apply-code-input />
             </div>
-            <button type="button" class="m__button">Apply Code</button>
+            <button type="button" class="m__button-compact" data-apply-code>Apply Code</button>
           </div>
         </div>
       </div>
@@ -144,4 +144,6 @@ permalink: /dashboard/billing/
   <div class="m__space XL"></div>
 </div>
 
+{% include 'service/modal-billing-apply-code.html' %}
+<script src="/assets/prototypes/billing-modals.js"></script>
 {% endblock %}

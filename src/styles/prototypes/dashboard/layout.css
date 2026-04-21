@@ -79,11 +79,16 @@
 }
 
 .dashboard-content {
+  & p {
+    font-size: var(--m__font-size-s);
+  }
+
   & .dashboard-page-title {
     margin: 0 0 1rem;
     font-size: var(--m__font-size-xl);
     font-weight: var(--m__font-weight-bold);
   }
+
   & .dashboard-section {
     margin-bottom: 0.5rem;
 
@@ -110,6 +115,10 @@
     }
   }
 
+  & .m__widget :is(.m__datepicker, .m__datepicker-compact, .m__select, .m__select-compact) {
+    font-size: var(--m__font-size-s);
+  }
+
   & .chart-empty {
     font-size: var(--m__font-size-s);
     color: var(--m__text-caption-color);
@@ -117,6 +126,7 @@
 }
 
 table.org-details {
+  font-size: var(--m__font-size-s);
   & th,
   & td {
     padding-top: 0.55rem;
@@ -153,7 +163,8 @@ table.org-details {
   }
 
   @media (width < 600px) {
-    &, & tbody {
+    &,
+    & tbody {
       display: block;
     }
 
@@ -161,7 +172,8 @@ table.org-details {
       display: flex;
       flex-direction: column;
       padding: 0.75rem 0;
-      border-bottom: 1px solid color-mix(in srgb, var(--m__text-color) 12%, transparent);
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--m__text-color) 12%, transparent);
     }
 
     & tbody tr:last-child {
