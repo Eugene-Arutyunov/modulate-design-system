@@ -60,6 +60,24 @@
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__widget-radius);
   padding: var(--m__widget-padding);
+  overflow: hidden;
+
+  & .m__widget__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: calc(-1 * var(--m__widget-padding));
+    margin-bottom: var(--m__widget-padding);
+    padding: 0.6rem var(--m__widget-padding);
+    border-bottom: 1px solid var(--m__ui-border-color);
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+
+    & .m__table-filters {
+      margin-bottom: 0;
+      flex: 1;
+    }
+  }
 
   & h2 {
     font-size: var(--m__font-size-m);

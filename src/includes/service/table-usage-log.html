@@ -1,31 +1,33 @@
 <div class="m__widget">
   {% if showFilters %}
-  <div class="m__table-filters">
-    <label class="m__select-compact" style="margin: 0">
-      <span>Model</span>
-      <div class="m__select">
-        <span class="m__select__value">All</span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
-          <path d="M2 4.5l4 4 4-4"/>
-        </svg>
-        <select id="filter-model">
-          <option>All</option>
-          <option>velma-2-stt-batch</option>
-          <option>velma-2-stt-streaming</option>
-        </select>
+  <div class="m__widget__header">
+    <div class="m__table-filters">
+      <label class="m__select-compact" style="margin: 0">
+        <span>Model</span>
+        <div class="m__select">
+          <span class="m__select__value">All</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+            <path d="M2 4.5l4 4 4-4"/>
+          </svg>
+          <select id="filter-model">
+            <option>All</option>
+            <option>velma-2-stt-batch</option>
+            <option>velma-2-stt-streaming</option>
+          </select>
+        </div>
+      </label>
+      <div class="m__table-filters__dates">
+        <label class="m__datepicker-compact" for="filter-start" style="margin: 0">
+          <span>Start</span>
+          <input type="date" id="filter-start" value="2026-03-16" />
+        </label>
+        <label class="m__datepicker-compact" for="filter-end" style="margin: 0">
+          <span>End</span>
+          <input type="date" id="filter-end" value="2026-04-15" />
+        </label>
       </div>
-    </label>
-    <div class="m__table-filters__dates">
-      <label class="m__datepicker-compact" for="filter-start" style="margin: 0">
-        <span>Start</span>
-        <input type="date" id="filter-start" value="2026-03-16" />
-      </label>
-      <label class="m__datepicker-compact" for="filter-end" style="margin: 0">
-        <span>End</span>
-        <input type="date" id="filter-end" value="2026-04-15" />
-      </label>
+      <button type="button" class="m__button-compact">Apply</button>
     </div>
-    <button type="button" class="m__button-compact">Apply</button>
   </div>
   {% endif %}
   <div style="overflow-x: auto;">

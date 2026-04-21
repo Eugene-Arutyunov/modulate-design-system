@@ -55,3 +55,52 @@
     display: none;
   }
 }
+
+.m__segmented-control-compact {
+  display: inline-flex;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  border: none;
+  background-color: color-mix(in srgb, var(--m__text-color) 5%, transparent);
+  overflow: hidden;
+  border-radius: var(--m__radius-s);
+
+  & label {
+    display: block;
+    padding: var(--m__segmented-control-padding);
+    font-size: 0.8em;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--m__text-color);
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      color: var(--m__text-hover-color);
+      background-color: color-mix(
+        in srgb,
+        var(--m__text-hover-color) 10%,
+        transparent
+      );
+      transition-duration: var(--m__hover-transition-duration);
+    }
+
+    &:has(input:checked) {
+      color: var(--m__text-color);
+      background-color: color-mix(
+        in srgb,
+        var(--m__text-color) 5%,
+        transparent
+      );
+      cursor: default;
+    }
+  }
+
+  & input[type="radio"] {
+    display: none;
+  }
+}
