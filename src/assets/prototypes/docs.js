@@ -137,7 +137,7 @@ async function renderApiDocs(uuid, content) {
     <div class="m__code-block">
       <div class="m__code-block__toolbar">
         <span>${escapeHtml(filename)}</span>
-        <button class="m__button-secondary-compact" id="docs-download-btn">Download</button>
+        <button class="m__button-outline-compact" id="docs-download-btn">Download</button>
       </div>
       <pre><code>${escapeHtml(yaml)}</code></pre>
     </div>`;
@@ -182,7 +182,7 @@ async function renderQuickstart(uuid, content) {
     <div class="docs-panel">
       <div class="docs-panel__toolbar">
         <span>${escapeHtml(mdFilename)}</span>
-        <button class="m__button-secondary-compact" id="docs-quickstart-download-btn">Download</button>
+        <button class="m__button-outline-compact" id="docs-quickstart-download-btn">Download</button>
       </div>
       <div class="docs-panel__body">${bodyHtml}</div>
     </div>`;
