@@ -8,7 +8,10 @@ block content %}
   <div class="m__text-width">
     <p>
       This document defines the visual language of Modulate product interfaces
-      for web. Its core is a combination of tokens and components.
+      for web. Its core is a combination of tokens and components, and the
+      system itself is UI-library-agnostic. The HTML/CSS implementation
+      shipped here is a reference — directly usable in a vanilla stack. The
+      Next.js implementation lives in Storybook.
     </p>
   </div>
   <div class="m__space S"></div>
@@ -43,8 +46,7 @@ block content %}
   <div class="m__space S"></div>
   <div class="m__text-width">
     <p>
-      Beyond this, the design system also addresses color, layouts, page
-      composition, graphics, animations and some principles.
+      Beyond this, the design system covers color, layout, page composition, graphics, and animation.
     </p>
   </div>
   <div class="m__space S"></div>
@@ -81,9 +83,10 @@ block content %}
     <div class="m__text-width">
       <p>
         Each variable stores a full color value, for example:
-        <code>rgb(253, 47, 75)</code>. To apply transparency, use
-        <code>color-mix()</code> directly in selector properties — this keeps
-        the token list short and makes opacity intent explicit in the code.
+        <code>rgb(253, 47, 75)</code>. To apply transparency, or to blend a
+        color toward the background, use <code>color-mix()</code> directly in
+        selector properties — this keeps the token list short and makes the
+        intent explicit in the code.
       </p>
     </div>
     <div class="m__text-width">
@@ -92,7 +95,8 @@ block content %}
           <span>CSS</span>
         </div>
         <pre><code>color: var(--m__accent-color);
-color: color-mix(in srgb, var(--m__accent-color) 50%, transparent);</code></pre>
+color: color-mix(in srgb, var(--m__accent-color) 50%, transparent);
+color: color-mix(in srgb, var(--m__accent-color) 50%, var(--m__background-color));</code></pre>
       </div>
     </div>
     <div class="m__space S"></div>
