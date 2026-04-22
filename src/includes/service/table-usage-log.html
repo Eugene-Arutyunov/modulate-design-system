@@ -6,7 +6,9 @@
         <span>Model</span>
         <div class="m__select">
           <span class="m__select__value">All</span>
-          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+            <use href="#chevron-down"></use>
+          </svg>
           <select id="filter-model">
             <option>All</option>
             <option>velma-2-stt-batch</option>
@@ -16,12 +18,16 @@
       </label>
       <div class="m__table-filters__dates">
         <label class="m__datepicker-compact" for="filter-start">
-          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><use href="#calendar"></use></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <use href="#calendar"></use>
+          </svg>
           <span>Start</span>
           <input type="date" id="filter-start" value="2026-03-16" />
         </label>
         <label class="m__datepicker-compact" for="filter-end">
-          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><use href="#calendar"></use></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <use href="#calendar"></use>
+          </svg>
           <span>End</span>
           <input type="date" id="filter-end" value="2026-04-15" />
         </label>
@@ -31,54 +37,79 @@
   </div>
   {% endif %}
   <div class="m__table-wrapper">
-  <table>
-    <thead>
-      <tr>
-        <th>Model</th>
-        <th>API Key</th>
-        <th>Status</th>
-        <th>Submitted</th>
-        <th>Completed</th>
-        <th>Duration</th>
-        <th>Credits</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% if rows | length %}
-        {% for row in rows %}
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>API Key</th>
+          <th>Status</th>
+          <th>Submitted</th>
+          <th>Completed</th>
+          <th>Duration</th>
+          <th>Credits</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if rows | length %} {% for row in rows %}
         <tr>
           <td>{{ row.model }}</td>
           <td><code>{{ row.key }}</code></td>
           <td>
             {% if row.status == 'success' %}
-              <span class="m__tag m__tag--success">Success</span>
+            <span class="m__tag m__tag--success">Success</span>
             {% elif row.status == 'error' %}
-              <span class="m__tag m__tag--error">Error</span>
+            <span class="m__tag m__tag--error">Error</span>
             {% elif row.status == 'processing' %}
-              <span class="m__tag m__tag--muted">Processing</span>
+            <span class="m__tag m__tag--muted">Processing</span>
             {% else %}
-              <span class="m__tag-flat">{{ row.status }}</span>
+            <span class="m__tag-flat">{{ row.status }}</span>
             {% endif %}
           </td>
           <td>{{ row.submitted }}</td>
-          <td {% if row.completed == '—' %}class="muted"{% endif %}>{{ row.completed }}</td>
-          <td {% if row.duration == '—' %}class="muted"{% endif %}>{{ row.duration }}</td>
-          <td {% if row.credits == '—' or row.credits == '0' %}class="muted"{% endif %}>{{ row.credits }}</td>
+          <td {% if row.completed == "—" %}class="muted" {% endif %}>
+            {{ row.completed }}
+          </td>
+          <td {% if row.duration == "—" %}class="muted" {% endif %}>
+            {{ row.duration }}
+          </td>
+          <td {% if row.credits == "—" or row.credits == "0" %}class="muted" {% endif %}>
+            {{ row.credits }}
+          </td>
         </tr>
-        {% endfor %}
-      {% else %}
+        {% endfor %} {% else %}
         <tr>
           <td colspan="7">
             <div class="m__table-empty">
-              <p>No usage records found{% if showFilters %} for this date range. Usage appears here after you make API calls{% endif %}.</p>
+              <p>
+                No usage records found{% if showFilters %} for this date range.
+                Usage appears here after you make API calls{% endif %}.
+              </p>
               {% if showFilters %}
-              <a href="#" class="m__button-outline-compact">View Quickstart Guide</a>
+              <a href="#" class="m__button-outline-compact"
+                >View Quickstart Guide</a
+              >
               {% endif %}
             </div>
           </td>
         </tr>
-      {% endif %}
-    </tbody>
-  </table>
+        {% endif %}
+      </tbody>
+    </table>
   </div>
+
+  <div class="m__space M"></div>
+  <h2>Credits Consumed</h2>
+  <div class="chart-container">
+    <canvas id="usage-credits-consumed-chart"></canvas>
+    <p class="chart-empty" hidden>No credit data available.</p>
+  </div>
+  <p class="chart-status-bar"></p>
+
+  <div class="m__space M"></div>
+  <h2>Requests by Status</h2>
+  <div class="chart-container">
+    <canvas id="usage-requests-status-chart"></canvas>
+    <p class="chart-empty" hidden>No requests recorded.</p>
+  </div>
+  <div class="chart-legend"></div>
 </div>
