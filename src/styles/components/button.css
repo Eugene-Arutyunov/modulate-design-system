@@ -2,10 +2,14 @@ a.m__button,
 button.m__button,
 a.m__button-secondary,
 button.m__button-secondary,
+a.m__button-outline,
+button.m__button-outline,
 a.m__button-compact,
 button.m__button-compact,
 a.m__button-secondary-compact,
 button.m__button-secondary-compact,
+a.m__button-outline-compact,
+button.m__button-outline-compact,
 button.m__button-preset,
 a.m__button-danger,
 button.m__button-danger,
@@ -57,6 +61,23 @@ button.m__button {
 a.m__button-secondary,
 button.m__button-secondary {
   padding: var(--m__button-padding);
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
+  color: var(--m__text-color);
+  border: none;
+  transition:
+    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover {
+    background-color: color-mix(in srgb, currentColor 15%, transparent);
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-outline,
+button.m__button-outline {
+  padding: var(--m__button-padding);
   background-color: transparent;
   color: var(--m__text-color);
   border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
@@ -89,6 +110,24 @@ button.m__button-compact {
 
 a.m__button-secondary-compact,
 button.m__button-secondary-compact {
+  padding: var(--m__control-compact-padding);
+  border-radius: var(--m__radius-s);
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
+  color: var(--m__text-color);
+  border: none;
+  transition:
+    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover {
+    background-color: color-mix(in srgb, currentColor 15%, transparent);
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-outline-compact,
+button.m__button-outline-compact {
   padding: var(--m__control-compact-padding);
   border-radius: var(--m__radius-s);
   background-color: transparent;
@@ -158,6 +197,13 @@ button.m__button-danger-compact {
 
 button.m__button-secondary:active,
 button.m__button-secondary-compact:active {
+  background-color: color-mix(in srgb, currentColor 8%, transparent);
+  color: var(--m__text-active-color);
+  transition-duration: var(--m__hover-transition-duration);
+}
+
+button.m__button-outline:active,
+button.m__button-outline-compact:active {
   color: var(--m__text-active-color);
   transition-duration: var(--m__hover-transition-duration);
 }
@@ -188,7 +234,7 @@ button.m__button-preset {
 
   &[aria-pressed="true"] {
     color: var(--m__text-hover-color);
-    outline: 2px solid color-mix(in srgb, currentColor 100%, transparent);
+    outline: 1px solid color-mix(in srgb, currentColor 100%, transparent);
     outline-offset: -1px;
     background-color: color-mix(
       in srgb,

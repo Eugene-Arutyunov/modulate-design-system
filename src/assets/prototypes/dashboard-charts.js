@@ -5,6 +5,8 @@
     creditBalance: null,
     usageByModel: null,
     requestStatus: null,
+    creditsConsumed: null,
+    usageRequestsStatus: null,
   };
 
   var fullData = null;
@@ -496,6 +498,178 @@
     attachCustomLegend(canvas, function () { return charts.requestStatus; });
   }
 
+  // --- Credits Consumed (inside usage table widget) ---
+
+  function renderCreditsConsumedChart() {
+    if (charts.creditsConsumed) charts.creditsConsumed.destroy();
+    var canvas = document.getElementById("usage-credits-consumed-chart");
+    if (!canvas || !fullData) return;
+
+    var history = fullData.creditHistory;
+    if (!history || !history.data_points || !history.data_points.length) {
+      canvas.parentNode.querySelector(".chart-empty").hidden = false;
+      canvas.hidden = true;
+      return;
+    }
+    canvas.parentNode.querySelector(".chart-empty").hidden = true;
+    canvas.hidden = false;
+
+    var dayMap = new Map();
+    for (var i = 0; i < history.data_points.length; i++) {
+      var dk = dayKey(history.data_points[i].period);
+      dayMap.set(dk, (dayMap.get(dk) || 0) + history.data_points[i].net_delta);
+    }
+
+    var sortedDays = Array.from(dayMap.keys()).sort();
+    var values = [];
+    var running = history.starting_balance;
+    for (var j = 0; j < sortedDays.length; j++) {
+      running += dayMap.get(sortedDays[j]);
+      values.push(+(running / 1000).toFixed(2));
+    }
+
+    var theme = readThemeColors();
+    var baseRgb = theme.chartDefault;
+
+    charts.creditsConsumed = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels: sortedDays,
+        datasets: [
+          {
+            label: "Credit Balance",
+            data: values,
+            borderColor: "transparent",
+            backgroundColor: function (context) {
+              var solid = rgbToRgba(baseRgb, 0.35);
+              var area = context.chart.chartArea;
+              if (!area) return solid;
+              var grad = context.chart.ctx.createLinearGradient(0, area.top, 0, area.bottom);
+              grad.addColorStop(0, solid);
+              grad.addColorStop(0.67, solid);
+              grad.addColorStop(1, rgbToRgba(baseRgb, 0));
+              return grad;
+            },
+            fill: true,
+            tension: 0.15,
+            pointRadius: 0,
+            pointHoverRadius: 2.5,
+            pointHoverBackgroundColor: rgbToRgba(baseRgb, 0.9),
+            pointHoverBorderWidth: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false },
+        },
+        scales: {
+          x: xScaleOptions(theme, sortedDays),
+          y: Object.assign({ grace: "25%" }, baseScaleOptions(theme)),
+        },
+      },
+    });
+
+    attachStatusBar(
+      canvas,
+      function () { return charts.creditsConsumed; },
+      formatCreditStatusBar
+    );
+  }
+
+  // --- Requests by Status (inside usage table widget) ---
+
+  function renderUsageRequestsStatusChart() {
+    if (charts.usageRequestsStatus) charts.usageRequestsStatus.destroy();
+    var canvas = document.getElementById("usage-requests-status-chart");
+    if (!canvas || !fullData) return;
+
+    var dataPoints =
+      fullData.usageStats && fullData.usageStats.data_points
+        ? fullData.usageStats.data_points
+        : [];
+    if (!dataPoints.length) {
+      canvas.parentNode.querySelector(".chart-empty").hidden = false;
+      canvas.hidden = true;
+      return;
+    }
+    canvas.parentNode.querySelector(".chart-empty").hidden = true;
+    canvas.hidden = false;
+
+    var periodMap = new Map();
+    for (var i = 0; i < dataPoints.length; i++) {
+      var dp = dataPoints[i];
+      var dk = dayKey(dp.period);
+      if (!periodMap.has(dk))
+        periodMap.set(dk, { success: 0, clientError: 0, serverError: 0, processing: 0 });
+      var entry = periodMap.get(dk);
+      entry.success += dp.success_requests;
+      entry.clientError += dp.client_error_requests;
+      entry.serverError += dp.server_error_requests;
+      entry.processing += dp.processing_requests;
+    }
+
+    var sortedDays = Array.from(periodMap.keys()).sort();
+    var theme = readThemeColors();
+
+    charts.usageRequestsStatus = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: sortedDays,
+        datasets: [
+          {
+            label: "Success",
+            data: sortedDays.map(function (d) { return periodMap.get(d).success; }),
+            backgroundColor: theme.statusSuccess,
+            hoverBackgroundColor: lightenColor(theme.statusSuccess, 0.35),
+          },
+          {
+            label: "Server Error",
+            data: sortedDays.map(function (d) { return periodMap.get(d).serverError; }),
+            backgroundColor: theme.statusServerError,
+            hoverBackgroundColor: lightenColor(theme.statusServerError, 0.35),
+          },
+          {
+            label: "Client Error",
+            data: sortedDays.map(function (d) { return periodMap.get(d).clientError; }),
+            backgroundColor: theme.statusClientError,
+            hoverBackgroundColor: lightenColor(theme.statusClientError, 0.35),
+          },
+          {
+            label: "Processing",
+            data: sortedDays.map(function (d) { return periodMap.get(d).processing; }),
+            backgroundColor: theme.statusProcessing,
+            hoverBackgroundColor: lightenColor(theme.statusProcessing, 0.35),
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        interaction: { mode: "index", intersect: false },
+        categoryPercentage: 1,
+        barPercentage: 0.92,
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false },
+        },
+        scales: {
+          x: xScaleOptions(theme, sortedDays, { stacked: true }),
+          y: Object.assign(
+            { stacked: true, beginAtZero: true },
+            baseScaleOptions(theme)
+          ),
+        },
+      },
+    });
+
+    attachCustomLegend(canvas, function () { return charts.usageRequestsStatus; });
+  }
+
   // --- Toggle wiring ---
 
   var renderMap = {
@@ -525,6 +699,8 @@
     renderCreditBalanceChart();
     renderUsageByModelChart();
     renderRequestStatusChart();
+    renderCreditsConsumedChart();
+    renderUsageRequestsStatusChart();
   }
 
   new MutationObserver(function (mutations) {

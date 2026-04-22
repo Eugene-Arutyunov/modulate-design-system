@@ -428,7 +428,7 @@ method: POST</code></pre>
             <code class="accent">--m__space-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__bg-hover-color</code><br />
+            <code class="accent">--m__text-hover-color</code><br />
             <code class="accent">--m__text-inverted-color</code>
           </td>
         </tr>
@@ -457,6 +457,30 @@ method: POST</code></pre>
           </td>
         </tr>
         <tr>
+          <td><code>.m__button-outline</code></td>
+          <td>
+            <button type="button" class="m__button-outline">Sign in</button>
+            &ensp;
+            <button type="button" class="m__button-outline">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#overview"></use>
+              </svg>
+              Continue with Google
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__text-color</code><br />
+            <code class="accent">--m__text-hover-color</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>.m__button-compact</code></td>
           <td>
             <button type="button" class="m__button-compact">
@@ -464,10 +488,10 @@ method: POST</code></pre>
             </button>
           </td>
           <td>
-            <code class="accent">--m__button-compact-padding</code><br />
+            <code class="accent">--m__control-compact-padding</code><br />
             <code class="accent">--m__radius-s</code><br />
             <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__bg-hover-color</code><br />
+            <code class="accent">--m__text-hover-color</code><br />
             <code class="accent">--m__text-inverted-color</code>
           </td>
         </tr>
@@ -477,7 +501,19 @@ method: POST</code></pre>
             <a href="#" class="m__button-secondary-compact">Sign in</a>
           </td>
           <td>
-            <code class="accent">--m__button-compact-padding</code><br />
+            <code class="accent">--m__control-compact-padding</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__text-color</code><br />
+            <code class="accent">--m__text-hover-color</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-outline-compact</code></td>
+          <td>
+            <a href="#" class="m__button-outline-compact">Sign in</a>
+          </td>
+          <td>
+            <code class="accent">--m__control-compact-padding</code><br />
             <code class="accent">--m__radius-s</code><br />
             <code class="accent">--m__text-color</code><br />
             <code class="accent">--m__text-hover-color</code>
@@ -817,17 +853,17 @@ method: POST</code></pre>
           </td>
           <td>
             <label class="m__checkbox">
-              <input type="checkbox" />
+              <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
               Unchecked
             </label>
             <div class="m__space XS"></div>
             <label class="m__checkbox">
-              <input type="checkbox" checked />
+              <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
               Checked
             </label>
             <div class="m__space XS"></div>
             <label class="m__checkbox">
-              <input type="checkbox" disabled />
+              <input type="checkbox" disabled /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
               Disabled
             </label>
           </td>
@@ -1134,6 +1170,15 @@ method: POST</code></pre>
             <use href="#close"></use>
           </svg>
           <span class="docs-icon-row__label">#close</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 10 10"
+            aria-hidden="true">
+            <use href="#checkmark"></use>
+          </svg>
+          <span class="docs-icon-row__label">#checkmark</span>
         </div>
       </div>
       <div class="m__space S"></div>
