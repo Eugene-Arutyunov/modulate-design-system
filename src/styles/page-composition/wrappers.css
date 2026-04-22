@@ -258,16 +258,12 @@
     }
   }
 
-  &:has(.m__widget__header:has(.m__table-filters)) {
-    --m__widget-header-height: calc(2 * 0.4rem + 2 * 0.24rem + 1.04rem + 1px);
-  }
-
   & .m__table-wrapper {
     overflow-x: visible;
   }
 
   th {
-    top: var(--m__widget-header-height, 0px);
+    top: 0px;
     background-color: var(--m__bg-surface-color);
   }
 
@@ -301,7 +297,8 @@ aside {
 }
 
 .m__widget--danger {
-  border: 2px solid color-mix(in srgb, var(--m__ui-error-color) 40%, transparent);
+  border: 2px solid
+    color-mix(in srgb, var(--m__ui-error-color) 40%, transparent);
   background: none;
   color: var(--m__ui-error-color);
 }
