@@ -1,51 +1,20 @@
-<div
-  class="m__modal-backdrop"
-  id="modal-enable-invoice"
-  hidden
-  aria-modal="true"
-  role="dialog"
-  aria-labelledby="modal-enable-invoice-title"
->
-  <div class="m__modal">
-    <div class="m__modal__header">
-      <h2 class="m__modal__title" id="modal-enable-invoice-title">
-        Enable Invoice Only
-      </h2>
-      <button
-        type="button"
-        class="m__modal__close"
-        aria-label="Close"
-        data-modal-close="modal-enable-invoice"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 16 16"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1"
-          aria-hidden="true"
-        >
-          <path d="M3 3l10 10M13 3L3 13" />
-        </svg>
-      </button>
-    </div>
-    <div class="m__modal__body">
-      <p>
-        Enabling invoice-only mode will block all self-service credit purchases,
-        credit code claims, and invite credit claims. Only an administrator can
-        add credits while this is enabled. Are you sure?
-      </p>
-    </div>
-    <div class="m__modal__footer">
-      <button
-        type="button"
-        class="m__button-secondary-compact"
-        data-modal-close="modal-enable-invoice"
-      >
-        Cancel
-      </button>
-      <button type="button" class="m__button-danger-compact">Confirm</button>
-    </div>
-  </div>
+{% from 'service/modal-wrapper.njk' import modal %}
+{% call modal("modal-enable-invoice", "Enable Invoice Only") %}
+<div class="m__modal__body">
+  <p>
+    Enabling invoice-only mode will block all self-service credit purchases,
+    credit code claims, and invite credit claims. Only an administrator can
+    add credits while this is enabled. Are you sure?
+  </p>
 </div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-secondary-compact"
+    data-modal-close="modal-enable-invoice"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-danger-compact">Confirm</button>
+</div>
+{% endcall %}
