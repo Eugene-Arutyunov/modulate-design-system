@@ -1,9 +1,15 @@
-{% from 'service/modal-wrapper.njk' import modal %}
-{% call modal("modal-delete-account", "Delete Account") %}
+{% from 'service/modal-wrapper.njk' import modal %} {% call
+modal("modal-delete-account", "Delete Account") %}
 <div class="m__modal__body">
   <p>This action cannot be undone. Enter your password to confirm.</p>
+  <div class="m__space XS"></div>
   <div class="m__textfield">
-    <input type="password" id="delete-account-password" placeholder="Password" autocomplete="current-password" />
+    <input
+      type="password"
+      id="delete-account-password"
+      placeholder="Password"
+      autocomplete="current-password"
+    />
   </div>
 </div>
 <div class="m__modal__footer">
