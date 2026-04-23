@@ -1,0 +1,18 @@
+{% from 'service/modal-wrapper.njk' import modal %}
+{% call modal("modal-behaviors-delete", "Delete") %}
+<div class="m__modal__body">
+  <p>
+    Are you sure you want to delete this item? This action cannot be undone.
+  </p>
+</div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-outline-compact"
+    data-modal-close="modal-behaviors-delete"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-danger-compact">Delete</button>
+</div>
+{% endcall %}

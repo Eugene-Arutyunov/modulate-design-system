@@ -13,16 +13,123 @@ permalink: /dashboard/behaviors/
     </div>
 
     <main class="dashboard-content">
-      <h1 class="dashboard-page-title">Behaviors</h1>
-
-      <div class="dashboard-section">
-        <p>This page is intentionally empty for now.</p>
+      <div class="m__segmented-control" role="group">
+        <label>
+          <input
+            type="radio"
+            name="behaviors-tabs"
+            value="configurations"
+            checked
+          />
+          Configurations
+        </label>
+        <label>
+          <input type="radio" name="behaviors-tabs" value="behaviors" />
+          Behaviors
+        </label>
+        <label>
+          <input type="radio" name="behaviors-tabs" value="rules" />
+          Rules
+        </label>
       </div>
+
+      <div class="m__space S"></div>
+
+      <section
+        class="dashboard-section behaviors-tab-content"
+        data-tab="configurations"
+      >
+        <h1 class="dashboard-page-title">Configurations</h1>
+        <p>Pre-configured detection packages to get you started quickly</p>
+
+        <div class="m__space XS"></div>
+
+        {% include 'service/table-behaviors-configurations.html' %}
+      </section>
+
+      <section
+        class="dashboard-section behaviors-tab-content"
+        data-tab="behaviors"
+        hidden
+      >
+        <h1 class="dashboard-page-title">Behaviors</h1>
+        <p>
+          Configure what behaviors to detect in conversations such as
+          interruptions, active listening, or emotional responses.
+        </p>
+
+        <div class="m__space XS"></div>
+
+        {% include 'service/table-behaviors-behaviors.html' %}
+      </section>
+
+      <section
+        class="dashboard-section behaviors-tab-content"
+        data-tab="rules"
+        hidden
+      >
+        <h1 class="dashboard-page-title">Rules</h1>
+        <p>
+          Define detection rules by combining conversation types, participant
+          roles, metrics, triggers, and actions into targeted monitoring
+          policies.
+        </p>
+
+        <div class="m__space XS"></div>
+
+        {% include 'service/table-behaviors-rules.html' %}
+      </section>
 
       <div class="m__space XL"></div>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
+
+<script>
+  const tabInputs = document.querySelectorAll('[name="behaviors-tabs"]');
+  const tabContents = document.querySelectorAll(".behaviors-tab-content");
+
+  tabInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      tabContents.forEach((content) => {
+        content.hidden = content.dataset.tab !== input.value;
+      });
+    });
+  });
+
+  const rulesTabInputs = document.querySelectorAll('[name="rules-tabs"]');
+  const rulesTabContents = document.querySelectorAll(".rules-tab-content");
+
+  rulesTabInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      rulesTabContents.forEach((content) => {
+        content.hidden = content.dataset.rulesTab !== input.value;
+      });
+    });
+  });
+</script>
+
+{% include 'service/modal-behaviors-delete.html' %}
+{% include 'service/modal-behaviors-create.html' %}
+{% include 'service/modal-behaviors-edit.html' %}
+<script>
+  var deleteBehaviorsModal = document.getElementById("modal-behaviors-delete");
+  var createBehaviorModal = document.getElementById("modal-behaviors-create");
+  var editBehaviorModal = document.getElementById("modal-behaviors-edit");
+  document
+    .querySelector(".dashboard-content")
+    .addEventListener("click", function (e) {
+      if (e.target.closest("[data-behaviors-delete]")) {
+        window.M.openModal(deleteBehaviorsModal);
+      }
+      if (e.target.closest("[data-behaviors-create]")) {
+        window.M.openModal(createBehaviorModal);
+      }
+      if (e.target.closest("[data-behaviors-edit]")) {
+        window.M.openModal(editBehaviorModal);
+      }
+    });
+</script>
 
 {% endblock %}

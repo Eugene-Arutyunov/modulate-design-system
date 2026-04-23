@@ -24,6 +24,12 @@
       font-size: inherit;
       line-height: var(--m__line-height-base);
       width: 100%;
+      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+      &:is(:hover, :focus-visible) {
+        color: var(--m__text-hover-color);
+        transition-duration: var(--m__hover-transition-duration);
+      }
 
       &:focus-visible {
         outline: 1px solid var(--m__text-hover-color);
@@ -37,8 +43,9 @@
 
       &::-webkit-calendar-picker-indicator {
         position: absolute;
-        inset: 0;
-        width: 100%;
+        right: 0;
+        top: 0;
+        width: 2.5rem;
         height: 100%;
         opacity: 0;
         cursor: pointer;
@@ -53,6 +60,12 @@
       translate: 0 -50%;
       pointer-events: none;
       color: var(--m__text-caption-color);
+      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+
+    &:has(input[type="date"]:is(:hover, :focus-visible)) > svg {
+      color: var(--m__text-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
   }
 }
@@ -68,14 +81,15 @@
   padding: var(--m__input-padding);
   cursor: text;
   position: relative;
-
   & > svg:first-child {
     width: 1rem;
     height: 1rem;
     flex-shrink: 0;
-    margin-right: 0.1rem;
-    pointer-events: none;
+
+    cursor: pointer;
     color: var(--m__text-caption-color);
+    transition: color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
   }
 
   & > span {
@@ -84,10 +98,12 @@
     color: var(--m__text-caption-color);
     font-weight: 500;
     cursor: pointer;
+    transition: color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
 
     &::after {
       content: ":";
-      margin-right: 0.2em;
+      margin-right: 0.1em;
     }
   }
 
@@ -102,6 +118,8 @@
     font-size: inherit;
     line-height: 1;
     cursor: text;
+    transition: color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
 
     &::placeholder {
       color: var(--m__text-caption-color);
@@ -120,6 +138,19 @@
       opacity: 0;
       cursor: pointer;
       margin: 0;
+    }
+  }
+
+  &:is(:hover, :focus-within) {
+    & > svg:first-child,
+    & > span {
+      color: var(--m__text-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
+    }
+
+    & input {
+      color: var(--m__text-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
   }
 

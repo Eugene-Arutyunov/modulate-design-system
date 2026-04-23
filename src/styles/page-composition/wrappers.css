@@ -63,7 +63,7 @@
   overflow: clip;
   --m__widget-header-height: 0px;
 
-  & .m__widget__header {
+  & .m__widget-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -78,7 +78,8 @@
     font-size: var(--m__font-size-s);
     color: var(--m__text-caption-color);
 
-    &:has(.m__table-filters) {
+    &:has(.m__table-filters),
+    &:has(.m__searchbar) {
       padding: 0;
     }
 
@@ -166,6 +167,27 @@
         height: 40%;
         background-color: var(--m__ui-border-color);
       }
+    }
+
+    & .m__searchbar {
+      flex: 1;
+      background-color: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0.55rem var(--m__widget-padding);
+
+      &:hover {
+        background-color: transparent;
+      }
+
+      &:focus-within {
+        outline: none;
+        background-color: transparent;
+      }
+    }
+
+    & .behaviors-toolbar-actions {
+      padding: 0.4rem var(--m__widget-padding);
     }
 
     & .m__table-filters__dates :is(.m__datepicker-compact):last-child::after {
@@ -267,7 +289,8 @@
     background-color: var(--m__bg-surface-color);
   }
 
-  & table {
+  & table,
+  & table th {
     font-size: var(--m__font-size-xs);
 
     & .m__tag {

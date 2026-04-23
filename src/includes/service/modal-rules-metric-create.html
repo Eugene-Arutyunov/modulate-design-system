@@ -1,0 +1,32 @@
+{% from 'service/modal-wrapper.njk' import modal %} {% call
+modal("modal-rules-metric-create", "Create Metric") %}
+<div class="m__modal__body">
+  <div class="m__textfield">
+    <label for="metric-name">Name</label>
+    <input type="text" id="metric-name" placeholder="" />
+  </div>
+  <p class="m__modal__field-hint">
+    Enter a clear, descriptive name for this metric
+  </p>
+
+  <div class="m__space XS"></div>
+
+  <div class="m__textfield">
+    <label for="metric-description">Description</label>
+    <textarea id="metric-description" placeholder=""></textarea>
+  </div>
+  <p class="m__modal__field-hint">
+    Enter a detailed description of this metric
+  </p>
+</div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-outline-compact"
+    data-modal-close="modal-rules-metric-create"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-compact">Create</button>
+</div>
+{% endcall %}

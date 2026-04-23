@@ -1,0 +1,86 @@
+---
+pageTitle: Edit Configuration
+permalink: /dashboard/behaviors/config-edit/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav>{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <a href="/dashboard/behaviors/" class="dashboard-back-link">
+        <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
+          <use href="#chevron-left"></use>
+        </svg>
+        Back
+      </a>
+      <div class="m__space XS"></div>
+      <h1 class="dashboard-page-title">Edit configuration</h1>
+
+      <div class="config-form">
+        <div class="config-name-field">
+          <label class="config-name-field__label">Name</label>
+          <div class="m__textfield m__textfield--compact">
+            <input type="text" value="Harassment in Job Interviews" />
+          </div>
+        </div>
+
+        <div class="m__space M"></div>
+
+        {% include 'service/table-config-behaviors.html' %}
+
+        <div class="m__space XS"></div>
+
+        {% include 'service/table-config-rules.html' %}
+
+        <div class="config-form-actions">
+          <button type="button" class="m__button-compact">Save</button>
+        </div>
+      </div>
+
+      <div class="m__space XL"></div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script>
+  const configRulesTabInputs = document.querySelectorAll(
+    '[name="config-rules-tabs"]',
+  );
+  const configRulesTabContents = document.querySelectorAll(
+    ".config-rules-tab-content",
+  );
+
+  configRulesTabInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      configRulesTabContents.forEach((content) => {
+        content.hidden = content.dataset.configRulesTab !== input.value;
+      });
+    });
+  });
+</script>
+
+{% include 'service/modal-behaviors-delete.html' %}
+{% include 'service/modal-behaviors-create.html' %}
+<script>
+  var deleteBehaviorsModal = document.getElementById("modal-behaviors-delete");
+  var createBehaviorModal = document.getElementById("modal-behaviors-create");
+  document
+    .querySelector(".dashboard-content")
+    .addEventListener("click", function (e) {
+      if (e.target.closest("[data-behaviors-delete]")) {
+        window.M.openModal(deleteBehaviorsModal);
+      }
+      if (e.target.closest("[data-behaviors-create]")) {
+        window.M.openModal(createBehaviorModal);
+      }
+    });
+</script>
+
+{% endblock %}
