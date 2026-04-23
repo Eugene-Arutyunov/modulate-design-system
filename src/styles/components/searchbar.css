@@ -1,6 +1,7 @@
 .m__searchbar {
   display: inline-flex;
   align-items: center;
+  gap: 0;
   background-color: var(--m__ui-control-color);
   border: 1px solid var(--m__ui-border-color);
   border-radius: var(--m__radius-s);
@@ -25,20 +26,21 @@
     );
   }
 
-  & svg {
+  & > svg {
     width: 1rem;
     height: 1rem;
     flex-shrink: 0;
   }
 
   & input {
+    flex: 1;
+    min-width: 0;
     background: none;
     border: none;
     outline: none;
     color: var(--m__text-color);
     font-size: var(--m__font-size-s);
     line-height: var(--m__line-height-base);
-    width: 9rem;
 
     &::placeholder {
       color: var(--m__text-caption-color);
@@ -46,6 +48,10 @@
 
     &:focus-visible {
       outline: none;
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
     }
   }
 }
