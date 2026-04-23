@@ -27,6 +27,10 @@ permalink: /dashboard/behaviors/
           <input type="radio" name="behaviors-tabs" value="behaviors" />
           Behaviors
         </label>
+        <label>
+          <input type="radio" name="behaviors-tabs" value="rules" />
+          Rules
+        </label>
       </div>
 
       <div class="m__space S"></div>
@@ -310,6 +314,453 @@ permalink: /dashboard/behaviors/
         </div>
       </section>
 
+      <section
+        class="dashboard-section behaviors-tab-content"
+        data-tab="rules"
+        hidden
+      >
+        <h1 class="dashboard-page-title">Rules</h1>
+        <p>
+          Define detection rules by combining conversation types, participant
+          roles, metrics, triggers, and actions into targeted monitoring
+          policies.
+        </p>
+
+        <div class="m__space XS"></div>
+
+        <div class="m__widget">
+          <div class="m__table-toolbar">
+            <div class="m__segmented-control-compact" role="group">
+              <label>
+                <input
+                  type="radio"
+                  name="rules-tabs"
+                  value="conversation-types"
+                  checked
+                />
+                Conversation Types
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="rules-tabs"
+                  value="participant-roles"
+                />
+                Participant Roles
+              </label>
+              <label>
+                <input type="radio" name="rules-tabs" value="metrics" />
+                Metrics
+              </label>
+              <label>
+                <input type="radio" name="rules-tabs" value="triggers" />
+                Triggers
+              </label>
+              <label>
+                <input type="radio" name="rules-tabs" value="actions" />
+                Actions
+              </label>
+            </div>
+            <button type="button" class="m__button-compact">Create</button>
+          </div>
+
+          <div class="rules-tab-content" data-rules-tab="conversation-types">
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Customer Service</td>
+                    <td>
+                      Inbound support calls between customers and service agents
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Sales Outreach</td>
+                    <td>
+                      Outbound calls from sales representatives to prospects
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Hiring Interview</td>
+                    <td>
+                      Structured interviews between recruiters and candidates
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Social Media DM</td>
+                    <td>Direct messages on social platforms between users</td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div
+            class="rules-tab-content"
+            data-rules-tab="participant-roles"
+            hidden
+          >
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Role</th>
+                    <th>Description</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Agent</td>
+                    <td>Customer-facing support or sales representative</td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Customer</td>
+                    <td>End user or consumer initiating contact</td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Supervisor</td>
+                    <td>
+                      Team lead monitoring or joining active conversations
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Bot</td>
+                    <td>Automated participant in the conversation</td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="rules-tab-content" data-rules-tab="metrics" hidden>
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Description</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Sentiment Score</td>
+                    <td>
+                      Overall emotional tone of the conversation, from negative
+                      to positive
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Talk-to-Listen Ratio</td>
+                    <td>Proportion of speaking time per participant</td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Interruption Rate</td>
+                    <td>Frequency of one participant cutting off another</td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Resolution Time</td>
+                    <td>Duration from first message to conversation close</td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="rules-tab-content" data-rules-tab="triggers" hidden>
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Trigger</th>
+                    <th>Description</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Behavior Detected</td>
+                    <td>
+                      Fires when a configured behavior is identified in the
+                      conversation
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Threshold Exceeded</td>
+                    <td>
+                      Fires when a metric crosses a defined threshold value
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Keyword Match</td>
+                    <td>
+                      Fires when a specific word or phrase appears in the
+                      transcript
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Conversation End</td>
+                    <td>
+                      Fires once when the conversation is closed or timed out
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="rules-tab-content" data-rules-tab="actions" hidden>
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Action</th>
+                    <th>Description</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Send Alert</td>
+                    <td>
+                      Notify a supervisor or team via webhook, email, or in-app
+                      alert
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Flag Conversation</td>
+                    <td>
+                      Mark the conversation for manual review in the audit queue
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Log Event</td>
+                    <td>
+                      Write a structured event to the analytics data stream
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Escalate</td>
+                    <td>
+                      Transfer the conversation to a senior agent or supervisor
+                      queue
+                    </td>
+                    <td class="m__col-actions">
+                      <div>
+                        <button type="button" class="m__button-outline-compact">
+                          Edit
+                        </button>
+                        <button type="button" class="m__button-danger-compact">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div class="m__space XL"></div>
     </main>
   </div>
@@ -324,6 +775,17 @@ permalink: /dashboard/behaviors/
     input.addEventListener("change", () => {
       tabContents.forEach((content) => {
         content.hidden = content.dataset.tab !== input.value;
+      });
+    });
+  });
+
+  const rulesTabInputs = document.querySelectorAll('[name="rules-tabs"]');
+  const rulesTabContents = document.querySelectorAll(".rules-tab-content");
+
+  rulesTabInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      rulesTabContents.forEach((content) => {
+        content.hidden = content.dataset.rulesTab !== input.value;
       });
     });
   });
