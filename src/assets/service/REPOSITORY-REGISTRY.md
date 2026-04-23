@@ -103,6 +103,17 @@ Raw SVG files are normalized into one hidden sprite include. The generator remov
 
 ---
 
+## Prosocial standalone export
+
+**Script:** `scripts/export-prosocial-single-html.js`  
+**Command:** `npm run export:prosocial:single`  
+**Input:** built `/_site/online-docs/prosocial/index.html` + `/_site/bundle.css` and `src/assets/fonts/*`  
+**Output:** `dist-publish/prosocial-single/prosocial.html` + `dist-publish/prosocial-single/fonts/*`.
+
+Builds a publish-ready single HTML version of the Prosocial online doc by inlining `/bundle.css` into a `<style>` tag, removing the favicon link, and copying only font files referenced by CSS into a sibling `fonts` folder.
+
+---
+
 ## Dashboard navigation icons
 
 **Markup:** `src/includes/prototypes/dashboard-nav-sidebar.html` (imports macros), `src/includes/prototypes/dashboard-nav-macros.html` (single source for sidebar + mobile menu links), `src/includes/service/header.html` (imports the same macros for the bar and popover).  
