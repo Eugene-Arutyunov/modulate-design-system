@@ -4,10 +4,16 @@
   align-items: center;
   justify-content: space-between;
 
-  & .prototype-header__icon-wrap {
-    width: 1.35rem;
-    height: 1.35rem;
+  & .prototype-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
     flex-shrink: 0;
+    text-decoration: none;
+  }
+
+  & .prototype-header__brand-label {
+    line-height: 1;
   }
 
   & .prototype-header__right {
@@ -23,6 +29,10 @@
   }
 
   @media (width < 768px) {
+    & .prototype-header__brand-label {
+      display: none;
+    }
+
     & .prototype-header__links {
       display: none;
     }
@@ -230,7 +240,7 @@
     display: block;
     width: 1.35rem;
     height: 1.35rem;
-    color: var(--m__text-color);
+    color: currentColor;
     background-color: var(--m__bg-surface-color);
 
     border-radius: 50%;

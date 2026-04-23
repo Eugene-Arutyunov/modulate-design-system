@@ -7,6 +7,11 @@
 .m__online-doc-wrapper {
   --online-doc-title-bleed: 3rem;
   --online-doc-title-padding-block: 1.5rem;
+  --online-doc-callout-bg-color: color-mix(
+    in srgb,
+    rgb(40, 95, 235) 12%,
+    rgb(255, 255, 255)
+  );
   /* Print: same value as @page margin (each side). */
   --online-doc-print-margin: 0.5in;
   --online-doc-print-letter-height: 11in;
@@ -83,14 +88,91 @@
     color: rgb(40, 95, 235);
   }
 
+  & mark.online-doc-highlight {
+    background-color: var(--online-doc-callout-bg-color);
+    color: inherit;
+    padding: 0;
+    border-radius: 0.12em;
+  }
+
+  & ul.appendix-speech-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  & p.appendix-speech-label {
+    margin-bottom: 0.55rem;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  & p.appendix-speech-label + ul.appendix-speech-list {
+    break-before: avoid;
+    page-break-before: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  & ul.appendix-speech-list li.appendix-speech {
+    --online-doc-appendix-bubble-radius: calc(var(--m__radius) * 3);
+
+    font-size: var(--m__font-size-xl);
+    font-family: var(--m__font-mono);
+    font-weight: var(--m__font-weight-bold);
+    line-height: var(--m__line-height-base);
+    color: rgb(40, 95, 235);
+    background-color: var(--online-doc-callout-bg-color);
+    display: inline-block;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.7rem 0.9rem;
+    border-radius: var(--online-doc-appendix-bubble-radius);
+    border-top-left-radius: 0;
+    corner-shape: squircle;
+    overflow: hidden;
+
+    &::before {
+      content: none;
+    }
+  }
+
+  @media screen and (width < 767px) {
+    & p.accent {
+      font-size: var(--m__font-size-xl);
+    }
+
+    & ul.appendix-speech-list li.appendix-speech {
+      font-size: var(--m__font-size-l);
+    }
+  }
+
+  @supports not (corner-shape: squircle) {
+    & ul.appendix-speech-list li.appendix-speech {
+      border-radius: 0;
+      border-radius: initial;
+      mask:
+        url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,100 l-100,0 Z"/></svg>')
+          top left / calc(var(--online-doc-appendix-bubble-radius) * 100)
+          no-repeat intersect,
+        url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l99,0 c1,0 1,0 1,1 l0,99 l-100,0 l0,-100 Z"/></svg>')
+          top right / calc(var(--online-doc-appendix-bubble-radius) * 100)
+          no-repeat intersect,
+        url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,99 c0,1 -0,1 -1,1 l-99,0 Z"/></svg>')
+          bottom right / calc(var(--online-doc-appendix-bubble-radius) * 100)
+          no-repeat intersect,
+        url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,100 l-99,0 c-1,0 -1,-0 -1,-1 Z"/></svg>')
+          bottom left / calc(var(--online-doc-appendix-bubble-radius) * 100)
+          no-repeat intersect;
+    }
+  }
+
   /* Contextual panel — blue tint on white; body copy in callout stays accent blue. */
   & aside.online-doc-callout {
     color: rgb(40, 95, 235);
-    background-color: color-mix(
-      in srgb,
-      rgb(40, 95, 235) 12%,
-      rgb(255, 255, 255)
-    );
+    background-color: var(--online-doc-callout-bg-color);
     padding: var(--m__widget-padding) calc(2 * var(--m__widget-padding))
       var(--m__widget-padding) var(--m__widget-padding);
 
@@ -108,17 +190,18 @@
 
       & p {
         margin: 0;
+        font-size: var(--m__font-size-xl);
       }
     }
 
-    /* Two columns at all breakpoints (screen + print); larger body type. */
-    & .m__sequence {
-      font-size: var(--m__font-size-xl);
-
-      & strong {
-        font-family: var(--m__font-mono);
-        font-weight: var(--m__font-weight-bold);
-      }
+    & .online-doc-callout-block strong {
+      font-family: var(--m__font-mono);
+      font-weight: var(--m__font-weight-bold);
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-decoration-color: rgb(40, 95, 235);
+      text-underline-offset: 0.18em;
+      text-decoration-skip-ink: none;
     }
 
     & .m__sequence .m__sequence-item {
@@ -126,6 +209,12 @@
 
       @media screen and (width < 767px) {
         --columns: 1;
+      }
+    }
+
+    @media screen and (width < 767px) {
+      & .online-doc-callout-block p {
+        font-size: var(--m__font-size-l);
       }
     }
 
@@ -154,6 +243,7 @@
       text-decoration-thickness: 3px;
       text-decoration-color: rgb(40, 95, 235);
       text-underline-offset: 0.18em;
+      text-decoration-skip-ink: none;
     }
 
     /* First stats row: icon + stacked blocks (flex). */
@@ -161,7 +251,7 @@
       display: flex;
       flex-direction: row;
       align-items: flex-start;
-      gap: 0.75rem;
+      gap: 0.4rem;
     }
 
     & .online-doc-callout-sequence .online-doc-callout-item__icon {
@@ -237,11 +327,12 @@
   @media screen and (width < 767px) {
     margin-left: 0;
     margin-right: 0;
-    padding: var(--online-doc-title-padding-block)
-      var(--online-doc-title-padding-block);
+    min-height: 25em;
+    padding: calc(var(--online-doc-title-padding-block) / 2)
+      calc(var(--online-doc-title-padding-block) / 2);
 
     & h1 {
-      font-size: 3em;
+      font-size: 1.7em;
     }
 
     & .title-container__footer-spacer {
@@ -266,12 +357,25 @@
     }
   }
 
+  & a[href^="mailto:"] {
+    color: var(--m__text-link-color);
+    will-change: color;
+    transition: color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+    &:hover {
+      color: var(--m__text-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
+    }
+  }
+
   & .title-container__logo-slot {
     position: relative;
     width: 7.25rem;
     flex-shrink: 0;
 
     &.title-container__logo-slot--activision {
+      width: calc(7.25rem * 0.88);
       bottom: -0.35em;
     }
 
@@ -357,6 +461,17 @@
   }
 
   .m__online-doc-wrapper aside.online-doc-callout {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .m__online-doc-wrapper h2.online-doc-print-new-page {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .m__online-doc-wrapper
+    aside.online-doc-callout.online-doc-callout--print-fullpage {
     break-before: page;
     break-after: page;
     break-inside: avoid;
@@ -370,7 +485,7 @@
     margin-bottom: 0;
   }
 
-  .m__online-doc-wrapper aside.online-doc-callout .m__sequence {
+  .m__online-doc-wrapper aside.online-doc-callout .online-doc-callout-block p {
     font-size: 1.2em;
   }
 }
