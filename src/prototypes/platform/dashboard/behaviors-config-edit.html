@@ -13,81 +13,24 @@ permalink: /dashboard/behaviors/config/
     </div>
 
     <main class="dashboard-content">
-      <a href="/dashboard/behaviors/" class="m__button-secondary-compact">
-        <svg
-          viewBox="0 0 12 12"
-          aria-hidden="true"
-          width="10"
-          height="10"
-          style="transform: rotate(90deg); flex-shrink: 0"
-        >
-          <use href="#chevron-down"></use>
+      <a href="/dashboard/behaviors/" class="dashboard-back-link">
+        <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
+          <use href="#chevron-left"></use>
         </svg>
         Back
       </a>
       <div class="m__space XS"></div>
-      <h1 class="dashboard-page-title">Create Configuration</h1>
+      <h1 class="dashboard-page-title">Edit Configuration</h1>
 
       <div class="m__space XS"></div>
 
       <div class="config-form">
-        <table class="org-details config-form-table">
-          <tbody>
-            <!-- Name -->
-            <tr>
-              <th>Name</th>
-              <td colspan="2">
-                <div
-                  class="m__textfield m__textfield--compact config-narrow-field"
-                >
-                  <input type="text" value="Harassment in Job Interviews" />
-                </div>
-              </td>
-            </tr>
-
-            <!-- Scope -->
-            <tr>
-              <th>Scope</th>
-              <td colspan="2">
-                <div class="config-narrow-field">
-                  <div class="m__select">
-                    <select>
-                      <option>Conversation Types</option>
-                      <option>Employment Interview</option>
-                      <option>Customer Service Call</option>
-                      <option>Social Conversation</option>
-                    </select>
-                    <svg
-                      viewBox="0 0 12 12"
-                      aria-hidden="true"
-                      width="10"
-                      height="10"
-                    >
-                      <use href="#chevron-down"></use>
-                    </svg>
-                  </div>
-                  <div class="m__space XS"></div>
-                  <div class="m__select">
-                    <select>
-                      <option>Role</option>
-                      <option>Interviewer</option>
-                      <option>Candidate</option>
-                      <option>Agent</option>
-                    </select>
-                    <svg
-                      viewBox="0 0 12 12"
-                      aria-hidden="true"
-                      width="10"
-                      height="10"
-                    >
-                      <use href="#chevron-down"></use>
-                    </svg>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="config-name-field">
+          <label class="config-name-field__label">Name</label>
+          <div class="m__textfield m__textfield--compact">
+            <input type="text" value="Harassment in Job Interviews" />
+          </div>
+        </div>
 
         <div class="m__space XS"></div>
 
@@ -95,329 +38,563 @@ permalink: /dashboard/behaviors/config/
         <div class="m__widget">
           <div class="config-behaviors-title-row">
             <h2>Behaviors</h2>
-            <div style="display:flex;gap:8px">
-              <button type="button" class="m__button-outline-compact">Select</button>
-              <button type="button" class="m__button-compact">Create new</button>
-            </div>
+            <button type="button" class="m__button-compact">
+              Create Behavior
+            </button>
           </div>
-          <div class="config-behavior-list">
-            <div class="config-behavior-row">
-              <div class="config-behavior-info">
-                <span class="config-behavior-name">Mysoginy</span>
-                <span class="config-behavior-desc"
-                  >Evidence of cultural attitudes that propagate systems of
-                  marginalizing people based on their gender identity or gender
-                  presentation.</span
-                >
-              </div>
-              <div class="config-behavior-controls">
-                <div class="m__select">
-                  <select>
-                    <option>Greater then</option>
-                    <option>Less then</option>
-                    <option>Equal to</option>
-                    <option>Not equal to</option>
-                  </select>
-                  <svg
-                    viewBox="0 0 12 12"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#chevron-down"></use>
-                  </svg>
-                </div>
-                <div
-                  class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
-                >
-                  <input type="number" value="0.8" step="0.1" min="0" max="1" />
-                </div>
-                <button type="button" class="m__button-danger-compact">
-                  Delete
-                </button>
-              </div>
-            </div>
-
-            <div class="config-behavior-row">
-              <div class="config-behavior-info">
-                <span class="config-behavior-name">Racism</span>
-                <span class="config-behavior-desc"
-                  >Evidence of cultural attitudes that propagate systems of
-                  marginalizing people based on their racial or national
-                  identity if that identity isn't white.</span
-                >
-              </div>
-              <div class="config-behavior-controls">
-                <div class="m__select">
-                  <select>
-                    <option>Greater then</option>
-                    <option>Less then</option>
-                    <option>Equal to</option>
-                    <option>Not equal to</option>
-                  </select>
-                  <svg
-                    viewBox="0 0 12 12"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#chevron-down"></use>
-                  </svg>
-                </div>
-                <div
-                  class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
-                >
-                  <input type="number" value="0.8" step="0.1" min="0" max="1" />
-                </div>
-                <button type="button" class="m__button-danger-compact">
-                  Delete
-                </button>
-              </div>
-            </div>
-
-            <div class="config-behavior-row">
-              <div class="config-behavior-info">
-                <span class="config-behavior-name">Homophobia</span>
-                <span class="config-behavior-desc"
-                  >Evidence of cultural attitudes that propagate systems of
-                  marginalizing people based on their sexuality.</span
-                >
-              </div>
-              <div class="config-behavior-controls">
-                <div class="m__select">
-                  <select>
-                    <option>Greater then</option>
-                    <option>Less then</option>
-                    <option>Equal to</option>
-                    <option>Not equal to</option>
-                  </select>
-                  <svg
-                    viewBox="0 0 12 12"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#chevron-down"></use>
-                  </svg>
-                </div>
-                <div
-                  class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
-                >
-                  <input type="number" value="0.8" step="0.1" min="0" max="1" />
-                </div>
-                <button type="button" class="m__button-danger-compact">
-                  Delete
-                </button>
-              </div>
-            </div>
-
-            <div class="config-behavior-row">
-              <div class="config-behavior-info">
-                <span class="config-behavior-name">Sizism</span>
-                <span class="config-behavior-desc"
-                  >Evidence of cultural attitudes that propagate systems of
-                  marginalizing people who identify as fat, have a unique or
-                  nontraditional body shape, or experience medical conditions
-                  that effect their weight.</span
-                >
-              </div>
-              <div class="config-behavior-controls">
-                <div class="m__select">
-                  <select>
-                    <option>Greater then</option>
-                    <option>Less then</option>
-                    <option>Equal to</option>
-                    <option>Not equal to</option>
-                  </select>
-                  <svg
-                    viewBox="0 0 12 12"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#chevron-down"></use>
-                  </svg>
-                </div>
-                <div
-                  class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
-                >
-                  <input type="number" value="0.8" step="0.1" min="0" max="1" />
-                </div>
-                <button type="button" class="m__button-danger-compact">
-                  Delete
-                </button>
-              </div>
-            </div>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Behavior</th>
+                  <th>Description</th>
+                  <th class="m__col-actions"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mysoginy</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people based on their gender identity or
+                    gender presentation.
+                  </td>
+                  <td class="m__col-actions">
+                    <label class="m__toggle"
+                      ><input type="checkbox" checked
+                    /></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Racism</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people based on their racial or national
+                    identity if that identity isn't white.
+                  </td>
+                  <td class="m__col-actions">
+                    <label class="m__toggle"><input type="checkbox" /></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Homophobia</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people based on their sexuality.
+                  </td>
+                  <td class="m__col-actions">
+                    <label class="m__toggle"
+                      ><input type="checkbox" checked
+                    /></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Transphobia</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people based on their trans identity.
+                  </td>
+                  <td class="m__col-actions">
+                    <label class="m__toggle"
+                      ><input type="checkbox" checked
+                    /></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sizism</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people who identify as fat, have a unique or
+                    nontraditional body shape, or experience medical conditions
+                    that affect their weight.
+                  </td>
+                  <td class="m__col-actions">
+                    <label class="m__toggle"><input type="checkbox" /></label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
         <div class="m__space XS"></div>
 
-        <table class="org-details config-form-table">
-          <tbody>
-            <!-- Metrics and triggers -->
-            <tr>
-              <th>Metrics and triggers</th>
-              <td colspan="2">
-                <div class="config-metric-list">
-                  <div class="config-metric-row">
-                    <div class="m__select config-metric-select">
-                      <select>
-                        <option>Toxicity scope</option>
-                        <option>Content Safety Score</option>
-                        <option>Disruption Frequency</option>
-                        <option>Account review required</option>
-                      </select>
-                      <svg
-                        viewBox="0 0 12 12"
-                        aria-hidden="true"
-                        width="10"
-                        height="10"
-                      >
-                        <use href="#chevron-down"></use>
-                      </svg>
-                    </div>
-                    <div class="config-metric-condition">
-                      <div class="m__select">
-                        <select>
-                          <option>Greater then</option>
-                          <option>Less then</option>
-                          <option>Equal to</option>
-                          <option>Not equal to</option>
-                        </select>
-                        <svg
-                          viewBox="0 0 12 12"
-                          aria-hidden="true"
-                          width="10"
-                          height="10"
-                        >
-                          <use href="#chevron-down"></use>
-                        </svg>
-                      </div>
-                      <div
-                        class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
-                      >
-                        <input
-                          type="number"
-                          value="0.8"
-                          step="0.1"
-                          min="0"
-                          max="1"
-                        />
-                      </div>
-                    </div>
-                  </div>
+        <!-- Rules widget -->
+        <div class="m__widget">
+          <div class="m__table-toolbar">
+            <div class="m__segmented-control-compact" role="group">
+              <label>
+                <input
+                  type="radio"
+                  name="config-rules-tabs"
+                  value="conversation-types"
+                  checked
+                />
+                Conversation Types
+              </label>
+              <label>
+                <input type="radio" name="config-rules-tabs" value="roles" />
+                Roles
+              </label>
+              <label>
+                <input type="radio" name="config-rules-tabs" value="metrics" />
+                Metrics
+              </label>
+              <label>
+                <input type="radio" name="config-rules-tabs" value="triggers" />
+                Triggers
+              </label>
+              <label>
+                <input type="radio" name="config-rules-tabs" value="actions" />
+                Actions
+              </label>
+            </div>
+            <button type="button" class="m__button-compact">Create</button>
+          </div>
 
-                  <div class="config-metric-row">
-                    <div class="m__select config-metric-select">
-                      <select>
-                        <option>Disruption Frequency</option>
-                        <option>Toxicity scope</option>
-                        <option>Content Safety Score</option>
-                        <option>Account review required</option>
-                      </select>
-                      <svg
-                        viewBox="0 0 12 12"
-                        aria-hidden="true"
-                        width="10"
-                        height="10"
-                      >
-                        <use href="#chevron-down"></use>
-                      </svg>
-                    </div>
-                    <div class="config-metric-condition">
-                      <div class="m__select">
-                        <select>
-                          <option>Greater then</option>
-                          <option>Less then</option>
-                          <option>Equal to</option>
-                          <option>Not equal to</option>
-                        </select>
-                        <svg
-                          viewBox="0 0 12 12"
-                          aria-hidden="true"
-                          width="10"
-                          height="10"
-                        >
-                          <use href="#chevron-down"></use>
-                        </svg>
-                      </div>
-                      <div
-                        class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
-                      >
-                        <input
-                          type="number"
-                          value="0.8"
-                          step="0.1"
-                          min="0"
-                          max="1"
-                        />
-                      </div>
-                    </div>
-                  </div>
+          <div
+            class="config-rules-tab-content"
+            data-config-rules-tab="conversation-types"
+          >
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Auto-Detect</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Customer Service Call</td>
+                    <td>
+                      Phone or video calls between customers and support agents
+                    </td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Social Conversation</td>
+                    <td>Public or group conversations in social contexts</td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"><input type="checkbox" /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Enterprise IT Support</td>
+                    <td>
+                      Any call to assist an employee in accessing or managing
+                      internal IT resources
+                    </td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>General Media Narration</td>
+                    <td>
+                      Any media style content with a single speaker that talks
+                      exclusively in the third person
+                    </td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Multiple Speakers Livestreamed Media</td>
+                    <td>
+                      Any improvised media content that features several
+                      speakers and explicitly exists for entertainment or social
+                      purposes
+                    </td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"><input type="checkbox" /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Media Interview or Talk Show</td>
+                    <td>
+                      Conversations in media formatted as one on one interviews,
+                      host with one or more guests, or podcasts formatted as
+                      question and answer shows
+                    </td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-                  <div class="config-metric-row">
-                    <div class="m__select config-metric-select">
-                      <select>
-                        <option>Account review required</option>
-                        <option>Toxicity scope</option>
-                        <option>Content Safety Score</option>
-                        <option>Disruption Frequency</option>
-                      </select>
-                      <svg
-                        viewBox="0 0 12 12"
-                        aria-hidden="true"
-                        width="10"
-                        height="10"
-                      >
-                        <use href="#chevron-down"></use>
-                      </svg>
-                    </div>
-                    <div class="config-metric-condition">
-                      <label class="m__toggle">
-                        <input type="checkbox" checked />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
+          <div
+            class="config-rules-tab-content"
+            data-config-rules-tab="roles"
+            hidden
+          >
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Role</th>
+                    <th>Description</th>
+                    <th>Conversation Types</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Customer</td>
+                    <td>Individual contacting support</td>
+                    <td>Customer Service Call</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Agent</td>
+                    <td>Customer support representative</td>
+                    <td>Customer Service Call</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Social Participant</td>
+                    <td>Participant in social conversation</td>
+                    <td>Social Conversation</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"><input type="checkbox" /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Support Specialist</td>
+                    <td>
+                      Someone who works with employees or contractors to solve
+                      problems with things like IT, logistics, or communication
+                    </td>
+                    <td>
+                      Internal Business Conversations, General Contractor
+                      Visitation Coordination, Enterprise IT Support, Business
+                      Contractor and Vendor Logistics
+                    </td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Employee</td>
+                    <td>
+                      Someone who is employed by company and exists in
+                      professional settings
+                    </td>
+                    <td>
+                      Internal Business Conversations, Management and
+                      Performance Reviews, Enterprise IT Support, Business
+                      Contractor and Vendor Logistics
+                    </td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-            <!-- Action -->
-            <tr>
-              <th>Action</th>
-              <td colspan="2">
-                <div class="config-narrow-field">
-                  <div class="m__select">
-                    <select>
-                      <option>Webhook</option>
-                      <option>Email notification</option>
-                      <option>Slack notification</option>
-                    </select>
-                    <svg
-                      viewBox="0 0 12 12"
-                      aria-hidden="true"
-                      width="10"
-                      height="10"
-                    >
-                      <use href="#chevron-down"></use>
-                    </svg>
-                  </div>
-                  <div class="m__space XS"></div>
-                  <div class="m__textfield m__textfield--compact">
-                    <input type="url" placeholder="Webhook URL" />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <div
+            class="config-rules-tab-content"
+            data-config-rules-tab="metrics"
+            hidden
+          >
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Conversation Types</th>
+                    <th>Participant Roles</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Return Request Legitimacy Score</td>
+                    <td>Confidence score for return request validity</td>
+                    <td><span class="m__tag-flat">Conversation</span></td>
+                    <td>Customer Service Call</td>
+                    <td class="muted">—</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"><input type="checkbox" /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Rejection Rate</td>
+                    <td>
+                      Whether customer was blocked due to security concerns
+                    </td>
+                    <td><span class="m__tag-flat">Conversation</span></td>
+                    <td>Customer Service Call</td>
+                    <td class="muted">—</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Authentication Time</td>
+                    <td>Time elapsed during authentication process</td>
+                    <td><span class="m__tag-flat">Conversation</span></td>
+                    <td>Customer Service Call</td>
+                    <td class="muted">—</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Engagement Quality</td>
+                    <td>Quality of participant interactions</td>
+                    <td><span class="m__tag-flat">Conversation</span></td>
+                    <td>Social Conversation</td>
+                    <td class="muted">—</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Content Safety Score</td>
+                    <td>Overall safety rating of conversation</td>
+                    <td><span class="m__tag-flat">Conversation</span></td>
+                    <td>Social Conversation</td>
+                    <td class="muted">—</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Disruption Frequency</td>
+                    <td>Rate of disruptive behaviors</td>
+                    <td><span class="m__tag-flat">Participant</span></td>
+                    <td>Social Conversation</td>
+                    <td>Social Participant</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"><input type="checkbox" /></label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div
+            class="config-rules-tab-content"
+            data-config-rules-tab="triggers"
+            hidden
+          >
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Trigger</th>
+                    <th>Description</th>
+                    <th>Conditions</th>
+                    <th>Conversation Types</th>
+                    <th>Participant Roles</th>
+                    <th>Status</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Review Needed</td>
+                    <td>Manual review required for potential fraud</td>
+                    <td>
+                      Intervention Needed != 0 ANY Impersonation - Critical != 0
+                      ANY Customer Rejected != 0
+                    </td>
+                    <td>Customer Service Call</td>
+                    <td>Customer, Agent</td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intervention Needed</td>
+                    <td>Immediate intervention required for fraud</td>
+                    <td>
+                      Impersonation - Critical != 0 ANY Coercion Detected != 0
+                      ANY Return Fraud Detected != 0
+                    </td>
+                    <td>Customer Service Call</td>
+                    <td>Customer, Agent</td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Customer Rejected</td>
+                    <td>Customer action rejected due to security</td>
+                    <td>Rejection Rate = 1</td>
+                    <td>Customer Service Call</td>
+                    <td>Customer, Agent</td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"><input type="checkbox" /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Coercion Detected</td>
+                    <td>Customer coercion detected</td>
+                    <td>Customer Coercion > 0.9</td>
+                    <td>Customer Service Call</td>
+                    <td>Customer, Agent</td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Return Fraud Detected</td>
+                    <td>Fraudulent return attempt identified</td>
+                    <td>Return Fraud Attempt > 0.8</td>
+                    <td>Customer Service Call</td>
+                    <td>Customer, Agent</td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Impersonation - Possible</td>
+                    <td>Possible account impersonation detected</td>
+                    <td>Account Impersonation > 0.6</td>
+                    <td>Customer Service Call</td>
+                    <td>Customer, Agent</td>
+                    <td><span class="m__tag m__tag--success">Enabled</span></td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div
+            class="config-rules-tab-content"
+            data-config-rules-tab="actions"
+            hidden
+          >
+            <div class="m__table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Action</th>
+                    <th>Description</th>
+                    <th>Trigger</th>
+                    <th>Integration</th>
+                    <th class="m__col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Queue for Fraud Review</td>
+                    <td>Queue conversation for fraud team review</td>
+                    <td>Review Needed</td>
+                    <td>Webhook</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Fraud Alert - Immediate</td>
+                    <td>
+                      Alert security team for immediate fraud intervention
+                    </td>
+                    <td>Intervention Needed</td>
+                    <td>Webhook</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Queue for Account Review</td>
+                    <td>Queue participant account for manual review</td>
+                    <td>Account Review Required</td>
+                    <td>Webhook</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"><input type="checkbox" /></label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Emergency Moderation</td>
+                    <td>Immediate moderation for safety concerns</td>
+                    <td>Immediate Safety Concern</td>
+                    <td>Webhook</td>
+                    <td class="m__col-actions">
+                      <label class="m__toggle"
+                        ><input type="checkbox" checked
+                      /></label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
         <div class="config-form-actions">
           <button type="button" class="m__button-compact">Save</button>
-          <a href="/dashboard/behaviors/" class="m__button-outline-compact"
-            >Cancel</a
-          >
         </div>
       </div>
 
@@ -426,5 +603,34 @@ permalink: /dashboard/behaviors/config/
   </div>
   <div class="m__space XL"></div>
 </div>
+
+<script>
+  const configRulesTabInputs = document.querySelectorAll(
+    '[name="config-rules-tabs"]',
+  );
+  const configRulesTabContents = document.querySelectorAll(
+    ".config-rules-tab-content",
+  );
+
+  configRulesTabInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      configRulesTabContents.forEach((content) => {
+        content.hidden = content.dataset.configRulesTab !== input.value;
+      });
+    });
+  });
+</script>
+
+{% include 'service/modal-behaviors-delete.html' %}
+<script>
+  var deleteBehaviorsModal = document.getElementById("modal-behaviors-delete");
+  document
+    .querySelector(".dashboard-content")
+    .addEventListener("click", function (e) {
+      if (e.target.closest("[data-behaviors-delete]")) {
+        window.M.openModal(deleteBehaviorsModal);
+      }
+    });
+</script>
 
 {% endblock %}
