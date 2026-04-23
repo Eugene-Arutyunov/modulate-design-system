@@ -365,3 +365,169 @@ table.account-details td:last-child {
   align-items: center;
   gap: 0.375rem;
 }
+
+/* Config edit page — Behaviors widget title row */
+
+.config-behaviors-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+
+  & h2 {
+    margin: 0;
+    font-size: var(--m__font-size-m);
+    font-weight: var(--m__font-weight-bold);
+  }
+}
+
+/* Config edit page */
+
+.config-form {
+  font-size: var(--m__font-size-s);
+
+  & .m__select select {
+    padding: var(--m__input-padding);
+    padding-right: calc(var(--m__input-padding) + 1.4em);
+  }
+
+  & .m__textfield {
+    margin-bottom: 0;
+  }
+}
+
+table.config-form-table {
+  & td[colspan],
+  & td:last-child {
+    width: auto;
+    white-space: normal;
+    text-align: left;
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+.config-narrow-field {
+  max-width: 19.5rem;
+}
+
+
+/* Behavior rows */
+
+.config-behavior-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.config-behavior-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--m__text-color) 12%, transparent);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.config-remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--m__text-caption-color);
+  cursor: pointer;
+  padding: 0;
+  margin-top: 0.05rem;
+  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+.config-behavior-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.config-behavior-name {
+  font-weight: var(--m__font-weight-medium);
+  font-size: var(--m__font-size-s);
+}
+
+.config-behavior-desc {
+  font-size: var(--m__font-size-xs);
+  color: var(--m__text-caption-color);
+  line-height: 1.4;
+}
+
+.config-behavior-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  & .m__select {
+    width: 8rem;
+  }
+}
+
+/* Metric rows */
+
+.config-metric-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.config-metric-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--m__text-color) 12%, transparent);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.config-metric-select {
+  width: 14rem;
+  flex-shrink: 0;
+}
+
+.config-metric-condition {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  & .m__select {
+    width: 10.5rem;
+  }
+}
+
+/* Shared value input */
+
+.config-value-input {
+  width: 3.5rem;
+  flex-shrink: 0;
+}
+
+/* Form footer actions */
+
+.config-form-actions {
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--m__text-color) 12%, transparent);
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}

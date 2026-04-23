@@ -1,0 +1,430 @@
+---
+pageTitle: Create Configuration
+permalink: /dashboard/behaviors/config/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav>{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <a href="/dashboard/behaviors/" class="m__button-secondary-compact">
+        <svg
+          viewBox="0 0 12 12"
+          aria-hidden="true"
+          width="10"
+          height="10"
+          style="transform: rotate(90deg); flex-shrink: 0"
+        >
+          <use href="#chevron-down"></use>
+        </svg>
+        Back
+      </a>
+      <div class="m__space XS"></div>
+      <h1 class="dashboard-page-title">Create Configuration</h1>
+
+      <div class="m__space XS"></div>
+
+      <div class="config-form">
+        <table class="org-details config-form-table">
+          <tbody>
+            <!-- Name -->
+            <tr>
+              <th>Name</th>
+              <td colspan="2">
+                <div
+                  class="m__textfield m__textfield--compact config-narrow-field"
+                >
+                  <input type="text" value="Harassment in Job Interviews" />
+                </div>
+              </td>
+            </tr>
+
+            <!-- Scope -->
+            <tr>
+              <th>Scope</th>
+              <td colspan="2">
+                <div class="config-narrow-field">
+                  <div class="m__select">
+                    <select>
+                      <option>Conversation Types</option>
+                      <option>Employment Interview</option>
+                      <option>Customer Service Call</option>
+                      <option>Social Conversation</option>
+                    </select>
+                    <svg
+                      viewBox="0 0 12 12"
+                      aria-hidden="true"
+                      width="10"
+                      height="10"
+                    >
+                      <use href="#chevron-down"></use>
+                    </svg>
+                  </div>
+                  <div class="m__space XS"></div>
+                  <div class="m__select">
+                    <select>
+                      <option>Role</option>
+                      <option>Interviewer</option>
+                      <option>Candidate</option>
+                      <option>Agent</option>
+                    </select>
+                    <svg
+                      viewBox="0 0 12 12"
+                      aria-hidden="true"
+                      width="10"
+                      height="10"
+                    >
+                      <use href="#chevron-down"></use>
+                    </svg>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="m__space XS"></div>
+
+        <!-- Behaviors widget -->
+        <div class="m__widget">
+          <div class="config-behaviors-title-row">
+            <h2>Behaviors</h2>
+            <div style="display:flex;gap:8px">
+              <button type="button" class="m__button-outline-compact">Select</button>
+              <button type="button" class="m__button-compact">Create new</button>
+            </div>
+          </div>
+          <div class="config-behavior-list">
+            <div class="config-behavior-row">
+              <div class="config-behavior-info">
+                <span class="config-behavior-name">Mysoginy</span>
+                <span class="config-behavior-desc"
+                  >Evidence of cultural attitudes that propagate systems of
+                  marginalizing people based on their gender identity or gender
+                  presentation.</span
+                >
+              </div>
+              <div class="config-behavior-controls">
+                <div class="m__select">
+                  <select>
+                    <option>Greater then</option>
+                    <option>Less then</option>
+                    <option>Equal to</option>
+                    <option>Not equal to</option>
+                  </select>
+                  <svg
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                    width="10"
+                    height="10"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </div>
+                <div
+                  class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
+                >
+                  <input type="number" value="0.8" step="0.1" min="0" max="1" />
+                </div>
+                <button type="button" class="m__button-danger-compact">
+                  Delete
+                </button>
+              </div>
+            </div>
+
+            <div class="config-behavior-row">
+              <div class="config-behavior-info">
+                <span class="config-behavior-name">Racism</span>
+                <span class="config-behavior-desc"
+                  >Evidence of cultural attitudes that propagate systems of
+                  marginalizing people based on their racial or national
+                  identity if that identity isn't white.</span
+                >
+              </div>
+              <div class="config-behavior-controls">
+                <div class="m__select">
+                  <select>
+                    <option>Greater then</option>
+                    <option>Less then</option>
+                    <option>Equal to</option>
+                    <option>Not equal to</option>
+                  </select>
+                  <svg
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                    width="10"
+                    height="10"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </div>
+                <div
+                  class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
+                >
+                  <input type="number" value="0.8" step="0.1" min="0" max="1" />
+                </div>
+                <button type="button" class="m__button-danger-compact">
+                  Delete
+                </button>
+              </div>
+            </div>
+
+            <div class="config-behavior-row">
+              <div class="config-behavior-info">
+                <span class="config-behavior-name">Homophobia</span>
+                <span class="config-behavior-desc"
+                  >Evidence of cultural attitudes that propagate systems of
+                  marginalizing people based on their sexuality.</span
+                >
+              </div>
+              <div class="config-behavior-controls">
+                <div class="m__select">
+                  <select>
+                    <option>Greater then</option>
+                    <option>Less then</option>
+                    <option>Equal to</option>
+                    <option>Not equal to</option>
+                  </select>
+                  <svg
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                    width="10"
+                    height="10"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </div>
+                <div
+                  class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
+                >
+                  <input type="number" value="0.8" step="0.1" min="0" max="1" />
+                </div>
+                <button type="button" class="m__button-danger-compact">
+                  Delete
+                </button>
+              </div>
+            </div>
+
+            <div class="config-behavior-row">
+              <div class="config-behavior-info">
+                <span class="config-behavior-name">Sizism</span>
+                <span class="config-behavior-desc"
+                  >Evidence of cultural attitudes that propagate systems of
+                  marginalizing people who identify as fat, have a unique or
+                  nontraditional body shape, or experience medical conditions
+                  that effect their weight.</span
+                >
+              </div>
+              <div class="config-behavior-controls">
+                <div class="m__select">
+                  <select>
+                    <option>Greater then</option>
+                    <option>Less then</option>
+                    <option>Equal to</option>
+                    <option>Not equal to</option>
+                  </select>
+                  <svg
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                    width="10"
+                    height="10"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </div>
+                <div
+                  class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
+                >
+                  <input type="number" value="0.8" step="0.1" min="0" max="1" />
+                </div>
+                <button type="button" class="m__button-danger-compact">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="m__space XS"></div>
+
+        <table class="org-details config-form-table">
+          <tbody>
+            <!-- Metrics and triggers -->
+            <tr>
+              <th>Metrics and triggers</th>
+              <td colspan="2">
+                <div class="config-metric-list">
+                  <div class="config-metric-row">
+                    <div class="m__select config-metric-select">
+                      <select>
+                        <option>Toxicity scope</option>
+                        <option>Content Safety Score</option>
+                        <option>Disruption Frequency</option>
+                        <option>Account review required</option>
+                      </select>
+                      <svg
+                        viewBox="0 0 12 12"
+                        aria-hidden="true"
+                        width="10"
+                        height="10"
+                      >
+                        <use href="#chevron-down"></use>
+                      </svg>
+                    </div>
+                    <div class="config-metric-condition">
+                      <div class="m__select">
+                        <select>
+                          <option>Greater then</option>
+                          <option>Less then</option>
+                          <option>Equal to</option>
+                          <option>Not equal to</option>
+                        </select>
+                        <svg
+                          viewBox="0 0 12 12"
+                          aria-hidden="true"
+                          width="10"
+                          height="10"
+                        >
+                          <use href="#chevron-down"></use>
+                        </svg>
+                      </div>
+                      <div
+                        class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
+                      >
+                        <input
+                          type="number"
+                          value="0.8"
+                          step="0.1"
+                          min="0"
+                          max="1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="config-metric-row">
+                    <div class="m__select config-metric-select">
+                      <select>
+                        <option>Disruption Frequency</option>
+                        <option>Toxicity scope</option>
+                        <option>Content Safety Score</option>
+                        <option>Account review required</option>
+                      </select>
+                      <svg
+                        viewBox="0 0 12 12"
+                        aria-hidden="true"
+                        width="10"
+                        height="10"
+                      >
+                        <use href="#chevron-down"></use>
+                      </svg>
+                    </div>
+                    <div class="config-metric-condition">
+                      <div class="m__select">
+                        <select>
+                          <option>Greater then</option>
+                          <option>Less then</option>
+                          <option>Equal to</option>
+                          <option>Not equal to</option>
+                        </select>
+                        <svg
+                          viewBox="0 0 12 12"
+                          aria-hidden="true"
+                          width="10"
+                          height="10"
+                        >
+                          <use href="#chevron-down"></use>
+                        </svg>
+                      </div>
+                      <div
+                        class="m__textfield m__textfield--compact m__textfield--no-spin config-value-input"
+                      >
+                        <input
+                          type="number"
+                          value="0.8"
+                          step="0.1"
+                          min="0"
+                          max="1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="config-metric-row">
+                    <div class="m__select config-metric-select">
+                      <select>
+                        <option>Account review required</option>
+                        <option>Toxicity scope</option>
+                        <option>Content Safety Score</option>
+                        <option>Disruption Frequency</option>
+                      </select>
+                      <svg
+                        viewBox="0 0 12 12"
+                        aria-hidden="true"
+                        width="10"
+                        height="10"
+                      >
+                        <use href="#chevron-down"></use>
+                      </svg>
+                    </div>
+                    <div class="config-metric-condition">
+                      <label class="m__toggle">
+                        <input type="checkbox" checked />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Action -->
+            <tr>
+              <th>Action</th>
+              <td colspan="2">
+                <div class="config-narrow-field">
+                  <div class="m__select">
+                    <select>
+                      <option>Webhook</option>
+                      <option>Email notification</option>
+                      <option>Slack notification</option>
+                    </select>
+                    <svg
+                      viewBox="0 0 12 12"
+                      aria-hidden="true"
+                      width="10"
+                      height="10"
+                    >
+                      <use href="#chevron-down"></use>
+                    </svg>
+                  </div>
+                  <div class="m__space XS"></div>
+                  <div class="m__textfield m__textfield--compact">
+                    <input type="url" placeholder="Webhook URL" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="config-form-actions">
+          <button type="button" class="m__button-compact">Save</button>
+          <a href="/dashboard/behaviors/" class="m__button-outline-compact"
+            >Cancel</a
+          >
+        </div>
+      </div>
+
+      <div class="m__space XL"></div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}
