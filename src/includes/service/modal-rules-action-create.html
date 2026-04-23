@@ -1,0 +1,32 @@
+{% from 'service/modal-wrapper.njk' import modal %} {% call
+modal("modal-rules-action-create", "Create Action") %}
+<div class="m__modal__body">
+  <div class="m__textfield">
+    <label for="action-name">Name</label>
+    <input type="text" id="action-name" placeholder="" />
+  </div>
+  <p class="m__modal__field-hint">
+    Enter a clear, descriptive name for this action
+  </p>
+
+  <div class="m__space XS"></div>
+
+  <div class="m__textfield">
+    <label for="action-description">Description</label>
+    <textarea id="action-description" placeholder=""></textarea>
+  </div>
+  <p class="m__modal__field-hint">
+    Enter a detailed description of this action
+  </p>
+</div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-outline-compact"
+    data-modal-close="modal-rules-action-create"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-compact">Create</button>
+</div>
+{% endcall %}

@@ -1,0 +1,32 @@
+{% from 'service/modal-wrapper.njk' import modal %} {% call
+modal("modal-rules-role-create", "Create Role") %}
+<div class="m__modal__body">
+  <div class="m__textfield">
+    <label for="role-name">Name</label>
+    <input type="text" id="role-name" placeholder="" />
+  </div>
+  <p class="m__modal__field-hint">
+    Enter a clear, descriptive name for this role
+  </p>
+
+  <div class="m__space XS"></div>
+
+  <div class="m__textfield">
+    <label for="role-description">Description</label>
+    <textarea id="role-description" placeholder=""></textarea>
+  </div>
+  <p class="m__modal__field-hint">
+    Enter a detailed description of this role
+  </p>
+</div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-outline-compact"
+    data-modal-close="modal-rules-role-create"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-compact">Create</button>
+</div>
+{% endcall %}
