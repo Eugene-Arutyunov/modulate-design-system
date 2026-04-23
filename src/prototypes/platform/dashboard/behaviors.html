@@ -13,16 +13,316 @@ permalink: /dashboard/behaviors/
     </div>
 
     <main class="dashboard-content">
-      <h1 class="dashboard-page-title">Behaviors</h1>
-
-      <div class="dashboard-section">
-        <p>This page is intentionally empty for now.</p>
+      <div class="m__segmented-control" role="group">
+        <label>
+          <input
+            type="radio"
+            name="behaviors-tabs"
+            value="configurations"
+            checked
+          />
+          Configurations
+        </label>
+        <label>
+          <input type="radio" name="behaviors-tabs" value="behaviors" />
+          Behaviors
+        </label>
       </div>
+
+      <div class="m__space S"></div>
+
+      <section
+        class="dashboard-section behaviors-tab-content"
+        data-tab="configurations"
+      >
+        <h1 class="dashboard-page-title">Configurations</h1>
+        <p>
+          Define where and for whom specific behaviors are detected, and what
+          actions to take. Each rule selects a conversation type, participant
+          roles, one or more behaviors, and optional actions. Rules allow you to
+          focus detection and automate responses without changing the underlying
+          behavior detectors.
+        </p>
+
+        <div class="m__space XS"></div>
+
+        <div class="m__widget">
+          <div class="m__widget-header">
+            <label class="m__searchbar" for="configurations-search">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <use href="#search"></use>
+              </svg>
+              <input
+                type="search"
+                id="configurations-search"
+                placeholder="Search"
+              />
+            </label>
+            <div class="behaviors-toolbar-actions">
+              <button type="button" class="m__button-outline-compact">
+                Export
+              </button>
+              <button type="button" class="m__button-outline-compact">
+                Import
+              </button>
+              <button type="button" class="m__button-compact">Create</button>
+            </div>
+          </div>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th class="m__col-actions"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Institutional Fraud Detection</td>
+                  <td>
+                    Fraud detection for customer service calls including
+                    vishing/phishing and Return fraud
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Consumer Fraud Detection</td>
+                  <td>
+                    Protection for consumers from vishing/phishing in outreach
+                    calls
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Moderation</td>
+                  <td>
+                    Content moderation for social conversations including
+                    harassment, threats, and safety violations
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Interview Monitoring</td>
+                  <td>
+                    Comprehensive monitoring for hiring interviews to ensure
+                    professional conduct, detect bot interviewees, and prevent
+                    manipulation attempts
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sales Effectiveness</td>
+                  <td>
+                    Sales performance monitoring and coaching for intro, demo,
+                    and followup calls
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="dashboard-section behaviors-tab-content"
+        data-tab="behaviors"
+        hidden
+      >
+        <h1 class="dashboard-page-title">Behaviors</h1>
+        <p>
+          Configure what behaviors to detect in conversations such as
+          interruptions, active listening, or emotional responses.
+        </p>
+
+        <div class="m__space XS"></div>
+
+        <div class="m__widget">
+          <div class="m__widget-header">
+            <label class="m__searchbar" for="behaviors-search">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <use href="#search"></use>
+              </svg>
+              <input type="search" id="behaviors-search" placeholder="Search" />
+            </label>
+            <div class="behaviors-toolbar-actions">
+              <button type="button" class="m__button-outline-compact">
+                Export
+              </button>
+              <button type="button" class="m__button-outline-compact">
+                Import
+              </button>
+              <button type="button" class="m__button-compact">Create</button>
+            </div>
+          </div>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Behavior</th>
+                  <th>Description</th>
+                  <th class="m__col-actions"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mysoginy</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people based on their gender identity or
+                    gender presentation.
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Racism</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people based on their racial or national
+                    identity if that identity isn't white.
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Homophobia</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people based on their sexuality.
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Transphobia</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people based on their trans identity.
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sizism</td>
+                  <td>
+                    Evidence of cultural attitudes that propagate systems of
+                    marginalizing people who identify as fat, have a unique or
+                    nontraditional body shape, or experience medical conditions
+                    that affect their weight.
+                  </td>
+                  <td class="m__col-actions">
+                    <div>
+                      <button type="button" class="m__button-outline-compact">
+                        Edit
+                      </button>
+                      <button type="button" class="m__button-danger-compact">
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
       <div class="m__space XL"></div>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
+
+<script>
+  const tabInputs = document.querySelectorAll('[name="behaviors-tabs"]');
+  const tabContents = document.querySelectorAll(".behaviors-tab-content");
+
+  tabInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      tabContents.forEach((content) => {
+        content.hidden = content.dataset.tab !== input.value;
+      });
+    });
+  });
+</script>
 
 {% endblock %}
