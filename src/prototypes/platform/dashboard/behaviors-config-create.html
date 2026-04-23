@@ -66,4 +66,16 @@ permalink: /dashboard/behaviors/config-create/
   });
 </script>
 
+{% include 'service/modal-behaviors-create.html' %}
+<script>
+  var createBehaviorModal = document.getElementById("modal-behaviors-create");
+  document
+    .querySelector(".dashboard-content")
+    .addEventListener("click", function (e) {
+      if (e.target.closest("[data-behaviors-create]")) {
+        window.M.openModal(createBehaviorModal);
+      }
+    });
+</script>
+
 {% endblock %}

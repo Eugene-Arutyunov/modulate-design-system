@@ -67,13 +67,18 @@ permalink: /dashboard/behaviors/config-edit/
 </script>
 
 {% include 'service/modal-behaviors-delete.html' %}
+{% include 'service/modal-behaviors-create.html' %}
 <script>
   var deleteBehaviorsModal = document.getElementById("modal-behaviors-delete");
+  var createBehaviorModal = document.getElementById("modal-behaviors-create");
   document
     .querySelector(".dashboard-content")
     .addEventListener("click", function (e) {
       if (e.target.closest("[data-behaviors-delete]")) {
         window.M.openModal(deleteBehaviorsModal);
+      }
+      if (e.target.closest("[data-behaviors-create]")) {
+        window.M.openModal(createBehaviorModal);
       }
     });
 </script>
