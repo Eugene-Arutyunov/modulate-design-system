@@ -1,0 +1,131 @@
+{% from 'service/modal-wrapper.njk' import modal %} {% call
+modal("modal-behaviors-create", "Create Behavior") %}
+<div class="m__modal__body">
+  <div class="m__textfield">
+    <label for="behavior-name">Name</label>
+    <input type="text" id="behavior-name" placeholder="" />
+  </div>
+  <p class="m__modal__field-hint">
+    Enter a clear, descriptive name for this behavior
+  </p>
+
+  <div class="m__space XS"></div>
+
+  <div class="m__textfield">
+    <label for="behavior-description">Description</label>
+    <textarea id="behavior-description" placeholder=""></textarea>
+  </div>
+  <p class="m__modal__field-hint">
+    Enter a detailed description of this behavior and what indicators to look
+    for
+  </p>
+
+  <div class="m__space M"></div>
+
+  <div class="m__modal__checklist">
+    <p class="m__modal__checklist-label">
+      Applicable Conversation Types
+      <span style="font-weight: 400; color: var(--m__text-caption-color)"
+        >(Optional)</span
+      >
+    </p>
+    <p class="m__modal__field-hint">
+      Select which conversation types this behavior applies to. If none
+      selected, behavior applies to all conversation types.
+    </p>
+    <div class="m__space XS"></div>
+    <div class="m__tag-group">
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Customer Service Call</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Social Conversation</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Enterprise IT support</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />General Media Narration</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Multiple Speakers Livestreamed Media</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Media Interview or Talk Show</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Academic or Professional Presentation</label
+      >
+    </div>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="m__modal__checklist">
+    <p class="m__modal__checklist-label">
+      Applicable Participant Roles
+      <span style="font-weight: 400; color: var(--m__text-caption-color)"
+        >(Optional)</span
+      >
+    </p>
+    <p class="m__modal__field-hint">
+      Select which participant roles this behavior applies to. If none selected,
+      behavior applies to all participant roles.
+    </p>
+    <div class="m__space XS"></div>
+    <div class="m__tag-group">
+      <label class="m__tag-toggle"><input type="checkbox" />Customer</label>
+      <label class="m__tag-toggle"><input type="checkbox" />Agent</label>
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Social Participant</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Support Specialist</label
+      >
+      <label class="m__tag-toggle"><input type="checkbox" />Employee</label>
+      <label class="m__tag-toggle"><input type="checkbox" />Presenter</label>
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Media Participant</label
+      >
+    </div>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="m__modal__checklist">
+    <p class="m__modal__checklist-label">
+      Detection Models
+      <span style="font-weight: 400; color: var(--m__text-caption-color)"
+        >(Optional)</span
+      >
+    </p>
+    <p class="m__modal__field-hint">
+      Select which detection models this behavior should use. If none selected,
+      no detection models will be applied.
+    </p>
+    <div class="m__space XS"></div>
+    <div class="m__tag-group">
+      <label class="m__tag-toggle"><input type="checkbox" />Interruption</label>
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Speech Pattern Analyzer</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Adult Language</label
+      >
+      <label class="m__tag-toggle"
+        ><input type="checkbox" />Synthetic Voice</label
+      >
+    </div>
+  </div>
+</div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-outline-compact"
+    data-modal-close="modal-behaviors-create"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-compact">Create</button>
+</div>
+{% endcall %}
