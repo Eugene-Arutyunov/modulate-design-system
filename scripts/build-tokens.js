@@ -37,6 +37,14 @@ for (const file of tokenFiles) {
   fs.writeFileSync(path.join(distDir, file), code);
 }
 
+// copy shadcn
+{
+  const file = 'shadcn.css';
+  const filePath = path.join(srcDir, file);
+  const source = fs.readFileSync(filePath, 'utf8');
+  fs.writeFileSync(path.join(distDir, file), source);
+}
+
 const { code: bundleCode } = transform({
   filename: 'tokens.css',
   code: Buffer.from(bundleSource),
