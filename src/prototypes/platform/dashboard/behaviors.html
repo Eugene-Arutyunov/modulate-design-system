@@ -24,12 +24,8 @@ permalink: /dashboard/behaviors/
           Configurations
         </label>
         <label>
-          <input type="radio" name="behaviors-tabs" value="behaviors" />
-          Behaviors
-        </label>
-        <label>
           <input type="radio" name="behaviors-tabs" value="rules" />
-          Rules
+          Entities
         </label>
       </div>
 
@@ -49,30 +45,13 @@ permalink: /dashboard/behaviors/
 
       <section
         class="dashboard-section behaviors-tab-content"
-        data-tab="behaviors"
-        hidden
-      >
-        <h1 class="dashboard-page-title">Behaviors</h1>
-        <p>
-          Configure what behaviors to detect in conversations such as
-          interruptions, active listening, or emotional responses.
-        </p>
-
-        <div class="m__space XS"></div>
-
-        {% include 'service/table-behaviors-behaviors.html' %}
-      </section>
-
-      <section
-        class="dashboard-section behaviors-tab-content"
         data-tab="rules"
         hidden
       >
-        <h1 class="dashboard-page-title">Rules</h1>
+        <h1 class="dashboard-page-title">Entities</h1>
         <p>
-          Define detection rules by combining conversation types, participant
-          roles, metrics, triggers, and actions into targeted monitoring
-          policies.
+          Manage the building blocks used across configurations: conversation
+          types, participant roles, and behaviors.
         </p>
 
         <div class="m__space XS"></div>
@@ -113,10 +92,20 @@ permalink: /dashboard/behaviors/
 {% include 'service/modal-behaviors-delete.html' %}
 {% include 'service/modal-behaviors-create.html' %}
 {% include 'service/modal-behaviors-edit.html' %}
+{% include 'service/modal-conversation-type-create.html' %}
+{% include 'service/modal-role-create.html' %}
 <script>
   var deleteBehaviorsModal = document.getElementById("modal-behaviors-delete");
   var createBehaviorModal = document.getElementById("modal-behaviors-create");
   var editBehaviorModal = document.getElementById("modal-behaviors-edit");
+  var createConversationTypeModal = document.getElementById("modal-conversation-type-create");
+  var createRoleModal = document.getElementById("modal-role-create");
+
+  function getActiveRulesTab() {
+    var checked = document.querySelector('[name="rules-tabs"]:checked');
+    return checked ? checked.value : "behaviors";
+  }
+
   document
     .querySelector(".dashboard-content")
     .addEventListener("click", function (e) {
@@ -124,7 +113,14 @@ permalink: /dashboard/behaviors/
         window.M.openModal(deleteBehaviorsModal);
       }
       if (e.target.closest("[data-behaviors-create]")) {
-        window.M.openModal(createBehaviorModal);
+        var tab = getActiveRulesTab();
+        if (tab === "conversation-types") {
+          window.M.openModal(createConversationTypeModal);
+        } else if (tab === "roles") {
+          window.M.openModal(createRoleModal);
+        } else {
+          window.M.openModal(createBehaviorModal);
+        }
       }
       if (e.target.closest("[data-behaviors-edit]")) {
         window.M.openModal(editBehaviorModal);

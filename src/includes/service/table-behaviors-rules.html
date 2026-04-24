@@ -15,19 +15,11 @@
         Roles
       </label>
       <label>
-        <input type="radio" name="rules-tabs" value="metrics" />
-        Metrics
-      </label>
-      <label>
-        <input type="radio" name="rules-tabs" value="triggers" />
-        Triggers
-      </label>
-      <label>
-        <input type="radio" name="rules-tabs" value="actions" />
-        Actions
+        <input type="radio" name="rules-tabs" value="behaviors" />
+        Behaviors
       </label>
     </div>
-    <button type="button" class="m__button-compact">Create</button>
+    <button type="button" class="m__button-compact" data-behaviors-create>Create</button>
   </div>
 
   <div class="rules-tab-content" data-rules-tab="conversation-types">
@@ -37,7 +29,6 @@
           <tr>
             <th>Type</th>
             <th>Description</th>
-            <th>Auto-Detect</th>
             <th class="m__col-actions"></th>
           </tr>
         </thead>
@@ -46,11 +37,6 @@
             <td>Customer Service Call</td>
             <td>
               Phone or video calls between customers and support agents
-            </td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
             </td>
             <td class="m__col-actions">
               <div>
@@ -70,11 +56,6 @@
           <tr>
             <td>Social Conversation</td>
             <td>Public or group conversations in social contexts</td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
-            </td>
             <td class="m__col-actions">
               <div>
                 <button type="button" class="m__button-outline-compact">
@@ -96,11 +77,6 @@
               Any call to assist an employee in accessing or managing
               internal IT resources
             </td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
-            </td>
             <td class="m__col-actions">
               <div>
                 <button type="button" class="m__button-outline-compact">
@@ -121,11 +97,6 @@
             <td>
               Any media style content with a single speaker that talks
               exclusively in the third person
-            </td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
             </td>
             <td class="m__col-actions">
               <div>
@@ -149,11 +120,6 @@
               speakers and explicitly exists for entertainment or social
               purposes
             </td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
-            </td>
             <td class="m__col-actions">
               <div>
                 <button type="button" class="m__button-outline-compact">
@@ -175,11 +141,6 @@
               Conversations in media formatted as one on one interviews,
               host with one or more guests, or podcasts formatted as
               question and answer shows
-            </td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
             </td>
             <td class="m__col-actions">
               <div>
@@ -208,7 +169,6 @@
           <tr>
             <th>Role</th>
             <th>Description</th>
-            <th>Conversation Types</th>
             <th class="m__col-actions"></th>
           </tr>
         </thead>
@@ -216,7 +176,6 @@
           <tr>
             <td>Customer</td>
             <td>Individual contacting support</td>
-            <td>Customer Service Call</td>
             <td class="m__col-actions">
               <div>
                 <button type="button" class="m__button-outline-compact">
@@ -235,7 +194,6 @@
           <tr>
             <td>Agent</td>
             <td>Customer support representative</td>
-            <td>Customer Service Call</td>
             <td class="m__col-actions">
               <div>
                 <button type="button" class="m__button-outline-compact">
@@ -254,7 +212,6 @@
           <tr>
             <td>Social Participant</td>
             <td>Participant in social conversation</td>
-            <td>Social Conversation</td>
             <td class="m__col-actions">
               <div>
                 <button type="button" class="m__button-outline-compact">
@@ -275,11 +232,6 @@
             <td>
               Someone who works with employees or contractors to solve
               problems with things like IT, logistics, or communication
-            </td>
-            <td>
-              Internal Business Conversations, General Contractor
-              Visitation Coordination, Enterprise IT Support, Business
-              Contractor and Vendor Logistics
             </td>
             <td class="m__col-actions">
               <div>
@@ -302,11 +254,6 @@
               Someone who is employed by company and exists in
               professional settings
             </td>
-            <td>
-              Internal Business Conversations, Management and
-              Performance Reviews, Enterprise IT Support, Business
-              Contractor and Vendor Logistics
-            </td>
             <td class="m__col-actions">
               <div>
                 <button type="button" class="m__button-outline-compact">
@@ -327,52 +274,27 @@
     </div>
   </div>
 
-  <div class="rules-tab-content" data-rules-tab="metrics" hidden>
+  <div class="rules-tab-content" data-rules-tab="behaviors" hidden>
     <div class="m__table-wrapper">
       <table>
         <thead>
           <tr>
-            <th>Metric</th>
+            <th>Behavior</th>
             <th>Description</th>
-            <th>Type</th>
-            <th>Conversation Types</th>
-            <th>Participant Roles</th>
             <th class="m__col-actions"></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Return Request Legitimacy Score</td>
-            <td>Confidence score for return request validity</td>
-            <td><span class="m__tag-flat">Conversation</span></td>
-            <td>Customer Service Call</td>
-            <td class="muted">—</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Rejection Rate</td>
+            <td>Misogyny</td>
             <td>
-              Whether customer was blocked due to security concerns
+              Evidence of cultural attitudes that propagate systems of
+              marginalizing people based on their gender identity or
+              gender presentation.
             </td>
-            <td><span class="m__tag-flat">Conversation</span></td>
-            <td>Customer Service Call</td>
-            <td class="muted">—</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
                   Edit
                 </button>
                 <button
@@ -386,126 +308,36 @@
             </td>
           </tr>
           <tr>
-            <td>Authentication Time</td>
-            <td>Time elapsed during authentication process</td>
-            <td><span class="m__tag-flat">Conversation</span></td>
-            <td>Customer Service Call</td>
-            <td class="muted">—</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Engagement Quality</td>
-            <td>Quality of participant interactions</td>
-            <td><span class="m__tag-flat">Conversation</span></td>
-            <td>Social Conversation</td>
-            <td class="muted">—</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Content Safety Score</td>
-            <td>Overall safety rating of conversation</td>
-            <td><span class="m__tag-flat">Conversation</span></td>
-            <td>Social Conversation</td>
-            <td class="muted">—</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Disruption Frequency</td>
-            <td>Rate of disruptive behaviors</td>
-            <td><span class="m__tag-flat">Participant</span></td>
-            <td>Social Conversation</td>
-            <td>Social Participant</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="rules-tab-content" data-rules-tab="triggers" hidden>
-    <div class="m__table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Trigger</th>
-            <th>Description</th>
-            <th>Conditions</th>
-            <th>Conversation Types</th>
-            <th>Participant Roles</th>
-            <th>Status</th>
-            <th class="m__col-actions"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Review Needed</td>
-            <td>Manual review required for potential fraud</td>
+            <td>Racism</td>
             <td>
-              Intervention Needed != 0 ANY Impersonation - Critical != 0
-              ANY Customer Rejected != 0
+              Evidence of cultural attitudes that propagate systems of
+              marginalizing people based on their racial or national
+              identity.
             </td>
-            <td>Customer Service Call</td>
-            <td>Customer, Agent</td>
+            <td class="m__col-actions">
+              <div>
+                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="m__button-danger-compact"
+                  data-behaviors-delete
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Homophobia</td>
             <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
+              Evidence of cultural attitudes that propagate systems of
+              marginalizing people based on their sexuality.
             </td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
                   Edit
                 </button>
                 <button
@@ -519,22 +351,35 @@
             </td>
           </tr>
           <tr>
-            <td>Intervention Needed</td>
-            <td>Immediate intervention required for fraud</td>
+            <td>Coercion</td>
             <td>
-              Impersonation - Critical != 0 ANY Coercion Detected != 0
-              ANY Return Fraud Detected != 0
+              Attempts to pressure or manipulate a participant into
+              taking an action against their will.
             </td>
-            <td>Customer Service Call</td>
-            <td>Customer, Agent</td>
+            <td class="m__col-actions">
+              <div>
+                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="m__button-danger-compact"
+                  data-behaviors-delete
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Impersonation</td>
             <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
+              Attempts to falsely claim another person's identity during
+              a conversation.
             </td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
                   Edit
                 </button>
                 <button
@@ -548,210 +393,15 @@
             </td>
           </tr>
           <tr>
-            <td>Customer Rejected</td>
-            <td>Customer action rejected due to security</td>
-            <td>Rejection Rate = 1</td>
-            <td>Customer Service Call</td>
-            <td>Customer, Agent</td>
+            <td>Return Fraud Attempt</td>
             <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
+              Indicators of fraudulent behavior in the context of a
+              product return or refund request.
             </td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
                   Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Coercion Detected</td>
-            <td>Customer coercion detected</td>
-            <td>Customer Coercion > 0.9</td>
-            <td>Customer Service Call</td>
-            <td>Customer, Agent</td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Return Fraud Detected</td>
-            <td>Fraudulent return attempt identified</td>
-            <td>Return Fraud Attempt > 0.8</td>
-            <td>Customer Service Call</td>
-            <td>Customer, Agent</td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Impersonation - Possible</td>
-            <td>Possible account impersonation detected</td>
-            <td>Account Impersonation > 0.6</td>
-            <td>Customer Service Call</td>
-            <td>Customer, Agent</td>
-            <td>
-              <label class="m__toggle"
-                ><input type="checkbox" checked
-              /></label>
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="rules-tab-content" data-rules-tab="actions" hidden>
-    <div class="m__table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Action</th>
-            <th>Description</th>
-            <th>Trigger</th>
-            <th>Integration</th>
-            <th class="m__col-actions"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Queue for Fraud Review</td>
-            <td>Queue conversation for fraud team review</td>
-            <td>Review Needed</td>
-            <td>Webhook</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button type="button" class="m__button-outline-compact">
-                  Test
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Fraud Alert - Immediate</td>
-            <td>
-              Alert security team for immediate fraud intervention
-            </td>
-            <td>Intervention Needed</td>
-            <td>Webhook</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button type="button" class="m__button-outline-compact">
-                  Test
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Queue for Account Review</td>
-            <td>Queue participant account for manual review</td>
-            <td>Account Review Required</td>
-            <td>Webhook</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button type="button" class="m__button-outline-compact">
-                  Test
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Emergency Moderation</td>
-            <td>Immediate moderation for safety concerns</td>
-            <td>Immediate Safety Concern</td>
-            <td>Webhook</td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
-                <button type="button" class="m__button-outline-compact">
-                  Test
                 </button>
                 <button
                   type="button"
