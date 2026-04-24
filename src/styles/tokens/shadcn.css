@@ -1,0 +1,86 @@
+/* shadcn standard tokens */
+/* Scoped under DS light class so app shells work either way. */
+:root,
+.light,
+.light-mode {
+  --background: var(--m__background-color);
+  --foreground: var(--m__text-color);
+  --card: var(--m__bg-surface-color);
+  --card-foreground: var(--m__text-color);
+  --popover: var(--m__bg-surface-color);
+  --popover-foreground: var(--m__text-color);
+  --primary: var(--m__bg-accent-color);
+  --primary-foreground: var(--m__text-inverted-color);
+  --secondary: var(--m__bg-surface-color);
+  --secondary-foreground: var(--m__text-color);
+  --muted: var(--m__bg-surface-color);
+  --muted-foreground: var(--m__text-caption-color);
+  --accent: var(--m__code-accent-color);
+  --accent-foreground: var(--m__text-inverted-color);
+  --destructive: var(--m__ui-error-color);
+  --destructive-foreground: var(--m__text-inverted-color);
+  --success: var(--m__ui-success-color);
+  --border: var(--m__ui-border-color);
+  --input: var(--m__ui-border-color);
+  --ring: var(--m__text-hover-color);
+  --radius: 0.5rem;
+}
+
+/* Custom DS extensions for shadcn-styled buttons */
+/* Not part of the shadcn spec. Consumed by shadcn-style Button components */
+/* that want to match DS button behavior without reaching into the --m__* namespace. */
+:root,
+.light,
+.light-mode {
+  --primary-hover: var(--m__bg-hover-color);
+  --primary-active: var(--m__bg-active-color);
+  --outline-hover: var(--m__text-hover-color);
+  --outline-active: var(--m__text-active-color);
+  --destructive-active: color-mix(in srgb, var(--m__ui-error-color) 20%, transparent);
+  --success-active: color-mix(in srgb, var(--m__ui-success-color) 20%, transparent);
+  --button-m-padding: var(--m__button-padding);
+  --button-s-padding: var(--m__control-compact-padding);
+  --button-xs-padding: var(--m__button-compact-padding);
+  --button-radius: var(--m__radius-m);
+  --button-compact-radius: var(--m__radius-s);
+
+  /* link — ports DS a { ... } from components/text.css */
+  --link-color: var(--m__text-link-color);
+  --link-hover-color: var(--m__text-hover-color);
+  --link-decoration: color-mix(in srgb, var(--m__text-link-color) 20%, transparent);
+  --link-decoration-hover: color-mix(in srgb, var(--m__text-hover-color) 20%, transparent);
+}
+
+/* No re-mapping needed in dark: once DS aliases .dark-mode,.dark the --m__* vars flip
+   and the references above resolve to dark values automatically. */
+
+@custom-variant dark (&:where(.dark, .dark-mode, .dark *, .dark-mode *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Custom: enables rounded-button / rounded-button-sm utilities */
+  --radius-button: var(--button-radius);
+  --radius-button-sm: var(--button-compact-radius);
+}

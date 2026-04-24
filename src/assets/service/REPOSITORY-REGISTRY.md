@@ -103,6 +103,17 @@ Raw SVG files are normalized into one hidden sprite include. The generator remov
 
 ---
 
+## Prosocial standalone export
+
+**Script:** `scripts/export-prosocial-single-html.js`  
+**Command:** `npm run export:prosocial:single`  
+**Input:** built `/_site/online-docs/prosocial/index.html` + `/_site/bundle.css` and `src/assets/fonts/*`  
+**Output:** `dist-publish/prosocial-single/prosocial.html` + `dist-publish/prosocial-single/fonts/*`.
+
+Builds a publish-ready single HTML version of the Prosocial online doc by inlining `/bundle.css` into a `<style>` tag, removing the favicon link, and copying only font files referenced by CSS into a sibling `fonts` folder.
+
+---
+
 ## Dashboard navigation icons
 
 **Markup:** `src/includes/prototypes/dashboard-nav-sidebar.html` (imports macros), `src/includes/prototypes/dashboard-nav-macros.html` (single source for sidebar + mobile menu links), `src/includes/service/header.html` (imports the same macros for the bar and popover).  
@@ -120,6 +131,16 @@ Dashboard page navigation in the prototype uses the shared SVG sprite for page i
 **Styles:** `src/styles/prototypes/docs.css`
 
 Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. Two-column layout (`dashboard-layout`): left sidebar lists models loaded from `/assets/data/models.json` with `.m__tag-flat` status labels; right panel shows per-model tabs (Overview / API Spec / Quickstart) via `.m__segmented-control`. Overview is rendered from cached model data. API Spec fetches `/assets/data/model-docs/{identifier}/openapi.yaml` and shows it in `.docs-code-block` with a download button. Quickstart fetches `/assets/data/model-docs/{identifier}/quickstart.md` → `marked.parse()` → `hljs.highlightElement()`; example links come from `models.json`. Marked and highlight.js loaded from CDN via `{% block scripts %}`. Works fully without a backend.
+
+---
+
+## Landing page drafts
+
+**Pages:** `src/prototypes/index-landing.html`, `src/prototypes/index-landing-full-draft.html`  
+**Permalink:** `/index-landing/`  
+**Styles:** `src/styles/prototypes/index-landing.css`
+
+`index-landing.html` is the current compact hero-only landing variant (headline, inline feature line with icons, and CTA row). `index-landing-full-draft.html` keeps the previous long-form full draft for future reuse and copy extraction.
 
 ---
 

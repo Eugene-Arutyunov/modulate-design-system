@@ -19,7 +19,13 @@ const OUTPUT_FILE = path.join(
 
 // Icons that keep their original fill colors instead of using currentColor.
 // These are typically brand/vendor logos that must render in their trademark colors.
-const COLORED_ICONS = new Set(["google", "microsoft", "facebook"]);
+const COLORED_ICONS = new Set([
+  "google",
+  "microsoft",
+  "facebook",
+  "emotions",
+  "deepfake",
+]);
 
 const SHAPE_TAGS = new Set([
   "path",
