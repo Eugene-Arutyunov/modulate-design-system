@@ -22,25 +22,205 @@ permalink: /dashboard/behaviors/config-create/
       <div class="m__space XS"></div>
       <h1 class="dashboard-page-title">New configuration</h1>
 
-      <div class="config-form">
-        <div class="config-name-field">
-          <label class="config-name-field__label">Name</label>
-          <div class="m__textfield m__textfield--compact">
-            <input type="text" placeholder="" />
+      <div class="config-name-field">
+        <label class="config-name-field__label">Name</label>
+        <div class="m__textfield m__textfield--compact">
+          <input type="text" placeholder="" />
+        </div>
+      </div>
+
+      <div class="m__space M"></div>
+
+      <div class="m__widget config-selector-columns">
+        <div class="config-selector-col" id="col-type">
+          <div class="config-selector-col__header">
+            <span class="config-selector-col__title">Type</span>
+            <button
+              type="button"
+              class="m__button-compact"
+              data-create-conversation-type
+            >
+              New
+            </button>
+          </div>
+          <div class="config-selector-col__body">
+            <div class="config-type-list">
+              <label class="config-type-item">
+                <span class="config-type-item__radio">
+                  <input
+                    type="radio"
+                    name="config-type"
+                    value="customer-service"
+                  />
+                </span>
+                <div class="config-type-item__text">
+                  <span class="config-type-item__name"
+                    >Customer Service Call</span
+                  >
+                  <span class="config-type-item__desc"
+                    >Inbound support conversations</span
+                  >
+                </div>
+              </label>
+              <label class="config-type-item">
+                <span class="config-type-item__radio">
+                  <input type="radio" name="config-type" value="sales" />
+                </span>
+                <div class="config-type-item__text">
+                  <span class="config-type-item__name">Sales Outreach</span>
+                  <span class="config-type-item__desc"
+                    >Outbound sales & prospecting</span
+                  >
+                </div>
+              </label>
+              <label class="config-type-item">
+                <span class="config-type-item__radio">
+                  <input type="radio" name="config-type" value="interview" />
+                </span>
+                <div class="config-type-item__text">
+                  <span class="config-type-item__name">Hiring Interview</span>
+                  <span class="config-type-item__desc"
+                    >Candidate screening sessions</span
+                  >
+                </div>
+              </label>
+            </div>
           </div>
         </div>
 
-        <div class="m__space M"></div>
-
-        {% include 'service/table-config-behaviors-create.html' %}
-
-        <div class="m__space XS"></div>
-
-        {% include 'service/table-config-rules-create.html' %}
-
-        <div class="config-form-actions">
-          <button type="button" class="m__button-compact">Save</button>
+        <div class="config-selector-col" id="col-roles">
+          <div class="config-selector-col__header">
+            <span class="config-selector-col__title">
+              Roles
+              <span class="config-selector-col__count" id="roles-count" hidden
+                >0</span
+              >
+            </span>
+            <button type="button" class="m__button-compact" data-add-role>
+              New
+            </button>
+          </div>
+          <div class="config-selector-col__body">
+            <div class="config-role-list">
+              <label class="m__checkbox config-role-item">
+                <input
+                  type="checkbox"
+                  name="config-role"
+                  value="agent"
+                  data-role-name="Agent"
+                />
+                <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10">
+                  <use href="#checkmark"></use>
+                </svg>
+                <div class="config-role-item__text">
+                  <span class="config-role-item__name">Agent</span>
+                  <span class="config-role-item__desc"
+                    >Company representative</span
+                  >
+                </div>
+              </label>
+              <label class="m__checkbox config-role-item">
+                <input
+                  type="checkbox"
+                  name="config-role"
+                  value="customer"
+                  data-role-name="Customer"
+                />
+                <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10">
+                  <use href="#checkmark"></use>
+                </svg>
+                <div class="config-role-item__text">
+                  <span class="config-role-item__name">Customer</span>
+                  <span class="config-role-item__desc">End-user or client</span>
+                </div>
+              </label>
+              <label class="m__checkbox config-role-item">
+                <input
+                  type="checkbox"
+                  name="config-role"
+                  value="interviewer"
+                  data-role-name="Interviewer"
+                />
+                <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10">
+                  <use href="#checkmark"></use>
+                </svg>
+                <div class="config-role-item__text">
+                  <span class="config-role-item__name">Interviewer</span>
+                  <span class="config-role-item__desc"
+                    >Hiring-side participant</span
+                  >
+                </div>
+              </label>
+              <label class="m__checkbox config-role-item">
+                <input
+                  type="checkbox"
+                  name="config-role"
+                  value="candidate"
+                  data-role-name="Candidate"
+                />
+                <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10">
+                  <use href="#checkmark"></use>
+                </svg>
+                <div class="config-role-item__text">
+                  <span class="config-role-item__name">Candidate</span>
+                  <span class="config-role-item__desc">Applicant</span>
+                </div>
+              </label>
+              <label class="m__checkbox config-role-item">
+                <input
+                  type="checkbox"
+                  name="config-role"
+                  value="manager"
+                  data-role-name="Manager"
+                />
+                <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10">
+                  <use href="#checkmark"></use>
+                </svg>
+                <div class="config-role-item__text">
+                  <span class="config-role-item__name">Manager</span>
+                  <span class="config-role-item__desc"
+                    >Supervisor or escalation target</span
+                  >
+                </div>
+              </label>
+            </div>
+          </div>
         </div>
+
+        <div class="config-selector-col" id="col-behaviors">
+          <div class="config-selector-col__header">
+            <span class="config-selector-col__title">Behaviors</span>
+            <button
+              type="button"
+              class="m__button-compact"
+              data-behaviors-create
+            >
+              New
+            </button>
+          </div>
+          <div class="config-selector-col__body">
+            <div id="behaviors-content" hidden>
+              <div class="config-behaviors-tabs" id="behaviors-tabs"></div>
+              <div id="behaviors-panels"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-selector-preview">
+        <span class="config-selector-preview__label">Preview</span>
+        <div class="config-selector-preview__items" id="preview-items">
+          <span class="config-selector-preview__empty"
+            >Nothing selected yet</span
+          >
+        </div>
+      </div>
+
+      <div class="config-form-actions">
+        <a href="/dashboard/behaviors/" class="m__button-outline-compact"
+          >Cancel</a
+        >
+        <button type="button" class="m__button-compact">Save</button>
       </div>
 
       <div class="m__space XL"></div>
@@ -49,33 +229,187 @@ permalink: /dashboard/behaviors/config-create/
   <div class="m__space XL"></div>
 </div>
 
-<script>
-  const configRulesTabInputs = document.querySelectorAll(
-    '[name="config-rules-tabs"]',
-  );
-  const configRulesTabContents = document.querySelectorAll(
-    ".config-rules-tab-content",
-  );
+{% include 'service/modal-conversation-type-create.html' %} {% include
+'service/modal-role-add.html' %} {% include
+'service/modal-behaviors-create.html' %}
 
-  configRulesTabInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      configRulesTabContents.forEach((content) => {
-        content.hidden = content.dataset.configRulesTab !== input.value;
+<script>
+  (function () {
+    var BEHAVIORS = [
+      { name: "Vishing attempt", desc: "Voice phishing / social engineering" },
+      { name: "Phishing link", desc: "Suspicious URL shared in call" },
+      { name: "Return fraud", desc: "Fraudulent return request" },
+      { name: "Aggressive tone", desc: "Hostile or threatening language" },
+      {
+        name: "Script deviation",
+        desc: "Agent departing from approved script",
+      },
+      { name: "Manipulation attempt", desc: "Psychological pressure tactics" },
+      { name: "Bot detection", desc: "Non-human response patterns" },
+      { name: "Inappropriate content", desc: "Harmful or offensive speech" },
+      { name: "Compliance breach", desc: "Regulatory violation indicators" },
+    ];
+
+    var typeRadios = document.querySelectorAll('[name="config-type"]');
+    var roleCheckboxes = document.querySelectorAll('[name="config-role"]');
+    var rolesCountEl = document.getElementById("roles-count");
+    var behaviorsContent = document.getElementById("behaviors-content");
+    var behaviorsTabs = document.getElementById("behaviors-tabs");
+    var behaviorsRoleLabel = document.getElementById("behaviors-role-label");
+    var behaviorsPanels = document.getElementById("behaviors-panels");
+    var previewItems = document.getElementById("preview-items");
+
+    var selectedType = null;
+    var selectedRoles = [];
+    var activeRoleTab = null;
+
+    function updatePreview() {
+      var parts = [];
+      if (selectedType) {
+        var radio = document.querySelector(
+          '[name="config-type"][value="' + selectedType + '"]',
+        );
+        var typeName = radio
+          ? radio
+              .closest(".config-type-item")
+              .querySelector(".config-type-item__name").textContent
+          : selectedType;
+        parts.push(
+          '<span class="config-selector-preview__tag">' + typeName + "</span>",
+        );
+      }
+      if (selectedRoles.length) {
+        parts.push('<span class="config-selector-preview__sep">→</span>');
+        selectedRoles.forEach(function (role, i) {
+          var cb = document.querySelector(
+            '[name="config-role"][value="' + role + '"]',
+          );
+          var roleName = cb ? cb.dataset.roleName : role;
+          if (i > 0)
+            parts.push('<span class="config-selector-preview__sep">|</span>');
+          parts.push(
+            '<span class="config-selector-preview__tag">' +
+              roleName +
+              "</span>",
+          );
+        });
+      }
+      previewItems.innerHTML = parts.length
+        ? parts.join("")
+        : '<span class="config-selector-preview__empty">Nothing selected yet</span>';
+    }
+
+    function renderBehaviors() {
+      behaviorsTabs.innerHTML = "";
+      behaviorsPanels.innerHTML = "";
+
+      if (!selectedRoles.length) {
+        behaviorsContent.hidden = true;
+        return;
+      }
+
+      behaviorsContent.hidden = false;
+
+      if (!activeRoleTab || selectedRoles.indexOf(activeRoleTab) === -1) {
+        activeRoleTab = selectedRoles[0];
+      }
+
+      selectedRoles.forEach(function (role) {
+        var cb = document.querySelector(
+          '[name="config-role"][value="' + role + '"]',
+        );
+        var roleName = cb ? cb.dataset.roleName : role;
+
+        var tab = document.createElement("button");
+        tab.type = "button";
+        tab.className =
+          "config-behaviors-tab" +
+          (role === activeRoleTab ? " config-behaviors-tab--active" : "");
+        tab.textContent = roleName;
+        tab.addEventListener("click", function () {
+          activeRoleTab = role;
+          renderBehaviors();
+        });
+        behaviorsTabs.appendChild(tab);
+
+        var panel = document.createElement("div");
+        panel.className = "config-behaviors-panel";
+        panel.hidden = role !== activeRoleTab;
+
+        BEHAVIORS.forEach(function (b, idx) {
+          var item = document.createElement("label");
+          item.className = "m__checkbox config-behavior-check-item";
+          item.innerHTML =
+            '<input type="checkbox" name="behavior-' +
+            role +
+            "-" +
+            idx +
+            '" />' +
+            '<svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>' +
+            '<div class="config-behavior-check-item__text">' +
+            '<span class="config-behavior-check-item__name">' +
+            b.name +
+            "</span>" +
+            '<span class="config-behavior-check-item__desc">' +
+            b.desc +
+            "</span>" +
+            "</div>";
+          panel.appendChild(item);
+        });
+
+        behaviorsPanels.appendChild(panel);
+      });
+
+      var activeCb = document.querySelector(
+        '[name="config-role"][value="' + activeRoleTab + '"]',
+      );
+      behaviorsRoleLabel.textContent = activeCb
+        ? activeCb.dataset.roleName
+        : activeRoleTab;
+    }
+
+    typeRadios.forEach(function (radio) {
+      radio.addEventListener("change", function () {
+        selectedType = radio.value;
+        updatePreview();
       });
     });
-  });
-</script>
 
-{% include 'service/modal-behaviors-create.html' %}
-<script>
-  var createBehaviorModal = document.getElementById("modal-behaviors-create");
-  document
-    .querySelector(".dashboard-content")
-    .addEventListener("click", function (e) {
-      if (e.target.closest("[data-behaviors-create]")) {
-        window.M.openModal(createBehaviorModal);
-      }
+    roleCheckboxes.forEach(function (cb) {
+      cb.addEventListener("change", function () {
+        selectedRoles = Array.from(
+          document.querySelectorAll('[name="config-role"]:checked'),
+        ).map(function (c) {
+          return c.value;
+        });
+        var count = selectedRoles.length;
+        rolesCountEl.textContent = count;
+        rolesCountEl.hidden = count === 0;
+        renderBehaviors();
+        updatePreview();
+      });
     });
+
+    var createConversationTypeModal = document.getElementById(
+      "modal-conversation-type-create",
+    );
+    var addRoleModal = document.getElementById("modal-role-add");
+    var createBehaviorModal = document.getElementById("modal-behaviors-create");
+
+    document
+      .querySelector(".dashboard-content")
+      .addEventListener("click", function (e) {
+        if (e.target.closest("[data-create-conversation-type]"))
+          window.M.openModal(createConversationTypeModal);
+        if (e.target.closest("[data-add-role]"))
+          window.M.openModal(addRoleModal);
+        if (e.target.closest("[data-behaviors-create]"))
+          window.M.openModal(createBehaviorModal);
+      });
+
+    renderBehaviors();
+    updatePreview();
+  })();
 </script>
 
 {% endblock %}

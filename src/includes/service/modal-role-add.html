@@ -1,0 +1,66 @@
+{% from 'service/modal-wrapper.njk' import modal %} {% call
+modal("modal-role-add", "Add Role") %}
+<div class="m__modal__body">
+  <div class="m__table-wrapper">
+    <table>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" id="add-role-customer" /></td>
+          <td>
+            <label for="add-role-customer">
+              <strong>Customer</strong>
+              <span class="m__modal__field-hint">Individual contacting support</span>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="add-role-agent" /></td>
+          <td>
+            <label for="add-role-agent">
+              <strong>Agent</strong>
+              <span class="m__modal__field-hint">Customer support representative</span>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="add-role-social" /></td>
+          <td>
+            <label for="add-role-social">
+              <strong>Social Participant</strong>
+              <span class="m__modal__field-hint">Participant in social conversation</span>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="add-role-support" /></td>
+          <td>
+            <label for="add-role-support">
+              <strong>Support Specialist</strong>
+              <span class="m__modal__field-hint">Someone who works with employees or contractors to solve problems with things like IT, logistics, or communication</span>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="add-role-employee" /></td>
+          <td>
+            <label for="add-role-employee">
+              <strong>Employee</strong>
+              <span class="m__modal__field-hint">Someone who is employed by company and exists in professional settings</span>
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-outline-compact"
+    data-modal-close="modal-role-add"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-compact">Add</button>
+</div>
+{% endcall %}
