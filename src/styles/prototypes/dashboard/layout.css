@@ -722,11 +722,23 @@ table.config-form-table {
 .config-type-item {
   display: flex;
   align-items: flex-start;
-  padding: 0.45rem 0;
+  padding: 0.45rem 0.5rem;
+  margin: 0 -0.5rem;
+  border-radius: 0.4rem;
   cursor: pointer;
+  transition: background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
 
   & input[type="radio"] {
     display: none;
+  }
+
+  &:hover {
+    background-color: var(--m__bg-surface-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  &:has(input:checked) {
+    background-color: var(--m__bg-surface-color);
   }
 
   &:has(input:checked) .config-type-item__name {
