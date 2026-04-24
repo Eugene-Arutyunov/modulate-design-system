@@ -27,6 +27,12 @@ permalink: /models/
     <h2>Transcription</h2>
     <div class="pricing-table-wrap">
       <table>
+        <colgroup>
+          <col style="width: 25%" />
+          <col style="width: 25%" />
+          <col style="width: 25%" />
+          <col style="width: 25%" />
+        </colgroup>
         <thead>
           <tr>
             <th>Model Comparison</th>
@@ -187,6 +193,11 @@ permalink: /models/
     </p>
     <div class="pricing-table-wrap">
       <table>
+        <colgroup>
+          <col style="width: 25%" />
+          <col />
+          <col />
+        </colgroup>
         <thead>
           <tr>
             <th>Model Comparison</th>
@@ -316,6 +327,185 @@ permalink: /models/
         </tbody>
       </table>
     </div>
+    <div class="m__space XL"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="pii-phi-redaction" label="PII/PHI Redaction">
+  <div class="m__wrapper">
+    <div class="m__space M"></div>
+
+    <h2>PII/PHI Redaction</h2>
+    <p>
+      Velma-2 PII/PHI Redaction (Personally Identifiable Information / Protected
+      Health Information) transcribes audio in real time, detects and redacts
+      sensitive entities from both the transcript text and the audio — returning
+      a clean MP3 and a redacted transcript with 100+ entity types supported.
+    </p>
+
+    <div class="pricing-table-wrap">
+      <table>
+        <colgroup>
+          <col style="width: 25%" />
+          <col />
+          <col />
+        </colgroup>
+        <thead>
+          <tr>
+            <th></th>
+            <th>PII/PHI Redaction Batch</th>
+            <th>PII/PHI Redaction Streaming</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Description</td>
+            <td>
+              Transcribe an audio file and receive a redacted transcript and
+              redacted MP3 with PII/PHI ranges silenced
+            </td>
+            <td>
+              Real-time PII/PHI redaction via WebSocket — streams audio in,
+              receives redacted transcript text and redacted MP3 clips as each
+              utterance completes
+            </td>
+          </tr>
+
+          <tr>
+            <td>Endpoint</td>
+            <td><code>/api/velma-2-pii-phi-redaction-batch</code></td>
+            <td><code>/api/velma-2-pii-phi-redaction-streaming</code></td>
+          </tr>
+
+          <tr>
+            <td>Type</td>
+            <td>Batch</td>
+            <td>Streaming</td>
+          </tr>
+
+          <tr>
+            <td>API</td>
+            <td>REST API</td>
+            <td>WebSocket</td>
+          </tr>
+
+          <tr>
+            <td>Accepted Files</td>
+            <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
+            <td>AAC, AIFF, FLAC, MP3, OGG, WAV, WebM + raw PCM formats</td>
+          </tr>
+
+          <tr>
+            <td>Pricing</td>
+            <td><strong>$0.05 / hour</strong></td>
+            <td><strong>$0.08 / hour</strong></td>
+          </tr>
+
+          <tr>
+            <td colspan="3">Outputs</td>
+          </tr>
+
+          <tr>
+            <td>Redacted Transcript</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Redacted Audio (MP3)</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Redaction Ranges</td>
+            <td>
+              Full list of silenced <code>[start_ms, end_ms]</code> ranges
+            </td>
+            <td>Per-utterance timing with each audio clip</td>
+          </tr>
+
+          <tr>
+            <td colspan="3">PII/PHI Categories Detected</td>
+          </tr>
+
+          <tr>
+            <td>Coverage</td>
+            <td>100+ PII/PHI entity types across all categories</td>
+            <td>100+ PII/PHI entity types across all categories</td>
+          </tr>
+
+          <tr>
+            <td>Names &amp; Identifiers</td>
+            <td>Full names, usernames, dates of birth</td>
+            <td>Full names, usernames, dates of birth</td>
+          </tr>
+
+          <tr>
+            <td>Government IDs</td>
+            <td>SSN, passport, driver’s license</td>
+            <td>SSN, passport, driver’s license</td>
+          </tr>
+
+          <tr>
+            <td>Address &amp; Locations</td>
+            <td>Street addresses, ZIP codes, cities</td>
+            <td>Street addresses, ZIP codes, cities</td>
+          </tr>
+
+          <tr>
+            <td>Contact Details</td>
+            <td>Phone numbers, email addresses</td>
+            <td>Phone numbers, email addresses</td>
+          </tr>
+
+          <tr>
+            <td>Financial Info</td>
+            <td>Credit card numbers, bank accounts</td>
+            <td>Credit card numbers, bank accounts</td>
+          </tr>
+
+          <tr>
+            <td>Medical / Health Info (PHI)</td>
+            <td>Diagnoses, medications, health record IDs</td>
+            <td>Diagnoses, medications, health record IDs</td>
+          </tr>
+
+          <tr>
+            <td colspan="3">Built-In Features</td>
+          </tr>
+
+          <tr>
+            <td>Speaker Diarization</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Configurable Redaction Padding</td>
+            <td>
+              Adjustable silence buffer before and after each redacted range
+            </td>
+            <td>
+              Adjustable silence buffer before and after each redacted range
+            </td>
+          </tr>
+
+          <tr>
+            <td>Real-Time</td>
+            <td>−</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>First Result</td>
+            <td>After full file upload</td>
+            <td>At utterance completion</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="m__space XL"></div>
   </div>
 </ids-nav-item>
