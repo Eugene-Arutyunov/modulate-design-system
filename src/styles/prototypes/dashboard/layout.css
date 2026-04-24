@@ -647,7 +647,7 @@ table.config-form-table {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: var(--m__widget-padding);
+  padding: var(--m__widget-padding) 0;
   overflow: hidden;
 
   &:not(:last-child) {
@@ -662,6 +662,7 @@ table.config-form-table {
   gap: 0.5rem;
   margin-bottom: 0.5rem;
   flex-shrink: 0;
+  padding: 0 var(--m__widget-padding);
 }
 
 .config-selector-col__title {
@@ -684,6 +685,7 @@ table.config-form-table {
   font-size: var(--m__font-size-xs);
   color: var(--m__text-caption-color);
   margin: 0 0 0.5rem;
+  padding: 0 var(--m__widget-padding);
 }
 
 .config-selector-col__empty {
@@ -709,9 +711,7 @@ table.config-form-table {
 .config-type-item {
   display: flex;
   align-items: flex-start;
-  padding: 0.45rem 0.5rem;
-  margin: 0 -0.5rem;
-  border-radius: 0.4rem;
+  padding: 0.45rem var(--m__widget-padding);
   cursor: pointer;
   transition: color var(--m__unhover-transition-duration)
     var(--m__transition-easing);
@@ -727,7 +727,12 @@ table.config-form-table {
   }
 
   &:has(input:checked) {
-    background-color: var(--m__bg-surface-color);
+    background: linear-gradient(
+        to left,
+        color-mix(in srgb, var(--m__code-accent-color) 10%, transparent),
+        transparent 50%
+      )
+      var(--m__bg-surface-color);
   }
 
   &:has(input:checked) .config-type-item__name {
@@ -765,7 +770,7 @@ table.config-form-table {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: 0.3rem 0;
+  padding: 0.3rem var(--m__widget-padding);
 }
 
 .config-role-item__check {
@@ -808,6 +813,15 @@ table.config-form-table {
   color: var(--m__text-caption-color);
 }
 
+.config-role-item--active {
+  background: linear-gradient(
+      to left,
+      color-mix(in srgb, var(--m__code-accent-color) 10%, transparent),
+      transparent 50%
+    )
+    var(--m__bg-surface-color);
+}
+
 .config-role-item--active .config-role-item__name {
   color: var(--m__code-accent-color);
 }
@@ -826,6 +840,7 @@ table.config-form-table {
   gap: 0.2rem;
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
+  padding: 0 var(--m__widget-padding);
 }
 
 .config-behaviors-tab {
@@ -875,6 +890,7 @@ table.config-form-table {
 .config-behaviors-panel {
   display: flex;
   flex-direction: column;
+  padding: 0 var(--m__widget-padding);
 }
 
 .config-behavior-check-item {
