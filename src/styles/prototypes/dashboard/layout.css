@@ -673,25 +673,12 @@ table.config-form-table {
   color: var(--m__text-color);
 }
 
-.config-selector-col__count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1rem;
-  height: 1rem;
-  border-radius: 0.5rem;
-  background-color: color-mix(in srgb, var(--m__text-color) 15%, transparent);
-  font-size: var(--m__font-size-xs);
-  font-weight: var(--m__font-weight-bold);
-  padding: 0 0.2rem;
-  text-transform: none;
-  letter-spacing: 0;
-}
 
 .config-selector-col__body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .config-selector-col__hint {
@@ -726,15 +713,17 @@ table.config-form-table {
   margin: 0 -0.5rem;
   border-radius: 0.4rem;
   cursor: pointer;
-  transition: background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
 
   & input[type="radio"] {
     display: none;
   }
 
   &:hover {
-    background-color: var(--m__bg-surface-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-hover-color);
+    transition-duration: color var(--m__hover-transition-duration)
+      var(--m__transition-easing);
   }
 
   &:has(input:checked) {
@@ -742,7 +731,7 @@ table.config-form-table {
   }
 
   &:has(input:checked) .config-type-item__name {
-    color: var(--m__bg-accent-color);
+    color: var(--m__code-accent-color);
   }
 }
 
@@ -776,24 +765,38 @@ table.config-form-table {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: 0.45rem 0;
-  cursor: pointer;
-
-  & > svg {
-    top: 0.45rem;
-    transform: none;
-  }
+  padding: 0.3rem 0;
 }
 
-.config-role-item__text {
+.config-role-item__check {
+  padding-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.config-role-item__body {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
   flex: 1;
   min-width: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--m__text-color);
+  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
 }
 
 .config-role-item__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   font-size: var(--m__font-size-xs);
   font-weight: var(--m__font-weight-medium);
 }
@@ -801,6 +804,10 @@ table.config-form-table {
 .config-role-item__desc {
   font-size: var(--m__font-size-xs);
   color: var(--m__text-caption-color);
+}
+
+.config-role-item--active .config-role-item__name {
+  color: var(--m__code-accent-color);
 }
 
 /* Behaviors column */
@@ -848,6 +855,12 @@ table.config-form-table {
   font-size: var(--m__font-size-xs);
   color: var(--m__text-caption-color);
   margin: 0 0 0.4rem;
+}
+
+.config-behaviors-panel[hidden],
+.config-selector-col__empty[hidden],
+.config-role-list[hidden] {
+  display: none;
 }
 
 .config-behaviors-panel {

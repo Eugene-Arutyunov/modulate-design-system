@@ -92,7 +92,7 @@ permalink: /dashboard/behaviors/config-create/
           <div class="config-selector-col__header">
             <span class="config-selector-col__title">
               Roles
-              <span class="config-selector-col__count" id="roles-count" hidden
+              <span class="config-selector-col__count m__badge" id="roles-count" hidden
                 >0</span
               >
             </span>
@@ -105,120 +105,68 @@ permalink: /dashboard/behaviors/config-create/
             </button>
           </div>
           <div class="config-selector-col__body">
-            <div class="config-role-list">
-              <label class="m__checkbox config-role-item">
-                <input
-                  type="checkbox"
-                  name="config-role"
-                  value="agent"
-                  data-role-name="Agent"
-                />
-                <svg
-                  viewBox="0 0 32 32"
-                  aria-hidden="true"
-                  width="10"
-                  height="10"
-                >
-                  <use href="#checkmark"></use>
-                </svg>
-                <div class="config-role-item__text">
-                  <span class="config-role-item__name">Agent</span>
-                  <span class="config-role-item__desc"
-                    >Company representative</span
-                  >
-                </div>
-              </label>
-              <label class="m__checkbox config-role-item">
-                <input
-                  type="checkbox"
-                  name="config-role"
-                  value="customer"
-                  data-role-name="Customer"
-                />
-                <svg
-                  viewBox="0 0 32 32"
-                  aria-hidden="true"
-                  width="10"
-                  height="10"
-                >
-                  <use href="#checkmark"></use>
-                </svg>
-                <div class="config-role-item__text">
-                  <span class="config-role-item__name">Customer</span>
+            <div class="config-selector-col__empty" id="roles-placeholder">Select a conversation type in the left column to specify a role</div>
+            <div class="config-role-list" id="roles-list" hidden>
+              <div class="config-role-item">
+                <label class="m__checkbox config-role-item__check">
+                  <input type="checkbox" name="config-role" value="agent" data-role-name="Agent" />
+                  <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>
+                </label>
+                <button type="button" class="config-role-item__body">
+                  <span class="config-role-item__name">Agent<span class="config-role-item__count m__badge" hidden>0</span></span>
+                  <span class="config-role-item__desc">Company representative</span>
+                </button>
+              </div>
+              <div class="config-role-item">
+                <label class="m__checkbox config-role-item__check">
+                  <input type="checkbox" name="config-role" value="customer" data-role-name="Customer" />
+                  <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>
+                </label>
+                <button type="button" class="config-role-item__body">
+                  <span class="config-role-item__name">Customer<span class="config-role-item__count m__badge" hidden>0</span></span>
                   <span class="config-role-item__desc">End-user or client</span>
-                </div>
-              </label>
-              <label class="m__checkbox config-role-item">
-                <input
-                  type="checkbox"
-                  name="config-role"
-                  value="interviewer"
-                  data-role-name="Interviewer"
-                />
-                <svg
-                  viewBox="0 0 32 32"
-                  aria-hidden="true"
-                  width="10"
-                  height="10"
-                >
-                  <use href="#checkmark"></use>
-                </svg>
-                <div class="config-role-item__text">
-                  <span class="config-role-item__name">Interviewer</span>
-                  <span class="config-role-item__desc"
-                    >Hiring-side participant</span
-                  >
-                </div>
-              </label>
-              <label class="m__checkbox config-role-item">
-                <input
-                  type="checkbox"
-                  name="config-role"
-                  value="candidate"
-                  data-role-name="Candidate"
-                />
-                <svg
-                  viewBox="0 0 32 32"
-                  aria-hidden="true"
-                  width="10"
-                  height="10"
-                >
-                  <use href="#checkmark"></use>
-                </svg>
-                <div class="config-role-item__text">
-                  <span class="config-role-item__name">Candidate</span>
+                </button>
+              </div>
+              <div class="config-role-item">
+                <label class="m__checkbox config-role-item__check">
+                  <input type="checkbox" name="config-role" value="interviewer" data-role-name="Interviewer" />
+                  <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>
+                </label>
+                <button type="button" class="config-role-item__body">
+                  <span class="config-role-item__name">Interviewer<span class="config-role-item__count m__badge" hidden>0</span></span>
+                  <span class="config-role-item__desc">Hiring-side participant</span>
+                </button>
+              </div>
+              <div class="config-role-item">
+                <label class="m__checkbox config-role-item__check">
+                  <input type="checkbox" name="config-role" value="candidate" data-role-name="Candidate" />
+                  <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>
+                </label>
+                <button type="button" class="config-role-item__body">
+                  <span class="config-role-item__name">Candidate<span class="config-role-item__count m__badge" hidden>0</span></span>
                   <span class="config-role-item__desc">Applicant</span>
-                </div>
-              </label>
-              <label class="m__checkbox config-role-item">
-                <input
-                  type="checkbox"
-                  name="config-role"
-                  value="manager"
-                  data-role-name="Manager"
-                />
-                <svg
-                  viewBox="0 0 32 32"
-                  aria-hidden="true"
-                  width="10"
-                  height="10"
-                >
-                  <use href="#checkmark"></use>
-                </svg>
-                <div class="config-role-item__text">
-                  <span class="config-role-item__name">Manager</span>
-                  <span class="config-role-item__desc"
-                    >Supervisor or escalation target</span
-                  >
-                </div>
-              </label>
+                </button>
+              </div>
+              <div class="config-role-item">
+                <label class="m__checkbox config-role-item__check">
+                  <input type="checkbox" name="config-role" value="manager" data-role-name="Manager" />
+                  <svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>
+                </label>
+                <button type="button" class="config-role-item__body">
+                  <span class="config-role-item__name">Manager<span class="config-role-item__count m__badge" hidden>0</span></span>
+                  <span class="config-role-item__desc">Supervisor or escalation target</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="config-selector-col" id="col-behaviors">
           <div class="config-selector-col__header">
-            <span class="config-selector-col__title">Behaviors</span>
+            <span class="config-selector-col__title">
+              Behaviors
+              <span class="m__badge" id="behaviors-count" hidden>0</span>
+            </span>
             <button
               type="button"
               class="m__button-outline-compact"
@@ -228,6 +176,7 @@ permalink: /dashboard/behaviors/config-create/
             </button>
           </div>
           <div class="config-selector-col__body">
+            <div class="config-selector-col__empty" id="behaviors-placeholder" hidden>Select a role to assign behaviors</div>
             <div id="behaviors-content" hidden>
               <div class="config-behaviors-tabs" id="behaviors-tabs"></div>
               <div id="behaviors-panels"></div>
@@ -282,45 +231,186 @@ permalink: /dashboard/behaviors/config-create/
     var typeRadios = document.querySelectorAll('[name="config-type"]');
     var roleCheckboxes = document.querySelectorAll('[name="config-role"]');
     var rolesCountEl = document.getElementById("roles-count");
+    var rolesPlaceholder = document.getElementById("roles-placeholder");
+    var rolesList = document.getElementById("roles-list");
+    var behaviorsPlaceholder = document.getElementById("behaviors-placeholder");
     var behaviorsContent = document.getElementById("behaviors-content");
     var behaviorsTabs = document.getElementById("behaviors-tabs");
-    var behaviorsRoleLabel = document.getElementById("behaviors-role-label");
     var behaviorsPanels = document.getElementById("behaviors-panels");
+    var behaviorsCountEl = document.getElementById("behaviors-count");
     var previewItems = document.getElementById("preview-items");
 
     var selectedType = null;
     var selectedRoles = [];
     var activeRoleTab = null;
 
+    // --- Behaviors count badges ---
+
+    function updateRoleCount(role) {
+      var count = document.querySelectorAll('[name^="behavior-' + role + '-"]:checked').length;
+      var cb = document.querySelector('[name="config-role"][value="' + role + '"]');
+      if (cb) {
+        var el = cb.closest(".config-role-item").querySelector(".config-role-item__count");
+        if (el) { el.textContent = count; el.hidden = count === 0; }
+      }
+      var total = document.querySelectorAll('[name^="behavior-"]:checked').length;
+      behaviorsCountEl.textContent = total;
+      behaviorsCountEl.hidden = total === 0;
+    }
+
+    behaviorsPanels.addEventListener("change", function (e) {
+      var input = e.target.closest('input[type="checkbox"]');
+      if (!input) return;
+      var match = input.name.match(/^behavior-(.+)-\d+$/);
+      if (match) updateRoleCount(match[1]);
+    });
+
+    // --- Role active highlight ---
+
+    function updateActiveRoleItem() {
+      document.querySelectorAll(".config-role-item").forEach(function (item) {
+        var input = item.querySelector('[name="config-role"]');
+        item.classList.toggle(
+          "config-role-item--active",
+          input && input.checked && input.value === activeRoleTab
+        );
+      });
+    }
+
+    // --- Behaviors tabs & panels ---
+
+    function switchTab(role) {
+      activeRoleTab = role;
+      behaviorsTabs.querySelectorAll(".config-behaviors-tab").forEach(function (t) {
+        t.classList.toggle("config-behaviors-tab--active", t.dataset.role === role);
+      });
+      behaviorsPanels.querySelectorAll(".config-behaviors-panel").forEach(function (p) {
+        p.hidden = p.dataset.role !== role;
+      });
+      updateActiveRoleItem();
+    }
+
+    function addRolePanel(role) {
+      var cb = document.querySelector('[name="config-role"][value="' + role + '"]');
+      var roleName = cb ? cb.dataset.roleName : role;
+
+      var tab = document.createElement("button");
+      tab.type = "button";
+      tab.dataset.role = role;
+      tab.className = "config-behaviors-tab";
+      tab.textContent = roleName;
+      tab.addEventListener("click", function () { switchTab(role); });
+      behaviorsTabs.appendChild(tab);
+
+      var panel = document.createElement("div");
+      panel.className = "config-behaviors-panel";
+      panel.dataset.role = role;
+      panel.hidden = true;
+      BEHAVIORS.forEach(function (b, idx) {
+        var item = document.createElement("label");
+        item.className = "m__checkbox config-behavior-check-item";
+        item.innerHTML =
+          '<input type="checkbox" name="behavior-' + role + "-" + idx + '" />' +
+          '<svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>' +
+          '<div class="config-behavior-check-item__text">' +
+          '<span class="config-behavior-check-item__name">' + b.name + "</span>" +
+          '<span class="config-behavior-check-item__desc">' + b.desc + "</span>" +
+          "</div>";
+        panel.appendChild(item);
+      });
+      behaviorsPanels.appendChild(panel);
+    }
+
+    function removeRolePanel(role) {
+      var tab = behaviorsTabs.querySelector('[data-role="' + role + '"]');
+      var panel = behaviorsPanels.querySelector('[data-role="' + role + '"]');
+      if (tab) tab.remove();
+      if (panel) panel.remove();
+      updateRoleCount(role);
+    }
+
+    // --- Role checkbox change ---
+
+    roleCheckboxes.forEach(function (checkbox) {
+      checkbox.addEventListener("change", function () {
+        selectedRoles = Array.from(
+          document.querySelectorAll('[name="config-role"]:checked')
+        ).map(function (c) { return c.value; });
+
+        rolesCountEl.textContent = selectedRoles.length;
+        rolesCountEl.hidden = selectedRoles.length === 0;
+
+        if (checkbox.checked) {
+          // Role just added: create its panel and switch to it
+          behaviorsContent.hidden = false;
+          addRolePanel(checkbox.value);
+          activeRoleTab = checkbox.value;
+          switchTab(activeRoleTab);
+        } else {
+          // Role removed: delete its panel
+          removeRolePanel(checkbox.value);
+          if (activeRoleTab === checkbox.value) {
+            activeRoleTab = selectedRoles[0] || null;
+            if (activeRoleTab) switchTab(activeRoleTab);
+            else {
+              behaviorsContent.hidden = true;
+              behaviorsTabs.innerHTML = "";
+              behaviorsPanels.innerHTML = "";
+            }
+          }
+          updateActiveRoleItem();
+        }
+
+        updateBehaviorsPlaceholder();
+        updatePreview();
+      });
+    });
+
+    // Clicking the role body switches to its behaviors tab (if role is checked)
+    document.querySelectorAll(".config-role-item__body").forEach(function (body) {
+      body.addEventListener("click", function () {
+        var input = body.closest(".config-role-item").querySelector('[name="config-role"]');
+        if (input && input.checked) {
+          switchTab(input.value);
+        }
+      });
+    });
+
+    // --- Type ---
+
+    typeRadios.forEach(function (radio) {
+      radio.addEventListener("change", function () {
+        selectedType = radio.value;
+        rolesPlaceholder.hidden = true;
+        rolesList.hidden = false;
+        updateBehaviorsPlaceholder();
+        updatePreview();
+      });
+    });
+
+    function updateBehaviorsPlaceholder() {
+      var showPlaceholder = selectedType !== null && selectedRoles.length === 0;
+      behaviorsPlaceholder.hidden = !showPlaceholder;
+    }
+
+    // --- Preview ---
+
     function updatePreview() {
       var parts = [];
       if (selectedType) {
-        var radio = document.querySelector(
-          '[name="config-type"][value="' + selectedType + '"]',
-        );
+        var radio = document.querySelector('[name="config-type"][value="' + selectedType + '"]');
         var typeName = radio
-          ? radio
-              .closest(".config-type-item")
-              .querySelector(".config-type-item__name").textContent
+          ? radio.closest(".config-type-item").querySelector(".config-type-item__name").textContent
           : selectedType;
-        parts.push(
-          '<span class="config-selector-preview__tag">' + typeName + "</span>",
-        );
+        parts.push('<span class="config-selector-preview__tag">' + typeName + "</span>");
       }
       if (selectedRoles.length) {
         parts.push('<span class="config-selector-preview__sep">→</span>');
         selectedRoles.forEach(function (role, i) {
-          var cb = document.querySelector(
-            '[name="config-role"][value="' + role + '"]',
-          );
+          var cb = document.querySelector('[name="config-role"][value="' + role + '"]');
           var roleName = cb ? cb.dataset.roleName : role;
-          if (i > 0)
-            parts.push('<span class="config-selector-preview__sep">|</span>');
-          parts.push(
-            '<span class="config-selector-preview__tag">' +
-              roleName +
-              "</span>",
-          );
+          if (i > 0) parts.push('<span class="config-selector-preview__sep">|</span>');
+          parts.push('<span class="config-selector-preview__tag">' + roleName + "</span>");
         });
       }
       previewItems.innerHTML = parts.length
@@ -328,115 +418,18 @@ permalink: /dashboard/behaviors/config-create/
         : '<span class="config-selector-preview__empty">Nothing selected yet</span>';
     }
 
-    function renderBehaviors() {
-      behaviorsTabs.innerHTML = "";
-      behaviorsPanels.innerHTML = "";
+    // --- Modals ---
 
-      if (!selectedRoles.length) {
-        behaviorsContent.hidden = true;
-        return;
-      }
-
-      behaviorsContent.hidden = false;
-
-      if (!activeRoleTab || selectedRoles.indexOf(activeRoleTab) === -1) {
-        activeRoleTab = selectedRoles[0];
-      }
-
-      selectedRoles.forEach(function (role) {
-        var cb = document.querySelector(
-          '[name="config-role"][value="' + role + '"]',
-        );
-        var roleName = cb ? cb.dataset.roleName : role;
-
-        var tab = document.createElement("button");
-        tab.type = "button";
-        tab.className =
-          "config-behaviors-tab" +
-          (role === activeRoleTab ? " config-behaviors-tab--active" : "");
-        tab.textContent = roleName;
-        tab.addEventListener("click", function () {
-          activeRoleTab = role;
-          renderBehaviors();
-        });
-        behaviorsTabs.appendChild(tab);
-
-        var panel = document.createElement("div");
-        panel.className = "config-behaviors-panel";
-        panel.hidden = role !== activeRoleTab;
-
-        BEHAVIORS.forEach(function (b, idx) {
-          var item = document.createElement("label");
-          item.className = "m__checkbox config-behavior-check-item";
-          item.innerHTML =
-            '<input type="checkbox" name="behavior-' +
-            role +
-            "-" +
-            idx +
-            '" />' +
-            '<svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>' +
-            '<div class="config-behavior-check-item__text">' +
-            '<span class="config-behavior-check-item__name">' +
-            b.name +
-            "</span>" +
-            '<span class="config-behavior-check-item__desc">' +
-            b.desc +
-            "</span>" +
-            "</div>";
-          panel.appendChild(item);
-        });
-
-        behaviorsPanels.appendChild(panel);
-      });
-
-      var activeCb = document.querySelector(
-        '[name="config-role"][value="' + activeRoleTab + '"]',
-      );
-      behaviorsRoleLabel.textContent = activeCb
-        ? activeCb.dataset.roleName
-        : activeRoleTab;
-    }
-
-    typeRadios.forEach(function (radio) {
-      radio.addEventListener("change", function () {
-        selectedType = radio.value;
-        updatePreview();
-      });
-    });
-
-    roleCheckboxes.forEach(function (cb) {
-      cb.addEventListener("change", function () {
-        selectedRoles = Array.from(
-          document.querySelectorAll('[name="config-role"]:checked'),
-        ).map(function (c) {
-          return c.value;
-        });
-        var count = selectedRoles.length;
-        rolesCountEl.textContent = count;
-        rolesCountEl.hidden = count === 0;
-        renderBehaviors();
-        updatePreview();
-      });
-    });
-
-    var createConversationTypeModal = document.getElementById(
-      "modal-conversation-type-create",
-    );
+    var createConversationTypeModal = document.getElementById("modal-conversation-type-create");
     var addRoleModal = document.getElementById("modal-role-add");
     var createBehaviorModal = document.getElementById("modal-behaviors-create");
 
-    document
-      .querySelector(".dashboard-content")
-      .addEventListener("click", function (e) {
-        if (e.target.closest("[data-create-conversation-type]"))
-          window.M.openModal(createConversationTypeModal);
-        if (e.target.closest("[data-add-role]"))
-          window.M.openModal(addRoleModal);
-        if (e.target.closest("[data-behaviors-create]"))
-          window.M.openModal(createBehaviorModal);
-      });
+    document.querySelector(".dashboard-content").addEventListener("click", function (e) {
+      if (e.target.closest("[data-create-conversation-type]")) window.M.openModal(createConversationTypeModal);
+      if (e.target.closest("[data-add-role]")) window.M.openModal(addRoleModal);
+      if (e.target.closest("[data-behaviors-create]")) window.M.openModal(createBehaviorModal);
+    });
 
-    renderBehaviors();
     updatePreview();
   })();
 </script>
