@@ -134,6 +134,16 @@ Documentation page. Uses `landing-layout.html` — unauthenticated header (Playg
 
 ---
 
+## Landing page drafts
+
+**Pages:** `src/prototypes/index-landing.html`, `src/prototypes/index-landing-full-draft.html`  
+**Permalink:** `/index-landing/`  
+**Styles:** `src/styles/prototypes/index-landing.css`
+
+`index-landing.html` is the current compact hero-only landing variant (headline, inline feature line with icons, and CTA row). `index-landing-full-draft.html` keeps the previous long-form full draft for future reuse and copy extraction.
+
+---
+
 ## Model documentation data files
 
 **Data:** `src/assets/prototypes/data/models.json` — model list with all metadata and example project links.  
