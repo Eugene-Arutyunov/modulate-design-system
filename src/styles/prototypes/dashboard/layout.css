@@ -638,7 +638,7 @@ table.config-form-table {
   display: flex;
   align-items: stretch;
   padding: 0;
-  max-height: 65vh;
+  height: 32rem;
   overflow: hidden;
 }
 
@@ -673,7 +673,6 @@ table.config-form-table {
   color: var(--m__text-color);
 }
 
-
 .config-selector-col__body {
   flex: 1;
   min-height: 0;
@@ -694,6 +693,7 @@ table.config-form-table {
   text-align: center;
   font-size: var(--m__font-size-xs);
   color: var(--m__text-caption-color);
+  height: 100%;
   min-height: 8rem;
   padding: 1rem;
 }
@@ -785,7 +785,8 @@ table.config-form-table {
   text-align: left;
   cursor: pointer;
   color: var(--m__text-color);
-  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
 
   &:hover {
     color: var(--m__text-hover-color);
@@ -797,6 +798,7 @@ table.config-form-table {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
+  min-height: 1.5em;
   font-size: var(--m__font-size-xs);
   font-weight: var(--m__font-weight-medium);
 }
@@ -808,6 +810,13 @@ table.config-form-table {
 
 .config-role-item--active .config-role-item__name {
   color: var(--m__code-accent-color);
+}
+
+.config-role-item:has(.config-role-item__body:hover)
+  .config-role-item__check
+  input[type="checkbox"]:not(:checked) {
+  border-color: var(--m__bg-hover-color);
+  transition-duration: var(--m__hover-transition-duration);
 }
 
 /* Behaviors column */
