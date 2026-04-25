@@ -5,6 +5,227 @@ permalink: /dashboard/behaviors/config-create/
 
 {% extends 'prototypes/layout.html' %} {% block content %}
 
+<style>
+  /* ── Behavior widget local styles ───────────────────────────────── */
+
+  .bw-header .m__segmented-control-compact {
+    margin: 0;
+  }
+
+  .bw-seg-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: var(--m__font-size-s);
+  }
+
+  /* Table cell: behavior name + desc */
+  .bw-behavior-cell {
+    vertical-align: top;
+  }
+
+  .bw-behavior-name {
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-medium);
+    line-height: 1.3;
+    color: var(--m__text-color);
+  }
+
+  .bw-behavior-desc {
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-caption-color);
+    margin-top: 0.1rem;
+    line-height: 1.4;
+  }
+
+  /* Tags cell */
+  .bw-tags-cell {
+    vertical-align: top;
+  }
+
+  .bw-cell-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    align-items: center;
+    padding-top: 0.05rem;
+  }
+
+  .bw-cell-tags--mt {
+    margin-top: 0.35rem;
+  }
+
+  /* Tag with × button */
+  .bw-tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding-right: 0.3rem;
+  }
+
+  .bw-tag-x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: currentColor;
+    opacity: 0.5;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: opacity var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+  }
+  .bw-tag-x:hover {
+    opacity: 1;
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  /* Add button — inherits m__tag sizing, dashed border override */
+  .bw-add-btn {
+    background: none;
+    border-style: dashed;
+    border-color: color-mix(in srgb, currentColor 35%, transparent);
+    color: var(--m__text-caption-color);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+      color var(--m__unhover-transition-duration) var(--m__transition-easing),
+      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+  .bw-add-btn:hover {
+    color: var(--m__text-hover-color);
+    border-color: color-mix(in srgb, var(--m__text-hover-color) 50%, transparent);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  /* List table fixed columns */
+  #bw-list table {
+    table-layout: fixed;
+    width: 100%;
+  }
+  #bw-list th:nth-child(1) { width: 35%; }
+  #bw-list th:nth-child(2) { width: 45%; }
+  #bw-list th:nth-child(3) { width: 20%; }
+
+  /* Matrix columns */
+  #bw-matrix table {
+    table-layout: fixed;
+    width: 100%;
+  }
+  #bw-matrix th:first-child,
+  #bw-matrix td:first-child {
+    width: 35%;
+  }
+
+  .bw-matrix-role-th {
+    text-align: center;
+    font-weight: var(--m__font-weight-medium);
+  }
+  .bw-matrix-check {
+    text-align: center;
+    vertical-align: middle;
+  }
+  .bw-matrix-check .m__checkbox {
+    justify-content: center;
+  }
+
+  /* Popover */
+  .bw-popover {
+    position: fixed;
+    z-index: 200;
+    background-color: var(--m__background-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-m);
+    box-shadow: 0 4px 20px color-mix(in srgb, #000 22%, transparent);
+    width: 15rem;
+    overflow: hidden;
+  }
+  .bw-popover[hidden] {
+    display: none;
+  }
+
+  .bw-popover__search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--m__ui-border-color);
+  }
+  .bw-popover__search-wrap svg {
+    color: var(--m__text-caption-color);
+    flex-shrink: 0;
+  }
+  .bw-popover__search-wrap input {
+    flex: 1;
+    min-width: 0;
+    background: none;
+    border: none;
+    outline: none;
+    font: inherit;
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-color);
+  }
+  .bw-popover__search-wrap input::placeholder {
+    color: var(--m__text-caption-color);
+  }
+
+  .bw-popover__list {
+    max-height: 12rem;
+    overflow-y: auto;
+    padding: 0.25rem 0;
+  }
+
+  label.bw-popover__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+  }
+  label.bw-popover__item:hover {
+    background-color: color-mix(in srgb, var(--m__text-color) 5%, transparent);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+  label.bw-popover__item--active .bw-popover__item-name {
+    color: var(--m__text-link-color);
+  }
+
+  .bw-popover__item-name {
+    font-size: var(--m__font-size-s);
+    flex: 1;
+  }
+
+  .bw-popover__footer {
+    border-top: 1px solid var(--m__ui-border-color);
+    padding: 0.4rem 0.75rem;
+  }
+
+  .bw-popover__new-btn {
+    background: none;
+    border: none;
+    padding: 0.1rem 0;
+    font: inherit;
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption-color);
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+  }
+  .bw-popover__new-btn:hover {
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+</style>
+
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
@@ -31,271 +252,112 @@ permalink: /dashboard/behaviors/config-create/
 
       <div class="m__space M"></div>
 
-      <div class="m__widget config-selector-columns">
-        <div class="config-selector-col" id="col-type">
-          <div class="config-selector-col__header">
-            <span class="config-selector-col__title">Type</span>
-            <button
-              type="button"
-              class="m__button-outline-compact"
-              data-create-conversation-type
-            >
-              New
-            </button>
-          </div>
-          <div class="config-selector-col__body">
-            <div class="config-type-list">
-              <label class="config-type-item">
-                <span class="config-type-item__radio">
-                  <input
-                    type="radio"
-                    name="config-type"
-                    value="customer-service"
+      <!-- Behaviors widget -->
+      <div class="m__widget">
+        <div class="m__widget-header bw-header">
+          <div class="m__segmented-control-compact">
+            <label>
+              <input type="radio" name="bw-view" value="list" checked />
+              <span class="bw-seg-label">
+                <svg
+                  width="12"
+                  height="10"
+                  viewBox="0 0 12 10"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <rect width="12" height="1.5" rx="0.75" fill="currentColor" />
+                  <rect
+                    y="4"
+                    width="12"
+                    height="1.5"
+                    rx="0.75"
+                    fill="currentColor"
                   />
-                </span>
-                <div class="config-type-item__text">
-                  <span class="config-type-item__name"
-                    >Customer Service Call</span
-                  >
-                  <span class="config-type-item__desc"
-                    >Inbound support conversations</span
-                  >
-                </div>
-              </label>
-              <label class="config-type-item">
-                <span class="config-type-item__radio">
-                  <input type="radio" name="config-type" value="sales" />
-                </span>
-                <div class="config-type-item__text">
-                  <span class="config-type-item__name">Sales Outreach</span>
-                  <span class="config-type-item__desc"
-                    >Outbound sales & prospecting</span
-                  >
-                </div>
-              </label>
-              <label class="config-type-item">
-                <span class="config-type-item__radio">
-                  <input type="radio" name="config-type" value="interview" />
-                </span>
-                <div class="config-type-item__text">
-                  <span class="config-type-item__name">Hiring Interview</span>
-                  <span class="config-type-item__desc"
-                    >Candidate screening sessions</span
-                  >
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="config-selector-col" id="col-roles">
-          <div class="config-selector-col__header">
-            <span class="config-selector-col__title">
-              Roles
-              <span
-                class="config-selector-col__count m__badge"
-                id="roles-count"
-                hidden
-                >0</span
-              >
-            </span>
-            <button
-              type="button"
-              class="m__button-outline-compact"
-              data-add-role
-            >
-              New
-            </button>
-          </div>
-          <div class="config-selector-col__body">
-            <div class="config-selector-col__empty" id="roles-placeholder">
-              Select a conversation type in the left column to specify a role
-            </div>
-            <div class="config-role-list" id="roles-list" hidden>
-              <div class="config-role-item">
-                <label class="m__checkbox config-role-item__check">
-                  <input
-                    type="checkbox"
-                    name="config-role"
-                    value="agent"
-                    data-role-name="Agent"
+                  <rect
+                    y="8"
+                    width="12"
+                    height="1.5"
+                    rx="0.75"
+                    fill="currentColor"
                   />
-                  <svg
-                    viewBox="0 0 32 32"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#checkmark"></use>
-                  </svg>
-                </label>
-                <button type="button" class="config-role-item__body">
-                  <span class="config-role-item__name"
-                    >Agent<span class="config-role-item__count m__badge" hidden
-                      >0</span
-                    ></span
-                  >
-                  <span class="config-role-item__desc"
-                    >Company representative</span
-                  >
-                </button>
-              </div>
-              <div class="config-role-item">
-                <label class="m__checkbox config-role-item__check">
-                  <input
-                    type="checkbox"
-                    name="config-role"
-                    value="customer"
-                    data-role-name="Customer"
+                </svg>
+                List
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="bw-view" value="matrix" />
+              <span class="bw-seg-label">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <rect width="5" height="5" rx="0.5" fill="currentColor" />
+                  <rect
+                    x="7"
+                    width="5"
+                    height="5"
+                    rx="0.5"
+                    fill="currentColor"
                   />
-                  <svg
-                    viewBox="0 0 32 32"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#checkmark"></use>
-                  </svg>
-                </label>
-                <button type="button" class="config-role-item__body">
-                  <span class="config-role-item__name"
-                    >Customer<span
-                      class="config-role-item__count m__badge"
-                      hidden
-                      >0</span
-                    ></span
-                  >
-                  <span class="config-role-item__desc">End-user or client</span>
-                </button>
-              </div>
-              <div class="config-role-item">
-                <label class="m__checkbox config-role-item__check">
-                  <input
-                    type="checkbox"
-                    name="config-role"
-                    value="interviewer"
-                    data-role-name="Interviewer"
+                  <rect
+                    y="7"
+                    width="5"
+                    height="5"
+                    rx="0.5"
+                    fill="currentColor"
                   />
-                  <svg
-                    viewBox="0 0 32 32"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#checkmark"></use>
-                  </svg>
-                </label>
-                <button type="button" class="config-role-item__body">
-                  <span class="config-role-item__name"
-                    >Interviewer<span
-                      class="config-role-item__count m__badge"
-                      hidden
-                      >0</span
-                    ></span
-                  >
-                  <span class="config-role-item__desc"
-                    >Hiring-side participant</span
-                  >
-                </button>
-              </div>
-              <div class="config-role-item">
-                <label class="m__checkbox config-role-item__check">
-                  <input
-                    type="checkbox"
-                    name="config-role"
-                    value="candidate"
-                    data-role-name="Candidate"
+                  <rect
+                    x="7"
+                    y="7"
+                    width="5"
+                    height="5"
+                    rx="0.5"
+                    fill="currentColor"
                   />
-                  <svg
-                    viewBox="0 0 32 32"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#checkmark"></use>
-                  </svg>
-                </label>
-                <button type="button" class="config-role-item__body">
-                  <span class="config-role-item__name"
-                    >Candidate<span
-                      class="config-role-item__count m__badge"
-                      hidden
-                      >0</span
-                    ></span
-                  >
-                  <span class="config-role-item__desc">Applicant</span>
-                </button>
-              </div>
-              <div class="config-role-item">
-                <label class="m__checkbox config-role-item__check">
-                  <input
-                    type="checkbox"
-                    name="config-role"
-                    value="manager"
-                    data-role-name="Manager"
-                  />
-                  <svg
-                    viewBox="0 0 32 32"
-                    aria-hidden="true"
-                    width="10"
-                    height="10"
-                  >
-                    <use href="#checkmark"></use>
-                  </svg>
-                </label>
-                <button type="button" class="config-role-item__body">
-                  <span class="config-role-item__name"
-                    >Manager<span
-                      class="config-role-item__count m__badge"
-                      hidden
-                      >0</span
-                    ></span
-                  >
-                  <span class="config-role-item__desc"
-                    >Supervisor or escalation target</span
-                  >
-                </button>
-              </div>
-            </div>
+                </svg>
+                Matrix
+              </span>
+            </label>
           </div>
-        </div>
-
-        <div class="config-selector-col" id="col-behaviors">
-          <div class="config-selector-col__header">
-            <span class="config-selector-col__title">
-              Behaviors
-              <span class="m__badge" id="behaviors-count" hidden>0</span>
-            </span>
-            <button
-              type="button"
-              class="m__button-outline-compact"
-              data-behaviors-create
-            >
-              New
-            </button>
-          </div>
-          <div class="config-selector-col__body">
-            <div
-              class="config-selector-col__empty"
-              id="behaviors-placeholder"
-              hidden
-            >
-              Select a role to assign behaviors
-            </div>
-            <div id="behaviors-content" hidden>
-              <div class="config-behaviors-tabs" id="behaviors-tabs"></div>
-              <div id="behaviors-panels"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="config-selector-preview">
-        <span class="config-selector-preview__label">Preview</span>
-        <div class="config-selector-preview__items" id="preview-items">
-          <span class="config-selector-preview__empty"
-            >Nothing selected yet</span
+          <button
+            type="button"
+            class="m__button-outline-compact"
+            data-behaviors-create
           >
+            Create Behavior
+          </button>
+        </div>
+
+        <!-- List view -->
+        <div id="bw-list">
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Behavior</th>
+                  <th>Conversation Types</th>
+                  <th>Roles</th>
+                </tr>
+              </thead>
+              <tbody id="bw-list-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Matrix view -->
+        <div id="bw-matrix" hidden>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr id="bw-matrix-head"></tr>
+              </thead>
+              <tbody id="bw-matrix-body"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -309,290 +371,473 @@ permalink: /dashboard/behaviors/config-create/
   <div class="m__space XL"></div>
 </div>
 
-{% include 'service/modal-conversation-type-create.html' %} {% include
-'service/modal-role-create.html' %} {% include
-'service/modal-behaviors-create.html' %}
+<!-- Popover (outside widget to escape overflow:clip) -->
+<div class="bw-popover" id="bw-popover" hidden>
+  <div class="bw-popover__search-wrap">
+    <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
+      <use href="#search"></use>
+    </svg>
+    <input
+      type="text"
+      id="bw-popover-search"
+      placeholder="Search…"
+      autocomplete="off"
+    />
+  </div>
+  <div class="bw-popover__list" id="bw-popover-list"></div>
+  <div class="bw-popover__footer">
+    <button type="button" class="bw-popover__new-btn" id="bw-popover-new">
+      + Create new
+    </button>
+  </div>
+</div>
+
+{% include 'service/modal-behaviors-create.html' %} {% include
+'service/modal-conversation-type-create.html' %} {% include
+'service/modal-role-create.html' %}
 
 <script>
   (function () {
-    var BEHAVIORS = [
-      { name: "Vishing attempt", desc: "Voice phishing / social engineering" },
-      { name: "Phishing link", desc: "Suspicious URL shared in call" },
-      { name: "Return fraud", desc: "Fraudulent return request" },
-      { name: "Aggressive tone", desc: "Hostile or threatening language" },
-      {
-        name: "Script deviation",
-        desc: "Agent departing from approved script",
-      },
-      { name: "Manipulation attempt", desc: "Psychological pressure tactics" },
-      { name: "Bot detection", desc: "Non-human response patterns" },
-      { name: "Inappropriate content", desc: "Harmful or offensive speech" },
-      { name: "Compliance breach", desc: "Regulatory violation indicators" },
+    var TYPES = [
+      { id: "customer-service", name: "Customer Service Call" },
+      { id: "sales", name: "Sales Outreach" },
+      { id: "interview", name: "Hiring Interview" },
     ];
 
-    var typeRadios = document.querySelectorAll('[name="config-type"]');
-    var roleCheckboxes = document.querySelectorAll('[name="config-role"]');
-    var rolesCountEl = document.getElementById("roles-count");
-    var rolesPlaceholder = document.getElementById("roles-placeholder");
-    var rolesList = document.getElementById("roles-list");
-    var behaviorsPlaceholder = document.getElementById("behaviors-placeholder");
-    var behaviorsContent = document.getElementById("behaviors-content");
-    var behaviorsTabs = document.getElementById("behaviors-tabs");
-    var behaviorsPanels = document.getElementById("behaviors-panels");
-    var behaviorsCountEl = document.getElementById("behaviors-count");
-    var previewItems = document.getElementById("preview-items");
+    var ROLES = [
+      { id: "agent", name: "Agent" },
+      { id: "customer", name: "Customer" },
+      { id: "interviewer", name: "Interviewer" },
+      { id: "candidate", name: "Candidate" },
+      { id: "manager", name: "Manager" },
+    ];
 
-    var selectedType = null;
-    var selectedRoles = [];
-    var activeRoleTab = null;
+    var behaviors = [
+      {
+        id: 0,
+        name: "Vishing attempt",
+        desc: "Attempts to obtain sensitive information by impersonating a trusted entity over a voice call.",
+        types: [],
+        roles: [],
+      },
+      {
+        id: 1,
+        name: "Phishing link",
+        desc: "A suspicious or malicious URL shared during the conversation intended to deceive the recipient.",
+        types: [],
+        roles: [],
+      },
+      {
+        id: 2,
+        name: "Return fraud",
+        desc: "Indicators of fraudulent behavior in the context of a product return or refund request.",
+        types: [],
+        roles: [],
+      },
+      {
+        id: 3,
+        name: "Aggressive tone",
+        desc: "Use of hostile, threatening, or intimidating language directed at another participant.",
+        types: [],
+        roles: [],
+      },
+      {
+        id: 4,
+        name: "Script deviation",
+        desc: "An agent departing from the approved conversation script in a way that may introduce risk.",
+        types: [],
+        roles: [],
+      },
+      {
+        id: 5,
+        name: "Manipulation attempt",
+        desc: "Attempts to pressure or manipulate a participant into taking an action against their will.",
+        types: [],
+        roles: [],
+      },
+      {
+        id: 6,
+        name: "Bot detection",
+        desc: "Response patterns or timing that suggest the participant may not be a human speaker.",
+        types: [],
+        roles: [],
+      },
+      {
+        id: 7,
+        name: "Inappropriate content",
+        desc: "Harmful, offensive, or discriminatory speech that violates acceptable use policies.",
+        types: [],
+        roles: [],
+      },
+      {
+        id: 8,
+        name: "Compliance breach",
+        desc: "Indicators of a potential regulatory or policy violation occurring during the conversation.",
+        types: [],
+        roles: [],
+      },
+    ];
 
-    // --- Behaviors count badges ---
+    var listBody = document.getElementById("bw-list-body");
+    var matrixHead = document.getElementById("bw-matrix-head");
+    var matrixBody = document.getElementById("bw-matrix-body");
+    var listView = document.getElementById("bw-list");
+    var matrixView = document.getElementById("bw-matrix");
+    var popover = document.getElementById("bw-popover");
+    var popoverSearch = document.getElementById("bw-popover-search");
+    var popoverList = document.getElementById("bw-popover-list");
+    var popoverNew = document.getElementById("bw-popover-new");
 
-    function updateRoleCount(role) {
-      var count = document.querySelectorAll(
-        '[name^="behavior-' + role + '-"]:checked',
-      ).length;
-      var cb = document.querySelector(
-        '[name="config-role"][value="' + role + '"]',
-      );
-      if (cb) {
-        var el = cb
-          .closest(".config-role-item")
-          .querySelector(".config-role-item__count");
-        if (el) {
-          el.textContent = count;
-          el.hidden = count === 0;
-        }
-      }
-      var total = document.querySelectorAll(
-        '[name^="behavior-"]:checked',
-      ).length;
-      behaviorsCountEl.textContent = total;
-      behaviorsCountEl.hidden = total === 0;
-    }
+    var popoverState = { bId: null, field: null };
 
-    behaviorsPanels.addEventListener("change", function (e) {
-      var input = e.target.closest('input[type="checkbox"]');
-      if (!input) return;
-      var match = input.name.match(/^behavior-(.+)-\d+$/);
-      if (match) updateRoleCount(match[1]);
+    // ── View toggle ─────────────────────────────────────────────────
+    document.querySelectorAll('[name="bw-view"]').forEach(function (r) {
+      r.addEventListener("change", function () {
+        listView.hidden = r.value !== "list";
+        matrixView.hidden = r.value !== "matrix";
+      });
     });
 
-    // --- Role active highlight ---
+    // ── Helpers ─────────────────────────────────────────────────────
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
 
-    function updateActiveRoleItem() {
-      document.querySelectorAll(".config-role-item").forEach(function (item) {
-        var input = item.querySelector('[name="config-role"]');
-        item.classList.toggle(
-          "config-role-item--active",
-          input && input.checked && input.value === activeRoleTab,
-        );
+    function findB(id) {
+      return behaviors.find(function (b) {
+        return b.id === id;
       });
     }
 
-    // --- Behaviors tabs & panels ---
+    var X_SVG =
+      '<svg viewBox="0 0 12 12" width="8" height="8" fill="none" aria-hidden="true">' +
+      '<line x1="2" y1="2" x2="10" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '<line x1="10" y1="2" x2="2" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      "</svg>";
 
-    function switchTab(role) {
-      activeRoleTab = role;
-      behaviorsTabs
-        .querySelectorAll(".config-behaviors-tab")
-        .forEach(function (t) {
-          t.classList.toggle(
-            "config-behaviors-tab--active",
-            t.dataset.role === role,
-          );
+    var CHECK_SVG =
+      '<svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10">' +
+      '<use href="#checkmark"></use></svg>';
+
+    // ── Render list ─────────────────────────────────────────────────
+    function renderList() {
+      listBody.innerHTML = "";
+      behaviors.forEach(function (b) {
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          '<td class="bw-behavior-cell">' +
+          '<div class="bw-behavior-name">' +
+          esc(b.name) +
+          "</div>" +
+          '<div class="bw-behavior-desc">' +
+          esc(b.desc) +
+          "</div>" +
+          "</td>" +
+          '<td class="bw-tags-cell">' +
+          tagsCell(b, "types") +
+          "</td>" +
+          '<td class="bw-tags-cell">' +
+          tagsCell(b, "roles") +
+          "</td>";
+        listBody.appendChild(tr);
+      });
+
+      listBody.querySelectorAll("[data-bw-add]").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          openPopover(parseInt(btn.dataset.bwId), btn.dataset.bwAdd, btn);
         });
-      behaviorsPanels
-        .querySelectorAll(".config-behaviors-panel")
-        .forEach(function (p) {
-          p.hidden = p.dataset.role !== role;
+      });
+
+      listBody.querySelectorAll("[data-bw-remove]").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var b = findB(parseInt(btn.dataset.bwId));
+          var field = btn.dataset.bwRemove;
+          b[field] = b[field].filter(function (x) {
+            return x !== btn.dataset.bwItem;
+          });
+          renderList();
+          renderMatrix();
         });
-      updateActiveRoleItem();
+      });
     }
 
-    function addRolePanel(role) {
-      var cb = document.querySelector(
-        '[name="config-role"][value="' + role + '"]',
-      );
-      var roleName = cb ? cb.dataset.roleName : role;
-
-      var tab = document.createElement("button");
-      tab.type = "button";
-      tab.dataset.role = role;
-      tab.className = "config-behaviors-tab";
-      tab.textContent = roleName;
-      tab.addEventListener("click", function () {
-        switchTab(role);
+    function tagsCell(b, field) {
+      var items = field === "types" ? TYPES : ROLES;
+      var html = '<div class="bw-cell-tags">';
+      b[field].forEach(function (id) {
+        var item = items.find(function (x) {
+          return x.id === id;
+        });
+        if (!item) return;
+        html +=
+          '<span class="m__tag bw-tag-item">' +
+          esc(item.name) +
+          '<button type="button" class="bw-tag-x"' +
+          ' data-bw-remove="' +
+          field +
+          '"' +
+          ' data-bw-id="' +
+          b.id +
+          '"' +
+          ' data-bw-item="' +
+          id +
+          '">' +
+          X_SVG +
+          "</button></span>";
       });
-      behaviorsTabs.appendChild(tab);
+      html +=
+        '<button type="button" class="m__tag bw-add-btn"' +
+        ' data-bw-add="' +
+        field +
+        '"' +
+        ' data-bw-id="' +
+        b.id +
+        '">Add</button>';
+      html += "</div>";
+      return html;
+    }
 
-      var panel = document.createElement("div");
-      panel.className = "config-behaviors-panel";
-      panel.dataset.role = role;
-      panel.hidden = true;
-      BEHAVIORS.forEach(function (b, idx) {
-        var item = document.createElement("label");
-        item.className = "m__checkbox config-behavior-check-item";
-        item.innerHTML =
-          '<input type="checkbox" name="behavior-' +
-          role +
-          "-" +
-          idx +
-          '" />' +
-          '<svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10"><use href="#checkmark"></use></svg>' +
-          '<div class="config-behavior-check-item__text">' +
-          '<span class="config-behavior-check-item__name">' +
-          b.name +
-          "</span>" +
-          '<span class="config-behavior-check-item__desc">' +
-          b.desc +
-          "</span>" +
+    // ── Render matrix ────────────────────────────────────────────────
+    function renderMatrix() {
+      matrixHead.innerHTML = "<th>Behavior</th>";
+      ROLES.forEach(function (r) {
+        matrixHead.innerHTML +=
+          '<th class="bw-matrix-role-th">' + esc(r.name) + "</th>";
+      });
+
+      matrixBody.innerHTML = "";
+      behaviors.forEach(function (b) {
+        var tr = document.createElement("tr");
+        var firstCell =
+          '<td class="bw-behavior-cell">' +
+          '<div class="bw-behavior-name">' +
+          esc(b.name) +
+          "</div>" +
+          '<div class="bw-behavior-desc">' +
+          esc(b.desc) +
           "</div>";
-        panel.appendChild(item);
-      });
-      behaviorsPanels.appendChild(panel);
-    }
 
-    function removeRolePanel(role) {
-      var tab = behaviorsTabs.querySelector('[data-role="' + role + '"]');
-      var panel = behaviorsPanels.querySelector('[data-role="' + role + '"]');
-      if (tab) tab.remove();
-      if (panel) panel.remove();
-      updateRoleCount(role);
-    }
-
-    // --- Role checkbox change ---
-
-    roleCheckboxes.forEach(function (checkbox) {
-      checkbox.addEventListener("change", function () {
-        selectedRoles = Array.from(
-          document.querySelectorAll('[name="config-role"]:checked'),
-        ).map(function (c) {
-          return c.value;
-        });
-
-        rolesCountEl.textContent = selectedRoles.length;
-        rolesCountEl.hidden = selectedRoles.length === 0;
-
-        if (checkbox.checked) {
-          // Role just added: create its panel and switch to it
-          behaviorsContent.hidden = false;
-          addRolePanel(checkbox.value);
-          activeRoleTab = checkbox.value;
-          switchTab(activeRoleTab);
-        } else {
-          // Role removed: delete its panel
-          removeRolePanel(checkbox.value);
-          if (activeRoleTab === checkbox.value) {
-            activeRoleTab = selectedRoles[0] || null;
-            if (activeRoleTab) switchTab(activeRoleTab);
-            else {
-              behaviorsContent.hidden = true;
-              behaviorsTabs.innerHTML = "";
-              behaviorsPanels.innerHTML = "";
-            }
-          }
-          updateActiveRoleItem();
+        if (b.types.length) {
+          firstCell += '<div class="bw-cell-tags bw-cell-tags--mt">';
+          b.types.forEach(function (tid) {
+            var t = TYPES.find(function (x) {
+              return x.id === tid;
+            });
+            if (t)
+              firstCell += '<span class="m__tag">' + esc(t.name) + "</span>";
+          });
+          firstCell += "</div>";
         }
+        firstCell += "</td>";
 
-        updateBehaviorsPlaceholder();
-        updatePreview();
+        var roleCells = ROLES.map(function (r) {
+          var checked = b.roles.indexOf(r.id) !== -1 ? " checked" : "";
+          return (
+            '<td class="bw-matrix-check">' +
+            '<label class="m__checkbox">' +
+            '<input type="checkbox"' +
+            checked +
+            ' data-bm-bid="' +
+            b.id +
+            '" data-bm-role="' +
+            r.id +
+            '" />' +
+            CHECK_SVG +
+            "</label></td>"
+          );
+        }).join("");
+
+        tr.innerHTML = firstCell + roleCells;
+        matrixBody.appendChild(tr);
       });
-    });
 
-    // Clicking the role body: check if unchecked, or switch tab if already checked
-    document
-      .querySelectorAll(".config-role-item__body")
-      .forEach(function (body) {
-        body.addEventListener("click", function () {
-          var input = body
-            .closest(".config-role-item")
-            .querySelector('[name="config-role"]');
-          if (!input) return;
-          if (!input.checked) {
-            input.checked = true;
-            input.dispatchEvent(new Event("change", { bubbles: true }));
+      matrixBody.querySelectorAll("[data-bm-bid]").forEach(function (cb) {
+        cb.addEventListener("change", function () {
+          var b = findB(parseInt(cb.dataset.bmBid));
+          var roleId = cb.dataset.bmRole;
+          if (cb.checked) {
+            if (b.roles.indexOf(roleId) === -1) b.roles.push(roleId);
           } else {
-            switchTab(input.value);
+            b.roles = b.roles.filter(function (r) {
+              return r !== roleId;
+            });
           }
+          if (!listView.hidden) renderList();
         });
       });
+    }
 
-    // --- Type ---
+    // ── Popover ──────────────────────────────────────────────────────
+    function openPopover(bId, field, anchor) {
+      popoverState.bId = bId;
+      popoverState.field = field;
+      popoverSearch.value = "";
+      refreshPopoverList("");
+      popoverNew.textContent =
+        field === "types" ? "+ Create new type" : "+ Create new role";
 
-    typeRadios.forEach(function (radio) {
-      radio.addEventListener("change", function () {
-        selectedType = radio.value;
-        rolesPlaceholder.hidden = true;
-        rolesList.hidden = false;
-        updateBehaviorsPlaceholder();
-        updatePreview();
+      var rect = anchor.getBoundingClientRect();
+      var top = rect.bottom + 4;
+      var left = rect.left;
+      var pw = 240;
+      if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+
+      popover.style.top = top + "px";
+      popover.style.left = left + "px";
+      popover.hidden = false;
+      popoverSearch.focus();
+    }
+
+    function closePopover() {
+      popover.hidden = true;
+      popoverState.bId = null;
+    }
+
+    function refreshPopoverList(query) {
+      var b = findB(popoverState.bId);
+      if (!b) return;
+      var items = popoverState.field === "types" ? TYPES : ROLES;
+      var q = query.toLowerCase();
+      var filtered = q
+        ? items.filter(function (i) {
+            return i.name.toLowerCase().indexOf(q) !== -1;
+          })
+        : items;
+
+      popoverList.innerHTML = "";
+      filtered.forEach(function (item) {
+        var isActive = b[popoverState.field].indexOf(item.id) !== -1;
+        var label = document.createElement("label");
+        label.className =
+          "m__checkbox bw-popover__item" +
+          (isActive ? " bw-popover__item--active" : "");
+        label.innerHTML =
+          '<input type="checkbox"' +
+          (isActive ? " checked" : "") +
+          " />" +
+          CHECK_SVG +
+          '<span class="bw-popover__item-name">' +
+          esc(item.name) +
+          "</span>";
+
+        label.querySelector("input").addEventListener("change", function (e) {
+          var bv = findB(popoverState.bId);
+          var field = popoverState.field;
+          if (e.target.checked) {
+            if (bv[field].indexOf(item.id) === -1) bv[field].push(item.id);
+            label.classList.add("bw-popover__item--active");
+          } else {
+            bv[field] = bv[field].filter(function (x) {
+              return x !== item.id;
+            });
+            label.classList.remove("bw-popover__item--active");
+          }
+          renderList();
+          renderMatrix();
+        });
+
+        popoverList.appendChild(label);
       });
+    }
+
+    popoverSearch.addEventListener("input", function () {
+      refreshPopoverList(popoverSearch.value);
     });
 
-    function updateBehaviorsPlaceholder() {
-      var showPlaceholder = selectedType !== null && selectedRoles.length === 0;
-      behaviorsPlaceholder.hidden = !showPlaceholder;
-    }
-
-    // --- Preview ---
-
-    function updatePreview() {
-      var parts = [];
-      if (selectedType) {
-        var radio = document.querySelector(
-          '[name="config-type"][value="' + selectedType + '"]',
-        );
-        var typeName = radio
-          ? radio
-              .closest(".config-type-item")
-              .querySelector(".config-type-item__name").textContent
-          : selectedType;
-        parts.push(
-          '<span class="config-selector-preview__tag">' + typeName + "</span>",
-        );
+    document.addEventListener("click", function (e) {
+      if (
+        !popover.hidden &&
+        !popover.contains(e.target) &&
+        !e.target.closest("[data-bw-add]")
+      ) {
+        closePopover();
       }
-      if (selectedRoles.length) {
-        parts.push('<span class="config-selector-preview__sep">→</span>');
-        selectedRoles.forEach(function (role, i) {
-          var cb = document.querySelector(
-            '[name="config-role"][value="' + role + '"]',
-          );
-          var roleName = cb ? cb.dataset.roleName : role;
-          if (i > 0)
-            parts.push('<span class="config-selector-preview__sep">|</span>');
-          parts.push(
-            '<span class="config-selector-preview__tag">' +
-              roleName +
-              "</span>",
-          );
-        });
-      }
-      previewItems.innerHTML = parts.length
-        ? parts.join("")
-        : '<span class="config-selector-preview__empty">Nothing selected yet</span>';
-    }
+    });
 
-    // --- Modals ---
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !popover.hidden) closePopover();
+    });
 
-    var createConversationTypeModal = document.getElementById(
-      "modal-conversation-type-create",
-    );
-    var addRoleModal = document.getElementById("modal-role-create");
-    var createBehaviorModal = document.getElementById("modal-behaviors-create");
+    popoverNew.addEventListener("click", function () {
+      var field = popoverState.field;
+      closePopover();
+      var modalId =
+        field === "types"
+          ? "modal-conversation-type-create"
+          : "modal-role-create";
+      window.M.openModal(document.getElementById(modalId));
+    });
 
+    // ── Create Behavior button ───────────────────────────────────────
     document
-      .querySelector(".dashboard-content")
-      .addEventListener("click", function (e) {
-        if (e.target.closest("[data-create-conversation-type]"))
-          window.M.openModal(createConversationTypeModal);
-        if (e.target.closest("[data-add-role]"))
-          window.M.openModal(addRoleModal);
-        if (e.target.closest("[data-behaviors-create]"))
-          window.M.openModal(createBehaviorModal);
+      .querySelector("[data-behaviors-create]")
+      .addEventListener("click", function () {
+        window.M.openModal(document.getElementById("modal-behaviors-create"));
       });
 
-    updatePreview();
+    // ── Modal: create behavior ───────────────────────────────────────
+    document
+      .getElementById("modal-behaviors-create")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        var name = document.getElementById("behavior-name").value.trim();
+        var desc = document.getElementById("behavior-description").value.trim();
+        if (!name) return;
+        behaviors.push({
+          id: Date.now(),
+          name: name,
+          desc: desc,
+          types: [],
+          roles: [],
+        });
+        document.getElementById("behavior-name").value = "";
+        document.getElementById("behavior-description").value = "";
+        window.M.closeModal(document.getElementById("modal-behaviors-create"));
+        renderList();
+        renderMatrix();
+      });
+
+    // ── Modal: create type ───────────────────────────────────────────
+    document
+      .getElementById("modal-conversation-type-create")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        var name = document
+          .getElementById("conversation-type-name")
+          .value.trim();
+        if (!name) return;
+        TYPES.push({ id: "custom-" + Date.now(), name: name });
+        document.getElementById("conversation-type-name").value = "";
+        var ta = document.getElementById("conversation-type-description");
+        if (ta) ta.value = "";
+        window.M.closeModal(
+          document.getElementById("modal-conversation-type-create"),
+        );
+      });
+
+    // ── Modal: create role ───────────────────────────────────────────
+    document
+      .getElementById("modal-role-create")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        var name = document.getElementById("role-name").value.trim();
+        if (!name) return;
+        ROLES.push({ id: "custom-" + Date.now(), name: name });
+        document.getElementById("role-name").value = "";
+        var ta = document.getElementById("role-description");
+        if (ta) ta.value = "";
+        window.M.closeModal(document.getElementById("modal-role-create"));
+        renderMatrix();
+      });
+
+    // ── Init ─────────────────────────────────────────────────────────
+    renderList();
+    renderMatrix();
   })();
 </script>
 
