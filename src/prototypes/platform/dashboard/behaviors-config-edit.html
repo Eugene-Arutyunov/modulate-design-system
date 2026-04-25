@@ -102,9 +102,6 @@ permalink: /dashboard/behaviors/config-edit/
   <div class="m__space XL"></div>
 </div>
 
-<!-- Tooltip (fixed, outside table to escape overflow:clip) -->
-<div class="m__tooltip" id="bw-tooltip" hidden></div>
-
 <!-- Popover (outside widget to escape overflow:clip) -->
 <div class="m__popover" id="bw-popover" hidden>
   <div class="m__searchbar">
@@ -654,30 +651,6 @@ permalink: /dashboard/behaviors/config-edit/
         renderList();
       });
 
-    // ── Tooltip ──────────────────────────────────────────────────────
-    var bwTooltip = document.querySelector(".m__tooltip");
-    document.addEventListener("mouseover", function (e) {
-      var tag = e.target.closest("[data-tooltip]");
-      if (!tag || !tag.dataset.tooltip) {
-        bwTooltip.hidden = true;
-        return;
-      }
-      bwTooltip.textContent = tag.dataset.tooltip;
-      bwTooltip.hidden = false;
-      var rect = tag.getBoundingClientRect();
-      var tw = bwTooltip.offsetWidth;
-      var th = bwTooltip.offsetHeight;
-      var left = rect.left + rect.width / 2 - tw / 2;
-      left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
-      var top = rect.top - th - 6;
-      if (top < 8) top = rect.bottom + 6;
-      bwTooltip.style.top = top + "px";
-      bwTooltip.style.left = left + "px";
-    });
-    document.addEventListener("mouseout", function (e) {
-      var to = e.relatedTarget;
-      if (!to || !to.closest("[data-tooltip]")) bwTooltip.hidden = true;
-    });
 
     // ── Init ─────────────────────────────────────────────────────────
     renderList();
