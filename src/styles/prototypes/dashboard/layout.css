@@ -467,6 +467,10 @@ table.account-details td:last-child {
   color: var(--m__text-caption-color);
   margin-top: 0.1rem;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .bw-tags-cell {
@@ -490,6 +494,12 @@ table.account-details td:last-child {
   align-items: center;
   gap: 0.2rem;
   padding-right: 0;
+  transition: border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover {
+    border-color: color-mix(in srgb, currentColor 50%, transparent);
+    transition-duration: var(--m__hover-transition-duration);
+  }
 }
 
 .bw-tag-x {
@@ -551,17 +561,17 @@ table.account-details td:last-child {
 }
 
 #bw-list th:nth-child(1) {
-  width: 35%;
+  width: 45%;
 }
 
 #bw-list th:nth-child(2),
 #bw-list th:nth-child(3) {
-  width: 32.5%;
+  width: 27.5%;
 }
 
 #bw-matrix th:first-child,
 #bw-matrix td:first-child {
-  width: 35%;
+  width: 45%;
 }
 
 #bw-add-role-btn[hidden] {
@@ -572,6 +582,27 @@ table.account-details td:last-child {
   padding: 0.3rem 0;
   text-align: center;
   font-weight: var(--m__font-weight-medium);
+  overflow: hidden;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 1.5rem;
+    background: linear-gradient(to right, transparent, var(--m__bg-surface-color));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  &.is-overflowing::after {
+    opacity: 1;
+  }
 }
 
 .bw-matrix-check {
