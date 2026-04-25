@@ -318,10 +318,10 @@ permalink: /dashboard/behaviors/config-create/
       autocomplete="off"
     />
   </div>
-  <div class="m__popover__list" id="bw-popover-list"></div>
-  <div class="m__popover__footer">
-    <button type="button" class="m__popover__new-btn" id="bw-popover-new">
-      + Create new
+  <div class="m__popover-list" id="bw-popover-list"></div>
+  <div class="m__popover-footer">
+    <button type="button" class="m__popover-new-btn" id="bw-popover-new">
+      Create new
     </button>
   </div>
 </div>
@@ -667,7 +667,7 @@ permalink: /dashboard/behaviors/config-create/
       popoverSearch.value = "";
       refreshPopoverList("");
       popoverNew.textContent =
-        field === "types" ? "+ Create new type" : "+ Create new role";
+        field === "types" ? "Create Type" : "Create Role";
 
       positionPopover(anchor);
       popover.hidden = false;
@@ -717,16 +717,14 @@ permalink: /dashboard/behaviors/config-create/
       filtered.forEach(function (item) {
         var isActive = b[popoverState.field].indexOf(item.id) !== -1;
         var label = document.createElement("label");
-        label.className =
-          "m__popover__item" +
-          (isActive ? " m__popover__item--active" : "");
+        label.className = "m__popover-item";
         label.innerHTML =
           '<span class="m__checkbox"><input type="checkbox"' +
           (isActive ? " checked" : "") +
           " />" +
           CHECK_SVG +
           "</span>" +
-          '<span class="m__popover__item-name">' +
+          '<span class="m__popover-item-name">' +
           esc(item.name) +
           "</span>";
 
@@ -735,12 +733,10 @@ permalink: /dashboard/behaviors/config-create/
           var field = popoverState.field;
           if (e.target.checked) {
             if (bv[field].indexOf(item.id) === -1) bv[field].push(item.id);
-            label.classList.add("m__popover__item--active");
           } else {
             bv[field] = bv[field].filter(function (x) {
               return x !== item.id;
             });
-            label.classList.remove("m__popover__item--active");
           }
           renderList();
           renderMatrix();
