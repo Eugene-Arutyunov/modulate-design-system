@@ -231,6 +231,7 @@ permalink: /dashboard/behaviors/config-create/
     var popover = document.getElementById("bw-popover");
     var popoverSearch = document.getElementById("bw-popover-search");
     var popoverList = document.getElementById("bw-popover-list");
+    var popoverEmpty = document.getElementById("bw-popover-empty");
     var popoverNew = document.getElementById("bw-popover-new");
 
     var popoverState = { bId: null, field: null, activeBtn: null };
@@ -497,6 +498,8 @@ permalink: /dashboard/behaviors/config-create/
         : items;
 
       popoverList.innerHTML = "";
+      popoverList.hidden = filtered.length === 0;
+      popoverEmpty.hidden = filtered.length > 0;
       filtered.forEach(function (item) {
         var isActive = b[popoverState.field].indexOf(item.id) !== -1;
         var label = document.createElement("label");
@@ -547,8 +550,11 @@ permalink: /dashboard/behaviors/config-create/
       if (e.key === "Escape" && !popover.hidden) closePopover();
     });
 
+    var pendingAdd = null;
+
     popoverNew.addEventListener("click", function () {
       var field = popoverState.field;
+      pendingAdd = { bId: popoverState.bId, field: field };
       closePopover();
       var modalId =
         field === "types"
@@ -600,7 +606,13 @@ permalink: /dashboard/behaviors/config-create/
           .getElementById("conversation-type-name")
           .value.trim();
         if (!name) return;
-        TYPES.push({ id: "custom-" + Date.now(), name: name });
+        var newId = "custom-" + Date.now();
+        TYPES.push({ id: newId, name: name });
+        if (pendingAdd && pendingAdd.field === "types") {
+          var b = findB(pendingAdd.bId);
+          if (b && b.types.indexOf(newId) === -1) b.types.push(newId);
+          pendingAdd = null;
+        }
         document.getElementById("conversation-type-name").value = "";
         var ta = document.getElementById("conversation-type-description");
         if (ta) ta.value = "";
@@ -617,7 +629,13 @@ permalink: /dashboard/behaviors/config-create/
       .addEventListener("click", function () {
         var name = document.getElementById("role-name").value.trim();
         if (!name) return;
-        ROLES.push({ id: "custom-" + Date.now(), name: name });
+        var newId = "custom-" + Date.now();
+        ROLES.push({ id: newId, name: name });
+        if (pendingAdd && pendingAdd.field === "roles") {
+          var b = findB(pendingAdd.bId);
+          if (b && b.roles.indexOf(newId) === -1) b.roles.push(newId);
+          pendingAdd = null;
+        }
         document.getElementById("role-name").value = "";
         var ta = document.getElementById("role-description");
         if (ta) ta.value = "";
