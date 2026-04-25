@@ -183,7 +183,7 @@ permalink: /dashboard/behaviors/config-create/
       {
         id: 0,
         name: "Vishing attempt",
-        desc: "Attempts to obtain sensitive information by impersonating a trusted entity over a voice call.",
+        desc: "Attempts to obtain sensitive information by impersonating a trusted entity over a voice call. The caller typically poses as a bank representative, IT support technician, government official, or internal employee to gain the victim's trust. Common tactics include creating a sense of urgency, referencing partial personal details to appear legitimate, and requesting verification of account credentials, passwords, or payment information. Vishing attacks are increasingly sophisticated and may be difficult to distinguish from legitimate calls, making this behavior a high-priority indicator for fraud detection.",
         types: ["customer-service", "sales"],
         roles: ["customer", "agent"],
       },
@@ -204,7 +204,7 @@ permalink: /dashboard/behaviors/config-create/
       {
         id: 3,
         name: "Aggressive tone",
-        desc: "Use of hostile, threatening, or intimidating language directed at another participant.",
+        desc: "Use of hostile, threatening, or intimidating language directed at another participant during the conversation. This behavior encompasses a broad range of verbal aggression, including explicit threats, personal insults, emotional escalation, and coercive demands that create an unsafe or uncomfortable environment. Aggressive tone may indicate customer frustration, deliberate manipulation, or an attempt to pressure a representative into bypassing standard procedures. Early detection enables timely supervisor escalation and helps prevent the situation from deteriorating further into a compliance or safety incident.",
         types: ["customer-service"],
         roles: ["customer"],
       },
@@ -218,7 +218,7 @@ permalink: /dashboard/behaviors/config-create/
       {
         id: 5,
         name: "Manipulation attempt",
-        desc: "Attempts to pressure or manipulate a participant into taking an action against their will.",
+        desc: "Attempts to pressure or manipulate a participant into taking an action against their will or outside of established policy. Tactics commonly include emotional appeals, false urgency, repeated requests after initial refusal, guilt-tripping, exploiting authority dynamics, and selective omission of key facts to steer the other party toward a desired outcome. This behavior may be employed by customers seeking unauthorized exceptions or by agents acting outside approved guidelines. Identifying manipulation patterns early allows supervisors to intervene and protect both participants and organizational integrity.",
         types: ["sales"],
         roles: ["agent"],
       },
@@ -443,6 +443,10 @@ permalink: /dashboard/behaviors/config-create/
           }
           renderList();
         });
+      });
+
+      matrixHead.querySelectorAll(".bw-matrix-role-th").forEach(function (th) {
+        th.classList.toggle("is-overflowing", th.scrollWidth > th.clientWidth);
       });
     }
 

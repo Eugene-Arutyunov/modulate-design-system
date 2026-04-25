@@ -443,6 +443,10 @@ permalink: /dashboard/behaviors/config-edit/
           renderList();
         });
       });
+
+      matrixHead.querySelectorAll(".bw-matrix-role-th").forEach(function (th) {
+        th.classList.toggle("is-overflowing", th.scrollWidth > th.clientWidth);
+      });
     }
 
     // ── Popover ──────────────────────────────────────────────────────

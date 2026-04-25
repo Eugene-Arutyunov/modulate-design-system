@@ -15,3 +15,10 @@
 .m__tooltip[hidden] {
   display: none;
 }
+.m__tooltip:not([hidden]) {
+  animation: tooltip-show 0.15s 0.5s both;
+}
+@keyframes tooltip-show {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
