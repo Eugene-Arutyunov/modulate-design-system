@@ -59,7 +59,7 @@
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__widget-radius);
   padding: var(--m__widget-padding);
-  overflow: clip;
+  overflow-x: clip;
   --m__widget-header-height: 0px;
 
   & .m__widget-header {
@@ -276,6 +276,12 @@
 
     & .chart-legend-date {
       align-self: center;
+    }
+  }
+
+  & .m__table-wrapper {
+    @media (width >= 768px) {
+      overflow: visible;
     }
   }
 
