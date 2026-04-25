@@ -1,9 +1,9 @@
 {% from 'service/modal-wrapper.njk' import modal %} {% call
-modal("modal-rules-conversation-type-create", "Create Conversation Type") %}
+modal("modal-conversation-type-edit", "Edit Conversation Type") %}
 <div class="m__modal__body">
   <div class="m__textfield">
-    <label for="conversation-type-name">Name</label>
-    <input type="text" id="conversation-type-name" placeholder="" />
+    <label for="conversation-type-edit-name">Name</label>
+    <input type="text" id="conversation-type-edit-name" placeholder="" value="Customer Service Call" />
   </div>
   <p class="m__modal__field-hint">
     Enter a clear, descriptive name for this conversation type
@@ -12,8 +12,8 @@ modal("modal-rules-conversation-type-create", "Create Conversation Type") %}
   <div class="m__space XS"></div>
 
   <div class="m__textfield">
-    <label for="conversation-type-description">Description</label>
-    <textarea id="conversation-type-description" placeholder=""></textarea>
+    <label for="conversation-type-edit-description">Description</label>
+    <textarea id="conversation-type-edit-description" placeholder=""></textarea>
   </div>
   <p class="m__modal__field-hint">
     Enter a detailed description of this conversation type
@@ -23,10 +23,10 @@ modal("modal-rules-conversation-type-create", "Create Conversation Type") %}
   <button
     type="button"
     class="m__button-outline-compact"
-    data-modal-close="modal-rules-conversation-type-create"
+    data-modal-close="modal-conversation-type-edit"
   >
     Cancel
   </button>
-  <button type="button" class="m__button-compact">Create</button>
+  <button type="button" class="m__button-compact">Save</button>
 </div>
 {% endcall %}

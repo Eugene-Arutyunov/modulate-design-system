@@ -5,42 +5,222 @@
         <input
           type="radio"
           name="rules-tabs"
-          value="conversation-types"
+          value="behaviors"
           checked
         />
+        Behaviors
+      </label>
+      <label>
+        <input type="radio" name="rules-tabs" value="conversation-types" />
         Conversation Types
       </label>
       <label>
         <input type="radio" name="rules-tabs" value="roles" />
         Roles
       </label>
-      <label>
-        <input type="radio" name="rules-tabs" value="behaviors" />
-        Behaviors
-      </label>
     </div>
-    <button type="button" class="m__button-compact" data-behaviors-create>Create</button>
+    <button type="button" class="m__button-compact" data-behaviors-create>
+      Create
+    </button>
   </div>
 
-  <div class="rules-tab-content" data-rules-tab="conversation-types">
+  <div class="rules-tab-content" data-rules-tab="behaviors">
+    <div class="m__table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Behavior</th>
+            <th>Description</th>
+            <th>Used in configurations</th>
+            <th class="m__col-actions"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Misogyny</td>
+            <td>
+              Evidence of cultural attitudes that propagate systems of
+              marginalizing people based on their gender identity or gender
+              presentation.
+            </td>
+            <td>Moderation</td>
+            <td class="m__col-actions">
+              <div>
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="m__button-danger-compact"
+                  data-behaviors-delete
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Racism</td>
+            <td>
+              Evidence of cultural attitudes that propagate systems of
+              marginalizing people based on their racial or national identity.
+            </td>
+            <td>Moderation</td>
+            <td class="m__col-actions">
+              <div>
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="m__button-danger-compact"
+                  data-behaviors-delete
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Homophobia</td>
+            <td>
+              Evidence of cultural attitudes that propagate systems of
+              marginalizing people based on their sexuality.
+            </td>
+            <td>Moderation</td>
+            <td class="m__col-actions">
+              <div>
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="m__button-danger-compact"
+                  data-behaviors-delete
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Coercion</td>
+            <td>
+              Attempts to pressure or manipulate a participant into taking an
+              action against their will.
+            </td>
+            <td>Institutional Fraud Detection, Consumer Fraud Detection</td>
+            <td class="m__col-actions">
+              <div>
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="m__button-danger-compact"
+                  data-behaviors-delete
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Impersonation</td>
+            <td>
+              Attempts to falsely claim another person's identity during a
+              conversation.
+            </td>
+            <td>Institutional Fraud Detection, Consumer Fraud Detection</td>
+            <td class="m__col-actions">
+              <div>
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="m__button-danger-compact"
+                  data-behaviors-delete
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Return Fraud Attempt</td>
+            <td>
+              Indicators of fraudulent behavior in the context of a product
+              return or refund request.
+            </td>
+            <td>Institutional Fraud Detection</td>
+            <td class="m__col-actions">
+              <div>
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="m__button-danger-compact"
+                  data-behaviors-delete
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="rules-tab-content" data-rules-tab="conversation-types" hidden>
     <div class="m__table-wrapper">
       <table>
         <thead>
           <tr>
             <th>Type</th>
             <th>Description</th>
+            <th>Used in configurations</th>
             <th class="m__col-actions"></th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>Customer Service Call</td>
-            <td>
-              Phone or video calls between customers and support agents
-            </td>
+            <td>Phone or video calls between customers and support agents</td>
+            <td>Institutional Fraud Detection, Consumer Fraud Detection</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -56,9 +236,14 @@
           <tr>
             <td>Social Conversation</td>
             <td>Public or group conversations in social contexts</td>
+            <td>Moderation</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -74,12 +259,17 @@
           <tr>
             <td>Enterprise IT Support</td>
             <td>
-              Any call to assist an employee in accessing or managing
-              internal IT resources
+              Any call to assist an employee in accessing or managing internal
+              IT resources
             </td>
+            <td>Institutional Fraud Detection</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -98,9 +288,14 @@
               Any media style content with a single speaker that talks
               exclusively in the third person
             </td>
+            <td></td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -116,13 +311,17 @@
           <tr>
             <td>Multiple Speakers Livestreamed Media</td>
             <td>
-              Any improvised media content that features several
-              speakers and explicitly exists for entertainment or social
-              purposes
+              Any improvised media content that features several speakers and
+              explicitly exists for entertainment or social purposes
             </td>
+            <td>Moderation</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -138,13 +337,18 @@
           <tr>
             <td>Media Interview or Talk Show</td>
             <td>
-              Conversations in media formatted as one on one interviews,
-              host with one or more guests, or podcasts formatted as
-              question and answer shows
+              Conversations in media formatted as one on one interviews, host
+              with one or more guests, or podcasts formatted as question and
+              answer shows
             </td>
+            <td>Interview Monitoring</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -169,6 +373,7 @@
           <tr>
             <th>Role</th>
             <th>Description</th>
+            <th>Used in configurations</th>
             <th class="m__col-actions"></th>
           </tr>
         </thead>
@@ -176,9 +381,14 @@
           <tr>
             <td>Customer</td>
             <td>Individual contacting support</td>
+            <td>Consumer Fraud Detection</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -194,9 +404,14 @@
           <tr>
             <td>Agent</td>
             <td>Customer support representative</td>
+            <td>Institutional Fraud Detection, Sales Effectiveness</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -212,9 +427,14 @@
           <tr>
             <td>Social Participant</td>
             <td>Participant in social conversation</td>
+            <td>Moderation</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -230,12 +450,17 @@
           <tr>
             <td>Support Specialist</td>
             <td>
-              Someone who works with employees or contractors to solve
-              problems with things like IT, logistics, or communication
+              Someone who works with employees or contractors to solve problems
+              with things like IT, logistics, or communication
             </td>
+            <td>Institutional Fraud Detection</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
+                <button
+                  type="button"
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
+                >
                   Edit
                 </button>
                 <button
@@ -251,156 +476,17 @@
           <tr>
             <td>Employee</td>
             <td>
-              Someone who is employed by company and exists in
-              professional settings
+              Someone who is employed by company and exists in professional
+              settings
             </td>
+            <td>Interview Monitoring</td>
             <td class="m__col-actions">
               <div>
-                <button type="button" class="m__button-outline-compact">
-                  Edit
-                </button>
                 <button
                   type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
+                  class="m__button-outline-compact"
+                  data-behaviors-edit
                 >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="rules-tab-content" data-rules-tab="behaviors" hidden>
-    <div class="m__table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Behavior</th>
-            <th>Description</th>
-            <th class="m__col-actions"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Misogyny</td>
-            <td>
-              Evidence of cultural attitudes that propagate systems of
-              marginalizing people based on their gender identity or
-              gender presentation.
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Racism</td>
-            <td>
-              Evidence of cultural attitudes that propagate systems of
-              marginalizing people based on their racial or national
-              identity.
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Homophobia</td>
-            <td>
-              Evidence of cultural attitudes that propagate systems of
-              marginalizing people based on their sexuality.
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Coercion</td>
-            <td>
-              Attempts to pressure or manipulate a participant into
-              taking an action against their will.
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Impersonation</td>
-            <td>
-              Attempts to falsely claim another person's identity during
-              a conversation.
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  class="m__button-danger-compact"
-                  data-behaviors-delete
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Return Fraud Attempt</td>
-            <td>
-              Indicators of fraudulent behavior in the context of a
-              product return or refund request.
-            </td>
-            <td class="m__col-actions">
-              <div>
-                <button type="button" class="m__button-outline-compact" data-behaviors-edit>
                   Edit
                 </button>
                 <button

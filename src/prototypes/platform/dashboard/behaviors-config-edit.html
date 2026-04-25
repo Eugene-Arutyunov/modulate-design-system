@@ -22,25 +22,78 @@ permalink: /dashboard/behaviors/config-edit/
       <div class="m__space XS"></div>
       <h1 class="dashboard-page-title">Edit configuration</h1>
 
-      <div class="config-form">
-        <div class="config-name-field">
-          <label class="config-name-field__label">Name</label>
-          <div class="m__textfield m__textfield--compact">
-            <input type="text" value="Harassment in Job Interviews" />
+      <div class="config-name-field">
+        <label class="config-name-field__label">Name</label>
+        <div class="m__textfield m__textfield--compact">
+          <input type="text" value="Institutional Fraud Detection" />
+        </div>
+      </div>
+
+      <div class="m__space M"></div>
+
+      <!-- Behaviors widget -->
+      <div class="m__widget">
+        <div class="m__table-toolbar">
+          <div class="m__segmented-control-compact">
+            <label>
+              <input type="radio" name="bw-view" value="list" checked />
+              <span class="bw-seg-label"> Scope </span>
+            </label>
+            <label>
+              <input type="radio" name="bw-view" value="matrix" />
+              <span class="bw-seg-label"> Roles</span>
+            </label>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center">
+            <button
+              type="button"
+              class="m__button-outline-compact"
+              id="bw-add-role-btn"
+              hidden
+            >
+              Add Role
+            </button>
+            <button
+              type="button"
+              class="m__button-compact"
+              data-behaviors-create
+            >
+              Create Behavior
+            </button>
           </div>
         </div>
 
-        <div class="m__space M"></div>
-
-        {% include 'service/table-config-behaviors.html' %}
-
-        <div class="m__space XS"></div>
-
-        {% include 'service/table-config-rules.html' %}
-
-        <div class="config-form-actions">
-          <button type="button" class="m__button-compact">Save</button>
+        <!-- List view -->
+        <div id="bw-list">
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Behavior</th>
+                  <th>Conversation Types</th>
+                  <th>Roles</th>
+                </tr>
+              </thead>
+              <tbody id="bw-list-body"></tbody>
+            </table>
+          </div>
         </div>
+
+        <!-- Matrix view -->
+        <div id="bw-matrix" hidden>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr id="bw-matrix-head"></tr>
+              </thead>
+              <tbody id="bw-matrix-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-form-actions">
+        <button type="button" class="m__button-compact">Save</button>
       </div>
 
       <div class="m__space XL"></div>
@@ -49,38 +102,583 @@ permalink: /dashboard/behaviors/config-edit/
   <div class="m__space XL"></div>
 </div>
 
-<script>
-  const configRulesTabInputs = document.querySelectorAll(
-    '[name="config-rules-tabs"]',
-  );
-  const configRulesTabContents = document.querySelectorAll(
-    ".config-rules-tab-content",
-  );
+<!-- Tooltip (fixed, outside table to escape overflow:clip) -->
+<div class="m__tooltip" id="bw-tooltip" hidden></div>
 
-  configRulesTabInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      configRulesTabContents.forEach((content) => {
-        content.hidden = content.dataset.configRulesTab !== input.value;
+<!-- Popover (outside widget to escape overflow:clip) -->
+<div class="m__popover" id="bw-popover" hidden>
+  <div class="m__searchbar">
+    <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
+      <use href="#search"></use>
+    </svg>
+    <input
+      type="text"
+      id="bw-popover-search"
+      placeholder="Search…"
+      autocomplete="off"
+    />
+  </div>
+  <div class="m__popover-list" id="bw-popover-list"></div>
+  <div class="m__popover-footer">
+    <button type="button" class="m__popover-new-btn" id="bw-popover-new">
+      Create new
+    </button>
+  </div>
+</div>
+
+{% include 'service/modal-behaviors-create.html' %} {% include
+'service/modal-conversation-type-create.html' %} {% include
+'service/modal-role-create.html' %}
+
+<script>
+  (function () {
+    var TYPES = [
+      {
+        id: "customer-service",
+        name: "Customer Service Call",
+        desc: "Conversations in which a service representative handles customer inquiries, complaints, or support requests on behalf of the organization.",
+      },
+      {
+        id: "sales",
+        name: "Sales Outreach",
+        desc: "Conversations where a representative engages prospects or existing customers with the goal of closing a sale or upselling a product.",
+      },
+      {
+        id: "interview",
+        name: "Hiring Interview",
+        desc: "Structured conversations conducted by the organization for the purpose of candidate evaluation and selection.",
+      },
+    ];
+
+    var ROLES = [
+      {
+        id: "agent",
+        name: "Agent",
+        desc: "A company representative responsible for managing or executing the conversation on behalf of the organization.",
+      },
+      {
+        id: "customer",
+        name: "Customer",
+        desc: "The external individual initiating or participating in a conversation as a client, user, or prospect.",
+      },
+      {
+        id: "interviewer",
+        name: "Interviewer",
+        desc: "The person conducting the evaluation on behalf of the hiring organization.",
+      },
+      {
+        id: "candidate",
+        name: "Candidate",
+        desc: "The individual being assessed for a position during a hiring interview.",
+      },
+      {
+        id: "manager",
+        name: "Manager",
+        desc: "A supervisory participant who may be overseeing, auditing, or participating in the conversation.",
+      },
+    ];
+
+    var behaviors = [
+      {
+        id: 0,
+        name: "Vishing attempt",
+        desc: "Attempts to obtain sensitive information by impersonating a trusted entity over a voice call.",
+        types: ["customer-service", "sales"],
+        roles: ["customer", "agent"],
+      },
+      {
+        id: 1,
+        name: "Phishing link",
+        desc: "A suspicious or malicious URL shared during the conversation intended to deceive the recipient.",
+        types: ["sales"],
+        roles: ["agent"],
+      },
+      {
+        id: 2,
+        name: "Return fraud",
+        desc: "Indicators of fraudulent behavior in the context of a product return or refund request.",
+        types: ["customer-service"],
+        roles: ["customer"],
+      },
+      {
+        id: 3,
+        name: "Aggressive tone",
+        desc: "Use of hostile, threatening, or intimidating language directed at another participant.",
+        types: ["customer-service", "sales"],
+        roles: ["customer", "agent"],
+      },
+      {
+        id: 4,
+        name: "Script deviation",
+        desc: "An agent departing from the approved conversation script in a way that may introduce risk.",
+        types: ["customer-service", "sales"],
+        roles: ["agent"],
+      },
+      {
+        id: 5,
+        name: "Manipulation attempt",
+        desc: "Attempts to pressure or manipulate a participant into taking an action against their will.",
+        types: ["sales", "interview"],
+        roles: ["agent", "interviewer"],
+      },
+      {
+        id: 6,
+        name: "Bot detection",
+        desc: "Response patterns or timing that suggest the participant may not be a human speaker.",
+        types: ["customer-service", "interview"],
+        roles: ["customer", "candidate"],
+      },
+      {
+        id: 7,
+        name: "Inappropriate content",
+        desc: "Harmful, offensive, or discriminatory speech that violates acceptable use policies.",
+        types: ["customer-service", "sales", "interview"],
+        roles: ["customer", "agent", "candidate"],
+      },
+      {
+        id: 8,
+        name: "Compliance breach",
+        desc: "Indicators of a potential regulatory or policy violation occurring during the conversation.",
+        types: ["customer-service", "sales"],
+        roles: ["agent"],
+      },
+    ];
+
+    var listBody = document.getElementById("bw-list-body");
+    var matrixHead = document.getElementById("bw-matrix-head");
+    var matrixBody = document.getElementById("bw-matrix-body");
+    var listView = document.getElementById("bw-list");
+    var matrixView = document.getElementById("bw-matrix");
+    var popover = document.getElementById("bw-popover");
+    var popoverSearch = document.getElementById("bw-popover-search");
+    var popoverList = document.getElementById("bw-popover-list");
+    var popoverNew = document.getElementById("bw-popover-new");
+
+    var popoverState = { bId: null, field: null, activeBtn: null };
+    var addRoleBtn = document.getElementById("bw-add-role-btn");
+    var scrollHandler = null;
+
+    // ── View toggle ─────────────────────────────────────────────────
+    document.querySelectorAll('[name="bw-view"]').forEach(function (r) {
+      r.addEventListener("change", function () {
+        listView.hidden = r.value !== "list";
+        matrixView.hidden = r.value !== "matrix";
+        addRoleBtn.hidden = r.value !== "matrix";
       });
     });
-  });
-</script>
 
-{% include 'service/modal-behaviors-delete.html' %}
-{% include 'service/modal-behaviors-create.html' %}
-<script>
-  var deleteBehaviorsModal = document.getElementById("modal-behaviors-delete");
-  var createBehaviorModal = document.getElementById("modal-behaviors-create");
-  document
-    .querySelector(".dashboard-content")
-    .addEventListener("click", function (e) {
-      if (e.target.closest("[data-behaviors-delete]")) {
-        window.M.openModal(deleteBehaviorsModal);
+    // ── Helpers ─────────────────────────────────────────────────────
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function findB(id) {
+      return behaviors.find(function (b) {
+        return b.id === id;
+      });
+    }
+
+    var X_SVG =
+      '<svg viewBox="0 0 12 12" width="8" height="8" fill="none" aria-hidden="true">' +
+      '<line x1="2" y1="2" x2="10" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '<line x1="10" y1="2" x2="2" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      "</svg>";
+
+    var CHECK_SVG =
+      '<svg viewBox="0 0 32 32" aria-hidden="true" width="10" height="10">' +
+      '<use href="#checkmark"></use></svg>';
+
+    // ── Render list ─────────────────────────────────────────────────
+    function renderList() {
+      listBody.innerHTML = "";
+      behaviors.forEach(function (b) {
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          '<td class="bw-behavior-cell">' +
+          '<div class="bw-behavior-name">' +
+          esc(b.name) +
+          "</div>" +
+          '<div class="bw-behavior-desc">' +
+          esc(b.desc) +
+          "</div>" +
+          "</td>" +
+          '<td class="bw-tags-cell">' +
+          tagsCell(b, "types") +
+          "</td>" +
+          '<td class="bw-tags-cell">' +
+          tagsCell(b, "roles") +
+          "</td>";
+        listBody.appendChild(tr);
+      });
+
+      listBody.querySelectorAll("[data-bw-add]").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          openPopover(parseInt(btn.dataset.bwId), btn.dataset.bwAdd, btn);
+        });
+      });
+
+      listBody.querySelectorAll("[data-bw-remove]").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var b = findB(parseInt(btn.dataset.bwId));
+          var field = btn.dataset.bwRemove;
+          b[field] = b[field].filter(function (x) {
+            return x !== btn.dataset.bwItem;
+          });
+          renderList();
+          renderMatrix();
+        });
+      });
+      updateActiveAddBtn();
+    }
+
+    function tagsCell(b, field) {
+      var items = field === "types" ? TYPES : ROLES;
+      var html = '<div class="bw-cell-tags">';
+      b[field].forEach(function (id) {
+        var item = items.find(function (x) {
+          return x.id === id;
+        });
+        if (!item) return;
+        html +=
+          '<span class="m__tag bw-tag-item" data-tooltip="' +
+          esc(item.desc || "") +
+          '">' +
+          esc(item.name) +
+          '<button type="button" class="bw-tag-x"' +
+          ' data-bw-remove="' +
+          field +
+          '"' +
+          ' data-bw-id="' +
+          b.id +
+          '"' +
+          ' data-bw-item="' +
+          id +
+          '">' +
+          X_SVG +
+          "</button></span>";
+      });
+      html +=
+        '<button type="button" class="m__tag bw-add-btn"' +
+        ' data-bw-add="' +
+        field +
+        '"' +
+        ' data-bw-id="' +
+        b.id +
+        '">Add</button>';
+      html += "</div>";
+      return html;
+    }
+
+    // ── Render matrix ────────────────────────────────────────────────
+    function renderMatrix() {
+      matrixHead.innerHTML = "<th>Behavior</th>";
+      ROLES.forEach(function (r) {
+        matrixHead.innerHTML +=
+          '<th class="bw-matrix-role-th">' + esc(r.name) + "</th>";
+      });
+
+      matrixBody.innerHTML = "";
+      behaviors.forEach(function (b) {
+        var tr = document.createElement("tr");
+        var firstCell =
+          '<td class="bw-behavior-cell">' +
+          '<div class="bw-behavior-name">' +
+          esc(b.name) +
+          "</div>" +
+          '<div class="bw-behavior-desc">' +
+          esc(b.desc) +
+          "</div>";
+
+        if (b.types.length) {
+          firstCell += '<div class="bw-cell-tags bw-cell-tags--mt">';
+          b.types.forEach(function (tid) {
+            var t = TYPES.find(function (x) {
+              return x.id === tid;
+            });
+            if (t)
+              firstCell +=
+                '<span class="m__tag-flat">' + esc(t.name) + "</span>";
+          });
+          firstCell += "</div>";
+        }
+        firstCell += "</td>";
+
+        var roleCells = ROLES.map(function (r) {
+          var checked = b.roles.indexOf(r.id) !== -1 ? " checked" : "";
+          return (
+            '<td class="bw-matrix-check">' +
+            '<label class="m__checkbox">' +
+            '<input type="checkbox"' +
+            checked +
+            ' data-bm-bid="' +
+            b.id +
+            '" data-bm-role="' +
+            r.id +
+            '" />' +
+            CHECK_SVG +
+            "</label></td>"
+          );
+        }).join("");
+
+        tr.innerHTML = firstCell + roleCells;
+        matrixBody.appendChild(tr);
+      });
+
+      matrixBody.querySelectorAll("[data-bm-bid]").forEach(function (cb) {
+        cb.addEventListener("change", function () {
+          var b = findB(parseInt(cb.dataset.bmBid));
+          var roleId = cb.dataset.bmRole;
+          if (cb.checked) {
+            if (b.roles.indexOf(roleId) === -1) b.roles.push(roleId);
+          } else {
+            b.roles = b.roles.filter(function (r) {
+              return r !== roleId;
+            });
+          }
+          renderList();
+        });
+      });
+    }
+
+    // ── Popover ──────────────────────────────────────────────────────
+    function positionPopover(anchor) {
+      var rect = anchor.getBoundingClientRect();
+      var top = rect.bottom + 4;
+      var left = rect.left;
+      var pw = 240;
+      if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+      popover.style.top = top + "px";
+      popover.style.left = left + "px";
+    }
+
+    function openPopover(bId, field, anchor) {
+      if (popoverState.activeBtn) {
+        popoverState.activeBtn.classList.remove("bw-add-btn--active");
       }
-      if (e.target.closest("[data-behaviors-create]")) {
-        window.M.openModal(createBehaviorModal);
+      popoverState.bId = bId;
+      popoverState.field = field;
+      popoverState.activeBtn = anchor;
+      anchor.classList.add("bw-add-btn--active");
+      popoverSearch.value = "";
+      refreshPopoverList("");
+      popoverNew.textContent =
+        field === "types" ? "Create Type" : "Create Role";
+
+      positionPopover(anchor);
+      popover.hidden = false;
+      popoverSearch.focus();
+
+      if (scrollHandler)
+        document.removeEventListener("scroll", scrollHandler, true);
+      scrollHandler = function () {
+        positionPopover(anchor);
+      };
+      document.addEventListener("scroll", scrollHandler, true);
+    }
+
+    function closePopover() {
+      if (popoverState.activeBtn) {
+        popoverState.activeBtn.classList.remove("bw-add-btn--active");
+        popoverState.activeBtn = null;
+      }
+      popover.hidden = true;
+      popoverState.bId = null;
+      if (scrollHandler) {
+        document.removeEventListener("scroll", scrollHandler, true);
+        scrollHandler = null;
+      }
+    }
+
+    function updateActiveAddBtn() {
+      if (popoverState.bId === null) return;
+      var btn = listBody.querySelector(
+        '.bw-add-btn[data-bw-id="' +
+          popoverState.bId +
+          '"][data-bw-add="' +
+          popoverState.field +
+          '"]',
+      );
+      if (btn) {
+        popoverState.activeBtn = btn;
+        btn.classList.add("bw-add-btn--active");
+      }
+    }
+
+    function refreshPopoverList(query) {
+      var b = findB(popoverState.bId);
+      if (!b) return;
+      var items = popoverState.field === "types" ? TYPES : ROLES;
+      var q = query.toLowerCase();
+      var filtered = q
+        ? items.filter(function (i) {
+            return i.name.toLowerCase().indexOf(q) !== -1;
+          })
+        : items;
+
+      popoverList.innerHTML = "";
+      filtered.forEach(function (item) {
+        var isActive = b[popoverState.field].indexOf(item.id) !== -1;
+        var label = document.createElement("label");
+        label.className = "m__popover-item";
+        label.innerHTML =
+          '<span class="m__checkbox"><input type="checkbox"' +
+          (isActive ? " checked" : "") +
+          " />" +
+          CHECK_SVG +
+          "</span>" +
+          '<span class="m__popover-item-name">' +
+          esc(item.name) +
+          "</span>";
+
+        label.querySelector("input").addEventListener("change", function (e) {
+          var bv = findB(popoverState.bId);
+          var field = popoverState.field;
+          if (e.target.checked) {
+            if (bv[field].indexOf(item.id) === -1) bv[field].push(item.id);
+          } else {
+            bv[field] = bv[field].filter(function (x) {
+              return x !== item.id;
+            });
+          }
+          renderList();
+          renderMatrix();
+        });
+
+        popoverList.appendChild(label);
+      });
+    }
+
+    popoverSearch.addEventListener("input", function () {
+      refreshPopoverList(popoverSearch.value);
+    });
+
+    document.addEventListener("click", function (e) {
+      if (
+        !popover.hidden &&
+        !popover.contains(e.target) &&
+        !e.target.closest("[data-bw-add]")
+      ) {
+        closePopover();
       }
     });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !popover.hidden) closePopover();
+    });
+
+    popoverNew.addEventListener("click", function () {
+      var field = popoverState.field;
+      closePopover();
+      var modalId =
+        field === "types"
+          ? "modal-conversation-type-create"
+          : "modal-role-create";
+      window.M.openModal(document.getElementById(modalId));
+    });
+
+    // ── Add Role button ──────────────────────────────────────────────
+    addRoleBtn.addEventListener("click", function () {
+      window.M.openModal(document.getElementById("modal-role-create"));
+    });
+
+    // ── Create Behavior button ───────────────────────────────────────
+    document
+      .querySelector("[data-behaviors-create]")
+      .addEventListener("click", function () {
+        window.M.openModal(document.getElementById("modal-behaviors-create"));
+      });
+
+    // ── Modal: create behavior ───────────────────────────────────────
+    document
+      .getElementById("modal-behaviors-create")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        var name = document.getElementById("behavior-name").value.trim();
+        var desc = document.getElementById("behavior-description").value.trim();
+        if (!name) return;
+        behaviors.push({
+          id: Date.now(),
+          name: name,
+          desc: desc,
+          types: [],
+          roles: [],
+        });
+        document.getElementById("behavior-name").value = "";
+        document.getElementById("behavior-description").value = "";
+        window.M.closeModal(document.getElementById("modal-behaviors-create"));
+        renderList();
+        renderMatrix();
+      });
+
+    // ── Modal: create type ───────────────────────────────────────────
+    document
+      .getElementById("modal-conversation-type-create")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        var name = document
+          .getElementById("conversation-type-name")
+          .value.trim();
+        if (!name) return;
+        TYPES.push({ id: "custom-" + Date.now(), name: name });
+        document.getElementById("conversation-type-name").value = "";
+        var ta = document.getElementById("conversation-type-description");
+        if (ta) ta.value = "";
+        window.M.closeModal(
+          document.getElementById("modal-conversation-type-create"),
+        );
+        renderList();
+      });
+
+    // ── Modal: create role ───────────────────────────────────────────
+    document
+      .getElementById("modal-role-create")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        var name = document.getElementById("role-name").value.trim();
+        if (!name) return;
+        ROLES.push({ id: "custom-" + Date.now(), name: name });
+        document.getElementById("role-name").value = "";
+        var ta = document.getElementById("role-description");
+        if (ta) ta.value = "";
+        window.M.closeModal(document.getElementById("modal-role-create"));
+        renderMatrix();
+        renderList();
+      });
+
+    // ── Tooltip ──────────────────────────────────────────────────────
+    var bwTooltip = document.querySelector(".m__tooltip");
+    document.addEventListener("mouseover", function (e) {
+      var tag = e.target.closest("[data-tooltip]");
+      if (!tag || !tag.dataset.tooltip) {
+        bwTooltip.hidden = true;
+        return;
+      }
+      bwTooltip.textContent = tag.dataset.tooltip;
+      bwTooltip.hidden = false;
+      var rect = tag.getBoundingClientRect();
+      var tw = bwTooltip.offsetWidth;
+      var th = bwTooltip.offsetHeight;
+      var left = rect.left + rect.width / 2 - tw / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+      var top = rect.top - th - 6;
+      if (top < 8) top = rect.bottom + 6;
+      bwTooltip.style.top = top + "px";
+      bwTooltip.style.left = left + "px";
+    });
+    document.addEventListener("mouseout", function (e) {
+      var to = e.relatedTarget;
+      if (!to || !to.closest("[data-tooltip]")) bwTooltip.hidden = true;
+    });
+
+    // ── Init ─────────────────────────────────────────────────────────
+    renderList();
+    renderMatrix();
+  })();
 </script>
 
 {% endblock %}

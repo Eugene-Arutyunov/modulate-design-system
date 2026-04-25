@@ -59,7 +59,7 @@
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__widget-radius);
   padding: var(--m__widget-padding);
-  overflow: clip;
+  overflow-x: clip;
   --m__widget-header-height: 0px;
 
   & .m__widget-header {
@@ -69,6 +69,7 @@
     position: sticky;
     top: 0;
     z-index: 10;
+    border-radius: var(--m__widget-radius) var(--m__widget-radius) 0 0;
     margin: calc(-1 * var(--m__widget-padding));
     margin-bottom: var(--m__widget-padding);
     padding: 0.6rem var(--m__widget-padding);
@@ -83,6 +84,7 @@
     }
 
     & .m__table-filters {
+      z-index: 10;
       margin-bottom: 0;
       flex: 1;
       display: grid;
@@ -279,7 +281,14 @@
     }
   }
 
+  & .m__table-wrapper {
+    @media (width >= 768px) {
+      overflow: visible;
+    }
+  }
+
   th {
+    z-index: 1;
     top: 0px;
     background-color: var(--m__bg-surface-color);
   }
@@ -300,8 +309,12 @@
   .m__segmented-control label {
     font-size: var(--m__font-size-s);
   }
-  button.m__button-compact {
+  button {
     font-size: var(--m__font-size-s);
+  }
+
+  table button {
+    font-size: var(--m__font-size-xs);
   }
 }
 
