@@ -122,26 +122,6 @@ permalink: /dashboard/behaviors/config-create/
     opacity: 1;
   }
 
-  /* Floating tag tooltip */
-  .bw-tooltip {
-    position: fixed;
-    z-index: 300;
-    background-color: var(--m__background-color);
-    border: 1px solid var(--m__ui-border-color);
-    border-radius: var(--m__radius-s);
-    box-shadow: 0 2px 12px color-mix(in srgb, #000 25%, transparent);
-    padding: 0.35rem 0.5rem;
-    font-size: var(--m__font-size-xs);
-    color: var(--m__text-color);
-    max-width: 14rem;
-    line-height: 1.4;
-    pointer-events: none;
-    white-space: normal;
-  }
-  .bw-tooltip[hidden] {
-    display: none;
-  }
-
   /* List table fixed columns */
   #bw-list table {
     table-layout: fixed;
@@ -323,7 +303,7 @@ permalink: /dashboard/behaviors/config-create/
 </div>
 
 <!-- Tooltip (fixed, outside table to escape overflow:clip) -->
-<div class="bw-tooltip" id="bw-tooltip" hidden></div>
+<div class="m__tooltip" id="bw-tooltip" hidden></div>
 
 <!-- Popover (outside widget to escape overflow:clip) -->
 <div class="m__popover" id="bw-popover" hidden>
@@ -476,6 +456,7 @@ permalink: /dashboard/behaviors/config-create/
 
     var popoverState = { bId: null, field: null, activeBtn: null };
     var addRoleBtn = document.getElementById("bw-add-role-btn");
+    var scrollHandler = null;
 
     // ── View toggle ─────────────────────────────────────────────────
     document.querySelectorAll('[name="bw-view"]').forEach(function (r) {
@@ -665,6 +646,16 @@ permalink: /dashboard/behaviors/config-create/
     }
 
     // ── Popover ──────────────────────────────────────────────────────
+    function positionPopover(anchor) {
+      var rect = anchor.getBoundingClientRect();
+      var top = rect.bottom + 4;
+      var left = rect.left;
+      var pw = 240;
+      if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+      popover.style.top = top + "px";
+      popover.style.left = left + "px";
+    }
+
     function openPopover(bId, field, anchor) {
       if (popoverState.activeBtn) {
         popoverState.activeBtn.classList.remove("bw-add-btn--active");
@@ -678,16 +669,13 @@ permalink: /dashboard/behaviors/config-create/
       popoverNew.textContent =
         field === "types" ? "+ Create new type" : "+ Create new role";
 
-      var rect = anchor.getBoundingClientRect();
-      var top = rect.bottom + 4;
-      var left = rect.left;
-      var pw = 240;
-      if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
-
-      popover.style.top = top + "px";
-      popover.style.left = left + "px";
+      positionPopover(anchor);
       popover.hidden = false;
       popoverSearch.focus();
+
+      if (scrollHandler) document.removeEventListener("scroll", scrollHandler, true);
+      scrollHandler = function () { positionPopover(anchor); };
+      document.addEventListener("scroll", scrollHandler, true);
     }
 
     function closePopover() {
@@ -697,6 +685,10 @@ permalink: /dashboard/behaviors/config-create/
       }
       popover.hidden = true;
       popoverState.bId = null;
+      if (scrollHandler) {
+        document.removeEventListener("scroll", scrollHandler, true);
+        scrollHandler = null;
+      }
     }
 
     function updateActiveAddBtn() {
@@ -856,7 +848,7 @@ permalink: /dashboard/behaviors/config-create/
       });
 
     // ── Tooltip ──────────────────────────────────────────────────────
-    var bwTooltip = document.getElementById("bw-tooltip");
+    var bwTooltip = document.querySelector(".m__tooltip");
     document.addEventListener("mouseover", function (e) {
       var tag = e.target.closest("[data-tooltip]");
       if (!tag || !tag.dataset.tooltip) {
