@@ -102,29 +102,7 @@ permalink: /dashboard/behaviors/config-edit/
   <div class="m__space XL"></div>
 </div>
 
-<!-- Tooltip (fixed, outside table to escape overflow:clip) -->
-<div class="m__tooltip" id="bw-tooltip" hidden></div>
-
-<!-- Popover (outside widget to escape overflow:clip) -->
-<div class="m__popover" id="bw-popover" hidden>
-  <div class="m__searchbar">
-    <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
-      <use href="#search"></use>
-    </svg>
-    <input
-      type="text"
-      id="bw-popover-search"
-      placeholder="Search…"
-      autocomplete="off"
-    />
-  </div>
-  <div class="m__popover-list" id="bw-popover-list"></div>
-  <div class="m__popover-footer">
-    <button type="button" class="m__popover-new-btn" id="bw-popover-new">
-      Create new
-    </button>
-  </div>
-</div>
+{% include 'service/popover-behaviors.html' %}
 
 {% include 'service/modal-behaviors-create.html' %} {% include
 'service/modal-conversation-type-create.html' %} {% include
@@ -252,6 +230,7 @@ permalink: /dashboard/behaviors/config-edit/
     var popover = document.getElementById("bw-popover");
     var popoverSearch = document.getElementById("bw-popover-search");
     var popoverList = document.getElementById("bw-popover-list");
+    var popoverEmpty = document.getElementById("bw-popover-empty");
     var popoverNew = document.getElementById("bw-popover-new");
 
     var popoverState = { bId: null, field: null, activeBtn: null };
@@ -525,6 +504,8 @@ permalink: /dashboard/behaviors/config-edit/
         : items;
 
       popoverList.innerHTML = "";
+      popoverList.hidden = filtered.length === 0;
+      popoverEmpty.hidden = filtered.length > 0;
       filtered.forEach(function (item) {
         var isActive = b[popoverState.field].indexOf(item.id) !== -1;
         var label = document.createElement("label");
@@ -575,8 +556,11 @@ permalink: /dashboard/behaviors/config-edit/
       if (e.key === "Escape" && !popover.hidden) closePopover();
     });
 
+    var pendingAdd = null;
+
     popoverNew.addEventListener("click", function () {
       var field = popoverState.field;
+      pendingAdd = { bId: popoverState.bId, field: field };
       closePopover();
       var modalId =
         field === "types"
@@ -628,7 +612,13 @@ permalink: /dashboard/behaviors/config-edit/
           .getElementById("conversation-type-name")
           .value.trim();
         if (!name) return;
-        TYPES.push({ id: "custom-" + Date.now(), name: name });
+        var newId = "custom-" + Date.now();
+        TYPES.push({ id: newId, name: name });
+        if (pendingAdd && pendingAdd.field === "types") {
+          var b = findB(pendingAdd.bId);
+          if (b && b.types.indexOf(newId) === -1) b.types.push(newId);
+          pendingAdd = null;
+        }
         document.getElementById("conversation-type-name").value = "";
         var ta = document.getElementById("conversation-type-description");
         if (ta) ta.value = "";
@@ -645,7 +635,13 @@ permalink: /dashboard/behaviors/config-edit/
       .addEventListener("click", function () {
         var name = document.getElementById("role-name").value.trim();
         if (!name) return;
-        ROLES.push({ id: "custom-" + Date.now(), name: name });
+        var newId = "custom-" + Date.now();
+        ROLES.push({ id: newId, name: name });
+        if (pendingAdd && pendingAdd.field === "roles") {
+          var b = findB(pendingAdd.bId);
+          if (b && b.roles.indexOf(newId) === -1) b.roles.push(newId);
+          pendingAdd = null;
+        }
         document.getElementById("role-name").value = "";
         var ta = document.getElementById("role-description");
         if (ta) ta.value = "";
@@ -654,30 +650,6 @@ permalink: /dashboard/behaviors/config-edit/
         renderList();
       });
 
-    // ── Tooltip ──────────────────────────────────────────────────────
-    var bwTooltip = document.querySelector(".m__tooltip");
-    document.addEventListener("mouseover", function (e) {
-      var tag = e.target.closest("[data-tooltip]");
-      if (!tag || !tag.dataset.tooltip) {
-        bwTooltip.hidden = true;
-        return;
-      }
-      bwTooltip.textContent = tag.dataset.tooltip;
-      bwTooltip.hidden = false;
-      var rect = tag.getBoundingClientRect();
-      var tw = bwTooltip.offsetWidth;
-      var th = bwTooltip.offsetHeight;
-      var left = rect.left + rect.width / 2 - tw / 2;
-      left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
-      var top = rect.top - th - 6;
-      if (top < 8) top = rect.bottom + 6;
-      bwTooltip.style.top = top + "px";
-      bwTooltip.style.left = left + "px";
-    });
-    document.addEventListener("mouseout", function (e) {
-      var to = e.relatedTarget;
-      if (!to || !to.closest("[data-tooltip]")) bwTooltip.hidden = true;
-    });
 
     // ── Init ─────────────────────────────────────────────────────────
     renderList();
