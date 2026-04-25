@@ -223,98 +223,6 @@ permalink: /dashboard/behaviors/config-create/
     transform: translate(-50%, -50%);
   }
 
-  /* Popover */
-  .bw-popover {
-    position: fixed;
-    z-index: 200;
-    background-color: var(--m__background-color);
-    border: 1px solid var(--m__ui-border-color);
-    border-radius: var(--m__radius-m);
-    box-shadow: 0 4px 20px color-mix(in srgb, #000 22%, transparent);
-    width: 15rem;
-    overflow: hidden;
-  }
-  .bw-popover[hidden] {
-    display: none;
-  }
-
-  .bw-popover__search-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--m__ui-border-color);
-  }
-  .bw-popover__search-wrap svg {
-    color: var(--m__text-caption-color);
-    flex-shrink: 0;
-  }
-  .bw-popover__search-wrap input {
-    flex: 1;
-    min-width: 0;
-    background: none;
-    border: none;
-    outline: none;
-    font: inherit;
-    font-size: var(--m__font-size-s);
-    color: var(--m__text-color);
-  }
-  .bw-popover__search-wrap input::placeholder {
-    color: var(--m__text-caption-color);
-  }
-
-  .bw-popover__list {
-    max-height: 12rem;
-    overflow-y: auto;
-    padding: 0.25rem 0;
-  }
-
-  label.bw-popover__item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem 0.75rem;
-    border-radius: 0;
-    width: 100%;
-    box-sizing: border-box;
-    transition: background-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
-  }
-  label.bw-popover__item:hover {
-    background-color: color-mix(in srgb, var(--m__text-color) 5%, transparent);
-    transition-duration: var(--m__hover-transition-duration);
-  }
-  label.bw-popover__item--active .bw-popover__item-name {
-    color: var(--m__text-link-color);
-  }
-
-  .bw-popover__item-name {
-    font-size: var(--m__font-size-s);
-    flex: 1;
-  }
-
-  .bw-popover__footer {
-    border-top: 1px solid var(--m__ui-border-color);
-    padding: 0.4rem 0.75rem;
-  }
-
-  .bw-popover__new-btn {
-    background: none;
-    border: none;
-    padding: 0.1rem 0;
-    font: inherit;
-    font-size: var(--m__font-size-s);
-    color: var(--m__text-caption-color);
-    cursor: pointer;
-    width: 100%;
-    text-align: left;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
-  }
-  .bw-popover__new-btn:hover {
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
-  }
 </style>
 
 <div class="m__wrapper">
@@ -418,8 +326,8 @@ permalink: /dashboard/behaviors/config-create/
 <div class="bw-tooltip" id="bw-tooltip" hidden></div>
 
 <!-- Popover (outside widget to escape overflow:clip) -->
-<div class="bw-popover" id="bw-popover" hidden>
-  <div class="bw-popover__search-wrap">
+<div class="m__popover" id="bw-popover" hidden>
+  <div class="m__searchbar">
     <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
       <use href="#search"></use>
     </svg>
@@ -430,9 +338,9 @@ permalink: /dashboard/behaviors/config-create/
       autocomplete="off"
     />
   </div>
-  <div class="bw-popover__list" id="bw-popover-list"></div>
-  <div class="bw-popover__footer">
-    <button type="button" class="bw-popover__new-btn" id="bw-popover-new">
+  <div class="m__popover__list" id="bw-popover-list"></div>
+  <div class="m__popover__footer">
+    <button type="button" class="m__popover__new-btn" id="bw-popover-new">
       + Create new
     </button>
   </div>
@@ -818,15 +726,15 @@ permalink: /dashboard/behaviors/config-create/
         var isActive = b[popoverState.field].indexOf(item.id) !== -1;
         var label = document.createElement("label");
         label.className =
-          "bw-popover__item" +
-          (isActive ? " bw-popover__item--active" : "");
+          "m__popover__item" +
+          (isActive ? " m__popover__item--active" : "");
         label.innerHTML =
           '<span class="m__checkbox"><input type="checkbox"' +
           (isActive ? " checked" : "") +
           " />" +
           CHECK_SVG +
           "</span>" +
-          '<span class="bw-popover__item-name">' +
+          '<span class="m__popover__item-name">' +
           esc(item.name) +
           "</span>";
 
@@ -835,12 +743,12 @@ permalink: /dashboard/behaviors/config-create/
           var field = popoverState.field;
           if (e.target.checked) {
             if (bv[field].indexOf(item.id) === -1) bv[field].push(item.id);
-            label.classList.add("bw-popover__item--active");
+            label.classList.add("m__popover__item--active");
           } else {
             bv[field] = bv[field].filter(function (x) {
               return x !== item.id;
             });
-            label.classList.remove("bw-popover__item--active");
+            label.classList.remove("m__popover__item--active");
           }
           renderList();
           renderMatrix();
