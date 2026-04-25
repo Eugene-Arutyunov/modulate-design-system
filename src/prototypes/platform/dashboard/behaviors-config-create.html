@@ -15,6 +15,11 @@ permalink: /dashboard/behaviors/config-create/
     font-size: var(--m__font-size-s);
   }
 
+  .bw-seg-label svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
   /* Table cell: behavior name + desc */
   .bw-behavior-cell {
     vertical-align: top;
@@ -264,16 +269,8 @@ permalink: /dashboard/behaviors/config-create/
             <label>
               <input type="radio" name="bw-view" value="list" checked />
               <span class="bw-seg-label">
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <circle cx="6" cy="6" r="5.25" stroke="currentColor" stroke-width="1.5"/>
-                  <circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/>
-                  <circle cx="6" cy="6" r="0.75" fill="currentColor"/>
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#scope"></use>
                 </svg>
                 Scope
               </span>
@@ -281,7 +278,7 @@ permalink: /dashboard/behaviors/config-create/
             <label>
               <input type="radio" name="bw-view" value="matrix" />
               <span class="bw-seg-label">
-                <svg viewBox="0 0 32 32" aria-hidden="true" width="12" height="12">
+                <svg viewBox="0 0 32 32" aria-hidden="true">
                   <use href="#account"></use>
                 </svg>
                 Role Matrix
@@ -594,7 +591,8 @@ permalink: /dashboard/behaviors/config-create/
               return x.id === tid;
             });
             if (t)
-              firstCell += '<span class="m__tag-flat">' + esc(t.name) + "</span>";
+              firstCell +=
+                '<span class="m__tag-flat">' + esc(t.name) + "</span>";
           });
           firstCell += "</div>";
         }
