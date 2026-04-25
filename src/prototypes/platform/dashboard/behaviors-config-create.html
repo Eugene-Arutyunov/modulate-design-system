@@ -108,7 +108,8 @@ permalink: /dashboard/behaviors/config-create/
   .bw-tags-cell:hover .bw-add-btn {
     opacity: 1;
   }
-  .bw-add-btn:hover {
+  .bw-add-btn:hover,
+  .bw-add-btn--active {
     color: var(--m__text-hover-color);
     border-color: color-mix(
       in srgb,
@@ -116,6 +117,9 @@ permalink: /dashboard/behaviors/config-create/
       transparent
     );
     transition-duration: var(--m__hover-transition-duration);
+  }
+  .bw-add-btn--active {
+    opacity: 1;
   }
 
   /* Floating tag tooltip */
@@ -562,7 +566,7 @@ permalink: /dashboard/behaviors/config-create/
     var popoverList = document.getElementById("bw-popover-list");
     var popoverNew = document.getElementById("bw-popover-new");
 
-    var popoverState = { bId: null, field: null };
+    var popoverState = { bId: null, field: null, activeBtn: null };
     var addRoleBtn = document.getElementById("bw-add-role-btn");
 
     // ── View toggle ─────────────────────────────────────────────────
@@ -640,6 +644,7 @@ permalink: /dashboard/behaviors/config-create/
           renderMatrix();
         });
       });
+      updateActiveAddBtn();
     }
 
     function tagsCell(b, field) {
@@ -753,8 +758,13 @@ permalink: /dashboard/behaviors/config-create/
 
     // ── Popover ──────────────────────────────────────────────────────
     function openPopover(bId, field, anchor) {
+      if (popoverState.activeBtn) {
+        popoverState.activeBtn.classList.remove("bw-add-btn--active");
+      }
       popoverState.bId = bId;
       popoverState.field = field;
+      popoverState.activeBtn = anchor;
+      anchor.classList.add("bw-add-btn--active");
       popoverSearch.value = "";
       refreshPopoverList("");
       popoverNew.textContent =
@@ -773,8 +783,23 @@ permalink: /dashboard/behaviors/config-create/
     }
 
     function closePopover() {
+      if (popoverState.activeBtn) {
+        popoverState.activeBtn.classList.remove("bw-add-btn--active");
+        popoverState.activeBtn = null;
+      }
       popover.hidden = true;
       popoverState.bId = null;
+    }
+
+    function updateActiveAddBtn() {
+      if (popoverState.bId === null) return;
+      var btn = listBody.querySelector(
+        '.bw-add-btn[data-bw-id="' + popoverState.bId + '"][data-bw-add="' + popoverState.field + '"]'
+      );
+      if (btn) {
+        popoverState.activeBtn = btn;
+        btn.classList.add("bw-add-btn--active");
+      }
     }
 
     function refreshPopoverList(query) {
@@ -793,13 +818,14 @@ permalink: /dashboard/behaviors/config-create/
         var isActive = b[popoverState.field].indexOf(item.id) !== -1;
         var label = document.createElement("label");
         label.className =
-          "m__checkbox bw-popover__item" +
+          "bw-popover__item" +
           (isActive ? " bw-popover__item--active" : "");
         label.innerHTML =
-          '<input type="checkbox"' +
+          '<span class="m__checkbox"><input type="checkbox"' +
           (isActive ? " checked" : "") +
           " />" +
           CHECK_SVG +
+          "</span>" +
           '<span class="bw-popover__item-name">' +
           esc(item.name) +
           "</span>";
