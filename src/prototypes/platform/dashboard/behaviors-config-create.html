@@ -18,6 +18,11 @@ permalink: /dashboard/behaviors/config-create/
   .bw-seg-label svg {
     width: 1rem;
     height: 1rem;
+    display: block;
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+    align-self: end;
   }
 
   /* Table cell: behavior name + desc */
@@ -268,21 +273,11 @@ permalink: /dashboard/behaviors/config-create/
           <div class="m__segmented-control-compact">
             <label>
               <input type="radio" name="bw-view" value="list" checked />
-              <span class="bw-seg-label">
-                <svg viewBox="0 0 32 32" aria-hidden="true">
-                  <use href="#scope"></use>
-                </svg>
-                Scope
-              </span>
+              <span class="bw-seg-label"> Scope </span>
             </label>
             <label>
               <input type="radio" name="bw-view" value="matrix" />
-              <span class="bw-seg-label">
-                <svg viewBox="0 0 32 32" aria-hidden="true">
-                  <use href="#account"></use>
-                </svg>
-                Role Matrix
-              </span>
+              <span class="bw-seg-label"> Role Matrix </span>
             </label>
           </div>
           <button
