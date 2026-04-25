@@ -8,10 +8,6 @@ permalink: /dashboard/behaviors/config-create/
 <style>
   /* ── Behavior widget local styles ───────────────────────────────── */
 
-  .bw-header .m__segmented-control-compact {
-    margin: 0;
-  }
-
   .bw-seg-label {
     display: inline-flex;
     align-items: center;
@@ -93,11 +89,16 @@ permalink: /dashboard/behaviors/config-create/
     flex-shrink: 0;
     transition:
       color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      border-color var(--m__unhover-transition-duration)
+        var(--m__transition-easing);
   }
   .bw-add-btn:hover {
     color: var(--m__text-hover-color);
-    border-color: color-mix(in srgb, var(--m__text-hover-color) 50%, transparent);
+    border-color: color-mix(
+      in srgb,
+      var(--m__text-hover-color) 50%,
+      transparent
+    );
     transition-duration: var(--m__hover-transition-duration);
   }
 
@@ -106,9 +107,13 @@ permalink: /dashboard/behaviors/config-create/
     table-layout: fixed;
     width: 100%;
   }
-  #bw-list th:nth-child(1) { width: 35%; }
-  #bw-list th:nth-child(2) { width: 45%; }
-  #bw-list th:nth-child(3) { width: 20%; }
+  #bw-list th:nth-child(1) {
+    width: 35%;
+  }
+  #bw-list th:nth-child(2),
+  #bw-list th:nth-child(3) {
+    width: 32.5%;
+  }
 
   /* Matrix columns */
   #bw-matrix table {
@@ -254,39 +259,10 @@ permalink: /dashboard/behaviors/config-create/
 
       <!-- Behaviors widget -->
       <div class="m__widget">
-        <div class="m__widget-header bw-header">
+        <div class="m__table-toolbar">
           <div class="m__segmented-control-compact">
             <label>
               <input type="radio" name="bw-view" value="list" checked />
-              <span class="bw-seg-label">
-                <svg
-                  width="12"
-                  height="10"
-                  viewBox="0 0 12 10"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <rect width="12" height="1.5" rx="0.75" fill="currentColor" />
-                  <rect
-                    y="4"
-                    width="12"
-                    height="1.5"
-                    rx="0.75"
-                    fill="currentColor"
-                  />
-                  <rect
-                    y="8"
-                    width="12"
-                    height="1.5"
-                    rx="0.75"
-                    fill="currentColor"
-                  />
-                </svg>
-                List
-              </span>
-            </label>
-            <label>
-              <input type="radio" name="bw-view" value="matrix" />
               <span class="bw-seg-label">
                 <svg
                   width="12"
@@ -295,31 +271,20 @@ permalink: /dashboard/behaviors/config-create/
                   fill="none"
                   aria-hidden="true"
                 >
-                  <rect width="5" height="5" rx="0.5" fill="currentColor" />
-                  <rect
-                    x="7"
-                    width="5"
-                    height="5"
-                    rx="0.5"
-                    fill="currentColor"
-                  />
-                  <rect
-                    y="7"
-                    width="5"
-                    height="5"
-                    rx="0.5"
-                    fill="currentColor"
-                  />
-                  <rect
-                    x="7"
-                    y="7"
-                    width="5"
-                    height="5"
-                    rx="0.5"
-                    fill="currentColor"
-                  />
+                  <circle cx="6" cy="6" r="5.25" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="6" cy="6" r="0.75" fill="currentColor"/>
                 </svg>
-                Matrix
+                Scope
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="bw-view" value="matrix" />
+              <span class="bw-seg-label">
+                <svg viewBox="0 0 32 32" aria-hidden="true" width="12" height="12">
+                  <use href="#account"></use>
+                </svg>
+                Role Matrix
               </span>
             </label>
           </div>
@@ -629,7 +594,7 @@ permalink: /dashboard/behaviors/config-create/
               return x.id === tid;
             });
             if (t)
-              firstCell += '<span class="m__tag">' + esc(t.name) + "</span>";
+              firstCell += '<span class="m__tag-flat">' + esc(t.name) + "</span>";
           });
           firstCell += "</div>";
         }
