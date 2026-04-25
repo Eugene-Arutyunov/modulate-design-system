@@ -66,7 +66,7 @@ permalink: /dashboard/behaviors/config-create/
     display: inline-flex;
     align-items: center;
     gap: 0.2rem;
-    padding-right: 0.3rem;
+    padding-right: 0;
   }
 
   .bw-tag-x {
@@ -75,7 +75,8 @@ permalink: /dashboard/behaviors/config-create/
     justify-content: center;
     background: none;
     border: none;
-    padding: 0;
+    padding: 0.25rem 0.3rem 0.25rem 0.1rem;
+    margin: -0.25rem 0;
     cursor: pointer;
     color: currentColor;
     opacity: 0.5;
@@ -97,10 +98,15 @@ permalink: /dashboard/behaviors/config-create/
     color: var(--m__text-caption-color);
     cursor: pointer;
     flex-shrink: 0;
+    opacity: 0;
     transition:
       color var(--m__unhover-transition-duration) var(--m__transition-easing),
       border-color var(--m__unhover-transition-duration)
-        var(--m__transition-easing);
+        var(--m__transition-easing),
+      opacity var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+  .bw-tags-cell:hover .bw-add-btn {
+    opacity: 1;
   }
   .bw-add-btn:hover {
     color: var(--m__text-hover-color);
@@ -110,6 +116,26 @@ permalink: /dashboard/behaviors/config-create/
       transparent
     );
     transition-duration: var(--m__hover-transition-duration);
+  }
+
+  /* Floating tag tooltip */
+  .bw-tooltip {
+    position: fixed;
+    z-index: 300;
+    background-color: var(--m__background-color);
+    border: 1px solid var(--m__ui-border-color);
+    border-radius: var(--m__radius-s);
+    box-shadow: 0 2px 12px color-mix(in srgb, #000 25%, transparent);
+    padding: 0.35rem 0.5rem;
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-color);
+    max-width: 14rem;
+    line-height: 1.4;
+    pointer-events: none;
+    white-space: normal;
+  }
+  .bw-tooltip[hidden] {
+    display: none;
   }
 
   /* List table fixed columns */
@@ -135,16 +161,62 @@ permalink: /dashboard/behaviors/config-create/
     width: 35%;
   }
 
+  #bw-add-role-btn[hidden] {
+    display: none;
+  }
+
   .bw-matrix-role-th {
+    padding: 0.3rem 0;
     text-align: center;
     font-weight: var(--m__font-weight-medium);
   }
   .bw-matrix-check {
     text-align: center;
     vertical-align: middle;
+    position: relative;
+    padding: 0;
+  }
+  .bw-matrix-check::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: transparent;
+    pointer-events: none;
+    transition: background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+  }
+  .bw-matrix-check:has(input:checked)::before {
+    background-color: color-mix(
+      in srgb,
+      var(--m__bg-hover-color) 5%,
+      transparent
+    );
+  }
+  .bw-matrix-check:hover::before {
+    background-color: color-mix(
+      in srgb,
+      var(--m__bg-hover-color) 5%,
+      transparent
+    );
+    transition-duration: var(--m__hover-transition-duration);
+  }
+  .bw-matrix-check:has(input:checked):hover::before {
+    background-color: color-mix(
+      in srgb,
+      var(--m__bg-hover-color) 8%,
+      transparent
+    );
   }
   .bw-matrix-check .m__checkbox {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
     justify-content: center;
+  }
+  .bw-matrix-check .m__checkbox > svg {
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   /* Popover */
@@ -277,16 +349,26 @@ permalink: /dashboard/behaviors/config-create/
             </label>
             <label>
               <input type="radio" name="bw-view" value="matrix" />
-              <span class="bw-seg-label"> Role Matrix </span>
+              <span class="bw-seg-label"> Roles</span>
             </label>
           </div>
-          <button
-            type="button"
-            class="m__button-outline-compact"
-            data-behaviors-create
-          >
-            Create Behavior
-          </button>
+          <div style="display: flex; gap: 0.5rem; align-items: center">
+            <button
+              type="button"
+              class="m__button-outline-compact"
+              id="bw-add-role-btn"
+              hidden
+            >
+              Add Role
+            </button>
+            <button
+              type="button"
+              class="m__button-compact"
+              data-behaviors-create
+            >
+              Create Behavior
+            </button>
+          </div>
         </div>
 
         <!-- List view -->
@@ -328,6 +410,9 @@ permalink: /dashboard/behaviors/config-create/
   <div class="m__space XL"></div>
 </div>
 
+<!-- Tooltip (fixed, outside table to escape overflow:clip) -->
+<div class="bw-tooltip" id="bw-tooltip" hidden></div>
+
 <!-- Popover (outside widget to escape overflow:clip) -->
 <div class="bw-popover" id="bw-popover" hidden>
   <div class="bw-popover__search-wrap">
@@ -356,17 +441,49 @@ permalink: /dashboard/behaviors/config-create/
 <script>
   (function () {
     var TYPES = [
-      { id: "customer-service", name: "Customer Service Call" },
-      { id: "sales", name: "Sales Outreach" },
-      { id: "interview", name: "Hiring Interview" },
+      {
+        id: "customer-service",
+        name: "Customer Service Call",
+        desc: "Conversations in which a service representative handles customer inquiries, complaints, or support requests on behalf of the organization.",
+      },
+      {
+        id: "sales",
+        name: "Sales Outreach",
+        desc: "Conversations where a representative engages prospects or existing customers with the goal of closing a sale or upselling a product.",
+      },
+      {
+        id: "interview",
+        name: "Hiring Interview",
+        desc: "Structured conversations conducted by the organization for the purpose of candidate evaluation and selection.",
+      },
     ];
 
     var ROLES = [
-      { id: "agent", name: "Agent" },
-      { id: "customer", name: "Customer" },
-      { id: "interviewer", name: "Interviewer" },
-      { id: "candidate", name: "Candidate" },
-      { id: "manager", name: "Manager" },
+      {
+        id: "agent",
+        name: "Agent",
+        desc: "A company representative responsible for managing or executing the conversation on behalf of the organization.",
+      },
+      {
+        id: "customer",
+        name: "Customer",
+        desc: "The external individual initiating or participating in a conversation as a client, user, or prospect.",
+      },
+      {
+        id: "interviewer",
+        name: "Interviewer",
+        desc: "The person conducting the evaluation on behalf of the hiring organization.",
+      },
+      {
+        id: "candidate",
+        name: "Candidate",
+        desc: "The individual being assessed for a position during a hiring interview.",
+      },
+      {
+        id: "manager",
+        name: "Manager",
+        desc: "A supervisory participant who may be overseeing, auditing, or participating in the conversation.",
+      },
     ];
 
     var behaviors = [
@@ -446,12 +563,14 @@ permalink: /dashboard/behaviors/config-create/
     var popoverNew = document.getElementById("bw-popover-new");
 
     var popoverState = { bId: null, field: null };
+    var addRoleBtn = document.getElementById("bw-add-role-btn");
 
     // ── View toggle ─────────────────────────────────────────────────
     document.querySelectorAll('[name="bw-view"]').forEach(function (r) {
       r.addEventListener("change", function () {
         listView.hidden = r.value !== "list";
         matrixView.hidden = r.value !== "matrix";
+        addRoleBtn.hidden = r.value !== "matrix";
       });
     });
 
@@ -532,7 +651,9 @@ permalink: /dashboard/behaviors/config-create/
         });
         if (!item) return;
         html +=
-          '<span class="m__tag bw-tag-item">' +
+          '<span class="m__tag bw-tag-item" data-tooltip="' +
+          esc(item.desc || "") +
+          '">' +
           esc(item.name) +
           '<button type="button" class="bw-tag-x"' +
           ' data-bw-remove="' +
@@ -625,7 +746,7 @@ permalink: /dashboard/behaviors/config-create/
               return r !== roleId;
             });
           }
-          if (!listView.hidden) renderList();
+          renderList();
         });
       });
     }
@@ -731,6 +852,11 @@ permalink: /dashboard/behaviors/config-create/
       window.M.openModal(document.getElementById(modalId));
     });
 
+    // ── Add Role button ──────────────────────────────────────────────
+    addRoleBtn.addEventListener("click", function () {
+      window.M.openModal(document.getElementById("modal-role-create"));
+    });
+
     // ── Create Behavior button ───────────────────────────────────────
     document
       .querySelector("[data-behaviors-create]")
@@ -776,6 +902,7 @@ permalink: /dashboard/behaviors/config-create/
         window.M.closeModal(
           document.getElementById("modal-conversation-type-create"),
         );
+        renderList();
       });
 
     // ── Modal: create role ───────────────────────────────────────────
@@ -791,7 +918,33 @@ permalink: /dashboard/behaviors/config-create/
         if (ta) ta.value = "";
         window.M.closeModal(document.getElementById("modal-role-create"));
         renderMatrix();
+        renderList();
       });
+
+    // ── Tooltip ──────────────────────────────────────────────────────
+    var bwTooltip = document.getElementById("bw-tooltip");
+    document.addEventListener("mouseover", function (e) {
+      var tag = e.target.closest("[data-tooltip]");
+      if (!tag || !tag.dataset.tooltip) {
+        bwTooltip.hidden = true;
+        return;
+      }
+      bwTooltip.textContent = tag.dataset.tooltip;
+      bwTooltip.hidden = false;
+      var rect = tag.getBoundingClientRect();
+      var tw = bwTooltip.offsetWidth;
+      var th = bwTooltip.offsetHeight;
+      var left = rect.left + rect.width / 2 - tw / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+      var top = rect.top - th - 6;
+      if (top < 8) top = rect.bottom + 6;
+      bwTooltip.style.top = top + "px";
+      bwTooltip.style.left = left + "px";
+    });
+    document.addEventListener("mouseout", function (e) {
+      var to = e.relatedTarget;
+      if (!to || !to.closest("[data-tooltip]")) bwTooltip.hidden = true;
+    });
 
     // ── Init ─────────────────────────────────────────────────────────
     renderList();
