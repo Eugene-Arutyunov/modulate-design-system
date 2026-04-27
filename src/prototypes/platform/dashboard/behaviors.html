@@ -44,7 +44,7 @@ permalink: /dashboard/behaviors/
         data-tab="configurations"
       >
         <h1 class="dashboard-page-title">Configurations</h1>
-        <p>Pre-configured detection packages to get you started quickly</p>
+        <p>Pre-configured detection packages to get you started quickly. The default configuration is applied to all API calls. Modulate-provided configurations are read-only — duplicate one to create an editable version you can customize and set as default.</p>
 
         <div class="m__space XS"></div>
 
@@ -130,9 +130,7 @@ permalink: /dashboard/behaviors/
     return checked ? checked.value : "configurations";
   }
 
-  document
-    .querySelector(".dashboard-content")
-    .addEventListener("click", function (e) {
+  document.addEventListener("click", function (e) {
       if (e.target.closest("[data-behaviors-delete]")) {
         window.M.openModal(deleteBehaviorsModal);
       }
@@ -159,4 +157,5 @@ permalink: /dashboard/behaviors/
     });
 </script>
 
+<script src="/assets/prototypes/action-menu.js"></script>
 {% endblock %}

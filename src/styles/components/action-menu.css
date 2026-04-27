@@ -1,0 +1,53 @@
+.m__action-menu {
+  display: inline-block;
+}
+
+.m__action-menu-list {
+  position: fixed;
+  z-index: 200;
+  background-color: var(--m__background-color);
+  border: 1px solid var(--m__ui-border-color);
+  border-radius: var(--m__widget-radius);
+  box-shadow: 0 4px 20px color-mix(in srgb, #000 22%, transparent);
+  min-width: 9rem;
+  overflow: hidden;
+  padding: 0.25rem;
+}
+
+.m__action-menu-list[hidden] {
+  display: none;
+}
+
+.m__action-menu-item {
+  font-size: 1rem;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--m__radius-m);
+  font: inherit;
+  color: var(--m__text-color);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition:
+    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover {
+    background-color: var(--m__bg-surface-color);
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+.m__action-menu-item--danger {
+  color: color-mix(in srgb, var(--m__ui-error-color) 80%, transparent);
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--m__ui-error-color) 8%, transparent);
+    color: var(--m__ui-error-hover-color);
+  }
+}
