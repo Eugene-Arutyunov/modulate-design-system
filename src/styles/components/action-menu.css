@@ -2,6 +2,17 @@
   display: inline-block;
 }
 
+.m__action-menu .m__action-menu-trigger {
+  padding-right: 0.6em;
+  gap: 0.2rem;
+
+  & .m__button__icon {
+    width: 12px;
+    height: 12px;
+    align-self: center;
+  }
+}
+
 .m__action-menu-list {
   position: fixed;
   z-index: 200;
@@ -33,7 +44,8 @@
   text-align: left;
   text-decoration: none;
   transition:
-    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    background-color var(--m__unhover-transition-duration)
+      var(--m__transition-easing),
     color var(--m__unhover-transition-duration) var(--m__transition-easing);
 
   &:hover {
@@ -47,7 +59,11 @@
   color: color-mix(in srgb, var(--m__ui-error-color) 80%, transparent);
 
   &:hover {
-    background-color: color-mix(in srgb, var(--m__ui-error-color) 8%, transparent);
+    background-color: color-mix(
+      in srgb,
+      var(--m__ui-error-color) 8%,
+      transparent
+    );
     color: var(--m__ui-error-hover-color);
   }
 }

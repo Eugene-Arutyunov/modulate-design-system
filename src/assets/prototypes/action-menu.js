@@ -22,9 +22,9 @@
 
     var rect = trigger.getBoundingClientRect();
     list.style.top = rect.bottom + 4 + "px";
-    list.style.left = rect.right + "px";
+    list.style.left = rect.left + "px";
     list.style.right = "auto";
-    list.style.transform = "translateX(-100%)";
+    list.style.transform = "";
 
     list.hidden = false;
     activeList = list;
