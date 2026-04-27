@@ -34,33 +34,14 @@ permalink: /dashboard/behaviors/config-edit/
       <!-- Behaviors widget -->
       <div class="m__widget">
         <div class="m__table-toolbar">
-          <div class="m__segmented-control-compact">
-            <label>
-              <input type="radio" name="bw-view" value="list" checked />
-              <span class="bw-seg-label"> Scope </span>
-            </label>
-            <label>
-              <input type="radio" name="bw-view" value="matrix" />
-              <span class="bw-seg-label"> Roles</span>
-            </label>
-          </div>
-          <div style="display: flex; gap: 0.5rem; align-items: center">
-            <button
-              type="button"
-              class="m__button-outline-compact"
-              id="bw-add-role-btn"
-              hidden
-            >
-              Add Role
-            </button>
-            <button
-              type="button"
-              class="m__button-compact"
-              data-behaviors-create
-            >
-              Create Behavior
-            </button>
-          </div>
+          <h2>Scope</h2>
+          <button
+            type="button"
+            class="m__button-compact"
+            data-behaviors-create
+          >
+            Create Behavior
+          </button>
         </div>
 
         <!-- List view -->
@@ -79,17 +60,6 @@ permalink: /dashboard/behaviors/config-edit/
           </div>
         </div>
 
-        <!-- Matrix view -->
-        <div id="bw-matrix" hidden>
-          <div class="m__table-wrapper">
-            <table>
-              <thead>
-                <tr id="bw-matrix-head"></tr>
-              </thead>
-              <tbody id="bw-matrix-body"></tbody>
-            </table>
-          </div>
-        </div>
       </div>
 
       <div class="config-form-actions">
@@ -223,10 +193,6 @@ permalink: /dashboard/behaviors/config-edit/
     ];
 
     var listBody = document.getElementById("bw-list-body");
-    var matrixHead = document.getElementById("bw-matrix-head");
-    var matrixBody = document.getElementById("bw-matrix-body");
-    var listView = document.getElementById("bw-list");
-    var matrixView = document.getElementById("bw-matrix");
     var popover = document.getElementById("bw-popover");
     var popoverSearch = document.getElementById("bw-popover-search");
     var popoverList = document.getElementById("bw-popover-list");
@@ -234,17 +200,7 @@ permalink: /dashboard/behaviors/config-edit/
     var popoverNew = document.getElementById("bw-popover-new");
 
     var popoverState = { bId: null, field: null, activeBtn: null };
-    var addRoleBtn = document.getElementById("bw-add-role-btn");
     var scrollHandler = null;
-
-    // ── View toggle ─────────────────────────────────────────────────
-    document.querySelectorAll('[name="bw-view"]').forEach(function (r) {
-      r.addEventListener("change", function () {
-        listView.hidden = r.value !== "list";
-        matrixView.hidden = r.value !== "matrix";
-        addRoleBtn.hidden = r.value !== "matrix";
-      });
-    });
 
     // ── Helpers ─────────────────────────────────────────────────────
     function esc(s) {
@@ -309,7 +265,6 @@ permalink: /dashboard/behaviors/config-edit/
             return x !== btn.dataset.bwItem;
           });
           renderList();
-          renderMatrix();
         });
       });
       updateActiveAddBtn();
@@ -351,81 +306,6 @@ permalink: /dashboard/behaviors/config-edit/
         '">Add</button>';
       html += "</div>";
       return html;
-    }
-
-    // ── Render matrix ────────────────────────────────────────────────
-    function renderMatrix() {
-      matrixHead.innerHTML = "<th>Behavior</th>";
-      ROLES.forEach(function (r) {
-        matrixHead.innerHTML +=
-          '<th class="bw-matrix-role-th">' + esc(r.name) + "</th>";
-      });
-
-      matrixBody.innerHTML = "";
-      behaviors.forEach(function (b) {
-        var tr = document.createElement("tr");
-        var firstCell =
-          '<td class="bw-behavior-cell">' +
-          '<div class="bw-behavior-name">' +
-          esc(b.name) +
-          "</div>" +
-          '<div class="bw-behavior-desc">' +
-          esc(b.desc) +
-          "</div>";
-
-        if (b.types.length) {
-          firstCell += '<div class="bw-cell-tags bw-cell-tags--mt">';
-          b.types.forEach(function (tid) {
-            var t = TYPES.find(function (x) {
-              return x.id === tid;
-            });
-            if (t)
-              firstCell +=
-                '<span class="m__tag-flat">' + esc(t.name) + "</span>";
-          });
-          firstCell += "</div>";
-        }
-        firstCell += "</td>";
-
-        var roleCells = ROLES.map(function (r) {
-          var checked = b.roles.indexOf(r.id) !== -1 ? " checked" : "";
-          return (
-            '<td class="bw-matrix-check">' +
-            '<label class="m__checkbox">' +
-            '<input type="checkbox"' +
-            checked +
-            ' data-bm-bid="' +
-            b.id +
-            '" data-bm-role="' +
-            r.id +
-            '" />' +
-            CHECK_SVG +
-            "</label></td>"
-          );
-        }).join("");
-
-        tr.innerHTML = firstCell + roleCells;
-        matrixBody.appendChild(tr);
-      });
-
-      matrixBody.querySelectorAll("[data-bm-bid]").forEach(function (cb) {
-        cb.addEventListener("change", function () {
-          var b = findB(parseInt(cb.dataset.bmBid));
-          var roleId = cb.dataset.bmRole;
-          if (cb.checked) {
-            if (b.roles.indexOf(roleId) === -1) b.roles.push(roleId);
-          } else {
-            b.roles = b.roles.filter(function (r) {
-              return r !== roleId;
-            });
-          }
-          renderList();
-        });
-      });
-
-      matrixHead.querySelectorAll(".bw-matrix-role-th").forEach(function (th) {
-        th.classList.toggle("is-overflowing", th.scrollWidth > th.clientWidth);
-      });
     }
 
     // ── Popover ──────────────────────────────────────────────────────
@@ -531,7 +411,6 @@ permalink: /dashboard/behaviors/config-edit/
             });
           }
           renderList();
-          renderMatrix();
         });
 
         popoverList.appendChild(label);
@@ -569,11 +448,6 @@ permalink: /dashboard/behaviors/config-edit/
       window.M.openModal(document.getElementById(modalId));
     });
 
-    // ── Add Role button ──────────────────────────────────────────────
-    addRoleBtn.addEventListener("click", function () {
-      window.M.openModal(document.getElementById("modal-role-create"));
-    });
-
     // ── Create Behavior button ───────────────────────────────────────
     document
       .querySelector("[data-behaviors-create]")
@@ -600,7 +474,6 @@ permalink: /dashboard/behaviors/config-edit/
         document.getElementById("behavior-description").value = "";
         window.M.closeModal(document.getElementById("modal-behaviors-create"));
         renderList();
-        renderMatrix();
       });
 
     // ── Modal: create type ───────────────────────────────────────────
@@ -646,14 +519,12 @@ permalink: /dashboard/behaviors/config-edit/
         var ta = document.getElementById("role-description");
         if (ta) ta.value = "";
         window.M.closeModal(document.getElementById("modal-role-create"));
-        renderMatrix();
         renderList();
       });
 
 
     // ── Init ─────────────────────────────────────────────────────────
     renderList();
-    renderMatrix();
   })();
 </script>
 
