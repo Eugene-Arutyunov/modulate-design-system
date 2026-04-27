@@ -28,7 +28,10 @@
       {% if rows | length %}
         {% for row in rows %}
         <tr>
-          <td>{{ row.name }}</td>
+          <td>
+            <span>{{ row.name }}</span>
+            {% if row.description %}<br><span class="muted">{{ row.description }}</span>{% endif %}
+          </td>
           <td>
             <span class="m__tag-flat">{{ row.type }}</span>
           </td>
