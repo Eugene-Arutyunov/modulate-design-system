@@ -29,17 +29,24 @@ permalink: /dashboard/behaviors/config-edit/
         </div>
       </div>
 
+      <div class="m__space XS"></div>
+
+      <div class="config-name-field config-name-field--wide">
+        <label class="config-name-field__label">Description</label>
+        <div class="m__textfield m__textfield--compact">
+          <textarea rows="2">
+Detects fraud-related behaviors across customer service and sales conversations within financial institutions.</textarea
+          >
+        </div>
+      </div>
+
       <div class="m__space M"></div>
 
       <!-- Behaviors widget -->
       <div class="m__widget">
         <div class="m__table-toolbar">
           <h2>Scope</h2>
-          <button
-            type="button"
-            class="m__button-compact"
-            data-behaviors-create
-          >
+          <button type="button" class="m__button-compact" data-behaviors-create>
             Create Behavior
           </button>
         </div>
@@ -59,7 +66,6 @@ permalink: /dashboard/behaviors/config-edit/
             </table>
           </div>
         </div>
-
       </div>
 
       <div class="config-form-actions">
@@ -72,9 +78,8 @@ permalink: /dashboard/behaviors/config-edit/
   <div class="m__space XL"></div>
 </div>
 
-{% include 'service/popover-behaviors.html' %}
-
-{% include 'service/modal-behaviors-create.html' %} {% include
+{% include 'service/popover-behaviors.html' %} {% include
+'service/modal-behaviors-create.html' %} {% include
 'service/modal-conversation-type-create.html' %} {% include
 'service/modal-role-create.html' %}
 
@@ -521,7 +526,6 @@ permalink: /dashboard/behaviors/config-edit/
         window.M.closeModal(document.getElementById("modal-role-create"));
         renderList();
       });
-
 
     // ── Init ─────────────────────────────────────────────────────────
     renderList();

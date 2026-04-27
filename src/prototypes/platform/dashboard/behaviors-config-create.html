@@ -5,7 +5,6 @@ permalink: /dashboard/behaviors/config-create/
 
 {% extends 'prototypes/layout.html' %} {% block content %}
 
-
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
@@ -30,17 +29,22 @@ permalink: /dashboard/behaviors/config-create/
         </div>
       </div>
 
+      <div class="m__space XS"></div>
+
+      <div class="config-name-field config-name-field--wide">
+        <label class="config-name-field__label">Description</label>
+        <div class="m__textfield m__textfield--compact">
+          <textarea rows="2" placeholder=""></textarea>
+        </div>
+      </div>
+
       <div class="m__space M"></div>
 
       <!-- Behaviors widget -->
       <div class="m__widget">
         <div class="m__table-toolbar">
           <h2>Scope</h2>
-          <button
-            type="button"
-            class="m__button-compact"
-            data-behaviors-create
-          >
+          <button type="button" class="m__button-compact" data-behaviors-create>
             Create Behavior
           </button>
         </div>
@@ -60,7 +64,6 @@ permalink: /dashboard/behaviors/config-create/
             </table>
           </div>
         </div>
-
       </div>
 
       <div class="config-form-actions">
@@ -73,9 +76,8 @@ permalink: /dashboard/behaviors/config-create/
   <div class="m__space XL"></div>
 </div>
 
-{% include 'service/popover-behaviors.html' %}
-
-{% include 'service/modal-behaviors-create.html' %} {% include
+{% include 'service/popover-behaviors.html' %} {% include
+'service/modal-behaviors-create.html' %} {% include
 'service/modal-conversation-type-create.html' %} {% include
 'service/modal-role-create.html' %}
 
@@ -337,8 +339,11 @@ permalink: /dashboard/behaviors/config-create/
       popover.hidden = false;
       popoverSearch.focus();
 
-      if (scrollHandler) document.removeEventListener("scroll", scrollHandler, true);
-      scrollHandler = function () { positionPopover(anchor); };
+      if (scrollHandler)
+        document.removeEventListener("scroll", scrollHandler, true);
+      scrollHandler = function () {
+        positionPopover(anchor);
+      };
       document.addEventListener("scroll", scrollHandler, true);
     }
 
@@ -358,7 +363,11 @@ permalink: /dashboard/behaviors/config-create/
     function updateActiveAddBtn() {
       if (popoverState.bId === null) return;
       var btn = listBody.querySelector(
-        '.bw-add-btn[data-bw-id="' + popoverState.bId + '"][data-bw-add="' + popoverState.field + '"]'
+        '.bw-add-btn[data-bw-id="' +
+          popoverState.bId +
+          '"][data-bw-add="' +
+          popoverState.field +
+          '"]',
       );
       if (btn) {
         popoverState.activeBtn = btn;
@@ -515,7 +524,6 @@ permalink: /dashboard/behaviors/config-create/
         window.M.closeModal(document.getElementById("modal-role-create"));
         renderList();
       });
-
 
     // ── Init ─────────────────────────────────────────────────────────
     renderList();
