@@ -22,21 +22,28 @@ permalink: /dashboard/behaviors/config-create/
       <div class="m__space XS"></div>
       <h1 class="dashboard-page-title">New configuration</h1>
 
-      <div class="config-name-field">
-        <label class="config-name-field__label">Name</label>
-        <div class="m__textfield m__textfield--compact">
-          <input type="text" placeholder="" />
-        </div>
-      </div>
-
-      <div class="m__space XS"></div>
-
-      <div class="config-name-field config-name-field--wide">
-        <label class="config-name-field__label">Description</label>
-        <div class="m__textfield m__textfield--compact">
-          <textarea rows="2" placeholder=""></textarea>
-        </div>
-      </div>
+      <table class="org-details config-details">
+        <tbody>
+          <tr>
+            <th>Name</th>
+            <td>
+              <div
+                class="m__textfield m__textfield--compact config-details-name"
+              >
+                <input type="text" placeholder="" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td>
+              <div class="m__textfield m__textfield--compact">
+                <textarea rows="2" placeholder=""></textarea>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <div class="m__space M"></div>
 
@@ -58,6 +65,7 @@ permalink: /dashboard/behaviors/config-create/
                   <th>Behavior</th>
                   <th>Conversation Types</th>
                   <th>Roles</th>
+                  <th class="m__col-actions"></th>
                 </tr>
               </thead>
               <tbody id="bw-list-body"></tbody>
@@ -132,6 +140,7 @@ permalink: /dashboard/behaviors/config-create/
     var behaviors = [
       {
         id: 0,
+        enabled: true,
         name: "Vishing attempt",
         desc: "Attempts to obtain sensitive information by impersonating a trusted entity over a voice call. The caller typically poses as a bank representative, IT support technician, government official, or internal employee to gain the victim's trust. Common tactics include creating a sense of urgency, referencing partial personal details to appear legitimate, and requesting verification of account credentials, passwords, or payment information. Vishing attacks are increasingly sophisticated and may be difficult to distinguish from legitimate calls, making this behavior a high-priority indicator for fraud detection.",
         types: ["customer-service", "sales"],
@@ -139,6 +148,7 @@ permalink: /dashboard/behaviors/config-create/
       },
       {
         id: 1,
+        enabled: true,
         name: "Phishing link",
         desc: "A suspicious or malicious URL shared during the conversation intended to deceive the recipient.",
         types: ["sales"],
@@ -146,6 +156,7 @@ permalink: /dashboard/behaviors/config-create/
       },
       {
         id: 2,
+        enabled: true,
         name: "Return fraud",
         desc: "Indicators of fraudulent behavior in the context of a product return or refund request.",
         types: [],
@@ -153,6 +164,7 @@ permalink: /dashboard/behaviors/config-create/
       },
       {
         id: 3,
+        enabled: true,
         name: "Aggressive tone",
         desc: "Use of hostile, threatening, or intimidating language directed at another participant during the conversation. This behavior encompasses a broad range of verbal aggression, including explicit threats, personal insults, emotional escalation, and coercive demands that create an unsafe or uncomfortable environment. Aggressive tone may indicate customer frustration, deliberate manipulation, or an attempt to pressure a representative into bypassing standard procedures. Early detection enables timely supervisor escalation and helps prevent the situation from deteriorating further into a compliance or safety incident.",
         types: ["customer-service"],
@@ -160,6 +172,7 @@ permalink: /dashboard/behaviors/config-create/
       },
       {
         id: 4,
+        enabled: true,
         name: "Script deviation",
         desc: "An agent departing from the approved conversation script in a way that may introduce risk.",
         types: [],
@@ -167,6 +180,7 @@ permalink: /dashboard/behaviors/config-create/
       },
       {
         id: 5,
+        enabled: true,
         name: "Manipulation attempt",
         desc: "Attempts to pressure or manipulate a participant into taking an action against their will or outside of established policy. Tactics commonly include emotional appeals, false urgency, repeated requests after initial refusal, guilt-tripping, exploiting authority dynamics, and selective omission of key facts to steer the other party toward a desired outcome. This behavior may be employed by customers seeking unauthorized exceptions or by agents acting outside approved guidelines. Identifying manipulation patterns early allows supervisors to intervene and protect both participants and organizational integrity.",
         types: ["sales"],
@@ -174,6 +188,7 @@ permalink: /dashboard/behaviors/config-create/
       },
       {
         id: 6,
+        enabled: true,
         name: "Bot detection",
         desc: "Response patterns or timing that suggest the participant may not be a human speaker.",
         types: ["customer-service", "interview"],
@@ -181,6 +196,7 @@ permalink: /dashboard/behaviors/config-create/
       },
       {
         id: 7,
+        enabled: true,
         name: "Inappropriate content",
         desc: "Harmful, offensive, or discriminatory speech that violates acceptable use policies.",
         types: [],
@@ -188,6 +204,7 @@ permalink: /dashboard/behaviors/config-create/
       },
       {
         id: 8,
+        enabled: true,
         name: "Compliance breach",
         desc: "Indicators of a potential regulatory or policy violation occurring during the conversation.",
         types: [],
@@ -248,6 +265,11 @@ permalink: /dashboard/behaviors/config-create/
           "</td>" +
           '<td class="bw-tags-cell">' +
           tagsCell(b, "roles") +
+          "</td>" +
+          '<td class="m__col-actions">' +
+          '<label class="m__toggle">' +
+          '<input type="checkbox" data-bw-toggle="' + b.id + '"' + (b.enabled ? " checked" : "") + " />" +
+          "</label>" +
           "</td>";
         listBody.appendChild(tr);
       });
@@ -270,6 +292,14 @@ permalink: /dashboard/behaviors/config-create/
           renderList();
         });
       });
+
+      listBody.querySelectorAll("[data-bw-toggle]").forEach(function (input) {
+        input.addEventListener("change", function () {
+          var b = findB(parseInt(input.dataset.bwToggle));
+          b.enabled = input.checked;
+        });
+      });
+
       updateActiveAddBtn();
     }
 
@@ -468,6 +498,7 @@ permalink: /dashboard/behaviors/config-create/
         if (!name) return;
         behaviors.push({
           id: Date.now(),
+          enabled: true,
           name: name,
           desc: desc,
           types: [],

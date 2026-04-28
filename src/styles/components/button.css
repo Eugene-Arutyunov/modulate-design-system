@@ -18,7 +18,8 @@ button.m__button-danger-compact,
 a.m__button-success,
 button.m__button-success,
 a.m__button-success-compact,
-button.m__button-success-compact {
+button.m__button-success-compact,
+button.m__button-icon {
   display: inline-flex;
   align-items: baseline;
   justify-content: center;
@@ -280,4 +281,34 @@ button.m__button-success:active,
 button.m__button-success-compact:active {
   color: color-mix(in srgb, var(--m__ui-success-color) 80%, transparent);
   transition-duration: var(--m__hover-transition-duration);
+}
+
+button.m__button-icon {
+  padding: 0.3em;
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  color: var(--m__text-color);
+  border: none;
+  align-items: center;
+  transition:
+    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  & svg {
+    display: block;
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  &:hover {
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+    color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  &:active {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    color: var(--m__text-active-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
 }

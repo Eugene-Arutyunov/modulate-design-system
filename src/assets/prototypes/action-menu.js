@@ -8,6 +8,7 @@
     if (activeList._amOriginalParent) {
       activeList._amOriginalParent.appendChild(activeList);
     }
+    activeTrigger.classList.remove("m__action-menu-trigger--active");
     activeList = null;
     activeTrigger = null;
   }
@@ -22,13 +23,14 @@
 
     var rect = trigger.getBoundingClientRect();
     list.style.top = rect.bottom + 4 + "px";
-    list.style.left = rect.left + "px";
-    list.style.right = "auto";
+    list.style.left = "auto";
+    list.style.right = document.documentElement.clientWidth - rect.right + "px";
     list.style.transform = "";
 
     list.hidden = false;
     activeList = list;
     activeTrigger = trigger;
+    trigger.classList.add("m__action-menu-trigger--active");
   }
 
   document.addEventListener("click", function (e) {
