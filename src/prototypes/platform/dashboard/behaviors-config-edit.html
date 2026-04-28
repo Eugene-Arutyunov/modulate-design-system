@@ -27,7 +27,9 @@ permalink: /dashboard/behaviors/config-edit/
           <tr>
             <th>Name</th>
             <td>
-              <div class="m__textfield m__textfield--compact config-details-name">
+              <div
+                class="m__textfield m__textfield--compact config-details-name"
+              >
                 <input type="text" value="Institutional Fraud Detection" />
               </div>
             </td>
@@ -36,7 +38,9 @@ permalink: /dashboard/behaviors/config-edit/
             <th>Description</th>
             <td>
               <div class="m__textfield m__textfield--compact">
-                <textarea rows="2">Detects fraud-related behaviors across customer service and sales conversations within financial institutions.</textarea>
+                <textarea rows="2">
+Detects fraud-related behaviors across customer service and sales conversations within financial institutions.</textarea
+                >
               </div>
             </td>
           </tr>
@@ -49,8 +53,8 @@ permalink: /dashboard/behaviors/config-edit/
       <div class="m__widget">
         <div class="m__table-toolbar">
           <h2>Scope</h2>
-          <button type="button" class="m__button-compact" data-behaviors-create>
-            Create Behavior
+          <button type="button" class="m__button-compact" id="bw-scope-add-btn">
+            Add Behavior
           </button>
         </div>
 
@@ -63,6 +67,7 @@ permalink: /dashboard/behaviors/config-edit/
                   <th>Behavior</th>
                   <th>Conversation Types</th>
                   <th>Roles</th>
+                  <th class="m__col-actions"></th>
                 </tr>
               </thead>
               <tbody id="bw-list-body"></tbody>
@@ -72,7 +77,7 @@ permalink: /dashboard/behaviors/config-edit/
       </div>
 
       <div class="config-form-actions">
-        <button type="button" class="m__button-compact">Save</button>
+        <button type="button" class="m__button-compact">Save config</button>
       </div>
 
       <div class="m__space XL"></div>
@@ -85,6 +90,29 @@ permalink: /dashboard/behaviors/config-edit/
 'service/modal-behaviors-create.html' %} {% include
 'service/modal-conversation-type-create.html' %} {% include
 'service/modal-role-create.html' %}
+
+<div class="m__popover" id="bw-scope-popover" hidden>
+  <div class="m__searchbar">
+    <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
+      <use href="#search"></use>
+    </svg>
+    <input
+      type="text"
+      id="bw-scope-search"
+      placeholder="Search…"
+      autocomplete="off"
+    />
+  </div>
+  <div class="m__popover-list" id="bw-scope-list"></div>
+  <p class="bw-popover-empty" id="bw-scope-empty" hidden>
+    No matching behaviors
+  </p>
+  <div class="m__popover-footer">
+    <button type="button" class="m__popover-new-btn" id="bw-scope-create">
+      Create Behavior
+    </button>
+  </div>
+</div>
 
 <script>
   (function () {
@@ -200,6 +228,10 @@ permalink: /dashboard/behaviors/config-edit/
       },
     ];
 
+    var scopeIds = behaviors.map(function (b) {
+      return b.id;
+    });
+
     var listBody = document.getElementById("bw-list-body");
     var popover = document.getElementById("bw-popover");
     var popoverSearch = document.getElementById("bw-popover-search");
@@ -237,25 +269,36 @@ permalink: /dashboard/behaviors/config-edit/
     // ── Render list ─────────────────────────────────────────────────
     function renderList() {
       listBody.innerHTML = "";
-      behaviors.forEach(function (b) {
-        var tr = document.createElement("tr");
-        tr.innerHTML =
-          '<td class="bw-behavior-cell">' +
-          '<div class="bw-behavior-name">' +
-          esc(b.name) +
-          "</div>" +
-          '<div class="bw-behavior-desc">' +
-          esc(b.desc) +
-          "</div>" +
-          "</td>" +
-          '<td class="bw-tags-cell">' +
-          tagsCell(b, "types") +
-          "</td>" +
-          '<td class="bw-tags-cell">' +
-          tagsCell(b, "roles") +
-          "</td>";
-        listBody.appendChild(tr);
-      });
+      behaviors
+        .filter(function (b) {
+          return scopeIds.indexOf(b.id) !== -1;
+        })
+        .forEach(function (b) {
+          var tr = document.createElement("tr");
+          tr.innerHTML =
+            '<td class="bw-behavior-cell">' +
+            '<div class="bw-behavior-name">' +
+            esc(b.name) +
+            "</div>" +
+            '<div class="bw-behavior-desc">' +
+            esc(b.desc) +
+            "</div>" +
+            "</td>" +
+            '<td class="bw-tags-cell">' +
+            tagsCell(b, "types") +
+            "</td>" +
+            '<td class="bw-tags-cell">' +
+            tagsCell(b, "roles") +
+            "</td>" +
+            '<td class="m__col-actions">' +
+            '<button type="button" class="m__button-icon" data-bw-delete="' +
+            b.id +
+            '" aria-label="Remove">' +
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><use href="#close"></use></svg>' +
+            "</button>" +
+            "</td>";
+          listBody.appendChild(tr);
+        });
 
       listBody.querySelectorAll("[data-bw-add]").forEach(function (btn) {
         btn.addEventListener("click", function (e) {
@@ -275,6 +318,17 @@ permalink: /dashboard/behaviors/config-edit/
           renderList();
         });
       });
+
+      listBody.querySelectorAll("[data-bw-delete]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var id = parseInt(btn.dataset.bwDelete);
+          scopeIds = scopeIds.filter(function (x) {
+            return x !== id;
+          });
+          renderList();
+        });
+      });
+
       updateActiveAddBtn();
     }
 
@@ -456,12 +510,105 @@ permalink: /dashboard/behaviors/config-edit/
       window.M.openModal(document.getElementById(modalId));
     });
 
-    // ── Create Behavior button ───────────────────────────────────────
+    // ── Add Behaviors popover ────────────────────────────────────────
+    var scopePopover = document.getElementById("bw-scope-popover");
+    var scopeSearch = document.getElementById("bw-scope-search");
+    var scopeList = document.getElementById("bw-scope-list");
+    var scopeEmpty = document.getElementById("bw-scope-empty");
+    var scopeAddBtn = document.getElementById("bw-scope-add-btn");
+    var scopeScrollHandler = null;
+
+    function positionScopePopover() {
+      var rect = scopeAddBtn.getBoundingClientRect();
+      scopePopover.style.top = rect.bottom + 4 + "px";
+      scopePopover.style.right =
+        document.documentElement.clientWidth - rect.right + "px";
+      scopePopover.style.left = "auto";
+    }
+
+    function refreshScopePopover() {
+      var q = scopeSearch.value.toLowerCase();
+      var filtered = q
+        ? behaviors.filter(function (b) {
+            return b.name.toLowerCase().indexOf(q) !== -1;
+          })
+        : behaviors;
+      scopeList.innerHTML = "";
+      scopeEmpty.hidden = filtered.length > 0;
+      scopeList.hidden = filtered.length === 0;
+      filtered.forEach(function (b) {
+        var isActive = scopeIds.indexOf(b.id) !== -1;
+        var label = document.createElement("label");
+        label.className = "m__popover-item";
+        label.innerHTML =
+          '<span class="m__checkbox"><input type="checkbox"' +
+          (isActive ? " checked" : "") +
+          " />" +
+          CHECK_SVG +
+          "</span>" +
+          '<span class="m__popover-item-name">' +
+          esc(b.name) +
+          "</span>";
+        label.querySelector("input").addEventListener("change", function (e) {
+          if (e.target.checked) {
+            if (scopeIds.indexOf(b.id) === -1) scopeIds.push(b.id);
+          } else {
+            scopeIds = scopeIds.filter(function (x) {
+              return x !== b.id;
+            });
+          }
+          renderList();
+        });
+        scopeList.appendChild(label);
+      });
+    }
+
+    function openScopePopover() {
+      scopeSearch.value = "";
+      positionScopePopover();
+      scopePopover.hidden = false;
+      refreshScopePopover();
+      scopeSearch.focus();
+      if (scopeScrollHandler)
+        document.removeEventListener("scroll", scopeScrollHandler, true);
+      scopeScrollHandler = positionScopePopover;
+      document.addEventListener("scroll", scopeScrollHandler, true);
+    }
+
+    function closeScopePopover() {
+      scopePopover.hidden = true;
+      if (scopeScrollHandler) {
+        document.removeEventListener("scroll", scopeScrollHandler, true);
+        scopeScrollHandler = null;
+      }
+    }
+
+    scopeAddBtn.addEventListener("click", function () {
+      if (!scopePopover.hidden) {
+        closeScopePopover();
+        return;
+      }
+      openScopePopover();
+    });
+
+    scopeSearch.addEventListener("input", refreshScopePopover);
+
     document
-      .querySelector("[data-behaviors-create]")
+      .getElementById("bw-scope-create")
       .addEventListener("click", function () {
+        closeScopePopover();
         window.M.openModal(document.getElementById("modal-behaviors-create"));
       });
+
+    document.addEventListener("click", function (e) {
+      if (
+        !scopePopover.hidden &&
+        !scopePopover.contains(e.target) &&
+        e.target !== scopeAddBtn
+      ) {
+        closeScopePopover();
+      }
+    });
 
     // ── Modal: create behavior ───────────────────────────────────────
     document
@@ -471,13 +618,15 @@ permalink: /dashboard/behaviors/config-edit/
         var name = document.getElementById("behavior-name").value.trim();
         var desc = document.getElementById("behavior-description").value.trim();
         if (!name) return;
+        var newId = Date.now();
         behaviors.push({
-          id: Date.now(),
+          id: newId,
           name: name,
           desc: desc,
           types: [],
           roles: [],
         });
+        scopeIds.push(newId);
         document.getElementById("behavior-name").value = "";
         document.getElementById("behavior-description").value = "";
         window.M.closeModal(document.getElementById("modal-behaviors-create"));
