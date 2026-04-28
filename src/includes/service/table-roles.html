@@ -1,25 +1,15 @@
-<div class="m__widget" id="bw-configurations">
+<div class="m__widget">
   <div class="m__widget-header">
-    <label class="m__searchbar" for="configurations-search">
+    <label class="m__searchbar" for="roles-search">
       <svg viewBox="0 0 32 32" aria-hidden="true">
         <use href="#search"></use>
       </svg>
-      <input
-        type="search"
-        id="configurations-search"
-        placeholder="Search"
-      />
+      <input type="search" id="roles-search" placeholder="Search" />
     </label>
     <div class="behaviors-toolbar-actions">
-      <button type="button" class="m__button-outline-compact">
-        Export
-      </button>
-      <button type="button" class="m__button-outline-compact">
-        Import
-      </button>
-      <a href="/dashboard/behaviors/config-create/" class="m__button-compact">
+      <button type="button" class="m__button-compact" data-behaviors-create>
         Create
-      </a>
+      </button>
     </div>
   </div>
   <div class="m__table-wrapper">
@@ -27,17 +17,17 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Author</th>
+          <th>Used in configurations</th>
           <th class="m__col-actions"></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td class="bw-behavior-cell">
-            <div class="bw-behavior-name">Interview Monitoring <span class="m__tag-flat m__tag--success">Active</span></div>
-            <div class="bw-behavior-desc">Comprehensive monitoring for hiring interviews to ensure professional conduct, detect bot interviewees, and prevent manipulation attempts</div>
+            <div class="bw-behavior-name">Customer</div>
+            <div class="bw-behavior-desc">Individual contacting support</div>
           </td>
-          <td>Eugene Arutyunov</td>
+          <td><a href="/dashboard/behaviors/config-edit/">Consumer Fraud Detection</a></td>
           <td class="m__col-actions">
             <div class="m__action-menu">
               <button type="button" class="m__button-icon m__action-menu-trigger" aria-label="Actions">
@@ -46,8 +36,7 @@
                 </svg>
               </button>
               <div class="m__action-menu-list" hidden>
-                <a href="/dashboard/behaviors/config-edit/" class="m__action-menu-item">Edit</a>
-                <button type="button" class="m__action-menu-item" data-behaviors-duplicate>Duplicate</button>
+                <button type="button" class="m__action-menu-item" data-behaviors-edit>Edit</button>
                 <button type="button" class="m__action-menu-item m__action-menu-item--danger" data-behaviors-delete>Delete</button>
               </div>
             </div>
@@ -55,10 +44,10 @@
         </tr>
         <tr>
           <td class="bw-behavior-cell">
-            <div class="bw-behavior-name">Sales Effectiveness</div>
-            <div class="bw-behavior-desc">Sales performance monitoring and coaching for intro, demo, and followup calls</div>
+            <div class="bw-behavior-name">Agent</div>
+            <div class="bw-behavior-desc">Customer support representative</div>
           </td>
-          <td>Eugene Arutyunov</td>
+          <td><a href="/dashboard/behaviors/config-edit/">Institutional Fraud Detection</a>, <a href="/dashboard/behaviors/config-edit/">Sales Effectiveness</a></td>
           <td class="m__col-actions">
             <div class="m__action-menu">
               <button type="button" class="m__button-icon m__action-menu-trigger" aria-label="Actions">
@@ -67,9 +56,7 @@
                 </svg>
               </button>
               <div class="m__action-menu-list" hidden>
-                <button type="button" class="m__action-menu-item">Set as Active</button>
-                <a href="/dashboard/behaviors/config-edit/" class="m__action-menu-item">Edit</a>
-                <button type="button" class="m__action-menu-item" data-behaviors-duplicate>Duplicate</button>
+                <button type="button" class="m__action-menu-item" data-behaviors-edit>Edit</button>
                 <button type="button" class="m__action-menu-item m__action-menu-item--danger" data-behaviors-delete>Delete</button>
               </div>
             </div>
@@ -77,10 +64,10 @@
         </tr>
         <tr>
           <td class="bw-behavior-cell">
-            <div class="bw-behavior-name">Institutional Fraud Detection</div>
-            <div class="bw-behavior-desc">Fraud detection for customer service calls including vishing/phishing and Return fraud</div>
+            <div class="bw-behavior-name">Social Participant</div>
+            <div class="bw-behavior-desc">Participant in social conversation</div>
           </td>
-          <td>Modulate</td>
+          <td><a href="/dashboard/behaviors/config-edit/">Moderation</a></td>
           <td class="m__col-actions">
             <div class="m__action-menu">
               <button type="button" class="m__button-icon m__action-menu-trigger" aria-label="Actions">
@@ -89,18 +76,18 @@
                 </svg>
               </button>
               <div class="m__action-menu-list" hidden>
-                <button type="button" class="m__action-menu-item">Set as Active</button>
-                <a href="/dashboard/behaviors/config-create/" class="m__action-menu-item">Duplicate</a>
+                <button type="button" class="m__action-menu-item" data-behaviors-edit>Edit</button>
+                <button type="button" class="m__action-menu-item m__action-menu-item--danger" data-behaviors-delete>Delete</button>
               </div>
             </div>
           </td>
         </tr>
         <tr>
           <td class="bw-behavior-cell">
-            <div class="bw-behavior-name">Consumer Fraud Detection</div>
-            <div class="bw-behavior-desc">Protection for consumers from vishing/phishing in outreach calls</div>
+            <div class="bw-behavior-name">Support Specialist</div>
+            <div class="bw-behavior-desc">Someone who works with employees or contractors to solve problems with things like IT, logistics, or communication</div>
           </td>
-          <td>Modulate</td>
+          <td><a href="/dashboard/behaviors/config-edit/">Institutional Fraud Detection</a></td>
           <td class="m__col-actions">
             <div class="m__action-menu">
               <button type="button" class="m__button-icon m__action-menu-trigger" aria-label="Actions">
@@ -109,18 +96,18 @@
                 </svg>
               </button>
               <div class="m__action-menu-list" hidden>
-                <button type="button" class="m__action-menu-item">Set as Active</button>
-                <a href="/dashboard/behaviors/config-create/" class="m__action-menu-item">Duplicate</a>
+                <button type="button" class="m__action-menu-item" data-behaviors-edit>Edit</button>
+                <button type="button" class="m__action-menu-item m__action-menu-item--danger" data-behaviors-delete>Delete</button>
               </div>
             </div>
           </td>
         </tr>
         <tr>
           <td class="bw-behavior-cell">
-            <div class="bw-behavior-name">Moderation</div>
-            <div class="bw-behavior-desc">Content moderation for social conversations including harassment, threats, and safety violations</div>
+            <div class="bw-behavior-name">Employee</div>
+            <div class="bw-behavior-desc">Someone who is employed by company and exists in professional settings</div>
           </td>
-          <td>Modulate</td>
+          <td><a href="/dashboard/behaviors/config-edit/">Interview Monitoring</a></td>
           <td class="m__col-actions">
             <div class="m__action-menu">
               <button type="button" class="m__button-icon m__action-menu-trigger" aria-label="Actions">
@@ -129,8 +116,8 @@
                 </svg>
               </button>
               <div class="m__action-menu-list" hidden>
-                <button type="button" class="m__action-menu-item">Set as Active</button>
-                <a href="/dashboard/behaviors/config-create/" class="m__action-menu-item">Duplicate</a>
+                <button type="button" class="m__action-menu-item" data-behaviors-edit>Edit</button>
+                <button type="button" class="m__action-menu-item m__action-menu-item--danger" data-behaviors-delete>Delete</button>
               </div>
             </div>
           </td>

@@ -590,6 +590,30 @@ method: POST</code></pre>
           </td>
         </tr>
         <tr>
+          <td><code>.m__action-menu</code></td>
+          <td>
+            <div class="m__action-menu">
+              <button type="button" class="m__button-outline-compact m__action-menu-trigger">
+                Actions
+                <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#chevron-down"></use>
+                </svg>
+              </button>
+              <div class="m__action-menu-list" hidden>
+                <button type="button" class="m__action-menu-item">Edit</button>
+                <button type="button" class="m__action-menu-item">Duplicate</button>
+                <button type="button" class="m__action-menu-item m__action-menu-item--danger">Delete</button>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__background-color</code><br />
+            <code class="accent">--m__ui-border-color</code><br />
+            <code class="accent">--m__widget-radius</code><br />
+            <code class="accent">--m__radius-m</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>.m__option-list</code></td>
           <td>
             <div class="m__option-list" style="max-width: 20rem">
@@ -1309,6 +1333,15 @@ method: POST</code></pre>
           </svg>
           <span class="docs-icon-row__label">#checkmark</span>
         </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 12 12"
+            aria-hidden="true">
+            <use href="#dots-vertical"></use>
+          </svg>
+          <span class="docs-icon-row__label">#dots</span>
+        </div>
       </div>
       <div class="m__space S"></div>
       <p>
@@ -1624,6 +1657,7 @@ method: POST</code></pre>
     <div class="m__space S"></div>
   </div>
 </ids-nav-item>
+<script src="/assets/prototypes/action-menu.js"></script>
 <script>
   document.querySelectorAll('.docs-preset-group').forEach(function (group) {
     group.addEventListener('click', function (e) {

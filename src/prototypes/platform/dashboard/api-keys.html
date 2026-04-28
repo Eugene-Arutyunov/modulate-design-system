@@ -27,15 +27,43 @@ permalink: /dashboard/api-keys/
       <div class="m__space XS"></div>
 
       <section class="dashboard-section" data-component="api-keys-table">
-        {% set rows = [ { name: 'Production Key', type: 'Model', limits:
-        'Models: velma-2-stt-batch', status: 'active', created: '12 Jan 2025,
-        10:00' }, { name: 'Dev Key', type: 'Model', limits: '', status:
-        'active', created: '3 Mar 2025, 14:22' }, { name: 'CI Key', type:
-        'Console Read-Only', limits: '', status: 'active', created: '7 Jul 2025,
-        09:15' }, { name: 'Admin Key', type: 'Console Admin', limits: '',
-        status: 'inactive', created: '22 Aug 2024, 17:30' } ] %} {% set
-        activeTab = 'active' %} {% set tabsName = 'api-keys-tabs' %} {% include
-        'service/table-api-keys.html' %}
+        {% set rows = [
+          {
+            name: 'Model Name Call center Ops Production',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+            type: 'Model',
+            limits: '',
+            status: 'active',
+            created: '25 Apr 2026, 21:12'
+          },
+          {
+            name: 'the-best-key',
+            description: 'all keys are belong to us',
+            type: 'Model',
+            limits: 'Credits: 0.000/2000.000',
+            status: 'active',
+            created: '24 Apr 2026, 17:57'
+          },
+          {
+            name: 'CI Pipeline Key',
+            description: 'Used for automated test runs in GitHub Actions',
+            type: 'Console Read-Only',
+            limits: '',
+            status: 'active',
+            created: '10 Mar 2026, 09:15'
+          },
+          {
+            name: 'Admin Legacy Key',
+            description: 'Deprecated — scheduled for removal Q3 2026',
+            type: 'Console Admin',
+            limits: '',
+            status: 'inactive',
+            created: '22 Aug 2025, 17:30'
+          }
+        ] %}
+        {% set activeTab = 'active' %}
+        {% set tabsName = 'api-keys-tabs' %}
+        {% include 'service/table-api-keys.html' %}
       </section>
     </main>
   </div>

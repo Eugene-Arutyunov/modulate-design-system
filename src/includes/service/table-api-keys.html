@@ -17,10 +17,9 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Type</th>
         <th>Limits</th>
-        <th>Status</th>
         <th>Created</th>
+        <th style="padding-right: 2rem;">Active</th>
         <th class="m__col-actions"></th>
       </tr>
     </thead>
@@ -28,26 +27,23 @@
       {% if rows | length %}
         {% for row in rows %}
         <tr>
-          <td>{{ row.name }}</td>
           <td>
-            <span class="m__tag-flat">{{ row.type }}</span>
+            <span>{{ row.name }}</span>
+            {% if row.description %}<br><span class="muted">{{ row.description }}</span>{% endif %}
+            <br><span class="m__tag-flat" style="margin-top: 0.3rem; display: inline-block;">{{ row.type }}</span>
           </td>
           <td {% if not row.limits %}class="muted"{% endif %}>{{ row.limits if row.limits else '—' }}</td>
-          <td>
-            {% if row.status === 'active' %}
-            <span class="m__tag m__tag--success">Active</span>
-            {% else %}
-            <span class="m__tag m__tag--muted">Inactive</span>
-            {% endif %}
-          </td>
           <td>{{ row.created }}</td>
+          <td style="padding-right: 2rem;">
+            <label class="m__toggle" data-api-key-name="{{ row.name }}">
+              <input type="checkbox"
+                {% if row.status === 'active' %}checked{% endif %}
+                data-api-key-toggle
+              />
+            </label>
+          </td>
           <td class="m__col-actions">
             <div>
-              {% if row.status === 'active' %}
-              <button type="button" class="m__button-outline-compact" data-api-key-deactivate data-api-key-name="{{ row.name }}">Deactivate</button>
-              {% else %}
-              <button type="button" class="m__button-success-compact" data-api-key-activate data-api-key-name="{{ row.name }}">Activate</button>
-              {% endif %}
               <button type="button" class="m__button-outline-compact" data-api-key-edit data-api-key-name="{{ row.name }}">Edit</button>
               <button type="button" class="m__button-danger-compact" data-api-key-delete data-api-key-name="{{ row.name }}">Delete</button>
             </div>
@@ -56,7 +52,7 @@
         {% endfor %}
       {% else %}
         <tr>
-          <td colspan="6">
+          <td colspan="5">
             <div class="m__table-empty">
               {% if activeTab === 'inactive' %}
               <p>No inactive API keys.</p>
