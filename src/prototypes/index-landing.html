@@ -33,19 +33,20 @@ permalink: /index-landing/
         <span class="landing-feature-inline">
           <span class="landing-feature-inline__icon" aria-hidden="true">
             <svg viewBox="0 0 32 32">
+              <use href="#account"></use>
+            </svg>
+          </span>
+          <span>PII&thinsp;/&thinsp;PHI redaction</span></span
+        >, and
+        <span class="landing-feature-inline">
+          <span class="landing-feature-inline__icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32">
               <use href="#emotions"></use>
             </svg>
           </span>
-          <span>emotions</span></span
-        >, and <span class="landing-feature-inline">
-          <span class="landing-feature-inline__icon" aria-hidden="true">
-            <svg viewBox="0 0 32 32">
-              <use href="#behaviors"></use>
-            </svg>
-          </span>
-          <span>behavior signals</span>,
-        </span>
-        available as REST and streaming APIs.
+          <span>emotion signals</span></span
+        >
+        — available as both batch REST and real-time streaming APIs.
       </p>
     </div>
     <div class="m__space S"></div>
@@ -58,16 +59,120 @@ permalink: /index-landing/
       </a>
       <a href="/docs/" class="m__button-secondary">Read the Docs</a>
     </div>
+    <div class="m__space S"></div>
+    <!--<p class="landing-clients__label">
+      Up to 200+ free hours included. No credit card. No expiration.
+    </p>-->
   </section>
 
-  <div class="m__space XL"></div>
-  <ul>
-    <li>$10 in credits included</li>
+  <div class="m__space L"></div>
 
-    <li>Simple API key authentication</li>
-    <li>Credit-based pricing with free tier</li>
-    <li>Usage dashboard and billing controls</li>
-  </ul>
+  <div class="m__sequence L gap-L">
+    <div class="m__sequence-item">
+      <p class="landing-stat__value">#1</p>
+      <p class="landing-stat__label">
+        benchmark accuracy on transcription, deepfake, and emotion
+      </p>
+    </div>
+    <div class="m__sequence-item">
+      <p class="landing-stat__value">40M+</p>
+      <p class="landing-stat__label">
+        users protected from fraud, harassment, and abuse
+      </p>
+    </div>
+    <div class="m__sequence-item">
+      <p class="landing-stat__value">563M+</p>
+      <p class="landing-stat__label">conversations analyzed in production</p>
+    </div>
+  </div>
+
+  <div class="m__sequence-item">
+    <div class="m__space XS"></div>
+    <div class="landing-clients__row">
+      <span class="landing-clients__logo">
+        {% include 'prototypes/activision-logo.html' %}
+      </span>
+      <span class="landing-clients__logo landing-clients__logo--lg">
+        {% include 'prototypes/rockstar-logo.html' %}
+      </span>
+      <span class="landing-clients__logo landing-clients__logo--lg">
+        {% include 'prototypes/voicerun-logo.html' %}
+      </span>
+    </div>
+    <p class="landing-stat__label">
+      Trusted by developers and the world's largest studios
+    </p>
+  </div>
+
+  <!--<div class="m__space XL"></div>
+
+  <div class="m__space L"></div>
+  <div class="landing-api-modes">
+    <span class="landing-api-mode">Real-time streaming</span>
+    <span class="landing-api-mode">Batch REST</span>
+  </div>-->
+
+  <div class="m__space XL"></div>
+
+  <div class="m__sequence XL gap-L">
+    <div class="m__sequence-item">
+      <h5>Models</h5>
+      <ul>
+        <li>
+          <strong>Transcription</strong> with optional diarization, language
+          &amp; accent detection, emotion tagging, deepfake flags, and PII/PHI
+          tagging — one request, any combination
+        </li>
+        <li>
+          <strong>Standalone deepfake detection</strong> for synthetic voice and
+          replay attacks
+        </li>
+        <li><strong>PII / PHI redaction</strong> on transcript and audio</li>
+      </ul>
+    </div>
+
+    <div class="m__sequence-item">
+      <h5>Deployment</h5>
+      <ul>
+        <li>
+          <strong>Real-time streaming</strong> via WebSocket — sub-second
+          partial results
+        </li>
+        <li><strong>Batch REST</strong> for files, archives, and pipelines</li>
+        <li>
+          Same model surface across both — pick per use case, not per vendor
+        </li>
+        <li>Simple API key authentication, drop-in SDKs</li>
+      </ul>
+    </div>
+
+    <div class="m__sequence-item">
+      <h5>Organizations</h5>
+      <ul>
+        <li>
+          <strong>Multi-user organizations</strong> with role-based access
+        </li>
+        <li>
+          <strong>Quotas at every level</strong> — per user, per org, per API
+          key
+        </li>
+        <li>Multiple scoped API keys per environment</li>
+        <li>Audit log for keys, calls, and config changes</li>
+      </ul>
+    </div>
+
+    <div class="m__sequence-item">
+      <h5>Pricing &amp; Billing</h5>
+      <ul>
+        <li><strong>Up to 200+ free hours</strong> to get started</li>
+        <li>Transparent per-minute pricing — no minimums, no seat fees</li>
+        <li>Usage dashboard with per-key and per-user breakdowns</li>
+        <li>Spend caps, budget alerts, and hard cutoffs</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="m__space XL"></div>
 </div>
 
 {% endblock %}
