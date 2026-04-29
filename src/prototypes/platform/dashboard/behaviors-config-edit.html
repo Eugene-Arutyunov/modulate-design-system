@@ -17,7 +17,7 @@ permalink: /dashboard/behaviors/config-edit/
         <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
           <use href="#chevron-left"></use>
         </svg>
-        Back
+        Configurations
       </a>
       <div class="m__space XS"></div>
       <h1 class="dashboard-page-title">Edit configuration</h1>
@@ -42,10 +42,15 @@ permalink: /dashboard/behaviors/config-edit/
       <!-- Behaviors widget -->
       <div class="m__widget">
         <div class="m__table-toolbar">
-          <h2>Scope</h2>
-          <button type="button" class="m__button-compact" id="bw-scope-add-btn">
-            Add Behavior
-          </button>
+          <h2>Behaviors</h2>
+          <div style="display:flex;gap:0.5rem">
+            <button type="button" class="m__button-outline-compact" id="bw-scope-add-btn">
+              Add from Library
+            </button>
+            <button type="button" class="m__button-compact" id="bw-scope-create-btn">
+              Create new
+            </button>
+          </div>
         </div>
 
         <!-- List view -->
@@ -81,44 +86,34 @@ permalink: /dashboard/behaviors/config-edit/
 'service/modal-conversation-type-create.html' %} {% include
 'service/modal-role-create.html' %}
 
-<div class="m__popover" id="bw-scope-popover" hidden>
-  <div class="m__searchbar">
-    <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
-      <use href="#search"></use>
-    </svg>
-    <input
-      type="text"
-      id="bw-scope-search"
-      placeholder="Search…"
-      autocomplete="off"
-    />
-  </div>
-  <div class="m__popover-list" id="bw-scope-list"></div>
-  <p class="bw-popover-empty" id="bw-scope-empty" hidden>
-    No matching behaviors
-  </p>
-  <div class="m__popover-footer">
-    <button type="button" class="m__popover-new-btn" id="bw-scope-create">
-      Create Behavior
-    </button>
-  </div>
-</div>
+{% include 'service/modal-behaviors-add.html' %}
+
+{% include 'service/modal-behavior-delete.html' %}
+
+{% include 'service/modal-behaviors-edit.html' %}
+
+{% include 'service/modal-conversation-type-edit.html' %}
+
+{% include 'service/modal-role-edit.html' %}
 
 <script>
   (function () {
     var TYPES = [
       {
         id: "customer-service",
+        library: true,
         name: "Customer Service Call",
         desc: "Conversations in which a service representative handles customer inquiries, complaints, or support requests on behalf of the organization.",
       },
       {
         id: "sales",
+        library: true,
         name: "Sales Outreach",
         desc: "Conversations where a representative engages prospects or existing customers with the goal of closing a sale or upselling a product.",
       },
       {
         id: "interview",
+        library: true,
         name: "Hiring Interview",
         desc: "Structured conversations conducted by the organization for the purpose of candidate evaluation and selection.",
       },
@@ -127,26 +122,31 @@ permalink: /dashboard/behaviors/config-edit/
     var ROLES = [
       {
         id: "agent",
+        library: true,
         name: "Agent",
         desc: "A company representative responsible for managing or executing the conversation on behalf of the organization.",
       },
       {
         id: "customer",
+        library: true,
         name: "Customer",
         desc: "The external individual initiating or participating in a conversation as a client, user, or prospect.",
       },
       {
         id: "interviewer",
+        library: true,
         name: "Interviewer",
         desc: "The person conducting the evaluation on behalf of the hiring organization.",
       },
       {
         id: "candidate",
+        library: true,
         name: "Candidate",
         desc: "The individual being assessed for a position during a hiring interview.",
       },
       {
         id: "manager",
+        library: true,
         name: "Manager",
         desc: "A supervisory participant who may be overseeing, auditing, or participating in the conversation.",
       },
@@ -155,13 +155,17 @@ permalink: /dashboard/behaviors/config-edit/
     var behaviors = [
       {
         id: 0,
+        enabled: true,
+        library: true,
         name: "Vishing attempt",
-        desc: "Attempts to obtain sensitive information by impersonating a trusted entity over a voice call.",
+        desc: "Attempts to obtain sensitive information by impersonating a trusted entity over a voice call. The caller typically poses as a bank representative, IT support technician, government official, or internal employee to gain the victim's trust. Common tactics include creating a sense of urgency, referencing partial personal details to appear legitimate, and requesting verification of account credentials, passwords, or payment information. Vishing attacks are increasingly sophisticated and may be difficult to distinguish from legitimate calls, making this behavior a high-priority indicator for fraud detection.",
         types: ["customer-service", "sales"],
         roles: ["customer", "agent"],
       },
       {
         id: 1,
+        enabled: true,
+        library: true,
         name: "Phishing link",
         desc: "A suspicious or malicious URL shared during the conversation intended to deceive the recipient.",
         types: ["sales"],
@@ -169,6 +173,8 @@ permalink: /dashboard/behaviors/config-edit/
       },
       {
         id: 2,
+        enabled: true,
+        library: true,
         name: "Return fraud",
         desc: "Indicators of fraudulent behavior in the context of a product return or refund request.",
         types: ["customer-service"],
@@ -176,13 +182,17 @@ permalink: /dashboard/behaviors/config-edit/
       },
       {
         id: 3,
+        enabled: true,
+        library: true,
         name: "Aggressive tone",
-        desc: "Use of hostile, threatening, or intimidating language directed at another participant.",
+        desc: "Use of hostile, threatening, or intimidating language directed at another participant during the conversation. This behavior encompasses a broad range of verbal aggression, including explicit threats, personal insults, emotional escalation, and coercive demands that create an unsafe or uncomfortable environment. Aggressive tone may indicate customer frustration, deliberate manipulation, or an attempt to pressure a representative into bypassing standard procedures. Early detection enables timely supervisor escalation and helps prevent the situation from deteriorating further into a compliance or safety incident.",
         types: ["customer-service", "sales"],
         roles: ["customer", "agent"],
       },
       {
         id: 4,
+        enabled: true,
+        library: true,
         name: "Script deviation",
         desc: "An agent departing from the approved conversation script in a way that may introduce risk.",
         types: ["customer-service", "sales"],
@@ -190,13 +200,17 @@ permalink: /dashboard/behaviors/config-edit/
       },
       {
         id: 5,
+        enabled: true,
+        library: true,
         name: "Manipulation attempt",
-        desc: "Attempts to pressure or manipulate a participant into taking an action against their will.",
+        desc: "Attempts to pressure or manipulate a participant into taking an action against their will or outside of established policy. Tactics commonly include emotional appeals, false urgency, repeated requests after initial refusal, guilt-tripping, exploiting authority dynamics, and selective omission of key facts to steer the other party toward a desired outcome. This behavior may be employed by customers seeking unauthorized exceptions or by agents acting outside approved guidelines. Identifying manipulation patterns early allows supervisors to intervene and protect both participants and organizational integrity.",
         types: ["sales", "interview"],
         roles: ["agent", "interviewer"],
       },
       {
         id: 6,
+        enabled: true,
+        library: true,
         name: "Bot detection",
         desc: "Response patterns or timing that suggest the participant may not be a human speaker.",
         types: ["customer-service", "interview"],
@@ -204,6 +218,8 @@ permalink: /dashboard/behaviors/config-edit/
       },
       {
         id: 7,
+        enabled: true,
+        library: true,
         name: "Inappropriate content",
         desc: "Harmful, offensive, or discriminatory speech that violates acceptable use policies.",
         types: ["customer-service", "sales", "interview"],
@@ -211,16 +227,61 @@ permalink: /dashboard/behaviors/config-edit/
       },
       {
         id: 8,
+        enabled: true,
+        library: true,
         name: "Compliance breach",
         desc: "Indicators of a potential regulatory or policy violation occurring during the conversation.",
         types: ["customer-service", "sales"],
         roles: ["agent"],
       },
+      {
+        id: 9,
+        enabled: true,
+        library: true,
+        name: "Sensitive data exposure",
+        desc: "Instances where personally identifiable information, financial details, authentication credentials, or protected health information are verbally disclosed during a conversation without proper authorization or verification. This includes cases where an agent reads back full account numbers, social security digits, or passwords without confirming the identity of the recipient. Sensitive data exposure can result in regulatory penalties under GDPR, HIPAA, or PCI-DSS frameworks and poses significant risk to both the individual and the organization. Detection should trigger an immediate review workflow and may require incident reporting depending on jurisdiction.",
+        types: ["customer-service", "sales"],
+        roles: ["agent"],
+      },
+      {
+        id: 10,
+        enabled: true,
+        library: true,
+        name: "Escalation avoidance",
+        desc: "Behavior in which an agent actively discourages or prevents a customer from escalating their issue to a supervisor, manager, or specialized support tier despite repeated or legitimate requests to do so. This may manifest as repeatedly deflecting escalation requests, misrepresenting the availability of supervisors, offering insincere resolutions to stall the conversation, or using subtle pressure tactics to close the interaction prematurely. Escalation avoidance can signal training gaps, incentive misalignment, or deliberate policy circumvention, and often correlates with elevated customer dissatisfaction and churn risk.",
+        types: ["customer-service"],
+        roles: ["agent"],
+      },
+      {
+        id: 11,
+        enabled: true,
+        library: true,
+        name: "Unauthorized commitment",
+        desc: "Situations where a participant makes a promise, guarantee, or agreement that exceeds their authority or falls outside the bounds of established policy. Common examples include an agent committing to a refund amount not supported by policy, guaranteeing a delivery timeline without operational confirmation, or offering a discount or exception that requires managerial approval. Unauthorized commitments create legal and financial exposure for the organization and may lead to customer disputes if the commitment cannot be honored. Identifying these instances early enables supervisors to intervene before expectations are set and to provide corrective coaching to the agent.",
+        types: ["customer-service", "sales"],
+        roles: ["agent"],
+      },
+      {
+        id: 12,
+        enabled: true,
+        library: true,
+        name: "Competitor mention",
+        desc: "Any reference to a competing product, service, or organization made during a conversation, whether by the agent or the customer. While customer-initiated competitor comparisons are expected and can be handled constructively, agent-initiated mentions may represent a brand risk, suggest inadequate product knowledge, or indicate unauthorized comparison selling. In regulated industries, comparative claims about competitors may also carry legal implications. Tracking competitor mentions across conversations provides valuable intelligence for product, marketing, and training teams, and helps identify patterns where competitive pressure is influencing conversion rates or customer retention.",
+        types: ["sales", "customer-service"],
+        roles: ["agent", "customer"],
+      },
+      {
+        id: 13,
+        enabled: true,
+        library: true,
+        name: "Dead air",
+        desc: "Extended periods of silence or unresponsiveness during an active conversation that exceed acceptable thresholds for the interaction type. Dead air may indicate that an agent is navigating complex systems without narrating their actions, has placed the caller on an unannounced hold, is experiencing technical difficulties, or is disengaged from the conversation. In customer-facing contexts, prolonged silence without acknowledgment significantly degrades the customer experience and increases the likelihood of call abandonment. This behavior is particularly relevant in voice-based interactions and should be evaluated alongside average handle time and customer satisfaction metrics.",
+        types: ["customer-service", "sales"],
+        roles: ["agent"],
+      },
     ];
 
-    var scopeIds = behaviors.map(function (b) {
-      return b.id;
-    });
+    var scopeIds = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
     var listBody = document.getElementById("bw-list-body");
     var popover = document.getElementById("bw-popover");
@@ -231,6 +292,8 @@ permalink: /dashboard/behaviors/config-edit/
 
     var popoverState = { bId: null, field: null, activeBtn: null };
     var scrollHandler = null;
+
+    function preventScroll(e) { e.preventDefault(); }
 
     // ── Helpers ─────────────────────────────────────────────────────
     function esc(s) {
@@ -266,7 +329,7 @@ permalink: /dashboard/behaviors/config-edit/
         .forEach(function (b) {
           var tr = document.createElement("tr");
           tr.innerHTML =
-            '<td class="bw-behavior-cell">' +
+            '<td class="bw-behavior-cell" data-bw-edit="' + b.id + '">' +
             '<div class="bw-behavior-name">' +
             esc(b.name) +
             "</div>" +
@@ -274,10 +337,14 @@ permalink: /dashboard/behaviors/config-edit/
             esc(b.desc) +
             "</div>" +
             "</td>" +
-            '<td class="bw-tags-cell">' +
+            '<td class="bw-tags-cell" data-bw-add="types" data-bw-id="' +
+            b.id +
+            '">' +
             tagsCell(b, "types") +
             "</td>" +
-            '<td class="bw-tags-cell">' +
+            '<td class="bw-tags-cell" data-bw-add="roles" data-bw-id="' +
+            b.id +
+            '">' +
             tagsCell(b, "roles") +
             "</td>" +
             '<td class="m__col-actions">' +
@@ -290,10 +357,11 @@ permalink: /dashboard/behaviors/config-edit/
           listBody.appendChild(tr);
         });
 
-      listBody.querySelectorAll("[data-bw-add]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
+      listBody.querySelectorAll("td[data-bw-add]").forEach(function (td) {
+        td.addEventListener("click", function (e) {
+          if (e.target.closest("[data-bw-remove]")) return;
           e.stopPropagation();
-          openPopover(parseInt(btn.dataset.bwId), btn.dataset.bwAdd, btn);
+          openPopover(parseInt(td.dataset.bwId), td.dataset.bwAdd, td);
         });
       });
 
@@ -305,6 +373,7 @@ permalink: /dashboard/behaviors/config-edit/
           b[field] = b[field].filter(function (x) {
             return x !== btn.dataset.bwItem;
           });
+
           renderList();
         });
       });
@@ -312,14 +381,65 @@ permalink: /dashboard/behaviors/config-edit/
       listBody.querySelectorAll("[data-bw-delete]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var id = parseInt(btn.dataset.bwDelete);
-          scopeIds = scopeIds.filter(function (x) {
-            return x !== id;
-          });
-          renderList();
+          var b = findB(id);
+          pendingDeleteId = id;
+          document.getElementById("modal-bw-delete-confirm-text").innerHTML =
+            "<strong>" + esc(b ? b.name : "This behavior") + "</strong> will be removed from this configuration only. It will remain available in other configurations.";
+          window.M.openModal(document.getElementById("modal-bw-delete-confirm"));
+        });
+      });
+
+      listBody.querySelectorAll("td[data-bw-edit]").forEach(function (td) {
+        td.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var id = parseInt(td.dataset.bwEdit);
+          var b = findB(id);
+          if (!b) return;
+          pendingEditId = id;
+          document.getElementById("behavior-edit-name").value = b.name;
+          document.getElementById("behavior-edit-description").value = b.desc || "";
+          var isLibrary = !!b.library;
+          document.getElementById("behavior-edit-notice").hidden = !isLibrary;
+          document.getElementById("behavior-edit-name").disabled = isLibrary;
+          document.getElementById("behavior-edit-description").disabled = isLibrary;
+          document.getElementById("behavior-edit-save-btn").textContent = isLibrary ? "Done" : "Save";
+          window.M.openModal(document.getElementById("modal-behaviors-edit"));
+        });
+      });
+
+      listBody.querySelectorAll("[data-bw-tag-edit]").forEach(function (span) {
+        span.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var itemId = span.dataset.bwTagEdit;
+          var field = span.dataset.bwTagField;
+          var items = field === "types" ? TYPES : ROLES;
+          var item = items.find(function (x) { return x.id === itemId; });
+          if (!item) return;
+          pendingEditTag = { id: itemId, field: field };
+          if (field === "types") {
+            document.getElementById("conversation-type-edit-name").value = item.name;
+            document.getElementById("conversation-type-edit-description").value = item.desc || "";
+            var isLibraryType = !!item.library;
+            document.getElementById("conversation-type-edit-notice").hidden = !isLibraryType;
+            document.getElementById("conversation-type-edit-name").disabled = isLibraryType;
+            document.getElementById("conversation-type-edit-description").disabled = isLibraryType;
+            document.getElementById("conversation-type-edit-save-btn").textContent = isLibraryType ? "Done" : "Save";
+            window.M.openModal(document.getElementById("modal-conversation-type-edit"));
+          } else {
+            document.getElementById("role-edit-name").value = item.name;
+            document.getElementById("role-edit-description").value = item.desc || "";
+            var isLibraryRole = !!item.library;
+            document.getElementById("role-edit-notice").hidden = !isLibraryRole;
+            document.getElementById("role-edit-name").disabled = isLibraryRole;
+            document.getElementById("role-edit-description").disabled = isLibraryRole;
+            document.getElementById("role-edit-save-btn").textContent = isLibraryRole ? "Done" : "Save";
+            window.M.openModal(document.getElementById("modal-role-edit"));
+          }
         });
       });
 
       updateActiveAddBtn();
+      updateTruncation();
     }
 
     function tagsCell(b, field) {
@@ -334,7 +454,7 @@ permalink: /dashboard/behaviors/config-edit/
           '<span class="m__tag bw-tag-item" data-tooltip="' +
           esc(item.desc || "") +
           '">' +
-          esc(item.name) +
+          '<span class="bw-tag-item-name" data-bw-tag-edit="' + id + '" data-bw-tag-field="' + field + '">' + esc(item.name) + '</span>' +
           '<button type="button" class="bw-tag-x"' +
           ' data-bw-remove="' +
           field +
@@ -348,14 +468,6 @@ permalink: /dashboard/behaviors/config-edit/
           X_SVG +
           "</button></span>";
       });
-      html +=
-        '<button type="button" class="m__tag bw-add-btn"' +
-        ' data-bw-add="' +
-        field +
-        '"' +
-        ' data-bw-id="' +
-        b.id +
-        '">Add</button>';
       html += "</div>";
       return html;
     }
@@ -363,7 +475,7 @@ permalink: /dashboard/behaviors/config-edit/
     // ── Popover ──────────────────────────────────────────────────────
     function positionPopover(anchor) {
       var rect = anchor.getBoundingClientRect();
-      var top = rect.bottom + 4;
+      var top = rect.top;
       var left = rect.left;
       var pw = 240;
       if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
@@ -373,19 +485,21 @@ permalink: /dashboard/behaviors/config-edit/
 
     function openPopover(bId, field, anchor) {
       if (popoverState.activeBtn) {
-        popoverState.activeBtn.classList.remove("bw-add-btn--active");
+        popoverState.activeBtn.classList.remove("bw-cell--active");
       }
       popoverState.bId = bId;
       popoverState.field = field;
       popoverState.activeBtn = anchor;
-      anchor.classList.add("bw-add-btn--active");
+      anchor.classList.add("bw-cell--active");
       popoverSearch.value = "";
       refreshPopoverList("");
       popoverNew.textContent =
-        field === "types" ? "Create Type" : "Create Role";
+        field === "types" ? "Create new Type" : "Create new Role";
 
       positionPopover(anchor);
       popover.hidden = false;
+      document.addEventListener("wheel", preventScroll, { passive: false });
+      document.addEventListener("touchmove", preventScroll, { passive: false });
       popoverSearch.focus();
 
       if (scrollHandler)
@@ -398,10 +512,12 @@ permalink: /dashboard/behaviors/config-edit/
 
     function closePopover() {
       if (popoverState.activeBtn) {
-        popoverState.activeBtn.classList.remove("bw-add-btn--active");
+        popoverState.activeBtn.classList.remove("bw-cell--active");
         popoverState.activeBtn = null;
       }
       popover.hidden = true;
+      document.removeEventListener("wheel", preventScroll);
+      document.removeEventListener("touchmove", preventScroll);
       popoverState.bId = null;
       if (scrollHandler) {
         document.removeEventListener("scroll", scrollHandler, true);
@@ -411,16 +527,16 @@ permalink: /dashboard/behaviors/config-edit/
 
     function updateActiveAddBtn() {
       if (popoverState.bId === null) return;
-      var btn = listBody.querySelector(
-        '.bw-add-btn[data-bw-id="' +
+      var td = listBody.querySelector(
+        'td[data-bw-id="' +
           popoverState.bId +
           '"][data-bw-add="' +
           popoverState.field +
           '"]',
       );
-      if (btn) {
-        popoverState.activeBtn = btn;
-        btn.classList.add("bw-add-btn--active");
+      if (td) {
+        popoverState.activeBtn = td;
+        td.classList.add("bw-cell--active");
       }
     }
 
@@ -462,6 +578,7 @@ permalink: /dashboard/behaviors/config-edit/
               return x !== item.id;
             });
           }
+
           renderList();
         });
 
@@ -488,6 +605,21 @@ permalink: /dashboard/behaviors/config-edit/
     });
 
     var pendingAdd = null;
+    var pendingDeleteId = null;
+    var pendingEditId = null;
+    var pendingEditTag = null;
+    var pendingDuplicateId = null;
+    var pendingDuplicateTagId = null;
+    var pendingDuplicateTagField = null;
+
+    document.getElementById("modal-bw-delete-confirm-btn").addEventListener("click", function () {
+      if (pendingDeleteId !== null) {
+        scopeIds = scopeIds.filter(function (x) { return x !== pendingDeleteId; });
+        pendingDeleteId = null;
+        window.M.closeModal(document.getElementById("modal-bw-delete-confirm"));
+        renderList();
+      }
+    });
 
     popoverNew.addEventListener("click", function () {
       var field = popoverState.field;
@@ -500,104 +632,80 @@ permalink: /dashboard/behaviors/config-edit/
       window.M.openModal(document.getElementById(modalId));
     });
 
-    // ── Add Behaviors popover ────────────────────────────────────────
-    var scopePopover = document.getElementById("bw-scope-popover");
-    var scopeSearch = document.getElementById("bw-scope-search");
-    var scopeList = document.getElementById("bw-scope-list");
-    var scopeEmpty = document.getElementById("bw-scope-empty");
+    // ── Add Behaviors modal ───────────────────────────────────────────
+    var addModal = document.getElementById("modal-behaviors-add");
+    var addSearch = document.getElementById("bw-add-search");
+    var addList = document.getElementById("bw-add-list");
+    var addEmpty = document.getElementById("bw-add-empty");
     var scopeAddBtn = document.getElementById("bw-scope-add-btn");
-    var scopeScrollHandler = null;
+    var pendingIds = [];
 
-    function positionScopePopover() {
-      var rect = scopeAddBtn.getBoundingClientRect();
-      scopePopover.style.top = rect.bottom + 4 + "px";
-      scopePopover.style.right =
-        document.documentElement.clientWidth - rect.right + "px";
-      scopePopover.style.left = "auto";
-    }
-
-    function refreshScopePopover() {
-      var q = scopeSearch.value.toLowerCase();
+    function refreshAddModal() {
+      var q = addSearch.value.toLowerCase();
+      var available = behaviors.filter(function (b) {
+        return scopeIds.indexOf(b.id) === -1;
+      });
       var filtered = q
-        ? behaviors.filter(function (b) {
+        ? available.filter(function (b) {
             return b.name.toLowerCase().indexOf(q) !== -1;
           })
-        : behaviors;
-      scopeList.innerHTML = "";
-      scopeEmpty.hidden = filtered.length > 0;
-      scopeList.hidden = filtered.length === 0;
+        : available;
+      addList.innerHTML = "";
+      addEmpty.hidden = filtered.length > 0;
+      addList.hidden = filtered.length === 0;
       filtered.forEach(function (b) {
-        var isActive = scopeIds.indexOf(b.id) !== -1;
+        var isChecked = pendingIds.indexOf(b.id) !== -1;
+        var row = document.createElement("div");
+        row.className = "bw-add-item";
         var label = document.createElement("label");
-        label.className = "m__popover-item";
+        label.className = "bw-add-item-label";
         label.innerHTML =
           '<span class="m__checkbox"><input type="checkbox"' +
-          (isActive ? " checked" : "") +
+          (isChecked ? " checked" : "") +
           " />" +
           CHECK_SVG +
           "</span>" +
-          '<span class="m__popover-item-name">' +
+          '<span class="bw-add-item-text">' +
+          '<span class="bw-add-item-name">' +
           esc(b.name) +
+          "</span>" +
+          (b.desc
+            ? '<span class="bw-add-item-desc">' + esc(b.desc) + "</span>"
+            : "") +
           "</span>";
+        row.appendChild(label);
         label.querySelector("input").addEventListener("change", function (e) {
           if (e.target.checked) {
-            if (scopeIds.indexOf(b.id) === -1) scopeIds.push(b.id);
+            if (pendingIds.indexOf(b.id) === -1) pendingIds.push(b.id);
           } else {
-            scopeIds = scopeIds.filter(function (x) {
-              return x !== b.id;
-            });
+            pendingIds = pendingIds.filter(function (x) { return x !== b.id; });
           }
-          renderList();
         });
-        scopeList.appendChild(label);
+        addList.appendChild(row);
       });
-    }
-
-    function openScopePopover() {
-      scopeSearch.value = "";
-      positionScopePopover();
-      scopePopover.hidden = false;
-      refreshScopePopover();
-      scopeSearch.focus();
-      if (scopeScrollHandler)
-        document.removeEventListener("scroll", scopeScrollHandler, true);
-      scopeScrollHandler = positionScopePopover;
-      document.addEventListener("scroll", scopeScrollHandler, true);
-    }
-
-    function closeScopePopover() {
-      scopePopover.hidden = true;
-      if (scopeScrollHandler) {
-        document.removeEventListener("scroll", scopeScrollHandler, true);
-        scopeScrollHandler = null;
-      }
     }
 
     scopeAddBtn.addEventListener("click", function () {
-      if (!scopePopover.hidden) {
-        closeScopePopover();
-        return;
-      }
-      openScopePopover();
+      pendingIds = [];
+      addSearch.value = "";
+      refreshAddModal();
+      window.M.openModal(addModal);
+      setTimeout(function () { addSearch.focus(); }, 50);
     });
 
-    scopeSearch.addEventListener("input", refreshScopePopover);
+    addSearch.addEventListener("input", refreshAddModal);
 
-    document
-      .getElementById("bw-scope-create")
-      .addEventListener("click", function () {
-        closeScopePopover();
-        window.M.openModal(document.getElementById("modal-behaviors-create"));
+    document.getElementById("bw-add-confirm-btn").addEventListener("click", function () {
+      pendingIds.forEach(function (id) {
+        if (scopeIds.indexOf(id) === -1) scopeIds.push(id);
       });
+      pendingIds = [];
+      window.M.closeModal(addModal);
+      renderList();
+    });
 
-    document.addEventListener("click", function (e) {
-      if (
-        !scopePopover.hidden &&
-        !scopePopover.contains(e.target) &&
-        e.target !== scopeAddBtn
-      ) {
-        closeScopePopover();
-      }
+    document.getElementById("bw-scope-create-btn").addEventListener("click", function () {
+      window.M.openModal(document.getElementById("modal-behaviors-create"));
     });
 
     // ── Modal: create behavior ───────────────────────────────────────
@@ -609,14 +717,20 @@ permalink: /dashboard/behaviors/config-edit/
         var desc = document.getElementById("behavior-description").value.trim();
         if (!name) return;
         var newId = Date.now();
+        var orig = pendingDuplicateId !== null ? findB(pendingDuplicateId) : null;
         behaviors.push({
           id: newId,
           name: name,
           desc: desc,
-          types: [],
-          roles: [],
+          types: orig ? orig.types.slice() : [],
+          roles: orig ? orig.roles.slice() : [],
         });
-        scopeIds.push(newId);
+        if (pendingDuplicateId !== null) {
+          scopeIds = scopeIds.map(function (x) { return x === pendingDuplicateId ? newId : x; });
+          pendingDuplicateId = null;
+        } else {
+          scopeIds.push(newId);
+        }
         document.getElementById("behavior-name").value = "";
         document.getElementById("behavior-description").value = "";
         window.M.closeModal(document.getElementById("modal-behaviors-create"));
@@ -632,15 +746,22 @@ permalink: /dashboard/behaviors/config-edit/
           .getElementById("conversation-type-name")
           .value.trim();
         if (!name) return;
+        var ta = document.getElementById("conversation-type-description");
+        var desc = ta ? ta.value.trim() : "";
         var newId = "custom-" + Date.now();
-        TYPES.push({ id: newId, name: name });
-        if (pendingAdd && pendingAdd.field === "types") {
+        TYPES.push({ id: newId, name: name, desc: desc });
+        if (pendingDuplicateTagField === "types" && pendingDuplicateTagId) {
+          behaviors.filter(function (b) { return scopeIds.indexOf(b.id) !== -1; }).forEach(function (b) {
+            b.types = b.types.map(function (t) { return t === pendingDuplicateTagId ? newId : t; });
+          });
+          pendingDuplicateTagId = null;
+          pendingDuplicateTagField = null;
+        } else if (pendingAdd && pendingAdd.field === "types") {
           var b = findB(pendingAdd.bId);
           if (b && b.types.indexOf(newId) === -1) b.types.push(newId);
           pendingAdd = null;
         }
         document.getElementById("conversation-type-name").value = "";
-        var ta = document.getElementById("conversation-type-description");
         if (ta) ta.value = "";
         window.M.closeModal(
           document.getElementById("modal-conversation-type-create"),
@@ -655,21 +776,144 @@ permalink: /dashboard/behaviors/config-edit/
       .addEventListener("click", function () {
         var name = document.getElementById("role-name").value.trim();
         if (!name) return;
+        var ta = document.getElementById("role-description");
+        var desc = ta ? ta.value.trim() : "";
         var newId = "custom-" + Date.now();
-        ROLES.push({ id: newId, name: name });
-        if (pendingAdd && pendingAdd.field === "roles") {
+        ROLES.push({ id: newId, name: name, desc: desc });
+        if (pendingDuplicateTagField === "roles" && pendingDuplicateTagId) {
+          behaviors.filter(function (b) { return scopeIds.indexOf(b.id) !== -1; }).forEach(function (b) {
+            b.roles = b.roles.map(function (r) { return r === pendingDuplicateTagId ? newId : r; });
+          });
+          pendingDuplicateTagId = null;
+          pendingDuplicateTagField = null;
+        } else if (pendingAdd && pendingAdd.field === "roles") {
           var b = findB(pendingAdd.bId);
           if (b && b.roles.indexOf(newId) === -1) b.roles.push(newId);
           pendingAdd = null;
         }
         document.getElementById("role-name").value = "";
-        var ta = document.getElementById("role-description");
         if (ta) ta.value = "";
         window.M.closeModal(document.getElementById("modal-role-create"));
         renderList();
       });
 
+    // ── Modal: edit type ─────────────────────────────────────────────
+    document
+      .getElementById("modal-conversation-type-edit")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        if (!pendingEditTag || pendingEditTag.field !== "types") return;
+        if (document.getElementById("conversation-type-edit-name").disabled) {
+          pendingEditTag = null;
+          window.M.closeModal(document.getElementById("modal-conversation-type-edit"));
+          return;
+        }
+        var name = document.getElementById("conversation-type-edit-name").value.trim();
+        var desc = document.getElementById("conversation-type-edit-description").value.trim();
+        if (!name) return;
+        var item = TYPES.find(function (x) { return x.id === pendingEditTag.id; });
+        if (item) { item.name = name; item.desc = desc; }
+        pendingEditTag = null;
+        window.M.closeModal(document.getElementById("modal-conversation-type-edit"));
+        renderList();
+      });
+
+    // ── Modal: edit role ──────────────────────────────────────────────
+    document
+      .getElementById("modal-role-edit")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        if (!pendingEditTag || pendingEditTag.field !== "roles") return;
+        if (document.getElementById("role-edit-name").disabled) {
+          pendingEditTag = null;
+          window.M.closeModal(document.getElementById("modal-role-edit"));
+          return;
+        }
+        var name = document.getElementById("role-edit-name").value.trim();
+        var desc = document.getElementById("role-edit-description").value.trim();
+        if (!name) return;
+        var item = ROLES.find(function (x) { return x.id === pendingEditTag.id; });
+        if (item) { item.name = name; item.desc = desc; }
+        pendingEditTag = null;
+        window.M.closeModal(document.getElementById("modal-role-edit"));
+        renderList();
+      });
+
+    // ── Modal: edit behavior ─────────────────────────────────────────
+    document
+      .getElementById("modal-behaviors-edit")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        if (pendingEditId === null) return;
+        if (document.getElementById("behavior-edit-name").disabled) {
+          pendingEditId = null;
+          window.M.closeModal(document.getElementById("modal-behaviors-edit"));
+          return;
+        }
+        var name = document.getElementById("behavior-edit-name").value.trim();
+        var desc = document.getElementById("behavior-edit-description").value.trim();
+        if (!name) return;
+        var b = findB(pendingEditId);
+        if (b) {
+          b.name = name;
+          b.desc = desc;
+        }
+        pendingEditId = null;
+        window.M.closeModal(document.getElementById("modal-behaviors-edit"));
+        renderList();
+      });
+
+    // ── Duplicate handlers ───────────────────────────────────────────
+    document.getElementById("behavior-edit-duplicate-btn").addEventListener("click", function () {
+      if (pendingEditId === null) return;
+      var b = findB(pendingEditId);
+      if (!b) return;
+      pendingDuplicateId = pendingEditId;
+      pendingEditId = null;
+      window.M.closeModal(document.getElementById("modal-behaviors-edit"));
+      document.getElementById("behavior-name").value = b.name;
+      document.getElementById("behavior-description").value = b.desc || "";
+      window.M.openModal(document.getElementById("modal-behaviors-create"));
+    });
+
+    document.getElementById("conversation-type-edit-duplicate-btn").addEventListener("click", function () {
+      if (!pendingEditTag || pendingEditTag.field !== "types") return;
+      var item = TYPES.find(function (x) { return x.id === pendingEditTag.id; });
+      if (!item) return;
+      pendingDuplicateTagId = pendingEditTag.id;
+      pendingDuplicateTagField = "types";
+      pendingEditTag = null;
+      window.M.closeModal(document.getElementById("modal-conversation-type-edit"));
+      document.getElementById("conversation-type-name").value = item.name;
+      var ta = document.getElementById("conversation-type-description");
+      if (ta) ta.value = item.desc || "";
+      window.M.openModal(document.getElementById("modal-conversation-type-create"));
+    });
+
+    document.getElementById("role-edit-duplicate-btn").addEventListener("click", function () {
+      if (!pendingEditTag || pendingEditTag.field !== "roles") return;
+      var item = ROLES.find(function (x) { return x.id === pendingEditTag.id; });
+      if (!item) return;
+      pendingDuplicateTagId = pendingEditTag.id;
+      pendingDuplicateTagField = "roles";
+      pendingEditTag = null;
+      window.M.closeModal(document.getElementById("modal-role-edit"));
+      document.getElementById("role-name").value = item.name;
+      var ta = document.getElementById("role-description");
+      if (ta) ta.value = item.desc || "";
+      window.M.openModal(document.getElementById("modal-role-create"));
+    });
+
     // ── Init ─────────────────────────────────────────────────────────
+    document.querySelectorAll(".bw-save-to-library-toggle").forEach(function (el) {
+      el.hidden = false;
+    });
+    function updateTruncation() {
+      listBody.querySelectorAll(".bw-tag-item-name").forEach(function (el) {
+        el.classList.toggle("is-truncated", el.scrollWidth > el.clientWidth);
+      });
+    }
+
     renderList();
   })();
 </script>

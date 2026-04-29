@@ -1,6 +1,11 @@
 {% from 'service/modal-wrapper.njk' import modal %} {% call
 modal("modal-behaviors-edit", "Edit Behavior") %}
 <div class="m__modal__body">
+  <div class="m__modal__notice" id="behavior-edit-notice" hidden>
+    <p>This behavior is from the library. To edit it for this configuration only, create a duplicate.</p>
+    <button type="button" class="m__button-outline-compact" id="behavior-edit-duplicate-btn">Duplicate</button>
+  </div>
+
   <div class="m__textfield">
     <label for="behavior-edit-name">Name</label>
     <input type="text" id="behavior-edit-name" placeholder="" value="Mysoginy" />
@@ -13,7 +18,7 @@ modal("modal-behaviors-edit", "Edit Behavior") %}
 
   <div class="m__textfield">
     <label for="behavior-edit-description">Description</label>
-    <textarea id="behavior-edit-description" placeholder=""></textarea>
+    <textarea id="behavior-edit-description" class="m__textarea--autogrow" placeholder=""></textarea>
   </div>
   <p class="m__modal__field-hint">
     Enter a detailed description of this behavior and what indicators to look
@@ -29,6 +34,6 @@ modal("modal-behaviors-edit", "Edit Behavior") %}
   >
     Cancel
   </button>
-  <button type="button" class="m__button-compact">Save</button>
+  <button type="button" class="m__button-compact" id="behavior-edit-save-btn">Save</button>
 </div>
 {% endcall %}

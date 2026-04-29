@@ -1,6 +1,11 @@
 {% from 'service/modal-wrapper.njk' import modal %} {% call
 modal("modal-conversation-type-edit", "Edit Conversation Type") %}
 <div class="m__modal__body">
+  <div class="m__modal__notice" id="conversation-type-edit-notice" hidden>
+    <p>This conversation type is from the library. To edit it for this configuration only, create a duplicate.</p>
+    <button type="button" class="m__button-outline-compact" id="conversation-type-edit-duplicate-btn">Duplicate</button>
+  </div>
+
   <div class="m__textfield">
     <label for="conversation-type-edit-name">Name</label>
     <input type="text" id="conversation-type-edit-name" placeholder="" value="Customer Service Call" />
@@ -13,7 +18,7 @@ modal("modal-conversation-type-edit", "Edit Conversation Type") %}
 
   <div class="m__textfield">
     <label for="conversation-type-edit-description">Description</label>
-    <textarea id="conversation-type-edit-description" placeholder=""></textarea>
+    <textarea id="conversation-type-edit-description" class="m__textarea--autogrow" placeholder=""></textarea>
   </div>
   <p class="m__modal__field-hint">
     Enter a detailed description of this conversation type
@@ -27,6 +32,6 @@ modal("modal-conversation-type-edit", "Edit Conversation Type") %}
   >
     Cancel
   </button>
-  <button type="button" class="m__button-compact">Save</button>
+  <button type="button" class="m__button-compact" id="conversation-type-edit-save-btn">Save</button>
 </div>
 {% endcall %}
