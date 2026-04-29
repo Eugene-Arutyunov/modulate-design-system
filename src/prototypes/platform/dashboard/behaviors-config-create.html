@@ -90,6 +90,12 @@ permalink: /dashboard/behaviors/config-create/
 
 {% include 'service/modal-behavior-delete.html' %}
 
+{% include 'service/modal-behaviors-edit.html' %}
+
+{% include 'service/modal-conversation-type-edit.html' %}
+
+{% include 'service/modal-role-edit.html' %}
+
 <script>
   (function () {
     var TYPES = [
@@ -301,7 +307,7 @@ permalink: /dashboard/behaviors/config-create/
         .forEach(function (b) {
           var tr = document.createElement("tr");
           tr.innerHTML =
-            '<td class="bw-behavior-cell">' +
+            '<td class="bw-behavior-cell" data-bw-edit="' + b.id + '">' +
             '<div class="bw-behavior-name">' +
             esc(b.name) +
             "</div>" +
@@ -361,6 +367,40 @@ permalink: /dashboard/behaviors/config-create/
         });
       });
 
+      listBody.querySelectorAll("td[data-bw-edit]").forEach(function (td) {
+        td.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var id = parseInt(td.dataset.bwEdit);
+          var b = findB(id);
+          if (!b) return;
+          pendingEditId = id;
+          document.getElementById("behavior-edit-name").value = b.name;
+          document.getElementById("behavior-edit-description").value = b.desc || "";
+          window.M.openModal(document.getElementById("modal-behaviors-edit"));
+        });
+      });
+
+      listBody.querySelectorAll("[data-bw-tag-edit]").forEach(function (span) {
+        span.addEventListener("click", function (e) {
+          e.stopPropagation();
+          var itemId = span.dataset.bwTagEdit;
+          var field = span.dataset.bwTagField;
+          var items = field === "types" ? TYPES : ROLES;
+          var item = items.find(function (x) { return x.id === itemId; });
+          if (!item) return;
+          pendingEditTag = { id: itemId, field: field };
+          if (field === "types") {
+            document.getElementById("conversation-type-edit-name").value = item.name;
+            document.getElementById("conversation-type-edit-description").value = item.desc || "";
+            window.M.openModal(document.getElementById("modal-conversation-type-edit"));
+          } else {
+            document.getElementById("role-edit-name").value = item.name;
+            document.getElementById("role-edit-description").value = item.desc || "";
+            window.M.openModal(document.getElementById("modal-role-edit"));
+          }
+        });
+      });
+
       updateActiveAddBtn();
       updateTruncation();
     }
@@ -377,7 +417,7 @@ permalink: /dashboard/behaviors/config-create/
           '<span class="m__tag bw-tag-item" data-tooltip="' +
           esc(item.desc || "") +
           '">' +
-          '<span class="bw-tag-item-name">' + esc(item.name) + '</span>' +
+          '<span class="bw-tag-item-name" data-bw-tag-edit="' + id + '" data-bw-tag-field="' + field + '">' + esc(item.name) + '</span>' +
           '<button type="button" class="bw-tag-x"' +
           ' data-bw-remove="' +
           field +
@@ -529,6 +569,8 @@ permalink: /dashboard/behaviors/config-create/
 
     var pendingAdd = null;
     var pendingDeleteId = null;
+    var pendingEditId = null;
+    var pendingEditTag = null;
 
     document.getElementById("modal-bw-delete-confirm-btn").addEventListener("click", function () {
       if (pendingDeleteId !== null) {
@@ -692,6 +734,57 @@ permalink: /dashboard/behaviors/config-create/
         var ta = document.getElementById("role-description");
         if (ta) ta.value = "";
         window.M.closeModal(document.getElementById("modal-role-create"));
+        renderList();
+      });
+
+    // ── Modal: edit type ─────────────────────────────────────────────
+    document
+      .getElementById("modal-conversation-type-edit")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        if (!pendingEditTag || pendingEditTag.field !== "types") return;
+        var name = document.getElementById("conversation-type-edit-name").value.trim();
+        var desc = document.getElementById("conversation-type-edit-description").value.trim();
+        if (!name) return;
+        var item = TYPES.find(function (x) { return x.id === pendingEditTag.id; });
+        if (item) { item.name = name; item.desc = desc; }
+        pendingEditTag = null;
+        window.M.closeModal(document.getElementById("modal-conversation-type-edit"));
+        renderList();
+      });
+
+    // ── Modal: edit role ──────────────────────────────────────────────
+    document
+      .getElementById("modal-role-edit")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        if (!pendingEditTag || pendingEditTag.field !== "roles") return;
+        var name = document.getElementById("role-edit-name").value.trim();
+        var desc = document.getElementById("role-edit-description").value.trim();
+        if (!name) return;
+        var item = ROLES.find(function (x) { return x.id === pendingEditTag.id; });
+        if (item) { item.name = name; item.desc = desc; }
+        pendingEditTag = null;
+        window.M.closeModal(document.getElementById("modal-role-edit"));
+        renderList();
+      });
+
+    // ── Modal: edit behavior ─────────────────────────────────────────
+    document
+      .getElementById("modal-behaviors-edit")
+      .querySelector(".m__button-compact")
+      .addEventListener("click", function () {
+        if (pendingEditId === null) return;
+        var name = document.getElementById("behavior-edit-name").value.trim();
+        var desc = document.getElementById("behavior-edit-description").value.trim();
+        if (!name) return;
+        var b = findB(pendingEditId);
+        if (b) {
+          b.name = name;
+          b.desc = desc;
+        }
+        pendingEditId = null;
+        window.M.closeModal(document.getElementById("modal-behaviors-edit"));
         renderList();
       });
 

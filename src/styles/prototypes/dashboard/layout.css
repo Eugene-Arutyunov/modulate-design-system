@@ -511,6 +511,7 @@ table.config-details {
   min-width: 0;
   padding-bottom: 0.15em;
   margin-bottom: -0.15em;
+  cursor: pointer;
 
   &.is-truncated {
     mask-image: linear-gradient(
@@ -591,18 +592,33 @@ table.config-details {
   width: 100%;
 }
 
-#bw-list th:nth-child(1) {
-  width: 44%;
+#bw-list .m__table-wrapper {
+  margin: 0 calc(-1 * var(--m__widget-padding));
+}
+
+#bw-list th:nth-child(1),
+#bw-list td:nth-child(1) {
+  padding-left: var(--m__widget-padding);
+  width: 43%;
+}
+
+#bw-list th:nth-child(2),
+#bw-list td:nth-child(2),
+#bw-list th:nth-child(3),
+#bw-list td:nth-child(3) {
+  padding-left: 0.5rem;
 }
 
 #bw-list th:nth-child(2),
 #bw-list th:nth-child(3) {
-  width: 26%;
-  padding-left: 0.5rem;
+  width: 25%;
 }
 
-#bw-list th:nth-child(4) {
-  width: 4%;
+#bw-list th:nth-child(4),
+#bw-list td:nth-child(4) {
+  width: 7%;
+  padding-left: 0.75rem;
+  padding-right: var(--m__widget-padding);
 }
 
 #bw-list tbody tr [data-bw-delete] {
@@ -615,6 +631,21 @@ table.config-details {
 #bw-list tbody tr:hover [data-bw-delete] {
   opacity: 1;
   transition-duration: var(--m__hover-transition-duration);
+}
+
+.bw-behavior-cell[data-bw-edit] {
+  cursor: pointer;
+  transition: background-color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+
+  &:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--m__bg-hover-color) 5%,
+      transparent
+    );
+    transition-duration: var(--m__hover-transition-duration);
+  }
 }
 
 #bw-matrix th:first-child,
