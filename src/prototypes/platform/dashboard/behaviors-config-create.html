@@ -43,7 +43,7 @@ permalink: /dashboard/behaviors/config-create/
       <div class="m__widget">
         <div class="m__table-toolbar">
           <h2>Scope</h2>
-          <button type="button" class="m__button-compact" id="bw-scope-add-btn">
+          <button type="button" class="m__button-outline-compact" id="bw-scope-add-btn">
             Select Behaviors
           </button>
         </div>
@@ -81,63 +81,9 @@ permalink: /dashboard/behaviors/config-create/
 'service/modal-conversation-type-create.html' %} {% include
 'service/modal-role-create.html' %}
 
-<div
-  class="m__modal-backdrop"
-  id="modal-behaviors-add"
-  hidden
-  aria-modal="true"
-  role="dialog"
-  aria-labelledby="modal-behaviors-add-title"
->
-  <div class="m__modal m__modal--wide">
-    <div class="m__modal__header">
-      <h2 class="m__modal__title" id="modal-behaviors-add-title">
-        Select Behaviors
-      </h2>
-      <button
-        type="button"
-        class="m__modal__close"
-        aria-label="Close"
-        data-modal-close="modal-behaviors-add"
-      >
-        <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
-          <use href="#close"></use>
-        </svg>
-      </button>
-    </div>
-    <div class="m__modal__body bw-add-modal-body">
-      <div class="m__searchbar">
-        <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
-          <use href="#search"></use>
-        </svg>
-        <input
-          type="text"
-          id="bw-add-search"
-          placeholder="Search…"
-          autocomplete="off"
-        />
-      </div>
-      <div class="bw-add-list" id="bw-add-list"></div>
-      <p class="bw-add-empty" id="bw-add-empty" hidden>No matching behaviors</p>
-    </div>
-    <div class="m__modal__footer">
-      <button
-        type="button"
-        class="m__button-outline-compact"
-        id="bw-add-create-btn"
-      >
-        Create Behavior
-      </button>
-      <button
-        type="button"
-        class="m__button-compact"
-        data-modal-close="modal-behaviors-add"
-      >
-        Done
-      </button>
-    </div>
-  </div>
-</div>
+{% include 'service/modal-behaviors-add.html' %}
+
+{% include 'service/modal-behavior-delete.html' %}
 
 <script>
   (function () {
@@ -276,6 +222,8 @@ permalink: /dashboard/behaviors/config-create/
     var popoverState = { bId: null, field: null, activeBtn: null };
     var scrollHandler = null;
 
+    function preventScroll(e) { e.preventDefault(); }
+
     // ── Helpers ─────────────────────────────────────────────────────
     function esc(s) {
       return String(s)
@@ -362,10 +310,11 @@ permalink: /dashboard/behaviors/config-create/
       listBody.querySelectorAll("[data-bw-delete]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var id = parseInt(btn.dataset.bwDelete);
-          scopeIds = scopeIds.filter(function (x) {
-            return x !== id;
-          });
-          renderList();
+          var b = findB(id);
+          pendingDeleteId = id;
+          document.getElementById("modal-bw-delete-confirm-text").innerHTML =
+            "<strong>" + esc(b ? b.name : "This behavior") + "</strong> will be removed from this configuration only. It will remain available in other configurations.";
+          window.M.openModal(document.getElementById("modal-bw-delete-confirm"));
         });
       });
 
@@ -406,7 +355,7 @@ permalink: /dashboard/behaviors/config-create/
     // ── Popover ──────────────────────────────────────────────────────
     function positionPopover(anchor) {
       var rect = anchor.getBoundingClientRect();
-      var top = rect.bottom + 4;
+      var top = rect.top;
       var left = rect.left;
       var pw = 240;
       if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
@@ -425,10 +374,12 @@ permalink: /dashboard/behaviors/config-create/
       popoverSearch.value = "";
       refreshPopoverList("");
       popoverNew.textContent =
-        field === "types" ? "Create Type" : "Create Role";
+        field === "types" ? "Create new Type" : "Create new Role";
 
       positionPopover(anchor);
       popover.hidden = false;
+      document.addEventListener("wheel", preventScroll, { passive: false });
+      document.addEventListener("touchmove", preventScroll, { passive: false });
       popoverSearch.focus();
 
       if (scrollHandler)
@@ -445,6 +396,8 @@ permalink: /dashboard/behaviors/config-create/
         popoverState.activeBtn = null;
       }
       popover.hidden = true;
+      document.removeEventListener("wheel", preventScroll);
+      document.removeEventListener("touchmove", preventScroll);
       popoverState.bId = null;
       if (scrollHandler) {
         document.removeEventListener("scroll", scrollHandler, true);
@@ -532,6 +485,16 @@ permalink: /dashboard/behaviors/config-create/
     });
 
     var pendingAdd = null;
+    var pendingDeleteId = null;
+
+    document.getElementById("modal-bw-delete-confirm-btn").addEventListener("click", function () {
+      if (pendingDeleteId !== null) {
+        scopeIds = scopeIds.filter(function (x) { return x !== pendingDeleteId; });
+        pendingDeleteId = null;
+        window.M.closeModal(document.getElementById("modal-bw-delete-confirm"));
+        renderList();
+      }
+    });
 
     popoverNew.addEventListener("click", function () {
       var field = popoverState.field;

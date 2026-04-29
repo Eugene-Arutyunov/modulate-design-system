@@ -1,0 +1,18 @@
+{% from 'service/modal-wrapper.njk' import modal %} {% call
+modal("modal-bw-delete-confirm", "Remove behavior?") %}
+<div class="m__modal__body">
+  <p id="modal-bw-delete-confirm-text"></p>
+</div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-outline-compact"
+    data-modal-close="modal-bw-delete-confirm"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-danger-compact" id="modal-bw-delete-confirm-btn">
+    Remove
+  </button>
+</div>
+{% endcall %}

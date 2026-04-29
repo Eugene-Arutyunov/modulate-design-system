@@ -601,6 +601,18 @@ table.config-details {
   width: 4%;
 }
 
+#bw-list tbody tr [data-bw-delete] {
+  opacity: 0;
+  color: var(--m__ui-error-color);
+  transition: opacity var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
+}
+
+#bw-list tbody tr:hover [data-bw-delete] {
+  opacity: 1;
+  transition-duration: var(--m__hover-transition-duration);
+}
+
 #bw-matrix th:first-child,
 #bw-matrix td:first-child {
   width: 45%;
@@ -609,7 +621,7 @@ table.config-details {
 /* Behaviors add modal */
 
 .m__modal--wide {
-  max-width: 44rem;
+  max-width: 68rem;
 }
 
 .bw-add-modal-body {
@@ -624,8 +636,6 @@ table.config-details {
   flex-direction: column;
   max-height: 30rem;
   overflow-y: auto;
-  margin: 0 calc(var(--m__modal-padding) * -1);
-  padding: 0 calc(var(--m__modal-padding) - 0.5rem);
 }
 
 .bw-add-item {
@@ -634,7 +644,7 @@ table.config-details {
   gap: 0.6rem;
   padding: 0.55rem 0.5rem;
   cursor: pointer;
-  border-radius: var(--m__radius-m);
+  border-radius: var(--m__radius-l);
   transition: background-color var(--m__unhover-transition-duration)
     var(--m__transition-easing);
 
@@ -668,7 +678,7 @@ table.config-details {
   color: var(--m__text-caption-color);
   line-height: 1.4;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 10;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
