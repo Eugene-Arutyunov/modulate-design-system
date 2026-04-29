@@ -44,7 +44,7 @@ permalink: /dashboard/behaviors/config-create/
         <div class="m__table-toolbar">
           <h2>Scope</h2>
           <button type="button" class="m__button-compact" id="bw-scope-add-btn">
-            Add Behavior
+            Select Behaviors
           </button>
         </div>
 
@@ -81,26 +81,61 @@ permalink: /dashboard/behaviors/config-create/
 'service/modal-conversation-type-create.html' %} {% include
 'service/modal-role-create.html' %}
 
-<div class="m__popover" id="bw-scope-popover" hidden>
-  <div class="m__searchbar">
-    <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
-      <use href="#search"></use>
-    </svg>
-    <input
-      type="text"
-      id="bw-scope-search"
-      placeholder="Search…"
-      autocomplete="off"
-    />
-  </div>
-  <div class="m__popover-list" id="bw-scope-list"></div>
-  <p class="bw-popover-empty" id="bw-scope-empty" hidden>
-    No matching behaviors
-  </p>
-  <div class="m__popover-footer">
-    <button type="button" class="m__popover-new-btn" id="bw-scope-create">
-      Create Behavior
-    </button>
+<div
+  class="m__modal-backdrop"
+  id="modal-behaviors-add"
+  hidden
+  aria-modal="true"
+  role="dialog"
+  aria-labelledby="modal-behaviors-add-title"
+>
+  <div class="m__modal m__modal--wide">
+    <div class="m__modal__header">
+      <h2 class="m__modal__title" id="modal-behaviors-add-title">
+        Select Behaviors
+      </h2>
+      <button
+        type="button"
+        class="m__modal__close"
+        aria-label="Close"
+        data-modal-close="modal-behaviors-add"
+      >
+        <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+          <use href="#close"></use>
+        </svg>
+      </button>
+    </div>
+    <div class="m__modal__body bw-add-modal-body">
+      <div class="m__searchbar">
+        <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
+          <use href="#search"></use>
+        </svg>
+        <input
+          type="text"
+          id="bw-add-search"
+          placeholder="Search…"
+          autocomplete="off"
+        />
+      </div>
+      <div class="bw-add-list" id="bw-add-list"></div>
+      <p class="bw-add-empty" id="bw-add-empty" hidden>No matching behaviors</p>
+    </div>
+    <div class="m__modal__footer">
+      <button
+        type="button"
+        class="m__button-outline-compact"
+        id="bw-add-create-btn"
+      >
+        Create Behavior
+      </button>
+      <button
+        type="button"
+        class="m__button-compact"
+        data-modal-close="modal-behaviors-add"
+      >
+        Done
+      </button>
+    </div>
   </div>
 </div>
 
@@ -283,10 +318,14 @@ permalink: /dashboard/behaviors/config-create/
             esc(b.desc) +
             "</div>" +
             "</td>" +
-            '<td class="bw-tags-cell">' +
+            '<td class="bw-tags-cell" data-bw-add="types" data-bw-id="' +
+            b.id +
+            '">' +
             tagsCell(b, "types") +
             "</td>" +
-            '<td class="bw-tags-cell">' +
+            '<td class="bw-tags-cell" data-bw-add="roles" data-bw-id="' +
+            b.id +
+            '">' +
             tagsCell(b, "roles") +
             "</td>" +
             '<td class="m__col-actions">' +
@@ -299,10 +338,11 @@ permalink: /dashboard/behaviors/config-create/
           listBody.appendChild(tr);
         });
 
-      listBody.querySelectorAll("[data-bw-add]").forEach(function (btn) {
-        btn.addEventListener("click", function (e) {
+      listBody.querySelectorAll("td[data-bw-add]").forEach(function (td) {
+        td.addEventListener("click", function (e) {
+          if (e.target.closest("[data-bw-remove]")) return;
           e.stopPropagation();
-          openPopover(parseInt(btn.dataset.bwId), btn.dataset.bwAdd, btn);
+          openPopover(parseInt(td.dataset.bwId), td.dataset.bwAdd, td);
         });
       });
 
@@ -330,6 +370,7 @@ permalink: /dashboard/behaviors/config-create/
       });
 
       updateActiveAddBtn();
+      updateTruncation();
     }
 
     function tagsCell(b, field) {
@@ -344,7 +385,7 @@ permalink: /dashboard/behaviors/config-create/
           '<span class="m__tag bw-tag-item" data-tooltip="' +
           esc(item.desc || "") +
           '">' +
-          esc(item.name) +
+          '<span class="bw-tag-item-name">' + esc(item.name) + '</span>' +
           '<button type="button" class="bw-tag-x"' +
           ' data-bw-remove="' +
           field +
@@ -358,14 +399,6 @@ permalink: /dashboard/behaviors/config-create/
           X_SVG +
           "</button></span>";
       });
-      html +=
-        '<button type="button" class="m__tag bw-add-btn"' +
-        ' data-bw-add="' +
-        field +
-        '"' +
-        ' data-bw-id="' +
-        b.id +
-        '">Add</button>';
       html += "</div>";
       return html;
     }
@@ -383,12 +416,12 @@ permalink: /dashboard/behaviors/config-create/
 
     function openPopover(bId, field, anchor) {
       if (popoverState.activeBtn) {
-        popoverState.activeBtn.classList.remove("bw-add-btn--active");
+        popoverState.activeBtn.classList.remove("bw-cell--active");
       }
       popoverState.bId = bId;
       popoverState.field = field;
       popoverState.activeBtn = anchor;
-      anchor.classList.add("bw-add-btn--active");
+      anchor.classList.add("bw-cell--active");
       popoverSearch.value = "";
       refreshPopoverList("");
       popoverNew.textContent =
@@ -408,7 +441,7 @@ permalink: /dashboard/behaviors/config-create/
 
     function closePopover() {
       if (popoverState.activeBtn) {
-        popoverState.activeBtn.classList.remove("bw-add-btn--active");
+        popoverState.activeBtn.classList.remove("bw-cell--active");
         popoverState.activeBtn = null;
       }
       popover.hidden = true;
@@ -421,16 +454,16 @@ permalink: /dashboard/behaviors/config-create/
 
     function updateActiveAddBtn() {
       if (popoverState.bId === null) return;
-      var btn = listBody.querySelector(
-        '.bw-add-btn[data-bw-id="' +
+      var td = listBody.querySelector(
+        'td[data-bw-id="' +
           popoverState.bId +
           '"][data-bw-add="' +
           popoverState.field +
           '"]',
       );
-      if (btn) {
-        popoverState.activeBtn = btn;
-        btn.classList.add("bw-add-btn--active");
+      if (td) {
+        popoverState.activeBtn = td;
+        td.classList.add("bw-cell--active");
       }
     }
 
@@ -511,44 +544,40 @@ permalink: /dashboard/behaviors/config-create/
       window.M.openModal(document.getElementById(modalId));
     });
 
-    // ── Add Behaviors popover ────────────────────────────────────────
-    var scopePopover = document.getElementById("bw-scope-popover");
-    var scopeSearch = document.getElementById("bw-scope-search");
-    var scopeList = document.getElementById("bw-scope-list");
-    var scopeEmpty = document.getElementById("bw-scope-empty");
+    // ── Add Behaviors modal ───────────────────────────────────────────
+    var addModal = document.getElementById("modal-behaviors-add");
+    var addSearch = document.getElementById("bw-add-search");
+    var addList = document.getElementById("bw-add-list");
+    var addEmpty = document.getElementById("bw-add-empty");
     var scopeAddBtn = document.getElementById("bw-scope-add-btn");
-    var scopeScrollHandler = null;
 
-    function positionScopePopover() {
-      var rect = scopeAddBtn.getBoundingClientRect();
-      scopePopover.style.top = rect.bottom + 4 + "px";
-      scopePopover.style.right =
-        document.documentElement.clientWidth - rect.right + "px";
-      scopePopover.style.left = "auto";
-    }
-
-    function refreshScopePopover() {
-      var q = scopeSearch.value.toLowerCase();
+    function refreshAddModal() {
+      var q = addSearch.value.toLowerCase();
       var filtered = q
         ? behaviors.filter(function (b) {
             return b.name.toLowerCase().indexOf(q) !== -1;
           })
         : behaviors;
-      scopeList.innerHTML = "";
-      scopeEmpty.hidden = filtered.length > 0;
-      scopeList.hidden = filtered.length === 0;
+      addList.innerHTML = "";
+      addEmpty.hidden = filtered.length > 0;
+      addList.hidden = filtered.length === 0;
       filtered.forEach(function (b) {
         var isActive = scopeIds.indexOf(b.id) !== -1;
         var label = document.createElement("label");
-        label.className = "m__popover-item";
+        label.className = "bw-add-item";
         label.innerHTML =
           '<span class="m__checkbox"><input type="checkbox"' +
           (isActive ? " checked" : "") +
           " />" +
           CHECK_SVG +
           "</span>" +
-          '<span class="m__popover-item-name">' +
+          '<span class="bw-add-item-text">' +
+          '<span class="bw-add-item-name">' +
           esc(b.name) +
+          "</span>" +
+          (b.desc
+            ? '<span class="bw-add-item-desc">' + esc(b.desc) + "</span>"
+            : "") +
           "</span>";
         label.querySelector("input").addEventListener("change", function (e) {
           if (e.target.checked) {
@@ -560,56 +589,27 @@ permalink: /dashboard/behaviors/config-create/
           }
           renderList();
         });
-        scopeList.appendChild(label);
+        addList.appendChild(label);
       });
-    }
-
-    function openScopePopover() {
-      scopeSearch.value = "";
-      positionScopePopover();
-      scopePopover.hidden = false;
-      refreshScopePopover();
-      scopeSearch.focus();
-      if (scopeScrollHandler)
-        document.removeEventListener("scroll", scopeScrollHandler, true);
-      scopeScrollHandler = positionScopePopover;
-      document.addEventListener("scroll", scopeScrollHandler, true);
-    }
-
-    function closeScopePopover() {
-      scopePopover.hidden = true;
-      if (scopeScrollHandler) {
-        document.removeEventListener("scroll", scopeScrollHandler, true);
-        scopeScrollHandler = null;
-      }
     }
 
     scopeAddBtn.addEventListener("click", function () {
-      if (!scopePopover.hidden) {
-        closeScopePopover();
-        return;
-      }
-      openScopePopover();
+      addSearch.value = "";
+      refreshAddModal();
+      window.M.openModal(addModal);
+      setTimeout(function () {
+        addSearch.focus();
+      }, 50);
     });
 
-    scopeSearch.addEventListener("input", refreshScopePopover);
+    addSearch.addEventListener("input", refreshAddModal);
 
     document
-      .getElementById("bw-scope-create")
+      .getElementById("bw-add-create-btn")
       .addEventListener("click", function () {
-        closeScopePopover();
+        window.M.closeModal(addModal);
         window.M.openModal(document.getElementById("modal-behaviors-create"));
       });
-
-    document.addEventListener("click", function (e) {
-      if (
-        !scopePopover.hidden &&
-        !scopePopover.contains(e.target) &&
-        e.target !== scopeAddBtn
-      ) {
-        closeScopePopover();
-      }
-    });
 
     // ── Modal: create behavior ───────────────────────────────────────
     document
@@ -681,6 +681,12 @@ permalink: /dashboard/behaviors/config-create/
       });
 
     // ── Init ─────────────────────────────────────────────────────────
+    function updateTruncation() {
+      listBody.querySelectorAll(".bw-tag-item-name").forEach(function (el) {
+        el.classList.toggle("is-truncated", el.scrollWidth > el.clientWidth);
+      });
+    }
+
     renderList();
   })();
 </script>
