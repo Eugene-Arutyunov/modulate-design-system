@@ -42,10 +42,15 @@ permalink: /dashboard/behaviors/config-create/
       <!-- Behaviors widget -->
       <div class="m__widget">
         <div class="m__table-toolbar">
-          <h2>Scope</h2>
-          <button type="button" class="m__button-outline-compact" id="bw-scope-add-btn">
-            Select Behaviors
-          </button>
+          <h2>Behaviors</h2>
+          <div style="display:flex;gap:0.5rem">
+            <button type="button" class="m__button-outline-compact" id="bw-scope-add-btn">
+              Add from Library
+            </button>
+            <button type="button" class="m__button-compact" id="bw-scope-create-btn">
+              Create new
+            </button>
+          </div>
         </div>
 
         <!-- List view -->
@@ -206,11 +211,49 @@ permalink: /dashboard/behaviors/config-create/
         types: [],
         roles: [],
       },
+      {
+        id: 9,
+        enabled: true,
+        name: "Sensitive data exposure",
+        desc: "Instances where personally identifiable information, financial details, authentication credentials, or protected health information are verbally disclosed during a conversation without proper authorization or verification. This includes cases where an agent reads back full account numbers, social security digits, or passwords without confirming the identity of the recipient. Sensitive data exposure can result in regulatory penalties under GDPR, HIPAA, or PCI-DSS frameworks and poses significant risk to both the individual and the organization. Detection should trigger an immediate review workflow and may require incident reporting depending on jurisdiction.",
+        types: ["customer-service", "sales"],
+        roles: ["agent"],
+      },
+      {
+        id: 10,
+        enabled: true,
+        name: "Escalation avoidance",
+        desc: "Behavior in which an agent actively discourages or prevents a customer from escalating their issue to a supervisor, manager, or specialized support tier despite repeated or legitimate requests to do so. This may manifest as repeatedly deflecting escalation requests, misrepresenting the availability of supervisors, offering insincere resolutions to stall the conversation, or using subtle pressure tactics to close the interaction prematurely. Escalation avoidance can signal training gaps, incentive misalignment, or deliberate policy circumvention, and often correlates with elevated customer dissatisfaction and churn risk.",
+        types: ["customer-service"],
+        roles: ["agent"],
+      },
+      {
+        id: 11,
+        enabled: true,
+        name: "Unauthorized commitment",
+        desc: "Situations where a participant makes a promise, guarantee, or agreement that exceeds their authority or falls outside the bounds of established policy. Common examples include an agent committing to a refund amount not supported by policy, guaranteeing a delivery timeline without operational confirmation, or offering a discount or exception that requires managerial approval. Unauthorized commitments create legal and financial exposure for the organization and may lead to customer disputes if the commitment cannot be honored. Identifying these instances early enables supervisors to intervene before expectations are set and to provide corrective coaching to the agent.",
+        types: ["customer-service", "sales"],
+        roles: ["agent"],
+      },
+      {
+        id: 12,
+        enabled: true,
+        name: "Competitor mention",
+        desc: "Any reference to a competing product, service, or organization made during a conversation, whether by the agent or the customer. While customer-initiated competitor comparisons are expected and can be handled constructively, agent-initiated mentions may represent a brand risk, suggest inadequate product knowledge, or indicate unauthorized comparison selling. In regulated industries, comparative claims about competitors may also carry legal implications. Tracking competitor mentions across conversations provides valuable intelligence for product, marketing, and training teams, and helps identify patterns where competitive pressure is influencing conversion rates or customer retention.",
+        types: ["sales", "customer-service"],
+        roles: ["agent", "customer"],
+      },
+      {
+        id: 13,
+        enabled: true,
+        name: "Dead air",
+        desc: "Extended periods of silence or unresponsiveness during an active conversation that exceed acceptable thresholds for the interaction type. Dead air may indicate that an agent is navigating complex systems without narrating their actions, has placed the caller on an unannounced hold, is experiencing technical difficulties, or is disengaged from the conversation. In customer-facing contexts, prolonged silence without acknowledgment significantly degrades the customer experience and increases the likelihood of call abandonment. This behavior is particularly relevant in voice-based interactions and should be evaluated alongside average handle time and customer satisfaction metrics.",
+        types: ["customer-service", "sales"],
+        roles: ["agent"],
+      },
     ];
 
-    var scopeIds = behaviors.map(function (b) {
-      return b.id;
-    });
+    var scopeIds = [0, 3, 5, 6];
 
     var listBody = document.getElementById("bw-list-body");
     var popover = document.getElementById("bw-popover");
@@ -513,24 +556,30 @@ permalink: /dashboard/behaviors/config-create/
     var addList = document.getElementById("bw-add-list");
     var addEmpty = document.getElementById("bw-add-empty");
     var scopeAddBtn = document.getElementById("bw-scope-add-btn");
+    var pendingIds = [];
 
     function refreshAddModal() {
       var q = addSearch.value.toLowerCase();
+      var available = behaviors.filter(function (b) {
+        return scopeIds.indexOf(b.id) === -1;
+      });
       var filtered = q
-        ? behaviors.filter(function (b) {
+        ? available.filter(function (b) {
             return b.name.toLowerCase().indexOf(q) !== -1;
           })
-        : behaviors;
+        : available;
       addList.innerHTML = "";
       addEmpty.hidden = filtered.length > 0;
       addList.hidden = filtered.length === 0;
       filtered.forEach(function (b) {
-        var isActive = scopeIds.indexOf(b.id) !== -1;
+        var isChecked = pendingIds.indexOf(b.id) !== -1;
+        var row = document.createElement("div");
+        row.className = "bw-add-item";
         var label = document.createElement("label");
-        label.className = "bw-add-item";
+        label.className = "bw-add-item-label";
         label.innerHTML =
           '<span class="m__checkbox"><input type="checkbox"' +
-          (isActive ? " checked" : "") +
+          (isChecked ? " checked" : "") +
           " />" +
           CHECK_SVG +
           "</span>" +
@@ -542,37 +591,40 @@ permalink: /dashboard/behaviors/config-create/
             ? '<span class="bw-add-item-desc">' + esc(b.desc) + "</span>"
             : "") +
           "</span>";
+        row.appendChild(label);
         label.querySelector("input").addEventListener("change", function (e) {
           if (e.target.checked) {
-            if (scopeIds.indexOf(b.id) === -1) scopeIds.push(b.id);
+            if (pendingIds.indexOf(b.id) === -1) pendingIds.push(b.id);
           } else {
-            scopeIds = scopeIds.filter(function (x) {
-              return x !== b.id;
-            });
+            pendingIds = pendingIds.filter(function (x) { return x !== b.id; });
           }
-          renderList();
         });
-        addList.appendChild(label);
+        addList.appendChild(row);
       });
     }
 
     scopeAddBtn.addEventListener("click", function () {
+      pendingIds = [];
       addSearch.value = "";
       refreshAddModal();
       window.M.openModal(addModal);
-      setTimeout(function () {
-        addSearch.focus();
-      }, 50);
+      setTimeout(function () { addSearch.focus(); }, 50);
     });
 
     addSearch.addEventListener("input", refreshAddModal);
 
-    document
-      .getElementById("bw-add-create-btn")
-      .addEventListener("click", function () {
-        window.M.closeModal(addModal);
-        window.M.openModal(document.getElementById("modal-behaviors-create"));
+    document.getElementById("bw-add-confirm-btn").addEventListener("click", function () {
+      pendingIds.forEach(function (id) {
+        if (scopeIds.indexOf(id) === -1) scopeIds.push(id);
       });
+      pendingIds = [];
+      window.M.closeModal(addModal);
+      renderList();
+    });
+
+    document.getElementById("bw-scope-create-btn").addEventListener("click", function () {
+      window.M.openModal(document.getElementById("modal-behaviors-create"));
+    });
 
     // ── Modal: create behavior ───────────────────────────────────────
     document
@@ -644,6 +696,9 @@ permalink: /dashboard/behaviors/config-create/
       });
 
     // ── Init ─────────────────────────────────────────────────────────
+    document.querySelectorAll(".bw-save-to-library-toggle").forEach(function (el) {
+      el.hidden = false;
+    });
     function updateTruncation() {
       listBody.querySelectorAll(".bw-tag-item-name").forEach(function (el) {
         el.classList.toggle("is-truncated", el.scrollWidth > el.clientWidth);

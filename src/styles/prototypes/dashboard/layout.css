@@ -430,6 +430,10 @@ table.config-details {
 
   &:first-child {
     max-width: 50%;
+
+    @media (max-width: 600px) {
+      max-width: 100%;
+    }
   }
 }
 
@@ -639,12 +643,15 @@ table.config-details {
 }
 
 .bw-add-item {
+}
+
+.bw-add-item-label {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
-  padding: 0.55rem 0.5rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--m__radius-m);
   cursor: pointer;
-  border-radius: var(--m__radius-l);
   transition: background-color var(--m__unhover-transition-duration)
     var(--m__transition-easing);
 
@@ -667,6 +674,9 @@ table.config-details {
 }
 
 .bw-add-item-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-medium);
   color: var(--m__text-color);
@@ -692,5 +702,33 @@ table.config-details {
   color: var(--m__text-caption-color);
   text-align: center;
   padding: 1rem 0;
+  margin: 0;
+}
+
+.bw-save-to-library-toggle[hidden] {
+  display: none;
+}
+
+.bw-field-label {
+  font-size: var(--m__font-size-s);
+  font-weight: 500;
+  color: var(--m__text-color);
+  margin: 0 0 0.3rem;
+}
+
+.bw-save-to-library-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  cursor: pointer;
+}
+
+.bw-save-to-library-top {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bw-save-to-library-row .m__modal__field-hint {
   margin: 0;
 }
