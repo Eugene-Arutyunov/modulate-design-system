@@ -396,6 +396,28 @@ table.config-details {
   gap: 0.375rem;
 }
 
+@media (max-width: 768px) {
+  .m__widget-header:has(.behaviors-toolbar-actions) {
+    flex-wrap: wrap;
+    padding-bottom: 0.75rem;
+
+    & .m__searchbar {
+      flex: 1 1 100%;
+    }
+
+    & .behaviors-toolbar-actions {
+      width: 100%;
+      padding: 0 var(--m__widget-padding);
+      box-sizing: border-box;
+
+      & > * {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  }
+}
+
 /* Config edit page — Behaviors widget title row */
 
 .config-behaviors-title-row {
@@ -596,6 +618,10 @@ table.config-details {
   margin: 0 calc(-1 * var(--m__widget-padding));
 }
 
+#bw-list table {
+  min-width: 36rem;
+}
+
 #bw-list th:nth-child(1),
 #bw-list td:nth-child(1) {
   padding-left: var(--m__widget-padding);
@@ -622,30 +648,39 @@ table.config-details {
 }
 
 #bw-list tbody tr [data-bw-delete] {
-  opacity: 0;
   color: var(--m__ui-error-color);
-  transition: opacity var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
 }
 
-#bw-list tbody tr:hover [data-bw-delete] {
-  opacity: 1;
-  transition-duration: var(--m__hover-transition-duration);
+@media (hover: hover) {
+  #bw-list tbody tr [data-bw-delete] {
+    opacity: 0;
+    transition: opacity var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+  }
+
+  #bw-list tbody tr:hover [data-bw-delete] {
+    opacity: 1;
+    transition-duration: var(--m__hover-transition-duration);
+  }
 }
 
 .bw-behavior-cell[data-bw-edit] {
   cursor: pointer;
+}
+
+#bw-list tbody tr td {
   transition: background-color var(--m__unhover-transition-duration)
     var(--m__transition-easing);
+}
 
-  &:hover {
-    background-color: color-mix(
-      in srgb,
-      var(--m__bg-hover-color) 5%,
-      transparent
-    );
-    transition-duration: var(--m__hover-transition-duration);
-  }
+#bw-list tbody tr td:not(:last-child):hover {
+  background-color: color-mix(in srgb, var(--m__bg-hover-color) 5%, transparent);
+  transition-duration: var(--m__hover-transition-duration);
+}
+
+#bw-list tbody tr:has(td:last-child:hover) td {
+  background-color: color-mix(in srgb, var(--m__bg-hover-color) 5%, transparent);
+  transition-duration: var(--m__hover-transition-duration);
 }
 
 #bw-matrix th:first-child,

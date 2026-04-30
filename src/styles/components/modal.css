@@ -151,15 +151,16 @@
 
 .m__modal__notice {
   background: var(--m__bg-surface-color);
-  border-radius: var(--m__radius-m);
-  padding: var(--m__control-inset-padding);
+  border-radius: var(--m__radius-l) var(--m__radius-l) 0 0;
+  padding: var(--m__modal-padding);
+  padding-bottom: calc(var(--m__modal-padding) + var(--m__radius-l));
   font-size: var(--m__font-size-s);
   color: var(--m__text-color);
   line-height: 1.45;
-  margin-bottom: var(--m__default-margin-bottom);
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  align-items: flex-start;
+  gap: 1.5rem;
+  order: -1;
 
   &[hidden] {
     display: none;
@@ -169,4 +170,22 @@
     margin: 0;
     flex: 1;
   }
+
+  & button {
+    align-self: center;
+    flex-shrink: 0;
+  }
+}
+
+.m__modal:has(.m__modal__notice:not([hidden])) .m__modal__footer [data-modal-close] {
+  display: none;
+}
+
+.m__modal:has(.m__modal__notice:not([hidden])) .m__modal__header {
+  position: relative;
+  z-index: 1;
+  background: var(--m__background-color);
+  border-radius: var(--m__radius-l) var(--m__radius-l) 0 0;
+  margin-top: calc(-1 * var(--m__radius-l));
+  padding-top: var(--m__modal-padding);
 }
