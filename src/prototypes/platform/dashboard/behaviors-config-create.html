@@ -44,10 +44,18 @@ permalink: /dashboard/behaviors/config-create/
         <div class="m__table-toolbar">
           <h2>Behaviors</h2>
           <div class="bw-toolbar-actions">
-            <button type="button" class="m__button-outline-compact" id="bw-scope-add-btn">
+            <button
+              type="button"
+              class="m__button-outline-compact"
+              id="bw-scope-add-btn"
+            >
               Add from Library
             </button>
-            <button type="button" class="m__button-compact" id="bw-scope-create-btn">
+            <button
+              type="button"
+              class="m__button-compact"
+              id="bw-scope-create-btn"
+            >
               Create new
             </button>
           </div>
@@ -72,7 +80,7 @@ permalink: /dashboard/behaviors/config-create/
       </div>
 
       <div class="config-form-actions">
-        <button type="button" class="m__button-compact">Save config</button>
+        <button type="button" class="m__button-compact">Save</button>
       </div>
 
       <div class="m__space XL"></div>
@@ -84,17 +92,12 @@ permalink: /dashboard/behaviors/config-create/
 {% include 'service/popover-behaviors.html' %} {% include
 'service/modal-behaviors-create.html' %} {% include
 'service/modal-conversation-type-create.html' %} {% include
-'service/modal-role-create.html' %}
-
-{% include 'service/modal-behaviors-add.html' %}
-
-{% include 'service/modal-behavior-delete.html' %}
-
-{% include 'service/modal-behaviors-edit.html' %}
-
-{% include 'service/modal-conversation-type-edit.html' %}
-
-{% include 'service/modal-role-edit.html' %}
+'service/modal-role-create.html' %} {% include
+'service/modal-behaviors-add.html' %} {% include
+'service/modal-behavior-delete.html' %} {% include
+'service/modal-behaviors-edit.html' %} {% include
+'service/modal-conversation-type-edit.html' %} {% include
+'service/modal-role-edit.html' %}
 
 <style>
   .bw-toolbar-actions {
@@ -313,7 +316,9 @@ permalink: /dashboard/behaviors/config-create/
     var popoverState = { bId: null, field: null, activeBtn: null };
     var scrollHandler = null;
 
-    function preventScroll(e) { e.preventDefault(); }
+    function preventScroll(e) {
+      e.preventDefault();
+    }
 
     // ── Helpers ─────────────────────────────────────────────────────
     function esc(s) {
@@ -349,7 +354,9 @@ permalink: /dashboard/behaviors/config-create/
         .forEach(function (b) {
           var tr = document.createElement("tr");
           tr.innerHTML =
-            '<td class="bw-behavior-cell" data-bw-edit="' + b.id + '">' +
+            '<td class="bw-behavior-cell" data-bw-edit="' +
+            b.id +
+            '">' +
             '<div class="bw-behavior-name">' +
             esc(b.name) +
             "</div>" +
@@ -391,7 +398,8 @@ permalink: /dashboard/behaviors/config-create/
           if (e.target.closest("[data-bw-remove]")) return;
           e.stopPropagation();
           var nameSpan = tag.querySelector("[data-bw-tag-edit]");
-          if (nameSpan) nameSpan.dispatchEvent(new MouseEvent("click", { bubbles: false }));
+          if (nameSpan)
+            nameSpan.dispatchEvent(new MouseEvent("click", { bubbles: false }));
         });
       });
 
@@ -414,8 +422,12 @@ permalink: /dashboard/behaviors/config-create/
           var b = findB(id);
           pendingDeleteId = id;
           document.getElementById("modal-bw-delete-confirm-text").innerHTML =
-            "<strong>" + esc(b ? b.name : "This behavior") + "</strong> will be removed from this detection profile only. It will remain available in other detection profiles.";
-          window.M.openModal(document.getElementById("modal-bw-delete-confirm"));
+            "<strong>" +
+            esc(b ? b.name : "This behavior") +
+            "</strong> will be removed from this detection profile only. It will remain available in other detection profiles.";
+          window.M.openModal(
+            document.getElementById("modal-bw-delete-confirm"),
+          );
         });
       });
 
@@ -427,12 +439,15 @@ permalink: /dashboard/behaviors/config-create/
           if (!b) return;
           pendingEditId = id;
           document.getElementById("behavior-edit-name").value = b.name;
-          document.getElementById("behavior-edit-description").value = b.desc || "";
+          document.getElementById("behavior-edit-description").value =
+            b.desc || "";
           var isLibrary = !!b.library;
           document.getElementById("behavior-edit-notice").hidden = !isLibrary;
           document.getElementById("behavior-edit-name").disabled = isLibrary;
-          document.getElementById("behavior-edit-description").disabled = isLibrary;
-          document.getElementById("behavior-edit-save-btn").textContent = isLibrary ? "Done" : "Save";
+          document.getElementById("behavior-edit-description").disabled =
+            isLibrary;
+          document.getElementById("behavior-edit-save-btn").textContent =
+            isLibrary ? "Done" : "Save";
           window.M.openModal(document.getElementById("modal-behaviors-edit"));
         });
       });
@@ -443,26 +458,46 @@ permalink: /dashboard/behaviors/config-create/
           var itemId = span.dataset.bwTagEdit;
           var field = span.dataset.bwTagField;
           var items = field === "types" ? TYPES : ROLES;
-          var item = items.find(function (x) { return x.id === itemId; });
+          var item = items.find(function (x) {
+            return x.id === itemId;
+          });
           if (!item) return;
-          pendingEditTag = { id: itemId, field: field, bId: parseInt(span.dataset.bwBehaviorId) };
+          pendingEditTag = {
+            id: itemId,
+            field: field,
+            bId: parseInt(span.dataset.bwBehaviorId),
+          };
           if (field === "types") {
-            document.getElementById("conversation-type-edit-name").value = item.name;
-            document.getElementById("conversation-type-edit-description").value = item.desc || "";
+            document.getElementById("conversation-type-edit-name").value =
+              item.name;
+            document.getElementById(
+              "conversation-type-edit-description",
+            ).value = item.desc || "";
             var isLibraryType = !!item.library;
-            document.getElementById("conversation-type-edit-notice").hidden = !isLibraryType;
-            document.getElementById("conversation-type-edit-name").disabled = isLibraryType;
-            document.getElementById("conversation-type-edit-description").disabled = isLibraryType;
-            document.getElementById("conversation-type-edit-save-btn").textContent = isLibraryType ? "Done" : "Save";
-            window.M.openModal(document.getElementById("modal-conversation-type-edit"));
+            document.getElementById("conversation-type-edit-notice").hidden =
+              !isLibraryType;
+            document.getElementById("conversation-type-edit-name").disabled =
+              isLibraryType;
+            document.getElementById(
+              "conversation-type-edit-description",
+            ).disabled = isLibraryType;
+            document.getElementById(
+              "conversation-type-edit-save-btn",
+            ).textContent = isLibraryType ? "Done" : "Save";
+            window.M.openModal(
+              document.getElementById("modal-conversation-type-edit"),
+            );
           } else {
             document.getElementById("role-edit-name").value = item.name;
-            document.getElementById("role-edit-description").value = item.desc || "";
+            document.getElementById("role-edit-description").value =
+              item.desc || "";
             var isLibraryRole = !!item.library;
             document.getElementById("role-edit-notice").hidden = !isLibraryRole;
             document.getElementById("role-edit-name").disabled = isLibraryRole;
-            document.getElementById("role-edit-description").disabled = isLibraryRole;
-            document.getElementById("role-edit-save-btn").textContent = isLibraryRole ? "Done" : "Save";
+            document.getElementById("role-edit-description").disabled =
+              isLibraryRole;
+            document.getElementById("role-edit-save-btn").textContent =
+              isLibraryRole ? "Done" : "Save";
             window.M.openModal(document.getElementById("modal-role-edit"));
           }
         });
@@ -484,7 +519,15 @@ permalink: /dashboard/behaviors/config-create/
           '<span class="m__tag bw-tag-item" data-tooltip="' +
           esc(item.desc || "") +
           '">' +
-          '<span class="bw-tag-item-name" data-bw-tag-edit="' + id + '" data-bw-tag-field="' + field + '" data-bw-behavior-id="' + b.id + '">' + esc(item.name) + '</span>' +
+          '<span class="bw-tag-item-name" data-bw-tag-edit="' +
+          id +
+          '" data-bw-tag-field="' +
+          field +
+          '" data-bw-behavior-id="' +
+          b.id +
+          '">' +
+          esc(item.name) +
+          "</span>" +
           '<button type="button" class="bw-tag-x"' +
           ' data-bw-remove="' +
           field +
@@ -643,14 +686,20 @@ permalink: /dashboard/behaviors/config-create/
     var pendingDuplicateTagField = null;
     var pendingDuplicateBId = null;
 
-    document.getElementById("modal-bw-delete-confirm-btn").addEventListener("click", function () {
-      if (pendingDeleteId !== null) {
-        scopeIds = scopeIds.filter(function (x) { return x !== pendingDeleteId; });
-        pendingDeleteId = null;
-        window.M.closeModal(document.getElementById("modal-bw-delete-confirm"));
-        renderList();
-      }
-    });
+    document
+      .getElementById("modal-bw-delete-confirm-btn")
+      .addEventListener("click", function () {
+        if (pendingDeleteId !== null) {
+          scopeIds = scopeIds.filter(function (x) {
+            return x !== pendingDeleteId;
+          });
+          pendingDeleteId = null;
+          window.M.closeModal(
+            document.getElementById("modal-bw-delete-confirm"),
+          );
+          renderList();
+        }
+      });
 
     popoverNew.addEventListener("click", function () {
       var field = popoverState.field;
@@ -709,7 +758,9 @@ permalink: /dashboard/behaviors/config-create/
           if (e.target.checked) {
             if (pendingIds.indexOf(b.id) === -1) pendingIds.push(b.id);
           } else {
-            pendingIds = pendingIds.filter(function (x) { return x !== b.id; });
+            pendingIds = pendingIds.filter(function (x) {
+              return x !== b.id;
+            });
           }
         });
         addList.appendChild(row);
@@ -721,23 +772,29 @@ permalink: /dashboard/behaviors/config-create/
       addSearch.value = "";
       refreshAddModal();
       window.M.openModal(addModal);
-      setTimeout(function () { addSearch.focus(); }, 50);
+      setTimeout(function () {
+        addSearch.focus();
+      }, 50);
     });
 
     addSearch.addEventListener("input", refreshAddModal);
 
-    document.getElementById("bw-add-confirm-btn").addEventListener("click", function () {
-      pendingIds.forEach(function (id) {
-        if (scopeIds.indexOf(id) === -1) scopeIds.push(id);
+    document
+      .getElementById("bw-add-confirm-btn")
+      .addEventListener("click", function () {
+        pendingIds.forEach(function (id) {
+          if (scopeIds.indexOf(id) === -1) scopeIds.push(id);
+        });
+        pendingIds = [];
+        window.M.closeModal(addModal);
+        renderList();
       });
-      pendingIds = [];
-      window.M.closeModal(addModal);
-      renderList();
-    });
 
-    document.getElementById("bw-scope-create-btn").addEventListener("click", function () {
-      window.M.openModal(document.getElementById("modal-behaviors-create"));
-    });
+    document
+      .getElementById("bw-scope-create-btn")
+      .addEventListener("click", function () {
+        window.M.openModal(document.getElementById("modal-behaviors-create"));
+      });
 
     // ── Modal: create behavior ───────────────────────────────────────
     document
@@ -748,7 +805,8 @@ permalink: /dashboard/behaviors/config-create/
         var desc = document.getElementById("behavior-description").value.trim();
         if (!name) return;
         var newId = Date.now();
-        var orig = pendingDuplicateId !== null ? findB(pendingDuplicateId) : null;
+        var orig =
+          pendingDuplicateId !== null ? findB(pendingDuplicateId) : null;
         behaviors.push({
           id: newId,
           name: name,
@@ -836,16 +894,29 @@ permalink: /dashboard/behaviors/config-create/
         if (!pendingEditTag || pendingEditTag.field !== "types") return;
         if (document.getElementById("conversation-type-edit-name").disabled) {
           pendingEditTag = null;
-          window.M.closeModal(document.getElementById("modal-conversation-type-edit"));
+          window.M.closeModal(
+            document.getElementById("modal-conversation-type-edit"),
+          );
           return;
         }
-        var name = document.getElementById("conversation-type-edit-name").value.trim();
-        var desc = document.getElementById("conversation-type-edit-description").value.trim();
+        var name = document
+          .getElementById("conversation-type-edit-name")
+          .value.trim();
+        var desc = document
+          .getElementById("conversation-type-edit-description")
+          .value.trim();
         if (!name) return;
-        var item = TYPES.find(function (x) { return x.id === pendingEditTag.id; });
-        if (item) { item.name = name; item.desc = desc; }
+        var item = TYPES.find(function (x) {
+          return x.id === pendingEditTag.id;
+        });
+        if (item) {
+          item.name = name;
+          item.desc = desc;
+        }
         pendingEditTag = null;
-        window.M.closeModal(document.getElementById("modal-conversation-type-edit"));
+        window.M.closeModal(
+          document.getElementById("modal-conversation-type-edit"),
+        );
         renderList();
       });
 
@@ -861,10 +932,17 @@ permalink: /dashboard/behaviors/config-create/
           return;
         }
         var name = document.getElementById("role-edit-name").value.trim();
-        var desc = document.getElementById("role-edit-description").value.trim();
+        var desc = document
+          .getElementById("role-edit-description")
+          .value.trim();
         if (!name) return;
-        var item = ROLES.find(function (x) { return x.id === pendingEditTag.id; });
-        if (item) { item.name = name; item.desc = desc; }
+        var item = ROLES.find(function (x) {
+          return x.id === pendingEditTag.id;
+        });
+        if (item) {
+          item.name = name;
+          item.desc = desc;
+        }
         pendingEditTag = null;
         window.M.closeModal(document.getElementById("modal-role-edit"));
         renderList();
@@ -882,7 +960,9 @@ permalink: /dashboard/behaviors/config-create/
           return;
         }
         var name = document.getElementById("behavior-edit-name").value.trim();
-        var desc = document.getElementById("behavior-edit-description").value.trim();
+        var desc = document
+          .getElementById("behavior-edit-description")
+          .value.trim();
         if (!name) return;
         var b = findB(pendingEditId);
         if (b) {
@@ -895,52 +975,68 @@ permalink: /dashboard/behaviors/config-create/
       });
 
     // ── Duplicate handlers ───────────────────────────────────────────
-    document.getElementById("behavior-edit-duplicate-btn").addEventListener("click", function () {
-      if (pendingEditId === null) return;
-      var b = findB(pendingEditId);
-      if (!b) return;
-      pendingDuplicateId = pendingEditId;
-      pendingEditId = null;
-      window.M.closeModal(document.getElementById("modal-behaviors-edit"));
-      document.getElementById("behavior-name").value = b.name;
-      document.getElementById("behavior-description").value = b.desc || "";
-      window.M.openModal(document.getElementById("modal-behaviors-create"));
-    });
+    document
+      .getElementById("behavior-edit-duplicate-btn")
+      .addEventListener("click", function () {
+        if (pendingEditId === null) return;
+        var b = findB(pendingEditId);
+        if (!b) return;
+        pendingDuplicateId = pendingEditId;
+        pendingEditId = null;
+        window.M.closeModal(document.getElementById("modal-behaviors-edit"));
+        document.getElementById("behavior-name").value = b.name;
+        document.getElementById("behavior-description").value = b.desc || "";
+        window.M.openModal(document.getElementById("modal-behaviors-create"));
+      });
 
-    document.getElementById("conversation-type-edit-duplicate-btn").addEventListener("click", function () {
-      if (!pendingEditTag || pendingEditTag.field !== "types") return;
-      var item = TYPES.find(function (x) { return x.id === pendingEditTag.id; });
-      if (!item) return;
-      pendingDuplicateTagId = pendingEditTag.id;
-      pendingDuplicateTagField = "types";
-      pendingDuplicateBId = pendingEditTag.bId;
-      pendingEditTag = null;
-      window.M.closeModal(document.getElementById("modal-conversation-type-edit"));
-      document.getElementById("conversation-type-name").value = item.name;
-      var ta = document.getElementById("conversation-type-description");
-      if (ta) ta.value = item.desc || "";
-      window.M.openModal(document.getElementById("modal-conversation-type-create"));
-    });
+    document
+      .getElementById("conversation-type-edit-duplicate-btn")
+      .addEventListener("click", function () {
+        if (!pendingEditTag || pendingEditTag.field !== "types") return;
+        var item = TYPES.find(function (x) {
+          return x.id === pendingEditTag.id;
+        });
+        if (!item) return;
+        pendingDuplicateTagId = pendingEditTag.id;
+        pendingDuplicateTagField = "types";
+        pendingDuplicateBId = pendingEditTag.bId;
+        pendingEditTag = null;
+        window.M.closeModal(
+          document.getElementById("modal-conversation-type-edit"),
+        );
+        document.getElementById("conversation-type-name").value = item.name;
+        var ta = document.getElementById("conversation-type-description");
+        if (ta) ta.value = item.desc || "";
+        window.M.openModal(
+          document.getElementById("modal-conversation-type-create"),
+        );
+      });
 
-    document.getElementById("role-edit-duplicate-btn").addEventListener("click", function () {
-      if (!pendingEditTag || pendingEditTag.field !== "roles") return;
-      var item = ROLES.find(function (x) { return x.id === pendingEditTag.id; });
-      if (!item) return;
-      pendingDuplicateTagId = pendingEditTag.id;
-      pendingDuplicateTagField = "roles";
-      pendingDuplicateBId = pendingEditTag.bId;
-      pendingEditTag = null;
-      window.M.closeModal(document.getElementById("modal-role-edit"));
-      document.getElementById("role-name").value = item.name;
-      var ta = document.getElementById("role-description");
-      if (ta) ta.value = item.desc || "";
-      window.M.openModal(document.getElementById("modal-role-create"));
-    });
+    document
+      .getElementById("role-edit-duplicate-btn")
+      .addEventListener("click", function () {
+        if (!pendingEditTag || pendingEditTag.field !== "roles") return;
+        var item = ROLES.find(function (x) {
+          return x.id === pendingEditTag.id;
+        });
+        if (!item) return;
+        pendingDuplicateTagId = pendingEditTag.id;
+        pendingDuplicateTagField = "roles";
+        pendingDuplicateBId = pendingEditTag.bId;
+        pendingEditTag = null;
+        window.M.closeModal(document.getElementById("modal-role-edit"));
+        document.getElementById("role-name").value = item.name;
+        var ta = document.getElementById("role-description");
+        if (ta) ta.value = item.desc || "";
+        window.M.openModal(document.getElementById("modal-role-create"));
+      });
 
     // ── Init ─────────────────────────────────────────────────────────
-    document.querySelectorAll(".bw-save-to-library-toggle").forEach(function (el) {
-      el.hidden = false;
-    });
+    document
+      .querySelectorAll(".bw-save-to-library-toggle")
+      .forEach(function (el) {
+        el.hidden = false;
+      });
     function updateTruncation() {
       listBody.querySelectorAll(".bw-tag-item-name").forEach(function (el) {
         el.classList.toggle("is-truncated", el.scrollWidth > el.clientWidth);
