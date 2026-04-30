@@ -380,8 +380,18 @@ permalink: /dashboard/behaviors/config-create/
       listBody.querySelectorAll("td[data-bw-add]").forEach(function (td) {
         td.addEventListener("click", function (e) {
           if (e.target.closest("[data-bw-remove]")) return;
+          if (e.target.closest(".bw-tag-item")) return;
           e.stopPropagation();
           openPopover(parseInt(td.dataset.bwId), td.dataset.bwAdd, td);
+        });
+      });
+
+      listBody.querySelectorAll(".bw-tag-item").forEach(function (tag) {
+        tag.addEventListener("click", function (e) {
+          if (e.target.closest("[data-bw-remove]")) return;
+          e.stopPropagation();
+          var nameSpan = tag.querySelector("[data-bw-tag-edit]");
+          if (nameSpan) nameSpan.dispatchEvent(new MouseEvent("click", { bubbles: false }));
         });
       });
 
