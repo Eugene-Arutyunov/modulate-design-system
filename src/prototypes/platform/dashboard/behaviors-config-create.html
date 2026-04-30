@@ -43,7 +43,7 @@ permalink: /dashboard/behaviors/config-create/
       <div class="m__widget">
         <div class="m__table-toolbar">
           <h2>Behaviors</h2>
-          <div style="display:flex;gap:0.5rem">
+          <div class="bw-toolbar-actions">
             <button type="button" class="m__button-outline-compact" id="bw-scope-add-btn">
               Add from Library
             </button>
@@ -95,6 +95,26 @@ permalink: /dashboard/behaviors/config-create/
 {% include 'service/modal-conversation-type-edit.html' %}
 
 {% include 'service/modal-role-edit.html' %}
+
+<style>
+  .bw-toolbar-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  @media (max-width: 768px) {
+    .m__table-toolbar {
+      flex-wrap: wrap;
+    }
+    .bw-toolbar-actions {
+      width: 100%;
+    }
+    .bw-toolbar-actions .m__button-outline-compact,
+    .bw-toolbar-actions .m__button-compact {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+</style>
 
 <script>
   (function () {
