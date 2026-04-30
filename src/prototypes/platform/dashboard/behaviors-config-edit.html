@@ -1,5 +1,5 @@
 ---
-pageTitle: Edit Configuration
+pageTitle: Edit Detection Profile
 permalink: /dashboard/behaviors/config-edit/
 ---
 
@@ -17,10 +17,10 @@ permalink: /dashboard/behaviors/config-edit/
         <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
           <use href="#chevron-left"></use>
         </svg>
-        Configurations
+        Detection Profiles
       </a>
       <div class="m__space XS"></div>
-      <h1 class="dashboard-page-title">Edit configuration</h1>
+      <h1 class="dashboard-page-title">Edit detection profile</h1>
 
       <div class="config-fields">
         <div class="config-field">
@@ -384,7 +384,7 @@ permalink: /dashboard/behaviors/config-edit/
           var b = findB(id);
           pendingDeleteId = id;
           document.getElementById("modal-bw-delete-confirm-text").innerHTML =
-            "<strong>" + esc(b ? b.name : "This behavior") + "</strong> will be removed from this configuration only. It will remain available in other configurations.";
+            "<strong>" + esc(b ? b.name : "This behavior") + "</strong> will be removed from this detection profile only. It will remain available in other detection profiles.";
           window.M.openModal(document.getElementById("modal-bw-delete-confirm"));
         });
       });
@@ -415,7 +415,7 @@ permalink: /dashboard/behaviors/config-edit/
           var items = field === "types" ? TYPES : ROLES;
           var item = items.find(function (x) { return x.id === itemId; });
           if (!item) return;
-          pendingEditTag = { id: itemId, field: field };
+          pendingEditTag = { id: itemId, field: field, bId: parseInt(span.dataset.bwBehaviorId) };
           if (field === "types") {
             document.getElementById("conversation-type-edit-name").value = item.name;
             document.getElementById("conversation-type-edit-description").value = item.desc || "";
@@ -454,7 +454,7 @@ permalink: /dashboard/behaviors/config-edit/
           '<span class="m__tag bw-tag-item" data-tooltip="' +
           esc(item.desc || "") +
           '">' +
-          '<span class="bw-tag-item-name" data-bw-tag-edit="' + id + '" data-bw-tag-field="' + field + '">' + esc(item.name) + '</span>' +
+          '<span class="bw-tag-item-name" data-bw-tag-edit="' + id + '" data-bw-tag-field="' + field + '" data-bw-behavior-id="' + b.id + '">' + esc(item.name) + '</span>' +
           '<button type="button" class="bw-tag-x"' +
           ' data-bw-remove="' +
           field +
@@ -611,6 +611,7 @@ permalink: /dashboard/behaviors/config-edit/
     var pendingDuplicateId = null;
     var pendingDuplicateTagId = null;
     var pendingDuplicateTagField = null;
+    var pendingDuplicateBId = null;
 
     document.getElementById("modal-bw-delete-confirm-btn").addEventListener("click", function () {
       if (pendingDeleteId !== null) {
@@ -726,7 +727,7 @@ permalink: /dashboard/behaviors/config-edit/
           roles: orig ? orig.roles.slice() : [],
         });
         if (pendingDuplicateId !== null) {
-          scopeIds = scopeIds.map(function (x) { return x === pendingDuplicateId ? newId : x; });
+          scopeIds.push(newId);
           pendingDuplicateId = null;
         } else {
           scopeIds.push(newId);
@@ -751,11 +752,11 @@ permalink: /dashboard/behaviors/config-edit/
         var newId = "custom-" + Date.now();
         TYPES.push({ id: newId, name: name, desc: desc });
         if (pendingDuplicateTagField === "types" && pendingDuplicateTagId) {
-          behaviors.filter(function (b) { return scopeIds.indexOf(b.id) !== -1; }).forEach(function (b) {
-            b.types = b.types.map(function (t) { return t === pendingDuplicateTagId ? newId : t; });
-          });
+          var dupB = findB(pendingDuplicateBId);
+          if (dupB && dupB.types.indexOf(newId) === -1) dupB.types.push(newId);
           pendingDuplicateTagId = null;
           pendingDuplicateTagField = null;
+          pendingDuplicateBId = null;
         } else if (pendingAdd && pendingAdd.field === "types") {
           var b = findB(pendingAdd.bId);
           if (b && b.types.indexOf(newId) === -1) b.types.push(newId);
@@ -781,11 +782,11 @@ permalink: /dashboard/behaviors/config-edit/
         var newId = "custom-" + Date.now();
         ROLES.push({ id: newId, name: name, desc: desc });
         if (pendingDuplicateTagField === "roles" && pendingDuplicateTagId) {
-          behaviors.filter(function (b) { return scopeIds.indexOf(b.id) !== -1; }).forEach(function (b) {
-            b.roles = b.roles.map(function (r) { return r === pendingDuplicateTagId ? newId : r; });
-          });
+          var dupB = findB(pendingDuplicateBId);
+          if (dupB && dupB.roles.indexOf(newId) === -1) dupB.roles.push(newId);
           pendingDuplicateTagId = null;
           pendingDuplicateTagField = null;
+          pendingDuplicateBId = null;
         } else if (pendingAdd && pendingAdd.field === "roles") {
           var b = findB(pendingAdd.bId);
           if (b && b.roles.indexOf(newId) === -1) b.roles.push(newId);
@@ -882,6 +883,7 @@ permalink: /dashboard/behaviors/config-edit/
       if (!item) return;
       pendingDuplicateTagId = pendingEditTag.id;
       pendingDuplicateTagField = "types";
+      pendingDuplicateBId = pendingEditTag.bId;
       pendingEditTag = null;
       window.M.closeModal(document.getElementById("modal-conversation-type-edit"));
       document.getElementById("conversation-type-name").value = item.name;
@@ -896,6 +898,7 @@ permalink: /dashboard/behaviors/config-edit/
       if (!item) return;
       pendingDuplicateTagId = pendingEditTag.id;
       pendingDuplicateTagField = "roles";
+      pendingDuplicateBId = pendingEditTag.bId;
       pendingEditTag = null;
       window.M.closeModal(document.getElementById("modal-role-edit"));
       document.getElementById("role-name").value = item.name;
