@@ -1,11 +1,10 @@
 {% from 'service/modal-wrapper.njk' import modal %} {% call
 modal("modal-behaviors-edit", "Edit Behavior") %}
+<div class="m__modal__notice" id="behavior-edit-notice" hidden>
+  <p>This behavior is from the library. To edit it for this detection profile only, create a duplicate.</p>
+  <button type="button" class="m__button-outline-compact" id="behavior-edit-duplicate-btn">Duplicate</button>
+</div>
 <div class="m__modal__body">
-  <div class="m__modal__notice" id="behavior-edit-notice" hidden>
-    <p>This behavior is from the library. To edit it for this detection profile only, create a duplicate.</p>
-    <button type="button" class="m__button-outline-compact" id="behavior-edit-duplicate-btn">Duplicate</button>
-  </div>
-
   <div class="m__textfield">
     <label for="behavior-edit-name">Name</label>
     <input type="text" id="behavior-edit-name" placeholder="" value="Mysoginy" />
