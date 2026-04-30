@@ -635,17 +635,21 @@ table.config-details {
 
 .bw-behavior-cell[data-bw-edit] {
   cursor: pointer;
+}
+
+#bw-list tbody tr td {
   transition: background-color var(--m__unhover-transition-duration)
     var(--m__transition-easing);
+}
 
-  &:hover {
-    background-color: color-mix(
-      in srgb,
-      var(--m__bg-hover-color) 5%,
-      transparent
-    );
-    transition-duration: var(--m__hover-transition-duration);
-  }
+#bw-list tbody tr td:not(:last-child):hover {
+  background-color: color-mix(in srgb, var(--m__bg-hover-color) 5%, transparent);
+  transition-duration: var(--m__hover-transition-duration);
+}
+
+#bw-list tbody tr:has(td:last-child:hover) td {
+  background-color: color-mix(in srgb, var(--m__bg-hover-color) 5%, transparent);
+  transition-duration: var(--m__hover-transition-duration);
 }
 
 #bw-matrix th:first-child,
