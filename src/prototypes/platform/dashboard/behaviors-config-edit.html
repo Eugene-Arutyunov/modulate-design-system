@@ -730,6 +730,7 @@ permalink: /dashboard/behaviors/detection-package-edit/
     });
 
     document.getElementById("bw-scope-create-btn").addEventListener("click", function () {
+      if (window.bwTplReset) window.bwTplReset();
       window.M.openModal(document.getElementById("modal-behaviors-create"));
     });
 
@@ -896,8 +897,7 @@ permalink: /dashboard/behaviors/detection-package-edit/
       pendingDuplicateId = pendingEditId;
       pendingEditId = null;
       window.M.closeModal(document.getElementById("modal-behaviors-edit"));
-      document.getElementById("behavior-name").value = b.name;
-      document.getElementById("behavior-description").value = b.desc || "";
+      if (window.bwTplReset) window.bwTplReset();
       window.M.openModal(document.getElementById("modal-behaviors-create"));
     });
 
