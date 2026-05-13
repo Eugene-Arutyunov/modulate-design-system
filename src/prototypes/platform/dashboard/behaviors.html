@@ -21,7 +21,7 @@ permalink: /dashboard/behaviors/
             value="configurations"
             checked
           />
-          Detection Profiles
+          Detection Packages
         </label>
         <label>
           <input type="radio" name="behaviors-tabs" value="behaviors" />
@@ -43,8 +43,8 @@ permalink: /dashboard/behaviors/
         class="dashboard-section behaviors-tab-content"
         data-tab="configurations"
       >
-        <h1 class="dashboard-page-title">Detection Profiles</h1>
-        <p>A detection profile defines what to look for in a call — a named, reusable set of behaviors scoped to specific conversation types and participant roles. The default profile is applied to all API calls that don't specify one explicitly. Modulate-provided profiles are read-only — duplicate one to create an editable version you can customize and set as default.</p>
+        <h1 class="dashboard-page-title">Detection Packages</h1>
+        <p>A detection package defines what to look for in a call — a named, reusable set of behaviors scoped to specific conversation types and participant roles. The default package is applied to all API calls that don't specify one explicitly. Modulate-provided packages are read-only — duplicate one to create an editable version you can customize and set as default.</p>
 
         <div class="m__space XS"></div>
 
@@ -57,7 +57,7 @@ permalink: /dashboard/behaviors/
         hidden
       >
         <h1 class="dashboard-page-title">Behaviors</h1>
-        <p>A library of behaviors available for use across detection profiles.</p>
+        <p>A library of behaviors available for use across detection packages.</p>
 
         <div class="m__space XS"></div>
 
@@ -70,7 +70,7 @@ permalink: /dashboard/behaviors/
         hidden
       >
         <h1 class="dashboard-page-title">Conversation Types</h1>
-        <p>A library of conversation types available for use across detection profiles.</p>
+        <p>A library of conversation types available for use across detection packages.</p>
 
         <div class="m__space XS"></div>
 
@@ -83,7 +83,7 @@ permalink: /dashboard/behaviors/
         hidden
       >
         <h1 class="dashboard-page-title">Roles</h1>
-        <p>A library of participant roles available for use across detection profiles.</p>
+        <p>A library of participant roles available for use across detection packages.</p>
 
         <div class="m__space XS"></div>
 
@@ -125,36 +125,44 @@ permalink: /dashboard/behaviors/
   var createRoleModal = document.getElementById("modal-role-create");
   var editRoleModal = document.getElementById("modal-role-edit");
 
+
+
   function getActiveTab() {
     var checked = document.querySelector('[name="behaviors-tabs"]:checked');
     return checked ? checked.value : "configurations";
   }
 
   document.addEventListener("click", function (e) {
-      if (e.target.closest("[data-behaviors-delete]")) {
-        window.M.openModal(deleteBehaviorsModal);
+    if (e.target.closest("[data-behaviors-delete]")) {
+      window.M.openModal(deleteBehaviorsModal);
+    }
+
+
+    if (e.target.closest("[data-behaviors-create]")) {
+      var tab = getActiveTab();
+      if (tab === "conversation-types") {
+        window.M.openModal(createConversationTypeModal);
+      } else if (tab === "roles") {
+        window.M.openModal(createRoleModal);
+      } else {
+        if (window.bwTplReset) window.bwTplReset();
+        window.M.openModal(createBehaviorModal);
       }
-      if (e.target.closest("[data-behaviors-create]")) {
-        var tab = getActiveTab();
-        if (tab === "conversation-types") {
-          window.M.openModal(createConversationTypeModal);
-        } else if (tab === "roles") {
-          window.M.openModal(createRoleModal);
-        } else {
-          window.M.openModal(createBehaviorModal);
-        }
+    }
+
+    if (e.target.closest("[data-behaviors-edit]")) {
+      var tab = getActiveTab();
+      if (tab === "conversation-types") {
+        window.M.openModal(editConversationTypeModal);
+      } else if (tab === "roles") {
+        window.M.openModal(editRoleModal);
+      } else {
+        window.M.openModal(editBehaviorModal);
       }
-      if (e.target.closest("[data-behaviors-edit]")) {
-        var tab = getActiveTab();
-        if (tab === "conversation-types") {
-          window.M.openModal(editConversationTypeModal);
-        } else if (tab === "roles") {
-          window.M.openModal(editRoleModal);
-        } else {
-          window.M.openModal(editBehaviorModal);
-        }
-      }
-    });
+    }
+
+  });
+
 </script>
 
 <script src="/assets/prototypes/action-menu.js"></script>
