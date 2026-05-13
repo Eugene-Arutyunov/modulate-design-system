@@ -689,7 +689,14 @@ table.config-details {
     var(--m__bg-hover-color) 5%,
     transparent
   );
+  outline: 1px solid color-mix(in srgb, var(--m__text-color) 20%, transparent);
+  outline-offset: -1px;
   transition-duration: var(--m__hover-transition-duration);
+}
+
+#bw-list tbody tr:not(.bw-empty-row):has(td:last-child:hover) {
+  outline: 1px solid color-mix(in srgb, var(--m__text-color) 20%, transparent);
+  outline-offset: -1px;
 }
 
 #bw-list tbody tr:not(.bw-empty-row):has(td:last-child:hover) td {
