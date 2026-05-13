@@ -683,7 +683,7 @@ table.config-details {
     var(--m__transition-easing);
 }
 
-#bw-list tbody tr td:not(:last-child):hover {
+#bw-list tbody tr:not(.bw-empty-row) td:not(:last-child):hover {
   background-color: color-mix(
     in srgb,
     var(--m__bg-hover-color) 5%,
@@ -692,13 +692,26 @@ table.config-details {
   transition-duration: var(--m__hover-transition-duration);
 }
 
-#bw-list tbody tr:has(td:last-child:hover) td {
+#bw-list tbody tr:not(.bw-empty-row):has(td:last-child:hover) td {
   background-color: color-mix(
     in srgb,
     var(--m__bg-hover-color) 5%,
     transparent
   );
   transition-duration: var(--m__hover-transition-duration);
+}
+
+#bw-list .bw-empty-row td {
+  height: 14rem;
+  vertical-align: middle;
+}
+
+#bw-list .bw-empty-row .m__table-empty {
+  padding-block: 0;
+}
+
+#bw-list .bw-empty-row .m__table-empty p {
+  font-size: var(--m__font-size-xs);
 }
 
 #bw-matrix th:first-child,
@@ -812,7 +825,6 @@ table.config-details {
 
 /* === Inline template dropdown === */
 
-
 .bw-prompt-header {
   display: flex;
   align-items: baseline;
@@ -867,7 +879,8 @@ table.config-details {
   color: var(--m__text-caption-color);
   cursor: pointer;
   text-align: left;
-  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
 
   &:hover {
     color: var(--m__text-hover-color);
@@ -878,7 +891,11 @@ table.config-details {
   &[aria-expanded="true"] {
     outline: 1px solid var(--m__text-hover-color);
     outline-offset: -1px;
-    background-color: color-mix(in srgb, var(--m__bg-hover-color) 8%, transparent);
+    background-color: color-mix(
+      in srgb,
+      var(--m__bg-hover-color) 8%,
+      transparent
+    );
     color: var(--m__text-hover-color);
   }
 
@@ -909,7 +926,8 @@ table.config-details {
   color: var(--m__text-caption-color);
   white-space: nowrap;
   flex-shrink: 0;
-  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
 
   &::after {
     content: ":";
@@ -959,7 +977,8 @@ table.config-details {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: background-color var(--m__unhover-transition-duration)
+    var(--m__transition-easing);
 
   &:hover {
     background-color: var(--m__bg-surface-color);
@@ -970,7 +989,6 @@ table.config-details {
     color: var(--m__text-link-color);
   }
 }
-
 
 .bw-tpl-empty {
   margin: 0;
