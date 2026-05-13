@@ -1,6 +1,21 @@
 {% from 'service/modal-wrapper.njk' import modal %} {% call
 modal("modal-behaviors-create", "Create Behavior") %}
 <div class="m__modal__body">
+  <div class="bw-template-selector">
+    <p class="bw-field-label">Start from template <span class="bw-template-selector-optional">· optional</span></p>
+    <div class="bw-tpl-wrap" id="bw-tpl-wrap">
+      <button type="button" class="bw-tpl-trigger" id="bw-tpl-trigger" aria-haspopup="listbox" aria-expanded="false">
+        <span id="bw-tpl-trigger-text">Pick template</span>
+        <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><use href="#chevron-down"></use></svg>
+      </button>
+      <div class="bw-tpl-dropdown" id="bw-tpl-dropdown" hidden role="listbox">
+        <div class="bw-tpl-section-label">System Templates</div>
+        <div id="bw-tpl-list"></div>
+      </div>
+    </div>
+    <p class="m__modal__field-hint">Pre-fills name and description. You can edit everything before creating.</p>
+  </div>
+
   <div class="m__textfield">
     <label for="behavior-name">Name</label>
     <input type="text" id="behavior-name" placeholder="" />
@@ -21,7 +36,7 @@ modal("modal-behaviors-create", "Create Behavior") %}
 
   <div class="bw-save-to-library-toggle" hidden>
     <div class="m__space XS"></div>
-    <p class="m__modal__field-hint"><strong>Tip:</strong> this behavior will be saved to the library when you save the detection profile, and can be reused in other detection profiles.</p>
+    <p class="m__modal__field-hint"><strong>Tip:</strong> this behavior will be saved to the library when you save the detection package, and can be reused in other detection packages.</p>
   </div>
 </div>
 <div class="m__modal__footer">

@@ -1,6 +1,6 @@
 ---
-pageTitle: Edit Detection Profile
-permalink: /dashboard/behaviors/config-edit/
+pageTitle: Edit Detection Package
+permalink: /dashboard/behaviors/detection-package-edit/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
@@ -17,10 +17,10 @@ permalink: /dashboard/behaviors/config-edit/
         <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
           <use href="#chevron-left"></use>
         </svg>
-        Detection Profiles
+        Detection Packages
       </a>
       <div class="m__space XS"></div>
-      <h1 class="dashboard-page-title">Edit detection profile</h1>
+      <h1 class="dashboard-page-title">Edit Detection Package</h1>
 
       <div class="config-fields">
         <div class="config-field">
@@ -36,7 +36,7 @@ permalink: /dashboard/behaviors/config-edit/
       <!-- Behaviors widget -->
       <div class="m__widget">
         <div class="m__table-toolbar">
-          <h2>Behaviors</h2>
+          <h2>Behaviors included</h2>
           <div class="bw-toolbar-actions">
             <button type="button" class="m__button-outline-compact" id="bw-scope-add-btn">
               Add existing
@@ -66,7 +66,7 @@ permalink: /dashboard/behaviors/config-edit/
       </div>
 
       <div class="config-form-actions">
-        <button type="button" class="m__button-compact">Save profile</button>
+        <button type="button" class="m__button-compact">Save package</button>
       </div>
 
       <div class="m__space XL"></div>
@@ -408,7 +408,7 @@ permalink: /dashboard/behaviors/config-edit/
           var b = findB(id);
           pendingDeleteId = id;
           document.getElementById("modal-bw-delete-confirm-text").innerHTML =
-            "<strong>" + esc(b ? b.name : "This behavior") + "</strong> will be removed from this detection profile only. It will remain available in other detection profiles.";
+            "<strong>" + esc(b ? b.name : "This behavior") + "</strong> will be removed from this detection package only. It will remain available in other detection packages.";
           window.M.openModal(document.getElementById("modal-bw-delete-confirm"));
         });
       });

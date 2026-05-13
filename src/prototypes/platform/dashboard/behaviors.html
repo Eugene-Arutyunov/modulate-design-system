@@ -21,7 +21,7 @@ permalink: /dashboard/behaviors/
             value="configurations"
             checked
           />
-          Detection Profiles
+          Detection Packages
         </label>
         <label>
           <input type="radio" name="behaviors-tabs" value="behaviors" />
@@ -43,8 +43,8 @@ permalink: /dashboard/behaviors/
         class="dashboard-section behaviors-tab-content"
         data-tab="configurations"
       >
-        <h1 class="dashboard-page-title">Detection Profiles</h1>
-        <p>A detection profile defines what to look for in a call — a named, reusable set of behaviors scoped to specific conversation types and participant roles. The default profile is applied to all API calls that don't specify one explicitly. Modulate-provided profiles are read-only — duplicate one to create an editable version you can customize and set as default.</p>
+        <h1 class="dashboard-page-title">Detection Packages</h1>
+        <p>A detection package defines what to look for in a call — a named, reusable set of behaviors scoped to specific conversation types and participant roles. The default package is applied to all API calls that don't specify one explicitly. Modulate-provided packages are read-only — duplicate one to create an editable version you can customize and set as default.</p>
 
         <div class="m__space XS"></div>
 
@@ -57,7 +57,7 @@ permalink: /dashboard/behaviors/
         hidden
       >
         <h1 class="dashboard-page-title">Behaviors</h1>
-        <p>A library of behaviors available for use across detection profiles.</p>
+        <p>A library of behaviors available for use across detection packages.</p>
 
         <div class="m__space XS"></div>
 
@@ -70,7 +70,7 @@ permalink: /dashboard/behaviors/
         hidden
       >
         <h1 class="dashboard-page-title">Conversation Types</h1>
-        <p>A library of conversation types available for use across detection profiles.</p>
+        <p>A library of conversation types available for use across detection packages.</p>
 
         <div class="m__space XS"></div>
 
@@ -83,7 +83,7 @@ permalink: /dashboard/behaviors/
         hidden
       >
         <h1 class="dashboard-page-title">Roles</h1>
-        <p>A library of participant roles available for use across detection profiles.</p>
+        <p>A library of participant roles available for use across detection packages.</p>
 
         <div class="m__space XS"></div>
 
@@ -125,36 +125,144 @@ permalink: /dashboard/behaviors/
   var createRoleModal = document.getElementById("modal-role-create");
   var editRoleModal = document.getElementById("modal-role-edit");
 
+
+
   function getActiveTab() {
     var checked = document.querySelector('[name="behaviors-tabs"]:checked');
     return checked ? checked.value : "configurations";
   }
 
   document.addEventListener("click", function (e) {
-      if (e.target.closest("[data-behaviors-delete]")) {
-        window.M.openModal(deleteBehaviorsModal);
+    if (e.target.closest("[data-behaviors-delete]")) {
+      window.M.openModal(deleteBehaviorsModal);
+    }
+
+
+    if (e.target.closest("[data-behaviors-create]")) {
+      var tab = getActiveTab();
+      if (tab === "conversation-types") {
+        window.M.openModal(createConversationTypeModal);
+      } else if (tab === "roles") {
+        window.M.openModal(createRoleModal);
+      } else {
+        if (window.bwTplReset) window.bwTplReset();
+        window.M.openModal(createBehaviorModal);
       }
-      if (e.target.closest("[data-behaviors-create]")) {
-        var tab = getActiveTab();
-        if (tab === "conversation-types") {
-          window.M.openModal(createConversationTypeModal);
-        } else if (tab === "roles") {
-          window.M.openModal(createRoleModal);
-        } else {
-          window.M.openModal(createBehaviorModal);
-        }
+    }
+
+    if (e.target.closest("[data-behaviors-edit]")) {
+      var tab = getActiveTab();
+      if (tab === "conversation-types") {
+        window.M.openModal(editConversationTypeModal);
+      } else if (tab === "roles") {
+        window.M.openModal(editRoleModal);
+      } else {
+        window.M.openModal(editBehaviorModal);
       }
-      if (e.target.closest("[data-behaviors-edit]")) {
-        var tab = getActiveTab();
-        if (tab === "conversation-types") {
-          window.M.openModal(editConversationTypeModal);
-        } else if (tab === "roles") {
-          window.M.openModal(editRoleModal);
-        } else {
-          window.M.openModal(editBehaviorModal);
-        }
+    }
+
+  });
+
+</script>
+
+<script>
+  (function () {
+    var BW_TEMPLATES = [
+      { id: "blank", name: "Blank", desc: "Start from scratch.", blank: true },
+      { id: "misogyny", name: "Misogyny", desc: "Evidence of cultural attitudes that propagate systems of marginalizing people based on their gender identity or gender presentation." },
+      { id: "racism", name: "Racism", desc: "Evidence of cultural attitudes that propagate systems of marginalizing people based on their racial or national identity." },
+      { id: "homophobia", name: "Homophobia", desc: "Evidence of cultural attitudes that propagate systems of marginalizing people based on their sexuality." },
+      { id: "coercion", name: "Coercion", desc: "Attempts to pressure or manipulate a participant into taking an action against their will." },
+      { id: "impersonation", name: "Impersonation", desc: "Attempts to falsely claim another person's identity during a conversation." },
+      { id: "return-fraud", name: "Return Fraud Attempt", desc: "Indicators of fraudulent behavior in the context of a product return or refund request." },
+    ];
+
+    var bwTplTrigger = document.getElementById("bw-tpl-trigger");
+    var bwTplTriggerText = document.getElementById("bw-tpl-trigger-text");
+    var bwTplDropdown = document.getElementById("bw-tpl-dropdown");
+    var bwTplList = document.getElementById("bw-tpl-list");
+    var bwTplWrap = document.getElementById("bw-tpl-wrap");
+    var bwSelectedTpl = null;
+
+    if (!bwTplTrigger) return;
+
+    function bwRenderTplList() {
+      if (!bwTplList) return;
+      bwTplList.innerHTML = "";
+      BW_TEMPLATES.forEach(function (tpl) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "bw-tpl-item" + (bwSelectedTpl && bwSelectedTpl.id === tpl.id ? " is-selected" : "");
+        btn.dataset.tplId = tpl.id;
+        btn.innerHTML =
+          '<span class="bw-tpl-item-avatar' + (tpl.blank ? " bw-tpl-item-avatar--blank" : "") + '">' +
+          (tpl.blank ? "+" : tpl.name.charAt(0)) +
+          "</span>" +
+          '<span class="bw-tpl-item-body">' +
+          '<span class="bw-tpl-item-name">' + tpl.name + "</span>" +
+          (tpl.desc ? '<span class="bw-tpl-item-desc">' + tpl.desc + "</span>" : "") +
+          "</span>";
+        bwTplList.appendChild(btn);
+      });
+    }
+
+    function bwApplyTpl(tpl) {
+      bwSelectedTpl = tpl;
+      var isEmpty = !tpl || tpl.blank;
+      bwTplTrigger.classList.toggle("has-value", !isEmpty);
+      bwTplTriggerText.textContent = isEmpty ? "Pick template" : tpl.name;
+      var nameInput = document.getElementById("behavior-name");
+      var descInput = document.getElementById("behavior-description");
+      if (nameInput) nameInput.value = isEmpty ? "" : tpl.name;
+      if (descInput) {
+        descInput.value = isEmpty ? "" : (tpl.desc || "");
+        descInput.dispatchEvent(new Event("input"));
+      }
+    }
+
+    window.bwTplReset = function () {
+      bwApplyTpl(null);
+      bwTplDropdown.hidden = true;
+      bwTplTrigger.setAttribute("aria-expanded", "false");
+      var nameInput = document.getElementById("behavior-name");
+      var descInput = document.getElementById("behavior-description");
+      if (nameInput) nameInput.value = "";
+      if (descInput) { descInput.value = ""; descInput.dispatchEvent(new Event("input")); }
+    };
+
+    bwTplTrigger.addEventListener("click", function () {
+      var isOpen = !bwTplDropdown.hidden;
+      bwTplDropdown.hidden = isOpen;
+      bwTplTrigger.setAttribute("aria-expanded", String(!isOpen));
+      if (!isOpen) bwRenderTplList();
+    });
+
+    document.addEventListener("click", function (e) {
+      var item = e.target.closest(".bw-tpl-item");
+      if (item && bwTplList && bwTplList.contains(item)) {
+        var tpl = BW_TEMPLATES.find(function (t) { return t.id === item.dataset.tplId; });
+        if (tpl) bwApplyTpl(tpl);
+        bwTplDropdown.hidden = true;
+        bwTplTrigger.setAttribute("aria-expanded", "false");
+        bwRenderTplList();
+        return;
+      }
+      if (bwTplWrap && !bwTplWrap.contains(e.target) && !bwTplDropdown.hidden) {
+        bwTplDropdown.hidden = true;
+        bwTplTrigger.setAttribute("aria-expanded", "false");
       }
     });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !bwTplDropdown.hidden) {
+        bwTplDropdown.hidden = true;
+        bwTplTrigger.setAttribute("aria-expanded", "false");
+        bwTplTrigger.focus();
+      }
+    });
+
+    bwRenderTplList();
+  })();
 </script>
 
 <script src="/assets/prototypes/action-menu.js"></script>
