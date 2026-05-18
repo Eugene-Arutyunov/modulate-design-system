@@ -95,9 +95,13 @@
   }
 
   & .dashboard-page-title {
-    margin: 0 0 1rem;
+    margin: 0.15rem 0 1rem;
     font-size: var(--m__font-size-xl);
     font-weight: var(--m__font-weight-bold);
+  }
+
+  & > .m__segmented-control:first-child {
+    margin-top: 0.15rem;
   }
 
   & .dashboard-section {
@@ -112,11 +116,15 @@
 
   & .dashboard-stats {
     display: grid;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: minmax(11rem, 2fr) minmax(0, 3fr);
     gap: 0.5rem;
 
     @media (width < 767px) {
       grid-template-columns: 1fr;
+    }
+
+    & > * {
+      min-width: 0;
     }
   }
 
