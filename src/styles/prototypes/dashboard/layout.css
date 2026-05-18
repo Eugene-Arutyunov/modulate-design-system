@@ -5,6 +5,7 @@
 
   @media (width < 767px) {
     flex-direction: column;
+    align-items: stretch;
   }
 
   & > * {
@@ -25,7 +26,6 @@
   top: 1rem;
   flex-shrink: 0;
   width: max-content;
-  margin-left: -0.75rem;
 
   @media (width < 768px) {
     display: none;
@@ -64,7 +64,7 @@
 
     &.active {
       background-color: var(--m__bg-surface-color);
-      font-weight: 500;
+      font-weight: 700;
     }
 
     & .nav-sidebar__link-caption {
@@ -95,9 +95,13 @@
   }
 
   & .dashboard-page-title {
-    margin: 0 0 1rem;
+    margin: 0.15rem 0 1rem;
     font-size: var(--m__font-size-xl);
     font-weight: var(--m__font-weight-bold);
+  }
+
+  & > .m__segmented-control:first-child {
+    margin-top: 0.15rem;
   }
 
   & .dashboard-section {
@@ -112,11 +116,15 @@
 
   & .dashboard-stats {
     display: grid;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: minmax(11rem, 2fr) minmax(0, 3fr);
     gap: 0.5rem;
 
     @media (width < 767px) {
       grid-template-columns: 1fr;
+    }
+
+    & > * {
+      min-width: 0;
     }
   }
 
@@ -179,6 +187,20 @@
       align-self: center;
     }
   }
+}
+
+[data-component="credit-balance-over-time"] .chart-container,
+#credit-balance-chart {
+  height: 8rem !important;
+  max-height: 8rem !important;
+}
+
+[data-component="usage-by-model"] .chart-container,
+[data-component="requests-by-status"] .chart-container,
+#usage-by-model-chart,
+#request-status-chart {
+  height: 18rem !important;
+  max-height: 18rem !important;
 }
 
 table.org-details {
@@ -729,7 +751,7 @@ table.config-details {
 }
 
 #bw-list .bw-empty-row .m__table-empty p {
-  font-size: var(--m__font-size-xs);
+  font-size: var(--m__font-size-s);
 }
 
 #bw-matrix th:first-child,

@@ -247,6 +247,7 @@
     if (charts.creditBalance) charts.creditBalance.destroy();
     var canvas = document.getElementById("credit-balance-chart");
     if (!canvas || !fullData) return;
+    if (canvas.parentNode) canvas.parentNode.style.height = "16rem";
 
     var days = daysFromToggle("credit-balance");
     var history = creditHistoryForPeriod(fullData.creditHistory, days);
@@ -310,6 +311,7 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         animation: false,
         interaction: { mode: "index", intersect: false },
         plugins: {
