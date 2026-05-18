@@ -12,6 +12,12 @@
   }
 }
 
+@media (width >= 768px) {
+  .m__wrapper:has(.nav-sidebar) {
+    padding-left: clamp(1rem, calc(13rem - (100vw - 1050px) / 2), 13rem);
+  }
+}
+
 .dashboard-content {
   flex: 1;
 }
@@ -23,7 +29,7 @@
   width: 13rem;
   height: 100vh;
   overflow-y: auto;
-  padding: 1rem 0.4rem;
+  padding: 0.9rem 0.4rem;
   z-index: 10;
 
   @media (width < 768px) {
