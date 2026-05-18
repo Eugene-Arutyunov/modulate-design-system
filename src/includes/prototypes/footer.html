@@ -1,4 +1,6 @@
-<footer class="footer">
+{% set isDashboardFooter = page.url | startsWith('/dashboard/') %}
+<footer class="footer {{ 'footer--minimal' if isDashboardFooter }}">
+  {% if not isDashboardFooter %}
   <div class="footer-columns">
     <div class="footer-column">
       <div class="footer-logo">
@@ -9,25 +11,6 @@
         conversational intelligence with superior accuracy, transparency, and
         economics.
       </p>
-      <div class="footer-prototype-tools caption" aria-label="Prototype tools">
-        <div class="footer-prototype-tools__toggle-row">
-          <label
-            class="footer-prototype-tools__toggle-label"
-            for="prototype-internal-nav-toggle"
-            >Internal admin links</label
-          >
-          <button
-            type="button"
-            class="footer-prototype-tools__switch"
-            id="prototype-internal-nav-toggle"
-            role="switch"
-            aria-checked="true">
-            <span class="footer-prototype-tools__switch-track">
-              <span class="footer-prototype-tools__switch-thumb"></span>
-            </span>
-          </button>
-        </div>
-      </div>
     </div>
     <div class="footer-column">
       <p class="caption">
@@ -43,6 +26,7 @@
   </div>
   <div class="m__space XL"></div>
   <div class="m__space XL"></div>
+  {% endif %}
   <div class="footer-nav">
     <div class="footer-nav-item caption">
       <a href="https://modulate.ai">&copy; <strong>Modulate.ai</strong></a
@@ -55,6 +39,25 @@
       <a href="https://www.modulate.ai/privacy-policy" target="_blank"
         >Privacy Policy</a
       >
+    </div>
+    <div
+      class="footer-nav-item footer-nav-item--toggle caption"
+      aria-label="Prototype tools">
+      <label
+        class="footer-prototype-tools__toggle-label"
+        for="prototype-internal-nav-toggle"
+        >Internal admin links</label
+      >
+      <button
+        type="button"
+        class="footer-prototype-tools__switch"
+        id="prototype-internal-nav-toggle"
+        role="switch"
+        aria-checked="true">
+        <span class="footer-prototype-tools__switch-track">
+          <span class="footer-prototype-tools__switch-thumb"></span>
+        </span>
+      </button>
     </div>
   </div>
 </footer>
