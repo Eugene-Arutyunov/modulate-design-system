@@ -1,10 +1,10 @@
 .dashboard-layout {
-  display: grid;
-  grid-template-columns: 1fr 3.5fr;
+  display: flex;
+  align-items: flex-start;
   gap: 1.5rem;
 
   @media (width < 767px) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   & > * {
@@ -12,9 +12,25 @@
   }
 }
 
+@media (width >= 768px) {
+  .m__wrapper:has(.nav-sidebar) {
+    padding-left: clamp(1rem, calc(14rem - (100vw - 1050px) / 2), 14rem);
+  }
+}
+
+.dashboard-content {
+  flex: 1;
+}
+
 .nav-sidebar {
-  background-color: transparent;
-  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 13rem;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 0.9rem 0.4rem;
+  z-index: 10;
 
   @media (width < 768px) {
     display: none;
@@ -24,6 +40,37 @@
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
+  }
+
+  & .nav-sidebar__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.1rem 0.75rem 0.85rem;
+    text-decoration: none;
+    color: var(--m__text-color);
+    transition: color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+    &:hover {
+      color: var(--m__text-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
+    }
+  }
+
+  & .nav-sidebar__brand-icon {
+    display: block;
+    width: 1.35rem;
+    height: 1.35rem;
+    flex-shrink: 0;
+    color: currentColor;
+    background-color: var(--m__bg-surface-color);
+    border-radius: 50%;
+  }
+
+  & .nav-sidebar__brand-label {
+    line-height: 1;
+    font-size: 0.9em;
   }
 
   & .nav-sidebar__divider {
