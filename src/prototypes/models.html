@@ -11,8 +11,9 @@ permalink: /models/
     <h1 class="loud">Velma Models</h1>
     <div class="m__text-width">
       <p class="loud">
-        Velma handles transcription, emotion, accent, and engagement detection
-        across 70+ languages. Choose the model that fits your use case.
+        Velma handles transcription, music &amp; speech detection, emotion,
+        accent, and engagement detection across 70+ languages. Choose the model
+        that fits your use case.
       </p>
     </div>
     <div class="m__space XS"></div>
@@ -36,14 +37,14 @@ permalink: /models/
     <div class="pricing-table-wrap">
       <table class="models-pricing-table models-pricing-table--4">
         <colgroup>
-          <col style="width: 25%" />
-          <col style="width: 25%" />
-          <col style="width: 25%" />
-          <col style="width: 25%" />
+          <col />
+          <col />
+          <col />
+          <col />
         </colgroup>
         <thead>
           <tr>
-            <th></th>
+            <th>Model Type</th>
             <th>
               <span class="models-column-heading">
                 <span class="models-column-heading__icon" aria-hidden="true">
@@ -224,13 +225,13 @@ permalink: /models/
     <div class="pricing-table-wrap">
       <table class="models-pricing-table models-pricing-table--3">
         <colgroup>
-          <col style="width: 33.3333%" />
-          <col style="width: 33.3333%" />
-          <col style="width: 33.3333%" />
+          <col />
+          <col />
+          <col />
         </colgroup>
         <thead>
           <tr>
-            <th></th>
+            <th>Model Type</th>
             <th>
               <span class="models-column-heading">
                 <span class="models-column-heading__icon" aria-hidden="true">
@@ -370,7 +371,7 @@ permalink: /models/
     <h2 class="models-section-heading">
       <span class="models-section-heading__icon" aria-hidden="true">
         <svg viewBox="0 0 32 32">
-          <use href="#overview"></use>
+          <use href="#redaction"></use>
         </svg>
       </span>
       <span>PII/PHI Redaction</span>
@@ -388,13 +389,13 @@ permalink: /models/
     <div class="pricing-table-wrap">
       <table class="models-pricing-table models-pricing-table--3">
         <colgroup>
-          <col style="width: 33.3333%" />
-          <col style="width: 33.3333%" />
-          <col style="width: 33.3333%" />
+          <col />
+          <col />
+          <col />
         </colgroup>
         <thead>
           <tr>
-            <th></th>
+            <th>Model Type</th>
             <th>
               <span class="models-column-heading">
                 <span class="models-column-heading__icon" aria-hidden="true">
@@ -479,48 +480,41 @@ permalink: /models/
 
           <tr>
             <td>Coverage</td>
-            <td>100+ PII/PHI entity types across all categories</td>
-            <td>100+ PII/PHI entity types across all categories</td>
+            <td colspan="2">100+ PII/PHI entity types across all categories</td>
           </tr>
 
           <tr>
             <td>Names &amp; Identifiers</td>
-            <td>Full names, usernames, dates of birth</td>
-            <td>Full names, usernames, dates of birth</td>
+            <td colspan="2">Full names, usernames, dates of birth</td>
           </tr>
 
           <tr>
             <td>Government IDs</td>
-            <td>SSN, passport, driver’s license</td>
-            <td>SSN, passport, driver’s license</td>
+            <td colspan="2">SSN, passport, driver’s license</td>
           </tr>
 
           <tr>
-            <td>Address &amp; Locations</td>
-            <td>Street addresses, ZIP codes, cities</td>
-            <td>Street addresses, ZIP codes, cities</td>
+            <td>Addresses &amp; Locations</td>
+            <td colspan="2">Street addresses, ZIP codes, cities</td>
           </tr>
 
           <tr>
             <td>Contact Details</td>
-            <td>Phone numbers, email addresses</td>
-            <td>Phone numbers, email addresses</td>
+            <td colspan="2">Phone numbers, email addresses</td>
           </tr>
 
           <tr>
             <td>Financial Info</td>
-            <td>Credit card numbers, bank accounts</td>
-            <td>Credit card numbers, bank accounts</td>
+            <td colspan="2">Credit card numbers, bank accounts</td>
           </tr>
 
           <tr>
             <td>Medical / Health Info (PHI)</td>
-            <td>Diagnoses, medications, health record IDs</td>
-            <td>Diagnoses, medications, health record IDs</td>
+            <td colspan="2">Diagnoses, medications, health record IDs</td>
           </tr>
 
           <tr class="models-table-group-row">
-            <td colspan="3"><h6>Built-In Features</h6></td>
+            <td colspan="3"><h6>Built-in features</h6></td>
           </tr>
 
           <tr>
@@ -531,10 +525,7 @@ permalink: /models/
 
           <tr>
             <td>Configurable Redaction Padding</td>
-            <td>
-              Adjustable silence buffer before and after each redacted range
-            </td>
-            <td>
+            <td colspan="2">
               Adjustable silence buffer before and after each redacted range
             </td>
           </tr>
@@ -549,6 +540,175 @@ permalink: /models/
             <td>First Result</td>
             <td>After full file upload</td>
             <td>At utterance completion</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="m__space XL"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="music-speech-detection" label="Music &amp; Speech Detection">
+  <div class="m__wrapper">
+    <div class="m__space M"></div>
+
+    <h2 class="models-section-heading">
+      <span class="models-section-heading__icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32">
+          <use href="#music"></use>
+        </svg>
+      </span>
+      <span>Music &amp; Speech Detection</span>
+    </h2>
+    <div class="m__text-width">
+      <p>
+        Velma-2's music and speech detection models classify audio at the frame
+        level (~192ms resolution), returning independent music and speech
+        probabilities for every frame. Useful for content moderation, ad-break
+        detection, podcast segmentation, and audio analytics — available as both
+        a low-latency batch API and a real-time streaming WebSocket.
+      </p>
+    </div>
+
+    <div class="pricing-table-wrap">
+      <table class="models-pricing-table models-pricing-table--3">
+        <colgroup>
+          <col />
+          <col />
+          <col />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Model Type</th>
+            <th>
+              <span class="models-column-heading">
+                <span class="models-column-heading__icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <use href="#batch"></use>
+                  </svg>
+                </span>
+                <span>Batch</span>
+              </span>
+            </th>
+            <th>
+              <span class="models-column-heading">
+                <span class="models-column-heading__icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <use href="#streaming"></use>
+                  </svg>
+                </span>
+                <span>Streaming</span>
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Description</td>
+            <td>
+              Frame-level music and speech classification for audio files, with
+              a primary label and percentage breakdown across the clip
+            </td>
+            <td>
+              Real-time frame-level music and speech classification via
+              WebSocket — frames are emitted progressively as audio streams in
+            </td>
+          </tr>
+
+          <tr>
+            <td>API</td>
+            <td>REST API</td>
+            <td>WebSocket</td>
+          </tr>
+
+          <tr>
+            <td>Accepted Files</td>
+            <td>AAC, FLAC, M4A, MP3, MP4, OGG, Opus, WAV</td>
+            <td>
+              AAC, AIFF, FLAC, MP3, OGG, WAV, WebM, and raw PCM (various bit
+              depths and encodings)
+            </td>
+          </tr>
+
+          <tr>
+            <td>Concurrency Quota</td>
+            <td>3 concurrent requests</td>
+            <td>3 concurrent requests</td>
+          </tr>
+
+          <tr>
+            <td>Monthly Usage Quota</td>
+            <td>1,000 hours</td>
+            <td>1,000 hours</td>
+          </tr>
+
+          <tr>
+            <td>Pricing</td>
+            <td><strong>$0.02 / hour</strong></td>
+            <td><strong>$0.02 / hour</strong></td>
+          </tr>
+
+          <tr class="models-table-group-row">
+            <td colspan="3"><h6>Built-in features</h6></td>
+          </tr>
+
+          <tr>
+            <td>Music Detection</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Speech Detection</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Frame-Level Output</td>
+            <td colspan="2">Per-frame probabilities at ~192ms resolution</td>
+          </tr>
+
+          <tr>
+            <td>Non-Exclusive Labels</td>
+            <td colspan="2">
+              Music and speech probabilities are independent — both can be high
+              simultaneously (e.g. music with vocals)
+            </td>
+          </tr>
+
+          <tr>
+            <td>Primary Label</td>
+            <td colspan="2">
+              Overall clip classification: <code>music</code>,
+              <code>speech</code>, or <code>neither</code>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Percentage Breakdown</td>
+            <td colspan="2">
+              Percentage of clip where music / speech probability ≥ 0.5
+            </td>
+          </tr>
+
+          <tr>
+            <td>Flexible Chunk Size</td>
+            <td></td>
+            <td>Send audio in any chunk size that suits your pipeline</td>
+          </tr>
+
+          <tr>
+            <td>Real-Time</td>
+            <td></td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>First Result</td>
+            <td>After full file upload and processing</td>
+            <td>After first ~192ms of audio</td>
           </tr>
         </tbody>
       </table>

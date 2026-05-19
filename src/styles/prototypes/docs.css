@@ -114,12 +114,44 @@
 }
 
 .models-pricing-table.models-pricing-table--3 {
+  --models-col-scale: 0.75;
   width: 75%;
+}
+
+/* Match pixel widths of the 4-column table: col % ÷ table scale */
+.models-pricing-table--4 col:nth-child(1) {
+  width: 20%;
+}
+
+.models-pricing-table--4 col:nth-child(2),
+.models-pricing-table--4 col:nth-child(3),
+.models-pricing-table--4 col:nth-child(4) {
+  width: calc(80% / 3);
+}
+
+.models-pricing-table--3 col:nth-child(1) {
+  width: calc(20% / var(--models-col-scale));
+}
+
+/* Split remainder so columns sum to 100% — avoids redistributing col 1 */
+.models-pricing-table--3 col:nth-child(2),
+.models-pricing-table--3 col:nth-child(3) {
+  width: calc((100% - 20% / var(--models-col-scale)) / 2);
 }
 
 .models-pricing-table th {
   font-size: var(--m__font-size-m);
   color: var(--m__text-color);
+  font-weight: var(--m__font-weight-regular);
+}
+
+.models-pricing-table thead th {
+  vertical-align: baseline;
+}
+
+.models-pricing-table thead th:first-child {
+  font-size: var(--m__font-size-s);
+  color: var(--m__text-caption-color);
   font-weight: var(--m__font-weight-regular);
 }
 
@@ -176,9 +208,13 @@
   stroke: none;
 }
 
+.models-pricing-table tr:has(+ tr.models-table-group-row) td {
+  border-bottom: none;
+}
+
 .models-pricing-table tr.models-table-group-row td {
-  padding-top: 0.7rem;
-  padding-bottom: 0;
+  padding-top: 1.4rem;
+  padding-bottom: 0.35rem;
 }
 
 .models-pricing-table tr.models-table-group-row td h6 {

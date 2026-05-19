@@ -25,6 +25,7 @@ const COLORED_ICONS = new Set([
   "facebook",
   "emotions",
   "deepfake",
+  "music",
 ]);
 
 const SHAPE_TAGS = new Set([
