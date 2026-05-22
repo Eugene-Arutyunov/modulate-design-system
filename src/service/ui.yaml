@@ -39,11 +39,32 @@ current:
     title: Models Overview
     sections:
       - section:
-          text-content: deepfake-detection-models
+          text-content: models-intro
       - section:
-          text-content: transcription-models
-      - section:
-          text-content: authentication-rate-limits
+          widget: models-tabs
+    subsections:
+      - title: Transcription
+        sections:
+          - section:
+              widget: transcription-pricing-table
+      - title: Deepfake Detection
+        sections:
+          - section:
+              text-content: deepfake-detection-intro
+          - section:
+              widget: deepfake-detection-pricing-table
+      - title: PII/PHI Redaction
+        sections:
+          - section:
+              text-content: pii-phi-redaction-intro
+          - section:
+              widget: pii-phi-redaction-pricing-table
+      - title: Music & Speech Detection
+        sections:
+          - section:
+              text-content: music-speech-detection-intro
+          - section:
+              widget: music-speech-detection-pricing-table
 
   - id: playground
     route: —
@@ -78,7 +99,7 @@ current:
     title: API Keys
     sections:
       - section:
-          widget: api-keys-intro
+          text-content: api-keys-intro
       - section:
           widget: api-keys-table
 
@@ -104,13 +125,18 @@ current:
       - section:
           text-content: usage-intro
       - section:
-          widget: filters
-      - section:
-          widget: request-log
+          widgets:
+            - filters
+            - request-log
 
   - id: dashboard-behaviors
     route: —
     title: Behaviors
+    sections: []
+
+  - id: dashboard-behaviors-package-editor
+    route: —
+    title: Detection Package Editor
     sections: []
 
   - id: dashboard-billing
@@ -135,17 +161,17 @@ current:
       - section:
           text-content: account-settings
       - section:
-          text-content: display-name
+          widget: display-name
       - section:
-          text-content: email
+          widget: email
       - section:
-          text-content: organization-role
+          widget: organization-role
       - section:
-          text-content: change-password
+          widget: change-password
       - section:
-          text-content: training-data-opt-out
+          widget: training-data-opt-out
       - section:
-          text-content: delete-account
+          widget: delete-account
 
   - id: dashboard-organization
     route: /web/organization/
@@ -154,11 +180,23 @@ current:
       - section:
           text-content: organization-intro
       - section:
-          text-content: organization-details
+          text-content: organization-name
       - section:
-          text-content: members
+          text-content: type
       - section:
-          text-content: pending-invites
+          text-content: your-role
+      - section:
+          text-content: invoice-only
+      - section:
+          text-content: monthly-credits-spent
+      - section:
+          text-content: monthly-credit-limit
+      - section:
+          widget: members
+      - section:
+          widget: pending-invites
+      - section:
+          text-content: leave-organization
 
   - id: internal-users
     route: /web/internal-users
@@ -317,18 +355,13 @@ target:
     title: Landing
     sections:
       - section:
-          text-content: hero
+          text-content: landing-intro
       - section:
           widgets:
-            - feature-transcription
-            - feature-voice-native
-            - feature-ensemble
+            - cta-signup
+            - cta-read-docs
       - section:
-          text-content: built-for-developers
-      - section:
-          text-content: learn-more
-      - section:
-          text-content: cta
+          text-content: benefits-list
 
   - id: docs-models-api
     route: /models-api-docs/
@@ -347,13 +380,36 @@ target:
           widget: redocly-include
 
   - id: docs-models-overview
-    route: /models
+    route: /models/
     title: Models Overview
     sections:
       - section:
-          text-content: deepfake-detection-models
+          text-content: models-intro
       - section:
-          text-content: transcription-models
+          widget: models-tabs
+    subsections:
+      - title: Transcription
+        sections:
+          - section:
+              widget: transcription-pricing-table
+      - title: Deepfake Detection
+        sections:
+          - section:
+              text-content: deepfake-detection-intro
+          - section:
+              widget: deepfake-detection-pricing-table
+      - title: PII/PHI Redaction
+        sections:
+          - section:
+              text-content: pii-phi-redaction-intro
+          - section:
+              widget: pii-phi-redaction-pricing-table
+      - title: Music & Speech Detection
+        sections:
+          - section:
+              text-content: music-speech-detection-intro
+          - section:
+              widget: music-speech-detection-pricing-table
 
   - id: playground
     route: /playground
@@ -395,22 +451,60 @@ target:
     sections: []
 
   - id: dashboard-usage
-    route: /dashboard/usage
+    route: /dashboard/usage/
     title: Usage
     sections:
       - section:
           text-content: usage-intro
       - section:
-          widget: filters
-      - section:
-          widget: request-log
+          widgets:
+            - filters
+            - request-log
+            - credits-consumed
+            - requests-by-status
 
   - id: dashboard-behaviors
     route: /dashboard/behaviors/
     title: Behaviors
     sections:
       - section:
-          text-content: behaviors-intro
+          widget: behaviors-tabs
+    subsections:
+      - title: Detection Packages
+        sections:
+          - section:
+              text-content: detection-packages-intro
+          - section:
+              widget: detection-packages-table
+      - title: Behaviors
+        sections:
+          - section:
+              text-content: behaviors-intro
+          - section:
+              widget: behaviors-table
+      - title: Conversation Types
+        sections:
+          - section:
+              text-content: conversation-types-intro
+          - section:
+              widget: conversation-types-table
+      - title: Roles
+        sections:
+          - section:
+              text-content: roles-intro
+          - section:
+              widget: roles-table
+
+  - id: dashboard-behaviors-package-editor
+    routes:
+      - /dashboard/behaviors/detection-package-create/
+      - /dashboard/behaviors/detection-package-edit/
+    title: Detection Package Editor
+    sections:
+      - section:
+          text-content: package-name
+      - section:
+          widget: behaviors-included-table
 
   - id: dashboard-billing
     route: /dashboard/billing/
@@ -434,17 +528,15 @@ target:
       - section:
           text-content: account-settings
       - section:
-          text-content: display-name
-      - section:
           text-content: email
       - section:
-          text-content: organization-role
+          text-content: display-name
       - section:
           text-content: change-password
       - section:
           text-content: training-data-opt-out
       - section:
-          text-content: delete-account
+          widget: delete-account
 
   - id: dashboard-organization
     route: /dashboard/organization/
@@ -453,11 +545,23 @@ target:
       - section:
           text-content: organization-intro
       - section:
-          text-content: organization-details
+          text-content: organization-name
       - section:
-          text-content: members
+          text-content: type
       - section:
-          text-content: pending-invites
+          text-content: your-role
+      - section:
+          text-content: invoice-only
+      - section:
+          text-content: monthly-credits-spent
+      - section:
+          text-content: monthly-credit-limit
+      - section:
+          widget: members
+      - section:
+          widget: pending-invites
+      - section:
+          text-content: leave-organization
 
   - id: internal-users
     route: /internal/users/

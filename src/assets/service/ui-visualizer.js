@@ -69,21 +69,95 @@ function normalizeSection(item) {
   return { type: 'widget', widget: '', states: [] };
 }
 
+function normalizeSubsection(s) {
+  return {
+    title: typeof s?.title === 'string' ? s.title : '',
+    sections: (s?.sections ?? []).map(normalizeSection),
+  };
+}
+
 function normalizeRouteList(routes) {
-  return (routes ?? []).map((r) => ({
-    id: r.id ?? r.route ?? '',
-    route: r.route ?? '',
-    title: r.title ?? '',
-    title_deprecated:
-      typeof r.title_deprecated === 'string' ? r.title_deprecated : '',
-    sections: (r.sections ?? []).map(normalizeSection),
-  }));
+  return (routes ?? []).map((r) => {
+    const routes = Array.isArray(r.routes)
+      ? r.routes.filter((x) => typeof x === 'string' && x.length > 0)
+      : r.route
+        ? [r.route]
+        : [];
+    return {
+      id: r.id ?? r.route ?? (Array.isArray(r.routes) ? r.routes[0] : '') ?? '',
+      routes,
+      title: r.title ?? '',
+      title_deprecated:
+        typeof r.title_deprecated === 'string' ? r.title_deprecated : '',
+      sections: (r.sections ?? []).map(normalizeSection),
+      subsections: Array.isArray(r.subsections)
+        ? r.subsections.map(normalizeSubsection)
+        : [],
+    };
+  });
 }
 
 function normalizeUiData(raw) {
   const current = normalizeRouteList(raw?.current);
   const target = normalizeRouteList(raw?.target);
   return { current, target };
+}
+
+function renderRouteBody(cell, route) {
+  const hasSections = route?.sections?.length > 0;
+  const hasSubsections = route?.subsections?.length > 0;
+  if (!hasSections && !hasSubsections) {
+    const empty = document.createElement('p');
+    empty.className = 'ui-viz__empty';
+    empty.textContent = '—';
+    cell.appendChild(empty);
+    return;
+  }
+  if (hasSections) {
+    cell.appendChild(renderSectionsList(route.sections));
+  }
+  if (hasSubsections) {
+    const wrap = document.createElement('div');
+    wrap.className = 'ui-viz__subsections';
+    route.subsections.forEach((sub) => {
+      const block = document.createElement('div');
+      block.className = 'ui-viz__subsection';
+      const heading = document.createElement('h3');
+      heading.className = 'ui-viz__subsection-title';
+      heading.textContent = sub.title;
+      block.appendChild(heading);
+      if (sub.sections?.length) {
+        block.appendChild(renderSectionsList(sub.sections));
+      }
+      wrap.appendChild(block);
+    });
+    cell.appendChild(wrap);
+  }
+}
+
+function renderRoutePaths(routes) {
+  const list = (routes ?? []).filter((r) => typeof r === 'string' && r.length > 0);
+  if (list.length === 0) {
+    const span = document.createElement('span');
+    span.className = 'ui-viz__route-path';
+    span.textContent = '—';
+    return span;
+  }
+  if (list.length === 1) {
+    const span = document.createElement('span');
+    span.className = 'ui-viz__route-path';
+    span.textContent = list[0];
+    return span;
+  }
+  const wrap = document.createElement('div');
+  wrap.className = 'ui-viz__route-paths';
+  list.forEach((r) => {
+    const span = document.createElement('span');
+    span.className = 'ui-viz__route-path';
+    span.textContent = r;
+    wrap.appendChild(span);
+  });
+  return wrap;
 }
 
 function renderSectionsList(sections, listClass) {
@@ -151,12 +225,12 @@ function renderUIStructure(data) {
   const thRoute = document.createElement('th');
   thRoute.textContent = 'Route';
   const thCurrent = document.createElement('th');
-  thCurrent.textContent = 'Current';
+  thCurrent.textContent = 'Production';
   const thTarget = document.createElement('th');
-  thTarget.textContent = 'Target';
+  thTarget.textContent = 'Prototype';
   headerTr.appendChild(thRoute);
-  headerTr.appendChild(thCurrent);
   headerTr.appendChild(thTarget);
+  headerTr.appendChild(thCurrent);
   thead.appendChild(headerTr);
   table.appendChild(thead);
 
@@ -194,34 +268,13 @@ function renderUIStructure(data) {
     tr.appendChild(tdPage);
 
     const tdCurrent = document.createElement('td');
-    const currentPath = document.createElement('span');
-    currentPath.className = 'ui-viz__route-path';
-    currentPath.textContent = currentRoute?.route ?? '—';
-    tdCurrent.appendChild(currentPath);
-    if (currentRoute?.sections?.length) {
-      tdCurrent.appendChild(renderSectionsList(currentRoute.sections));
-    } else {
-      const empty = document.createElement('p');
-      empty.className = 'ui-viz__empty';
-      empty.textContent = '—';
-      tdCurrent.appendChild(empty);
-    }
-    tr.appendChild(tdCurrent);
-
+    tdCurrent.appendChild(renderRoutePaths(currentRoute?.routes));
+    renderRouteBody(tdCurrent, currentRoute);
     const tdTarget = document.createElement('td');
-    const targetPath = document.createElement('span');
-    targetPath.className = 'ui-viz__route-path';
-    targetPath.textContent = targetRoute?.route ?? '—';
-    tdTarget.appendChild(targetPath);
-    if (targetRoute?.sections?.length) {
-      tdTarget.appendChild(renderSectionsList(targetRoute.sections));
-    } else {
-      const empty = document.createElement('p');
-      empty.className = 'ui-viz__empty';
-      empty.textContent = '—';
-      tdTarget.appendChild(empty);
-    }
+    tdTarget.appendChild(renderRoutePaths(targetRoute?.routes));
+    renderRouteBody(tdTarget, targetRoute);
     tr.appendChild(tdTarget);
+    tr.appendChild(tdCurrent);
 
     tbody.appendChild(tr);
   });
