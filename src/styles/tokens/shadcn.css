@@ -36,8 +36,16 @@
   --primary-active: var(--m__bg-active-color);
   --outline-hover: var(--m__text-hover-color);
   --outline-active: var(--m__text-active-color);
-  --destructive-active: color-mix(in srgb, var(--m__ui-error-color) 20%, transparent);
-  --success-active: color-mix(in srgb, var(--m__ui-success-color) 20%, transparent);
+  --destructive-active: color-mix(
+    in srgb,
+    var(--m__ui-error-color) 20%,
+    transparent
+  );
+  --success-active: color-mix(
+    in srgb,
+    var(--m__ui-success-color) 20%,
+    transparent
+  );
   --button-m-padding: var(--m__button-padding);
   --button-s-padding: var(--m__control-compact-padding);
   --button-xs-padding: var(--m__button-compact-padding);
@@ -47,14 +55,22 @@
   /* link — ports DS a { ... } from components/text.css */
   --link-color: var(--m__text-link-color);
   --link-hover-color: var(--m__text-hover-color);
-  --link-decoration: color-mix(in srgb, var(--m__text-link-color) 20%, transparent);
-  --link-decoration-hover: color-mix(in srgb, var(--m__text-hover-color) 20%, transparent);
+  --link-decoration: color-mix(
+    in srgb,
+    var(--m__text-link-color) 20%,
+    transparent
+  );
+  --link-decoration-hover: color-mix(
+    in srgb,
+    var(--m__text-hover-color) 20%,
+    transparent
+  );
 }
 
 /* No re-mapping needed in dark: once DS aliases .dark-mode,.dark the --m__* vars flip
    and the references above resolve to dark values automatically. */
 
-@custom-variant dark (&:where(.dark, .dark-mode, .dark *, .dark-mode *));
+@custom-variant dark (&:where(.dark, .dark-mode, .dark-vibrant, .dark *, .dark-mode *, .dark-vibrant *));
 
 @theme inline {
   --color-background: var(--background);

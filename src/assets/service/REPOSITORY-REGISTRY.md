@@ -247,6 +247,10 @@ Label + input pair. Label sits above the input. Input uses `--m__ui-control-colo
 
 Four auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link". Select organization shows an `.m__option-list` of orgs with `.m__tag` role labels, and a form to create a new org with a secondary button.
 
+**OAuth buttons:** `src/includes/prototypes/auth-oauth-buttons.html` — Google (colored), GitHub and Apple (monochrome `currentColor`). Included on sign-in and create-account pages.
+
+**Models panel (right column):** `src/includes/prototypes/auth-layout-models-panel.html` — centered promo block (`max-width: 20rem`, matches `.auth-form`) with landing copy (inline `data-term` spans), flex-wrapped icon links to `/models/` section anchors, and Models Overview / Docs links. Uses **`dark-vibrant`** theme (see **`src/styles/tokens/colors.css`**). Icon hover highlights matching text terms via **`:has()`** in **`auth-layout.css`**. Shown on all auth layout pages; hidden below 768px with the right column.
+
 ---
 
 ## Option list component

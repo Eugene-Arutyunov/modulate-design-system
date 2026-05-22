@@ -71,8 +71,11 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 ## Notes
 
 - **`overview-muted.svg`** → **`#overview-muted`**: same three bars as **`overview.svg`**, with **`fill-opacity="0.3"`** on the top two rectangles and full opacity on the bottom bar. Used in online docs only; not listed on the design-system icon grid.
-- **`music.svg`** → **`#music`**: colored icon — inner circle uses mark yellow **`rgb(255, 200, 29)`**; outer ring uses **`currentColor`** (inherits text color). Listed in **`COLORED_ICONS`** in **`scripts/generate-svg-sprite.js`**.
+- **`music.svg`** → **`#music`**: colored icon — inner circle uses threat-uncertainty purple **`rgb(200, 80, 160)`**; outer ring uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
+- **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use error red **`rgb(255, 53, 84)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`redaction.svg`** → **`#redaction`**: monochrome; inherits **`currentColor`**.
+- **`github.svg`** → **`#github`**: monochrome; inherits **`currentColor`** (used on auth OAuth buttons).
+- **`apple.svg`** → **`#apple`**: monochrome; inherits **`currentColor`** (used on auth OAuth buttons).
 - The build script is `scripts/generate-svg-sprite.js`.
 - `npm run build`, `npm run build:clean`, and `npm run dev` regenerate the sprite automatically before running.
 - Do not edit `src/includes/service/svg-icons-sprite.html` by hand. It is generated.

@@ -11,7 +11,12 @@ permalink: /auth/login/
 
   <div class="m__textfield">
     <label for="login-email">Email</label>
-    <input type="email" id="login-email" name="email" autocomplete="email" aria-describedby="auth-tf-email-invalid-error" />
+    <input
+      type="email"
+      id="login-email"
+      name="email"
+      autocomplete="email"
+      aria-describedby="auth-tf-email-invalid-error" />
     <div class="m__textfield__message" id="auth-tf-email-invalid-error">
       <span>Enter a valid email address</span>
     </div>
@@ -39,26 +44,7 @@ permalink: /auth/login/
 
   <div class="m__space M"></div>
 
-  <div class="auth-form__oauth">
-    <a href="/dashboard/overview/" class="m__button-outline">
-      <svg class="m__button__icon" viewBox="0 0 32 32" aria-hidden="true">
-        <use href="#google"></use>
-      </svg>
-      Continue with Google
-    </a>
-    <a href="/dashboard/overview/" class="m__button-outline">
-      <svg class="m__button__icon" viewBox="0 0 32 32" aria-hidden="true">
-        <use href="#microsoft"></use>
-      </svg>
-      Continue with Microsoft
-    </a>
-    <a href="/dashboard/overview/" class="m__button-outline">
-      <svg class="m__button__icon" viewBox="0 0 32 32" aria-hidden="true">
-        <use href="#facebook"></use>
-      </svg>
-      Continue with Facebook
-    </a>
-  </div>
+  {% include 'prototypes/auth-oauth-buttons.html' %}
 </form>
 
 {% endblock %}
