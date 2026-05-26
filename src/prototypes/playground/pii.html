@@ -1,0 +1,118 @@
+---
+pageTitle: PII/PHI Redaction
+permalink: /playground/pii/
+---
+
+{% extends 'prototypes/playground-layout.html' %} {% block panel_content %}
+  <div class="pg-tab-panel">
+      <div class="m__space XS"></div>
+      <div class="deepfake-header verdict-synthetic">
+      <h2>12 redactions</h2>
+      <span>9 PII · 3 PHI segments. 2 high-confidence matches.</span>
+      </div>
+
+      <div class="m__space XS"></div>
+      <div class="pg-histogram-section">
+        <div class="pg-histogram-scroll">
+          <div class="pg-histogram">
+            <div class="pg-histo-squares">
+              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:01 · Clean"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:02 · Clean"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.92" title="0:03 · Name · 92%"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.88" title="0:04 · Name · 88%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:05 · Clean"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:06 · Clean"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.96" title="0:07 · SSN · 96%"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.94" title="0:08 · SSN · 94%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:09 · Clean"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.82" title="0:10 · Address · 82%"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.79" title="0:11 · Address · 79%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:12 · Clean"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.71" title="0:13 · Diagnosis · 71%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:14 · Clean"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:15 · Clean"></div>
+            </div>
+            <div class="pg-histo-axis">
+              <div class="pg-histo-tick">0:00</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:05</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:10</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick" style="text-align: right">0:15</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg-results-table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Category</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0:02 – 0:04</td>
+              <td><span class="m__tag verdict-synthetic">PII · Name</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill synthetic" style="width: 90%"></div>
+                  </div>
+                  <span>90.1%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:06 – 0:08</td>
+              <td><span class="m__tag verdict-synthetic">PII · SSN</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill synthetic" style="width: 95%"></div>
+                  </div>
+                  <span>95.4%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:09 – 0:11</td>
+              <td><span class="m__tag verdict-synthetic">PII · Address</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill synthetic" style="width: 80%"></div>
+                  </div>
+                  <span>80.3%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:12 – 0:14</td>
+              <td><span class="m__tag verdict-synthetic">PHI · Diagnosis</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill synthetic" style="width: 71%"></div>
+                  </div>
+                  <span>71.2%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+{% endblock %}

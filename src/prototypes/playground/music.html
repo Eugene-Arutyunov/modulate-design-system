@@ -1,0 +1,130 @@
+---
+pageTitle: Music Detection
+permalink: /playground/music/
+---
+
+{% extends 'prototypes/playground-layout.html' %} {% block panel_content %}
+  <div class="pg-tab-panel">
+      <div class="m__space XS"></div>
+      <div class="deepfake-header verdict-authentic">
+      <h2>23% music</h2>
+      <span>5/22 music segments. 1 segment with >95% conf.</span>
+      </div>
+
+      <div class="m__space XS"></div>
+      <div class="pg-histogram-section">
+        <div class="pg-histogram-scroll">
+          <div class="pg-histogram">
+            <div class="pg-histo-squares">
+              <div class="pg-histo-bar authentic" style="opacity: 0.96" title="0:01 · Speech · 96%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.93" title="0:02 · Speech · 93%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.91" title="0:03 · Speech · 91%"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.84" title="0:04 · Music · 84%"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.97" title="0:05 · Music · 97%"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.92" title="0:06 · Music · 92%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.88" title="0:07 · Speech · 88%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.94" title="0:08 · Speech · 94%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.96" title="0:09 · Speech · 96%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.92" title="0:10 · Speech · 92%"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.86" title="0:11 · Music · 86%"></div>
+              <div class="pg-histo-bar synthetic" style="opacity: 0.78" title="0:12 · Music · 78%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.94" title="0:13 · Speech · 94%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.92" title="0:14 · Speech · 92%"></div>
+              <div class="pg-histo-bar authentic" style="opacity: 0.9" title="0:15 · Speech · 90%"></div>
+            </div>
+            <div class="pg-histo-axis">
+              <div class="pg-histo-tick">0:00</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:05</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:10</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick" style="text-align: right">0:15</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg-results-table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Type</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0:00 – 0:03</td>
+              <td><span class="m__tag verdict-authentic">Speech</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill authentic" style="width: 93%"></div>
+                  </div>
+                  <span>93.2%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:03 – 0:06</td>
+              <td><span class="m__tag verdict-synthetic">Music</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill synthetic" style="width: 91%"></div>
+                  </div>
+                  <span>91.0%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:06 – 0:10</td>
+              <td><span class="m__tag verdict-authentic">Speech</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill authentic" style="width: 92%"></div>
+                  </div>
+                  <span>92.4%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:10 – 0:12</td>
+              <td><span class="m__tag verdict-synthetic">Music</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill synthetic" style="width: 82%"></div>
+                  </div>
+                  <span>82.1%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:12 – 0:15</td>
+              <td><span class="m__tag verdict-authentic">Speech</span></td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div class="pg-confidence-bar-fill authentic" style="width: 92%"></div>
+                  </div>
+                  <span>92.0%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+{% endblock %}
