@@ -749,6 +749,32 @@
     font-size: var(--m__font-size-m);
   }
 
+  /* Player overrides ────────────────────────────────────────────────────── */
+  #audio-player .player-icon svg,
+  #audio-player .player-icon svg * {
+    fill: #fff;
+  }
+
+  #audio-player .player-start-time,
+  #audio-player .player-total-time {
+    position: absolute;
+    bottom: var(--padding);
+    top: auto;
+    pointer-events: none;
+    color: rgba(255, 255, 255, 0.55);
+    z-index: 3;
+  }
+
+  #audio-player .player-start-time { left: calc(var(--padding) + 0.6em); }
+  #audio-player .player-total-time { right: calc(var(--padding) + 0.6em); }
+
+  #audio-player .player-start-time .start-time,
+  #audio-player .player-total-time .total-time {
+    font-size: 0.8em;
+    opacity: 1;
+    color: inherit;
+  }
+
 
   .pg-content .pg-upload-header h2 {
     margin: 0;
@@ -801,43 +827,98 @@
       data-speaker-count="2"
     >
       <div class="player-visualization">
-        <!-- Speaker 0: Calm → Confident -->
-        <div
-          class="transcript-clip emotion-calm"
-          data-speaker-index="1"
-          style="left: 0%; width: 12%"
-        >
-          <div class="clip-visualization"></div>
-        </div>
-        <div
-          class="transcript-clip emotion-confident"
-          data-speaker-index="1"
-          style="left: 28%; width: 14%"
-        >
-          <div class="clip-visualization"></div>
-        </div>
-        <div
-          class="transcript-clip emotion-confident"
-          data-speaker-index="1"
-          style="left: 62%; width: 38%"
-        >
-          <div class="clip-visualization"></div>
-        </div>
-        <!-- Speaker 1: Happy → Interested -->
-        <div
-          class="transcript-clip emotion-happy"
-          data-speaker-index="2"
-          style="left: 12%; width: 16%"
-        >
-          <div class="clip-visualization"></div>
-        </div>
-        <div
-          class="transcript-clip emotion-interested"
-          data-speaker-index="2"
-          style="left: 42%; width: 20%"
-        >
-          <div class="clip-visualization"></div>
-        </div>
+        <!-- Turn-taking with varied turn lengths, clip counts and widths -->
+
+        <!-- Speaker 0: long opening turn -->
+        <div class="transcript-clip emotion-happy" data-speaker-index="1" style="left: 0%; width: 2%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-neutral" data-speaker-index="1" style="left: 2.5%; width: 1%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-amused" data-speaker-index="1" style="left: 4%; width: 2.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1: short reply -->
+        <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 7.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0: medium -->
+        <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 10%; width: 3.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1: longer turn -->
+        <div class="transcript-clip emotion-confident" data-speaker-index="2" style="left: 14.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 16.5%; width: 2.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-sad" data-speaker-index="2" style="left: 19.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Pause then Speaker 0 quick -->
+        <div class="transcript-clip emotion-happy" data-speaker-index="1" style="left: 22.5%; width: 1%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 -->
+        <div class="transcript-clip emotion-confident" data-speaker-index="2" style="left: 24%; width: 3%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 long -->
+        <div class="transcript-clip emotion-amused" data-speaker-index="1" style="left: 27.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-happy" data-speaker-index="1" style="left: 29.5%; width: 2%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-neutral" data-speaker-index="1" style="left: 32%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 34%; width: 1%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 short -->
+        <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 35.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 quick -->
+        <div class="transcript-clip emotion-happy" data-speaker-index="1" style="left: 37.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 medium -->
+        <div class="transcript-clip emotion-angry" data-speaker-index="2" style="left: 39.5%; width: 2.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-confident" data-speaker-index="2" style="left: 42.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 long -->
+        <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 44.5%; width: 3%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-amused" data-speaker-index="1" style="left: 48%; width: 1%"><div class="clip-visualization"></div></div>
+
+        <!-- pause -->
+        <!-- Speaker 1 single -->
+        <div class="transcript-clip emotion-sad" data-speaker-index="2" style="left: 50%; width: 2%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 medium -->
+        <div class="transcript-clip emotion-happy" data-speaker-index="1" style="left: 52.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-neutral" data-speaker-index="1" style="left: 54.5%; width: 2%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 long -->
+        <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 57%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-confident" data-speaker-index="2" style="left: 59%; width: 3.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 short -->
+        <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 63%; width: 1.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 quick -->
+        <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 65%; width: 1%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 medium -->
+        <div class="transcript-clip emotion-happy" data-speaker-index="1" style="left: 66.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-amused" data-speaker-index="1" style="left: 68.5%; width: 2.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 escalation -->
+        <div class="transcript-clip emotion-angry" data-speaker-index="2" style="left: 71.5%; width: 2%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-confident" data-speaker-index="2" style="left: 74%; width: 1%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 -->
+        <div class="transcript-clip emotion-angry" data-speaker-index="1" style="left: 75.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 77.5%; width: 2.5%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 long final stretch -->
+        <div class="transcript-clip emotion-angry" data-speaker-index="2" style="left: 80.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-frustrated" data-speaker-index="2" style="left: 82.5%; width: 3%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 quick -->
+        <div class="transcript-clip emotion-happy" data-speaker-index="1" style="left: 86%; width: 1%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 -->
+        <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 87.5%; width: 2%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 0 closing turn -->
+        <div class="transcript-clip emotion-amused" data-speaker-index="1" style="left: 90%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-happy" data-speaker-index="1" style="left: 92%; width: 2.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-neutral" data-speaker-index="1" style="left: 95%; width: 1%"><div class="clip-visualization"></div></div>
+
+        <!-- Speaker 1 final word -->
+        <div class="transcript-clip emotion-confident" data-speaker-index="2" style="left: 96.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 98.5%; width: 1.5%"><div class="clip-visualization"></div></div>
       </div>
       <div class="speaker-labels">
         <div class="speaker-label" data-speaker-index="1">
@@ -869,8 +950,11 @@
       <div class="player-status-caption">
         <span class="emotion-caption"></span>
       </div>
+      <div class="player-start-time">
+        <span class="start-time">0:00</span>
+      </div>
       <div class="player-total-time">
-        <span class="total-time" data-total-time>0:54</span>
+        <span class="total-time" data-total-time>7:48</span>
       </div>
       <div class="player-position-indicator">
         <div class="player-position-line"></div>
@@ -991,7 +1075,6 @@
 
   <div class="pg-subview" data-pg-subview="json" hidden>
     <div class="m__space XS"></div>
-    <h2>JSON Response</h2>
     <div class="pg-json-container">
 
       <pre class="pg-json-pre"><span class="pg-json-brace">{</span>
@@ -1051,13 +1134,7 @@
       <div class="pg-upload-section">
       <div class="pg-upload-header">
         <h2>Try More Audio</h2>
-        <span class="pg-upload-limits">
-      30 requests remaining</span>
       </div>
-
-      <p>
-        Velma-2 handles transcription, emotion, accent, and engagement detection across 70+ languages. Choose the options that fits your use case and upload voice.
-      </p>
 
               <div class="m__space XS"></div>
 
