@@ -416,7 +416,6 @@
 
   .pg-transcript-text,
   .pg-transcript-text p {
-    font-size: var(--m__font-size-m);
     font-family: var(--m__font-semi-mono);
     line-height: 1.6;
   }
@@ -613,11 +612,29 @@
   /* Statistics ─────────────────────────────────────────────────────────── */
 
   .pg-stats-table .pg-stats-label {
+    font-size: var(--m__font-size-s);
     color: var(--m__text-caption-color);
     font-weight: 500;
     padding-right: var(--m__space-m);
     white-space: nowrap;
     width: 25%;
+  }
+
+  .pg-stats-table tr.pg-stats-group-row td {
+    padding-top: 1.4rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .pg-stats-table tr.pg-stats-group-row td h6 {
+    margin: 0;
+  }
+
+  .pg-stats-table tr:has(+ tr.pg-stats-group-row) td {
+    border-bottom: none;
+  }
+
+  .pg-stats-table tr.pg-stats-group-row + tr td {
+    border-top: 1px solid var(--m__text-color);
   }
 
   /* JSON Response ──────────────────────────────────────────────────────── */
@@ -712,10 +729,6 @@
   .pg-content {
     flex: 1;
     min-width: 0;
-  }
-
-  .pg-content p {
-    font-size: var(--m__font-size-s);
   }
 
   .pg-page-header {
@@ -1034,9 +1047,11 @@
   <div class="pg-subview" data-pg-subview="stat" hidden>
     <div class="m__space XS"></div>
 
-    <h2 class="pg-stats-heading">General</h2>
     <table class="pg-stats-table">
       <tbody>
+        <tr class="pg-stats-group-row">
+          <td colspan="2"><h6>General</h6></td>
+        </tr>
         <tr>
           <td class="pg-stats-label">Speakers</td>
           <td class="pg-stats-value">2</td>
@@ -1057,13 +1072,10 @@
           <td class="pg-stats-label">Max deepfake score</td>
           <td class="pg-stats-value">0.9810</td>
         </tr>
-      </tbody>
-    </table>
 
-    <div class="m__space XS"></div>
-    <h2 class="pg-stats-heading">Audio</h2>
-    <table class="pg-stats-table">
-      <tbody>
+        <tr class="pg-stats-group-row">
+          <td colspan="2"><h6>Audio</h6></td>
+        </tr>
         <tr>
           <td class="pg-stats-label">File Name</td>
           <td class="pg-stats-value">AIAgentFrustration.mp3</td>
@@ -1080,13 +1092,10 @@
           <td class="pg-stats-label">Audio Duration</td>
           <td class="pg-stats-value">1m 37.3s</td>
         </tr>
-      </tbody>
-    </table>
 
-    <div class="m__space XS"></div>
-    <h2 class="pg-stats-heading">Performance</h2>
-    <table class="pg-stats-table">
-      <tbody>
+        <tr class="pg-stats-group-row">
+          <td colspan="2"><h6>Performance</h6></td>
+        </tr>
         <tr>
           <td class="pg-stats-label">Processing Time</td>
           <td class="pg-stats-value">2.66s</td>
@@ -1095,13 +1104,10 @@
           <td class="pg-stats-label">Processing Factor</td>
           <td class="pg-stats-value">36.6x real-time</td>
         </tr>
-      </tbody>
-    </table>
 
-    <div class="m__space XS"></div>
-    <h2 class="pg-stats-heading">Request</h2>
-    <table class="pg-stats-table">
-      <tbody>
+        <tr class="pg-stats-group-row">
+          <td colspan="2"><h6>Request</h6></td>
+        </tr>
         <tr>
           <td class="pg-stats-label">HTTP</td>
           <td class="pg-stats-value">200 OK</td>

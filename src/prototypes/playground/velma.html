@@ -8,7 +8,6 @@ permalink: /playground/velma/
 {% block options %}
       <div class="pg-options-row pg-velma-setup">
         <button class="m__button-secondary">Set up conversation type, roles &amp; behaviors</button>
-        <span class="pg-velma-setup-summary">1 conversation type · 2 roles · 5 behaviors</span>
       </div>
       <div class="m__space S"></div>
 {% endblock %}
@@ -28,89 +27,63 @@ permalink: /playground/velma/
       flex-wrap: wrap;
       gap: var(--m__space-m);
     }
-    .pg-velma-setup-summary {
-      font-size: var(--m__font-size-s);
-      color: var(--m__text-caption-color);
-      font-variant-numeric: tabular-nums;
-    }
 
-    /* Summary ───────────────────────────────────────────────────────────── */
-    .vx-summary {
-      font-size: var(--m__font-size-m);
-      line-height: 1.7;
-      margin: 0 0 var(--m__space-m);
-    }
-    .vx-box {
+    /* Summary cards — no DS card component yet */
+    .pg-card {
       padding: var(--m__space-s) var(--m__space-m);
-      border-radius: var(--m__radius-m);
       background: var(--m__bg-surface-color);
-      margin-bottom: var(--m__space-xs);
+      margin-bottom: 0.4rem;
     }
-    .vx-box.outlined { background: transparent; border: 1px solid var(--m__ui-border-color); }
-    .vx-box-head {
+    .pg-card.outlined {
+      background: transparent;
+      border: 1px solid var(--m__ui-border-color);
+    }
+    .pg-card-head {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
       gap: 0.4rem;
       margin-bottom: 0.25rem;
     }
-    .vx-box-pct { color: var(--m__text-caption-color); font-variant-numeric: tabular-nums; }
-    .vx-box-body { font-size: var(--m__font-size-s); color: var(--m__text-caption-color); line-height: 1.5; }
 
-    /* Tags ──────────────────────────────────────────────────────────────── */
-    .vx-tag {
-      font-size: var(--m__font-size-xs);
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      white-space: nowrap;
-    }
-    .vx-tag.meta { background: color-mix(in srgb, var(--m__chart-model-1-color) 12%, transparent); color: var(--m__text-caption-color); }
-    .vx-tag.detected { background: color-mix(in srgb, var(--m__ui-success-color) 16%, transparent); color: var(--m__ui-success-color); }
-    .vx-tag.not-detected { background: var(--m__bg-surface-color); color: var(--m__text-caption-color); }
-
-    /* Speakers table ────────────────────────────────────────────────────── */
-    .vx-table { width: 100%; }
-    .vx-table th { text-align: left; font-weight: 700; }
-    .vx-spk-name { font-weight: 700; }
-    .vx-spk-idx { color: var(--m__text-caption-color); }
-    .vx-emo-bar {
+    /* Per-speaker emotion distribution bar — no DS component yet */
+    .pg-emo-bar {
       height: 10px;
       border-radius: 5px;
       display: flex;
       overflow: hidden;
-      background: var(--vx-neutral);
-      max-width: 320px;
+      background: var(--emotion-neutral);
+      max-width: 440px;
     }
-    .vx-emo-seg { height: 100%; }
-    .vx-emo-labels { margin-top: 0.35rem; font-size: var(--m__font-size-xs); }
-    .vx-emo-neutral { color: var(--m__text-caption-color); }
-    .vx-emo-disappointed { color: var(--vx-disappointed); }
-    .vx-pct-cell { font-variant-numeric: tabular-nums; }
+    .pg-emo-seg { height: 100%; }
+    .pg-emo-labels {
+      margin-top: 0.35rem;
+      font-size: var(--m__font-size-xs);
+    }
+    .pg-emo-disappointed { color: var(--emotion-disappointed); }
 
-    /* Topics ─────────────────────────────────────────────────────────────── */
-    .vx-topic-group { margin-bottom: var(--m__space-s); }
-    .vx-topic-group-head { margin-bottom: 0.4rem; font-weight: 700; }
-    .vx-chip-score { font-variant-numeric: tabular-nums; opacity: 0.7; margin-left: 0.15rem; }
+    .pg-num { font-variant-numeric: tabular-nums; }
 
-    /* Behaviors table ───────────────────────────────────────────────────── */
-    .vx-behavior-name { display: flex; align-items: center; gap: 0.4rem; font-weight: 700; }
-    .vx-behavior-icon { color: var(--m__text-caption-color); }
-    .vx-behavior.detected .vx-behavior-icon { color: var(--m__chart-model-1-color); }
-    .vx-behavior.detected .vx-behavior-name { text-decoration: underline; }
-    .vx-behavior-tagline { margin-top: 0.3rem; }
-    .vx-behavior-evidence { margin-top: 0.3rem; font-size: var(--m__font-size-xs); color: var(--m__text-caption-color); }
-    .vx-behavior-reason { color: var(--m__text-caption-color); line-height: 1.5; }
-    .vx-behaviors-table td { vertical-align: top; }
+    /* Speakers table */
+    .pg-speakers-table td:nth-child(3),
+    .pg-speakers-table td:nth-child(4) { font-size: var(--m__font-size-s); }
+
+    /* Behaviors table */
+    .pg-behaviors-table { table-layout: fixed; }
+    .pg-behaviors-table th:nth-child(1) { width: 18%; }
+    .pg-behaviors-table th:nth-child(2) { width: 22%; }
+    .pg-behaviors-table th:nth-child(3) { width: 48%; }
+    .pg-behaviors-table th:nth-child(4) { width: 12%; }
+    .pg-reason { font-size: var(--m__font-size-s); }
+    .pg-behaviors-table .pg-num { font-size: var(--m__font-size-s); }
   </style>
 
-  <div class="pg-tab-panel" style="--vx-neutral: var(--emotion-neutral); --vx-disappointed: var(--emotion-disappointed);">
+  <div class="pg-tab-panel">
+    <div class="m__space S"></div>
 
     <!-- Speech Summary ──────────────────────────────────────────────────── -->
-    <h2 class="vx-heading">Speech Summary</h2>
-    <p class="vx-summary">
+    <h2>Speech Summary</h2>
+    <p>
       <span class="pii-blur">Daniel Mercer</span> spoke with Green Valley Health member services agent
       <span class="pii-blur">Mina</span> to verify his identity and discuss an MRI claim
       (<span class="pii-blur">diagnosis code M54.5</span>) and denied
@@ -120,35 +93,37 @@ permalink: /playground/velma/
       <span class="pii-blur">4827 Willow Creek Drive, Apt 5B, Columbus, Ohio 43215</span>.
     </p>
 
-    <div class="vx-box outlined">
-      <div class="vx-box-head">
+    <div class="m__space S"></div>
+
+    <div class="pg-card outlined m__rounded">
+      <div class="pg-card-head">
         <span>Type: <strong>Customer Service Call</strong></span>
-        <span class="vx-box-pct">100%</span>
-        <span class="vx-tag meta">Auto_selected_single_option</span>
+        <span class="pg-num muted">100%</span>
+        <span class="m__tag-flat">Auto_selected_single_option</span>
       </div>
-      <div class="vx-box-body">Auto-chosen as the only available option.</div>
+      <div class="caption">Auto-chosen as the only available option.</div>
     </div>
 
-    <div class="vx-box">
-      <div class="vx-box-head">
+    <div class="pg-card m__rounded">
+      <div class="pg-card-head">
         <span><strong>1: Customer Service Representative</strong></span>
-        <span class="vx-box-pct">100%</span>
-        <span class="vx-tag meta">Inferred</span>
+        <span class="pg-num muted">100%</span>
+        <span class="m__tag-flat">Inferred</span>
       </div>
-      <div class="vx-box-body">
+      <div class="caption">
         The speaker introduces themselves as Mina from Green Valley Health member services, verifies the
         caller's identity and details, and accesses and discusses specific account, claim, and medical
         information on file.
       </div>
     </div>
 
-    <div class="vx-box">
-      <div class="vx-box-head">
+    <div class="pg-card m__rounded">
+      <div class="pg-card-head">
         <span><strong>2: Customer</strong></span>
-        <span class="vx-box-pct">100%</span>
-        <span class="vx-tag meta">Inferred</span>
+        <span class="pg-num muted">100%</span>
+        <span class="m__tag-flat">Inferred</span>
       </div>
-      <div class="vx-box-body">
+      <div class="caption">
         The speaker provides personal verification details, describes issues with an MRI claim and denied
         prescription, and requests appeal forms and related actions, clearly acting as the caller seeking
         assistance.
@@ -156,9 +131,10 @@ permalink: /playground/velma/
     </div>
 
     <!-- Speakers ────────────────────────────────────────────────────────── -->
-    <h2 class="vx-heading">Speakers</h2>
+    <div class="m__space L"></div>
+    <h2>Speakers</h2>
     <div class="pg-results-table-section">
-      <table class="vx-table">
+      <table class="pg-speakers-table">
         <thead>
           <tr>
             <th>Speaker</th>
@@ -169,32 +145,28 @@ permalink: /playground/velma/
         </thead>
         <tbody>
           <tr>
+            <td><strong>Customer Service Representative</strong></td>
             <td>
-              <div class="vx-spk-name">Customer Service Representative</div>
+              <div class="pg-emo-bar"></div>
+              <div class="pg-emo-labels"><span class="muted">Neutral</span></div>
             </td>
-            <td>
-              <div class="vx-emo-bar"></div>
-              <div class="vx-emo-labels"><span class="vx-emo-neutral">Neutral</span></div>
-            </td>
-            <td class="vx-pct-cell">51%</td>
+            <td class="pg-num">51%</td>
             <td>English, American accent</td>
           </tr>
           <tr>
+            <td><strong>Customer</strong></td>
             <td>
-              <div class="vx-spk-name">Customer</div>
-            </td>
-            <td>
-              <div class="vx-emo-bar">
-                <div class="vx-emo-seg" style="width: 45%; background: var(--vx-neutral)"></div>
-                <div class="vx-emo-seg" style="width: 18%; background: var(--vx-disappointed)"></div>
-                <div class="vx-emo-seg" style="width: 37%; background: var(--vx-neutral)"></div>
+              <div class="pg-emo-bar">
+                <div class="pg-emo-seg" style="width: 45%; background: var(--emotion-neutral)"></div>
+                <div class="pg-emo-seg" style="width: 18%; background: var(--emotion-disappointed)"></div>
+                <div class="pg-emo-seg" style="width: 37%; background: var(--emotion-neutral)"></div>
               </div>
-              <div class="vx-emo-labels">
-                <span class="vx-emo-neutral">Neutral</span>,
-                <span class="vx-emo-disappointed">Disappointed</span>
+              <div class="pg-emo-labels">
+                <span class="muted">Neutral</span>,
+                <span class="pg-emo-disappointed">Disappointed</span>
               </div>
             </td>
-            <td class="vx-pct-cell">46%</td>
+            <td class="pg-num">46%</td>
             <td>English, American accent</td>
           </tr>
         </tbody>
@@ -202,32 +174,35 @@ permalink: /playground/velma/
     </div>
 
     <!-- Topics ──────────────────────────────────────────────────────────── -->
-    <h2 class="vx-heading">Topics</h2>
-    <div class="vx-topic-group">
-      <div class="vx-topic-group-head">Customer Service Representative</div>
+    <div class="m__space L"></div>
+    <h2>Topics</h2>
+    <div>
+      <p><strong>Customer Service Representative</strong></p>
       <div class="m__tag-group">
-        <span class="m__tag">back injury <span class="vx-chip-score">0.00</span></span>
-        <span class="m__tag">MRI claim <span class="vx-chip-score">0.00</span></span>
-        <span class="m__tag">Gabapentin <span class="vx-chip-score">0.00</span></span>
-        <span class="m__tag">diabetes <span class="vx-chip-score">0.00</span></span>
-        <span class="m__tag">hypertension <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag">back injury <span class="pg-num muted">0.00</span></span>
+        <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
+        <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
+        <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
+        <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
       </div>
     </div>
-    <div class="vx-topic-group">
-      <div class="vx-topic-group-head">Customer</div>
+    <div class="m__space S"></div>
+    <div>
+      <p><strong>Customer</strong></p>
       <div class="m__tag-group">
-        <span class="m__tag m__tag--error">back injury <span class="vx-chip-score">-0.50</span></span>
-        <span class="m__tag">MRI claim <span class="vx-chip-score">0.00</span></span>
-        <span class="m__tag">Gabapentin <span class="vx-chip-score">0.00</span></span>
-        <span class="m__tag">diabetes <span class="vx-chip-score">0.00</span></span>
-        <span class="m__tag">hypertension <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag m__tag--error">back injury <span class="pg-num muted">-0.50</span></span>
+        <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
+        <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
+        <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
+        <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
       </div>
     </div>
 
     <!-- Behaviors ───────────────────────────────────────────────────────── -->
-    <h2 class="vx-heading">Behaviors</h2>
-    <div class="pg-results-table-section vx-behaviors-table">
-      <table>
+    <div class="m__space L"></div>
+    <h2>Behaviors</h2>
+    <div class="pg-results-table-section">
+      <table class="pg-behaviors-table">
         <thead>
           <tr>
             <th>Speaker</th>
@@ -238,66 +213,70 @@ permalink: /playground/velma/
         </thead>
         <tbody>
           <tr>
-            <td rowspan="5">
-              <div class="vx-spk-name">Customer Service Representative</div>
+            <td rowspan="5"><strong>Customer Service Representative</strong></td>
+            <td>
+              <strong>Issue Not Resolved</strong>
+              <div class="m__space XS"></div>
+              <span class="m__tag m__tag--success">Detected</span>
+              <div class="m__space XS"></div>
+              <div class="caption">Evidence: 2 clips (1 definitive)</div>
             </td>
-            <td class="vx-behavior detected">
-              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Issue Not Resolved</div>
-              <div class="vx-behavior-tagline"><span class="vx-tag detected">Detected</span></div>
-              <div class="vx-behavior-evidence">Evidence: 2 clips (1 definitive)</div>
-            </td>
-            <td class="vx-behavior-reason">Rep references customer's claim and medication request but fails to provide concrete resolution (e.g., approval/denial status, payment) or any firm follow-up commitment.</td>
-            <td class="vx-pct-cell">75%</td>
-          </tr>
-          <tr>
-            <td class="vx-behavior">
-              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Complaints</div>
-              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
-            </td>
-            <td class="vx-behavior-reason">The speaker is the Customer Service Representative calmly verifying information, confirming details, and providing account data; no statements attributing negative outcomes to the company or explicit dissatisfaction markers present.</td>
-            <td class="vx-pct-cell">100%</td>
-          </tr>
-          <tr>
-            <td class="vx-behavior">
-              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Coercion Manipulation</div>
-              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
-            </td>
-            <td class="vx-behavior-reason">Speaker is Customer Service Representative providing polite verifications and information; no threats, ultimatums, reduced empathy, or pressure tactics observed.</td>
-            <td class="vx-pct-cell">100%</td>
-          </tr>
-          <tr>
-            <td class="vx-behavior">
-              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Issue Resolved</div>
-              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
-            </td>
-            <td class="vx-behavior-reason">No customer's stated issue referenced; no resolution confirmation, customer acknowledgment, or closure cues present in clips.</td>
-            <td class="vx-pct-cell">5%</td>
-          </tr>
-          <tr>
-            <td class="vx-behavior">
-              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Inappropriate Speech</div>
-              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
-            </td>
-            <td class="vx-behavior-reason">All clips contain professional, factual verification and information sharing with no profanity, slurs, personal attacks, or hostile indicators.</td>
-            <td class="vx-pct-cell">0%</td>
+            <td class="pg-reason">Rep references customer's claim and medication request but fails to provide concrete resolution (e.g., approval/denial status, payment) or any firm follow-up commitment.</td>
+            <td class="pg-num">75%</td>
           </tr>
           <tr>
             <td>
-              <div class="vx-spk-name">Customer</div>
+              <strong>Complaints</strong>
+              <div class="m__space XS"></div>
+              <span class="m__tag m__tag--muted">Not detected</span>
             </td>
-            <td class="vx-behavior">
-              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Inappropriate Speech</div>
-              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
+            <td class="pg-reason">The speaker is the Customer Service Representative calmly verifying information, confirming details, and providing account data; no statements attributing negative outcomes to the company or explicit dissatisfaction markers present.</td>
+            <td class="pg-num">100%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Coercion Manipulation</strong>
+              <div class="m__space XS"></div>
+              <span class="m__tag m__tag--muted">Not detected</span>
             </td>
-            <td class="vx-behavior-reason">No profanity, slurs, sexually-suggestive content, personal attacks, or hostile prosody observed; speech is polite and factual.</td>
-            <td class="vx-pct-cell">98%</td>
+            <td class="pg-reason">Speaker is Customer Service Representative providing polite verifications and information; no threats, ultimatums, reduced empathy, or pressure tactics observed.</td>
+            <td class="pg-num">100%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Issue Resolved</strong>
+              <div class="m__space XS"></div>
+              <span class="m__tag m__tag--muted">Not detected</span>
+            </td>
+            <td class="pg-reason">No customer's stated issue referenced; no resolution confirmation, customer acknowledgment, or closure cues present in clips.</td>
+            <td class="pg-num">5%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Inappropriate Speech</strong>
+              <div class="m__space XS"></div>
+              <span class="m__tag m__tag--muted">Not detected</span>
+            </td>
+            <td class="pg-reason">All clips contain professional, factual verification and information sharing with no profanity, slurs, personal attacks, or hostile indicators.</td>
+            <td class="pg-num">0%</td>
+          </tr>
+          <tr>
+            <td><strong>Customer</strong></td>
+            <td>
+              <strong>Inappropriate Speech</strong>
+              <div class="m__space XS"></div>
+              <span class="m__tag m__tag--muted">Not detected</span>
+            </td>
+            <td class="pg-reason">No profanity, slurs, sexually-suggestive content, personal attacks, or hostile prosody observed; speech is polite and factual.</td>
+            <td class="pg-num">98%</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <!-- Transcript ──────────────────────────────────────────────────────── -->
-    <h2 class="vx-heading">Transcript</h2>
+    <div class="m__space L"></div>
+    <h2>Transcript</h2>
     <div class="pg-transcript-container visible">
       <div class="pg-transcript-list">
 

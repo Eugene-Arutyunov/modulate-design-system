@@ -24,7 +24,6 @@ permalink: /playground/language/
       gap: var(--m__space-xxs);
       padding: var(--m__space-m);
       margin: var(--m__space-s) 0 var(--m__space-l);
-      border-radius: var(--m__radius-m);
       background: var(--m__bg-surface-color);
     }
     .lang-name {
@@ -34,16 +33,8 @@ permalink: /playground/language/
       line-height: 1;
       margin: 0;
     }
-    .lang-code {
-      font-size: var(--m__font-size-m);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      color: var(--m__text-caption-color);
-    }
     .lang-note {
       margin-top: var(--m__space-s);
-      font-size: var(--m__font-size-s);
-      color: var(--m__text-caption-color);
     }
     .lang-conf-value {
       font-size: var(--m__font-size-xxl);
@@ -62,22 +53,19 @@ permalink: /playground/language/
     }
     .lang-meta {
       margin-top: var(--m__space-xs);
-      font-size: var(--m__font-size-s);
-      color: var(--m__text-caption-color);
       font-variant-numeric: tabular-nums;
     }
   </style>
 
   <div class="pg-tab-panel">
-    <div class="lang-card">
+    <div class="lang-card m__rounded">
       <h2 class="lang-name">English</h2>
-      <span class="lang-code">EN</span>
 
-      <p class="lang-note">Only the first 30 seconds of audio are analyzed.</p>
+      <p class="caption lang-note">Only the first 30 seconds of audio are analyzed.</p>
       <div class="lang-conf-value">99.6%</div>
       <div class="lang-conf-label">Confidence</div>
 
-      <p class="lang-meta">Audio 97.7s · first 30s analyzed · Processed 1.10s · 27.3× real-time</p>
+      <p class="caption lang-meta">Audio 97.7s · first 30s analyzed · Processed 1.10s · 27.3× real-time</p>
     </div>
   </div>
 {% endblock %}

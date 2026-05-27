@@ -7,18 +7,18 @@ permalink: /playground/redaction/
 
 {% block options %}
       <div class="pg-options-row pg-redaction-options">
-        <label class="pg-pad-field">
-          <span class="pg-pad-label">Start padding</span>
+        <div class="m__textfield m__textfield--no-spin pg-pad-field">
+          <label>Start padding</label>
           <span class="pg-pad-control">
             <input type="number" value="80" min="0" /><span class="pg-pad-unit">ms</span>
           </span>
-        </label>
-        <label class="pg-pad-field">
-          <span class="pg-pad-label">End padding</span>
+        </div>
+        <div class="m__textfield m__textfield--no-spin pg-pad-field">
+          <label>End padding</label>
           <span class="pg-pad-control">
             <input type="number" value="10" min="0" /><span class="pg-pad-unit">ms</span>
           </span>
-        </label>
+        </div>
         <label class="m__checkbox pg-stt-option pg-diarization-option" data-tip="Identify different speakers in the audio">
           <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
         </label>
@@ -45,47 +45,23 @@ permalink: /playground/redaction/
       align-self: flex-end;
       min-height: calc(0.8rem * var(--m__line-height-base) + 1rem + 2px);
     }
-    .pg-pad-field {
-      display: inline-flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-    .pg-pad-label {
-      font-size: var(--m__font-size-s);
-      font-weight: 500;
-      color: var(--m__text-color);
+    /* DS textfield + inline unit suffix; width/suffix are the only custom bits */
+    .pg-redaction-options .pg-pad-field {
+      width: 11rem;
+      margin-bottom: 0;
     }
     .pg-pad-control {
       position: relative;
-      display: inline-flex;
-      align-items: center;
-      font-size: var(--m__font-size-s);
+      display: block;
     }
     .pg-pad-field input {
-      width: 11rem;
-      font: inherit;
-      font-variant-numeric: tabular-nums;
-      line-height: var(--m__line-height-base);
-      color: var(--m__text-color);
-      background-color: var(--m__ui-control-color);
-      border: 1px solid var(--m__ui-border-color);
-      border-radius: var(--m__radius-s);
-      padding: var(--m__control-inset-padding);
       padding-right: 2.4rem;
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-    .pg-pad-field input::-webkit-outer-spin-button,
-    .pg-pad-field input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    .pg-pad-field input:focus-visible {
-      outline: 1px solid var(--m__text-hover-color);
-      outline-offset: -1px;
+      font-variant-numeric: tabular-nums;
     }
     .pg-pad-unit {
       position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
       right: 0.6rem;
       pointer-events: none;
       color: var(--m__text-caption-color);
@@ -106,7 +82,6 @@ permalink: /playground/redaction/
       grid-template-columns: repeat(3, 1fr);
       margin: 0 0 var(--m__space-s);
       padding: var(--m__space-xs) 0;
-      border-radius: var(--m__radius-m);
       background: var(--m__bg-surface-color);
     }
     .pg-redaction-stat {
@@ -196,7 +171,7 @@ permalink: /playground/redaction/
     </div>
 
     <!-- Summary ─────────────────────────────────────────────────────────── -->
-    <div class="pg-redaction-summary">
+    <div class="pg-redaction-summary m__rounded">
       <div class="pg-redaction-stat">
         <div class="pg-redaction-stat-value">31</div>
         <div class="pg-redaction-stat-label">Redactions</div>
