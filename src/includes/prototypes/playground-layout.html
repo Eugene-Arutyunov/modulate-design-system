@@ -880,6 +880,7 @@
       <div class="m__space L"></div>
 
       <!-- PLAYER -->
+      <div class="media-stuck-sentinel" aria-hidden="true"></div>
       <div class="media-container">
     <div
       class="media-box m__rounded dark-mode"
@@ -1586,6 +1587,15 @@
           view.hidden = view.dataset.pgSubview !== val;
         });
       });
+    }
+
+    // Shrink the player while it's pinned to the top
+    var playerContainer = document.querySelector('.media-container');
+    var stuckSentinel = document.querySelector('.media-stuck-sentinel');
+    if (playerContainer && stuckSentinel && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        playerContainer.classList.toggle('stuck', !entries[0].isIntersecting);
+      }, { threshold: 0 }).observe(stuckSentinel);
     }
   </script>
   {% endblock %}
