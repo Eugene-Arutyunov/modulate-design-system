@@ -1,0 +1,202 @@
+---
+pageTitle: Music Detection
+permalink: /playground/music/
+segments:
+  - { t: "0.00s – 1.15s",   music: 95.6, speech: 7.9 }
+  - { t: "1.15s – 2.11s",   music: 94.6, speech: 3.2 }
+  - { t: "2.11s – 3.07s",   music: 91.4, speech: 2.1 }
+  - { t: "3.07s – 4.03s",   music: 84.7, speech: 1.6 }
+  - { t: "4.03s – 5.18s",   music: 79.3, speech: 99.0 }
+  - { t: "5.18s – 6.14s",   music: 79.8, speech: 99.9 }
+  - { t: "6.14s – 7.10s",   music: 80.3, speech: 97.5 }
+  - { t: "7.10s – 8.06s",   music: 82.7, speech: 100 }
+  - { t: "8.06s – 9.02s",   music: 83.1, speech: 90.4 }
+  - { t: "9.02s – 10.18s",  music: 78.2, speech: 98.2 }
+  - { t: "10.18s – 11.14s", music: 74.6, speech: 99.6 }
+  - { t: "11.14s – 12.10s", music: 76.1, speech: 95.3 }
+  - { t: "12.10s – 13.06s", music: 81.4, speech: 71.8 }
+  - { t: "13.06s – 14.02s", music: 86.0, speech: 33.5 }
+  - { t: "14.02s – 15.17s", music: 90.2, speech: 12.4 }
+  - { t: "15.17s – 16.13s", music: 92.7, speech: 6.1 }
+---
+
+{% extends 'prototypes/playground-layout.html' %}
+
+{% block options %}{% endblock %}
+
+{% block panel_content %}
+  <style>
+    .mx-panel { --music-color: var(--m__chart-model-1-color); --speech-color: var(--m__ui-success-color); }
+
+    /* Verdict card ──────────────────────────────────────────────────────── */
+    .mx-verdict {
+      display: flex;
+      align-items: center;
+      gap: var(--m__space-m);
+      padding: var(--m__space-s) var(--m__space-m);
+      margin: var(--m__space-s) 0 var(--m__space-l);
+      background: var(--m__bg-surface-color);
+    }
+    .mx-verdict-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      flex-shrink: 0;
+      color: var(--music-color);
+    }
+    .mx-verdict-icon svg { width: 100%; height: 100%; fill: currentColor; }
+    .mx-verdict-title {
+      font-size: var(--m__font-size-l);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--music-color);
+      line-height: 1;
+    }
+    .mx-verdict-stats {
+      display: flex;
+      gap: var(--m__space-m);
+      margin-left: auto;
+    }
+    .mx-verdict-stat { display: flex; align-items: baseline; gap: 0.35rem; }
+    .mx-verdict-stat-value { font-size: var(--m__font-size-l); font-weight: 800; line-height: 1; }
+    .mx-verdict-stat.music  .mx-verdict-stat-value { color: var(--music-color); }
+    .mx-verdict-stat.speech .mx-verdict-stat-value { color: var(--speech-color); }
+    .mx-verdict-stat-label {
+      font-size: var(--m__font-size-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--m__text-caption-color);
+    }
+
+    /* Heatmap ───────────────────────────────────────────────────────────── */
+    .mx-heatmap { display: flex; flex-direction: column; gap: 0.4rem; }
+    .mx-heat-row { display: flex; align-items: center; gap: 0.75rem; }
+    .mx-heat-label {
+      width: 4.5rem;
+      flex-shrink: 0;
+      text-align: left;
+      font-size: var(--m__font-size-xs);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .mx-heat-label.music  { color: var(--music-color); }
+    .mx-heat-label.speech { color: var(--speech-color); }
+    .mx-heat-cells {
+      flex: 1;
+      display: flex;
+      height: 1.9rem;
+      border-radius: var(--m__radius-xs);
+      overflow: hidden;
+      background: var(--m__bg-surface-color);
+    }
+    .mx-heat-cell { flex: 1; transition: filter var(--m__unhover-transition-duration) var(--m__transition-easing); }
+    .mx-heat-cell:hover { filter: brightness(1.08); }
+    .mx-heat-cell.music  { background: var(--music-color); }
+    .mx-heat-cell.speech { background: var(--speech-color); }
+    .mx-heat-axis { display: flex; gap: 0.75rem; margin-top: 0.3rem; }
+    .mx-heat-axis-spacer { width: 4.5rem; flex-shrink: 0; }
+    .mx-heat-axis-ticks {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--m__font-size-xs);
+      color: var(--m__text-caption-color);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Detailed view ─────────────────────────────────────────────────────── */
+    .mx-detailed td:first-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .mx-cell { display: flex; align-items: center; gap: 0.6rem; }
+    .mx-bar {
+      flex: 0 0 130px;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--m__ui-border-color);
+      overflow: hidden;
+    }
+    .mx-bar-fill { height: 100%; border-radius: 3px; }
+    .mx-bar-fill.music  { background: var(--music-color); }
+    .mx-bar-fill.speech { background: var(--speech-color); }
+    .mx-pct { font-variant-numeric: tabular-nums; min-width: 3.6em; }
+  </style>
+
+  <div class="pg-tab-panel mx-panel">
+
+    <!-- Verdict card ──────────────────────────────────────────────────────── -->
+    <div class="mx-verdict m__rounded">
+      <span class="mx-verdict-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#music"></use></svg></span>
+      <div class="mx-verdict-title">Music</div>
+      <div class="mx-verdict-stats">
+        <div class="mx-verdict-stat music">
+          <div class="mx-verdict-stat-value">90%</div>
+          <div class="mx-verdict-stat-label">Music</div>
+        </div>
+        <div class="mx-verdict-stat speech">
+          <div class="mx-verdict-stat-value">77%</div>
+          <div class="mx-verdict-stat-label">Speech</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heatmap ─────────────────────────────────────────────────────────── -->
+    <div>
+      <div class="mx-heatmap">
+        <div class="mx-heat-row">
+          <span class="mx-heat-label music">MUSIC</span>
+          <div class="mx-heat-cells">
+            {% for s in segments %}<div class="mx-heat-cell music" style="opacity: {{ s.music / 100 }}" title="{{ s.t }} · Music {{ s.music }}%"></div>{% endfor %}
+          </div>
+        </div>
+        <div class="mx-heat-row">
+          <span class="mx-heat-label speech">SPEECH</span>
+          <div class="mx-heat-cells">
+            {% for s in segments %}<div class="mx-heat-cell speech" style="opacity: {{ s.speech / 100 }}" title="{{ s.t }} · Speech {{ s.speech }}%"></div>{% endfor %}
+          </div>
+        </div>
+        <div class="mx-heat-axis">
+          <div class="mx-heat-axis-spacer"></div>
+          <div class="mx-heat-axis-ticks">
+            <span>0s</span><span>4s</span><span>8s</span><span>12s</span><span>16s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="m__space L"></div>
+
+    <!-- Detailed table ──────────────────────────────────────────────────── -->
+    <div>
+      <div class="pg-results-table-section mx-detailed">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Music</th>
+              <th>Speech</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in segments %}
+            <tr>
+              <td>{{ s.t }}</td>
+              <td>
+                <div class="mx-cell">
+                  <div class="mx-bar"><div class="mx-bar-fill music" style="width: {{ s.music }}%"></div></div>
+                  <span class="mx-pct">{{ s.music }}%</span>
+                </div>
+              </td>
+              <td>
+                <div class="mx-cell">
+                  <div class="mx-bar"><div class="mx-bar-fill speech" style="width: {{ s.speech }}%"></div></div>
+                  <span class="mx-pct">{{ s.speech }}%</span>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

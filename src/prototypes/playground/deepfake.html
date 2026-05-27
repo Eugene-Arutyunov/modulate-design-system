@@ -1,0 +1,282 @@
+---
+pageTitle: Deepfake
+permalink: /playground/deepfake/
+---
+
+{% extends 'prototypes/playground-layout.html' %}
+
+{% block options %}{% endblock %}
+
+{% block upload_actions %}
+      <div class="pg-upload-actions">
+        <button class="m__button-outline">Choose file…</button>
+        <button class="m__button-outline">Start streaming</button>
+      </div>
+{% endblock %}
+
+{% block panel_content %}
+  <style>
+    .df-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--m__space-xxs);
+      padding: var(--m__space-l) var(--m__space-m);
+      margin: var(--m__space-s) 0 var(--m__space-l);
+      background: var(--m__bg-surface-color);
+      color: var(--m__ui-error-color);
+    }
+    .df-title {
+      font-size: var(--m__font-size-xxl);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin: 0;
+    }
+    .df-stat { font-size: var(--m__font-size-l); font-weight: 700; }
+  </style>
+
+  <div class="pg-tab-panel">
+      <div class="df-card m__rounded">
+        <h2 class="df-title">Deepfake</h2>
+        <div class="df-stat">14/25 deepfake segments</div>
+        <div class="caption">3 segments with &gt;98% conf.</div>
+      </div>
+
+      <div class="m__space XS"></div>
+      <div class="pg-histogram-section">
+        <div class="pg-histogram-scroll">
+          <div class="pg-histogram" id="histogram">
+            <div class="pg-histo-squares">
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.97"
+                title="0:01 · Authentic · 97%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.94"
+                title="0:02 · Authentic · 94%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.91"
+                title="0:03 · Authentic · 91%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.96"
+                title="0:04 · Authentic · 96%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.89"
+                title="0:05 · Authentic · 89%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.93"
+                title="0:06 · Authentic · 93%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.78"
+                title="0:07 · Synthetic · 78%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.94"
+                title="0:08 · Synthetic · 94%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.97"
+                title="0:09 · Synthetic · 97%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.91"
+                title="0:10 · Synthetic · 91%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.88"
+                title="0:11 · Synthetic · 88%"
+              ></div>
+              <div
+                class="pg-histo-bar synthetic"
+                style="opacity: 0.95"
+                title="0:12 · Synthetic · 95%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.86"
+                title="0:13 · Authentic · 86%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                style="opacity: 0.92"
+                title="0:14 · Authentic · 92%"
+              ></div>
+              <div
+                class="pg-histo-bar authentic"
+                title="0:15 · No content"
+              ></div>
+            </div>
+            <div class="pg-histo-axis">
+              <div class="pg-histo-tick">0:00</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:05</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick">0:10</div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick"></div>
+              <div class="pg-histo-tick" style="text-align: right">0:15</div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+      <div class="pg-results-table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Verdict</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="results-tbody">
+            <tr>
+              <td>0:00 – 0:04</td>
+              <td>
+                <span class="m__tag verdict-authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 97%"
+                    ></div>
+                  </div>
+                  <span>97.0%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:04 – 0:08</td>
+              <td>
+                <span class="m__tag verdict-authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 91%"
+                    ></div>
+                  </div>
+                  <span>91.2%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:08 – 0:12</td>
+              <td>
+                <span class="m__tag verdict-authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 93%"
+                    ></div>
+                  </div>
+                  <span>93.4%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:12 – 0:16</td>
+              <td>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 78%"
+                    ></div>
+                  </div>
+                  <span>78.3%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:16 – 0:20</td>
+              <td>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 97%"
+                    ></div>
+                  </div>
+                  <span>96.8%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:20 – 0:24</td>
+              <td>
+                <span class="m__tag verdict-synthetic">Synthetic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill synthetic"
+                      style="width: 88%"
+                    ></div>
+                  </div>
+                  <span>87.6%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>0:24 – 0:28</td>
+              <td>
+                <span class="m__tag verdict-authentic">Authentic</span>
+              </td>
+              <td>
+                <div class="pg-confidence-cell">
+                  <div class="pg-confidence-bar-track">
+                    <div
+                      class="pg-confidence-bar-fill authentic"
+                      style="width: 86%"
+                    ></div>
+                  </div>
+                  <span>86.2%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+{% endblock %}

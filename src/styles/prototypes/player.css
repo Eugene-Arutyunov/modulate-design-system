@@ -24,11 +24,25 @@
   }
 }
 
+/* Zero-height marker: when it scrolls past the top, the player is stuck */
+.media-stuck-sentinel {
+  height: 1px;
+  margin-bottom: -1px;
+}
+
 .media-container {
   position: sticky;
   top: 0;
-  height: calc(var(--initial-height) + 0.5em);
+  height: calc(var(--initial-height) + 1em);
   z-index: 1;
+
+  /* Page-bg strip above the player so it isn't flush to the top when stuck */
+  &::before {
+    content: "";
+    display: block;
+    height: 0.5em;
+    background-color: rgba(var(--ids__background-RGB), 1);
+  }
 
   & .media-space {
     background-color: rgba(var(--ids__background-RGB), 1);

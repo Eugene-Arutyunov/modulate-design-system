@@ -1,0 +1,71 @@
+---
+pageTitle: Language
+permalink: /playground/language/
+---
+
+{% extends 'prototypes/playground-layout.html' %}
+
+{% block options %}{% endblock %}
+
+{% block upload_actions %}
+      <div class="pg-upload-actions">
+        <button class="m__button-outline">Choose file…</button>
+      </div>
+{% endblock %}
+
+{% block panel_content %}
+  <style>
+    .lang-card {
+      --lang-accent: var(--m__ui-success-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--m__space-xxs);
+      padding: var(--m__space-m);
+      margin: var(--m__space-s) 0 var(--m__space-l);
+      background: var(--m__bg-surface-color);
+    }
+    .lang-name {
+      font-size: var(--m__font-size-xxxl);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin: 0;
+    }
+    .lang-note {
+      margin-top: var(--m__space-s);
+    }
+    .lang-conf-value {
+      font-size: var(--m__font-size-xxl);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--lang-accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .lang-conf-label {
+      font-size: var(--m__font-size-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--m__text-caption-color);
+    }
+    .lang-meta {
+      margin-top: var(--m__space-xs);
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+
+  <div class="pg-tab-panel">
+    <div class="lang-card m__rounded">
+      <h2 class="lang-name">English</h2>
+
+      <p class="caption lang-note">Only the first 30 seconds of audio are analyzed.</p>
+      <div class="lang-conf-value">99.6%</div>
+      <div class="lang-conf-label">Confidence</div>
+
+      <p class="caption lang-meta">Audio 97.7s · first 30s analyzed · Processed 1.10s · 27.3× real-time</p>
+    </div>
+  </div>
+{% endblock %}
