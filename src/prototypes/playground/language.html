@@ -3,128 +3,81 @@ pageTitle: Language
 permalink: /playground/language/
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block panel_content %}
+{% extends 'prototypes/playground-layout.html' %}
+
+{% block options %}{% endblock %}
+
+{% block upload_actions %}
+      <div class="pg-upload-actions">
+        <button class="m__button-outline">Choose file…</button>
+      </div>
+{% endblock %}
+
+{% block panel_content %}
+  <style>
+    .lang-card {
+      --lang-accent: var(--m__ui-success-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--m__space-xxs);
+      padding: var(--m__space-m);
+      margin: var(--m__space-s) 0 var(--m__space-l);
+      border-radius: var(--m__radius-m);
+      background: var(--m__bg-surface-color);
+    }
+    .lang-name {
+      font-size: var(--m__font-size-xxxl);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin: 0;
+    }
+    .lang-code {
+      font-size: var(--m__font-size-m);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--m__text-caption-color);
+    }
+    .lang-note {
+      margin-top: var(--m__space-s);
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
+    }
+    .lang-conf-value {
+      font-size: var(--m__font-size-xxl);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--lang-accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .lang-conf-label {
+      font-size: var(--m__font-size-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--m__text-caption-color);
+    }
+    .lang-meta {
+      margin-top: var(--m__space-xs);
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+
   <div class="pg-tab-panel">
-      <div class="m__space XS"></div>
-      <div class="deepfake-header verdict-authentic">
-      <h2>3 languages detected</h2>
-      <span>English 64% · Spanish 24% · French 12%.</span>
-      </div>
+    <div class="lang-card">
+      <h2 class="lang-name">English</h2>
+      <span class="lang-code">EN</span>
 
-      <div class="m__space XS"></div>
-      <div class="pg-histogram-section">
-        <div class="pg-histogram-scroll">
-          <div class="pg-histogram">
-            <div class="pg-histo-squares">
-              <div class="pg-histo-bar authentic" style="opacity: 0.95" title="0:01 · en · 95%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.94" title="0:02 · en · 94%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.92" title="0:03 · en · 92%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.91" title="0:04 · en · 91%"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.88" title="0:05 · es · 88%"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.86" title="0:06 · es · 86%"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.92" title="0:07 · es · 92%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.9" title="0:08 · en · 90%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.93" title="0:09 · en · 93%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.91" title="0:10 · en · 91%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.94" title="0:11 · en · 94%"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.71" title="0:12 · fr · 71%" data-lang="fr"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.83" title="0:13 · fr · 83%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.89" title="0:14 · en · 89%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.92" title="0:15 · en · 92%"></div>
-            </div>
-            <div class="pg-histo-axis">
-              <div class="pg-histo-tick">0:00</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:05</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:10</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick" style="text-align: right">0:15</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <p class="lang-note">Only the first 30 seconds of audio are analyzed.</p>
+      <div class="lang-conf-value">99.6%</div>
+      <div class="lang-conf-label">Confidence</div>
 
-      <div class="pg-results-table-section">
-        <table>
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Language</th>
-              <th>Confidence</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>0:00 – 0:04</td>
-              <td><span class="m__tag verdict-authentic">English</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill authentic" style="width: 93%"></div>
-                  </div>
-                  <span>93.0%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:04 – 0:07</td>
-              <td><span class="m__tag verdict-synthetic">Spanish</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill synthetic" style="width: 89%"></div>
-                  </div>
-                  <span>88.7%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:07 – 0:11</td>
-              <td><span class="m__tag verdict-authentic">English</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill authentic" style="width: 92%"></div>
-                  </div>
-                  <span>92.0%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:11 – 0:13</td>
-              <td><span class="m__tag verdict-synthetic">French</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill synthetic" style="width: 77%"></div>
-                  </div>
-                  <span>77.0%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:13 – 0:15</td>
-              <td><span class="m__tag verdict-authentic">English</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill authentic" style="width: 91%"></div>
-                  </div>
-                  <span>90.5%</span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <p class="lang-meta">Audio 97.7s · first 30s analyzed · Processed 1.10s · 27.3× real-time</p>
+    </div>
   </div>
 {% endblock %}

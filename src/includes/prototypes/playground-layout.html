@@ -527,29 +527,16 @@
 
   /* Upload area ────────────────────────────────────────────────────────── */
 
-  .pg-upload-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--m__space-s);
-    padding: var(--m__space-xl) var(--m__space-l);
-    text-align: center;
-    background-color: rgba(var(--ids__bg-accent-RGB), 1);
-    color: rgba(var(--ids__text-RGB), 1);
-  }
-
-  .pg-upload-box p {
-    font-size: var(--m__font-size-m);
-    color: rgba(var(--ids__text-RGB), 0.7);
-    margin: 0;
-  }
-
-  .pg-upload-formats {
+  .pg-upload-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--m__space-xxs);
-    justify-content: center;
+    gap: var(--m__space-xs);
+  }
+
+  .pg-upload-note {
+    margin: var(--m__space-xs) 0 0;
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-caption-color);
   }
 
   .pg-upload-header {
@@ -727,26 +714,19 @@
     min-width: 0;
   }
 
-  .pg-content h2 {
-    font-size: var(--m__font-size-m);
-    font-weight: var(--m__font-weight-bold);
-    margin: 0 0 0.4rem;
+  .pg-content p {
+    font-size: var(--m__font-size-s);
   }
 
   .pg-page-header {
     display: flex;
     gap: var(--m__space-xs);
-    align-items: baseline;
-    margin: 0.15rem 0 1rem;
+    align-items: center;
+    margin: -0.3rem 0 1rem;
   }
 
-  .pg-page-header .dashboard-page-title {
+  .pg-page-header .pg-page-title {
     margin: 0;
-  }
-
-  .pg-requests-remaining {
-    color: var(--m__text-caption-color);
-    font-size: var(--m__font-size-m);
   }
 
   /* Player overrides ────────────────────────────────────────────────────── */
@@ -813,11 +793,78 @@
       {% include 'prototypes/playground-nav-sidebar.html' %}
     </div>
 
-    <main class="pg-content dashboard-content">
+    <main class="pg-content">
       <div class="pg-page-header">
-        <h1 class="dashboard-page-title">{{ pageTitle }}</h1>
-        <span class="pg-requests-remaining">10 requests remaining</span>
+        <h1 class="pg-page-title">{{ pageTitle }}</h1>
       </div>
+
+      <div class="pg-upload-section">
+      {% block options %}
+      <!-- Options row -->
+      <div class="pg-options-row">
+        <div class="pg-stt-options visible" id="stt-options">
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tip="Identify different speakers in the audio"
+          >
+            <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
+          </label>
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tip="Detect synthetic/AI-generated voice (deepfake) per utterance"
+          >
+            <input type="checkbox" id="opt-deepfake" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Deepfake
+          </label>
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
+          >
+            <input type="checkbox" id="opt-emotion" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Emotions
+          </label>
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tip="Detect speaker accent (e.g. American, British)"
+          >
+            <input type="checkbox" id="opt-accent" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Accent
+          </label>
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tip="Tag personally identifiable and health information"
+          >
+            <input type="checkbox" id="opt-pii" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> PII/PHI
+          </label>
+          <label
+            class="m__toggle pg-stt-option"
+            data-tip="Fast transcription, English only"
+          >
+            <input type="checkbox" id="opt-fast" />
+            Fast (English only)
+          </label>
+          <label
+            class="m__toggle pg-stt-option"
+            data-tip="Show raw debug output"
+          >
+            <input type="checkbox" id="opt-debug" />
+            Debug
+          </label>
+        </div>
+      </div>
+
+        <div class="m__space S"></div>
+      {% endblock %}
+
+      {% block upload_actions %}
+      <div class="pg-upload-actions">
+        <button class="m__button-outline">Choose file…</button>
+        <button class="m__button-outline">Start streaming</button>
+        <button class="m__button-outline">Stream demo</button>
+        <button class="m__button-outline">Choose file for streaming…</button>
+      </div>
+      {% endblock %}
+      <p class="pg-upload-note">10 requests remaining. Supported formats up to 50 MB: .aac, .flac, .m4a, .mp3, .mp4, .ogg, .opus, .wav, .webm</p>
+      </div>
+
+      <div class="m__space L"></div>
 
       <!-- PLAYER -->
       <div class="media-container">
@@ -974,7 +1021,7 @@
   <div class="m__space L"></div>
 
   <fieldset class="m__segmented-control" id="pg-subtabs">
-    <label><input type="radio" name="pg-subtab" value="main" checked />Result</label>
+    <label><input type="radio" name="pg-subtab" value="main" checked />Output</label>
     <label><input type="radio" name="pg-subtab" value="stat" />Statistic</label>
     <label><input type="radio" name="pg-subtab" value="json" />JSON Response</label>
   </fieldset>
@@ -1128,82 +1175,6 @@
 <span class="pg-json-brace">}</span></pre>
     </div>
   </div>
-
-      <div class="m__space XL"></div>
-
-      <div class="pg-upload-section">
-      <div class="pg-upload-header">
-        <h2>Try More Audio</h2>
-      </div>
-
-              <div class="m__space XS"></div>
-
-
-      <!-- Options row -->
-      <div class="pg-options-row">
-        <div class="pg-stt-options visible" id="stt-options">
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Identify different speakers in the audio"
-          >
-            <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
-          </label>
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Detect synthetic/AI-generated voice (deepfake) per utterance"
-          >
-            <input type="checkbox" id="opt-deepfake" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Deepfake
-          </label>
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
-          >
-            <input type="checkbox" id="opt-emotion" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Emotions
-          </label>
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Detect speaker accent (e.g. American, British)"
-          >
-            <input type="checkbox" id="opt-accent" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Accent
-          </label>
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Tag personally identifiable and health information"
-          >
-            <input type="checkbox" id="opt-pii" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> PII/PHI
-          </label>
-          <label
-            class="m__toggle pg-stt-option"
-            data-tip="Fast transcription, English only"
-          >
-            <input type="checkbox" id="opt-fast" />
-            Fast (English only)
-          </label>
-        </div>
-      </div>
-
-        <div class="m__space M"></div>
-
-      <div class="pg-upload-box m__rounded dark-mode">
-        <p>Drop your audio or video file here, or stream live voice</p>
-        <p>Supported formats up to 50 MB:</p>
-        <div class="pg-upload-formats">
-          <span class="m__tag">.aac</span>
-          <span class="m__tag">.flac</span>
-          <span class="m__tag">.m4a</span>
-          <span class="m__tag">.mp3</span>
-          <span class="m__tag">.mp4</span>
-          <span class="m__tag">.ogg</span>
-          <span class="m__tag">.opus</span>
-          <span class="m__tag">.wav</span>
-          <span class="m__tag">.webm</span>
-        </div>
-        <div>
-        <button class="m__button-outline">Choose file…</button>
-                <button class="m__button-outline">Start streaming</button>
-        </div>
-      </div>
-      </div>
 
     </main>
   </div>
@@ -1589,22 +1560,27 @@
   {% endblock %} {% block scripts %}
   <script>
     var fastToggle = document.getElementById('opt-fast');
-    var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]:not(#opt-fast)');
+    var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]:not(#opt-fast):not(#opt-debug)');
 
-    fastToggle.addEventListener('change', function () {
-      checkboxes.forEach(function (cb) {
-        cb.disabled = fastToggle.checked;
-        cb.closest('.pg-stt-option').style.opacity = fastToggle.checked ? '0.4' : '';
-        cb.closest('.pg-stt-option').style.pointerEvents = fastToggle.checked ? 'none' : '';
+    if (fastToggle) {
+      fastToggle.addEventListener('change', function () {
+        checkboxes.forEach(function (cb) {
+          cb.disabled = fastToggle.checked;
+          cb.closest('.pg-stt-option').style.opacity = fastToggle.checked ? '0.4' : '';
+          cb.closest('.pg-stt-option').style.pointerEvents = fastToggle.checked ? 'none' : '';
+        });
       });
-    });
+    }
 
-    document.getElementById('pg-subtabs').addEventListener('change', function (e) {
-      var val = e.target.value;
-      document.querySelectorAll('[data-pg-subview]').forEach(function (view) {
-        view.hidden = view.dataset.pgSubview !== val;
+    var subtabs = document.getElementById('pg-subtabs');
+    if (subtabs) {
+      subtabs.addEventListener('change', function (e) {
+        var val = e.target.value;
+        document.querySelectorAll('[data-pg-subview]').forEach(function (view) {
+          view.hidden = view.dataset.pgSubview !== val;
+        });
       });
-    });
+    }
   </script>
   {% endblock %}
 </div>

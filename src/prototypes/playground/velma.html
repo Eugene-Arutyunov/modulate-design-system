@@ -1,0 +1,373 @@
+---
+pageTitle: Velma
+permalink: /playground/velma/
+---
+
+{% extends 'prototypes/playground-layout.html' %}
+
+{% block options %}
+      <div class="pg-options-row pg-velma-setup">
+        <button class="m__button-secondary">Set up conversation type, roles &amp; behaviors</button>
+        <span class="pg-velma-setup-summary">1 conversation type · 2 roles · 5 behaviors</span>
+      </div>
+      <div class="m__space S"></div>
+{% endblock %}
+
+{% block upload_actions %}
+      <div class="pg-upload-actions">
+        <button class="m__button-outline">Choose file…</button>
+        <button class="m__button-outline">Try demo audio</button>
+      </div>
+{% endblock %}
+
+{% block panel_content %}
+  <style>
+    .pg-velma-setup {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--m__space-m);
+    }
+    .pg-velma-setup-summary {
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Summary ───────────────────────────────────────────────────────────── */
+    .vx-summary {
+      font-size: var(--m__font-size-m);
+      line-height: 1.7;
+      margin: 0 0 var(--m__space-m);
+    }
+    .vx-box {
+      padding: var(--m__space-s) var(--m__space-m);
+      border-radius: var(--m__radius-m);
+      background: var(--m__bg-surface-color);
+      margin-bottom: var(--m__space-xs);
+    }
+    .vx-box.outlined { background: transparent; border: 1px solid var(--m__ui-border-color); }
+    .vx-box-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.4rem;
+      margin-bottom: 0.25rem;
+    }
+    .vx-box-pct { color: var(--m__text-caption-color); font-variant-numeric: tabular-nums; }
+    .vx-box-body { font-size: var(--m__font-size-s); color: var(--m__text-caption-color); line-height: 1.5; }
+
+    /* Tags ──────────────────────────────────────────────────────────────── */
+    .vx-tag {
+      font-size: var(--m__font-size-xs);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .vx-tag.meta { background: color-mix(in srgb, var(--m__chart-model-1-color) 12%, transparent); color: var(--m__text-caption-color); }
+    .vx-tag.detected { background: color-mix(in srgb, var(--m__ui-success-color) 16%, transparent); color: var(--m__ui-success-color); }
+    .vx-tag.not-detected { background: var(--m__bg-surface-color); color: var(--m__text-caption-color); }
+
+    /* Speakers table ────────────────────────────────────────────────────── */
+    .vx-table { width: 100%; }
+    .vx-table th { text-align: left; font-weight: 700; }
+    .vx-spk-name { font-weight: 700; }
+    .vx-spk-idx { color: var(--m__text-caption-color); }
+    .vx-emo-bar {
+      height: 10px;
+      border-radius: 5px;
+      display: flex;
+      overflow: hidden;
+      background: var(--vx-neutral);
+      max-width: 320px;
+    }
+    .vx-emo-seg { height: 100%; }
+    .vx-emo-labels { margin-top: 0.35rem; font-size: var(--m__font-size-xs); }
+    .vx-emo-neutral { color: var(--m__text-caption-color); }
+    .vx-emo-disappointed { color: var(--vx-disappointed); }
+    .vx-pct-cell { font-variant-numeric: tabular-nums; }
+
+    /* Topics ─────────────────────────────────────────────────────────────── */
+    .vx-topic-group { margin-bottom: var(--m__space-s); }
+    .vx-topic-group-head { margin-bottom: 0.4rem; font-weight: 700; }
+    .vx-chip-score { font-variant-numeric: tabular-nums; opacity: 0.7; margin-left: 0.15rem; }
+
+    /* Behaviors table ───────────────────────────────────────────────────── */
+    .vx-behavior-name { display: flex; align-items: center; gap: 0.4rem; font-weight: 700; }
+    .vx-behavior-icon { color: var(--m__text-caption-color); }
+    .vx-behavior.detected .vx-behavior-icon { color: var(--m__chart-model-1-color); }
+    .vx-behavior.detected .vx-behavior-name { text-decoration: underline; }
+    .vx-behavior-tagline { margin-top: 0.3rem; }
+    .vx-behavior-evidence { margin-top: 0.3rem; font-size: var(--m__font-size-xs); color: var(--m__text-caption-color); }
+    .vx-behavior-reason { color: var(--m__text-caption-color); line-height: 1.5; }
+    .vx-behaviors-table td { vertical-align: top; }
+  </style>
+
+  <div class="pg-tab-panel" style="--vx-neutral: var(--emotion-neutral); --vx-disappointed: var(--emotion-disappointed);">
+
+    <!-- Speech Summary ──────────────────────────────────────────────────── -->
+    <h2 class="vx-heading">Speech Summary</h2>
+    <p class="vx-summary">
+      <span class="pii-blur">Daniel Mercer</span> spoke with Green Valley Health member services agent
+      <span class="pii-blur">Mina</span> to verify his identity and discuss an MRI claim
+      (<span class="pii-blur">diagnosis code M54.5</span>) and denied
+      <span class="pii-blur">Gabapentin 300 mg prescription</span> for nerve pain related to a workplace
+      back injury. He requested the appeal form be sent to
+      <span class="pii-blur">daniel.mercer82@protonmail.com</span> and
+      <span class="pii-blur">4827 Willow Creek Drive, Apt 5B, Columbus, Ohio 43215</span>.
+    </p>
+
+    <div class="vx-box outlined">
+      <div class="vx-box-head">
+        <span>Type: <strong>Customer Service Call</strong></span>
+        <span class="vx-box-pct">100%</span>
+        <span class="vx-tag meta">Auto_selected_single_option</span>
+      </div>
+      <div class="vx-box-body">Auto-chosen as the only available option.</div>
+    </div>
+
+    <div class="vx-box">
+      <div class="vx-box-head">
+        <span><strong>1: Customer Service Representative</strong></span>
+        <span class="vx-box-pct">100%</span>
+        <span class="vx-tag meta">Inferred</span>
+      </div>
+      <div class="vx-box-body">
+        The speaker introduces themselves as Mina from Green Valley Health member services, verifies the
+        caller's identity and details, and accesses and discusses specific account, claim, and medical
+        information on file.
+      </div>
+    </div>
+
+    <div class="vx-box">
+      <div class="vx-box-head">
+        <span><strong>2: Customer</strong></span>
+        <span class="vx-box-pct">100%</span>
+        <span class="vx-tag meta">Inferred</span>
+      </div>
+      <div class="vx-box-body">
+        The speaker provides personal verification details, describes issues with an MRI claim and denied
+        prescription, and requests appeal forms and related actions, clearly acting as the caller seeking
+        assistance.
+      </div>
+    </div>
+
+    <!-- Speakers ────────────────────────────────────────────────────────── -->
+    <h2 class="vx-heading">Speakers</h2>
+    <div class="pg-results-table-section">
+      <table class="vx-table">
+        <thead>
+          <tr>
+            <th>Speaker</th>
+            <th>Emotion pattern</th>
+            <th>Speaking time</th>
+            <th>Language</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="vx-spk-name">Customer Service Representative</div>
+            </td>
+            <td>
+              <div class="vx-emo-bar"></div>
+              <div class="vx-emo-labels"><span class="vx-emo-neutral">Neutral</span></div>
+            </td>
+            <td class="vx-pct-cell">51%</td>
+            <td>English, American accent</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="vx-spk-name">Customer</div>
+            </td>
+            <td>
+              <div class="vx-emo-bar">
+                <div class="vx-emo-seg" style="width: 45%; background: var(--vx-neutral)"></div>
+                <div class="vx-emo-seg" style="width: 18%; background: var(--vx-disappointed)"></div>
+                <div class="vx-emo-seg" style="width: 37%; background: var(--vx-neutral)"></div>
+              </div>
+              <div class="vx-emo-labels">
+                <span class="vx-emo-neutral">Neutral</span>,
+                <span class="vx-emo-disappointed">Disappointed</span>
+              </div>
+            </td>
+            <td class="vx-pct-cell">46%</td>
+            <td>English, American accent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Topics ──────────────────────────────────────────────────────────── -->
+    <h2 class="vx-heading">Topics</h2>
+    <div class="vx-topic-group">
+      <div class="vx-topic-group-head">Customer Service Representative</div>
+      <div class="m__tag-group">
+        <span class="m__tag">back injury <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag">MRI claim <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag">Gabapentin <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag">diabetes <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag">hypertension <span class="vx-chip-score">0.00</span></span>
+      </div>
+    </div>
+    <div class="vx-topic-group">
+      <div class="vx-topic-group-head">Customer</div>
+      <div class="m__tag-group">
+        <span class="m__tag m__tag--error">back injury <span class="vx-chip-score">-0.50</span></span>
+        <span class="m__tag">MRI claim <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag">Gabapentin <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag">diabetes <span class="vx-chip-score">0.00</span></span>
+        <span class="m__tag">hypertension <span class="vx-chip-score">0.00</span></span>
+      </div>
+    </div>
+
+    <!-- Behaviors ───────────────────────────────────────────────────────── -->
+    <h2 class="vx-heading">Behaviors</h2>
+    <div class="pg-results-table-section vx-behaviors-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Speaker</th>
+            <th>Behavior</th>
+            <th>Model reasoning</th>
+            <th>Confidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="5">
+              <div class="vx-spk-name">Customer Service Representative</div>
+            </td>
+            <td class="vx-behavior detected">
+              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Issue Not Resolved</div>
+              <div class="vx-behavior-tagline"><span class="vx-tag detected">Detected</span></div>
+              <div class="vx-behavior-evidence">Evidence: 2 clips (1 definitive)</div>
+            </td>
+            <td class="vx-behavior-reason">Rep references customer's claim and medication request but fails to provide concrete resolution (e.g., approval/denial status, payment) or any firm follow-up commitment.</td>
+            <td class="vx-pct-cell">75%</td>
+          </tr>
+          <tr>
+            <td class="vx-behavior">
+              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Complaints</div>
+              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
+            </td>
+            <td class="vx-behavior-reason">The speaker is the Customer Service Representative calmly verifying information, confirming details, and providing account data; no statements attributing negative outcomes to the company or explicit dissatisfaction markers present.</td>
+            <td class="vx-pct-cell">100%</td>
+          </tr>
+          <tr>
+            <td class="vx-behavior">
+              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Coercion Manipulation</div>
+              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
+            </td>
+            <td class="vx-behavior-reason">Speaker is Customer Service Representative providing polite verifications and information; no threats, ultimatums, reduced empathy, or pressure tactics observed.</td>
+            <td class="vx-pct-cell">100%</td>
+          </tr>
+          <tr>
+            <td class="vx-behavior">
+              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Issue Resolved</div>
+              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
+            </td>
+            <td class="vx-behavior-reason">No customer's stated issue referenced; no resolution confirmation, customer acknowledgment, or closure cues present in clips.</td>
+            <td class="vx-pct-cell">5%</td>
+          </tr>
+          <tr>
+            <td class="vx-behavior">
+              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Inappropriate Speech</div>
+              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
+            </td>
+            <td class="vx-behavior-reason">All clips contain professional, factual verification and information sharing with no profanity, slurs, personal attacks, or hostile indicators.</td>
+            <td class="vx-pct-cell">0%</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="vx-spk-name">Customer</div>
+            </td>
+            <td class="vx-behavior">
+              <div class="vx-behavior-name"><span class="vx-behavior-icon">✻</span> Inappropriate Speech</div>
+              <div class="vx-behavior-tagline"><span class="vx-tag not-detected">Not detected</span></div>
+            </td>
+            <td class="vx-behavior-reason">No profanity, slurs, sexually-suggestive content, personal attacks, or hostile prosody observed; speech is polite and factual.</td>
+            <td class="vx-pct-cell">98%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Transcript ──────────────────────────────────────────────────────── -->
+    <h2 class="vx-heading">Transcript</h2>
+    <div class="pg-transcript-container visible">
+      <div class="pg-transcript-list">
+
+        <div class="pg-transcript-utterance m__rounded speaker-left ec-neutral">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">0:00</span>
+            <span class="pg-transcript-speaker">Customer Service Representative</span>
+            <span class="pg-transcript-emotion">Neutral</span>
+            <span>🇬🇧</span>
+            <span class="pg-transcript-accent">American accent</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>Thank you for calling Green Valley Health member services. This is Mina speaking on a recorded line. Can I confirm I'm speaking with Daniel Mercer, born July 18, 1982, and living at 4827 Willow Creek Drive, Apt 5B, Columbus, Ohio 43215?</p>
+          </div>
+        </div>
+
+        <div class="pg-transcript-utterance m__rounded speaker-right ec-neutral">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">0:18</span>
+            <span class="pg-transcript-speaker">Customer</span>
+            <span class="pg-transcript-emotion">Neutral</span>
+            <span>🇬🇧</span>
+            <span class="pg-transcript-accent">American accent</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>Yes, this is Daniel Andrew Mercer. The last four of my Social Security number are 4421, and my member ID is GVH-88394127.</p>
+          </div>
+        </div>
+
+        <div class="pg-transcript-utterance m__rounded speaker-left ec-neutral">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">0:32</span>
+            <span class="pg-transcript-speaker">Customer Service Representative</span>
+            <span class="pg-transcript-emotion">Neutral</span>
+            <span>🇬🇧</span>
+            <span class="pg-transcript-accent">American accent</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>Thank you, Mr. Mercer. For verification, can you confirm the phone number and email we have on file: 614-555-0198, and daniel.mercer82@protonmail.com?</p>
+          </div>
+        </div>
+
+        <div class="pg-transcript-utterance m__rounded speaker-right ec-neutral">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">0:47</span>
+            <span class="pg-transcript-speaker">Customer</span>
+            <span class="pg-transcript-emotion">Neutral</span>
+            <span>🇬🇧</span>
+            <span class="pg-transcript-accent">American accent</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>Yes, that's right, although my new callback number is 380-555-4412, and my employer is Harrison Industrial Company at 2150 Fisher Road, Columbus, Ohio.</p>
+          </div>
+        </div>
+
+        <div class="pg-transcript-utterance m__rounded speaker-left ec-neutral">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">1:00</span>
+            <span class="pg-transcript-speaker">Customer Service Representative</span>
+            <span class="pg-transcript-emotion">Neutral</span>
+            <span>🇬🇧</span>
+            <span class="pg-transcript-accent">American accent</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>I see your plan is under policy number PPO-77-194402, and the primary care physician listed is Dr. Elena Ruiz at Buckeye Family Clinic, 903 East Main Street, Columbus, Ohio 43205.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

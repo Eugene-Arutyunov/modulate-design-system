@@ -3,116 +3,332 @@ pageTitle: PII/PHI Redaction
 permalink: /playground/redaction/
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block panel_content %}
-  <div class="pg-tab-panel">
-      <div class="m__space XS"></div>
-      <div class="deepfake-header verdict-synthetic">
-      <h2>12 redactions</h2>
-      <span>9 PII · 3 PHI segments. 2 high-confidence matches.</span>
-      </div>
+{% extends 'prototypes/playground-layout.html' %}
 
-      <div class="m__space XS"></div>
-      <div class="pg-histogram-section">
-        <div class="pg-histogram-scroll">
-          <div class="pg-histogram">
-            <div class="pg-histo-squares">
-              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:01 · Clean"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:02 · Clean"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.92" title="0:03 · Name · 92%"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.88" title="0:04 · Name · 88%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:05 · Clean"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:06 · Clean"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.96" title="0:07 · SSN · 96%"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.94" title="0:08 · SSN · 94%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:09 · Clean"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.82" title="0:10 · Address · 82%"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.79" title="0:11 · Address · 79%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:12 · Clean"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.71" title="0:13 · Diagnosis · 71%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:14 · Clean"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.2" title="0:15 · Clean"></div>
-            </div>
-            <div class="pg-histo-axis">
-              <div class="pg-histo-tick">0:00</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:05</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:10</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick" style="text-align: right">0:15</div>
-            </div>
+{% block options %}
+      <div class="pg-options-row pg-redaction-options">
+        <label class="pg-pad-field">
+          <span class="pg-pad-label">Start padding</span>
+          <span class="pg-pad-control">
+            <input type="number" value="80" min="0" /><span class="pg-pad-unit">ms</span>
+          </span>
+        </label>
+        <label class="pg-pad-field">
+          <span class="pg-pad-label">End padding</span>
+          <span class="pg-pad-control">
+            <input type="number" value="10" min="0" /><span class="pg-pad-unit">ms</span>
+          </span>
+        </label>
+        <label class="m__checkbox pg-stt-option pg-diarization-option" data-tip="Identify different speakers in the audio">
+          <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
+        </label>
+      </div>
+      <div class="m__space S"></div>
+{% endblock %}
+
+{% block upload_actions %}
+      <div class="pg-upload-actions">
+        <button class="m__button-outline">Choose file…</button>
+      </div>
+{% endblock %}
+
+{% block panel_content %}
+  <style>
+    /* Padding inputs ────────────────────────────────────────────────────── */
+    .pg-redaction-options {
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: var(--m__space-xs);
+    }
+    .pg-diarization-option {
+      align-self: flex-end;
+      min-height: calc(0.8rem * var(--m__line-height-base) + 1rem + 2px);
+    }
+    .pg-pad-field {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .pg-pad-label {
+      font-size: var(--m__font-size-s);
+      font-weight: 500;
+      color: var(--m__text-color);
+    }
+    .pg-pad-control {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      font-size: var(--m__font-size-s);
+    }
+    .pg-pad-field input {
+      width: 11rem;
+      font: inherit;
+      font-variant-numeric: tabular-nums;
+      line-height: var(--m__line-height-base);
+      color: var(--m__text-color);
+      background-color: var(--m__ui-control-color);
+      border: 1px solid var(--m__ui-border-color);
+      border-radius: var(--m__radius-s);
+      padding: var(--m__control-inset-padding);
+      padding-right: 2.4rem;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .pg-pad-field input::-webkit-outer-spin-button,
+    .pg-pad-field input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .pg-pad-field input:focus-visible {
+      outline: 1px solid var(--m__text-hover-color);
+      outline-offset: -1px;
+    }
+    .pg-pad-unit {
+      position: absolute;
+      right: 0.6rem;
+      pointer-events: none;
+      color: var(--m__text-caption-color);
+    }
+
+    /* Redacted audio ─────────────────────────────────────────────────────── */
+    .pg-redacted-audio {
+      margin: var(--m__space-s) 0;
+    }
+    .pg-redacted-audio audio {
+      width: 100%;
+      height: 2.5rem;
+    }
+
+    /* Redaction summary ─────────────────────────────────────────────────── */
+    .pg-redaction-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 0 0 var(--m__space-s);
+      padding: var(--m__space-xs) 0;
+      border-radius: var(--m__radius-m);
+      background: var(--m__bg-surface-color);
+    }
+    .pg-redaction-stat {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: var(--m__space-xs) var(--m__space-m);
+    }
+    .pg-redaction-stat + .pg-redaction-stat {
+      border-left: 1px solid var(--m__ui-border-color);
+    }
+    .pg-redaction-stat-value {
+      font-size: var(--m__font-size-l);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--m__bg-accent-color);
+      font-variant-numeric: tabular-nums;
+    }
+    .pg-redaction-stat-label {
+      font-size: var(--m__font-size-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--m__text-caption-color);
+    }
+
+    /* Silenced-audio timeline ───────────────────────────────────────────── */
+    .pg-redaction-timeline {
+      margin-bottom: var(--m__space-s);
+    }
+    .pg-redaction-track {
+      position: relative;
+      height: 2.4rem;
+      border-radius: var(--m__radius-xs);
+      background: var(--m__bg-surface-color);
+      overflow: hidden;
+    }
+    .pg-redaction-seg {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      background: color-mix(in srgb, var(--m__ui-error-color) 38%, transparent);
+      border-left: 1px solid var(--m__ui-error-color);
+      border-right: 1px solid var(--m__ui-error-color);
+      cursor: help;
+      transition: background var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+    .pg-redaction-seg:hover {
+      background: color-mix(in srgb, var(--m__ui-error-color) 55%, transparent);
+      transition: background var(--m__hover-transition-duration) var(--m__transition-easing);
+    }
+    .pg-redaction-axis {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--m__space-xxs);
+      font-size: var(--m__font-size-xs);
+      color: var(--m__text-caption-color);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Inline redaction tag ──────────────────────────────────────────────── */
+    .pii-tag {
+      display: inline-block;
+      font-family: var(--m__font-semi-mono);
+      font-size: 0.82em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--m__ui-error-color);
+      background: color-mix(in srgb, var(--m__ui-error-color) 10%, transparent);
+      border-radius: var(--m__radius-xs);
+      padding: 0.02em 0.32em;
+      white-space: nowrap;
+      cursor: help;
+    }
+    .pg-transcript-flag {
+      font-size: 0.85em;
+    }
+  </style>
+
+  <div class="pg-tab-panel">
+
+    <!-- Redacted audio ──────────────────────────────────────────────────── -->
+    <div class="pg-redacted-audio">
+      <audio controls src="/assets/audio/redacted-demo.mp3"></audio>
+    </div>
+
+    <!-- Summary ─────────────────────────────────────────────────────────── -->
+    <div class="pg-redaction-summary">
+      <div class="pg-redaction-stat">
+        <div class="pg-redaction-stat-value">31</div>
+        <div class="pg-redaction-stat-label">Redactions</div>
+      </div>
+      <div class="pg-redaction-stat">
+        <div class="pg-redaction-stat-value">108.9s</div>
+        <div class="pg-redaction-stat-label">Silenced</div>
+      </div>
+      <div class="pg-redaction-stat">
+        <div class="pg-redaction-stat-value">53.7%</div>
+        <div class="pg-redaction-stat-label">Of audio</div>
+      </div>
+    </div>
+
+    <!-- Silenced timeline ───────────────────────────────────────────────── -->
+    <div class="pg-redaction-timeline">
+      <div class="pg-redaction-track">
+        <div class="pg-redaction-seg" style="left: 8%;  width: 5%"  title="0:16 – 0:26 · Name"></div>
+        <div class="pg-redaction-seg" style="left: 14%; width: 7%"  title="0:28 – 0:42 · Address · ZIP"></div>
+        <div class="pg-redaction-seg" style="left: 23%; width: 4%"  title="0:46 – 0:54 · Date of birth"></div>
+        <div class="pg-redaction-seg" style="left: 30%; width: 6%"  title="1:00 – 1:13 · SSN · Member ID"></div>
+        <div class="pg-redaction-seg" style="left: 39%; width: 5%"  title="1:18 – 1:28 · Phone · Email"></div>
+        <div class="pg-redaction-seg" style="left: 48%; width: 8%"  title="1:36 – 1:53 · Callback · Employer"></div>
+        <div class="pg-redaction-seg" style="left: 59%; width: 4%"  title="1:59 – 2:07 · Workplace address"></div>
+        <div class="pg-redaction-seg" style="left: 66%; width: 6%"  title="2:13 – 2:25 · Account number"></div>
+        <div class="pg-redaction-seg" style="left: 76%; width: 5%"  title="2:33 – 2:43 · Name · Phone"></div>
+        <div class="pg-redaction-seg" style="left: 85%; width: 4%"  title="2:51 – 2:59 · Email"></div>
+        <div class="pg-redaction-seg" style="left: 92%; width: 4%"  title="3:05 – 3:13 · Address"></div>
+      </div>
+      <div class="pg-redaction-axis">
+        <span>0:00</span>
+        <span>0:40</span>
+        <span>1:21</span>
+        <span>2:01</span>
+        <span>2:42</span>
+        <span>3:22</span>
+      </div>
+    </div>
+
+    <!-- Redacted transcript ─────────────────────────────────────────────── -->
+    <div class="pg-transcript-container visible">
+      <div class="pg-transcript-list">
+
+        <div class="pg-transcript-utterance m__rounded speaker-left">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">0:00</span>
+            <span class="pg-transcript-speaker">Speaker 1</span>
+            <span class="pg-transcript-flag">🇬🇧</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>
+              Thank you for calling Green Valley Health member services. This is
+              <span class="pii-tag" title="First name">[FIRSTNAME]</span> speaking on a
+              recorded line. Can I confirm I'm speaking with
+              <span class="pii-tag" title="First name">[FIRSTNAME]</span>
+              <span class="pii-tag" title="Last name">[LASTNAME]</span>, born
+              <span class="pii-tag" title="Date of birth">[DATE OF BIRTH]</span>, and living at
+              <span class="pii-tag" title="Address">[ADDRESS]</span>,
+              <span class="pii-tag" title="Address">[ADDRESS]</span>
+              <span class="pii-tag" title="ZIP code">[ZIPCODE]</span>?
+            </p>
           </div>
         </div>
-      </div>
 
-      <div class="pg-results-table-section">
-        <table>
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Category</th>
-              <th>Confidence</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>0:02 – 0:04</td>
-              <td><span class="m__tag verdict-synthetic">PII · Name</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill synthetic" style="width: 90%"></div>
-                  </div>
-                  <span>90.1%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:06 – 0:08</td>
-              <td><span class="m__tag verdict-synthetic">PII · SSN</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill synthetic" style="width: 95%"></div>
-                  </div>
-                  <span>95.4%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:09 – 0:11</td>
-              <td><span class="m__tag verdict-synthetic">PII · Address</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill synthetic" style="width: 80%"></div>
-                  </div>
-                  <span>80.3%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:12 – 0:14</td>
-              <td><span class="m__tag verdict-synthetic">PHI · Diagnosis</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill synthetic" style="width: 71%"></div>
-                  </div>
-                  <span>71.2%</span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="pg-transcript-utterance m__rounded speaker-right">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">0:18</span>
+            <span class="pg-transcript-speaker">Speaker 2</span>
+            <span class="pg-transcript-flag">🇬🇧</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>
+              Yes, this is <span class="pii-tag" title="First name">[FIRSTNAME]</span>
+              <span class="pii-tag" title="Middle name">[MIDDLENAME]</span>
+              <span class="pii-tag" title="Last name">[LASTNAME]</span>. The last 4 of my Social
+              Security number are <span class="pii-tag" title="Social security number">[SSN]</span>,
+              and my member ID is <span class="pii-tag" title="Protected health information">[PHI]</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="pg-transcript-utterance m__rounded speaker-left">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">0:32</span>
+            <span class="pg-transcript-speaker">Speaker 1</span>
+            <span class="pg-transcript-flag">🇬🇧</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>
+              Thank you, <span class="pii-tag" title="Prefix / suffix">[PREFIX SUFFIX]</span>
+              <span class="pii-tag" title="Last name">[LASTNAME]</span>. For verification, can you
+              confirm the phone number and email we have on file:
+              <span class="pii-tag" title="Phone number">[PHONE]</span>, and
+              <span class="pii-tag" title="Email address">[EMAIL]</span>?
+            </p>
+          </div>
+        </div>
+
+        <div class="pg-transcript-utterance m__rounded speaker-right">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">0:47</span>
+            <span class="pg-transcript-speaker">Speaker 2</span>
+            <span class="pg-transcript-flag">🇬🇧</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>
+              Yes, that's right, although my new callback number is
+              <span class="pii-tag" title="Phone number">[PHONE]</span>, and my employer is
+              <span class="pii-tag" title="Employer">[EMPLOYER]</span> at
+              <span class="pii-tag" title="Workplace address">[WORKPLACE ADDRESS]</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="pg-transcript-utterance m__rounded speaker-left">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">1:00</span>
+            <span class="pg-transcript-speaker">Speaker 1</span>
+            <span class="pg-transcript-flag">🇬🇧</span>
+          </div>
+          <div class="pg-transcript-text">
+            <p>
+              Perfect, I've updated that for you. To pull up your plan, can you give me your
+              member account number and the last payment amount on file —
+              <span class="pii-tag" title="Account number">[ACCOUNT NUMBER]</span> and
+              <span class="pii-tag" title="Payment amount">[AMOUNT]</span>?
+            </p>
+          </div>
+        </div>
+
       </div>
+    </div>
+
   </div>
 {% endblock %}

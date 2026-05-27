@@ -3,92 +3,100 @@ pageTitle: AI Music Detection
 permalink: /playground/ai-music/
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block panel_content %}
-  <div class="pg-tab-panel">
-      <div class="m__space XS"></div>
-      <div class="deepfake-header verdict-synthetic">
-      <h2>1 AI-generated music segment</h2>
-      <span>1/5 music segments AI-generated. Highest conf 94%.</span>
-      </div>
+{% extends 'prototypes/playground-layout.html' %}
 
-      <div class="m__space XS"></div>
-      <div class="pg-histogram-section">
-        <div class="pg-histogram-scroll">
-          <div class="pg-histogram">
-            <div class="pg-histo-squares">
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:01 · No music"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:02 · No music"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:03 · No music"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.86" title="0:04 · Human music · 86%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.94" title="0:05 · Human music · 94%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.91" title="0:06 · Human music · 91%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:07 · No music"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:08 · No music"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:09 · No music"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:10 · No music"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.94" title="0:11 · AI music · 94%"></div>
-              <div class="pg-histo-bar synthetic" style="opacity: 0.92" title="0:12 · AI music · 92%"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:13 · No music"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:14 · No music"></div>
-              <div class="pg-histo-bar authentic" style="opacity: 0.15" title="0:15 · No music"></div>
-            </div>
-            <div class="pg-histo-axis">
-              <div class="pg-histo-tick">0:00</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:05</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:10</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick" style="text-align: right">0:15</div>
-            </div>
-          </div>
+{% block options %}{% endblock %}
+
+{% block upload_actions %}
+      <div class="pg-upload-actions">
+        <button class="m__button-outline">Choose file…</button>
+      </div>
+{% endblock %}
+
+{% block panel_content %}
+  <style>
+    .aim-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--m__space-s);
+      padding: var(--m__space-l) var(--m__space-m);
+      margin: var(--m__space-s) 0 var(--m__space-l);
+      border-radius: var(--m__radius-m);
+      background: var(--m__bg-surface-color);
+    }
+    .aim-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: var(--m__font-size-xs);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--m__ui-error-color);
+      background: color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+    }
+    .aim-title {
+      font-size: var(--m__font-size-xxl);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--m__ui-error-color);
+      margin: 0;
+    }
+    .aim-sub {
+      max-width: 38ch;
+      font-size: var(--m__font-size-s);
+      color: var(--m__text-caption-color);
+      line-height: 1.5;
+    }
+    .aim-paths {
+      width: 100%;
+      max-width: 24rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: var(--m__space-s) var(--m__space-m);
+      border-radius: var(--m__radius-s);
+      background: var(--m__background-color);
+    }
+    .aim-path {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--m__space-s);
+    }
+    .aim-path-name { font-weight: 600; }
+    .aim-path.muted .aim-path-name { color: var(--m__text-caption-color); font-weight: 500; }
+    .aim-path-val { font-weight: 700; color: var(--m__ui-error-color); font-variant-numeric: tabular-nums; }
+    .aim-path.muted .aim-path-val { color: var(--m__text-caption-color); font-weight: 400; font-style: italic; }
+    .aim-meta {
+      font-size: var(--m__font-size-xs);
+      color: var(--m__text-caption-color);
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+
+  <div class="pg-tab-panel">
+    <div class="aim-card">
+      <span class="aim-badge">AI DETECTED</span>
+      <h2 class="aim-title">AI Vocal Music</h2>
+      <p class="aim-sub">Synthetic voice detected in a musical context — likely an AI song or AI-generated topline.</p>
+
+      <div class="aim-paths">
+        <div class="aim-path">
+          <span class="aim-path-name">Vocal path</span>
+          <span class="aim-path-val">55.8% AI</span>
+        </div>
+        <div class="aim-path muted">
+          <span class="aim-path-name">Instrumental path</span>
+          <span class="aim-path-val">not evaluated</span>
         </div>
       </div>
 
-      <div class="pg-results-table-section">
-        <table>
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Verdict</th>
-              <th>Confidence</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>0:03 – 0:06</td>
-              <td><span class="m__tag verdict-authentic">Human music</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill authentic" style="width: 90%"></div>
-                  </div>
-                  <span>90.3%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:10 – 0:12</td>
-              <td><span class="m__tag verdict-synthetic">AI music</span></td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div class="pg-confidence-bar-fill synthetic" style="width: 93%"></div>
-                  </div>
-                  <span>93.1%</span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <p class="aim-meta">Audio 89.3s · Processed 0.52s · 170.7× real-time</p>
+    </div>
   </div>
 {% endblock %}

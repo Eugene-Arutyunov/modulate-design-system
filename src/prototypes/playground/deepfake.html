@@ -3,12 +3,47 @@ pageTitle: Deepfake
 permalink: /playground/deepfake/
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block panel_content %}
+{% extends 'prototypes/playground-layout.html' %}
+
+{% block options %}{% endblock %}
+
+{% block upload_actions %}
+      <div class="pg-upload-actions">
+        <button class="m__button-outline">Choose file…</button>
+        <button class="m__button-outline">Start streaming</button>
+      </div>
+{% endblock %}
+
+{% block panel_content %}
+  <style>
+    .df-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--m__space-xxs);
+      padding: var(--m__space-l) var(--m__space-m);
+      margin: var(--m__space-s) 0 var(--m__space-l);
+      border-radius: var(--m__radius-m);
+      background: var(--m__bg-surface-color);
+      color: var(--m__ui-error-color);
+    }
+    .df-title {
+      font-size: var(--m__font-size-xxl);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin: 0;
+    }
+    .df-stat { font-size: var(--m__font-size-l); font-weight: 700; }
+    .df-sub { font-size: var(--m__font-size-s); color: var(--m__text-caption-color); }
+  </style>
+
   <div class="pg-tab-panel">
-      <div class="m__space XS"></div>
-      <div class="deepfake-header verdict-synthetic">
-      <h2>56% Deepfake</h2>
-      <span>14/25 deepfake segments. 3 segments with >98% conf.</span>
+      <div class="df-card">
+        <h2 class="df-title">Deepfake</h2>
+        <div class="df-stat">14/25 deepfake segments</div>
+        <div class="df-sub">3 segments with &gt;98% conf.</div>
       </div>
 
       <div class="m__space XS"></div>
