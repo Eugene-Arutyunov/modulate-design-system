@@ -7,13 +7,13 @@ permalink: /playground/redaction/
 
 {% block options %}
       <div class="pg-options-row pg-redaction-options">
-        <div class="m__textfield m__textfield--compact m__textfield--no-spin pg-pad-field">
+        <div class="m__textfield m__textfield--no-spin pg-pad-field">
           <label>Start padding</label>
           <span class="pg-pad-control">
             <input type="number" value="80" min="0" /><span class="pg-pad-unit">ms</span>
           </span>
         </div>
-        <div class="m__textfield m__textfield--compact m__textfield--no-spin pg-pad-field">
+        <div class="m__textfield m__textfield--no-spin pg-pad-field">
           <label>End padding</label>
           <span class="pg-pad-control">
             <input type="number" value="10" min="0" /><span class="pg-pad-unit">ms</span>
@@ -23,7 +23,7 @@ permalink: /playground/redaction/
           <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
         </label>
       </div>
-      <div class="m__space XS"></div>
+      <div class="m__space S"></div>
 {% endblock %}
 
 {% block upload_actions %}
@@ -72,26 +72,32 @@ permalink: /playground/redaction/
     /* Padding inputs ────────────────────────────────────────────────────── */
     .pg-redaction-options {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       flex-wrap: wrap;
-      gap: var(--m__space-xs);
-    }
-    .pg-diarization-option {
-      align-self: flex-end;
-      min-height: calc(0.8rem * var(--m__line-height-base) + 1rem + 2px);
+      gap: var(--m__space-s);
+      font-size: var(--m__font-size-s);
     }
     /* DS textfield + inline unit suffix; width/suffix are the only custom bits */
     .pg-redaction-options .pg-pad-field {
-      width: 8rem;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--m__space-xs);
       margin-bottom: 0;
+    }
+    .pg-redaction-options .pg-pad-field > label {
+      margin: 0;
+      white-space: nowrap;
     }
     .pg-pad-control {
       position: relative;
       display: block;
+      width: 5rem;
     }
     .pg-pad-field input {
+      padding: var(--m__control-compact-padding);
       padding-right: 2rem;
-      font-size: var(--m__font-size-s);
+      font-size: inherit;
+      line-height: inherit;
       font-variant-numeric: tabular-nums;
     }
     .pg-pad-unit {
@@ -100,7 +106,6 @@ permalink: /playground/redaction/
       transform: translateY(-50%);
       right: 0.5rem;
       pointer-events: none;
-      font-size: var(--m__font-size-s);
       color: var(--m__text-caption-color);
     }
 
