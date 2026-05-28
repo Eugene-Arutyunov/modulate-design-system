@@ -24,83 +24,89 @@ segments:
 
 {% block options %}{% endblock %}
 
+{% block player_clips %}
+  <div class="mx-player-heat">
+    <div class="mx-player-heat-row" data-row="music">
+      {% for s in segments %}<div class="mx-player-heat-cell" style="opacity: {{ s.music / 100 }}" title="{{ s.t }} · Music {{ s.music }}%"></div>{% endfor %}
+    </div>
+    <div class="mx-player-heat-row" data-row="speech">
+      {% for s in segments %}<div class="mx-player-heat-cell" style="opacity: {{ s.speech / 100 }}" title="{{ s.t }} · Speech {{ s.speech }}%"></div>{% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block speaker_labels %}
+  <div class="speaker-labels">
+    <div class="speaker-label" data-speaker-index="1"><span>Music</span></div>
+    <div class="speaker-label" data-speaker-index="2"><span>Speech</span></div>
+  </div>
+{% endblock %}
+
+{% block above_output %}
+  <div class="mx-verdict m__rounded">
+    <span class="mx-verdict-title">Music</span>
+    <span class="mx-verdict-stat">
+      <span class="mx-verdict-stat-value">90%</span>
+      <span class="mx-verdict-stat-label">Music</span>
+    </span>
+    <span class="mx-verdict-stat">
+      <span class="mx-verdict-stat-value">77%</span>
+      <span class="mx-verdict-stat-label">Speech</span>
+    </span>
+  </div>
+{% endblock %}
+
 {% block panel_content %}
   <style>
-    .mx-panel { --music-color: var(--m__chart-model-1-color); --speech-color: var(--m__ui-success-color); }
+    .mx-panel,
+    .mx-verdict,
+    .media-container { --music-color: var(--m__ui-success-color); --speech-color: var(--m__ui-error-color); }
+
+    /* Player visualization heatmap ──────────────────────────────────────── */
+    .media-container:has(.mx-player-heat) {
+      --player-visualization-height: 4rem;
+    }
+    .mx-player-heat {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .mx-player-heat-row {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    .mx-player-heat-cell {
+      flex: 1;
+      transition: filter var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+    .mx-player-heat-cell:hover {
+      filter: brightness(1.15);
+    }
+    .mx-player-heat-row[data-row="music"]  .mx-player-heat-cell { background: var(--music-color); }
+    .mx-player-heat-row[data-row="speech"] .mx-player-heat-cell { background: var(--speech-color); }
 
     /* Verdict card ──────────────────────────────────────────────────────── */
     .mx-verdict {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: var(--m__space-m);
-      padding: var(--m__space-s) var(--m__space-m);
-      margin: var(--m__space-s) 0 var(--m__space-l);
-      background: var(--m__bg-surface-color);
-    }
-    .mx-verdict-icon {
-      width: 1.5rem;
-      height: 1.5rem;
-      flex-shrink: 0;
-      color: var(--music-color);
-    }
-    .mx-verdict-icon svg { width: 100%; height: 100%; fill: currentColor; }
-    .mx-verdict-title {
-      font-size: var(--m__font-size-l);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--music-color);
-      line-height: 1;
-    }
-    .mx-verdict-stats {
-      display: flex;
-      gap: var(--m__space-m);
-      margin-left: auto;
-    }
-    .mx-verdict-stat { display: flex; align-items: baseline; gap: 0.35rem; }
-    .mx-verdict-stat-value { font-size: var(--m__font-size-l); font-weight: 800; line-height: 1; }
-    .mx-verdict-stat.music  .mx-verdict-stat-value { color: var(--music-color); }
-    .mx-verdict-stat.speech .mx-verdict-stat-value { color: var(--speech-color); }
-    .mx-verdict-stat-label {
-      font-size: var(--m__font-size-xs);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--m__text-caption-color);
-    }
-
-    /* Heatmap ───────────────────────────────────────────────────────────── */
-    .mx-heatmap { display: flex; flex-direction: column; gap: 0.4rem; }
-    .mx-heat-row { display: flex; align-items: center; gap: 0.75rem; }
-    .mx-heat-label {
-      width: 4.5rem;
-      flex-shrink: 0;
-      text-align: left;
-      font-size: var(--m__font-size-xs);
+      height: 4rem;
+      padding-inline: var(--m__space-m);
+      margin-bottom: var(--m__space-l);
+      background: var(--m__ui-success-color);
+      color: white;
       font-weight: 700;
-      letter-spacing: 0.06em;
+      white-space: nowrap;
     }
-    .mx-heat-label.music  { color: var(--music-color); }
-    .mx-heat-label.speech { color: var(--speech-color); }
-    .mx-heat-cells {
-      flex: 1;
+    .mx-verdict-stat {
       display: flex;
-      height: 1.9rem;
-      border-radius: var(--m__radius-xs);
-      overflow: hidden;
-      background: var(--m__bg-surface-color);
+      align-items: baseline;
+      gap: 0.4rem;
     }
-    .mx-heat-cell { flex: 1; transition: filter var(--m__unhover-transition-duration) var(--m__transition-easing); }
-    .mx-heat-cell:hover { filter: brightness(1.08); }
-    .mx-heat-cell.music  { background: var(--music-color); }
-    .mx-heat-cell.speech { background: var(--speech-color); }
-    .mx-heat-axis { display: flex; gap: 0.75rem; margin-top: 0.3rem; }
-    .mx-heat-axis-spacer { width: 4.5rem; flex-shrink: 0; }
-    .mx-heat-axis-ticks {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      font-size: var(--m__font-size-xs);
-      color: var(--m__text-caption-color);
+    .mx-verdict-stat-value {
       font-variant-numeric: tabular-nums;
     }
 
@@ -114,55 +120,11 @@ segments:
       background: var(--m__ui-border-color);
       overflow: hidden;
     }
-    .mx-bar-fill { height: 100%; border-radius: 3px; }
-    .mx-bar-fill.music  { background: var(--music-color); }
-    .mx-bar-fill.speech { background: var(--speech-color); }
+    .mx-bar-fill { height: 100%; border-radius: 3px; background: var(--m__text-color); }
     .mx-pct { font-variant-numeric: tabular-nums; min-width: 3.6em; }
   </style>
 
   <div class="pg-tab-panel mx-panel">
-
-    <!-- Verdict card ──────────────────────────────────────────────────────── -->
-    <div class="mx-verdict m__rounded">
-      <span class="mx-verdict-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#music"></use></svg></span>
-      <div class="mx-verdict-title">Music</div>
-      <div class="mx-verdict-stats">
-        <div class="mx-verdict-stat music">
-          <div class="mx-verdict-stat-value">90%</div>
-          <div class="mx-verdict-stat-label">Music</div>
-        </div>
-        <div class="mx-verdict-stat speech">
-          <div class="mx-verdict-stat-value">77%</div>
-          <div class="mx-verdict-stat-label">Speech</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Heatmap ─────────────────────────────────────────────────────────── -->
-    <div>
-      <div class="mx-heatmap">
-        <div class="mx-heat-row">
-          <span class="mx-heat-label music">MUSIC</span>
-          <div class="mx-heat-cells">
-            {% for s in segments %}<div class="mx-heat-cell music" style="opacity: {{ s.music / 100 }}" title="{{ s.t }} · Music {{ s.music }}%"></div>{% endfor %}
-          </div>
-        </div>
-        <div class="mx-heat-row">
-          <span class="mx-heat-label speech">SPEECH</span>
-          <div class="mx-heat-cells">
-            {% for s in segments %}<div class="mx-heat-cell speech" style="opacity: {{ s.speech / 100 }}" title="{{ s.t }} · Speech {{ s.speech }}%"></div>{% endfor %}
-          </div>
-        </div>
-        <div class="mx-heat-axis">
-          <div class="mx-heat-axis-spacer"></div>
-          <div class="mx-heat-axis-ticks">
-            <span>0s</span><span>4s</span><span>8s</span><span>12s</span><span>16s</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="m__space L"></div>
 
     <!-- Detailed table ──────────────────────────────────────────────────── -->
     <div>

@@ -14,138 +14,92 @@ permalink: /playground/deepfake/
       </div>
 {% endblock %}
 
+{% block player_clips %}
+  <div class="pg-histo-squares df-player-clips">
+    <div class="pg-histo-bar authentic" style="opacity: 0.97" title="0:01 · Authentic · 97%"></div>
+    <div class="pg-histo-bar authentic" style="opacity: 0.94" title="0:02 · Authentic · 94%"></div>
+    <div class="pg-histo-bar authentic" style="opacity: 0.91" title="0:03 · Authentic · 91%"></div>
+    <div class="pg-histo-bar authentic" style="opacity: 0.96" title="0:04 · Authentic · 96%"></div>
+    <div class="pg-histo-bar authentic" style="opacity: 0.89" title="0:05 · Authentic · 89%"></div>
+    <div class="pg-histo-bar authentic" style="opacity: 0.93" title="0:06 · Authentic · 93%"></div>
+    <div class="pg-histo-bar synthetic" style="opacity: 0.78" title="0:07 · Synthetic · 78%"></div>
+    <div class="pg-histo-bar synthetic" style="opacity: 0.94" title="0:08 · Synthetic · 94%"></div>
+    <div class="pg-histo-bar synthetic" style="opacity: 0.97" title="0:09 · Synthetic · 97%"></div>
+    <div class="pg-histo-bar synthetic" style="opacity: 0.91" title="0:10 · Synthetic · 91%"></div>
+    <div class="pg-histo-bar synthetic" style="opacity: 0.88" title="0:11 · Synthetic · 88%"></div>
+    <div class="pg-histo-bar synthetic" style="opacity: 0.95" title="0:12 · Synthetic · 95%"></div>
+    <div class="pg-histo-bar authentic" style="opacity: 0.86" title="0:13 · Authentic · 86%"></div>
+    <div class="pg-histo-bar authentic" style="opacity: 0.92" title="0:14 · Authentic · 92%"></div>
+    <div class="pg-histo-bar authentic" title="0:15 · No content"></div>
+  </div>
+{% endblock %}
+
+{% block speaker_labels %}{% endblock %}
+
+{% block above_output %}
+  <div class="df-card m__rounded">
+    <span class="df-title">Deepfake</span>
+    <span class="df-stat">
+      <span class="df-stat-value">14/25</span>
+      <span class="df-stat-label">deepfake segments</span>
+    </span>
+    <span class="df-stat">
+      <span class="df-stat-value">3</span>
+      <span class="df-stat-label">segments with &gt;98% conf.</span>
+    </span>
+  </div>
+{% endblock %}
+
 {% block panel_content %}
   <style>
+    /* Deepfake histogram inside the player visualization ────────────────── */
+    .media-container {
+      --player-visualization-height: 1.5rem;
+    }
+    .df-player-clips {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .df-player-clips .pg-histo-bar {
+      height: 100%;
+    }
+
     .df-card {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      text-align: center;
-      gap: var(--m__space-xxs);
-      padding: var(--m__space-l) var(--m__space-m);
-      margin: var(--m__space-s) 0 var(--m__space-l);
-      background: var(--m__bg-surface-color);
-      color: var(--m__ui-error-color);
+      justify-content: center;
+      gap: var(--m__space-m);
+      height: 4rem;
+      padding-inline: var(--m__space-m);
+      margin-bottom: var(--m__space-l);
+      background: var(--m__ui-error-color);
+      color: white;
+      font-weight: 700;
+      white-space: nowrap;
     }
-    .df-title {
-      font-size: var(--m__font-size-xxl);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      margin: 0;
+    .df-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
     }
-    .df-stat { font-size: var(--m__font-size-l); font-weight: 700; }
+    .df-stat-value {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Detailed table — monochrome ───────────────────────────────────────── */
+    .pg-results-table-section .verdict-authentic,
+    .pg-results-table-section .verdict-synthetic {
+      color: var(--m__text-color);
+    }
+    .pg-results-table-section .pg-confidence-bar-fill.authentic,
+    .pg-results-table-section .pg-confidence-bar-fill.synthetic {
+      background: var(--m__text-color);
+    }
   </style>
 
   <div class="pg-tab-panel">
-      <div class="df-card m__rounded">
-        <h2 class="df-title">Deepfake</h2>
-        <div class="df-stat">14/25 deepfake segments</div>
-        <div class="caption">3 segments with &gt;98% conf.</div>
-      </div>
-
-      <div class="m__space XS"></div>
-      <div class="pg-histogram-section">
-        <div class="pg-histogram-scroll">
-          <div class="pg-histogram" id="histogram">
-            <div class="pg-histo-squares">
-              <div
-                class="pg-histo-bar authentic"
-                style="opacity: 0.97"
-                title="0:01 · Authentic · 97%"
-              ></div>
-              <div
-                class="pg-histo-bar authentic"
-                style="opacity: 0.94"
-                title="0:02 · Authentic · 94%"
-              ></div>
-              <div
-                class="pg-histo-bar authentic"
-                style="opacity: 0.91"
-                title="0:03 · Authentic · 91%"
-              ></div>
-              <div
-                class="pg-histo-bar authentic"
-                style="opacity: 0.96"
-                title="0:04 · Authentic · 96%"
-              ></div>
-              <div
-                class="pg-histo-bar authentic"
-                style="opacity: 0.89"
-                title="0:05 · Authentic · 89%"
-              ></div>
-              <div
-                class="pg-histo-bar authentic"
-                style="opacity: 0.93"
-                title="0:06 · Authentic · 93%"
-              ></div>
-              <div
-                class="pg-histo-bar synthetic"
-                style="opacity: 0.78"
-                title="0:07 · Synthetic · 78%"
-              ></div>
-              <div
-                class="pg-histo-bar synthetic"
-                style="opacity: 0.94"
-                title="0:08 · Synthetic · 94%"
-              ></div>
-              <div
-                class="pg-histo-bar synthetic"
-                style="opacity: 0.97"
-                title="0:09 · Synthetic · 97%"
-              ></div>
-              <div
-                class="pg-histo-bar synthetic"
-                style="opacity: 0.91"
-                title="0:10 · Synthetic · 91%"
-              ></div>
-              <div
-                class="pg-histo-bar synthetic"
-                style="opacity: 0.88"
-                title="0:11 · Synthetic · 88%"
-              ></div>
-              <div
-                class="pg-histo-bar synthetic"
-                style="opacity: 0.95"
-                title="0:12 · Synthetic · 95%"
-              ></div>
-              <div
-                class="pg-histo-bar authentic"
-                style="opacity: 0.86"
-                title="0:13 · Authentic · 86%"
-              ></div>
-              <div
-                class="pg-histo-bar authentic"
-                style="opacity: 0.92"
-                title="0:14 · Authentic · 92%"
-              ></div>
-              <div
-                class="pg-histo-bar authentic"
-                title="0:15 · No content"
-              ></div>
-            </div>
-            <div class="pg-histo-axis">
-              <div class="pg-histo-tick">0:00</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:05</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick">0:10</div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick"></div>
-              <div class="pg-histo-tick" style="text-align: right">0:15</div>
-            </div>
-          </div>
-        </div>
-
-    </div>
-
       <div class="pg-results-table-section">
         <table>
           <thead>

@@ -32,94 +32,113 @@ permalink: /playground/redaction/
       </div>
 {% endblock %}
 
+{% block player_clips %}
+  <div class="pg-redaction-player-track">
+    <div class="pg-redaction-seg" style="left: 8%;  width: 5%"  title="0:16 – 0:26 · Name"></div>
+    <div class="pg-redaction-seg" style="left: 14%; width: 7%"  title="0:28 – 0:42 · Address · ZIP"></div>
+    <div class="pg-redaction-seg" style="left: 23%; width: 4%"  title="0:46 – 0:54 · Date of birth"></div>
+    <div class="pg-redaction-seg" style="left: 30%; width: 6%"  title="1:00 – 1:13 · SSN · Member ID"></div>
+    <div class="pg-redaction-seg" style="left: 39%; width: 5%"  title="1:18 – 1:28 · Phone · Email"></div>
+    <div class="pg-redaction-seg" style="left: 48%; width: 8%"  title="1:36 – 1:53 · Callback · Employer"></div>
+    <div class="pg-redaction-seg" style="left: 59%; width: 4%"  title="1:59 – 2:07 · Workplace address"></div>
+    <div class="pg-redaction-seg" style="left: 66%; width: 6%"  title="2:13 – 2:25 · Account number"></div>
+    <div class="pg-redaction-seg" style="left: 76%; width: 5%"  title="2:33 – 2:43 · Name · Phone"></div>
+    <div class="pg-redaction-seg" style="left: 85%; width: 4%"  title="2:51 – 2:59 · Email"></div>
+    <div class="pg-redaction-seg" style="left: 92%; width: 4%"  title="3:05 – 3:13 · Address"></div>
+  </div>
+{% endblock %}
+
+{% block speaker_labels %}{% endblock %}
+
+{% block above_output %}
+  <div class="pg-redaction-summary m__rounded">
+    <div class="pg-redaction-stat">
+      <div class="pg-redaction-stat-value">31</div>
+      <div class="pg-redaction-stat-label">Redactions</div>
+    </div>
+    <div class="pg-redaction-stat">
+      <div class="pg-redaction-stat-value">108.9s</div>
+      <div class="pg-redaction-stat-label">Silenced</div>
+    </div>
+    <div class="pg-redaction-stat">
+      <div class="pg-redaction-stat-value">53.7%</div>
+      <div class="pg-redaction-stat-label">Of audio</div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block panel_content %}
   <style>
     /* Padding inputs ────────────────────────────────────────────────────── */
     .pg-redaction-options {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       flex-wrap: wrap;
-      gap: var(--m__space-xs);
-    }
-    .pg-diarization-option {
-      align-self: flex-end;
-      min-height: calc(0.8rem * var(--m__line-height-base) + 1rem + 2px);
+      gap: var(--m__space-s);
+      font-size: var(--m__font-size-s);
     }
     /* DS textfield + inline unit suffix; width/suffix are the only custom bits */
     .pg-redaction-options .pg-pad-field {
-      width: 11rem;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--m__space-xs);
       margin-bottom: 0;
+    }
+    .pg-redaction-options .pg-pad-field > label {
+      margin: 0;
+      white-space: nowrap;
     }
     .pg-pad-control {
       position: relative;
       display: block;
+      width: 5rem;
     }
     .pg-pad-field input {
-      padding-right: 2.4rem;
+      padding: var(--m__control-compact-padding);
+      padding-right: 2rem;
+      font-size: inherit;
+      line-height: inherit;
       font-variant-numeric: tabular-nums;
     }
     .pg-pad-unit {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      right: 0.6rem;
+      right: 0.5rem;
       pointer-events: none;
       color: var(--m__text-caption-color);
     }
 
-    /* Redacted audio ─────────────────────────────────────────────────────── */
-    .pg-redacted-audio {
-      margin: var(--m__space-s) 0;
-    }
-    .pg-redacted-audio audio {
-      width: 100%;
-      height: 2.5rem;
-    }
-
     /* Redaction summary ─────────────────────────────────────────────────── */
     .pg-redaction-summary {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      margin: 0 0 var(--m__space-s);
-      padding: var(--m__space-xs) 0;
-      background: var(--m__bg-surface-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--m__space-m);
+      height: 4rem;
+      padding-inline: var(--m__space-m);
+      margin-bottom: var(--m__space-l);
+      background: var(--m__ui-success-color);
+      color: white;
+      font-weight: 700;
+      white-space: nowrap;
     }
     .pg-redaction-stat {
       display: flex;
       align-items: baseline;
-      justify-content: center;
       gap: 0.4rem;
-      padding: var(--m__space-xs) var(--m__space-m);
-    }
-    .pg-redaction-stat + .pg-redaction-stat {
-      border-left: 1px solid var(--m__ui-border-color);
     }
     .pg-redaction-stat-value {
-      font-size: var(--m__font-size-l);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      color: var(--m__bg-accent-color);
       font-variant-numeric: tabular-nums;
     }
-    .pg-redaction-stat-label {
-      font-size: var(--m__font-size-xs);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--m__text-caption-color);
-    }
 
-    /* Silenced-audio timeline ───────────────────────────────────────────── */
-    .pg-redaction-timeline {
-      margin-bottom: var(--m__space-s);
+    /* Redaction timeline inside the player visualization ────────────────── */
+    .media-container {
+      --player-visualization-height: 2rem;
     }
-    .pg-redaction-track {
-      position: relative;
-      height: 2.4rem;
-      border-radius: var(--m__radius-xs);
-      background: var(--m__bg-surface-color);
-      overflow: hidden;
+    .pg-redaction-player-track {
+      position: absolute;
+      inset: 0;
     }
     .pg-redaction-seg {
       position: absolute;
@@ -135,13 +154,18 @@ permalink: /playground/redaction/
       background: color-mix(in srgb, var(--m__ui-error-color) 55%, transparent);
       transition: background var(--m__hover-transition-duration) var(--m__transition-easing);
     }
-    .pg-redaction-axis {
-      display: flex;
-      justify-content: space-between;
-      margin-top: var(--m__space-xxs);
-      font-size: var(--m__font-size-xs);
-      color: var(--m__text-caption-color);
-      font-variant-numeric: tabular-nums;
+
+    /* Redaction transcript — flat text, no bubbles ──────────────────────── */
+    .pg-redaction-transcript .pg-transcript-utterance,
+    .pg-redaction-transcript .pg-transcript-utterance:hover {
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      cursor: default;
+      color: inherit;
+    }
+    .pg-redaction-transcript .pg-transcript-list {
+      gap: var(--m__space-s);
     }
 
     /* Inline redaction tag ──────────────────────────────────────────────── */
@@ -151,75 +175,29 @@ permalink: /playground/redaction/
       font-size: 0.82em;
       font-weight: 700;
       letter-spacing: 0.02em;
-      color: var(--m__ui-error-color);
-      background: color-mix(in srgb, var(--m__ui-error-color) 10%, transparent);
+      color: var(--m__text-color);
+      background: color-mix(in srgb, var(--m__text-color) 10%, transparent);
       border-radius: var(--m__radius-xs);
       padding: 0.02em 0.32em;
       white-space: nowrap;
       cursor: help;
     }
     .pg-transcript-flag {
-      font-size: 0.85em;
+      color: var(--m__text-caption-color);
     }
   </style>
 
   <div class="pg-tab-panel">
 
-    <!-- Redacted audio ──────────────────────────────────────────────────── -->
-    <div class="pg-redacted-audio">
-      <audio controls src="/assets/audio/redacted-demo.mp3"></audio>
-    </div>
-
-    <!-- Summary ─────────────────────────────────────────────────────────── -->
-    <div class="pg-redaction-summary m__rounded">
-      <div class="pg-redaction-stat">
-        <div class="pg-redaction-stat-value">31</div>
-        <div class="pg-redaction-stat-label">Redactions</div>
-      </div>
-      <div class="pg-redaction-stat">
-        <div class="pg-redaction-stat-value">108.9s</div>
-        <div class="pg-redaction-stat-label">Silenced</div>
-      </div>
-      <div class="pg-redaction-stat">
-        <div class="pg-redaction-stat-value">53.7%</div>
-        <div class="pg-redaction-stat-label">Of audio</div>
-      </div>
-    </div>
-
-    <!-- Silenced timeline ───────────────────────────────────────────────── -->
-    <div class="pg-redaction-timeline">
-      <div class="pg-redaction-track">
-        <div class="pg-redaction-seg" style="left: 8%;  width: 5%"  title="0:16 – 0:26 · Name"></div>
-        <div class="pg-redaction-seg" style="left: 14%; width: 7%"  title="0:28 – 0:42 · Address · ZIP"></div>
-        <div class="pg-redaction-seg" style="left: 23%; width: 4%"  title="0:46 – 0:54 · Date of birth"></div>
-        <div class="pg-redaction-seg" style="left: 30%; width: 6%"  title="1:00 – 1:13 · SSN · Member ID"></div>
-        <div class="pg-redaction-seg" style="left: 39%; width: 5%"  title="1:18 – 1:28 · Phone · Email"></div>
-        <div class="pg-redaction-seg" style="left: 48%; width: 8%"  title="1:36 – 1:53 · Callback · Employer"></div>
-        <div class="pg-redaction-seg" style="left: 59%; width: 4%"  title="1:59 – 2:07 · Workplace address"></div>
-        <div class="pg-redaction-seg" style="left: 66%; width: 6%"  title="2:13 – 2:25 · Account number"></div>
-        <div class="pg-redaction-seg" style="left: 76%; width: 5%"  title="2:33 – 2:43 · Name · Phone"></div>
-        <div class="pg-redaction-seg" style="left: 85%; width: 4%"  title="2:51 – 2:59 · Email"></div>
-        <div class="pg-redaction-seg" style="left: 92%; width: 4%"  title="3:05 – 3:13 · Address"></div>
-      </div>
-      <div class="pg-redaction-axis">
-        <span>0:00</span>
-        <span>0:40</span>
-        <span>1:21</span>
-        <span>2:01</span>
-        <span>2:42</span>
-        <span>3:22</span>
-      </div>
-    </div>
-
     <!-- Redacted transcript ─────────────────────────────────────────────── -->
-    <div class="pg-transcript-container visible">
+    <div class="pg-transcript-container pg-redaction-transcript visible">
       <div class="pg-transcript-list">
 
-        <div class="pg-transcript-utterance m__rounded speaker-left">
+        <div class="pg-transcript-utterance">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:00</span>
             <span class="pg-transcript-speaker">Speaker 1</span>
-            <span class="pg-transcript-flag">🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
           </div>
           <div class="pg-transcript-text">
             <p>
@@ -236,11 +214,11 @@ permalink: /playground/redaction/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance m__rounded speaker-right">
+        <div class="pg-transcript-utterance">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:18</span>
             <span class="pg-transcript-speaker">Speaker 2</span>
-            <span class="pg-transcript-flag">🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
           </div>
           <div class="pg-transcript-text">
             <p>
@@ -253,11 +231,11 @@ permalink: /playground/redaction/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance m__rounded speaker-left">
+        <div class="pg-transcript-utterance">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:32</span>
             <span class="pg-transcript-speaker">Speaker 1</span>
-            <span class="pg-transcript-flag">🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
           </div>
           <div class="pg-transcript-text">
             <p>
@@ -270,11 +248,11 @@ permalink: /playground/redaction/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance m__rounded speaker-right">
+        <div class="pg-transcript-utterance">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:47</span>
             <span class="pg-transcript-speaker">Speaker 2</span>
-            <span class="pg-transcript-flag">🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
           </div>
           <div class="pg-transcript-text">
             <p>
@@ -286,11 +264,11 @@ permalink: /playground/redaction/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance m__rounded speaker-left">
+        <div class="pg-transcript-utterance">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">1:00</span>
             <span class="pg-transcript-speaker">Speaker 1</span>
-            <span class="pg-transcript-flag">🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
           </div>
           <div class="pg-transcript-text">
             <p>

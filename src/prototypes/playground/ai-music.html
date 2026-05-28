@@ -1,6 +1,7 @@
 ---
 pageTitle: AI Music Detection
 permalink: /playground/ai-music/
+noOutputTab: true
 ---
 
 {% extends 'prototypes/playground-layout.html' %}
@@ -13,87 +14,54 @@ permalink: /playground/ai-music/
       </div>
 {% endblock %}
 
-{% block panel_content %}
+{% block player_clips %}{% endblock %}
+{% block speaker_labels %}{% endblock %}
+
+{% block above_output %}
   <style>
+    .media-container {
+      --player-visualization-height: 1rem;
+    }
+    .media-container .player-visualization {
+      background: linear-gradient(
+        to right,
+        rgba(180, 180, 255, 0.45) 0,
+        rgba(180, 180, 255, 0.45) 25%,
+        rgba(255, 255, 255, 0.08) 25%,
+        rgba(255, 255, 255, 0.08) 100%
+      );
+    }
     .aim-card {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      text-align: center;
-      gap: var(--m__space-s);
-      padding: var(--m__space-l) var(--m__space-m);
-      margin: var(--m__space-s) 0 var(--m__space-l);
-      background: var(--m__bg-surface-color);
-    }
-    .aim-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: var(--m__font-size-xs);
+      justify-content: center;
+      gap: var(--m__space-m);
+      height: 4rem;
+      padding-inline: var(--m__space-m);
+      margin-bottom: var(--m__space-l);
+      background: var(--m__ui-error-color);
+      color: white;
       font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--m__ui-error-color);
-      background: color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
+      white-space: nowrap;
     }
-    .aim-title {
-      font-size: var(--m__font-size-xxl);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      color: var(--m__ui-error-color);
-      margin: 0;
-    }
-    .aim-sub {
-      max-width: 38ch;
-      line-height: 1.5;
-    }
-    .aim-paths {
-      width: 100%;
-      max-width: 24rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      padding: var(--m__space-s) var(--m__space-m);
-      border-radius: var(--m__radius-s);
-      background: var(--m__background-color);
-    }
-    .aim-path {
+    .aim-stat {
       display: flex;
       align-items: baseline;
-      justify-content: space-between;
-      gap: var(--m__space-s);
+      gap: 0.4rem;
     }
-    .aim-path-name { font-weight: 600; }
-    .aim-path.muted .aim-path-name { color: var(--m__text-caption-color); font-weight: 500; }
-    .aim-path-val { font-weight: 700; color: var(--m__ui-error-color); font-variant-numeric: tabular-nums; }
-    .aim-path.muted .aim-path-val { color: var(--m__text-caption-color); font-weight: 400; font-style: italic; }
-    .aim-meta {
-      font-size: var(--m__font-size-xs);
-      color: var(--m__text-caption-color);
+    .aim-stat-value {
       font-variant-numeric: tabular-nums;
     }
   </style>
 
-  <div class="pg-tab-panel">
-    <div class="aim-card m__rounded">
-      <span class="aim-badge">AI DETECTED</span>
-      <h2 class="aim-title">AI Vocal Music</h2>
-      <p class="caption aim-sub">Synthetic voice detected in a musical context — likely an AI song or AI-generated topline.</p>
-
-      <div class="aim-paths">
-        <div class="aim-path">
-          <span class="aim-path-name">Vocal path</span>
-          <span class="aim-path-val">55.8% AI</span>
-        </div>
-        <div class="aim-path muted">
-          <span class="aim-path-name">Instrumental path</span>
-          <span class="aim-path-val">not evaluated</span>
-        </div>
-      </div>
-
-      <p class="aim-meta">Audio 89.3s · Processed 0.52s · 170.7× real-time</p>
-    </div>
+  <div class="aim-card m__rounded">
+    <span class="aim-title">AI Vocal Music</span>
+    <span class="aim-stat">
+      <span class="aim-stat-value">55.8%</span>
+      <span class="aim-stat-label">AI · Vocal path</span>
+    </span>
+    <span class="aim-stat">
+      <span class="aim-stat-label">Instrumental: not evaluated</span>
+    </span>
   </div>
 {% endblock %}

@@ -7,7 +7,7 @@ permalink: /playground/velma/
 
 {% block options %}
       <div class="pg-options-row pg-velma-setup">
-        <button class="m__button-secondary">Set up conversation type, roles &amp; behaviors</button>
+        <a href="#" class="m__button-outline-compact">Set up conversation type, roles &amp; behaviors</a>
       </div>
       <div class="m__space S"></div>
 {% endblock %}
@@ -26,19 +26,13 @@ permalink: /playground/velma/
       align-items: center;
       flex-wrap: wrap;
       gap: var(--m__space-m);
+      font-size: var(--m__font-size-s);
     }
 
-    /* Summary cards — no DS card component yet */
-    .pg-card {
-      padding: var(--m__space-s) var(--m__space-m);
-      background: var(--m__bg-surface-color);
-      margin-bottom: 0.4rem;
+    .pg-summary-item {
+      margin-bottom: var(--m__space-m);
     }
-    .pg-card.outlined {
-      background: transparent;
-      border: 1px solid var(--m__ui-border-color);
-    }
-    .pg-card-head {
+    .pg-summary-head {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
@@ -76,6 +70,26 @@ permalink: /playground/velma/
     .pg-behaviors-table th:nth-child(4) { width: 12%; }
     .pg-reason { font-size: var(--m__font-size-s); }
     .pg-behaviors-table .pg-num { font-size: var(--m__font-size-s); }
+
+    .pg-transcript-flag {
+      color: var(--m__text-caption-color);
+    }
+
+    /* Flat transcript — no bubbles, no left/right split */
+    .pg-velma-transcript .pg-transcript-utterance,
+    .pg-velma-transcript .pg-transcript-utterance:hover,
+    .pg-velma-transcript .pg-transcript-utterance.active {
+      background: transparent !important;
+      padding: 0;
+      margin: 0;
+      cursor: default;
+      color: inherit;
+      align-self: stretch;
+      max-width: none;
+    }
+    .pg-velma-transcript .pg-transcript-list {
+      gap: var(--m__space-s);
+    }
   </style>
 
   <div class="pg-tab-panel">
@@ -95,8 +109,8 @@ permalink: /playground/velma/
 
     <div class="m__space S"></div>
 
-    <div class="pg-card outlined m__rounded">
-      <div class="pg-card-head">
+    <div class="pg-summary-item">
+      <div class="pg-summary-head">
         <span>Type: <strong>Customer Service Call</strong></span>
         <span class="pg-num muted">100%</span>
         <span class="m__tag-flat">Auto_selected_single_option</span>
@@ -104,8 +118,8 @@ permalink: /playground/velma/
       <div class="caption">Auto-chosen as the only available option.</div>
     </div>
 
-    <div class="pg-card m__rounded">
-      <div class="pg-card-head">
+    <div class="pg-summary-item">
+      <div class="pg-summary-head">
         <span><strong>1: Customer Service Representative</strong></span>
         <span class="pg-num muted">100%</span>
         <span class="m__tag-flat">Inferred</span>
@@ -117,8 +131,8 @@ permalink: /playground/velma/
       </div>
     </div>
 
-    <div class="pg-card m__rounded">
-      <div class="pg-card-head">
+    <div class="pg-summary-item">
+      <div class="pg-summary-head">
         <span><strong>2: Customer</strong></span>
         <span class="pg-num muted">100%</span>
         <span class="m__tag-flat">Inferred</span>
@@ -277,15 +291,15 @@ permalink: /playground/velma/
     <!-- Transcript ──────────────────────────────────────────────────────── -->
     <div class="m__space L"></div>
     <h2>Transcript</h2>
-    <div class="pg-transcript-container visible">
+    <div class="pg-transcript-container pg-velma-transcript visible">
       <div class="pg-transcript-list">
 
-        <div class="pg-transcript-utterance m__rounded speaker-left ec-neutral">
+        <div class="pg-transcript-utterance ec-neutral">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:00</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
             <span class="pg-transcript-emotion">Neutral</span>
-            <span>🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
           <div class="pg-transcript-text">
@@ -293,12 +307,12 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance m__rounded speaker-right ec-neutral">
+        <div class="pg-transcript-utterance ec-neutral">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:18</span>
             <span class="pg-transcript-speaker">Customer</span>
             <span class="pg-transcript-emotion">Neutral</span>
-            <span>🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
           <div class="pg-transcript-text">
@@ -306,12 +320,12 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance m__rounded speaker-left ec-neutral">
+        <div class="pg-transcript-utterance ec-neutral">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:32</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
             <span class="pg-transcript-emotion">Neutral</span>
-            <span>🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
           <div class="pg-transcript-text">
@@ -319,12 +333,12 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance m__rounded speaker-right ec-neutral">
+        <div class="pg-transcript-utterance ec-neutral">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:47</span>
             <span class="pg-transcript-speaker">Customer</span>
             <span class="pg-transcript-emotion">Neutral</span>
-            <span>🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
           <div class="pg-transcript-text">
@@ -332,12 +346,12 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance m__rounded speaker-left ec-neutral">
+        <div class="pg-transcript-utterance ec-neutral">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">1:00</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
             <span class="pg-transcript-emotion">Neutral</span>
-            <span>🇬🇧</span>
+            <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
           <div class="pg-transcript-text">

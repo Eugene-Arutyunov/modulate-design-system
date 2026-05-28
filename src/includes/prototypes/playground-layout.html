@@ -4,7 +4,7 @@
   .pg-stt-options {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--m__space-xs) var(--m__space-m);
+    gap: var(--m__space-xs) var(--m__space-s);
   }
 
   .pg-stt-option {
@@ -430,12 +430,12 @@
     cursor: help;
     padding: 0 0.15em;
     border-radius: 3px;
-    background: color-mix(in srgb, var(--m__ui-error-color) 8%, transparent);
+    background: color-mix(in srgb, var(--m__text-color) 8%, transparent);
   }
 
   .pii-blur:hover {
     filter: none;
-    background: color-mix(in srgb, var(--m__ui-error-color) 12%, transparent);
+    background: color-mix(in srgb, var(--m__text-color) 12%, transparent);
   }
 
   .pg-transcript-empty {
@@ -526,6 +526,17 @@
 
   /* Upload area ────────────────────────────────────────────────────────── */
 
+  .pg-upload-plate {
+    border: 1px solid var(--m__ui-border-color);
+    padding: var(--m__widget-padding);
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
   .pg-upload-actions {
     display: flex;
     flex-wrap: wrap;
@@ -537,6 +548,7 @@
     font-size: var(--m__font-size-xs);
     color: var(--m__text-caption-color);
   }
+
 
   .pg-upload-header {
     display: flex;
@@ -612,7 +624,6 @@
   /* Statistics ─────────────────────────────────────────────────────────── */
 
   .pg-stats-table .pg-stats-label {
-    font-size: var(--m__font-size-s);
     color: var(--m__text-caption-color);
     font-weight: 500;
     padding-right: var(--m__space-m);
@@ -637,17 +648,85 @@
     border-top: 1px solid var(--m__text-color);
   }
 
+  /* Output block (surface card with toolbar) ───────────────────────────── */
+  .pg-output-block {
+    background: var(--m__bg-surface-color);
+    border-radius: var(--m__radius-m);
+    overflow: hidden;
+    margin-top: var(--m__space-xxs);
+    font-family: var(--m__font-mono);
+  }
+
+  .pg-output-block .pg-transcript-text,
+  .pg-output-block .pg-transcript-text p {
+    font-family: var(--m__font-mono);
+  }
+
+  .pg-output-toolbar {
+    display: flex;
+    align-items: stretch;
+    padding-inline: var(--m__space-xs);
+    border-bottom: 1px solid var(--m__ui-border-color);
+    font-family: "Inter";
+  }
+
+  .pg-output-tabs {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .pg-output-tabs label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 0.4rem;
+    font-size: var(--m__font-size-s);
+    cursor: pointer;
+    color: var(--m__text-caption-color);
+    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-output-tabs label:hover {
+    color: var(--m__text-hover-color);
+  }
+
+  .pg-output-tabs label:has(input:checked) {
+    color: var(--m__text-color);
+    cursor: default;
+  }
+
+  .pg-output-tabs label:has(input:checked)::after {
+    content: "";
+    position: absolute;
+    left: 0.4rem;
+    right: 0.4rem;
+    bottom: -1px;
+    height: 2px;
+    background: var(--m__text-color);
+  }
+
+  .pg-output-tabs input[type="radio"] {
+    display: none;
+  }
+
+  .pg-subview {
+    padding: var(--m__space-m);
+    font-size: 0.78rem;
+  }
+
+  .pg-subview th {
+    background-color: inherit;
+  }
+
   /* JSON Response ──────────────────────────────────────────────────────── */
   .pg-json-container {
     position: relative;
   }
 
   .pg-json-pre {
-    background: var(--m__bg-surface-color);
-    border-radius: var(--m__radius-m);
-    padding: var(--m__space-m);
-    font-family: "SF Mono", "Fira Code", monospace;
-    font-size: 0.78rem;
+    font-family: var(--m__font-mono);
     line-height: 1.6;
     overflow-x: auto;
     white-space: pre;
@@ -735,14 +814,28 @@
     display: flex;
     gap: var(--m__space-xs);
     align-items: center;
-    margin: -0.3rem 0 1rem;
+    margin: -0.3rem 0 0.3rem;
   }
 
   .pg-page-header .pg-page-title {
     margin: 0;
   }
 
+  .pg-upload-section > .pg-upload-plate:first-child {
+    margin-top: var(--m__space-s);
+  }
+
   /* Player overrides ────────────────────────────────────────────────────── */
+  /* Single source of truth for player heights:
+     - pages set --player-visualization-height (the variable upper area)
+     - --player-controls-height is fixed across all playground players
+     - total --initial-height is derived from the two */
+  .media-container {
+    --player-controls-height: 4em;
+    --player-visualization-height: 10em;
+    --initial-height: calc(var(--player-visualization-height) + var(--player-controls-height));
+  }
+
   #audio-player .player-icon svg,
   #audio-player .player-icon svg * {
     fill: #fff;
@@ -866,6 +959,7 @@
         <div class="m__space S"></div>
       {% endblock %}
 
+      <div class="m__rounded pg-upload-plate">
       {% block upload_actions %}
       <div class="pg-upload-actions">
         <button class="m__button-outline">Choose file…</button>
@@ -874,13 +968,13 @@
         <button class="m__button-outline">Choose file for streaming…</button>
       </div>
       {% endblock %}
-      <p class="pg-upload-note">10 requests remaining. Supported formats up to 50 MB: .aac, .flac, .m4a, .mp3, .mp4, .ogg, .opus, .wav, .webm</p>
+      <p class="pg-upload-note">10 requests remaining. Supported formats up to 50 MB: <span class="m__tag-flat">.aac</span> <span class="m__tag-flat">.flac</span> <span class="m__tag-flat">.m4a</span> <span class="m__tag-flat">.mp3</span> <span class="m__tag-flat">.mp4</span> <span class="m__tag-flat">.ogg</span> <span class="m__tag-flat">.opus</span> <span class="m__tag-flat">.wav</span> <span class="m__tag-flat">.webm</span></p>
+      </div>
       </div>
 
       <div class="m__space L"></div>
 
       <!-- PLAYER -->
-      <div class="media-stuck-sentinel" aria-hidden="true"></div>
       <div class="media-container">
     <div
       class="media-box m__rounded dark-mode"
@@ -888,6 +982,7 @@
       data-speaker-count="2"
     >
       <div class="player-visualization">
+        {% block player_clips %}
         <!-- Turn-taking with varied turn lengths, clip counts and widths -->
 
         <!-- Speaker 0: long opening turn -->
@@ -980,7 +1075,9 @@
         <!-- Speaker 1 final word -->
         <div class="transcript-clip emotion-confident" data-speaker-index="2" style="left: 96.5%; width: 1.5%"><div class="clip-visualization"></div></div>
         <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 98.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        {% endblock %}
       </div>
+      {% block speaker_labels %}
       <div class="speaker-labels">
         <div class="speaker-label" data-speaker-index="1">
           <span>Speaker 0</span>
@@ -989,6 +1086,7 @@
           <span>Speaker 1</span>
         </div>
       </div>
+      {% endblock %}
       <div class="behaviour-indicators"></div>
       <div class="behaviour-labels" style="display: none"></div>
       <div class="player-controls">
@@ -1034,20 +1132,27 @@
 
   <div class="m__space L"></div>
 
-  <fieldset class="m__segmented-control" id="pg-subtabs">
-    <label><input type="radio" name="pg-subtab" value="main" checked />Output</label>
-    <label><input type="radio" name="pg-subtab" value="stat" />Statistic</label>
-    <label><input type="radio" name="pg-subtab" value="json" />JSON Response</label>
-  </fieldset>
+  {% block above_output %}{% endblock %}
 
+  <div class="pg-output-block">
+  <div class="pg-output-toolbar">
+    <fieldset class="pg-output-tabs" id="pg-subtabs">
+      {% if not noOutputTab %}
+      <label><input type="radio" name="pg-subtab" value="main" checked />Output</label>
+      {% endif %}
+      <label><input type="radio" name="pg-subtab" value="stat" {% if noOutputTab %}checked{% endif %} />Statistic</label>
+      <label><input type="radio" name="pg-subtab" value="json" />JSON Response</label>
+    </fieldset>
+  </div>
+
+  {% if not noOutputTab %}
   <div class="pg-subview" data-pg-subview="main">
     {% block panel_content %}{% endblock %}
   </div>
   <!-- /.pg-subview main -->
+  {% endif %}
 
-  <div class="pg-subview" data-pg-subview="stat" hidden>
-    <div class="m__space XS"></div>
-
+  <div class="pg-subview" data-pg-subview="stat" {% if not noOutputTab %}hidden{% endif %}>
     <table class="pg-stats-table">
       <tbody>
         <tr class="pg-stats-group-row">
@@ -1128,7 +1233,6 @@
   <!-- /.pg-subview stat -->
 
   <div class="pg-subview" data-pg-subview="json" hidden>
-    <div class="m__space XS"></div>
     <div class="pg-json-container">
 
       <pre class="pg-json-pre"><span class="pg-json-brace">{</span>
@@ -1182,6 +1286,8 @@
 <span class="pg-json-brace">}</span></pre>
     </div>
   </div>
+  </div>
+  <!-- /.pg-output-block -->
 
     </main>
   </div>
@@ -1589,14 +1695,6 @@
       });
     }
 
-    // Shrink the player while it's pinned to the top
-    var playerContainer = document.querySelector('.media-container');
-    var stuckSentinel = document.querySelector('.media-stuck-sentinel');
-    if (playerContainer && stuckSentinel && 'IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) {
-        playerContainer.classList.toggle('stuck', !entries[0].isIntersecting);
-      }, { threshold: 0 }).observe(stuckSentinel);
-    }
   </script>
   {% endblock %}
 </div>

@@ -1,6 +1,5 @@
 :root {
   --initial-height: 14em;
-  --stuck-height: 9em;
   --player-visualization-height: 75%;
   --player-visualization-mobile-height: 65%;
 
@@ -24,36 +23,7 @@
   }
 }
 
-/* Zero-height marker: when it scrolls past the top, the player is stuck */
-.media-stuck-sentinel {
-  height: 1px;
-  margin-bottom: -1px;
-}
-
 .media-container {
-  position: sticky;
-  top: 0;
-  height: calc(var(--initial-height) + 1em);
-  z-index: 1;
-
-  /* Page-bg strip above the player so it isn't flush to the top when stuck */
-  &::before {
-    content: "";
-    display: block;
-    height: 0.5em;
-    background-color: rgba(var(--ids__background-RGB), 1);
-  }
-
-  & .media-space {
-    background-color: rgba(var(--ids__background-RGB), 1);
-    height: 5em;
-    margin-bottom: -4.5em;
-
-    @media (width < 768px) {
-      margin-bottom: -4.5em;
-    }
-  }
-
   & .media-box {
     position: relative;
     display: flex;
@@ -63,85 +33,12 @@
 
     height: var(--initial-height);
     background-color: rgba(var(--ids__bg-accent-RGB), 1);
-    box-shadow: 0 0.5em 0.5em 0 white;
-    transition: height 0.2s ease;
 
     &[data-speaker-count="1"] { --speaker-count: 1; }
     &[data-speaker-count="2"] { --speaker-count: 2; }
     &[data-speaker-count="3"] { --speaker-count: 3; }
     &[data-speaker-count="4"] { --speaker-count: 4; }
     &[data-speaker-count="5"] { --speaker-count: 5; }
-  }
-
-  &.stuck {
-    pointer-events: none;
-
-    & .media-box {
-      height: var(--stuck-height);
-      transition: height 0.5s ease;
-      pointer-events: auto;
-
-      & .player-visualization {
-        height: var(--player-visualization-mobile-height);
-        transition: height 0.5s ease;
-      }
-    }
-
-    & .speaker-labels {
-      height: var(--player-visualization-mobile-height);
-      transition: height 0.5s ease;
-    }
-    & .behaviour-indicators {
-      height: var(--player-visualization-mobile-height);
-      transition: height 0.5s ease;
-    }
-    & .behaviour-labels {
-      height: var(--player-visualization-mobile-height);
-      transition: height 0.5s ease;
-    }
-    & .player-controls {
-      height: calc(100% - var(--player-visualization-mobile-height));
-      transition: height 0.5s ease;
-    }
-    & .player-icon {
-      transform: scale(0.8);
-      transition: transform 0.5s ease;
-    }
-    & .player-controls .player-control-center:hover .player-icon {
-      transform: scale(0.9);
-      transition: transform 0s ease;
-    }
-    & .player-controls .player-control-center:hover .player-icon:hover {
-      & svg,
-      & svg * {
-        fill: white;
-        transition: fill 0s ease;
-      }
-    }
-    & .clip-text-caption {
-      top: var(--player-visualization-mobile-height);
-      transition: top 0.5s ease;
-    }
-    & .player-status-caption {
-      top: var(--player-visualization-mobile-height);
-      transition: top 0.5s ease;
-    }
-    & .player-total-time {
-      top: var(--player-captions-top-mobile);
-      transition: top 0.5s ease;
-    }
-    & .player-position-indicator {
-      & .player-position-caption {
-        top: var(--player-captions-top-mobile);
-        transition: top 0.5s ease;
-      }
-    }
-    & .player-hover-position-indicator {
-      & .player-hover-position-caption {
-        top: var(--player-captions-top-mobile);
-        transition: top 0.5s ease;
-      }
-    }
   }
 
   /* Player visualization timeline */
