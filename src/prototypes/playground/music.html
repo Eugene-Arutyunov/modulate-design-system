@@ -24,31 +24,71 @@ segments:
 
 {% block options %}{% endblock %}
 
+{% block above_output %}
+  <div class="mx-heatmap">
+    <div class="mx-heat-row">
+      <span class="mx-heat-label music">MUSIC</span>
+      <div class="mx-heat-cells">
+        {% for s in segments %}<div class="mx-heat-cell music" style="opacity: {{ s.music / 100 }}" title="{{ s.t }} · Music {{ s.music }}%"></div>{% endfor %}
+      </div>
+    </div>
+    <div class="mx-heat-row">
+      <span class="mx-heat-label speech">SPEECH</span>
+      <div class="mx-heat-cells">
+        {% for s in segments %}<div class="mx-heat-cell speech" style="opacity: {{ s.speech / 100 }}" title="{{ s.t }} · Speech {{ s.speech }}%"></div>{% endfor %}
+      </div>
+    </div>
+    <div class="mx-heat-axis">
+      <div class="mx-heat-axis-spacer"></div>
+      <div class="mx-heat-axis-ticks">
+        <span>0s</span><span>4s</span><span>8s</span><span>12s</span><span>16s</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-verdict m__rounded">
+    <div class="mx-verdict-title">Music</div>
+    <div class="mx-verdict-stats">
+      <div class="mx-verdict-stat music">
+        <div class="mx-verdict-stat-value">90%</div>
+        <div class="mx-verdict-stat-label">Music</div>
+      </div>
+      <div class="mx-verdict-stat speech">
+        <div class="mx-verdict-stat-value">77%</div>
+        <div class="mx-verdict-stat-label">Speech</div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block panel_content %}
   <style>
-    .mx-panel { --music-color: var(--m__chart-model-1-color); --speech-color: var(--m__ui-success-color); }
+    .mx-panel,
+    .mx-verdict,
+    .mx-heatmap { --music-color: var(--m__ui-success-color); --speech-color: var(--m__ui-error-color); }
 
     /* Verdict card ──────────────────────────────────────────────────────── */
     .mx-verdict {
       display: flex;
       align-items: center;
       gap: var(--m__space-m);
-      padding: var(--m__space-s) var(--m__space-m);
-      margin: var(--m__space-s) 0 var(--m__space-l);
-      background: var(--m__bg-surface-color);
+      height: 4rem;
+      padding-inline: var(--m__space-m);
+      margin-bottom: var(--m__space-l);
+      background: var(--m__ui-success-color);
+      color: white;
+      white-space: nowrap;
     }
     .mx-verdict-icon {
       width: 1.5rem;
       height: 1.5rem;
       flex-shrink: 0;
-      color: var(--music-color);
     }
     .mx-verdict-icon svg { width: 100%; height: 100%; fill: currentColor; }
     .mx-verdict-title {
       font-size: var(--m__font-size-l);
       font-weight: 800;
       letter-spacing: -0.02em;
-      color: var(--music-color);
       line-height: 1;
     }
     .mx-verdict-stats {
@@ -58,18 +98,22 @@ segments:
     }
     .mx-verdict-stat { display: flex; align-items: baseline; gap: 0.35rem; }
     .mx-verdict-stat-value { font-size: var(--m__font-size-l); font-weight: 800; line-height: 1; }
-    .mx-verdict-stat.music  .mx-verdict-stat-value { color: var(--music-color); }
-    .mx-verdict-stat.speech .mx-verdict-stat-value { color: var(--speech-color); }
     .mx-verdict-stat-label {
       font-size: var(--m__font-size-xs);
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--m__text-caption-color);
+      opacity: 0.75;
     }
 
     /* Heatmap ───────────────────────────────────────────────────────────── */
-    .mx-heatmap { display: flex; flex-direction: column; gap: 0.4rem; }
+    .mx-heatmap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-top: calc(var(--m__space-s) - var(--m__space-l));
+      margin-bottom: var(--m__space-m);
+    }
     .mx-heat-row { display: flex; align-items: center; gap: 0.75rem; }
     .mx-heat-label {
       width: 4.5rem;
@@ -114,55 +158,11 @@ segments:
       background: var(--m__ui-border-color);
       overflow: hidden;
     }
-    .mx-bar-fill { height: 100%; border-radius: 3px; }
-    .mx-bar-fill.music  { background: var(--music-color); }
-    .mx-bar-fill.speech { background: var(--speech-color); }
+    .mx-bar-fill { height: 100%; border-radius: 3px; background: var(--m__text-color); }
     .mx-pct { font-variant-numeric: tabular-nums; min-width: 3.6em; }
   </style>
 
   <div class="pg-tab-panel mx-panel">
-
-    <!-- Verdict card ──────────────────────────────────────────────────────── -->
-    <div class="mx-verdict m__rounded">
-      <span class="mx-verdict-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#music"></use></svg></span>
-      <div class="mx-verdict-title">Music</div>
-      <div class="mx-verdict-stats">
-        <div class="mx-verdict-stat music">
-          <div class="mx-verdict-stat-value">90%</div>
-          <div class="mx-verdict-stat-label">Music</div>
-        </div>
-        <div class="mx-verdict-stat speech">
-          <div class="mx-verdict-stat-value">77%</div>
-          <div class="mx-verdict-stat-label">Speech</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Heatmap ─────────────────────────────────────────────────────────── -->
-    <div>
-      <div class="mx-heatmap">
-        <div class="mx-heat-row">
-          <span class="mx-heat-label music">MUSIC</span>
-          <div class="mx-heat-cells">
-            {% for s in segments %}<div class="mx-heat-cell music" style="opacity: {{ s.music / 100 }}" title="{{ s.t }} · Music {{ s.music }}%"></div>{% endfor %}
-          </div>
-        </div>
-        <div class="mx-heat-row">
-          <span class="mx-heat-label speech">SPEECH</span>
-          <div class="mx-heat-cells">
-            {% for s in segments %}<div class="mx-heat-cell speech" style="opacity: {{ s.speech / 100 }}" title="{{ s.t }} · Speech {{ s.speech }}%"></div>{% endfor %}
-          </div>
-        </div>
-        <div class="mx-heat-axis">
-          <div class="mx-heat-axis-spacer"></div>
-          <div class="mx-heat-axis-ticks">
-            <span>0s</span><span>4s</span><span>8s</span><span>12s</span><span>16s</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="m__space L"></div>
 
     <!-- Detailed table ──────────────────────────────────────────────────── -->
     <div>

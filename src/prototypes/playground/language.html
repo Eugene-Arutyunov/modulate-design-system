@@ -1,6 +1,7 @@
 ---
 pageTitle: Language
 permalink: /playground/language/
+noOutputTab: true
 ---
 
 {% extends 'prototypes/playground-layout.html' %}
@@ -13,59 +14,34 @@ permalink: /playground/language/
       </div>
 {% endblock %}
 
-{% block panel_content %}
+{% block above_output %}
   <style>
     .lang-card {
-      --lang-accent: var(--m__ui-success-color);
       display: flex;
-      flex-direction: column;
       align-items: center;
-      text-align: center;
-      gap: var(--m__space-xxs);
-      padding: var(--m__space-m);
-      margin: var(--m__space-s) 0 var(--m__space-l);
-      background: var(--m__bg-surface-color);
+      justify-content: center;
+      gap: var(--m__space-m);
+      height: 4rem;
+      padding-inline: var(--m__space-m);
+      margin-top: calc(var(--m__space-s) - var(--m__space-l));
+      margin-bottom: var(--m__space-l);
+      background: var(--m__ui-success-color);
+      color: white;
+      white-space: nowrap;
     }
     .lang-name {
-      font-size: var(--m__font-size-xxxl);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      margin: 0;
-    }
-    .lang-note {
-      margin-top: var(--m__space-s);
-    }
-    .lang-conf-value {
-      font-size: var(--m__font-size-xxl);
-      font-weight: 800;
+      font-size: var(--m__font-size-l);
+      font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1;
-      color: var(--lang-accent);
-      font-variant-numeric: tabular-nums;
     }
-    .lang-conf-label {
-      font-size: var(--m__font-size-xs);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--m__text-caption-color);
-    }
-    .lang-meta {
-      margin-top: var(--m__space-xs);
-      font-variant-numeric: tabular-nums;
-    }
+    .lang-stat { font-weight: 700; }
+    .lang-caption { opacity: 0.75; font-size: var(--m__font-size-s); }
   </style>
 
-  <div class="pg-tab-panel">
-    <div class="lang-card m__rounded">
-      <h2 class="lang-name">English</h2>
-
-      <p class="caption lang-note">Only the first 30 seconds of audio are analyzed.</p>
-      <div class="lang-conf-value">99.6%</div>
-      <div class="lang-conf-label">Confidence</div>
-
-      <p class="caption lang-meta">Audio 97.7s · first 30s analyzed · Processed 1.10s · 27.3× real-time</p>
-    </div>
+  <div class="lang-card m__rounded">
+    <span class="lang-name">English</span>
+    <span class="lang-stat">99.6% confidence</span>
+    <span class="lang-caption">First 30s analyzed</span>
   </div>
 {% endblock %}
