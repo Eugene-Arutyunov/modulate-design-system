@@ -4,27 +4,38 @@ permalink: /playground/transcription/
 ---
 
 {% extends 'prototypes/playground-layout.html' %} {% block panel_content %}
+  <style>
+    /* Transcription transcript — flat text, no bubbles ──────────────────── */
+    .pg-transcription-transcript .pg-transcript-utterance,
+    .pg-transcription-transcript .pg-transcript-utterance:hover,
+    .pg-transcription-transcript .pg-transcript-utterance.active {
+      background: transparent !important;
+      padding: 0;
+      margin: 0;
+      cursor: default;
+      color: inherit;
+    }
+    .pg-transcription-transcript .pg-transcript-list {
+      gap: var(--m__space-s);
+    }
+    .pg-transcription-transcript .pg-transcript-verdict {
+      color: var(--m__text-caption-color);
+    }
+  </style>
+
   <div class="pg-tab-panel">
 
-      <div class="m__space XS"></div>
-
       <!-- Transcript -->
-      <div class="pg-transcript-container visible" id="transcript-container">
+      <div class="pg-transcript-container pg-transcription-transcript visible" id="transcript-container">
         <div class="pg-transcript-list" id="transcript-list">
           <!-- Speaker 0 · Calm · American · Authentic -->
-          <div
-            class="pg-transcript-utterance m__rounded speaker-left ec-calm"
-          >
+          <div class="pg-transcript-utterance ec-calm">
             <div class="pg-transcript-utterance-header">
               <span class="pg-transcript-time">0:00</span>
               <span class="pg-transcript-speaker">Speaker 0</span>
-              <span class="pg-transcript-emotion"
-                >Calm</span
-              >
-              <span class="pg-transcript-accent"
-                >American accent</span
-              >
-              <span class="m__tag verdict-authentic">Authentic</span>
+              <span class="pg-transcript-emotion">Calm</span>
+              <span class="pg-transcript-accent">American accent</span>
+              <span class="pg-transcript-verdict">Authentic</span>
             </div>
             <div class="pg-transcript-text">
               <p>
@@ -34,19 +45,13 @@ permalink: /playground/transcription/
             </div>
           </div>
           <!-- Speaker 1 · Happy · British · Authentic -->
-          <div
-            class="pg-transcript-utterance m__rounded speaker-right ec-happy"
-          >
+          <div class="pg-transcript-utterance ec-happy">
             <div class="pg-transcript-utterance-header">
               <span class="pg-transcript-time">0:06</span>
               <span class="pg-transcript-speaker">Speaker 1</span>
-              <span class="pg-transcript-emotion"
-                >Happy</span
-              >
-              <span class="pg-transcript-accent"
-                >British accent</span
-              >
-              <span class="m__tag verdict-authentic">Authentic</span>
+              <span class="pg-transcript-emotion">Happy</span>
+              <span class="pg-transcript-accent">British accent</span>
+              <span class="pg-transcript-verdict">Authentic</span>
             </div>
             <div class="pg-transcript-text">
               <p>
@@ -56,19 +61,13 @@ permalink: /playground/transcription/
             </div>
           </div>
           <!-- Speaker 0 · Neutral · American · Authentic -->
-          <div
-            class="pg-transcript-utterance m__rounded speaker-left ec-neutral"
-          >
+          <div class="pg-transcript-utterance ec-neutral">
             <div class="pg-transcript-utterance-header">
               <span class="pg-transcript-time">0:18</span>
               <span class="pg-transcript-speaker">Speaker 0</span>
-              <span class="pg-transcript-emotion"
-                >Neutral</span
-              >
-              <span class="pg-transcript-accent"
-                >American accent</span
-              >
-              <span class="m__tag verdict-authentic">Authentic</span>
+              <span class="pg-transcript-emotion">Neutral</span>
+              <span class="pg-transcript-accent">American accent</span>
+              <span class="pg-transcript-verdict">Authentic</span>
             </div>
             <div class="pg-transcript-text">
               <p>
@@ -78,23 +77,13 @@ permalink: /playground/transcription/
             </div>
           </div>
           <!-- Speaker 1 · Interested · British · SYNTHETIC -->
-          <div
-            class="pg-transcript-utterance m__rounded speaker-right active ec-interested"
-          >
+          <div class="pg-transcript-utterance ec-interested">
             <div class="pg-transcript-utterance-header">
               <span class="pg-transcript-time">0:24</span>
               <span class="pg-transcript-speaker">Speaker 1</span>
-              <span class="pg-transcript-emotion"
-                >Interested</span
-              >
-              <span class="pg-transcript-accent"
-                >British accent</span
-              >
-              <span
-                class="m__tag verdict-synthetic"
-                title="Deepfake · 68% confidence"
-                >Deepfake</span
-              >
+              <span class="pg-transcript-emotion">Interested</span>
+              <span class="pg-transcript-accent">British accent</span>
+              <span class="pg-transcript-verdict" title="Deepfake · 68% confidence">Deepfake</span>
             </div>
             <div class="pg-transcript-text">
               <p>
@@ -105,19 +94,13 @@ permalink: /playground/transcription/
             </div>
           </div>
           <!-- Speaker 0 · Confident · American · Authentic -->
-          <div
-            class="pg-transcript-utterance m__rounded speaker-left ec-confident"
-          >
+          <div class="pg-transcript-utterance ec-confident">
             <div class="pg-transcript-utterance-header">
               <span class="pg-transcript-time">0:42</span>
               <span class="pg-transcript-speaker">Speaker 0</span>
-              <span class="pg-transcript-emotion"
-                >Confident</span
-              >
-              <span class="pg-transcript-accent"
-                >American accent</span
-              >
-              <span class="m__tag verdict-authentic">Authentic</span>
+              <span class="pg-transcript-emotion">Confident</span>
+              <span class="pg-transcript-accent">American accent</span>
+              <span class="pg-transcript-verdict">Authentic</span>
             </div>
             <div class="pg-transcript-text">
               <p>

@@ -47,17 +47,9 @@ segments:
   </div>
 
   <div class="mx-verdict m__rounded">
-    <div class="mx-verdict-title">Music</div>
-    <div class="mx-verdict-stats">
-      <div class="mx-verdict-stat music">
-        <div class="mx-verdict-stat-value">90%</div>
-        <div class="mx-verdict-stat-label">Music</div>
-      </div>
-      <div class="mx-verdict-stat speech">
-        <div class="mx-verdict-stat-value">77%</div>
-        <div class="mx-verdict-stat-label">Speech</div>
-      </div>
-    </div>
+    <span class="mx-verdict-title">Music</span>
+    <span class="mx-verdict-stat">90% Music</span>
+    <span class="mx-verdict-stat">77% Speech</span>
   </div>
 {% endblock %}
 
@@ -71,6 +63,7 @@ segments:
     .mx-verdict {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: var(--m__space-m);
       height: 4rem;
       padding-inline: var(--m__space-m);
@@ -79,32 +72,13 @@ segments:
       color: white;
       white-space: nowrap;
     }
-    .mx-verdict-icon {
-      width: 1.5rem;
-      height: 1.5rem;
-      flex-shrink: 0;
-    }
-    .mx-verdict-icon svg { width: 100%; height: 100%; fill: currentColor; }
     .mx-verdict-title {
       font-size: var(--m__font-size-l);
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1;
     }
-    .mx-verdict-stats {
-      display: flex;
-      gap: var(--m__space-m);
-      margin-left: auto;
-    }
-    .mx-verdict-stat { display: flex; align-items: baseline; gap: 0.35rem; }
-    .mx-verdict-stat-value { font-size: var(--m__font-size-l); font-weight: 800; line-height: 1; }
-    .mx-verdict-stat-label {
-      font-size: var(--m__font-size-xs);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      opacity: 0.75;
-    }
+    .mx-verdict-stat { font-weight: 700; }
 
     /* Heatmap ───────────────────────────────────────────────────────────── */
     .mx-heatmap {
