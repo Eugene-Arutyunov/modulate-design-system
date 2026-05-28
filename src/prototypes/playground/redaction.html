@@ -32,11 +32,25 @@ permalink: /playground/redaction/
       </div>
 {% endblock %}
 
-{% block above_output %}
-  <div class="pg-redacted-audio">
-    <audio controls src="/assets/audio/redacted-demo.mp3"></audio>
+{% block player_clips %}
+  <div class="pg-redaction-player-track">
+    <div class="pg-redaction-seg" style="left: 8%;  width: 5%"  title="0:16 – 0:26 · Name"></div>
+    <div class="pg-redaction-seg" style="left: 14%; width: 7%"  title="0:28 – 0:42 · Address · ZIP"></div>
+    <div class="pg-redaction-seg" style="left: 23%; width: 4%"  title="0:46 – 0:54 · Date of birth"></div>
+    <div class="pg-redaction-seg" style="left: 30%; width: 6%"  title="1:00 – 1:13 · SSN · Member ID"></div>
+    <div class="pg-redaction-seg" style="left: 39%; width: 5%"  title="1:18 – 1:28 · Phone · Email"></div>
+    <div class="pg-redaction-seg" style="left: 48%; width: 8%"  title="1:36 – 1:53 · Callback · Employer"></div>
+    <div class="pg-redaction-seg" style="left: 59%; width: 4%"  title="1:59 – 2:07 · Workplace address"></div>
+    <div class="pg-redaction-seg" style="left: 66%; width: 6%"  title="2:13 – 2:25 · Account number"></div>
+    <div class="pg-redaction-seg" style="left: 76%; width: 5%"  title="2:33 – 2:43 · Name · Phone"></div>
+    <div class="pg-redaction-seg" style="left: 85%; width: 4%"  title="2:51 – 2:59 · Email"></div>
+    <div class="pg-redaction-seg" style="left: 92%; width: 4%"  title="3:05 – 3:13 · Address"></div>
   </div>
+{% endblock %}
 
+{% block speaker_labels %}{% endblock %}
+
+{% block above_output %}
   <div class="pg-redaction-summary m__rounded">
     <div class="pg-redaction-stat">
       <div class="pg-redaction-stat-value">31</div>
@@ -49,30 +63,6 @@ permalink: /playground/redaction/
     <div class="pg-redaction-stat">
       <div class="pg-redaction-stat-value">53.7%</div>
       <div class="pg-redaction-stat-label">Of audio</div>
-    </div>
-  </div>
-
-  <div class="pg-redaction-timeline">
-    <div class="pg-redaction-track">
-      <div class="pg-redaction-seg" style="left: 8%;  width: 5%"  title="0:16 – 0:26 · Name"></div>
-      <div class="pg-redaction-seg" style="left: 14%; width: 7%"  title="0:28 – 0:42 · Address · ZIP"></div>
-      <div class="pg-redaction-seg" style="left: 23%; width: 4%"  title="0:46 – 0:54 · Date of birth"></div>
-      <div class="pg-redaction-seg" style="left: 30%; width: 6%"  title="1:00 – 1:13 · SSN · Member ID"></div>
-      <div class="pg-redaction-seg" style="left: 39%; width: 5%"  title="1:18 – 1:28 · Phone · Email"></div>
-      <div class="pg-redaction-seg" style="left: 48%; width: 8%"  title="1:36 – 1:53 · Callback · Employer"></div>
-      <div class="pg-redaction-seg" style="left: 59%; width: 4%"  title="1:59 – 2:07 · Workplace address"></div>
-      <div class="pg-redaction-seg" style="left: 66%; width: 6%"  title="2:13 – 2:25 · Account number"></div>
-      <div class="pg-redaction-seg" style="left: 76%; width: 5%"  title="2:33 – 2:43 · Name · Phone"></div>
-      <div class="pg-redaction-seg" style="left: 85%; width: 4%"  title="2:51 – 2:59 · Email"></div>
-      <div class="pg-redaction-seg" style="left: 92%; width: 4%"  title="3:05 – 3:13 · Address"></div>
-    </div>
-    <div class="pg-redaction-axis">
-      <span>0:00</span>
-      <span>0:40</span>
-      <span>1:21</span>
-      <span>2:01</span>
-      <span>2:42</span>
-      <span>3:22</span>
     </div>
   </div>
 {% endblock %}
@@ -114,15 +104,6 @@ permalink: /playground/redaction/
       color: var(--m__text-caption-color);
     }
 
-    /* Redacted audio ─────────────────────────────────────────────────────── */
-    .pg-redacted-audio {
-      margin-bottom: var(--m__space-s);
-    }
-    .pg-redacted-audio audio {
-      width: 100%;
-      height: 2.5rem;
-    }
-
     /* Redaction summary ─────────────────────────────────────────────────── */
     .pg-redaction-summary {
       display: flex;
@@ -131,7 +112,7 @@ permalink: /playground/redaction/
       gap: var(--m__space-m);
       height: 4rem;
       padding-inline: var(--m__space-m);
-      margin-bottom: var(--m__space-s);
+      margin-bottom: var(--m__space-l);
       background: var(--m__ui-success-color);
       color: white;
       font-weight: 700;
@@ -146,16 +127,13 @@ permalink: /playground/redaction/
       font-variant-numeric: tabular-nums;
     }
 
-    /* Silenced-audio timeline ───────────────────────────────────────────── */
-    .pg-redaction-timeline {
-      margin-bottom: var(--m__space-s);
+    /* Redaction timeline inside the player visualization ────────────────── */
+    .media-container {
+      --player-visualization-height: 2rem;
     }
-    .pg-redaction-track {
-      position: relative;
-      height: 2.4rem;
-      border-radius: var(--m__radius-xs);
-      background: var(--m__bg-surface-color);
-      overflow: hidden;
+    .pg-redaction-player-track {
+      position: absolute;
+      inset: 0;
     }
     .pg-redaction-seg {
       position: absolute;
@@ -170,14 +148,6 @@ permalink: /playground/redaction/
     .pg-redaction-seg:hover {
       background: color-mix(in srgb, var(--m__ui-error-color) 55%, transparent);
       transition: background var(--m__hover-transition-duration) var(--m__transition-easing);
-    }
-    .pg-redaction-axis {
-      display: flex;
-      justify-content: space-between;
-      margin-top: var(--m__space-xxs);
-      font-size: var(--m__font-size-xs);
-      color: var(--m__text-caption-color);
-      font-variant-numeric: tabular-nums;
     }
 
     /* Redaction transcript — flat text, no bubbles ──────────────────────── */
