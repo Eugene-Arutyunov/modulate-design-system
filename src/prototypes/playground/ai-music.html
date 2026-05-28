@@ -14,8 +14,23 @@ noOutputTab: true
       </div>
 {% endblock %}
 
+{% block player_clips %}{% endblock %}
+{% block speaker_labels %}{% endblock %}
+
 {% block above_output %}
   <style>
+    .media-container {
+      --player-visualization-height: 1rem;
+    }
+    .media-container .player-visualization {
+      background: linear-gradient(
+        to right,
+        rgba(180, 180, 255, 0.45) 0,
+        rgba(180, 180, 255, 0.45) 25%,
+        rgba(255, 255, 255, 0.08) 25%,
+        rgba(255, 255, 255, 0.08) 100%
+      );
+    }
     .aim-card {
       display: flex;
       align-items: center;
@@ -26,21 +41,27 @@ noOutputTab: true
       margin-bottom: var(--m__space-l);
       background: var(--m__ui-error-color);
       color: white;
+      font-weight: 700;
       white-space: nowrap;
     }
-    .aim-title {
-      font-size: var(--m__font-size-l);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1;
+    .aim-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
     }
-    .aim-stat { font-weight: 700; }
-    .aim-caption { opacity: 0.75; font-size: var(--m__font-size-s); }
+    .aim-stat-value {
+      font-variant-numeric: tabular-nums;
+    }
   </style>
 
   <div class="aim-card m__rounded">
     <span class="aim-title">AI Vocal Music</span>
-    <span class="aim-stat">55.8% AI · Vocal path</span>
-    <span class="aim-caption">Instrumental: not evaluated</span>
+    <span class="aim-stat">
+      <span class="aim-stat-value">55.8%</span>
+      <span class="aim-stat-label">AI · Vocal path</span>
+    </span>
+    <span class="aim-stat">
+      <span class="aim-stat-label">Instrumental: not evaluated</span>
+    </span>
   </div>
 {% endblock %}

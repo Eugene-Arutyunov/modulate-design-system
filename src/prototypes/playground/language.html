@@ -14,8 +14,23 @@ noOutputTab: true
       </div>
 {% endblock %}
 
+{% block player_clips %}{% endblock %}
+{% block speaker_labels %}{% endblock %}
+
 {% block above_output %}
   <style>
+    .media-container {
+      --player-visualization-height: 1rem;
+    }
+    .media-container .player-visualization {
+      background: linear-gradient(
+        to right,
+        rgba(180, 180, 255, 0.45) 0,
+        rgba(180, 180, 255, 0.45) 25%,
+        rgba(255, 255, 255, 0.08) 25%,
+        rgba(255, 255, 255, 0.08) 100%
+      );
+    }
     .lang-card {
       display: flex;
       align-items: center;
@@ -26,21 +41,27 @@ noOutputTab: true
       margin-bottom: var(--m__space-l);
       background: var(--m__ui-success-color);
       color: white;
+      font-weight: 700;
       white-space: nowrap;
     }
-    .lang-name {
-      font-size: var(--m__font-size-l);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1;
+    .lang-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
     }
-    .lang-stat { font-weight: 700; }
-    .lang-caption { opacity: 0.75; font-size: var(--m__font-size-s); }
+    .lang-stat-value {
+      font-variant-numeric: tabular-nums;
+    }
   </style>
 
   <div class="lang-card m__rounded">
     <span class="lang-name">English</span>
-    <span class="lang-stat">99.6% confidence</span>
-    <span class="lang-caption">First 30s analyzed</span>
+    <span class="lang-stat">
+      <span class="lang-stat-value">99.6%</span>
+      <span class="lang-stat-label">confidence</span>
+    </span>
+    <span class="lang-stat">
+      <span class="lang-stat-label">First 30s analyzed</span>
+    </span>
   </div>
 {% endblock %}

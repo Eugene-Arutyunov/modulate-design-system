@@ -822,6 +822,16 @@
   }
 
   /* Player overrides ────────────────────────────────────────────────────── */
+  /* Single source of truth for player heights:
+     - pages set --player-visualization-height (the variable upper area)
+     - --player-controls-height is fixed across all playground players
+     - total --initial-height is derived from the two */
+  .media-container {
+    --player-controls-height: 4em;
+    --player-visualization-height: 10em;
+    --initial-height: calc(var(--player-visualization-height) + var(--player-controls-height));
+  }
+
   #audio-player .player-icon svg,
   #audio-player .player-icon svg * {
     fill: #fff;
@@ -968,6 +978,7 @@
       data-speaker-count="2"
     >
       <div class="player-visualization">
+        {% block player_clips %}
         <!-- Turn-taking with varied turn lengths, clip counts and widths -->
 
         <!-- Speaker 0: long opening turn -->
@@ -1060,7 +1071,9 @@
         <!-- Speaker 1 final word -->
         <div class="transcript-clip emotion-confident" data-speaker-index="2" style="left: 96.5%; width: 1.5%"><div class="clip-visualization"></div></div>
         <div class="transcript-clip emotion-calm" data-speaker-index="2" style="left: 98.5%; width: 1.5%"><div class="clip-visualization"></div></div>
+        {% endblock %}
       </div>
+      {% block speaker_labels %}
       <div class="speaker-labels">
         <div class="speaker-label" data-speaker-index="1">
           <span>Speaker 0</span>
@@ -1069,6 +1082,7 @@
           <span>Speaker 1</span>
         </div>
       </div>
+      {% endblock %}
       <div class="behaviour-indicators"></div>
       <div class="behaviour-labels" style="display: none"></div>
       <div class="player-controls">

@@ -125,36 +125,25 @@ permalink: /playground/redaction/
 
     /* Redaction summary ─────────────────────────────────────────────────── */
     .pg-redaction-summary {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      margin: 0 0 var(--m__space-s);
-      padding: var(--m__space-xs) 0;
-      background: var(--m__bg-surface-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--m__space-m);
+      height: 4rem;
+      padding-inline: var(--m__space-m);
+      margin-bottom: var(--m__space-s);
+      background: var(--m__ui-success-color);
+      color: white;
+      font-weight: 700;
+      white-space: nowrap;
     }
     .pg-redaction-stat {
       display: flex;
       align-items: baseline;
-      justify-content: center;
       gap: 0.4rem;
-      padding: var(--m__space-xs) var(--m__space-m);
-    }
-    .pg-redaction-stat + .pg-redaction-stat {
-      border-left: 1px solid var(--m__ui-border-color);
     }
     .pg-redaction-stat-value {
-      font-size: var(--m__font-size-l);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      color: var(--m__bg-accent-color);
       font-variant-numeric: tabular-nums;
-    }
-    .pg-redaction-stat-label {
-      font-size: var(--m__font-size-xs);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--m__text-caption-color);
     }
 
     /* Silenced-audio timeline ───────────────────────────────────────────── */
