@@ -740,12 +740,11 @@
     border-radius: var(--m__radius-m);
     overflow: hidden;
     margin-top: var(--m__space-xxs);
-    font-family: var(--m__font-mono);
+    font-family: var(--m__font-semi-mono);
   }
 
-  .pg-output-block .pg-transcript-text,
-  .pg-output-block .pg-transcript-text p {
-    font-family: var(--m__font-mono);
+  .pg-output-block h2 {
+    font-family: "Inter";
   }
 
   .pg-output-toolbar {
@@ -799,7 +798,18 @@
 
   .pg-subview {
     padding: var(--m__space-m) var(--m__space-xs);
-    font-size: 0.78rem;
+    font-size: var(--m__font-size-s);
+  }
+
+  .pg-output-block .pg-transcript-utterance-header,
+  .pg-output-block .pg-transcript-deepfake-score,
+  .pg-output-block .pg-transcript-lang,
+  .pg-output-block .pg-emo-labels {
+    font-size: var(--m__font-size-s);
+  }
+
+  .pg-subview[data-pg-subview="json"] {
+    font-family: var(--m__font-mono);
   }
 
   .pg-subview th {
