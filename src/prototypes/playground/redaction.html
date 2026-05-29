@@ -51,18 +51,9 @@ permalink: /playground/redaction/
 
 {% block above_output %}
   <div class="pg-redaction-summary m__rounded">
-    <div class="pg-redaction-stat">
-      <div class="pg-redaction-stat-value">31</div>
-      <div class="pg-redaction-stat-label">Redactions</div>
-    </div>
-    <div class="pg-redaction-stat">
-      <div class="pg-redaction-stat-value">108.9s</div>
-      <div class="pg-redaction-stat-label">Silenced</div>
-    </div>
-    <div class="pg-redaction-stat">
-      <div class="pg-redaction-stat-value">53.7%</div>
-      <div class="pg-redaction-stat-label">Of audio</div>
-    </div>
+    <span class="pg-redaction-title">31 Redactions</span>
+    <div class="pg-redaction-details"
+      ><span class="pg-redaction-stat"><span class="pg-redaction-stat-value">108.9s</span> <span class="pg-redaction-stat-label">silenced</span></span><span class="pg-redaction-stat"><span class="pg-redaction-stat-value">53.7%</span> <span class="pg-redaction-stat-label">of audio</span></span></div>
   </div>
 {% endblock %}
 
@@ -121,21 +112,32 @@ permalink: /playground/redaction/
     /* Redaction summary ─────────────────────────────────────────────────── */
     .pg-redaction-summary {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: var(--m__space-m);
-      height: 4rem;
-      padding-inline: var(--m__space-m);
+      gap: var(--m__space-xxs);
+      min-height: 6rem;
+      padding: var(--m__space-s) var(--m__space-m);
       margin-bottom: var(--m__space-l);
       background: var(--m__ui-success-color);
       color: white;
+      text-align: center;
+    }
+    .pg-redaction-title {
       font-weight: 700;
-      white-space: nowrap;
+      font-size: var(--m__font-size-l);
+    }
+    .pg-redaction-details {
+      font-size: var(--m__font-size-s);
+      font-weight: 500;
     }
     .pg-redaction-stat {
-      display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
+      white-space: nowrap;
+    }
+    .pg-redaction-stat + .pg-redaction-stat::before {
+      content: " · ";
+      white-space: pre;
+      opacity: 0.6;
     }
     .pg-redaction-stat-value {
       font-variant-numeric: tabular-nums;

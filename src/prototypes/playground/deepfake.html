@@ -39,14 +39,8 @@ permalink: /playground/deepfake/
 {% block above_output %}
   <div class="df-card m__rounded">
     <span class="df-title">Deepfake</span>
-    <span class="df-stat">
-      <span class="df-stat-value">14/25</span>
-      <span class="df-stat-label">deepfake segments</span>
-    </span>
-    <span class="df-stat">
-      <span class="df-stat-value">3</span>
-      <span class="df-stat-label">segments with &gt;98% conf.</span>
-    </span>
+    <div class="df-details"
+      ><span class="df-stat"><span class="df-stat-value">14/25</span> <span class="df-stat-label">deepfake segments</span></span><span class="df-stat"><span class="df-stat-value">3</span> <span class="df-stat-label">segments with &gt;98% conf.</span></span></div>
   </div>
 {% endblock %}
 
@@ -68,21 +62,32 @@ permalink: /playground/deepfake/
 
     .df-card {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: var(--m__space-m);
-      height: 4rem;
-      padding-inline: var(--m__space-m);
+      gap: var(--m__space-xxs);
+      min-height: 6rem;
+      padding: var(--m__space-s) var(--m__space-m);
       margin-bottom: var(--m__space-l);
       background: var(--m__ui-error-color);
       color: white;
+      text-align: center;
+    }
+    .df-title {
       font-weight: 700;
-      white-space: nowrap;
+      font-size: var(--m__font-size-l);
+    }
+    .df-details {
+      font-size: var(--m__font-size-s);
+      font-weight: 500;
     }
     .df-stat {
-      display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
+      white-space: nowrap;
+    }
+    .df-stat + .df-stat::before {
+      content: " · ";
+      white-space: pre;
+      opacity: 0.6;
     }
     .df-stat-value {
       font-variant-numeric: tabular-nums;

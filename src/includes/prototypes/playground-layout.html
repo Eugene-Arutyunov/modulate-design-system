@@ -913,13 +913,57 @@
 
   /* Player overrides ────────────────────────────────────────────────────── */
   /* Single source of truth for player heights:
-     - pages set --player-visualization-height (the variable upper area)
+     - pages set --player-visualization-height (the variable upper area, lives outside the player now)
      - --player-controls-height is fixed across all playground players
-     - total --initial-height is derived from the two */
+     - --initial-height shrinks to just controls since viz was extracted into .pg-player-dataviz */
   .media-container {
-    --player-controls-height: 4em;
+    --player-controls-height: 3rem;
     --player-visualization-height: 10em;
-    --initial-height: calc(var(--player-visualization-height) + var(--player-controls-height));
+    --initial-height: var(--player-controls-height);
+  }
+  #audio-player.media-box .player-controls {
+    height: 100%;
+    padding-top: 0;
+  }
+  #audio-player.media-box .player-controls .player-control-center {
+    padding-top: 0;
+  }
+  .pg-player-dataviz {
+    position: relative;
+    margin-top: var(--m__space-xxs);
+    height: var(--player-visualization-height);
+    background-color: rgba(var(--ids__bg-accent-RGB), 1);
+    --speaker-count: 2;
+    --padding: 0.2em;
+  }
+  .pg-player-dataviz .speaker-labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    font-size: 0.8em;
+    z-index: 2;
+  }
+  .pg-player-dataviz .speaker-labels .speaker-label {
+    position: absolute;
+    left: 0;
+    height: auto;
+    padding-left: 0.2em;
+    line-height: 1;
+    top: auto;
+  }
+  .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index="1"] {
+    bottom: calc(100% / var(--speaker-count));
+    top: auto;
+  }
+  .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index="2"] {
+    bottom: 0;
+    top: auto;
+  }
+  .pg-player-dataviz .speaker-label span {
+    background-color: rgba(var(--ids__bg-accent-RGB), 0.7);
+    color: rgba(255, 255, 255, 0.6);
+    padding: 0.1em 0.3em;
+    font-weight: 500;
   }
 
   #audio-player .player-icon svg,
@@ -930,8 +974,9 @@
   #audio-player .player-start-time,
   #audio-player .player-total-time {
     position: absolute;
-    bottom: var(--padding);
-    top: auto;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
     pointer-events: none;
     color: rgba(255, 255, 255, 0.55);
     z-index: 3;
@@ -1072,6 +1117,46 @@
       id="audio-player"
       data-speaker-count="2"
     >
+      <div class="player-controls">
+        <div class="player-control-spacer"></div>
+        <div
+          class="player-control player-control-center"
+          data-action="play-pause"
+        >
+          <a href="#" class="player-icon" data-playing="false">
+            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+              <polygon
+                fill="currentColor"
+                points="40 30 40 190 190 110 40 30"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="clip-text-caption"><span></span></div>
+      <div class="player-status-caption">
+        <span class="emotion-caption"></span>
+      </div>
+      <div class="player-start-time">
+        <span class="start-time">0:00</span>
+      </div>
+      <div class="player-total-time">
+        <span class="total-time" data-total-time>7:48</span>
+      </div>
+      <div class="player-position-indicator">
+        <div class="player-position-line"></div>
+        <div class="player-position-caption">
+          <span data-current-time>0:00</span>
+        </div>
+      </div>
+      <div class="player-hover-position-indicator">
+        <div class="player-hover-position-line"></div>
+        <div class="player-hover-position-caption">
+          <span data-hover-time>0:00</span>
+        </div>
+      </div>
+    </div>
+    <div class="pg-player-dataviz m__rounded dark-mode">
       <div class="player-visualization">
         {% block player_clips %}
         <!-- Turn-taking with varied turn lengths, clip counts and widths -->
@@ -1180,44 +1265,6 @@
       {% endblock %}
       <div class="behaviour-indicators"></div>
       <div class="behaviour-labels" style="display: none"></div>
-      <div class="player-controls">
-        <div class="player-control-spacer"></div>
-        <div
-          class="player-control player-control-center"
-          data-action="play-pause"
-        >
-          <a href="#" class="player-icon" data-playing="false">
-            <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-              <polygon
-                fill="currentColor"
-                points="40 30 40 190 190 110 40 30"
-              />
-            </svg>
-          </a>
-        </div>
-      </div>
-      <div class="clip-text-caption"><span></span></div>
-      <div class="player-status-caption">
-        <span class="emotion-caption"></span>
-      </div>
-      <div class="player-start-time">
-        <span class="start-time">0:00</span>
-      </div>
-      <div class="player-total-time">
-        <span class="total-time" data-total-time>7:48</span>
-      </div>
-      <div class="player-position-indicator">
-        <div class="player-position-line"></div>
-        <div class="player-position-caption">
-          <span data-current-time>0:00</span>
-        </div>
-      </div>
-      <div class="player-hover-position-indicator">
-        <div class="player-hover-position-line"></div>
-        <div class="player-hover-position-caption">
-          <span data-hover-time>0:00</span>
-        </div>
-      </div>
     </div>
   </div>
 

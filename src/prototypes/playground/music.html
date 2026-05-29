@@ -45,14 +45,8 @@ segments:
 {% block above_output %}
   <div class="mx-verdict m__rounded">
     <span class="mx-verdict-title">Music</span>
-    <span class="mx-verdict-stat">
-      <span class="mx-verdict-stat-value">90%</span>
-      <span class="mx-verdict-stat-label">Music</span>
-    </span>
-    <span class="mx-verdict-stat">
-      <span class="mx-verdict-stat-value">77%</span>
-      <span class="mx-verdict-stat-label">Speech</span>
-    </span>
+    <div class="mx-verdict-details"
+      ><span class="mx-verdict-stat"><span class="mx-verdict-stat-value">90%</span> <span class="mx-verdict-stat-label">Music</span></span><span class="mx-verdict-stat"><span class="mx-verdict-stat-value">77%</span> <span class="mx-verdict-stat-label">Speech</span></span></div>
   </div>
 {% endblock %}
 
@@ -90,21 +84,32 @@ segments:
     /* Verdict card ──────────────────────────────────────────────────────── */
     .mx-verdict {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: var(--m__space-m);
-      height: 4rem;
-      padding-inline: var(--m__space-m);
+      gap: var(--m__space-xxs);
+      min-height: 6rem;
+      padding: var(--m__space-s) var(--m__space-m);
       margin-bottom: var(--m__space-l);
       background: var(--m__ui-success-color);
       color: white;
+      text-align: center;
+    }
+    .mx-verdict-title {
       font-weight: 700;
-      white-space: nowrap;
+      font-size: var(--m__font-size-l);
+    }
+    .mx-verdict-details {
+      font-size: var(--m__font-size-s);
+      font-weight: 500;
     }
     .mx-verdict-stat {
-      display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
+      white-space: nowrap;
+    }
+    .mx-verdict-stat + .mx-verdict-stat::before {
+      content: " · ";
+      white-space: pre;
+      opacity: 0.6;
     }
     .mx-verdict-stat-value {
       font-variant-numeric: tabular-nums;
