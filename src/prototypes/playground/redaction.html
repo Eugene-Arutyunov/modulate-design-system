@@ -19,11 +19,10 @@ permalink: /playground/redaction/
             <input type="number" value="10" min="0" /><span class="pg-pad-unit">ms</span>
           </span>
         </div>
-        <label class="m__checkbox pg-stt-option pg-diarization-option" data-tip="Identify different speakers in the audio">
+        <label class="m__checkbox pg-stt-option pg-diarization-option" data-tooltip="Identify different speakers in the audio">
           <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
         </label>
       </div>
-      <div class="m__space S"></div>
 {% endblock %}
 
 {% block upload_actions %}
@@ -52,18 +51,9 @@ permalink: /playground/redaction/
 
 {% block above_output %}
   <div class="pg-redaction-summary m__rounded">
-    <div class="pg-redaction-stat">
-      <div class="pg-redaction-stat-value">31</div>
-      <div class="pg-redaction-stat-label">Redactions</div>
-    </div>
-    <div class="pg-redaction-stat">
-      <div class="pg-redaction-stat-value">108.9s</div>
-      <div class="pg-redaction-stat-label">Silenced</div>
-    </div>
-    <div class="pg-redaction-stat">
-      <div class="pg-redaction-stat-value">53.7%</div>
-      <div class="pg-redaction-stat-label">Of audio</div>
-    </div>
+    <h2 class="pg-redaction-title">31 Redactions</h2>
+    <div class="pg-redaction-details"
+      ><span class="pg-redaction-stat"><span class="pg-redaction-stat-value">108.9s</span> <span class="pg-redaction-stat-label">silenced</span></span><span class="pg-redaction-stat"><span class="pg-redaction-stat-value">53.7%</span> <span class="pg-redaction-stat-label">of audio</span></span></div>
   </div>
 {% endblock %}
 
@@ -81,8 +71,11 @@ permalink: /playground/redaction/
     .pg-redaction-options .pg-pad-field {
       flex-direction: row;
       align-items: center;
-      gap: var(--m__space-xs);
+      gap: var(--m__space-xxs);
       margin-bottom: 0;
+    }
+    .pg-redaction-options .m__checkbox {
+      gap: var(--m__space-xxs);
     }
     .pg-redaction-options .pg-pad-field > label {
       margin: 0;
@@ -99,6 +92,13 @@ permalink: /playground/redaction/
       font-size: inherit;
       line-height: inherit;
       font-variant-numeric: tabular-nums;
+      background-color: color-mix(in srgb, var(--m__text-link-color) 8%, transparent);
+      border: 2px solid var(--m__bg-accent-color);
+      transition: border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+    .pg-pad-field input:hover {
+      border-color: var(--m__bg-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
     .pg-pad-unit {
       position: absolute;
@@ -112,21 +112,31 @@ permalink: /playground/redaction/
     /* Redaction summary ─────────────────────────────────────────────────── */
     .pg-redaction-summary {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: var(--m__space-m);
-      height: 4rem;
-      padding-inline: var(--m__space-m);
+      gap: var(--m__space-xxs);
+      min-height: 6rem;
+      padding: var(--m__space-s) var(--m__space-m);
       margin-bottom: var(--m__space-l);
       background: var(--m__ui-success-color);
       color: white;
-      font-weight: 700;
-      white-space: nowrap;
+      text-align: center;
+    }
+    .pg-redaction-title {
+      margin: 0;
+    }
+    .pg-redaction-details {
+      font-size: var(--m__font-size-s);
+      font-weight: 500;
     }
     .pg-redaction-stat {
-      display: flex;
-      align-items: baseline;
-      gap: 0.4rem;
+      white-space: nowrap;
+    }
+    .pg-redaction-stat + .pg-redaction-stat::before {
+      content: " · ";
+      white-space: pre;
+      opacity: 0.6;
     }
     .pg-redaction-stat-value {
       font-variant-numeric: tabular-nums;

@@ -7,9 +7,9 @@ permalink: /playground/velma/
 
 {% block options %}
       <div class="pg-options-row pg-velma-setup">
-        <a href="#" class="m__button-outline-compact">Set up conversation type, roles &amp; behaviors</a>
+        <a href="#" class="m__button-outline-compact">Set up behaviors</a>
+        <span class="pg-velma-setup-summary">1 conversation type · 2 roles · 5 behaviors</span>
       </div>
-      <div class="m__space S"></div>
 {% endblock %}
 
 {% block upload_actions %}
@@ -19,14 +19,55 @@ permalink: /playground/velma/
       </div>
 {% endblock %}
 
+{% block speaker_labels %}
+      <div class="speaker-labels">
+        <div class="speaker-label" data-speaker-index="1">
+          <span>Customer</span>
+        </div>
+        <div class="speaker-label" data-speaker-index="2">
+          <span>Support specialist</span>
+        </div>
+      </div>
+{% endblock %}
+
 {% block panel_content %}
   <style>
+    .pg-velma-output p,
+    .pg-velma-output .caption,
+    .pg-velma-output .pg-summary-head,
+    .pg-velma-output table th,
+    .pg-velma-output table td,
+    .pg-velma-output table td strong {
+      font-family: "Inter";
+    }
+    .pg-velma-output [class*="m__tag"],
+    .pg-velma-output .pg-num {
+      font-family: var(--m__font-semi-mono);
+    }
+    .pg-velma-output .caption {
+      color: var(--m__text-color);
+    }
+    .pg-velma-output .m__tag .pg-num,
+    .pg-velma-output .m__tag-flat .pg-num {
+      margin-left: 0.4rem;
+    }
+
     .pg-velma-setup {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: var(--m__space-m);
+      gap: var(--m__space-xs);
       font-size: var(--m__font-size-s);
+    }
+    .pg-velma-setup .m__button-outline-compact {
+      border: 2px solid var(--m__bg-accent-color);
+      transition:
+        color var(--m__unhover-transition-duration) var(--m__transition-easing),
+        border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+    .pg-velma-setup .m__button-outline-compact:hover {
+      border-color: var(--m__bg-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
 
     .pg-summary-item {
@@ -92,7 +133,7 @@ permalink: /playground/velma/
     }
   </style>
 
-  <div class="pg-tab-panel">
+  <div class="pg-tab-panel pg-velma-output">
     <div class="m__space S"></div>
 
     <!-- Speech Summary ──────────────────────────────────────────────────── -->
