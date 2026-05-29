@@ -38,7 +38,7 @@ During generation, the script:
 - applies `fill="currentColor"` on the generated `<symbol>`
 - icon inherits color from where it is used
 
-**Colored icons** (brand/vendor logos):
+**Colored icons** (brand/vendor logos and product signal icons):
 
 - resolves class-based fills to inline `fill` attributes before stripping `<style>`
 - removes only editor junk (`class`, `id`, `data-name`, `style`, `xmlns`)
@@ -50,6 +50,32 @@ To mark an icon as colored, add its base filename (without `.svg`) to the `COLOR
 ```js
 const COLORED_ICONS = new Set(["google", "microsoft", "facebook"]);
 ```
+
+## Icon palette colors
+
+Product icons that need fixed accent fills use tokens from **`src/styles/tokens/colors.css`**:
+
+| Token                        | Default value        | Typical use                           |
+| ---------------------------- | -------------------- | ------------------------------------- |
+| **`--m__icon-red-color`**    | `rgb(255, 53, 84)`   | Alerts, deepfake, medical/STT accents |
+| **`--m__icon-yellow-color`** | `rgb(255, 200, 0)`   | Music-related accents                 |
+| **`--m__icon-gray-color`**   | `rgb(153, 153, 153)` | Secondary accent shapes               |
+
+Do not hardcode RGB in source SVGs or reuse emotion/UI palette values for these accents — reference the icon tokens so palette updates stay centralized. The design-system **Icon Color Palette** section on the home page documents the same tokens.
+
+In a colored source SVG:
+
+- **`fill="var(--m__icon-red-color)"`** (or yellow/gray) — fixed accent; does not follow parent `color`
+- **`fill="currentColor"`** — monochrome part; inherits `color` from where the icon is used
+
+Example:
+
+```xml
+<rect x="4.975" y="4.975" width="4.727" height="3.708" fill="var(--m__icon-red-color)" />
+<rect x="11.878" y="4.975" width="14.347" height="3.708" fill="currentColor" />
+```
+
+CSS custom properties cascade into sprite symbols referenced via `<use>`, so `var(--m__icon-…-color)` resolves at render time from `:root`.
 
 ## How to use an icon
 
@@ -65,18 +91,22 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 
 1. Put the raw SVG file into `src/assets/images/svg-icons-source/`.
 2. Keep the filename stable, because it becomes the symbol id.
-3. Run `npm run icons:build`.
-4. Use the icon with `<use href="#file-name">`.
+3. For colored product icons, map editor fills to **`var(--m__icon-…-color)`** or **`currentColor`** as above; add the filename to **`COLORED_ICONS`** if needed.
+4. Run `npm run icons:build`.
+5. Use the icon with `<use href="#file-name">`.
 
 ## Notes
 
 - **`overview-muted.svg`** → **`#overview-muted`**: same three bars as **`overview.svg`**, with **`fill-opacity="0.3"`** on the top two rectangles and full opacity on the bottom bar. Used in online docs only; not listed on the design-system icon grid.
-- **`music.svg`** → **`#music`**: colored icon — inner circle uses threat-uncertainty purple **`rgb(200, 80, 160)`**; outer ring uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
-- **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use error red **`rgb(255, 53, 84)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.
+- **`music.svg`** → **`#music`**: colored icon — inner circle uses **`var(--m__icon-yellow-color)`**; outer ring uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
+- **`ai-music.svg`** → **`#ai-music`**: colored icon — accent blocks use **`var(--m__icon-yellow-color)`**; other blocks use **`currentColor`**. Listed in **`COLORED_ICONS`**.
+- **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use **`var(--m__icon-red-color)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.
+- **`stt-med.svg`** → **`#stt-med`**: colored icon — all bars use **`var(--m__icon-red-color)`**. Listed in **`COLORED_ICONS`**.
+- **`velma.svg`** → **`#velma`**: colored icon — accent shapes use **`var(--m__icon-red-color)`**; other shapes use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`redaction.svg`** → **`#redaction`**: monochrome; inherits **`currentColor`**.
 - **`github.svg`** → **`#github`**: monochrome; inherits **`currentColor`** (used on auth OAuth buttons).
 - **`apple.svg`** → **`#apple`**: monochrome; inherits **`currentColor`** (used on auth OAuth buttons).
 - The build script is `scripts/generate-svg-sprite.js`.
 - `npm run build`, `npm run build:clean`, and `npm run dev` regenerate the sprite automatically before running.
 - Do not edit `src/includes/service/svg-icons-sprite.html` by hand. It is generated.
-- Colored icon symbols render identically regardless of CSS `color` or `fill` on the parent element.
+- Colored icon symbols render identically regardless of CSS `color` or `fill` on the parent element — except shapes explicitly set to **`currentColor`**.

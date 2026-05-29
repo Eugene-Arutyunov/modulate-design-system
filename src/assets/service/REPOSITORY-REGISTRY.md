@@ -249,7 +249,7 @@ Four auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in h
 
 **OAuth buttons:** `src/includes/prototypes/auth-oauth-buttons.html` — Google (colored), GitHub and Apple (monochrome `currentColor`). Included on sign-in and create-account pages.
 
-**Models panel (right column):** `src/includes/prototypes/auth-layout-models-panel.html` — centered promo block (`max-width: 20rem`, matches `.auth-form`) with landing copy (inline `data-term` spans), flex-wrapped icon links to `/models/` section anchors, and Models Overview / Docs links. Uses **`dark-vibrant`** theme (see **`src/styles/tokens/colors.css`**). Icon hover highlights matching text terms via **`:has()`** in **`auth-layout.css`**. Shown on all auth layout pages; hidden below 768px with the right column.
+**Models panel (right column):** `src/includes/prototypes/auth-layout-models-panel.html` — centered promo block (`max-width: 20rem`, matches `.auth-form`) with landing copy (inline `data-term` spans), flex-wrapped icon links to `/models/` section anchors, and Models Overview / Docs links. Uses **`dark-vibrant`** theme (see **`src/styles/tokens/colors.css`**); icon tiles sit in a **`.light`** island with surface/background fills and light **`--m__text-color`**. Icon hover highlights matching text terms via **`:has()`** in **`auth-layout.css`**. Shown on all auth layout pages; hidden below 768px with the right column.
 
 ---
 
