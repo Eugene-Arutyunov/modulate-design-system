@@ -19,11 +19,10 @@ permalink: /playground/redaction/
             <input type="number" value="10" min="0" /><span class="pg-pad-unit">ms</span>
           </span>
         </div>
-        <label class="m__checkbox pg-stt-option pg-diarization-option" data-tip="Identify different speakers in the audio">
+        <label class="m__checkbox pg-stt-option pg-diarization-option" data-tooltip="Identify different speakers in the audio">
           <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
         </label>
       </div>
-      <div class="m__space S"></div>
 {% endblock %}
 
 {% block upload_actions %}
@@ -81,8 +80,11 @@ permalink: /playground/redaction/
     .pg-redaction-options .pg-pad-field {
       flex-direction: row;
       align-items: center;
-      gap: var(--m__space-xs);
+      gap: var(--m__space-xxs);
       margin-bottom: 0;
+    }
+    .pg-redaction-options .m__checkbox {
+      gap: var(--m__space-xxs);
     }
     .pg-redaction-options .pg-pad-field > label {
       margin: 0;
@@ -99,6 +101,13 @@ permalink: /playground/redaction/
       font-size: inherit;
       line-height: inherit;
       font-variant-numeric: tabular-nums;
+      background-color: color-mix(in srgb, var(--m__text-link-color) 8%, transparent);
+      border: 2px solid var(--m__bg-accent-color);
+      transition: border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+    .pg-pad-field input:hover {
+      border-color: var(--m__bg-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
     .pg-pad-unit {
       position: absolute;

@@ -7,9 +7,9 @@ permalink: /playground/velma/
 
 {% block options %}
       <div class="pg-options-row pg-velma-setup">
-        <a href="#" class="m__button-outline-compact">Set up conversation type, roles &amp; behaviors</a>
+        <a href="#" class="m__button-outline-compact">Set up behaviors</a>
+        <span class="pg-velma-setup-summary">1 conversation type · 2 roles · 5 behaviors</span>
       </div>
-      <div class="m__space S"></div>
 {% endblock %}
 
 {% block upload_actions %}
@@ -25,8 +25,18 @@ permalink: /playground/velma/
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: var(--m__space-m);
+      gap: var(--m__space-xs);
       font-size: var(--m__font-size-s);
+    }
+    .pg-velma-setup .m__button-outline-compact {
+      border: 2px solid var(--m__bg-accent-color);
+      transition:
+        color var(--m__unhover-transition-duration) var(--m__transition-easing),
+        border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+    .pg-velma-setup .m__button-outline-compact:hover {
+      border-color: var(--m__bg-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
     }
 
     .pg-summary-item {

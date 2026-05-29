@@ -8,32 +8,9 @@
   }
 
   .pg-stt-option {
-    position: relative;
     font-size: var(--m__font-size-s);
     user-select: none;
-  }
-
-  .pg-stt-option::after {
-    content: attr(data-tip);
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--m__bg-accent-color);
-    color: var(--m__text-inverted-color);
-    font-size: 0.7rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--m__radius-xs);
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--m__unhover-transition-duration) var(--m__transition-easing);
-    z-index: 50;
-  }
-
-  .pg-stt-option:hover::after {
-    opacity: 1;
-    transition-duration: var(--m__hover-transition-duration);
+    gap: var(--m__space-xxs);
   }
 
   /* RESULT */
@@ -527,14 +504,80 @@
   /* Upload area ────────────────────────────────────────────────────────── */
 
   .pg-upload-plate {
-    border: 1px solid var(--m__ui-border-color);
-    padding: var(--m__widget-padding);
-    height: 10rem;
+    border: 3px solid var(--m__bg-accent-color);
+    border-radius: var(--m__radius-m);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 18rem;
+  }
+
+  .pg-upload-plate > .pg-options-row {
+    height: 2.4rem;
+    padding-block: 0;
+    padding-inline: var(--m__space-xs);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--m__ui-border-color);
+    font-weight: 500;
+  }
+
+  /* Outlined toggle / checkbox styles, scoped to the upload-plate header */
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"] {
+    box-sizing: border-box;
+    height: 1.1rem;
+    border: 2px solid var(--m__bg-accent-color);
+    transition:
+      background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
+      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]::after {
+    width: 0.55rem;
+    height: 0.55rem;
+    transition:
+      left var(--m__unhover-transition-duration) var(--m__transition-easing),
+      background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:hover:not(:disabled),
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:hover:not(:disabled)::after {
+    transition-duration: var(--m__hover-transition-duration);
+  }
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:checked::after {
+    left: calc(100% - 0.15rem - 0.55rem);
+  }
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:not(:checked) {
+    background-color: transparent;
+  }
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:not(:checked)::after {
+    background-color: var(--m__bg-accent-color);
+  }
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:hover:not(:disabled) {
+    border-color: var(--m__bg-hover-color);
+  }
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:not(:checked):hover:not(:disabled) {
+    background-color: transparent;
+  }
+  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:not(:checked):hover:not(:disabled)::after {
+    background-color: var(--m__bg-hover-color);
+  }
+
+  .pg-upload-plate > .pg-options-row .m__checkbox input[type="checkbox"]:not(:checked) {
+    box-sizing: border-box;
+    border: 2px solid var(--m__bg-accent-color);
+  }
+  .pg-upload-plate > .pg-options-row .m__checkbox input[type="checkbox"]:not(:checked):hover:not(:disabled) {
+    border-color: var(--m__bg-hover-color);
+  }
+
+  .pg-upload-plate-body {
+    padding: var(--m__space-xs) var(--m__widget-padding) var(--m__space-l);
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    position: relative;
   }
 
   .pg-upload-actions {
@@ -544,9 +587,52 @@
   }
 
   .pg-upload-note {
-    margin: var(--m__space-xs) 0 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: var(--m__space-xs);
+    margin: 0;
     font-size: var(--m__font-size-xs);
-    color: var(--m__text-caption-color);
+    color: var(--m__text-color);
+    text-align: center;
+    opacity: 0;
+    transition: opacity var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-upload-plate:hover .pg-upload-note {
+    opacity: 1;
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  .pg-upload-formats {
+    margin: 0 0 var(--m__space-xxs);
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-color);
+    text-align: center;
+  }
+
+  .pg-upload-formats-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--m__space-xxs);
+    margin-bottom: var(--m__space-m);
+  }
+
+  .pg-upload-formats-tags .m__tag-flat {
+    color: var(--m__text-color);
+    background-color: color-mix(in srgb, var(--m__text-link-color) 8%, transparent);
+  }
+
+  .pg-upload-actions .m__button-outline {
+    border: 2px solid var(--m__bg-accent-color);
+    transition:
+      color var(--m__unhover-transition-duration) var(--m__transition-easing),
+      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+  .pg-upload-actions .m__button-outline:hover {
+    border-color: var(--m__bg-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
   }
 
 
@@ -665,7 +751,7 @@
   .pg-output-toolbar {
     display: flex;
     align-items: stretch;
-    padding-inline: var(--m__space-xs);
+    padding-inline: 0.3rem;
     border-bottom: 1px solid var(--m__ui-border-color);
     font-family: "Inter";
   }
@@ -712,7 +798,7 @@
   }
 
   .pg-subview {
-    padding: var(--m__space-m);
+    padding: var(--m__space-m) var(--m__space-xs);
     font-size: 0.78rem;
   }
 
@@ -821,7 +907,7 @@
     margin: 0;
   }
 
-  .pg-upload-section > .pg-upload-plate:first-child {
+  .pg-upload-section > .pg-upload-plate {
     margin-top: var(--m__space-s);
   }
 
@@ -905,61 +991,65 @@
       </div>
 
       <div class="pg-upload-section">
+      <div class="pg-upload-plate">
       {% block options %}
       <!-- Options row -->
       <div class="pg-options-row">
         <div class="pg-stt-options visible" id="stt-options">
           <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Identify different speakers in the audio"
-          >
-            <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
-          </label>
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Detect synthetic/AI-generated voice (deepfake) per utterance"
-          >
-            <input type="checkbox" id="opt-deepfake" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Deepfake
-          </label>
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
-          >
-            <input type="checkbox" id="opt-emotion" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Emotions
-          </label>
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Detect speaker accent (e.g. American, British)"
-          >
-            <input type="checkbox" id="opt-accent" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Accent
-          </label>
-          <label
-            class="m__checkbox pg-stt-option"
-            data-tip="Tag personally identifiable and health information"
-          >
-            <input type="checkbox" id="opt-pii" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> PII/PHI
-          </label>
-          <label
             class="m__toggle pg-stt-option"
-            data-tip="Fast transcription, English only"
+            data-tooltip="Fast transcription, English only"
           >
             <input type="checkbox" id="opt-fast" />
             Fast (English only)
           </label>
           <label
-            class="m__toggle pg-stt-option"
-            data-tip="Show raw debug output"
+            class="m__checkbox pg-stt-option"
+            data-tooltip="Identify different speakers in the audio"
           >
-            <input type="checkbox" id="opt-debug" />
-            Debug
+            <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
+          </label>
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tooltip="Detect synthetic/AI-generated voice (deepfake) per utterance"
+          >
+            <input type="checkbox" id="opt-deepfake" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Deepfake
+          </label>
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tooltip="Detect emotional tone (e.g. Calm, Happy, Frustrated)"
+          >
+            <input type="checkbox" id="opt-emotion" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Emotions
+          </label>
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tooltip="Detect speaker accent (e.g. American, British)"
+          >
+            <input type="checkbox" id="opt-accent" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Accent
+          </label>
+          <label
+            class="m__checkbox pg-stt-option"
+            data-tooltip="Tag personally identifiable and health information"
+          >
+            <input type="checkbox" id="opt-pii" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> PII/PHI
           </label>
         </div>
       </div>
-
-        <div class="m__space S"></div>
       {% endblock %}
 
-      <div class="m__rounded pg-upload-plate">
+      <div class="pg-upload-plate-body">
+      <p class="pg-upload-formats">Drop your audio or video file here! Supported formats up to 50 MB:</p>
+      <div class="pg-upload-formats-tags">
+        <span class="m__tag-flat">.aac</span>
+        <span class="m__tag-flat">.flac</span>
+        <span class="m__tag-flat">.m4a</span>
+        <span class="m__tag-flat">.mp3</span>
+        <span class="m__tag-flat">.mp4</span>
+        <span class="m__tag-flat">.ogg</span>
+        <span class="m__tag-flat">.opus</span>
+        <span class="m__tag-flat">.wav</span>
+        <span class="m__tag-flat">.webm</span>
+      </div>
       {% block upload_actions %}
       <div class="pg-upload-actions">
         <button class="m__button-outline">Choose file…</button>
@@ -968,7 +1058,8 @@
         <button class="m__button-outline">Choose file for streaming…</button>
       </div>
       {% endblock %}
-      <p class="pg-upload-note">10 requests remaining. Supported formats up to 50 MB: <span class="m__tag-flat">.aac</span> <span class="m__tag-flat">.flac</span> <span class="m__tag-flat">.m4a</span> <span class="m__tag-flat">.mp3</span> <span class="m__tag-flat">.mp4</span> <span class="m__tag-flat">.ogg</span> <span class="m__tag-flat">.opus</span> <span class="m__tag-flat">.wav</span> <span class="m__tag-flat">.webm</span></p>
+      <p class="pg-upload-note">9 of 10 requests remaining</p>
+      </div>
       </div>
       </div>
 
@@ -1671,16 +1762,16 @@
   </div>
 
   {% endblock %} {% block scripts %}
+  <div class="m__tooltip" hidden></div>
+  <script src="/assets/components/tooltip.js"></script>
   <script>
     var fastToggle = document.getElementById('opt-fast');
-    var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]:not(#opt-fast):not(#opt-debug)');
+    var checkboxes = document.querySelectorAll('#stt-options input[type="checkbox"]:not(#opt-fast)');
 
     if (fastToggle) {
       fastToggle.addEventListener('change', function () {
         checkboxes.forEach(function (cb) {
-          cb.disabled = fastToggle.checked;
-          cb.closest('.pg-stt-option').style.opacity = fastToggle.checked ? '0.4' : '';
-          cb.closest('.pg-stt-option').style.pointerEvents = fastToggle.checked ? 'none' : '';
+          cb.closest('.pg-stt-option').style.display = fastToggle.checked ? 'none' : '';
         });
       });
     }
