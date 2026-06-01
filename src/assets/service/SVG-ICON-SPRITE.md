@@ -101,7 +101,7 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 
 - **`overview-muted.svg`** → **`#overview-muted`**: same three bars as **`overview.svg`**, with **`fill-opacity="0.3"`** on the top two rectangles and full opacity on the bottom bar. Used in online docs only; not listed on the design-system icon grid.
 - **`music.svg`** → **`#music`**: colored icon — inner circle uses **`var(--m__icon-yellow-color)`**; outer ring uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
-- **`ai-music.svg`** → **`#ai-music`**: colored icon — left rings use **`var(--m__icon-yellow-color)`** and **`currentColor`**; right bars use **`var(--m__icon-yellow-color)`**, **`currentColor`**, and **`var(--m__icon-white-color)`**. Listed in **`COLORED_ICONS`**.
+- **`ai-music.svg`** → **`#ai-music`**: colored icon — ring and bars on the left use **`currentColor`**; accent bars on the right use **`var(--m__icon-yellow-color)`**. Listed in **`COLORED_ICONS`**.
 - **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use **`var(--m__icon-red-color)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`stt-med.svg`** → **`#stt-med`**: colored icon — all bars use **`var(--m__icon-red-color)`**. Listed in **`COLORED_ICONS`**.
 - **`velma.svg`** → **`#velma`**: colored icon — accent shapes use **`var(--m__icon-purple-color)`**; other shapes use **`currentColor`**. Listed in **`COLORED_ICONS`**.
