@@ -39,6 +39,14 @@
   max-width: 20rem;
   color: inherit;
 
+  & .auth-layout__promo-heading {
+    margin: 0 0 var(--m__space-m);
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: inherit;
+  }
+
   & .auth-layout__promo-text {
     margin: 0 0 var(--m__space-m);
     font-size: var(--m__font-size-m);
@@ -48,8 +56,38 @@
   }
 }
 
+.auth-layout__icon-group {
+  --auth-layout-icon-gap: 1rem;
+  --auth-layout-icon-size: 4em;
+  margin-bottom: var(--m__space-m);
+
+  & .auth-layout__icons {
+    margin-bottom: 0;
+  }
+}
+
+.auth-layout__icon-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--auth-layout-icon-gap);
+
+  & .auth-layout__icons {
+    flex-shrink: 0;
+    width: var(--auth-layout-icon-size);
+  }
+
+  & .auth-layout__icon-tile {
+    width: 100%;
+  }
+
+  & .auth-layout__promo-text {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 .auth-layout__icons {
-  --auth-layout-icon-gap: 0.75rem;
   display: flex;
   flex-wrap: wrap;
   gap: var(--auth-layout-icon-gap);
@@ -74,7 +112,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: calc((100% - 4 * var(--auth-layout-icon-gap)) / 5);
+  width: var(--auth-layout-icon-size, 4em);
   aspect-ratio: 1;
   padding: 0.35rem;
   background-color: color-mix(
@@ -141,16 +179,37 @@
     .auth-layout__icon-tile[data-term="music-speech-detection"]:hover
   )
   .auth-layout__promo-text
-  [data-term="music-speech-detection"] {
+  [data-term="music-speech-detection"],
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="speech-to-text"]:hover
+  )
+  .auth-layout__promo-text
+  [data-term="speech-to-text"],
+.auth-layout__promo:has(.auth-layout__icon-tile[data-term="ai-music"]:hover)
+  .auth-layout__promo-text
+  [data-term="ai-music"],
+.auth-layout__promo:has(.auth-layout__icon-tile[data-term="language"]:hover)
+  .auth-layout__promo-text
+  [data-term="language"] {
   color: var(--m__text-hover-color);
   transition-duration: var(--m__hover-transition-duration);
+}
+
+.auth-layout__promo-footer {
+  display: grid;
+  font-size: var(--m__font-size-s);
+  line-height: var(--m__line-height-base);
+
+  & > * {
+    grid-area: 1 / 1;
+    align-self: start;
+  }
 }
 
 .auth-layout__promo-links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--m__space-xs) var(--m__space-s);
-  font-size: var(--m__font-size-s);
 
   & a {
     color: var(--m__text-color);
@@ -179,6 +238,70 @@
         var(--m__hover-transition-duration), var(--m__hover-transition-duration);
     }
   }
+}
+
+.auth-layout__promo-caption {
+  visibility: hidden;
+  margin: 0;
+  color: var(--m__text-color);
+}
+
+.auth-layout__promo:has(.auth-layout__icon-tile[data-term="velma"]:hover)
+  .auth-layout__promo-links,
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="transcription"]:hover
+  )
+  .auth-layout__promo-links,
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="deepfake-detection"]:hover
+  )
+  .auth-layout__promo-links,
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="pii-phi-redaction"]:hover
+  )
+  .auth-layout__promo-links,
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="music-speech-detection"]:hover
+  )
+  .auth-layout__promo-links,
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="speech-to-text"]:hover
+  )
+  .auth-layout__promo-links,
+.auth-layout__promo:has(.auth-layout__icon-tile[data-term="ai-music"]:hover)
+  .auth-layout__promo-links,
+.auth-layout__promo:has(.auth-layout__icon-tile[data-term="language"]:hover)
+  .auth-layout__promo-links {
+  visibility: hidden;
+}
+
+.auth-layout__promo:has(.auth-layout__icon-tile[data-term="velma"]:hover)
+  .auth-layout__promo-caption[data-term="velma"],
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="transcription"]:hover
+  )
+  .auth-layout__promo-caption[data-term="transcription"],
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="deepfake-detection"]:hover
+  )
+  .auth-layout__promo-caption[data-term="deepfake-detection"],
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="pii-phi-redaction"]:hover
+  )
+  .auth-layout__promo-caption[data-term="pii-phi-redaction"],
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="music-speech-detection"]:hover
+  )
+  .auth-layout__promo-caption[data-term="music-speech-detection"],
+.auth-layout__promo:has(
+    .auth-layout__icon-tile[data-term="speech-to-text"]:hover
+  )
+  .auth-layout__promo-caption[data-term="speech-to-text"],
+.auth-layout__promo:has(.auth-layout__icon-tile[data-term="ai-music"]:hover)
+  .auth-layout__promo-caption[data-term="ai-music"],
+.auth-layout__promo:has(.auth-layout__icon-tile[data-term="language"]:hover)
+  .auth-layout__promo-caption[data-term="language"] {
+  visibility: visible;
 }
 
 .auth-layout__header.prototype-header {

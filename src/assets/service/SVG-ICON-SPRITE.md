@@ -60,12 +60,14 @@ Product icons that need fixed accent fills use tokens from **`src/styles/tokens/
 | **`--m__icon-red-color`**    | `rgb(255, 53, 84)`   | Alerts, deepfake, medical/STT accents |
 | **`--m__icon-yellow-color`** | `rgb(255, 200, 0)`   | Music-related accents                 |
 | **`--m__icon-gray-color`**   | `rgb(153, 153, 153)` | Secondary accent shapes               |
+| **`--m__icon-white-color`**  | `rgb(255, 255, 255)` | Light accent stripes on dark shapes   |
+| **`--m__icon-purple-color`** | `rgb(124, 58, 237)`  | Brand accents (same as code-accent)   |
 
 Do not hardcode RGB in source SVGs or reuse emotion/UI palette values for these accents — reference the icon tokens so palette updates stay centralized. The design-system **Icon Color Palette** section on the home page documents the same tokens.
 
 In a colored source SVG:
 
-- **`fill="var(--m__icon-red-color)"`** (or yellow/gray) — fixed accent; does not follow parent `color`
+- **`fill="var(--m__icon-red-color)"`** (or yellow, gray, white, purple) — fixed accent; does not follow parent `color`
 - **`fill="currentColor"`** — monochrome part; inherits `color` from where the icon is used
 
 Example:
@@ -99,10 +101,10 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 
 - **`overview-muted.svg`** → **`#overview-muted`**: same three bars as **`overview.svg`**, with **`fill-opacity="0.3"`** on the top two rectangles and full opacity on the bottom bar. Used in online docs only; not listed on the design-system icon grid.
 - **`music.svg`** → **`#music`**: colored icon — inner circle uses **`var(--m__icon-yellow-color)`**; outer ring uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
-- **`ai-music.svg`** → **`#ai-music`**: colored icon — accent blocks use **`var(--m__icon-yellow-color)`**; other blocks use **`currentColor`**. Listed in **`COLORED_ICONS`**.
+- **`ai-music.svg`** → **`#ai-music`**: colored icon — left rings use **`var(--m__icon-yellow-color)`** and **`currentColor`**; right bars use **`var(--m__icon-yellow-color)`**, **`currentColor`**, and **`var(--m__icon-white-color)`**. Listed in **`COLORED_ICONS`**.
 - **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use **`var(--m__icon-red-color)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`stt-med.svg`** → **`#stt-med`**: colored icon — all bars use **`var(--m__icon-red-color)`**. Listed in **`COLORED_ICONS`**.
-- **`velma.svg`** → **`#velma`**: colored icon — accent shapes use **`var(--m__icon-red-color)`**; other shapes use **`currentColor`**. Listed in **`COLORED_ICONS`**.
+- **`velma.svg`** → **`#velma`**: colored icon — accent shapes use **`var(--m__icon-purple-color)`**; other shapes use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`redaction.svg`** → **`#redaction`**: monochrome; inherits **`currentColor`**.
 - **`github.svg`** → **`#github`**: monochrome; inherits **`currentColor`** (used on auth OAuth buttons).
 - **`apple.svg`** → **`#apple`**: monochrome; inherits **`currentColor`** (used on auth OAuth buttons).
