@@ -7,15 +7,6 @@ permalink: /playground/deepfake/
 
 {% block options %}{% endblock %}
 
-{% block upload_actions %}
-      <div class="pg-upload-actions">
-        <button class="m__button-outline">Choose file…</button>
-        <button class="m__button-outline">Start streaming</button>
-        <button class="m__button-outline">Stream demo</button>
-        <button class="m__button-outline">Choose file for streaming…</button>
-      </div>
-{% endblock %}
-
 {% block player_clips %}
   <div class="pg-histo-squares df-player-clips">
     <div class="pg-histo-bar authentic" style="opacity: 0.97" title="0:01 · Authentic · 97%"></div>
@@ -50,7 +41,7 @@ permalink: /playground/deepfake/
   <style>
     /* Deepfake histogram inside the player visualization ────────────────── */
     .media-container {
-      --player-visualization-height: 1.5rem;
+      --player-visualization-height: var(--player-strip-height);
     }
     .df-player-clips {
       position: absolute;
