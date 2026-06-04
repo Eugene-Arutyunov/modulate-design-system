@@ -13,43 +13,76 @@
       </div>
 
       <div class="pg-upload-section">
-      <div class="pg-upload-plate">
+      <div class="pg-upload-plate" data-state="initial" id="pg-upload-plate">
       {% block options %}
       {% include 'prototypes/playground/stt-options.html' %}
       {% endblock %}
 
       <div class="pg-upload-plate-body">
-      <p class="pg-upload-formats">Drop your audio or video file here! Supported formats up to 50 MB:</p>
-      <div class="pg-upload-formats-tags">
-        <span class="m__tag-flat">.aac</span>
-        <span class="m__tag-flat">.flac</span>
-        <span class="m__tag-flat">.m4a</span>
-        <span class="m__tag-flat">.mp3</span>
-        <span class="m__tag-flat">.mp4</span>
-        <span class="m__tag-flat">.ogg</span>
-        <span class="m__tag-flat">.opus</span>
-        <span class="m__tag-flat">.wav</span>
-        <span class="m__tag-flat">.webm</span>
-      </div>
       {% block upload_actions %}
       <div class="pg-upload-actions">
-        <button class="m__button-outline">Choose file…</button>
-        <button class="m__button-outline">Start streaming</button>
-        <button class="m__button-outline">Stream demo</button>
-        <button class="m__button-outline">Choose file for streaming…</button>
+        <button type="button" class="m__button-outline pg-upload-primary">
+          <span class="pg-upload-primary__label">Drop or choose file…</span>
+        </button>
+        <div class="pg-upload-stream" data-open="false">
+          <button type="button" class="m__button-outline pg-upload-stream__main">Start streaming</button>
+          <button type="button" class="m__button-outline pg-upload-stream__toggle"
+                  aria-haspopup="menu" aria-expanded="false" aria-label="More streaming options">
+            <svg width="14" height="14" aria-hidden="true"><use href="#chevron-down" /></svg>
+          </button>
+          <div class="pg-upload-stream__menu" role="menu" hidden>
+            <button type="button" role="menuitem">Stream demo</button>
+            <button type="button" role="menuitem">Stream from file…</button>
+          </div>
+        </div>
       </div>
       {% endblock %}
-      <p class="pg-upload-note">9 of 10 requests remaining</p>
+
+      <div class="pg-upload-overlay pg-upload-overlay--dragging" aria-hidden="true">
+        <span class="pg-upload-overlay__icon" aria-hidden="true">↓</span>
+        <span>Drop the file here</span>
+      </div>
+      <div class="pg-upload-overlay pg-upload-overlay--processing" aria-hidden="true">
+        <img class="m__loader" src="/assets/service/loader-icon.svg" alt="" aria-hidden="true" />
+        <span>Processing file…</span>
+      </div>
+      <button type="button" class="pg-upload-collapsed-cta" aria-hidden="true">
+        Drop a file or click for options
+      </button>
+      </div>
+
+      <div class="pg-upload-plate-footer">
+        <div class="pg-upload-formats-tags">
+          <span class="pg-upload-formats-label">Supported formats up to 50 MB:</span>
+          <span class="m__tag-flat">.aac</span>
+          <span class="m__tag-flat">.flac</span>
+          <span class="m__tag-flat">.m4a</span>
+          <span class="m__tag-flat">.mp3</span>
+          <span class="m__tag-flat">.mp4</span>
+          <span class="m__tag-flat">.ogg</span>
+          <span class="m__tag-flat">.opus</span>
+          <span class="m__tag-flat">.wav</span>
+          <span class="m__tag-flat">.webm</span>
+        </div>
+        <p class="pg-upload-meta">9 of 10 requests remaining</p>
+      </div>
+      <div class="pg-plate-state-switch" role="radiogroup" aria-label="Demo plate state">
+        <label><input type="radio" name="pg-plate-state" value="initial" checked /><span>initial</span></label>
+        <label><input type="radio" name="pg-plate-state" value="file-dropping" /><span>file-dropping</span></label>
+        <label><input type="radio" name="pg-plate-state" value="uploading" /><span>uploading</span></label>
+        <label><input type="radio" name="pg-plate-state" value="uploaded" /><span>uploaded</span></label>
       </div>
       </div>
       </div>
 
       <div class="m__space L"></div>
 
+      <div class="pg-verdict-slot">{% block above_output %}{% endblock %}</div>
+
       <!-- PLAYER -->
-      <div class="media-container">
+      <div class="media-container m__rounded">
     <div
-      class="media-box m__rounded dark-mode"
+      class="media-box"
       id="audio-player"
       data-speaker-count="2"
     >
@@ -92,7 +125,7 @@
         </div>
       </div>
     </div>
-    <div class="pg-player-dataviz m__rounded dark-mode">
+    <div class="pg-player-dataviz">
       <div class="player-visualization">
         {% block player_clips %}
         {% include 'prototypes/playground/player-clips.html' %}
@@ -111,11 +144,10 @@
       <div class="behaviour-indicators"></div>
       <div class="behaviour-labels" style="display: none"></div>
     </div>
+    <div class="pg-media-hover-line" aria-hidden="true"></div>
   </div>
 
-  <div class="m__space L"></div>
-
-  {% block above_output %}{% endblock %}
+  <div class="m__space M"></div>
 
   <div class="pg-output-block">
   <div class="pg-output-toolbar">
@@ -123,8 +155,7 @@
       {% if not noOutputTab %}
       <label><input type="radio" name="pg-subtab" value="main" checked />Output</label>
       {% endif %}
-      <label><input type="radio" name="pg-subtab" value="stat" {% if noOutputTab %}checked{% endif %} />Statistics</label>
-      <label><input type="radio" name="pg-subtab" value="json" />JSON Response</label>
+      <label><input type="radio" name="pg-subtab" value="json" {% if noOutputTab %}checked{% endif %} />JSON Response</label>
     </fieldset>
   </div>
 
@@ -135,13 +166,7 @@
   <!-- /.pg-subview main -->
   {% endif %}
 
-  <div class="pg-subview" data-pg-subview="stat" {% if not noOutputTab %}hidden{% endif %}>
-    {% include 'prototypes/playground/output-stats.html' %}
-
-  </div>
-  <!-- /.pg-subview stat -->
-
-  <div class="pg-subview" data-pg-subview="json" hidden>
+  <div class="pg-subview" data-pg-subview="json" {% if not noOutputTab %}hidden{% endif %}>
     <div class="pg-json-container">
 
       {% include 'prototypes/playground/output-json.html' %}
@@ -149,6 +174,13 @@
   </div>
   </div>
   <!-- /.pg-output-block -->
+
+  <div class="m__space L"></div>
+
+  <div class="pg-stats-block">
+    {% include 'prototypes/playground/output-stats.html' %}
+  </div>
+  <!-- /.pg-stats-block -->
 
     </main>
   </div>
@@ -182,6 +214,64 @@
         });
       });
     }
+
+    // Demo-only plate state switcher
+    var plate = document.getElementById('pg-upload-plate');
+    var stateSwitch = document.querySelector('.pg-plate-state-switch');
+    if (plate && stateSwitch) {
+      stateSwitch.addEventListener('change', function (e) {
+        if (e.target.name !== 'pg-plate-state') return;
+        plate.dataset.state = e.target.value;
+        e.target.blur();
+      });
+      var collapsedCta = plate.querySelector('.pg-upload-collapsed-cta');
+      if (collapsedCta) {
+        collapsedCta.addEventListener('click', function () {
+          plate.dataset.state = 'initial';
+          var initial = stateSwitch.querySelector('input[value="initial"]');
+          if (initial) initial.checked = true;
+        });
+      }
+    }
+
+    // Media-container hover line follows cursor across player + dataviz
+    document.querySelectorAll('.media-container').forEach(function (container) {
+      container.addEventListener('mousemove', function (e) {
+        var rect = container.getBoundingClientRect();
+        container.style.setProperty('--pg-hover-x', (e.clientX - rect.left) + 'px');
+        container.dataset.hover = 'true';
+      });
+      container.addEventListener('mouseleave', function () {
+        container.dataset.hover = 'false';
+      });
+    });
+
+    // Streaming split-button dropdown
+    document.querySelectorAll('.pg-upload-stream').forEach(function (group) {
+      var toggle = group.querySelector('.pg-upload-stream__toggle');
+      var menu = group.querySelector('.pg-upload-stream__menu');
+      if (!toggle || !menu) return;
+      function close() {
+        group.dataset.open = 'false';
+        toggle.setAttribute('aria-expanded', 'false');
+        menu.hidden = true;
+      }
+      function open() {
+        group.dataset.open = 'true';
+        toggle.setAttribute('aria-expanded', 'true');
+        menu.hidden = false;
+      }
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (group.dataset.open === 'true') close(); else open();
+      });
+      document.addEventListener('click', function (e) {
+        if (!group.contains(e.target)) close();
+      });
+      menu.addEventListener('click', function (e) {
+        if (e.target.closest('[role="menuitem"]')) close();
+      });
+    });
 
   </script>
   {% endblock %}
