@@ -349,7 +349,7 @@
   .pg-transcript-utterance-header {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.8rem;
     margin-bottom: 0.2rem;
     font-size: var(--m__font-size-xs);
 
@@ -373,6 +373,12 @@
   .ec-anxious     { --ec: var(--emotion-anxious); }
   .ec-sad         { --ec: var(--emotion-sad); }
   .ec-concerned   { --ec: var(--emotion-concerned); }
+  .ec-tired       { --ec: var(--emotion-tired); }
+  .ec-amused      { --ec: var(--emotion-amused); }
+  .ec-confused    { --ec: var(--emotion-confused); }
+  .ec-affectionate { --ec: var(--emotion-affectionate); }
+  .ec-excited     { --ec: var(--emotion-excited); }
+  .ec-disappointed { --ec: var(--emotion-disappointed); }
   .pg-transcript-accent {
     color: var(--m__text-caption-color);
   }
@@ -391,7 +397,7 @@
 
   .pg-transcript-text,
   .pg-transcript-text p {
-    font-family: var(--m__font-semi-mono);
+    font-family: "Inter";
     line-height: 1.6;
   }
   .pg-transcript-text.partial {
@@ -597,8 +603,8 @@
     display: none;
   }
   .pg-verdict-slot > * {
-    width: 50%;
-    max-width: 28rem;
+    width: 28rem;
+    max-width: 100%;
     margin-inline: auto;
   }
 
@@ -958,26 +964,37 @@
     --ids__bg-hover-RGB: 100, 110, 140;
   }
 
+  /* Bottom columns: JSON Raw (left) + Statistics (right) ───────────────── */
+  .pg-bottom-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
+    gap: var(--m__space-l);
+    align-items: start;
+  }
+  @media (width < 900px) {
+    .pg-bottom-columns {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* Statistics (compact debug grid below the output) ───────────────────── */
   .pg-stats-block {
     font-family: var(--m__font-semi-mono);
     font-size: var(--m__font-size-xs);
     color: var(--m__text-caption-color);
   }
-  .pg-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--m__space-m);
+  .pg-bottom-columns > .pg-stats-block {
+    margin-left: 2rem;
   }
   @media (width < 900px) {
-    .pg-stats-grid {
-      grid-template-columns: repeat(2, 1fr);
+    .pg-bottom-columns > .pg-stats-block {
+      margin-left: 0;
     }
   }
-  @media (width < 540px) {
-    .pg-stats-grid {
-      grid-template-columns: 1fr;
-    }
+  .pg-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--m__space-m);
   }
   .pg-stats-card-title {
     margin: 0 0 0.4rem;
@@ -990,8 +1007,8 @@
   .pg-stats-list {
     margin: 0;
     display: grid;
-    grid-template-columns: 5rem 1fr;
-    column-gap: 0.1rem;
+    grid-template-columns: 7rem 1fr;
+    column-gap: 0.5rem;
     row-gap: 0.2rem;
     color: var(--m__text-caption-color);
   }
@@ -1030,119 +1047,89 @@
     border-top: 1px solid var(--m__text-color);
   }
 
-  /* Output block (surface card with toolbar) ───────────────────────────── */
-  .pg-output-block {
+  /* Output panel (gray surface, flush against the player) ──────────────── */
+  .pg-output-panel {
     background: var(--m__bg-surface-color);
-    border-radius: var(--m__radius-m);
-    overflow: hidden;
-    margin-top: var(--m__space-xxs);
-    font-family: var(--m__font-semi-mono);
-  }
-
-  .pg-output-block h2,
-  .pg-output-block table th,
-  .pg-output-block .pg-transcript-text,
-  .pg-output-block .pg-transcript-text p {
+    padding: var(--m__space-m) var(--m__space-s);
+    font-size: 1rem;
     font-family: "Inter";
   }
 
-  .pg-output-block table th {
+  .pg-output-panel table td {
+    font-size: 1rem;
+  }
+  .pg-output-panel table th {
+    font-size: 0.8rem;
     font-weight: 400;
-  }
-
-  .pg-output-toolbar {
-    display: flex;
-    align-items: stretch;
-    padding-inline: 0.3rem;
-    border-bottom: 1px solid var(--m__ui-border-color);
-    font-family: "Inter";
-  }
-
-  .pg-output-tabs {
-    display: flex;
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-
-  .pg-output-tabs label {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 0.6rem 0.4rem;
-    font-size: var(--m__font-size-s);
-    cursor: pointer;
-    color: var(--m__text-caption-color);
-    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
-  }
-
-  .pg-output-tabs label:hover {
-    color: var(--m__text-hover-color);
-  }
-
-  .pg-output-tabs label:has(input:checked) {
-    color: var(--m__text-color);
-    cursor: default;
-  }
-
-  .pg-output-tabs label:has(input:checked)::after {
-    content: "";
-    position: absolute;
-    left: 0.4rem;
-    right: 0.4rem;
-    bottom: -1px;
-    height: 2px;
-    background: var(--m__text-color);
-  }
-  .pg-output-tabs label:only-child:has(input:checked)::after {
-    content: none;
-  }
-  .pg-output-tabs label:only-child {
-    cursor: default;
-  }
-
-  .pg-output-tabs input[type="radio"] {
-    display: none;
-  }
-
-  .pg-subview {
-    padding: var(--m__space-m) var(--m__space-xs);
-    font-size: var(--m__font-size-s);
-  }
-
-  .pg-output-block .pg-transcript-utterance-header,
-  .pg-output-block .pg-transcript-deepfake-score,
-  .pg-output-block .pg-transcript-lang,
-  .pg-output-block .pg-emo-labels {
-    font-size: var(--m__font-size-s);
-  }
-
-  .pg-subview[data-pg-subview="json"] {
-    font-family: var(--m__font-mono);
-  }
-
-  .pg-subview th {
     background-color: inherit;
   }
+  .pg-output-panel .pg-reason,
+  .pg-output-panel table .pg-num {
+    font-size: 0.8rem;
+  }
 
-  /* JSON Response ──────────────────────────────────────────────────────── */
+  .pg-output-panel .caption {
+    font-size: 1rem;
+  }
+
+  /* Semi-mono, 0.8rem only on tags + transcript meta + emo labels ──────── */
+  .pg-output-panel :is(.m__tag, .m__tag-flat, .pg-transcript-utterance-header, .pg-emo-labels) {
+    font-family: var(--m__font-semi-mono);
+    font-size: 0.8rem;
+  }
+
+  /* JSON Response (placed before stats, no background) ─────────────────── */
+  .pg-section-title {
+    margin: 0 0 var(--m__space-xs);
+    font-size: var(--m__font-size-xs);
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--m__text-caption-color);
+  }
+
+  .pg-json-block {
+    font-family: var(--m__font-semi-mono);
+    font-size: var(--m__font-size-xs);
+  }
+
   .pg-json-container {
     position: relative;
   }
 
   .pg-json-pre {
-    font-family: var(--m__font-mono);
+    font-family: inherit;
+    font-size: inherit;
     line-height: 1.6;
-    overflow-x: auto;
-    white-space: pre;
-    color: var(--m__text-color);
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--m__text-caption-color);
+    background: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
   }
 
-  .pg-json-key    { color: rgb(124, 58, 237); }
-  .pg-json-string { color: rgb(21, 150, 100); }
-  .pg-json-number { color: rgb(40, 95, 235); }
-  .pg-json-bool   { color: rgb(220, 80, 50); }
-  .pg-json-null   { color: var(--m__text-caption-color); }
+  .pg-json-pre :is(.pg-json-key, .pg-json-string, .pg-json-number, .pg-json-bool, .pg-json-null) {
+    color: inherit;
+    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+
+  .pg-json-pre:hover {
+    color: var(--m__text-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  .pg-json-pre:hover .pg-json-key    { color: rgb(124, 58, 237); }
+  .pg-json-pre:hover .pg-json-string { color: rgb(21, 150, 100); }
+  .pg-json-pre:hover .pg-json-number { color: rgb(40, 95, 235); }
+  .pg-json-pre:hover .pg-json-bool   { color: rgb(220, 80, 50); }
+  .pg-json-pre:hover .pg-json-null   { color: var(--m__text-caption-color); }
+  .pg-json-pre:hover :is(.pg-json-key, .pg-json-string, .pg-json-number, .pg-json-bool, .pg-json-null) {
+    transition-duration: var(--m__hover-transition-duration);
+  }
 
   /* Demo recordings table ──────────────────────────────────────────────── */
   .pg-demo-recordings tbody tr {
@@ -1295,9 +1282,9 @@
     position: absolute;
     left: 0;
     height: auto;
-    padding-left: 0.2em;
     line-height: 1;
     top: auto;
+    padding-left: 0;
   }
   .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index="1"] {
     bottom: calc(100% / var(--speaker-count));
@@ -1307,10 +1294,10 @@
     bottom: 0;
     top: auto;
   }
-  .pg-player-dataviz .speaker-label span {
-    background-color: color-mix(in srgb, var(--m__ui-border-color) 80%, transparent);
+  .pg-player-dataviz .speaker-labels .speaker-label span {
+    background-color: var(--m__ui-border-color);
     color: var(--m__text-caption-color);
-    padding: 0.1em 0.3em;
+    padding: 0.2rem 0.3em;
     font-weight: 500;
   }
 

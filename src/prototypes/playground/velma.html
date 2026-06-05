@@ -45,10 +45,6 @@ permalink: /playground/velma/
     .pg-velma-output table td strong {
       font-family: "Inter";
     }
-    .pg-velma-output [class*="m__tag"],
-    .pg-velma-output .pg-num {
-      font-family: var(--m__font-semi-mono);
-    }
     .pg-velma-output .caption {
       color: var(--m__text-color);
     }
@@ -98,36 +94,58 @@ permalink: /playground/velma/
       margin-bottom: 0.25rem;
     }
 
-    /* Per-speaker emotion distribution bar — no DS component yet */
+    /* Per-speaker emotion distribution bar — width = speaking time */
     .pg-emo-bar {
-      height: 10px;
-      border-radius: 5px;
+      height: 2rem;
+      border-radius: 3px;
       display: flex;
       overflow: hidden;
       background: var(--emotion-neutral);
       max-width: 440px;
     }
-    .pg-emo-seg { height: 100%; }
+    .pg-emo-seg { height: 100%; flex-shrink: 0; }
     .pg-emo-labels {
       margin-top: 0.35rem;
-      font-size: var(--m__font-size-xs);
     }
-    .pg-emo-disappointed { color: var(--emotion-disappointed); }
+    .pg-emo-labels span { white-space: nowrap; }
+    .pg-emo-labels .ec-tired       { color: var(--emotion-tired); }
+    .pg-emo-labels .ec-amused      { color: var(--emotion-amused); }
+    .pg-emo-labels .ec-confused    { color: var(--emotion-confused); }
+    .pg-emo-labels .ec-neutral     { color: var(--emotion-neutral); }
+    .pg-emo-labels .ec-calm        { color: var(--emotion-calm); }
+    .pg-emo-labels .ec-affectionate { color: var(--emotion-affectionate); }
+    .pg-emo-labels .ec-excited     { color: var(--emotion-excited); }
+    .pg-emo-labels .ec-concerned   { color: var(--emotion-concerned); }
+    .pg-emo-labels .ec-disappointed { color: var(--emotion-disappointed); }
+    .pg-emo-labels .ec-confident   { color: var(--emotion-confident); }
 
     .pg-num { font-variant-numeric: tabular-nums; }
 
     /* Speakers table */
+    .pg-speakers-table { table-layout: fixed; }
+    .pg-speakers-table th:nth-child(1) { width: 18%; }
+    .pg-speakers-table th:nth-child(2) { width: 36%; }
+    .pg-speakers-table th:nth-child(3) { width: 12%; }
+    .pg-speakers-table th:nth-child(4) { width: 34%; }
+    .pg-speakers-table td:nth-child(1),
     .pg-speakers-table td:nth-child(3),
-    .pg-speakers-table td:nth-child(4) { font-size: var(--m__font-size-s); }
+    .pg-speakers-table td:nth-child(4) { font-size: 0.8rem; }
 
     /* Behaviors table */
     .pg-behaviors-table { table-layout: fixed; }
     .pg-behaviors-table th:nth-child(1) { width: 18%; }
-    .pg-behaviors-table th:nth-child(2) { width: 22%; }
-    .pg-behaviors-table th:nth-child(3) { width: 48%; }
+    .pg-behaviors-table th:nth-child(2) { width: 32%; }
+    .pg-behaviors-table th:nth-child(3) { width: 38%; }
     .pg-behaviors-table th:nth-child(4) { width: 12%; }
-    .pg-reason { font-size: var(--m__font-size-s); }
-    .pg-behaviors-table .pg-num { font-size: var(--m__font-size-s); }
+    .pg-behaviors-table td[rowspan] { font-size: 0.8rem; }
+    .pg-behaviors-table td > .m__tag {
+      display: flex;
+      width: fit-content;
+      margin-top: 0.3rem;
+    }
+    .pg-behaviors-table td > .caption {
+      margin-top: 0.3rem;
+    }
 
     .pg-transcript-flag {
       color: var(--m__text-caption-color);
@@ -171,7 +189,7 @@ permalink: /playground/velma/
       <div class="pg-summary-head">
         <span>Type: <strong>Customer Service Call</strong></span>
         <span class="pg-num muted">100%</span>
-        <span class="m__tag-flat">Auto_selected_single_option</span>
+        <span class="m__tag">Auto_selected_single_option</span>
       </div>
       <div class="caption">Auto-chosen as the only available option.</div>
     </div>
@@ -180,7 +198,7 @@ permalink: /playground/velma/
       <div class="pg-summary-head">
         <span><strong>1: Customer Service Representative</strong></span>
         <span class="pg-num muted">100%</span>
-        <span class="m__tag-flat">Inferred</span>
+        <span class="m__tag">Inferred</span>
       </div>
       <div class="caption">
         The speaker introduces themselves as Mina from Green Valley Health member services, verifies the
@@ -193,7 +211,7 @@ permalink: /playground/velma/
       <div class="pg-summary-head">
         <span><strong>2: Customer</strong></span>
         <span class="pg-num muted">100%</span>
-        <span class="m__tag-flat">Inferred</span>
+        <span class="m__tag">Inferred</span>
       </div>
       <div class="caption">
         The speaker provides personal verification details, describes issues with an MRI claim and denied
@@ -217,28 +235,62 @@ permalink: /playground/velma/
         </thead>
         <tbody>
           <tr>
-            <td><strong>Customer Service Representative</strong></td>
+            <td>Customer Service Representative</td>
             <td>
-              <div class="pg-emo-bar"></div>
-              <div class="pg-emo-labels"><span class="muted">Neutral</span></div>
+              <div class="pg-emo-bar" style="width: 76%">
+                <div class="pg-emo-seg" style="width: 4%; background: var(--emotion-tired)"></div>
+                <div class="pg-emo-seg" style="width: 6%; background: var(--emotion-calm)"></div>
+                <div class="pg-emo-seg" style="width: 3%; background: var(--emotion-amused)"></div>
+                <div class="pg-emo-seg" style="width: 2%; background: var(--emotion-confused)"></div>
+                <div class="pg-emo-seg" style="width: 30%; background: var(--emotion-neutral)"></div>
+                <div class="pg-emo-seg" style="width: 4%; background: var(--emotion-calm)"></div>
+                <div class="pg-emo-seg" style="width: 2%; background: var(--emotion-amused)"></div>
+                <div class="pg-emo-seg" style="width: 28%; background: var(--emotion-neutral)"></div>
+                <div class="pg-emo-seg" style="width: 5%; background: var(--emotion-calm)"></div>
+                <div class="pg-emo-seg" style="width: 3%; background: var(--emotion-affectionate)"></div>
+                <div class="pg-emo-seg" style="width: 4%; background: var(--emotion-amused)"></div>
+                <div class="pg-emo-seg" style="width: 9%; background: var(--emotion-neutral)"></div>
+              </div>
+              <div class="pg-emo-labels">
+                <span class="ec-tired">Tired</span>,
+                <span class="ec-amused">Amused</span>,
+                <span class="ec-confused">Confused</span>,
+                <span class="ec-neutral">Neutral</span>,
+                <span class="ec-calm">Calm</span>,
+                <span class="ec-affectionate">Affectionate</span>
+              </div>
             </td>
-            <td class="pg-num">51%</td>
+            <td class="pg-num">76%</td>
             <td>English, American accent</td>
           </tr>
           <tr>
-            <td><strong>Customer</strong></td>
+            <td>Customer</td>
             <td>
-              <div class="pg-emo-bar">
-                <div class="pg-emo-seg" style="width: 45%; background: var(--emotion-neutral)"></div>
-                <div class="pg-emo-seg" style="width: 18%; background: var(--emotion-disappointed)"></div>
-                <div class="pg-emo-seg" style="width: 37%; background: var(--emotion-neutral)"></div>
+              <div class="pg-emo-bar" style="width: 24%">
+                <div class="pg-emo-seg" style="width: 8%; background: var(--emotion-calm)"></div>
+                <div class="pg-emo-seg" style="width: 6%; background: var(--emotion-neutral)"></div>
+                <div class="pg-emo-seg" style="width: 5%; background: var(--emotion-amused)"></div>
+                <div class="pg-emo-seg" style="width: 7%; background: var(--emotion-excited)"></div>
+                <div class="pg-emo-seg" style="width: 9%; background: var(--emotion-tired)"></div>
+                <div class="pg-emo-seg" style="width: 4%; background: var(--emotion-neutral)"></div>
+                <div class="pg-emo-seg" style="width: 6%; background: var(--emotion-amused)"></div>
+                <div class="pg-emo-seg" style="width: 5%; background: var(--emotion-neutral)"></div>
+                <div class="pg-emo-seg" style="width: 8%; background: var(--emotion-concerned)"></div>
+                <div class="pg-emo-seg" style="width: 18%; background: var(--emotion-neutral)"></div>
+                <div class="pg-emo-seg" style="width: 12%; background: var(--emotion-confused)"></div>
+                <div class="pg-emo-seg" style="width: 12%; background: var(--emotion-neutral)"></div>
               </div>
               <div class="pg-emo-labels">
-                <span class="muted">Neutral</span>,
-                <span class="pg-emo-disappointed">Disappointed</span>
+                <span class="ec-calm">Calm</span>,
+                <span class="ec-neutral">Neutral</span>,
+                <span class="ec-amused">Amused</span>,
+                <span class="ec-excited">Excited</span>,
+                <span class="ec-tired">Tired</span>,
+                <span class="ec-concerned">Concerned</span>,
+                <span class="ec-confused">Confused</span>
               </div>
             </td>
-            <td class="pg-num">46%</td>
+            <td class="pg-num">24%</td>
             <td>English, American accent</td>
           </tr>
         </tbody>
@@ -262,7 +314,7 @@ permalink: /playground/velma/
     <div>
       <p><strong>Customer</strong></p>
       <div class="m__tag-group">
-        <span class="m__tag m__tag--error">back injury <span class="pg-num muted">-0.50</span></span>
+        <span class="m__tag m__tag--error">back injury <span class="pg-num">-0.50</span></span>
         <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
         <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
         <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
@@ -285,12 +337,10 @@ permalink: /playground/velma/
         </thead>
         <tbody>
           <tr>
-            <td rowspan="5"><strong>Customer Service Representative</strong></td>
+            <td rowspan="5">Customer Service Representative</td>
             <td>
               <strong>Issue Not Resolved</strong>
-              <div class="m__space XS"></div>
               <span class="m__tag m__tag--success">Detected</span>
-              <div class="m__space XS"></div>
               <div class="caption">Evidence: 2 clips (1 definitive)</div>
             </td>
             <td class="pg-reason">Rep references customer's claim and medication request but fails to provide concrete resolution (e.g., approval/denial status, payment) or any firm follow-up commitment.</td>
@@ -299,7 +349,6 @@ permalink: /playground/velma/
           <tr>
             <td>
               <strong>Complaints</strong>
-              <div class="m__space XS"></div>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">The speaker is the Customer Service Representative calmly verifying information, confirming details, and providing account data; no statements attributing negative outcomes to the company or explicit dissatisfaction markers present.</td>
@@ -308,7 +357,6 @@ permalink: /playground/velma/
           <tr>
             <td>
               <strong>Coercion Manipulation</strong>
-              <div class="m__space XS"></div>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">Speaker is Customer Service Representative providing polite verifications and information; no threats, ultimatums, reduced empathy, or pressure tactics observed.</td>
@@ -317,7 +365,6 @@ permalink: /playground/velma/
           <tr>
             <td>
               <strong>Issue Resolved</strong>
-              <div class="m__space XS"></div>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">No customer's stated issue referenced; no resolution confirmation, customer acknowledgment, or closure cues present in clips.</td>
@@ -326,17 +373,15 @@ permalink: /playground/velma/
           <tr>
             <td>
               <strong>Inappropriate Speech</strong>
-              <div class="m__space XS"></div>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">All clips contain professional, factual verification and information sharing with no profanity, slurs, personal attacks, or hostile indicators.</td>
             <td class="pg-num">0%</td>
           </tr>
           <tr>
-            <td><strong>Customer</strong></td>
+            <td rowspan="1">Customer</td>
             <td>
               <strong>Inappropriate Speech</strong>
-              <div class="m__space XS"></div>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">No profanity, slurs, sexually-suggestive content, personal attacks, or hostile prosody observed; speech is polite and factual.</td>
@@ -365,11 +410,11 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance ec-neutral">
+        <div class="pg-transcript-utterance ec-calm">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:18</span>
             <span class="pg-transcript-speaker">Customer</span>
-            <span class="pg-transcript-emotion">Neutral</span>
+            <span class="pg-transcript-emotion">Calm</span>
             <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
@@ -378,11 +423,11 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance ec-neutral">
+        <div class="pg-transcript-utterance ec-confident">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:32</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
-            <span class="pg-transcript-emotion">Neutral</span>
+            <span class="pg-transcript-emotion">Confident</span>
             <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
@@ -391,11 +436,11 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance ec-neutral">
+        <div class="pg-transcript-utterance ec-disappointed">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:47</span>
             <span class="pg-transcript-speaker">Customer</span>
-            <span class="pg-transcript-emotion">Neutral</span>
+            <span class="pg-transcript-emotion">Disappointed</span>
             <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
@@ -404,11 +449,11 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance ec-neutral">
+        <div class="pg-transcript-utterance ec-interested">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">1:00</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
-            <span class="pg-transcript-emotion">Neutral</span>
+            <span class="pg-transcript-emotion">Interested</span>
             <span class="pg-transcript-flag">English</span>
             <span class="pg-transcript-accent">American accent</span>
           </div>
