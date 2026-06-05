@@ -79,8 +79,9 @@
 
       <div class="pg-verdict-slot">{% block above_output %}{% endblock %}</div>
 
-      <!-- PLAYER -->
-      <div class="media-container m__rounded">
+      <!-- PLAYER + OUTPUT -->
+      <div class="pg-player-output m__rounded">
+      <div class="media-container">
     <div
       class="media-box"
       id="audio-player"
@@ -147,40 +148,28 @@
     <div class="pg-media-hover-line" aria-hidden="true"></div>
   </div>
 
-  <div class="m__space M"></div>
-
-  <div class="pg-output-block">
-  <div class="pg-output-toolbar">
-    <fieldset class="pg-output-tabs" id="pg-subtabs">
-      {% if not noOutputTab %}
-      <label><input type="radio" name="pg-subtab" value="main" checked />Output</label>
-      {% endif %}
-      <label><input type="radio" name="pg-subtab" value="json" {% if noOutputTab %}checked{% endif %} />JSON Response</label>
-    </fieldset>
-  </div>
-
   {% if not noOutputTab %}
-  <div class="pg-subview" data-pg-subview="main">
+  <div class="pg-output-panel">
     {% block panel_content %}{% endblock %}
   </div>
-  <!-- /.pg-subview main -->
   {% endif %}
-
-  <div class="pg-subview" data-pg-subview="json" {% if not noOutputTab %}hidden{% endif %}>
-    <div class="pg-json-container">
-
-      {% include 'prototypes/playground/output-json.html' %}
-    </div>
   </div>
-  </div>
-  <!-- /.pg-output-block -->
+  <!-- /.pg-player-output -->
 
   <div class="m__space L"></div>
 
-  <div class="pg-stats-block">
-    {% include 'prototypes/playground/output-stats.html' %}
+  <div class="pg-bottom-columns">
+    <div class="pg-json-block">
+      <h6 class="pg-section-title">JSON Raw</h6>
+      <div class="pg-json-container">
+        {% include 'prototypes/playground/output-json.html' %}
+      </div>
+    </div>
+
+    <div class="pg-stats-block">
+      {% include 'prototypes/playground/output-stats.html' %}
+    </div>
   </div>
-  <!-- /.pg-stats-block -->
 
     </main>
   </div>
@@ -201,16 +190,6 @@
       fastToggle.addEventListener('change', function () {
         checkboxes.forEach(function (cb) {
           cb.closest('.pg-stt-option').style.display = fastToggle.checked ? 'none' : '';
-        });
-      });
-    }
-
-    var subtabs = document.getElementById('pg-subtabs');
-    if (subtabs) {
-      subtabs.addEventListener('change', function (e) {
-        var val = e.target.value;
-        document.querySelectorAll('[data-pg-subview]').forEach(function (view) {
-          view.hidden = view.dataset.pgSubview !== val;
         });
       });
     }
