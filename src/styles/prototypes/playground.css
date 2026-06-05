@@ -349,7 +349,7 @@
   .pg-transcript-utterance-header {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.8rem;
     margin-bottom: 0.2rem;
     font-size: var(--m__font-size-xs);
 
@@ -373,6 +373,12 @@
   .ec-anxious     { --ec: var(--emotion-anxious); }
   .ec-sad         { --ec: var(--emotion-sad); }
   .ec-concerned   { --ec: var(--emotion-concerned); }
+  .ec-tired       { --ec: var(--emotion-tired); }
+  .ec-amused      { --ec: var(--emotion-amused); }
+  .ec-confused    { --ec: var(--emotion-confused); }
+  .ec-affectionate { --ec: var(--emotion-affectionate); }
+  .ec-excited     { --ec: var(--emotion-excited); }
+  .ec-disappointed { --ec: var(--emotion-disappointed); }
   .pg-transcript-accent {
     color: var(--m__text-caption-color);
   }
@@ -391,7 +397,7 @@
 
   .pg-transcript-text,
   .pg-transcript-text p {
-    font-family: var(--m__font-semi-mono);
+    font-family: "Inter";
     line-height: 1.6;
   }
   .pg-transcript-text.partial {
@@ -1045,26 +1051,31 @@
   .pg-output-panel {
     background: var(--m__bg-surface-color);
     padding: var(--m__space-m) var(--m__space-s);
-    font-size: var(--m__font-size-s);
-    font-family: var(--m__font-semi-mono);
-  }
-
-  .pg-output-panel h2,
-  .pg-output-panel .pg-transcript-text,
-  .pg-output-panel .pg-transcript-text p {
+    font-size: 1rem;
     font-family: "Inter";
   }
 
+  .pg-output-panel table td {
+    font-size: 1rem;
+  }
   .pg-output-panel table th {
+    font-size: 0.8rem;
     font-weight: 400;
     background-color: inherit;
   }
+  .pg-output-panel .pg-reason,
+  .pg-output-panel table .pg-num {
+    font-size: 0.8rem;
+  }
 
-  .pg-output-panel .pg-transcript-utterance-header,
-  .pg-output-panel .pg-transcript-deepfake-score,
-  .pg-output-panel .pg-transcript-lang,
-  .pg-output-panel .pg-emo-labels {
-    font-size: var(--m__font-size-s);
+  .pg-output-panel .caption {
+    font-size: 1rem;
+  }
+
+  /* Semi-mono, 0.8rem only on tags + transcript meta + emo labels ──────── */
+  .pg-output-panel :is(.m__tag, .m__tag-flat, .pg-transcript-utterance-header, .pg-emo-labels) {
+    font-family: var(--m__font-semi-mono);
+    font-size: 0.8rem;
   }
 
   /* JSON Response (placed before stats, no background) ─────────────────── */
@@ -1271,9 +1282,9 @@
     position: absolute;
     left: 0;
     height: auto;
-    padding-left: 0.2em;
     line-height: 1;
     top: auto;
+    padding-left: 0;
   }
   .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index="1"] {
     bottom: calc(100% / var(--speaker-count));
@@ -1283,10 +1294,10 @@
     bottom: 0;
     top: auto;
   }
-  .pg-player-dataviz .speaker-label span {
-    background-color: color-mix(in srgb, var(--m__ui-border-color) 80%, transparent);
+  .pg-player-dataviz .speaker-labels .speaker-label span {
+    background-color: var(--m__ui-border-color);
     color: var(--m__text-caption-color);
-    padding: 0.1em 0.3em;
+    padding: 0.2rem 0.3em;
     font-weight: 500;
   }
 
