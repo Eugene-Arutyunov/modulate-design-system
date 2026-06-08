@@ -302,22 +302,31 @@
   .pg-transcript-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .pg-transcript-utterance {
     background: var(--m__bg-surface-color);
-    padding: 0.7em;
+    padding: var(--m__space-xs) var(--m__space-s);
+    border-radius: 2rem;
+    corner-shape: squircle;
+    max-width: min(92%, 60rem);
     cursor: pointer;
     transition: background var(--m__unhover-transition-duration) var(--m__transition-easing),
     color var(--m__unhover-transition-duration) var(--m__transition-easing);
   }
 
+  .pg-transcript-list > .pg-transcript-utterance:nth-of-type(odd) {
+    align-self: flex-start;
+  }
+  .pg-transcript-list > .pg-transcript-utterance:nth-of-type(even) {
+    align-self: flex-end;
+  }
   .pg-transcript-utterance.speaker-left {
-    margin-right: 3rem;
+    align-self: flex-start;
   }
   .pg-transcript-utterance.speaker-right {
-    margin-left: 3rem;
+    align-self: flex-end;
   }
   .pg-transcript-utterance:hover {
     color: var(--m__text-hover-color);
@@ -510,7 +519,7 @@
   .pg-upload-plate {
     position: relative;
     border: 3px solid var(--m__bg-accent-color);
-    border-radius: var(--m__radius-m);
+    border-radius: var(--m__radius-l);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -531,53 +540,6 @@
     border-bottom: 1px solid var(--m__bg-accent-color);
     font-weight: 500;
     background-color: inherit;
-  }
-
-  /* Outlined toggle / checkbox styles, scoped to the upload-plate header */
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"] {
-    box-sizing: border-box;
-    height: 1.1rem;
-    border: 2px solid var(--m__bg-accent-color);
-    transition:
-      background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
-  }
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]::after {
-    width: 0.55rem;
-    height: 0.55rem;
-    transition:
-      left var(--m__unhover-transition-duration) var(--m__transition-easing),
-      background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
-  }
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:hover:not(:disabled),
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:hover:not(:disabled)::after {
-    transition-duration: var(--m__hover-transition-duration);
-  }
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:checked::after {
-    left: calc(100% - 0.15rem - 0.55rem);
-  }
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:not(:checked) {
-    background-color: transparent;
-  }
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:not(:checked)::after {
-    background-color: var(--m__bg-accent-color);
-  }
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:hover:not(:disabled) {
-    border-color: var(--m__bg-hover-color);
-  }
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:not(:checked):hover:not(:disabled) {
-    background-color: transparent;
-  }
-  .pg-upload-plate > .pg-options-row .m__toggle input[type="checkbox"]:not(:checked):hover:not(:disabled)::after {
-    background-color: var(--m__bg-hover-color);
-  }
-
-  .pg-upload-plate > .pg-options-row .m__checkbox input[type="checkbox"]:not(:checked) {
-    box-sizing: border-box;
-    border: 2px solid var(--m__bg-accent-color);
-  }
-  .pg-upload-plate > .pg-options-row .m__checkbox input[type="checkbox"]:not(:checked):hover:not(:disabled) {
-    border-color: var(--m__bg-hover-color);
   }
 
   .pg-upload-plate-body {
@@ -647,55 +609,9 @@
     font-size: var(--m__font-size-xs);
   }
 
-  .pg-upload-actions .m__button-outline {
-    border: 2px solid var(--m__bg-accent-color);
-    font-weight: 500;
-    transition:
-      color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
-  }
-  .pg-upload-actions .m__button-outline:hover {
-    border-color: var(--m__bg-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
-  }
-
-  /* Primary file action — emphasized, fills the eye */
-  .pg-upload-actions .pg-upload-primary {
-    padding-inline: var(--m__space-m);
-  }
-
-  /* Streaming split control: primary button + chevron toggle + popover menu */
+  /* Streaming split control: positioning context for popover menu */
   .pg-upload-stream {
     position: relative;
-    display: inline-flex;
-    align-items: stretch;
-  }
-  .pg-upload-stream .pg-upload-stream__main {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right-width: 1px;
-    padding-right: var(--m__space-s);
-  }
-  .pg-upload-stream .pg-upload-stream__toggle {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left-width: 0;
-    padding-inline: var(--m__space-xs);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .pg-upload-stream:has(.pg-upload-stream__toggle:hover) .pg-upload-stream__main {
-    border-right-color: var(--m__bg-hover-color);
-  }
-  .pg-upload-stream__toggle svg {
-    transition: transform var(--m__unhover-transition-duration) var(--m__transition-easing);
-    stroke: currentColor;
-    stroke-width: 0.75;
-    stroke-linejoin: round;
-  }
-  .pg-upload-stream[data-open="true"] .pg-upload-stream__toggle svg {
-    transform: rotate(180deg);
   }
   .pg-upload-stream__menu {
     position: absolute;
@@ -779,14 +695,15 @@
     transition: border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
   }
   .pg-upload-plate[data-state="uploaded"]:hover {
-    border-color: var(--m__bg-hover-color);
+    border-color: var(--m__text-hover-color);
     cursor: pointer;
     transition-duration: var(--m__hover-transition-duration);
   }
 
   /* file-dropping — only the drop overlay; hide options + actions + footer */
   .pg-upload-plate[data-state="file-dropping"] {
-    border-color: var(--m__text-link-color);
+    border-style: dashed;
+    border-color: var(--m__bg-accent-color);
     background-color: var(--m__background-color);
   }
   .pg-upload-plate[data-state="file-dropping"] > .pg-options-row,
@@ -799,7 +716,7 @@
     position: static;
     inset: auto;
     background: none;
-    color: var(--m__text-link-color);
+    color: var(--m__bg-accent-color);
   }
 
   /* uploading — only the spinner overlay; hide options + actions + footer */
@@ -824,13 +741,58 @@
     display: none;
   }
   .pg-upload-plate[data-state="uploaded"] .pg-upload-plate-body {
-    padding: var(--m__space-s) var(--m__widget-padding);
+    padding: 0;
   }
   .pg-upload-plate[data-state="uploaded"] .pg-upload-actions {
     display: none;
   }
   .pg-upload-plate[data-state="uploaded"] .pg-upload-collapsed-cta {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    width: 100%;
+    padding: var(--m__space-s) var(--m__widget-padding);
+  }
+
+  /* low-quota — same look as initial; meta swaps to show the danger digit */
+  .pg-upload-meta--low {
+    display: none;
+  }
+  .pg-upload-plate[data-state="low-quota"] .pg-upload-meta--default {
+    display: none;
+  }
+  .pg-upload-plate[data-state="low-quota"] .pg-upload-meta--low {
+    display: block;
+  }
+  .pg-upload-meta-danger {
+    color: var(--m__ui-error-color);
+    font-weight: var(--m__font-weight-medium);
+  }
+
+  /* exhausted — hide options + actions + footer, show centered signup CTA */
+  .pg-upload-plate[data-state="exhausted"] > .pg-options-row,
+  .pg-upload-plate[data-state="exhausted"] .pg-upload-plate-footer,
+  .pg-upload-plate[data-state="exhausted"] .pg-upload-actions {
+    display: none;
+  }
+  .pg-upload-plate[data-state="exhausted"] .pg-upload-overlay--exhausted {
+    display: flex;
+    position: static;
+    inset: auto;
+    background: none;
+    pointer-events: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--m__space-m);
+    max-width: 28rem;
+    margin-inline: auto;
+    color: var(--m__text-color);
+  }
+  .pg-upload-overlay--exhausted p {
+    margin: 0;
   }
 
   /* State switcher floating panel (design preview only) — top-right inside the
@@ -883,13 +845,13 @@
     padding: 0;
     border: 0;
     border-radius: 50%;
-    background-color: currentColor;
+    background-color: var(--m__bg-accent-color);
     margin: 0;
     flex: none;
     transition: none;
   }
   .pg-plate-state-switch input[type="radio"]:checked {
-    box-shadow: 0 0 0 2px var(--m__background-color), 0 0 0 3px currentColor;
+    box-shadow: 0 0 0 2px var(--m__background-color), 0 0 0 3px var(--m__bg-accent-color);
   }
 
 
@@ -964,7 +926,7 @@
     --ids__bg-hover-RGB: 100, 110, 140;
   }
 
-  /* Bottom columns: JSON Raw (left) + Statistics (right) ───────────────── */
+  /* Bottom columns: Raw JSON (left) + Statistics (right) ───────────────── */
   .pg-bottom-columns {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
@@ -1047,10 +1009,10 @@
     border-top: 1px solid var(--m__text-color);
   }
 
-  /* Output panel (gray surface, flush against the player) ──────────────── */
+  /* Output panel — sits below the plate, no surface of its own */
   .pg-output-panel {
-    background: var(--m__bg-surface-color);
-    padding: var(--m__space-m) var(--m__space-s);
+    background: transparent;
+    padding: 0;
     font-size: 1rem;
     font-family: "Inter";
   }

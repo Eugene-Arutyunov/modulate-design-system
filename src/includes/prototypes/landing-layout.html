@@ -13,8 +13,15 @@
     <link rel="stylesheet" href="/bundle.css" />
     {% block head %}{% endblock %}
   </head>
-  <body>
+  <body data-theme-storage-key="prototype-theme">
     <script>
+      (function () {
+        var key = document.body.dataset.themeStorageKey;
+        var theme = localStorage.getItem(key);
+        if (theme !== "light") {
+          document.body.classList.add("dark-mode");
+        }
+      })();
       (function () {
         try {
           if (localStorage.getItem("prototype-internal-nav-hidden") === "1") {
@@ -25,10 +32,11 @@
         }
       })();
     </script>
-    {% include 'service/svg-icons-sprite.html' %} {% include
-    'service/nav-island.html' %} {% set isLanding = true %} {% include
-    'prototypes/header.html' %} {% block content %}{% endblock %} {% include
-    'prototypes/footer.html' %}
+    {% include 'service/svg-icons-sprite.html' %} {% set islandThemeToggle =
+    true %} {% include 'service/nav-island.html' %} {% set isLanding = true %}
+    {% include 'prototypes/header.html' %} {% block content %}{% endblock %} {%
+    include 'prototypes/footer.html' %}
+    <script src="/assets/service/theme-toggle.js"></script>
     <script src="/assets/service/nav-island.js"></script>
     <script src="/assets/prototypes/header-menu.js"></script>
     <script src="/assets/prototypes/prototype-internal-nav-toggle.js"></script>

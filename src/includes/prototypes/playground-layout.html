@@ -21,12 +21,12 @@
       <div class="pg-upload-plate-body">
       {% block upload_actions %}
       <div class="pg-upload-actions">
-        <button type="button" class="m__button-outline pg-upload-primary">
+        <button type="button" class="m__button-brutal pg-upload-primary">
           <span class="pg-upload-primary__label">Drop or choose file…</span>
         </button>
-        <div class="pg-upload-stream" data-open="false">
-          <button type="button" class="m__button-outline pg-upload-stream__main">Start streaming</button>
-          <button type="button" class="m__button-outline pg-upload-stream__toggle"
+        <div class="m__split-button pg-upload-stream" data-open="false">
+          <button type="button" class="m__button-brutal pg-upload-stream__main">Start streaming</button>
+          <button type="button" class="m__action-menu-brutal pg-upload-stream__toggle"
                   aria-haspopup="menu" aria-expanded="false" aria-label="More streaming options">
             <svg width="14" height="14" aria-hidden="true"><use href="#chevron-down" /></svg>
           </button>
@@ -46,14 +46,18 @@
         <img class="m__loader" src="/assets/service/loader-icon.svg" alt="" aria-hidden="true" />
         <span>Processing file…</span>
       </div>
+      <div class="pg-upload-overlay pg-upload-overlay--exhausted" aria-hidden="true">
+        <p>You're out of free trial requests. Sign up to get credits and keep going.</p>
+        <a href="/auth/login/" class="m__button-brutal">Sign up</a>
+      </div>
       <button type="button" class="pg-upload-collapsed-cta" aria-hidden="true">
-        Drop a file or click for options
+        New analysis
       </button>
       </div>
 
       <div class="pg-upload-plate-footer">
         <div class="pg-upload-formats-tags">
-          <span class="pg-upload-formats-label">Supported formats up to 50 MB:</span>
+          <span class="pg-upload-formats-label">Supports</span>
           <span class="m__tag-flat">.aac</span>
           <span class="m__tag-flat">.flac</span>
           <span class="m__tag-flat">.m4a</span>
@@ -62,15 +66,20 @@
           <span class="m__tag-flat">.ogg</span>
           <span class="m__tag-flat">.opus</span>
           <span class="m__tag-flat">.wav</span>
+          <span class="pg-upload-formats-label">and</span>
           <span class="m__tag-flat">.webm</span>
+          <span class="pg-upload-formats-label">up to 50 MB</span>
         </div>
-        <p class="pg-upload-meta">9 of 10 requests remaining</p>
+        <p class="pg-upload-meta pg-upload-meta--default">9 / 10</p>
+        <p class="pg-upload-meta pg-upload-meta--low"><span class="pg-upload-meta-danger">3</span> / 10</p>
       </div>
       <div class="pg-plate-state-switch" role="radiogroup" aria-label="Demo plate state">
         <label><input type="radio" name="pg-plate-state" value="initial" checked /><span>initial</span></label>
         <label><input type="radio" name="pg-plate-state" value="file-dropping" /><span>file-dropping</span></label>
         <label><input type="radio" name="pg-plate-state" value="uploading" /><span>uploading</span></label>
         <label><input type="radio" name="pg-plate-state" value="uploaded" /><span>uploaded</span></label>
+        <label><input type="radio" name="pg-plate-state" value="low-quota" /><span>low-quota</span></label>
+        <label><input type="radio" name="pg-plate-state" value="exhausted" /><span>exhausted</span></label>
       </div>
       </div>
       </div>
@@ -82,6 +91,25 @@
       <!-- PLAYER + OUTPUT -->
       <div class="pg-player-output m__rounded">
       <div class="media-container">
+    <div class="pg-player-dataviz">
+      <div class="player-visualization">
+        {% block player_clips %}
+        {% include 'prototypes/playground/player-clips.html' %}
+        {% endblock %}
+      </div>
+      {% block speaker_labels %}
+      <div class="speaker-labels">
+        <div class="speaker-label" data-speaker-index="1">
+          <span>Speaker 0</span>
+        </div>
+        <div class="speaker-label" data-speaker-index="2">
+          <span>Speaker 1</span>
+        </div>
+      </div>
+      {% endblock %}
+      <div class="behaviour-indicators"></div>
+      <div class="behaviour-labels" style="display: none"></div>
+    </div>
     <div
       class="media-box"
       id="audio-player"
@@ -126,41 +154,23 @@
         </div>
       </div>
     </div>
-    <div class="pg-player-dataviz">
-      <div class="player-visualization">
-        {% block player_clips %}
-        {% include 'prototypes/playground/player-clips.html' %}
-        {% endblock %}
-      </div>
-      {% block speaker_labels %}
-      <div class="speaker-labels">
-        <div class="speaker-label" data-speaker-index="1">
-          <span>Speaker 0</span>
-        </div>
-        <div class="speaker-label" data-speaker-index="2">
-          <span>Speaker 1</span>
-        </div>
-      </div>
-      {% endblock %}
-      <div class="behaviour-indicators"></div>
-      <div class="behaviour-labels" style="display: none"></div>
-    </div>
     <div class="pg-media-hover-line" aria-hidden="true"></div>
   </div>
+  </div>
+  <!-- /.pg-player-output -->
 
   {% if not noOutputTab %}
+  <div class="m__space M"></div>
   <div class="pg-output-panel">
     {% block panel_content %}{% endblock %}
   </div>
   {% endif %}
-  </div>
-  <!-- /.pg-player-output -->
 
   <div class="m__space L"></div>
 
   <div class="pg-bottom-columns">
     <div class="pg-json-block">
-      <h6 class="pg-section-title">JSON Raw</h6>
+      <h6 class="pg-section-title">Raw JSON</h6>
       <div class="pg-json-container">
         {% include 'prototypes/playground/output-json.html' %}
       </div>

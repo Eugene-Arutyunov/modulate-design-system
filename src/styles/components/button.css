@@ -4,6 +4,8 @@ a.m__button-secondary,
 button.m__button-secondary,
 a.m__button-outline,
 button.m__button-outline,
+a.m__button-brutal,
+button.m__button-brutal,
 a.m__button-compact,
 button.m__button-compact,
 a.m__button-secondary-compact,
@@ -88,6 +90,50 @@ button.m__button-outline {
   &:hover {
     color: var(--m__text-hover-color);
     transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+a.m__button-brutal,
+button.m__button-brutal {
+  padding: var(--m__button-padding);
+  background-color: transparent;
+  color: var(--m__text-color);
+  border: 2px solid var(--m__bg-accent-color);
+  font-weight: var(--m__font-weight-medium);
+  transition:
+    color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    border-color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  &:active {
+    color: var(--m__text-active-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+}
+
+.m__split-button {
+  display: inline-flex;
+  align-items: stretch;
+
+  & > :is(button, a):first-of-type {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-width: 1px;
+  }
+
+  & > :is(button, a):last-of-type {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left-width: 0;
+  }
+
+  &:has(> :is(button, a):last-of-type:hover) > :is(button, a):first-of-type {
+    border-right-color: var(--m__text-hover-color);
   }
 }
 

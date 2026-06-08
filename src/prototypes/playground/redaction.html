@@ -19,7 +19,7 @@ permalink: /playground/redaction/
             <input type="number" value="10" min="0" /><span class="pg-pad-unit">ms</span>
           </span>
         </div>
-        <label class="m__checkbox pg-stt-option pg-diarization-option">
+        <label class="m__checkbox-brutal pg-stt-option pg-diarization-option">
           <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
         </label>
       </div>
@@ -68,7 +68,7 @@ permalink: /playground/redaction/
       gap: var(--m__space-xxs);
       margin-bottom: 0;
     }
-    .pg-redaction-options .m__checkbox {
+    .pg-redaction-options .m__checkbox-brutal {
       gap: var(--m__space-xxs);
     }
     .pg-redaction-options .pg-pad-field > label {
@@ -86,12 +86,12 @@ permalink: /playground/redaction/
       font-size: inherit;
       line-height: inherit;
       font-variant-numeric: tabular-nums;
-      background-color: var(--m__bg-surface-color);
+      background-color: transparent;
       border: 2px solid var(--m__bg-accent-color);
       transition: border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
     }
     .pg-pad-field input:hover {
-      border-color: var(--m__bg-hover-color);
+      border-color: var(--m__text-hover-color);
       transition-duration: var(--m__hover-transition-duration);
     }
     .pg-pad-unit {
@@ -100,7 +100,8 @@ permalink: /playground/redaction/
       transform: translateY(-50%);
       right: 0.5rem;
       pointer-events: none;
-      color: var(--m__text-caption-color);
+      color: var(--m__bg-accent-color);
+      font-weight: var(--m__font-weight-medium);
     }
 
     /* Redaction summary ─────────────────────────────────────────────────── */
@@ -157,19 +158,6 @@ permalink: /playground/redaction/
     .pg-redaction-seg:hover {
       background: color-mix(in srgb, var(--m__ui-error-color) 55%, transparent);
       transition: background var(--m__hover-transition-duration) var(--m__transition-easing);
-    }
-
-    /* Redaction transcript — flat text, no bubbles ──────────────────────── */
-    .pg-redaction-transcript .pg-transcript-utterance,
-    .pg-redaction-transcript .pg-transcript-utterance:hover {
-      background: transparent;
-      padding: 0;
-      margin: 0;
-      cursor: default;
-      color: inherit;
-    }
-    .pg-redaction-transcript .pg-transcript-list {
-      gap: var(--m__space-s);
     }
 
     /* Inline redaction tag ──────────────────────────────────────────────── */
