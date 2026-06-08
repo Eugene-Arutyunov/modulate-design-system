@@ -1,8 +1,10 @@
-.m__toggle[hidden] {
+.m__toggle[hidden],
+.m__toggle-brutal[hidden] {
   display: none;
 }
 
-.m__toggle {
+.m__toggle,
+.m__toggle-brutal {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -29,6 +31,7 @@
     border-radius: 999px;
     background-color: var(--m__ui-border-color);
     border: none;
+    outline: none;
     cursor: pointer;
     transition: background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
 
@@ -37,19 +40,21 @@
       position: absolute;
       top: 50%;
       left: 0.15rem;
-      transform: translateY(-50%);
+      transform: translate(0, -50%);
       width: 0.75rem;
       height: 0.75rem;
       border-radius: 50%;
       background-color: var(--m__background-color);
-      transition: left var(--m__unhover-transition-duration) var(--m__transition-easing);
+      transition:
+        transform var(--m__fast-transition-duration) var(--m__transition-easing),
+        background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
     }
 
     &:checked {
       background-color: var(--m__bg-accent-color);
 
       &::after {
-        left: calc(100% - 0.15rem - 0.75rem);
+        transform: translate(calc(2rem - 2 * 0.15rem - 0.75rem), -50%);
       }
     }
 
@@ -62,16 +67,64 @@
       }
 
       &:checked {
-        background-color: var(--m__bg-hover-color);
-
-        .dark-mode & {
-          background-color: var(--m__text-hover-color);
-        }
+        background-color: var(--m__text-hover-color);
       }
     }
 
     &:disabled {
       cursor: not-allowed;
+    }
+  }
+}
+
+.m__toggle-brutal {
+  font-weight: var(--m__font-weight-medium);
+
+  & input[type="checkbox"] {
+    box-sizing: border-box;
+    border: 2px solid var(--m__bg-accent-color);
+    background-color: transparent;
+    transition:
+      background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
+      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+    &::after {
+      width: 0.55rem;
+      height: 0.55rem;
+      background-color: var(--m__bg-accent-color);
+      transition:
+        transform var(--m__fast-transition-duration) var(--m__transition-easing),
+        background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+
+    &:checked {
+      background-color: var(--m__bg-accent-color);
+
+      &::after {
+        background-color: var(--m__background-color);
+        transform: translate(calc(2rem - 2 * 0.15rem - 0.55rem - 2 * 2px), -50%);
+      }
+    }
+
+    &:hover:not(:disabled) {
+      background-color: transparent;
+      border-color: var(--m__text-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
+
+      &::after {
+        background-color: var(--m__text-hover-color);
+        transition-duration:
+          var(--m__fast-transition-duration),
+          var(--m__hover-transition-duration);
+      }
+
+      &:checked {
+        background-color: var(--m__text-hover-color);
+
+        &::after {
+          background-color: var(--m__background-color);
+        }
+      }
     }
   }
 }

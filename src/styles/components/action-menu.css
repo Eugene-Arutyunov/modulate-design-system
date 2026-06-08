@@ -66,3 +66,39 @@
     color: var(--m__ui-error-hover-color);
   }
 }
+
+a.m__action-menu-brutal,
+button.m__action-menu-brutal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--m__button-padding);
+  padding-inline: var(--m__space-xs);
+  background-color: transparent;
+  color: var(--m__text-color);
+  border: 2px solid var(--m__bg-accent-color);
+  border-radius: var(--m__radius-m);
+  font: inherit;
+  font-weight: var(--m__font-weight-medium);
+  cursor: pointer;
+  transition:
+    color var(--m__unhover-transition-duration) var(--m__transition-easing),
+    border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+
+  &:hover {
+    color: var(--m__text-hover-color);
+    border-color: var(--m__text-hover-color);
+    transition-duration: var(--m__hover-transition-duration);
+  }
+
+  & svg {
+    stroke: currentColor;
+    stroke-width: 0.75;
+    stroke-linejoin: round;
+    transition: transform var(--m__unhover-transition-duration) var(--m__transition-easing);
+  }
+
+  &[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+}
