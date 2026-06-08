@@ -83,6 +83,30 @@ permalink: /playground/velma/
       flex: none;
     }
 
+    .pg-behavior-link {
+      color: var(--m__bg-accent-color);
+      font-weight: var(--m__font-weight-bold);
+      text-decoration: none;
+      background-image: linear-gradient(currentColor, currentColor);
+      background-repeat: no-repeat;
+      background-size: 100% 3.5px;
+      background-position: 0 100%;
+      padding-bottom: 0.15em;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+    .pg-behavior-link:hover {
+      color: var(--m__text-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
+    }
+    .pg-behavior-link svg {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.15em;
+      margin-right: 0.15em;
+    }
+
     .pg-summary-item {
       margin-bottom: var(--m__space-m);
     }
@@ -141,7 +165,7 @@ permalink: /playground/velma/
     .pg-behaviors-table td > .m__tag {
       display: flex;
       width: fit-content;
-      margin-top: 0.3rem;
+      margin-top: 0.7rem;
     }
     .pg-behaviors-table td > .caption {
       margin-top: 0.3rem;
@@ -151,21 +175,6 @@ permalink: /playground/velma/
       color: var(--m__text-caption-color);
     }
 
-    /* Flat transcript — no bubbles, no left/right split */
-    .pg-velma-transcript .pg-transcript-utterance,
-    .pg-velma-transcript .pg-transcript-utterance:hover,
-    .pg-velma-transcript .pg-transcript-utterance.active {
-      background: transparent !important;
-      padding: 0;
-      margin: 0;
-      cursor: default;
-      color: inherit;
-      align-self: stretch;
-      max-width: none;
-    }
-    .pg-velma-transcript .pg-transcript-list {
-      gap: var(--m__space-s);
-    }
   </style>
 
   <div class="pg-tab-panel pg-velma-output">
@@ -339,7 +348,7 @@ permalink: /playground/velma/
           <tr>
             <td rowspan="5">Customer Service Representative</td>
             <td>
-              <strong>Issue Not Resolved</strong>
+              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
               <span class="m__tag m__tag--success">Detected</span>
               <div class="caption">Evidence: 2 clips (1 definitive)</div>
             </td>
@@ -348,7 +357,7 @@ permalink: /playground/velma/
           </tr>
           <tr>
             <td>
-              <strong>Complaints</strong>
+              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">The speaker is the Customer Service Representative calmly verifying information, confirming details, and providing account data; no statements attributing negative outcomes to the company or explicit dissatisfaction markers present.</td>
@@ -356,7 +365,7 @@ permalink: /playground/velma/
           </tr>
           <tr>
             <td>
-              <strong>Coercion Manipulation</strong>
+              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Coercion Manipulation</a>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">Speaker is Customer Service Representative providing polite verifications and information; no threats, ultimatums, reduced empathy, or pressure tactics observed.</td>
@@ -364,7 +373,7 @@ permalink: /playground/velma/
           </tr>
           <tr>
             <td>
-              <strong>Issue Resolved</strong>
+              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">No customer's stated issue referenced; no resolution confirmation, customer acknowledgment, or closure cues present in clips.</td>
@@ -372,7 +381,7 @@ permalink: /playground/velma/
           </tr>
           <tr>
             <td>
-              <strong>Inappropriate Speech</strong>
+              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">All clips contain professional, factual verification and information sharing with no profanity, slurs, personal attacks, or hostile indicators.</td>
@@ -381,7 +390,7 @@ permalink: /playground/velma/
           <tr>
             <td rowspan="1">Customer</td>
             <td>
-              <strong>Inappropriate Speech</strong>
+              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
               <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">No profanity, slurs, sexually-suggestive content, personal attacks, or hostile prosody observed; speech is polite and factual.</td>

@@ -91,6 +91,25 @@
       <!-- PLAYER + OUTPUT -->
       <div class="pg-player-output m__rounded">
       <div class="media-container">
+    <div class="pg-player-dataviz">
+      <div class="player-visualization">
+        {% block player_clips %}
+        {% include 'prototypes/playground/player-clips.html' %}
+        {% endblock %}
+      </div>
+      {% block speaker_labels %}
+      <div class="speaker-labels">
+        <div class="speaker-label" data-speaker-index="1">
+          <span>Speaker 0</span>
+        </div>
+        <div class="speaker-label" data-speaker-index="2">
+          <span>Speaker 1</span>
+        </div>
+      </div>
+      {% endblock %}
+      <div class="behaviour-indicators"></div>
+      <div class="behaviour-labels" style="display: none"></div>
+    </div>
     <div
       class="media-box"
       id="audio-player"
@@ -135,35 +154,17 @@
         </div>
       </div>
     </div>
-    <div class="pg-player-dataviz">
-      <div class="player-visualization">
-        {% block player_clips %}
-        {% include 'prototypes/playground/player-clips.html' %}
-        {% endblock %}
-      </div>
-      {% block speaker_labels %}
-      <div class="speaker-labels">
-        <div class="speaker-label" data-speaker-index="1">
-          <span>Speaker 0</span>
-        </div>
-        <div class="speaker-label" data-speaker-index="2">
-          <span>Speaker 1</span>
-        </div>
-      </div>
-      {% endblock %}
-      <div class="behaviour-indicators"></div>
-      <div class="behaviour-labels" style="display: none"></div>
-    </div>
     <div class="pg-media-hover-line" aria-hidden="true"></div>
   </div>
+  </div>
+  <!-- /.pg-player-output -->
 
   {% if not noOutputTab %}
+  <div class="m__space M"></div>
   <div class="pg-output-panel">
     {% block panel_content %}{% endblock %}
   </div>
   {% endif %}
-  </div>
-  <!-- /.pg-player-output -->
 
   <div class="m__space L"></div>
 
