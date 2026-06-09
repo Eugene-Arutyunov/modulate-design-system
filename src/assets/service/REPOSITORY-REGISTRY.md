@@ -86,6 +86,7 @@ Global tag-level styles for prose elements: headings, paragraphs, links, inline 
 ## Design system main page layout
 
 **Styles:** `src/styles/service/ds-main-page.css`  
+**Scripts:** `src/assets/service/docs-icon-copy.js` — click on a Graphics → Icons tile copies a standalone SVG (resolved fills) to the clipboard.  
 **Used in:** `src/index.html` (e.g. Graphics → Icons `.docs-icon-row`, Animations `.docs-animation-samples`).  
 **Bundle:** `src/css-bundle.njk`.
 
