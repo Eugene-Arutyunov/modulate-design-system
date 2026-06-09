@@ -4,6 +4,25 @@ Index of notable functional blocks for developer navigation. Add a short descrip
 
 ---
 
+## Posts section
+
+**Pages:** `src/posts/index.html` → `/posts/`  
+**Individual posts:**
+
+- `src/posts/layers.html` → `/posts/layers/` — April 6, 2026 — Components as Reference Specimens
+- `src/posts/page-composition.html` → `/posts/page-composition/` — April 7, 2026 — The Page Composition Rule
+- `src/posts/layouts.html` → `/posts/layouts/` — April 13, 2026 — Time as the Main Axis
+- `src/posts/mobile.html` → `/posts/mobile/` — April 23, 2026 — Mobile Responsiveness Out of the Box
+- `src/posts/type-scale.html` → `/posts/type-scale/` — May 19, 2026 — Adjusting the Type Scale
+- `src/posts/charts.html` → `/posts/charts/` — June 9, 2026 — Chart.js Integration
+
+**Styles:** `src/styles/service/posts.css` — `.post-date` (caption style above `<h1>`), `.posts-list` (date+link rows on the index page).  
+**Navigation:** linked from `src/includes/service/nav-island.html` as "Posts".
+
+Blog-like section for design system development history. Each post is a standalone page extending `service/layout.html`. Posts are listed newest-first on the index. The Charts post contains the Chart.js integration documentation moved from `src/index.html`.
+
+---
+
 ## Theme toggle
 
 **Script:** `src/assets/service/theme-toggle.js`  

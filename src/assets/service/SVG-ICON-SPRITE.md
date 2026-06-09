@@ -55,13 +55,13 @@ const COLORED_ICONS = new Set(["google", "microsoft", "facebook"]);
 
 Product icons that need fixed accent fills use tokens from **`src/styles/tokens/colors.css`**:
 
-| Token                        | Default value        | Typical use                           |
-| ---------------------------- | -------------------- | ------------------------------------- |
-| **`--m__icon-red-color`**    | `rgb(255, 53, 84)`   | Alerts, deepfake, medical/STT accents |
-| **`--m__icon-yellow-color`** | `rgb(255, 200, 0)`   | Music-related accents                 |
-| **`--m__icon-gray-color`**   | `rgb(153, 153, 153)` | Secondary accent shapes               |
-| **`--m__icon-white-color`**  | `rgb(255, 255, 255)` | Light accent stripes on dark shapes   |
-| **`--m__icon-purple-color`** | `rgb(124, 58, 237)`  | Brand accents (same as code-accent)   |
+| Token                        | Default value                   | Typical use                           |
+| ---------------------------- | ------------------------------- | ------------------------------------- |
+| **`--m__icon-red-color`**    | `rgb(255, 53, 84)`              | Alerts, deepfake, medical/STT accents |
+| **`--m__icon-yellow-color`** | `rgb(255, 200, 0)`              | Music-related accents                 |
+| **`--m__icon-gray-color`**   | `rgb(153, 153, 153)`            | Secondary accent shapes               |
+| **`--m__icon-white-color`**  | `rgb(255, 255, 255)`            | Light accent stripes on dark shapes   |
+| **`--m__icon-purple-color`** | `var(--m__chart-model-2-color)` | Brand accents (chart-model-2)         |
 
 Do not hardcode RGB in source SVGs or reuse emotion/UI palette values for these accents — reference the icon tokens so palette updates stay centralized. The design-system **Icon Color Palette** section on the home page documents the same tokens.
 
@@ -101,7 +101,7 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 
 - **`overview-muted.svg`** → **`#overview-muted`**: same three bars as **`overview.svg`**, with **`fill-opacity="0.3"`** on the top two rectangles and full opacity on the bottom bar. Used in online docs only; not listed on the design-system icon grid.
 - **`music.svg`** → **`#music`**: colored icon — inner circle uses **`var(--m__icon-yellow-color)`**; outer ring uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
-- **`ai-music.svg`** → **`#ai-music`**: colored icon — ring and bars on the left use **`currentColor`**; accent bars on the right use **`var(--m__icon-yellow-color)`**. Listed in **`COLORED_ICONS`**.
+- **`ai-music.svg`** → **`#ai-music`**: colored icon — outer ring and waveform frame use **`currentColor`**; inner ring and accent bars use **`var(--m__icon-yellow-color)`**. Listed in **`COLORED_ICONS`**.
 - **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use **`var(--m__icon-red-color)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`stt-med.svg`** → **`#stt-med`**: colored icon — all bars use **`var(--m__icon-red-color)`**. Listed in **`COLORED_ICONS`**.
 - **`velma.svg`** → **`#velma`**: colored icon — accent shapes use **`var(--m__icon-purple-color)`**; other shapes use **`currentColor`**. Listed in **`COLORED_ICONS`**.

@@ -1,0 +1,239 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Chart.js Integration —
+Modulate Design System' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space L"></div>
+  <div class="m__text-width">
+    <time class="post-date">June 9, 2026</time>
+    <h1>Chart.js Integration</h1>
+    <p>
+      Charts use <a href="https://www.chartjs.org/">Chart.js</a> with a set of
+      opinionated defaults that align them with the design system's visual
+      language.
+    </p>
+  </div>
+  <div class="m__space M"></div>
+
+  <div class="m__sequence XL gap-M">
+    <div class="m__sequence-item">
+      <div class="m__widget">{% include 'widgets/chart-line.html' %}</div>
+      <div class="m__space S"></div>
+      <div class="m__widget">{% include 'widgets/chart-bar.html' %}</div>
+    </div>
+    <div class="m__sequence-item">
+      <div class="m__text-width">
+        <p>
+          The following adjustments are applied on top of the default Chart.js
+          configuration:
+        </p>
+        <ul>
+          <li>
+            Tooltips
+            <ids-footnote-link>are off.</ids-footnote-link>
+            <ids-footnote>
+              <p>
+                <code>plugins.tooltip.enabled:&nbsp;false</code>
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            Animation <ids-footnote-link>is off.</ids-footnote-link>
+            <ids-footnote>
+              <p>
+                <code>animation:&nbsp;false</code> at the
+                <code>options</code> level.
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            One bar / label per time unit. For example, data arriving at sub-day
+            granularity is aggregated by day before rendering.
+          </li>
+
+          <li>
+            Bars fill the full category width with a small gap between
+            <ids-footnote-link>them.</ids-footnote-link>
+            <ids-footnote>
+              <p>
+                <code>categoryPercentage:&nbsp;1</code>,
+                <code>barPercentage:&nbsp;0.92</code> — set at the
+                <code>options</code> level.
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            All colors come from CSS
+            <ids-footnote-link>tokens.</ids-footnote-link>
+            <ids-footnote>
+              <p>
+                Chart-specific palette tokens use the&nbsp;<code class="accent"
+                  >--m__chart-*</code
+                >&nbsp;prefix.
+              </p>
+              <p>
+                Grid and tick colors are read from
+                <code class="accent">--m__text-color</code> and
+                <code class="accent">--m__text-caption-color</code> via
+                <code>getComputedStyle</code>. Grid color is derived as
+                <code
+                  >color-mix(in&nbsp;srgb,&nbsp;--m__text-color&nbsp;12%,&nbsp;transparent)</code
+                >. Palette tokens are defined in <code>tokens/colors.css</code>.
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            Theme-aware re-rendering. When the theme class on the body element
+            <ids-footnote-link>changes,</ids-footnote-link> all charts are
+            destroyed and re-created with fresh colors from CSS variables.
+            <ids-footnote>
+              <p>
+                A <code>MutationObserver</code> watches the
+                <code>class</code> attribute on <code>&lt;body&gt;</code>.
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            Legend at the bottom with round 8&times;8
+            <ids-footnote-link>markers</ids-footnote-link> shown only when there
+            is more than one
+            <ids-footnote-link>dataset.</ids-footnote-link>
+            <ids-footnote>
+              <p>
+                <code>position:&nbsp;"bottom"</code>,
+                <code>labels.usePointStyle:&nbsp;true</code>,
+                <code>labels.pointStyle:&nbsp;"circle"</code>,
+                <code>labels.boxWidth:&nbsp;8</code>,
+                <code>labels.boxHeight:&nbsp;8</code>.
+              </p>
+            </ids-footnote>
+            <ids-footnote>
+              <p>
+                <code>plugins.legend.display:&nbsp;false</code> for
+                single-dataset charts.
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            X-axis labels stay
+            <ids-footnote-link>horizontal.</ids-footnote-link> At narrow widths
+            labels are auto-skipped rather than rotated.
+            <ids-footnote>
+              <p>
+                <code>ticks.maxRotation:&nbsp;0</code>
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            Smart X-axis labels. The first label on the axis and the first label
+            of each new month include the abbreviated month name; all other
+            labels show only the day
+            <ids-footnote-link>number.</ids-footnote-link>
+            <ids-footnote>
+              <p>
+                The formatter tracks the current month while iterating through
+                sorted dates. On month change (or at index&nbsp;0) it outputs
+                <code
+                  >toLocaleDateString("en-US",
+                  {&nbsp;month:&nbsp;"short",&nbsp;day:&nbsp;"numeric"&nbsp;})</code
+                >; otherwise — <code>d.getDate()</code>.
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            Gradient fill when the axis does not start at zero. The filled area
+            fades to transparent in the
+            <ids-footnote-link>bottom 1/3.</ids-footnote-link>
+            <ids-footnote>
+              <p>
+                A <code>CanvasGradient</code> runs from
+                <code>chartArea.top</code> to <code>chartArea.bottom</code> with
+                stops at <code>0&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0.35)</code>,
+                <code>0.67&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0.35)</code>,
+                <code>1&nbsp;&rarr;&nbsp;rgba(…,&nbsp;0)</code>. Base color:
+                <code class="accent">--m__chart-default-color</code>. Y-axis
+                uses <code>grace:&nbsp;"25%"</code>.
+              </p>
+            </ids-footnote>
+          </li>
+          <li>
+            Hover interaction. Moving the cursor over a chart activates a
+            vertical index zone spanning the full chart height — the active
+            position corresponds to a single day, not to individual shapes or
+            points. On line charts a
+            <ids-footnote-link>dot</ids-footnote-link> appears at the data
+            point; on bar charts the hovered column is
+            <ids-footnote-link>brightened.</ids-footnote-link>
+            <ids-footnote>
+              <p>
+                <code>pointHoverRadius:&nbsp;2.5</code> with
+                <code>pointRadius:&nbsp;0</code> on the dataset; hover color is
+                <code>rgbToRgba(baseRgb,&nbsp;0.9)</code>.
+              </p>
+            </ids-footnote>
+            <ids-footnote>
+              <p>
+                <code
+                  >interaction:&nbsp;{&nbsp;mode:&nbsp;"index",&nbsp;intersect:&nbsp;false&nbsp;}</code
+                >
+                on all charts. Bar hover color uses
+                <code
+                  >hoverBackgroundColor:&nbsp;lightenColor(color,&nbsp;0.35)</code
+                >
+                — mixes the base color with white to brighten consistently in
+                both light and dark themes.
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            Status bar on line
+            <ids-footnote-link>charts.</ids-footnote-link> While hovering, a
+            reserved single line below the chart shows the date and value for
+            that position. The line is empty when the cursor is outside the
+            chart area.
+            <ids-footnote>
+              <p>
+                A <code>&lt;p class="chart-status-bar"&gt;</code> element sits
+                below the chart container; its <code>innerHTML</code> is
+                replaced on <code>mousemove</code> and cleared on
+                <code>mouseleave</code>. Values are read with
+                <code
+                  >chart.getElementsAtEventForMode(e,&nbsp;"index",&nbsp;{&nbsp;intersect:&nbsp;false&nbsp;})</code
+                >. <code>min-height:&nbsp;1.3em</code> reserves the space so the
+                widget height does not change.
+              </p>
+            </ids-footnote>
+          </li>
+
+          <li>
+            Merged legend and status bar on bar
+            <ids-footnote-link>charts.</ids-footnote-link> The legend below the
+            chart doubles as a hover status bar: by default it shows colored
+            dots with dataset labels; while hovering it transforms to show the
+            date followed by each label with its colored value.
+            <ids-footnote>
+              <p>
+                A <code>&lt;div class="chart-legend"&gt;</code> element is
+                populated with <code>innerHTML</code> on every render and
+                updated on <code>mousemove</code> / <code>mouseleave</code>.
+                Chart.js built-in legend is disabled
+                (<code>plugins.legend.display:&nbsp;false</code>).
+              </p>
+            </ids-footnote>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="m__space S"></div>
+</div>
+
+{% endblock %}

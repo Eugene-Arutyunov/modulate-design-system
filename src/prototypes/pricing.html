@@ -18,29 +18,21 @@ permalink: /pricing/
     </div>
     <div class="m__space XS"></div>
 
-    <!-- EXPERIMENT: four family columns with playground-style model links.
+    <!-- EXPERIMENT: five columns with playground-style model links.
          Styles are inlined here on purpose so the design system is not touched. -->
     <style>
       .models-nav {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        gap: var(--m__space-s);
         width: 100%;
-        padding: calc(var(--m__space-xxs) * 2) var(--m__space-xxs) 1em;
+        padding: 0.2rem 0.5rem;
         background-color: var(--m__bg-surface-color);
 
-        & .models-nav__col {
-          display: flex;
-          flex-direction: column;
-          gap: 0.15em;
-          width: max-content;
-          flex: 0 0 auto;
-          padding-right: 1.5rem;
+        & .models-nav__table {
+          border-collapse: collapse;
         }
 
-        & .models-nav__group {
-          padding: 0 0 0.35rem 0.6rem;
+        & th {
+          padding: 0.4rem 1.25rem 0.4rem 0.75rem;
+          border-bottom: 1px solid var(--m__ui-border-color);
           font-family: var(--m__font-semi-mono);
           font-size: var(--m__font-size-s);
           font-weight: var(--m__font-weight-regular);
@@ -48,26 +40,29 @@ permalink: /pricing/
           letter-spacing: 0.06em;
           color: var(--m__text-caption-color);
           white-space: nowrap;
+          text-align: left;
+          position: static;
+          background-color: transparent;
+        }
+
+        & td {
+          padding: 0;
+          vertical-align: top;
         }
 
         & .models-nav__models {
           display: flex;
           flex-direction: column;
           gap: 0.15em;
-          width: max-content;
-        }
-
-        & .models-nav__models--grid {
-          display: grid;
-          grid-template-columns: repeat(2, max-content);
-          gap: 0.15em;
+          padding-top: 0.15em;
+          padding-bottom: 1em;
         }
 
         & .models-nav__link {
           display: flex;
           align-items: center;
           gap: 0.45rem;
-          padding: 0.4rem 0.6rem 0.4rem 0.5rem;
+          padding: 0.45rem 1.25rem 0.45rem 0.75rem;
           border-radius: 0.5rem;
           color: var(--m__text-color);
           text-decoration: none;
@@ -85,117 +80,220 @@ permalink: /pricing/
         }
 
         & .models-nav__link-icon {
-          width: 1.3rem;
-          height: 1.3rem;
+          width: 1.25rem;
+          height: 1.25rem;
           color: currentColor;
           fill: currentColor;
           flex-shrink: 0;
         }
 
-        @media (width < 480px) {
-          & .models-nav__models--grid {
-            grid-template-columns: max-content;
-          }
+        & .models-nav__tier-price {
+          padding: 0.35rem 1.25rem 0.4rem 0.75rem;
+          font-size: var(--m__font-size-s);
+          font-weight: var(--m__font-weight-regular);
+          color: var(--m__text-caption-color);
+          white-space: nowrap;
+          line-height: 1.3;
         }
       }
     </style>
 
     <nav class="models-nav m__rounded" aria-label="Models">
-      <div class="models-nav__col">
-        <div class="models-nav__group">Signal Escalation</div>
-        <div class="models-nav__models">
-          <a href="#velma" class="models-nav__link">
-            <svg
-              class="models-nav__link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#velma"></use>
-            </svg>
-            <span>Velma</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="models-nav__col">
-        <div class="models-nav__group">Redaction</div>
-        <div class="models-nav__models">
-          <a href="#pii-phi-redaction" class="models-nav__link">
-            <svg
-              class="models-nav__link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#redaction"></use>
-            </svg>
-            <span>PII/PHI</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="models-nav__col">
-        <div class="models-nav__group">Transcription</div>
-        <div class="models-nav__models">
-          <a href="#transcription" class="models-nav__link">
-            <svg
-              class="models-nav__link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#transcript"></use>
-            </svg>
-            <span>Multilingual</span>
-          </a>
-          <span class="models-nav__link">
-            <svg
-              class="models-nav__link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#stt-med"></use>
-            </svg>
-            <span>Medical</span>
-          </span>
-        </div>
-      </div>
-
-      <div class="models-nav__col">
-        <div class="models-nav__group">Detection</div>
-        <div class="models-nav__models models-nav__models--grid">
-          <a href="#deepfake-detection" class="models-nav__link">
-            <svg
-              class="models-nav__link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#deepfake"></use>
-            </svg>
-            <span>Deepfake</span>
-          </a>
-          <a href="#music-speech-detection" class="models-nav__link">
-            <svg
-              class="models-nav__link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#music"></use>
-            </svg>
-            <span>Music &amp; Speech</span>
-          </a>
-          <a href="#language-detection" class="models-nav__link">
-            <svg
-              class="models-nav__link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#language"></use>
-            </svg>
-            <span>Language</span>
-          </a>
-          <span class="models-nav__link">
-            <svg
-              class="models-nav__link-icon"
-              viewBox="0 0 32 32"
-              aria-hidden="true">
-              <use href="#ai-music"></use>
-            </svg>
-            <span>AI Music</span>
-          </span>
-        </div>
-      </div>
+      <table class="models-nav__table">
+        <thead>
+          <tr>
+            <th scope="col">Escalation</th>
+            <th scope="col">Analysis</th>
+            <th scope="col">Redaction</th>
+            <th scope="col">Transcription</th>
+            <th scope="col">Detection</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="models-nav__models">
+                <a href="#velma" class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#velma"></use>
+                  </svg>
+                  <span>Velma</span>
+                </a>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#velma"></use>
+                  </svg>
+                  <span>Velma Mini</span>
+                </span>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#overview"></use>
+                  </svg>
+                  <span>ToxMod</span>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="models-nav__models">
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#velma"></use>
+                  </svg>
+                  <span>Velma</span>
+                </span>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#velma"></use>
+                  </svg>
+                  <span>Velma Agentic</span>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="models-nav__models">
+                <a href="#pii-phi-redaction" class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#redaction"></use>
+                  </svg>
+                  <span>PII/PHI</span>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="models-nav__models">
+                <a href="#transcription" class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#transcript"></use>
+                  </svg>
+                  <span>Multilingual</span>
+                </a>
+                <a href="#transcription" class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#transcript"></use>
+                  </svg>
+                  <span>English Fast</span>
+                </a>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#stt-med"></use>
+                  </svg>
+                  <span>Medical</span>
+                </span>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#transcript"></use>
+                  </svg>
+                  <span>Agentic</span>
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="models-nav__models">
+                <a href="#deepfake-detection" class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#deepfake"></use>
+                  </svg>
+                  <span>Deepfake</span>
+                </a>
+                <a href="#language-detection" class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#language"></use>
+                  </svg>
+                  <span>Language</span>
+                </a>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#ai-music"></use>
+                  </svg>
+                  <span>AI Music &amp; Singing</span>
+                </span>
+                <a href="#music-speech-detection" class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#music"></use>
+                  </svg>
+                  <span>Music &amp; Speech</span>
+                </a>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#emotions"></use>
+                  </svg>
+                  <span>Emotion</span>
+                </span>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#overview"></use>
+                  </svg>
+                  <span>Voicemail</span>
+                </span>
+                <span class="models-nav__link">
+                  <svg
+                    class="models-nav__link-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true">
+                    <use href="#overview"></use>
+                  </svg>
+                  <span>Audio Event</span>
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="models-nav__tier-price">$0.75–2.00/hr</td>
+            <td class="models-nav__tier-price">$0.35–0.50/hr</td>
+            <td class="models-nav__tier-price">$0.05–0.08/hr</td>
+            <td class="models-nav__tier-price">$0.025–0.15/hr</td>
+            <td class="models-nav__tier-price">$0.01–0.25/hr</td>
+          </tr>
+        </tbody>
+      </table>
     </nav>
 
     <div class="m__space L"></div>

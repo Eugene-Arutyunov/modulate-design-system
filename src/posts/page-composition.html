@@ -1,0 +1,59 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'The Page Composition
+Rule — Modulate Design System' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space L"></div>
+  <div class="m__text-width">
+    <time class="post-date">April 7, 2026</time>
+    <h1>The Page Composition Rule</h1>
+
+    <p>Page composition follows a single rule:</p>
+
+    <blockquote>
+      <p>
+        A section can consist of one or more widgets, or of a text-content
+        block; but a section cannot contain more than one text-content block,
+        and a section cannot have widgets and text content sitting side by side.
+      </p>
+    </blockquote>
+
+    <p>Three primitives:</p>
+
+    <ul>
+      <li>
+        <strong>Section</strong> — rectangular container, full width, occupying
+        the full column.
+      </li>
+      <li>
+        <strong>Widget</strong> — interactive element or data presentation,
+        rendered as a card with rounded corners.
+      </li>
+      <li>
+        <strong>Text-content</strong> — free-form HTML with shared styles.
+      </li>
+    </ul>
+
+    <p>Why such strict rules?</p>
+
+    <p>
+      First: it brings maximum clarity about what developers can expect from
+      designers — and what designers can expect from developers. The rule is
+      defined once and applies everywhere.
+    </p>
+
+    <p>
+      Second: the rules aren't actually that strict. One section can hold any
+      number of widgets. Another can hold rich freeform text. Nesting and
+      composition happen at the section level upward, not inside the section.
+    </p>
+
+    <p>
+      The gain is in isolating objects so they don't affect each other. A widget
+      never needs to know about text; text never needs to adapt to widget
+      presence. Each object is responsible for itself.
+    </p>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}
