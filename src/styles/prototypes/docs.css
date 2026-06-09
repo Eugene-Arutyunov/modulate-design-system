@@ -113,9 +113,18 @@
   width: 100%;
 }
 
+.models-pricing-table.models-pricing-table--5 {
+  width: 100%;
+}
+
 .models-pricing-table.models-pricing-table--3 {
   --models-col-scale: 0.75;
   width: 75%;
+}
+
+.models-pricing-table.models-pricing-table--2 {
+  --models-col-scale: 0.65;
+  width: 65%;
 }
 
 /* Match pixel widths of the 4-column table: col % ÷ table scale */
@@ -129,6 +138,31 @@
   width: calc(80% / 3);
 }
 
+/* 5-column table: label col + 4 equal model columns */
+.models-pricing-table--5 col:nth-child(1) {
+  width: 16%;
+}
+
+.models-pricing-table--5 col:nth-child(2),
+.models-pricing-table--5 col:nth-child(3),
+.models-pricing-table--5 col:nth-child(4),
+.models-pricing-table--5 col:nth-child(5) {
+  width: 21%;
+}
+
+/* Grouped column headers (e.g. "English Fast" spanning Batch + Streaming) */
+.models-pricing-table__group-header {
+  font-weight: 600;
+  border-bottom: 1px solid var(--m__text-color);
+}
+
+/* Sub-labels in second thead row of grouped tables */
+.models-pricing-table--5 thead tr:nth-child(2) th {
+  font-size: var(--m__font-size-s);
+  color: var(--m__text-caption-color);
+  font-weight: var(--m__font-weight-regular);
+}
+
 .models-pricing-table--3 col:nth-child(1) {
   width: calc(20% / var(--models-col-scale));
 }
@@ -137,6 +171,15 @@
 .models-pricing-table--3 col:nth-child(2),
 .models-pricing-table--3 col:nth-child(3) {
   width: calc((100% - 20% / var(--models-col-scale)) / 2);
+}
+
+.models-pricing-table--2 col:nth-child(1) {
+  width: calc(22% / var(--models-col-scale));
+}
+
+/* Split remainder so columns sum to 100% */
+.models-pricing-table--2 col:nth-child(2) {
+  width: calc(100% - 22% / var(--models-col-scale));
 }
 
 .models-pricing-table th {

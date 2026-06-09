@@ -153,14 +153,13 @@ Static files committed to the repo; served as-is by Eleventy passthrough copy (`
 
 ---
 
-## Models page
+## Pricing page
 
-**Page:** `src/prototypes/models.html`  
-**Permalink:** `/models/`  
-**Script:** `src/assets/prototypes/models.js`  
+**Page:** `src/prototypes/pricing.html`  
+**Permalink:** `/pricing/`  
 **Styles:** `src/styles/prototypes/docs.css` (shared with docs)
 
-Public models/pricing page. Uses `landing-layout.html`. Loads model list from `/assets/data/models.json` and renders one `.pricing-card` per model with base cost, feature costs, quotas, and accepted formats. The nav item is called "Models" in all three nav variants (landing, bar, popover). Works fully without a backend.
+Public pricing page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. Six tabbed sections via `ids-navbar` / `ids-nav-item`: Velma, Transcription, Deepfake Detection, PII/PHI Redaction, Music & Speech Detection, Language Detection. Each section has an intro paragraph (where applicable) and a feature/pricing comparison table. Transcription uses a 5-column grouped-header table (English Fast Batch/Streaming + Multilingual Batch/Streaming); Language Detection uses a 2-column single-model table. The nav item is called "Pricing" in all three nav variants (landing, bar, popover). Works fully without a backend.
 
 ---
 

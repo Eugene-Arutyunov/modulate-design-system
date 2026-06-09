@@ -1,6 +1,6 @@
 ---
-pageTitle: Models
-permalink: /models/
+pageTitle: Pricing
+permalink: /pricing/
 ---
 
 {% extends 'prototypes/landing-layout.html' %} {% block content %}
@@ -8,12 +8,12 @@ permalink: /models/
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <main>
-    <h1 class="loud">Velma Models</h1>
+    <h1 class="loud">Model Pricing</h1>
     <div class="m__text-width">
       <p class="loud">
-        Velma handles transcription, music &amp; speech detection, emotion,
-        accent, and engagement detection across 70+ languages. Choose the model
-        that fits your use case.
+        Understand voice and audio through a suite of leading audio-native AI
+        models, with options for latency-sensitive real-time applications,
+        large-scale batch uploads, and anything in between.
       </p>
     </div>
     <div class="m__space XS"></div>
@@ -22,22 +22,40 @@ permalink: /models/
   </main>
 </div>
 
-<ids-nav-item id="transcription" label="Transcription">
+<ids-nav-item id="velma" label="Velma">
   <div class="m__wrapper">
     <div class="m__space M"></div>
 
     <h2 class="models-section-heading">
       <span class="models-section-heading__icon" aria-hidden="true">
         <svg viewBox="0 0 32 32">
-          <use href="#transcript"></use>
+          <use href="#velma"></use>
         </svg>
       </span>
-      <span>Transcription</span>
+      <span>Velma</span>
     </h2>
+    <div class="m__text-width">
+      <p>
+        Our flagship conversation-understanding audio-native model. It analyzes
+        the call itself, not just a transcript.
+      </p>
+      <p>
+        Its core feature is behaviors: describe what to watch for in plain
+        language, and Velma flags each instance with a confidence score, its
+        reasoning, and the clips it fired on. It ships with 146 behavior
+        templates across safety, compliance, and customer experience. Edit them
+        or write your own.
+      </p>
+      <p>
+        Every call also returns a diarized transcript, the conversation type,
+        each speaker's role, topics with per-speaker sentiment, and a summary.
+        It detects emotion, accent, deepfakes, and PII/PHI.
+      </p>
+      <p>Available as a batch REST API and a real-time streaming WebSocket.</p>
+    </div>
     <div class="pricing-table-wrap">
-      <table class="models-pricing-table models-pricing-table--4">
+      <table class="models-pricing-table models-pricing-table--3">
         <colgroup>
-          <col />
           <col />
           <col />
           <col />
@@ -52,17 +70,7 @@ permalink: /models/
                     <use href="#batch"></use>
                   </svg>
                 </span>
-                <span>Batch English Fast</span>
-              </span>
-            </th>
-            <th>
-              <span class="models-column-heading">
-                <span class="models-column-heading__icon" aria-hidden="true">
-                  <svg viewBox="0 0 32 32">
-                    <use href="#batch"></use>
-                  </svg>
-                </span>
-                <span>Batch Multilingual</span>
+                <span>Batch</span>
               </span>
             </th>
             <th>
@@ -72,7 +80,260 @@ permalink: /models/
                     <use href="#streaming"></use>
                   </svg>
                 </span>
-                <span>Streaming Multilingual</span>
+                <span>Streaming</span>
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Description</td>
+            <td>
+              Full conversation understanding for recordings — one REST call
+              returns a diarized transcript, conversation type, speaker roles,
+              topics, sentiment, a summary, and every behavior you configure
+            </td>
+            <td>
+              Real-time conversation understanding over WebSocket — clips,
+              behavior detections, and aggregate results are emitted
+              progressively as audio streams in
+            </td>
+          </tr>
+
+          <tr>
+            <td>API</td>
+            <td>REST API</td>
+            <td>WebSocket</td>
+          </tr>
+
+          <tr>
+            <td>Accepted Files</td>
+            <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
+            <td>AAC, AIFF, FLAC, MP3, OGG, WAV, WebM + raw PCM formats</td>
+          </tr>
+
+          <tr>
+            <td>Concurrency Quota</td>
+            <td>5 concurrent requests</td>
+            <td>5 concurrent requests</td>
+          </tr>
+
+          <tr>
+            <td>Monthly Usage Quota</td>
+            <td>1,000 hours</td>
+            <td>1,000 hours</td>
+          </tr>
+
+          <tr>
+            <td>Pricing</td>
+            <td><strong>$1.25 / hour</strong></td>
+            <td><strong>$1.25 / hour</strong></td>
+          </tr>
+
+          <tr class="models-table-group-row">
+            <td colspan="3"><h6>Dynamic Behaviors</h6></td>
+          </tr>
+
+          <tr>
+            <td>Fully Customizable</td>
+            <td colspan="2">
+              Define exactly what Velma should detect in plain language — a name
+              and a description — and scope each behavior to specific
+              conversation types or speaker roles
+            </td>
+          </tr>
+
+          <tr>
+            <td>Behavior Templates</td>
+            <td colspan="2">
+              146 ready-made behaviors to get you started, spanning safety,
+              compliance, and customer experience — use any as-is or as a
+              starting point for your own
+            </td>
+          </tr>
+
+          <tr>
+            <td>Confidence Scoring</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Reasoning per Detection</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Evidence Clips</td>
+            <td colspan="2">
+              Every detection links the clips it fired on, with a single
+              definitive clip
+            </td>
+          </tr>
+
+          <tr class="models-table-group-row">
+            <td colspan="3"><h6>Returned on Every Call</h6></td>
+          </tr>
+
+          <tr>
+            <td>Diarized Transcription</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Word-Level Timestamps</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Language</td>
+            <td colspan="2">
+              Detected per clip; optionally set a language hint for the
+              conversation
+            </td>
+          </tr>
+
+          <tr>
+            <td>Conversation Type</td>
+            <td colspan="2">
+              Inferred for the session with a confidence score and reasoning —
+              or set your own default
+            </td>
+          </tr>
+
+          <tr>
+            <td>Participant Roles</td>
+            <td colspan="2">
+              Per-speaker role inference (e.g. agent vs. caller) with confidence
+              and reasoning
+            </td>
+          </tr>
+
+          <tr>
+            <td>Topics</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Topic Sentiment</td>
+            <td colspan="2">
+              Per-speaker sentiment for each topic, scored from −1 to 1
+            </td>
+          </tr>
+
+          <tr>
+            <td>Conversation Summary</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr class="models-table-group-row">
+            <td colspan="3"><h6>Optional Signals</h6></td>
+          </tr>
+
+          <tr>
+            <td>Emotion Detection</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Accent Identification</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+
+          <tr>
+            <td>Deepfake Score</td>
+            <td colspan="2">Per-clip synthetic-voice score from 0 to 1</td>
+          </tr>
+
+          <tr>
+            <td>PII/PHI Tagging</td>
+            <td>✓</td>
+            <td>✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="m__space XL"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="transcription" label="Transcription">
+  <div class="m__wrapper">
+    <div class="m__space M"></div>
+
+    <h2 class="models-section-heading">
+      <span class="models-section-heading__icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32">
+          <use href="#transcript"></use>
+        </svg>
+      </span>
+      <span>Transcription</span>
+    </h2>
+    <div class="pricing-table-wrap">
+      <table class="models-pricing-table models-pricing-table--5">
+        <colgroup>
+          <col />
+          <col />
+          <col />
+          <col />
+          <col />
+        </colgroup>
+        <thead>
+          <tr>
+            <th rowspan="2"></th>
+            <th colspan="2" class="models-pricing-table__group-header">
+              English Fast
+            </th>
+            <th colspan="2" class="models-pricing-table__group-header">
+              Multilingual
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <span class="models-column-heading">
+                <span class="models-column-heading__icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <use href="#batch"></use>
+                  </svg>
+                </span>
+                <span>Batch</span>
+              </span>
+            </th>
+            <th>
+              <span class="models-column-heading">
+                <span class="models-column-heading__icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <use href="#streaming"></use>
+                  </svg>
+                </span>
+                <span>Streaming</span>
+              </span>
+            </th>
+            <th>
+              <span class="models-column-heading">
+                <span class="models-column-heading__icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <use href="#batch"></use>
+                  </svg>
+                </span>
+                <span>Batch</span>
+              </span>
+            </th>
+            <th>
+              <span class="models-column-heading">
+                <span class="models-column-heading__icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <use href="#streaming"></use>
+                  </svg>
+                </span>
+                <span>Streaming</span>
               </span>
             </th>
           </tr>
@@ -83,6 +344,10 @@ permalink: /models/
             <td>
               High-throughput English batch processing with &gt;200x real-time
               speed
+            </td>
+            <td>
+              Low-latency English streaming transcription via WebSocket with
+              real-time partial transcripts
             </td>
             <td>
               Multilingual batch transcription in 70+ languages with full
@@ -96,13 +361,16 @@ permalink: /models/
           <tr>
             <td>API</td>
             <td>REST API</td>
+            <td>WebSocket</td>
             <td>REST API</td>
             <td>WebSocket</td>
           </tr>
 
           <tr>
             <td>Accepted Files</td>
-            <td colspan="3">
+            <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
+            <td>AAC, AIFF, FLAC, MP3, OGG, WAV, WebM + raw PCM formats</td>
+            <td colspan="2">
               AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM
             </td>
           </tr>
@@ -112,10 +380,12 @@ permalink: /models/
             <td>25 concurrent requests</td>
             <td>5 concurrent requests</td>
             <td>5 concurrent requests</td>
+            <td>5 concurrent requests</td>
           </tr>
 
           <tr>
             <td>Monthly Usage Quota</td>
+            <td>10,000 hours</td>
             <td>10,000 hours</td>
             <td>1,000 hours</td>
             <td>1,000 hours</td>
@@ -124,16 +394,18 @@ permalink: /models/
           <tr>
             <td>Pricing</td>
             <td><strong>$0.025 / hour</strong></td>
+            <td><strong>$0.05 / hour</strong></td>
             <td><strong>$0.03 / hour</strong></td>
             <td><strong>$0.06 / hour</strong></td>
           </tr>
 
           <tr class="models-table-group-row">
-            <td colspan="4"><h6>Built-in features</h6></td>
+            <td colspan="5"><h6>Built-in features</h6></td>
           </tr>
 
           <tr>
             <td>Transcription</td>
+            <td>✓</td>
             <td>✓</td>
             <td>✓</td>
             <td>✓</td>
@@ -144,10 +416,12 @@ permalink: /models/
             <td>✓</td>
             <td>✓</td>
             <td>✓</td>
+            <td>✓</td>
           </tr>
 
           <tr>
             <td>Auto Punctuation</td>
+            <td>✓</td>
             <td>✓</td>
             <td>✓</td>
             <td>✓</td>
@@ -156,6 +430,7 @@ permalink: /models/
           <tr>
             <td>Language</td>
             <td>English</td>
+            <td>English</td>
             <td>70+ languages</td>
             <td>70+ languages</td>
           </tr>
@@ -163,16 +438,18 @@ permalink: /models/
           <tr>
             <td>Real-Time</td>
             <td></td>
+            <td>✓</td>
             <td></td>
             <td>✓</td>
           </tr>
 
           <tr class="models-table-group-row">
-            <td colspan="4"><h6>Optional features</h6></td>
+            <td colspan="5"><h6>Optional features</h6></td>
           </tr>
 
           <tr>
             <td>Speaker Diarization</td>
+            <td></td>
             <td></td>
             <td>✓</td>
             <td>✓</td>
@@ -181,12 +458,14 @@ permalink: /models/
           <tr>
             <td>Emotion Detection</td>
             <td></td>
+            <td></td>
             <td>✓</td>
             <td>✓</td>
           </tr>
 
           <tr>
             <td>Accent Identification</td>
+            <td></td>
             <td></td>
             <td>✓</td>
             <td>✓</td>
@@ -195,12 +474,22 @@ permalink: /models/
           <tr>
             <td>PII/PHI Tagging</td>
             <td></td>
-            <td>✓</td>
-            <td>✓</td>
+            <td></td>
+            <td><strong>$0.02 / hour</strong></td>
+            <td><strong>$0.02 / hour</strong></td>
+          </tr>
+
+          <tr>
+            <td>Deepfake Detection</td>
+            <td></td>
+            <td></td>
+            <td><strong>$0.25 / hour</strong></td>
+            <td><strong>$0.25 / hour</strong></td>
           </tr>
         </tbody>
       </table>
     </div>
+    <div class="m__space XL"></div>
   </div>
 </ids-nav-item>
 
@@ -297,7 +586,10 @@ permalink: /models/
           <tr>
             <td>Accepted Files</td>
             <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
-            <td>Raw 16kHz mono PCM (int16 LE)</td>
+            <td>
+              WAV, AIFF, FLAC, MP3, AAC, OGG, WebM, and raw PCM (various bit
+              depths and encodings)
+            </td>
           </tr>
 
           <tr>
@@ -490,7 +782,7 @@ permalink: /models/
 
           <tr>
             <td>Government IDs</td>
-            <td colspan="2">SSN, passport, driver’s license</td>
+            <td colspan="2">SSN, passport, driver's license</td>
           </tr>
 
           <tr>
@@ -709,6 +1001,139 @@ permalink: /models/
             <td>First Result</td>
             <td>After full file upload and processing</td>
             <td>After first ~192ms of audio</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="m__space XL"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="language-detection" label="Language Detection">
+  <div class="m__wrapper">
+    <div class="m__space M"></div>
+
+    <h2 class="models-section-heading">
+      <span class="models-section-heading__icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32">
+          <use href="#language"></use>
+        </svg>
+      </span>
+      <span>Language Detection</span>
+    </h2>
+    <div class="m__text-width">
+      <p>
+        Velma-2 Language Detection identifies the spoken language of an audio
+        file from 100 supported languages, returning a human-readable language
+        name, an ISO 639-1 code, and a confidence score in a single synchronous
+        request. Only the first 30 seconds of audio are analyzed.
+      </p>
+    </div>
+    <div class="pricing-table-wrap">
+      <table class="models-pricing-table models-pricing-table--2">
+        <colgroup>
+          <col />
+          <col />
+        </colgroup>
+        <tbody>
+          <tr>
+            <td>Description</td>
+            <td>
+              Identify the spoken language of an audio file in a single
+              synchronous request — returns the language name, its ISO code, and
+              a confidence score
+            </td>
+          </tr>
+
+          <tr>
+            <td>API</td>
+            <td>REST API</td>
+          </tr>
+
+          <tr>
+            <td>Accepted Files</td>
+            <td>AAC, AIFF, FLAC, MOV, MP3, MP4, OGG, Opus, WAV, WebM</td>
+          </tr>
+
+          <tr>
+            <td>Maximum File Size</td>
+            <td>100 MB</td>
+          </tr>
+
+          <tr>
+            <td>Analysis Window</td>
+            <td>
+              First 30 seconds of audio (longer files are accepted, but the
+              additional audio is ignored)
+            </td>
+          </tr>
+
+          <tr>
+            <td>Language Coverage</td>
+            <td>
+              100 spoken languages
+              <details>
+                <summary>Show all</summary>
+                Afrikaans, Albanian, Amharic, Arabic, Armenian, Assamese,
+                Azerbaijani, Bashkir, Basque, Belarusian, Bengali, Bosnian,
+                Breton, Bulgarian, Cantonese, Catalan, Chinese, Croatian, Czech,
+                Danish, Dutch, English, Estonian, Faroese, Finnish, French,
+                Galician, Georgian, German, Greek, Gujarati, Haitian Creole,
+                Hausa, Hawaiian, Hebrew, Hindi, Hungarian, Icelandic,
+                Indonesian, Italian, Japanese, Javanese, Kannada, Kazakh, Khmer,
+                Korean, Lao, Latin, Latvian, Lingala, Lithuanian, Luxembourgish,
+                Macedonian, Malagasy, Malay, Malayalam, Maltese, Maori, Marathi,
+                Mongolian, Myanmar, Nepali, Norwegian, Nynorsk, Occitan, Pashto,
+                Persian, Polish, Portuguese, Punjabi, Romanian, Russian,
+                Sanskrit, Serbian, Shona, Sindhi, Sinhala, Slovak, Slovenian,
+                Somali, Spanish, Sundanese, Swahili, Swedish, Tagalog, Tajik,
+                Tamil, Tatar, Telugu, Thai, Tibetan, Turkish, Turkmen,
+                Ukrainian, Urdu, Uzbek, Vietnamese, Welsh, Yiddish, Yoruba
+              </details>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Concurrency Quota</td>
+            <td>25 concurrent requests</td>
+          </tr>
+
+          <tr>
+            <td>Monthly Usage Quota</td>
+            <td>10,000 hours</td>
+          </tr>
+
+          <tr>
+            <td>Pricing</td>
+            <td><strong>$0.01 / hour</strong></td>
+          </tr>
+
+          <tr class="models-table-group-row">
+            <td colspan="2"><h6>Outputs</h6></td>
+          </tr>
+
+          <tr>
+            <td>Detected Language</td>
+            <td>Human-readable name (e.g. English, French, Mandarin)</td>
+          </tr>
+
+          <tr>
+            <td>Language Code</td>
+            <td>
+              Lowercase ISO 639-1 code (e.g. <code>en</code>, <code>fr</code>,
+              <code>zh</code>)
+            </td>
+          </tr>
+
+          <tr>
+            <td>Confidence Score</td>
+            <td>Probability from 0.0 to 1.0 for the predicted language</td>
+          </tr>
+
+          <tr>
+            <td>Audio Duration</td>
+            <td>Total decoded audio duration in milliseconds</td>
           </tr>
         </tbody>
       </table>
