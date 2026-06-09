@@ -667,10 +667,6 @@ a.auth-layout__icon-hover-zone {
   padding: var(--m__space-l) 0;
 }
 
-.auth-layout__footer .caption {
-  margin: 0;
-}
-
 .auth-form {
   width: 100%;
   max-width: 20rem;
@@ -731,6 +727,37 @@ a.auth-layout__icon-hover-zone {
       );
       transition-duration:
         var(--m__hover-transition-duration), var(--m__hover-transition-duration);
+    }
+  }
+
+  & .auth-form__agreement {
+    margin-bottom: var(--m__space-s);
+    font-size: var(--m__font-size-s);
+
+    & a {
+      display: inline-block;
+      padding-block: 0.35em;
+      margin-block: -0.35em;
+      line-height: 1;
+      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    }
+
+    &:hover:not(:has(a:hover)) a {
+      color: var(--m__text-hover-color);
+      transition-duration: var(--m__hover-transition-duration);
+    }
+
+    &:has(a:hover) {
+      color: var(--m__text-color);
+
+      & input[type="checkbox"]:not(:checked) {
+        border-color: var(--m__ui-border-color);
+      }
+
+      & input[type="checkbox"]:checked {
+        background-color: var(--m__bg-accent-color);
+        border-color: var(--m__bg-accent-color);
+      }
     }
   }
 
