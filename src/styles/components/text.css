@@ -8,7 +8,7 @@ b {
 }
 
 a {
-  color: var(--m__text-link-color);
+  color: var(--m__text-link);
   text-decoration: underline;
   will-change: color;
   text-decoration-thickness: 1px;
@@ -16,7 +16,7 @@ a {
   text-decoration-skip-ink: none;
   text-decoration-color: color-mix(
     in srgb,
-    var(--m__text-link-color) 20%,
+    var(--m__text-link) 20%,
     transparent
   );
   transition:
@@ -25,10 +25,10 @@ a {
       var(--m__transition-easing);
 
   &:hover {
-    color: var(--m__text-hover-color);
+    color: var(--m__text-link-hover);
     text-decoration-color: color-mix(
       in srgb,
-      var(--m__text-hover-color) 20%,
+      var(--m__text-link-hover) 20%,
       transparent
     );
     transition-duration:
@@ -55,7 +55,7 @@ h1.loud {
   font-size: var(--m__font-size-display);
   font-family: var(--m__font-gothic);
   font-weight: var(--m__font-weight-bold);
-  color: var(--m__text-color);
+  color: var(--m__text);
   line-height: 1;
 }
 
@@ -91,20 +91,20 @@ code {
   font-weight: var(--m__font-weight-regular);
   padding: 0.1em 0.25em;
   border-radius: 0.2rem;
-  color: var(--m__code-color);
-  border: 1px solid color-mix(in srgb, var(--m__code-color) 10%, transparent);
-  background: color-mix(in srgb, var(--m__code-color) 10%, transparent);
+  color: var(--m__text-code);
+  border: 1px solid color-mix(in srgb, var(--m__text-code) 10%, transparent);
+  background: color-mix(in srgb, var(--m__text-code) 10%, transparent);
 
   &.accent {
-    color: var(--m__code-accent-color);
+    color: var(--m__text-code-accent);
     border-color: color-mix(
       in srgb,
-      var(--m__code-accent-color) 10%,
+      var(--m__text-code-accent) 10%,
       transparent
     );
     background: color-mix(
       in srgb,
-      var(--m__code-accent-color) 10%,
+      var(--m__text-code-accent) 10%,
       transparent
     );
   }
@@ -142,7 +142,7 @@ ul {
 }
 
 pre {
-  background-color: var(--m__bg-surface-color);
+  background-color: var(--m__bg-surface);
   border-radius: var(--m__radius-s);
   padding: 0.5rem 0.7rem;
   overflow-x: auto;
@@ -161,12 +161,12 @@ pre {
 }
 
 .muted {
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 
 .caption {
   font-size: var(--m__font-size-s);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 
   & a {
     color: inherit;
@@ -177,7 +177,7 @@ pre {
     text-decoration-skip-ink: none;
     text-decoration-color: color-mix(
       in srgb,
-      var(--m__text-caption-color) 20%,
+      var(--m__text-caption) 20%,
       transparent
     );
     transition:
@@ -186,10 +186,10 @@ pre {
         var(--m__transition-easing);
 
     &:hover {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       text-decoration-color: color-mix(
         in srgb,
-        var(--m__text-hover-color) 20%,
+        var(--m__text-link-hover) 20%,
         transparent
       );
       transition-duration:

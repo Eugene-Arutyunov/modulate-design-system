@@ -63,9 +63,9 @@ segments:
       transition: filter var(--m__unhover-transition-duration) var(--m__transition-easing);
     }
     .aim-player-heat-cell:hover { filter: brightness(1.15); }
-    .aim-player-heat-cell[data-verdict="ai"]      { background: var(--m__ui-error-color); }
-    .aim-player-heat-cell[data-verdict="not-ai"]  { background: var(--m__ui-success-color); }
-    .aim-player-heat-cell[data-verdict="silence"] { background: var(--m__ui-border-color); opacity: 1 !important; }
+    .aim-player-heat-cell[data-verdict="ai"]      { background: var(--m__error); }
+    .aim-player-heat-cell[data-verdict="not-ai"]  { background: var(--m__success); }
+    .aim-player-heat-cell[data-verdict="silence"] { background: var(--m__border); opacity: 1 !important; }
 
     /* Verdict card ──────────────────────────────────────────────────────── */
     .aim-card {
@@ -77,7 +77,7 @@ segments:
       min-height: 6rem;
       padding: var(--m__space-s) var(--m__space-m);
       margin-bottom: var(--m__space-l);
-      background: var(--m__ui-error-color);
+      background: var(--m__error);
       color: white;
       text-align: center;
     }
@@ -102,19 +102,19 @@ segments:
 
     /* Detailed table ────────────────────────────────────────────────────── */
     .aim-detailed td:first-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .aim-verdict-ai     { color: var(--m__ui-error-color); }
-    .aim-verdict-not-ai { color: var(--m__ui-success-color); }
+    .aim-verdict-ai     { color: var(--m__error); }
+    .aim-verdict-not-ai { color: var(--m__success); }
     .aim-cell { display: flex; align-items: center; gap: 0.6rem; }
     .aim-bar {
       flex: 0 0 130px;
       height: 5px;
       border-radius: 3px;
-      background: var(--m__ui-border-color);
+      background: var(--m__border);
       overflow: hidden;
     }
-    .aim-bar-fill { height: 100%; border-radius: 3px; background: var(--m__ui-error-color); }
+    .aim-bar-fill { height: 100%; border-radius: 3px; background: var(--m__error); }
     .aim-pct { font-variant-numeric: tabular-nums; min-width: 3.6em; }
-    .aim-empty { color: var(--m__text-caption-color); }
+    .aim-empty { color: var(--m__text-caption); }
   </style>
 
   <div class="pg-results-table-section aim-detailed">

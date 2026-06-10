@@ -18,7 +18,7 @@ function formatCost(n) {
 }
 
 function statusColor(status) {
-  if (status === "released") return "var(--m__ui-success-color)";
+  if (status === "released") return "var(--m__success)";
   if (status === "preview") return "rgb(255, 160, 30)";
   return "";
 }

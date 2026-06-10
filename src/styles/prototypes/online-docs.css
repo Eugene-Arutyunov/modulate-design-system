@@ -283,8 +283,8 @@
 }
 
 .title-container {
-  background-color: var(--m__bg-accent-color);
-  color: var(--m__text-inverted-color);
+  background-color: var(--m__bg-accent);
+  color: var(--m__text-inverted);
   border-radius: var(--m__radius-l);
   margin-top: var(--m__space-m);
   margin-left: calc(-1 * var(--online-doc-title-bleed));
@@ -294,8 +294,8 @@
   flex-direction: column;
 
   &.dark-mode {
-    /* Mid between dark-mode --m__text-color rgb(180, 180, 190) and white. */
-    --m__text-color: rgb(218, 218, 223);
+    /* Mid between dark-mode --m__text rgb(180, 180, 190) and white. */
+    --m__text: rgb(218, 218, 223);
     /* Draft stops — long spans ≈ slow blend, short spans ≈ quick blend. */
     background-color: rgb(20, 20, 50);
     /* ~135deg ≈ to bottom right; smaller angle = a bit counter-clockwise. */
@@ -306,7 +306,7 @@
       rgb(50, 50, 70) 75%,
       rgb(255, 53, 84) 100%
     );
-    color: var(--m__text-color);
+    color: var(--m__text);
   }
 
   & h1,
@@ -352,26 +352,26 @@
 
   & a.title-container__logo-link {
     display: block;
-    color: var(--m__text-link-color);
+    color: var(--m__text-link);
     text-decoration: none;
     will-change: color;
     transition: color var(--m__unhover-transition-duration)
       var(--m__transition-easing);
 
     &:hover {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       transition-duration: var(--m__hover-transition-duration);
     }
   }
 
   & a[href^="mailto:"] {
-    color: var(--m__text-link-color);
+    color: var(--m__text-link);
     will-change: color;
     transition: color var(--m__unhover-transition-duration)
       var(--m__transition-easing);
 
     &:hover {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       transition-duration: var(--m__hover-transition-duration);
     }
   }

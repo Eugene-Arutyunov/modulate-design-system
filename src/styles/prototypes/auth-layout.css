@@ -25,8 +25,8 @@
     min-height: 100dvh;
     padding: var(--m__space-l) 1rem;
     border-radius: 0;
-    background-color: var(--m__background-color);
-    color: var(--m__text-color);
+    background-color: var(--m__bg);
+    color: var(--m__text);
 
     @media (width < 768px) {
       display: none;
@@ -51,7 +51,7 @@
 .auth-layout__right.dark-vibrant {
   --auth-layout-icon-bg: color-mix(
     in srgb,
-    var(--m__text-color) 45%,
+    var(--m__text) 45%,
     var(--auth-layout-icon-bg-active)
   );
   --auth-layout-icon-bg-active: rgb(255, 255, 255);
@@ -59,7 +59,7 @@
   & .auth-layout__icon-stack {
     --auth-layout-icon-shadow-color: color-mix(
       in srgb,
-      var(--m__background-color) 40%,
+      var(--m__bg) 40%,
       transparent
     );
   }
@@ -83,7 +83,7 @@
 
   &.light .auth-layout__icon-tile {
     background-color: var(--auth-layout-icon-bg);
-    color: var(--m__text-color);
+    color: var(--m__text);
     transition: background-color var(--m__unhover-transition-duration)
       var(--m__transition-easing);
   }
@@ -124,10 +124,10 @@ a.auth-layout__icon-hover-zone {
   pointer-events: none;
   background-color: color-mix(
     in srgb,
-    var(--m__text-color) 20%,
-    var(--m__background-color)
+    var(--m__text) 20%,
+    var(--m__bg)
   );
-  color: var(--m__text-color);
+  color: var(--m__text);
   filter: drop-shadow(0 0 0.5em var(--auth-layout-icon-shadow-color));
   transition:
     background-color var(--m__unhover-transition-duration)
@@ -573,14 +573,14 @@ a.auth-layout__icon-hover-zone {
   gap: var(--m__space-xs) var(--m__space-s);
 
   & a {
-    color: var(--m__text-color);
+    color: var(--m__text);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
     text-decoration-skip-ink: none;
     text-decoration-color: color-mix(
       in srgb,
-      var(--m__text-color) 35%,
+      var(--m__text) 35%,
       transparent
     );
     transition:
@@ -589,10 +589,10 @@ a.auth-layout__icon-hover-zone {
         var(--m__transition-easing);
 
     &:hover {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       text-decoration-color: color-mix(
         in srgb,
-        var(--m__text-hover-color) 35%,
+        var(--m__text-link-hover) 35%,
         transparent
       );
       transition-duration:
@@ -606,12 +606,12 @@ a.auth-layout__icon-hover-zone {
   margin: 0;
 
   & .auth-layout__promo-caption-lead {
-    color: var(--m__text-hover-color);
+    color: var(--m__text-link-hover);
     font-weight: var(--m__font-weight-bold);
   }
 
   & .auth-layout__promo-caption-tagline {
-    color: var(--m__text-color);
+    color: var(--m__text);
   }
 }
 
@@ -676,7 +676,7 @@ a.auth-layout__icon-hover-zone {
     font-size: 1.6rem;
     font-weight: 700;
     line-height: 1.2;
-    color: var(--m__text-accent-color);
+    color: var(--m__text-accent);
   }
 
   & .auth-form__oauth {
@@ -703,14 +703,14 @@ a.auth-layout__icon-hover-zone {
   & .auth-form__textfield-header a,
   & .auth-form__link {
     font-size: var(--m__font-size-s);
-    color: var(--m__text-link-color);
+    color: var(--m__text-link);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
     text-decoration-skip-ink: none;
     text-decoration-color: color-mix(
       in srgb,
-      var(--m__text-link-color) 20%,
+      var(--m__text-link) 20%,
       transparent
     );
     transition:
@@ -719,10 +719,10 @@ a.auth-layout__icon-hover-zone {
         var(--m__transition-easing);
 
     &:hover {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       text-decoration-color: color-mix(
         in srgb,
-        var(--m__text-hover-color) 20%,
+        var(--m__text-link-hover) 20%,
         transparent
       );
       transition-duration:
@@ -743,20 +743,20 @@ a.auth-layout__icon-hover-zone {
     }
 
     &:hover:not(:has(a:hover)) a {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       transition-duration: var(--m__hover-transition-duration);
     }
 
     &:has(a:hover) {
-      color: var(--m__text-color);
+      color: var(--m__text);
 
       & input[type="checkbox"]:not(:checked) {
-        border-color: var(--m__ui-border-color);
+        border-color: var(--m__border);
       }
 
       & input[type="checkbox"]:checked {
-        background-color: var(--m__bg-accent-color);
-        border-color: var(--m__bg-accent-color);
+        background-color: var(--m__bg-accent);
+        border-color: var(--m__bg-accent);
       }
     }
   }

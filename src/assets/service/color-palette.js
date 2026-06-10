@@ -18,6 +18,18 @@
     return color;
   }
 
+  function parseRgb(color) {
+    var m = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+    if (!m) return null;
+    return [Number(m[1]), Number(m[2]), Number(m[3])];
+  }
+
+  function isDarkBg(rgb) {
+    var l = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+    return l < 130;
+  }
+
+  /* Palette is theme-independent — collect once. */
   function collectPaletteByValue() {
     var byRgb = new Map();
     var probe = document.createElement("span");
@@ -52,42 +64,78 @@
     return byRgb;
   }
 
+  var paletteByRgb = null;
+  var entries = [];
+
+  function refreshEntry(entry) {
+    var bgRaw = getComputedStyle(entry.plate).backgroundColor;
+    var rgb = formatRgb(bgRaw);
+    entry.rgb = rgb;
+    entry.btn.textContent = rgb;
+
+    var parsed = parseRgb(bgRaw);
+    if (parsed) {
+      entry.plate.style.color = isDarkBg(parsed)
+        ? "var(--m__color-white)"
+        : "var(--m__color-gray-100)";
+    }
+
+    var name = paletteByRgb.get(rgb);
+    if (name) {
+      if (!entry.label) {
+        entry.label = document.createElement("span");
+        entry.label.className = "guide-color-plate__token";
+        entry.plate.insertBefore(entry.label, entry.btn);
+      }
+      entry.label.textContent = name;
+    } else if (entry.label) {
+      entry.label.remove();
+      entry.label = null;
+    }
+  }
+
+  function refreshAll() {
+    entries.forEach(refreshEntry);
+  }
+
   function initPlates() {
     var plates = document.querySelectorAll(".guide-color-plate");
     if (!plates.length) return;
 
-    var paletteByRgb = collectPaletteByValue();
+    paletteByRgb = collectPaletteByValue();
 
     plates.forEach(function (plate) {
       var btn = plate.querySelector(".guide-color-plate__value");
       if (!btn) return;
 
-      var computed = getComputedStyle(plate).backgroundColor;
-      var rgb = formatRgb(computed);
-      btn.textContent = rgb;
-
-      var paletteName = paletteByRgb.get(rgb);
-      if (paletteName) {
-        var label = plate.querySelector(".guide-color-plate__token");
-        if (!label) {
-          label = document.createElement("span");
-          label.className = "guide-color-plate__token";
-          plate.insertBefore(label, btn);
-        }
-        label.textContent = paletteName;
-      }
+      var entry = {
+        plate: plate,
+        btn: btn,
+        label: plate.querySelector(".guide-color-plate__token"),
+        rgb: "",
+      };
+      entries.push(entry);
 
       btn.addEventListener("click", function () {
-        navigator.clipboard.writeText(rgb);
+        navigator.clipboard.writeText(entry.rgb);
 
         var flash = document.createElement("span");
         flash.className = "guide-color-plate__flash";
-        flash.textContent = rgb;
+        flash.textContent = entry.rgb;
         btn.appendChild(flash);
         flash.addEventListener("animationend", function () {
           flash.remove();
         });
       });
+
+      refreshEntry(entry);
+    });
+
+    /* Re-read computed values when theme class flips on <body>. */
+    var observer = new MutationObserver(refreshAll);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
     });
   }
 

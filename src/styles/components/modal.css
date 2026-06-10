@@ -3,7 +3,7 @@
   inset: 0;
   background-color: color-mix(
     in srgb,
-    var(--m__bg-accent-color) 55%,
+    var(--m__bg-accent) 55%,
     transparent
   );
   z-index: 1000;
@@ -34,7 +34,7 @@
 }
 
 .m__modal {
-  background-color: var(--m__background-color);
+  background-color: var(--m__bg);
   border-radius: var(--m__radius-l);
   box-shadow: 0 8px 32px color-mix(in srgb, #000 18%, transparent);
   width: 100%;
@@ -64,7 +64,7 @@
 .m__modal__title {
   font-size: var(--m__font-size-l);
   font-weight: var(--m__font-weight-bold);
-  color: var(--m__text-color);
+  color: var(--m__text);
   margin: 0;
 }
 
@@ -72,7 +72,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   padding: 0.4rem;
   display: flex;
   align-items: center;
@@ -84,7 +84,7 @@
   margin: -0.4rem;
 
   &:hover {
-    color: var(--m__text-color);
+    color: var(--m__text);
     transition-duration: var(--m__hover-transition-duration);
   }
 }
@@ -107,7 +107,7 @@
 
 .m__modal__field-hint {
   font-size: var(--m__font-size-s);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   margin-top: -0.25rem;
   margin-bottom: var(--m__default-margin-bottom);
 }
@@ -124,7 +124,7 @@
 .m__modal__checklist-label {
   font-size: var(--m__font-size-s);
   font-weight: 500;
-  color: var(--m__text-color);
+  color: var(--m__text);
   margin: 0 0 0.3rem;
 }
 
@@ -149,12 +149,12 @@
 }
 
 .m__modal__notice {
-  background: var(--m__bg-surface-color);
+  background: var(--m__bg-surface);
   border-radius: var(--m__radius-l) var(--m__radius-l) 0 0;
   padding: var(--m__modal-padding);
   padding-bottom: calc(var(--m__modal-padding) + var(--m__radius-l));
   font-size: var(--m__font-size-s);
-  color: var(--m__text-color);
+  color: var(--m__text);
   line-height: 1.45;
   display: flex;
   align-items: flex-start;
@@ -185,7 +185,7 @@
 .m__modal:has(.m__modal__notice:not([hidden])) .m__modal__header {
   position: relative;
   z-index: 1;
-  background: var(--m__background-color);
+  background: var(--m__bg);
   border-radius: var(--m__radius-l) var(--m__radius-l) 0 0;
   margin-top: calc(-1 * var(--m__radius-l));
   padding-top: var(--m__modal-padding);

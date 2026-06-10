@@ -9,11 +9,11 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  color: var(--m__text-color);
+  color: var(--m__text);
   transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
 
   &:hover:not(:has(input:disabled)) {
-    color: var(--m__text-hover-color);
+    color: var(--m__text-link-hover);
     transition-duration: var(--m__hover-transition-duration);
   }
 
@@ -29,7 +29,7 @@
     width: 2rem;
     height: 1.1rem;
     border-radius: 999px;
-    background-color: var(--m__ui-border-color);
+    background-color: var(--m__border);
     border: none;
     outline: none;
     cursor: pointer;
@@ -44,14 +44,14 @@
       width: 0.75rem;
       height: 0.75rem;
       border-radius: 50%;
-      background-color: var(--m__background-color);
+      background-color: var(--m__bg);
       transition:
         transform var(--m__fast-transition-duration) var(--m__transition-easing),
         background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
     }
 
     &:checked {
-      background-color: var(--m__bg-accent-color);
+      background-color: var(--m__bg-accent);
 
       &::after {
         transform: translate(calc(2rem - 2 * 0.15rem - 0.75rem), -50%);
@@ -59,15 +59,15 @@
     }
 
     &:hover:not(:disabled) {
-      background-color: color-mix(in srgb, var(--m__ui-border-color) 70%, var(--m__text-color));
+      background-color: color-mix(in srgb, var(--m__border) 70%, var(--m__text));
       transition-duration: var(--m__hover-transition-duration);
 
       .dark-mode & {
-        background-color: color-mix(in srgb, var(--m__ui-border-color) 50%, var(--m__text-hover-color));
+        background-color: color-mix(in srgb, var(--m__border) 50%, var(--m__text-link-hover));
       }
 
       &:checked {
-        background-color: var(--m__text-hover-color);
+        background-color: var(--m__text-link-hover);
       }
     }
 
@@ -82,7 +82,7 @@
 
   & input[type="checkbox"] {
     box-sizing: border-box;
-    border: 2px solid var(--m__bg-accent-color);
+    border: 2px solid var(--m__bg-accent);
     background-color: transparent;
     transition:
       background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
@@ -91,38 +91,38 @@
     &::after {
       width: 0.55rem;
       height: 0.55rem;
-      background-color: var(--m__bg-accent-color);
+      background-color: var(--m__bg-accent);
       transition:
         transform var(--m__fast-transition-duration) var(--m__transition-easing),
         background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
     }
 
     &:checked {
-      background-color: var(--m__bg-accent-color);
+      background-color: var(--m__bg-accent);
 
       &::after {
-        background-color: var(--m__background-color);
+        background-color: var(--m__bg);
         transform: translate(calc(2rem - 2 * 0.15rem - 0.55rem - 2 * 2px), -50%);
       }
     }
 
     &:hover:not(:disabled) {
       background-color: transparent;
-      border-color: var(--m__text-hover-color);
+      border-color: var(--m__text-link-hover);
       transition-duration: var(--m__hover-transition-duration);
 
       &::after {
-        background-color: var(--m__text-hover-color);
+        background-color: var(--m__text-link-hover);
         transition-duration:
           var(--m__fast-transition-duration),
           var(--m__hover-transition-duration);
       }
 
       &:checked {
-        background-color: var(--m__text-hover-color);
+        background-color: var(--m__text-link-hover);
 
         &::after {
-          background-color: var(--m__background-color);
+          background-color: var(--m__bg);
         }
       }
     }
