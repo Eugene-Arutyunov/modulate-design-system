@@ -58,13 +58,33 @@ block content %}
     <h2>Color</h2>
     <div class="m__text-width">
       <p>
-        This is the source of truth for color values in the palette. If a color
-        in the design file differs slightly, consider using the value from here.
-        If it differs significantly, it may be worth checking with the designer.
+        Color lives in two layers. The <strong>palette</strong> holds raw color values —
+        a single source of truth, independent of theme. <strong>Semantic tokens</strong>
+        (text, background, UI) reference palette entries and are the only place themes
+        switch values. In CSS, point to a semantic token when available; reach into the
+        palette only when there is no semantic match.
       </p>
     </div>
     <div class="m__space S"></div>
+
+    <h3>Palette</h3>
+    <div class="m__text-width">
+      <p>
+        Raw colors. Click a swatch to copy the
+        <code>var(--m__color-*)</code> reference.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-palette"></div>
+    <div class="m__space M"></div>
+
     <h3>UI Color Palette</h3>
+    <div class="m__text-width">
+      <p>
+        Semantic tokens. These flip with theme; the palette values they point to do not.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
     {% include 'service/color-palette.html' %}
   </div>
 

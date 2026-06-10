@@ -1,41 +1,44 @@
+/* Semantic colors — every value points at the palette.
+   Theme switching happens here, not in the palette. */
+
 :root,
 .light,
 .light-mode {
   /* TEXT */
-  --m__text-color: rgb(30, 30, 35);
-  --m__text-link-color: rgb(50, 50, 70);
-  --m__text-hover-color: rgb(40, 95, 235);
-  --m__text-active-color: rgb(20, 60, 180);
-  --m__text-caption-color: rgb(150, 150, 170);
-  --m__text-inverted-color: rgb(242, 242, 246);
-  --m__text-accent-color: rgb(20, 20, 50);
-  --m__code-color: rgb(120, 120, 136);
-  --m__code-accent-color: rgb(124, 58, 237);
+  --m__text-color: var(--m__color-gray-95);
+  --m__text-link-color: var(--m__color-gray-80);
+  --m__text-hover-color: var(--m__color-blue-50);
+  --m__text-active-color: var(--m__color-blue-70);
+  --m__text-caption-color: var(--m__color-gray-50);
+  --m__text-inverted-color: var(--m__color-gray-10);
+  --m__text-accent-color: var(--m__color-navy-90);
+  --m__code-color: var(--m__color-gray-60);
+  --m__code-accent-color: var(--m__color-purple-70);
 
   /* BACKGROUND */
-  --m__background-color: rgb(255, 255, 255);
-  --m__bg-surface-color: rgb(242, 242, 246);
-  --m__bg-accent-color: rgb(20, 20, 50);
-  --m__bg-hover-color: rgb(35, 84, 207);
-  --m__bg-active-color: rgb(30, 50, 160);
-  --m__bg-mark-color: rgb(255, 200, 29);
+  --m__background-color: var(--m__color-white);
+  --m__bg-surface-color: var(--m__color-gray-10);
+  --m__bg-accent-color: var(--m__color-navy-90);
+  --m__bg-hover-color: var(--m__color-blue-60);
+  --m__bg-active-color: var(--m__color-blue-80);
+  --m__bg-mark-color: var(--m__color-yellow-50);
 
   /* UI */
   --m__ui-control-color: var(--m__bg-surface-color);
-  --m__ui-border-color: rgb(220, 220, 230);
-  --m__ui-error-color: rgb(255, 53, 84);
-  --m__ui-error-hover-color: rgb(220, 30, 58);
-  --m__ui-success-color: rgb(1, 163, 100);
-  --m__ui-success-hover-color: rgb(0, 138, 82);
+  --m__ui-border-color: var(--m__color-gray-20);
+  --m__ui-error-color: var(--m__color-red-60);
+  --m__ui-error-hover-color: var(--m__color-red-70);
+  --m__ui-success-color: var(--m__color-green-70);
+  --m__ui-success-hover-color: var(--m__color-green-80);
 
   /* CHARTS */
-  --m__chart-default-color: rgb(20, 20, 50);
-  --m__chart-model-1-color: rgb(124, 58, 237);
-  --m__chart-model-2-color: rgb(167, 120, 250);
-  --m__chart-model-3-color: rgb(196, 167, 255);
-  --m__chart-status-success-color: rgb(80, 210, 120);
-  --m__chart-status-server-error-color: rgb(255, 53, 84);
-  --m__chart-status-client-error-color: rgb(255, 120, 80);
+  --m__chart-default-color: var(--m__color-navy-90);
+  --m__chart-model-1-color: var(--m__color-purple-70);
+  --m__chart-model-2-color: var(--m__color-purple-50);
+  --m__chart-model-3-color: var(--m__color-purple-30);
+  --m__chart-status-success-color: var(--m__color-green-40);
+  --m__chart-status-server-error-color: var(--m__color-red-60);
+  --m__chart-status-client-error-color: var(--m__color-red-40);
   --m__chart-status-processing-color: var(--m__text-caption-color);
 }
 
@@ -43,27 +46,27 @@
 .dark-mode,
 .dark-vibrant {
   /* TEXT */
-  --m__text-color: rgb(180, 180, 190);
-  --m__text-link-color: rgb(180, 180, 190);
-  --m__text-hover-color: rgb(255, 255, 255);
-  --m__text-active-color: rgb(200, 200, 210);
+  --m__text-color: var(--m__color-gray-40);
+  --m__text-link-color: var(--m__color-gray-40);
+  --m__text-hover-color: var(--m__color-white);
+  --m__text-active-color: var(--m__color-gray-30);
   --m__text-caption-color: color-mix(
     in srgb,
     var(--m__text-color) 65%,
     var(--m__bg-surface-color)
   );
-  --m__text-inverted-color: rgb(20, 20, 30);
-  --m__text-accent-color: rgb(180, 180, 190);
+  --m__text-inverted-color: var(--m__color-gray-100);
+  --m__text-accent-color: var(--m__color-gray-40);
   --m__code-color: var(--m__text-caption-color);
-  --m__code-accent-color: rgb(167, 139, 250);
+  --m__code-accent-color: var(--m__color-purple-50);
 
   /* BACKGROUND */
-  --m__background-color: rgb(20, 20, 25);
-  --m__bg-surface-color: rgb(27, 27, 39);
-  --m__bg-accent-color: rgb(198, 198, 205);
-  --m__bg-hover-color: rgb(100, 110, 140);
-  --m__bg-active-color: rgb(164, 164, 171);
-  --m__bg-mark-color: rgb(255, 200, 29);
+  --m__background-color: var(--m__color-gray-100);
+  --m__bg-surface-color: var(--m__color-gray-95);
+  --m__bg-accent-color: var(--m__color-gray-30);
+  --m__bg-hover-color: var(--m__color-gray-70);
+  --m__bg-active-color: var(--m__color-gray-50);
+  --m__bg-mark-color: var(--m__color-yellow-50);
 
   /* UI */
   --m__ui-control-color: color-mix(
@@ -76,46 +79,46 @@
     var(--m__text-color) 15%,
     var(--m__bg-surface-color)
   );
-  --m__ui-error-color: rgb(255, 53, 84);
-  --m__ui-error-hover-color: rgb(255, 90, 115);
-  --m__ui-success-color: rgb(21, 207, 135);
-  --m__ui-success-hover-color: rgb(50, 225, 155);
+  --m__ui-error-color: var(--m__color-red-60);
+  --m__ui-error-hover-color: var(--m__color-red-50);
+  --m__ui-success-color: var(--m__color-green-50);
+  --m__ui-success-hover-color: var(--m__color-green-30);
 
   /* CHARTS */
-  --m__chart-default-color: rgb(180, 180, 220);
-  --m__chart-model-1-color: rgb(167, 139, 250);
-  --m__chart-model-2-color: rgb(196, 175, 255);
-  --m__chart-model-3-color: rgb(220, 208, 255);
-  --m__chart-status-success-color: rgb(100, 230, 150);
-  --m__chart-status-server-error-color: rgb(255, 90, 110);
-  --m__chart-status-client-error-color: rgb(255, 150, 110);
+  --m__chart-default-color: var(--m__color-purple-40);
+  --m__chart-model-1-color: var(--m__color-purple-50);
+  --m__chart-model-2-color: var(--m__color-purple-30);
+  --m__chart-model-3-color: var(--m__color-purple-20);
+  --m__chart-status-success-color: var(--m__color-green-30);
+  --m__chart-status-server-error-color: var(--m__color-red-50);
+  --m__chart-status-client-error-color: var(--m__color-red-30);
   --m__chart-status-processing-color: var(--m__text-caption-color);
 }
 
 .dark-vibrant {
-  --m__background-color: rgb(20, 20, 50);
-  --m__bg-surface-color: rgb(36, 36, 52);
-  --m__text-color: rgb(168, 170, 182);
-  --m__text-link-color: rgb(168, 170, 182);
+  --m__background-color: var(--m__color-navy-90);
+  --m__bg-surface-color: var(--m__color-gray-90);
+  --m__text-color: var(--m__color-gray-40);
+  --m__text-link-color: var(--m__color-gray-40);
 }
 
 :root {
-  --m__black-const-color: rgb(20, 20, 25);
+  --m__black-const-color: var(--m__color-gray-100);
 
   /* Icon palette */
-  --m__icon-red-color: rgb(255, 53, 84);
-  --m__icon-yellow-color: rgb(255, 200, 0);
-  --m__icon-gray-color: rgb(153, 153, 153);
-  --m__icon-white-color: rgb(255, 255, 255);
+  --m__icon-red-color: var(--m__color-red-60);
+  --m__icon-yellow-color: var(--m__color-yellow-50);
+  --m__icon-gray-color: var(--m__color-gray-50);
+  --m__icon-white-color: var(--m__color-white);
   --m__icon-purple-color: var(--m__chart-model-2-color);
 
   /* Emotion group colors - base values */
-  --emotion-attack-rejection-group: rgb(255, 53, 84);
-  --emotion-threat-uncertainty-group: rgb(200, 80, 160);
-  --emotion-excited-engaged-group: rgb(255, 120, 80);
-  --emotion-low-energy-negative-group: rgb(0, 120, 200);
-  --emotion-calm-grounded-group: rgb(110, 140, 190);
-  --emotion-neutral-group: rgb(90, 90, 110);
+  --emotion-attack-rejection-group: var(--m__color-red-60);
+  --emotion-threat-uncertainty-group: var(--m__color-pink-50);
+  --emotion-excited-engaged-group: var(--m__color-red-40);
+  --emotion-low-energy-negative-group: var(--m__color-azure-60);
+  --emotion-calm-grounded-group: var(--m__color-slate-50);
+  --emotion-neutral-group: var(--m__color-gray-70);
 
   /* Individual emotion variables - map to group variables */
   /* attack / rejection */
