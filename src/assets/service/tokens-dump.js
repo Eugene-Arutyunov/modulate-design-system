@@ -150,6 +150,23 @@
     container.appendChild(grid);
   }
 
+  function renderControlPadding(container, tokens) {
+    var list = el("div", "guide-tokens__rows");
+    tokens.forEach(function (t) {
+      var row = el("div", "guide-tokens__row guide-tokens__row--control-padding");
+
+      var box = el("div", "guide-tokens__control-sample");
+      box.style.padding = "var(" + t.name + ")";
+      box.appendChild(el("span", "guide-tokens__control-sample-content", "Sample"));
+      row.appendChild(box);
+
+      row.appendChild(el("span", "guide-tokens__row-label", t.short));
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+  }
+
   function renderSpace(container, tokens) {
     var list = el("div", "guide-tokens__rows");
     tokens.forEach(function (t) {
@@ -263,6 +280,7 @@
     swatch: renderSwatch,
     square: renderSquare,
     space: renderSpace,
+    "control-padding": renderControlPadding,
     "text-size": renderTextSize,
     "text-weight": renderTextWeight,
     "text-family": renderTextFamily,
