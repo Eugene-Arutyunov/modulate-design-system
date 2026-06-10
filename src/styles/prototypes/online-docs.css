@@ -62,7 +62,7 @@
   }
 
   & h1 {
-    font-family: var(--m__font-semi-mono);
+    font-family: var(--m__font-family-semi-mono);
     font-size: 3.5em;
   }
 
@@ -81,7 +81,7 @@
 
   /* Accent paragraph — prototype; mono, bold. */
   & p.accent {
-    font-family: var(--m__font-semi-mono);
+    font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xxl);
     font-weight: var(--m__font-weight-bold);
     line-height: var(--m__line-height-base);
@@ -117,10 +117,10 @@
   }
 
   & ul.appendix-speech-list li.appendix-speech {
-    --online-doc-appendix-bubble-radius: calc(var(--m__radius) * 3);
+    --online-doc-appendix-bubble-radius: calc(var(--m__rounded-radius) * 3);
 
     font-size: var(--m__font-size-xl);
-    font-family: var(--m__font-semi-mono);
+    font-family: var(--m__font-family-semi-mono);
     font-weight: var(--m__font-weight-bold);
     line-height: var(--m__line-height-base);
     color: rgb(40, 95, 235);
@@ -202,7 +202,7 @@
     }
 
     & .online-doc-callout-block strong {
-      font-family: var(--m__font-semi-mono);
+      font-family: var(--m__font-family-semi-mono);
       font-weight: var(--m__font-weight-bold);
       text-decoration: underline;
       text-decoration-thickness: 3px;
@@ -355,24 +355,24 @@
     color: var(--m__text-link);
     text-decoration: none;
     will-change: color;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &:hover {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
   }
 
   & a[href^="mailto:"] {
     color: var(--m__text-link);
     will-change: color;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &:hover {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
   }
 

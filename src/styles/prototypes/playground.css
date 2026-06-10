@@ -92,13 +92,13 @@
     position: relative;
         filter: brightness(1);
 
-        transition: filter var(--m__unhover-transition-duration) var(--m__transition-easing);
+        transition: filter var(--m__duration-base) var(--m__easing-base);
   }
 
   .pg-histo-bar:hover {
     z-index: 10;
     filter: brightness(1.1);
-    transition: filter var(--m__hover-transition-duration) var(--m__transition-easing);
+    transition: filter var(--m__duration-instant) var(--m__easing-base);
     outline-offset: 0px;
   }
 
@@ -312,8 +312,8 @@
     corner-shape: squircle;
     max-width: min(92%, 60rem);
     cursor: pointer;
-    transition: background var(--m__unhover-transition-duration) var(--m__transition-easing),
-    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    transition: background var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
   }
 
   .pg-transcript-list > .pg-transcript-utterance:nth-of-type(odd) {
@@ -335,8 +335,8 @@
       var(--m__bg-accent-hover) 15%,
       transparent
     );
-      transition: background var(--m__hover-transition-duration) var(--m__transition-easing),
-      color var(--m__hover-transition-duration) var(--m__transition-easing);
+      transition: background var(--m__duration-instant) var(--m__easing-base),
+      color var(--m__duration-instant) var(--m__easing-base);
   }
 
   .pg-transcript-utterance.active {
@@ -640,13 +640,13 @@
     text-align: left;
     cursor: pointer;
     transition:
-      background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      background-color var(--m__duration-base) var(--m__easing-base),
+      color var(--m__duration-base) var(--m__easing-base);
   }
   .pg-upload-stream__menu [role="menuitem"]:hover {
     background-color: var(--m__bg-surface);
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   /* Plate states ─────────────────────────────────────────────────────────── */
@@ -684,20 +684,20 @@
     color: var(--m__text);
     text-decoration: none;
     cursor: pointer;
-    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    transition: color var(--m__duration-base) var(--m__easing-base);
   }
   .pg-upload-collapsed-cta:hover,
   .pg-upload-plate[data-state="uploaded"]:hover .pg-upload-collapsed-cta {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
   .pg-upload-plate[data-state="uploaded"] {
-    transition: border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    transition: border-color var(--m__duration-base) var(--m__easing-base);
   }
   .pg-upload-plate[data-state="uploaded"]:hover {
     border-color: var(--m__text-link-hover);
     cursor: pointer;
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   /* file-dropping — only the drop overlay; hide options + actions + footer */
@@ -941,7 +941,7 @@
 
   /* Statistics (compact debug grid below the output) ───────────────────── */
   .pg-stats-block {
-    font-family: var(--m__font-semi-mono);
+    font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
     color: var(--m__text-caption);
   }
@@ -1036,7 +1036,7 @@
 
   /* Semi-mono, 0.8rem only on tags + transcript meta + emo labels ──────── */
   .pg-output-panel :is(.m__tag, .m__tag-flat, .pg-transcript-utterance-header, .pg-emo-labels) {
-    font-family: var(--m__font-semi-mono);
+    font-family: var(--m__font-family-semi-mono);
     font-size: 0.8rem;
   }
 
@@ -1051,7 +1051,7 @@
   }
 
   .pg-json-block {
-    font-family: var(--m__font-semi-mono);
+    font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
   }
 
@@ -1071,17 +1071,17 @@
     padding: 0;
     margin: 0;
     border-radius: 0;
-    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    transition: color var(--m__duration-base) var(--m__easing-base);
   }
 
   .pg-json-pre :is(.pg-json-key, .pg-json-string, .pg-json-number, .pg-json-bool, .pg-json-null) {
     color: inherit;
-    transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    transition: color var(--m__duration-base) var(--m__easing-base);
   }
 
   .pg-json-pre:hover {
     color: var(--m__text);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   .pg-json-pre:hover .pg-json-key    { color: rgb(124, 58, 237); }
@@ -1090,7 +1090,7 @@
   .pg-json-pre:hover .pg-json-bool   { color: rgb(220, 80, 50); }
   .pg-json-pre:hover .pg-json-null   { color: var(--m__text-caption); }
   .pg-json-pre:hover :is(.pg-json-key, .pg-json-string, .pg-json-number, .pg-json-bool, .pg-json-null) {
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   /* Demo recordings table ──────────────────────────────────────────────── */
@@ -1227,11 +1227,11 @@
     pointer-events: none;
     opacity: 0;
     z-index: 4;
-    transition: opacity var(--m__unhover-transition-duration) var(--m__transition-easing);
+    transition: opacity var(--m__duration-base) var(--m__easing-base);
   }
   .media-container[data-hover="true"] .pg-media-hover-line {
     opacity: 1;
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
   .pg-player-dataviz .speaker-labels {
     position: absolute;

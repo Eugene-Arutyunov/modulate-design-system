@@ -88,11 +88,11 @@ permalink: /playground/redaction/
       font-variant-numeric: tabular-nums;
       background-color: transparent;
       border: 2px solid var(--m__bg-accent);
-      transition: border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      transition: border-color var(--m__duration-base) var(--m__easing-base);
     }
     .pg-pad-field input:hover {
       border-color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
     .pg-pad-unit {
       position: absolute;
@@ -153,17 +153,17 @@ permalink: /playground/redaction/
       border-left: 1px solid var(--m__error);
       border-right: 1px solid var(--m__error);
       cursor: help;
-      transition: background var(--m__unhover-transition-duration) var(--m__transition-easing);
+      transition: background var(--m__duration-base) var(--m__easing-base);
     }
     .pg-redaction-seg:hover {
       background: color-mix(in srgb, var(--m__error) 55%, transparent);
-      transition: background var(--m__hover-transition-duration) var(--m__transition-easing);
+      transition: background var(--m__duration-instant) var(--m__easing-base);
     }
 
     /* Inline redaction tag ──────────────────────────────────────────────── */
     .pii-tag {
       display: inline-block;
-      font-family: var(--m__font-semi-mono);
+      font-family: var(--m__font-family-semi-mono);
       font-size: 0.82em;
       font-weight: 700;
       letter-spacing: 0.02em;

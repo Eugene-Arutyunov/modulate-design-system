@@ -1,0 +1,291 @@
+(function () {
+  "use strict";
+
+  function formatRgb(color) {
+    var m = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+    if (m) return "rgb(" + m[1] + ", " + m[2] + ", " + m[3] + ")";
+    var s = color.match(/color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
+    if (s) {
+      return "rgb(" +
+        Math.round(parseFloat(s[1]) * 255) + ", " +
+        Math.round(parseFloat(s[2]) * 255) + ", " +
+        Math.round(parseFloat(s[3]) * 255) + ")";
+    }
+    return color;
+  }
+
+  function parseRgb(color) {
+    var m = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+    if (!m) return null;
+    return [Number(m[1]), Number(m[2]), Number(m[3])];
+  }
+
+  function isDarkBg(rgb) {
+    var l = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+    return l < 130;
+  }
+
+  /* Walk all stylesheets for tokens whose name matches prefix + dash,
+     defined under :root (no theme-scoped variants). Preserves declaration order. */
+  function collectTokens(prefix) {
+    var fullPrefix = "--m__" + prefix + "-";
+    var seen = new Set();
+    var result = [];
+
+    for (var i = 0; i < document.styleSheets.length; i++) {
+      var sheet = document.styleSheets[i];
+      var rules;
+      try { rules = sheet.cssRules; } catch (e) { continue; }
+      if (!rules) continue;
+      for (var j = 0; j < rules.length; j++) {
+        var rule = rules[j];
+        if (rule.type !== 1) continue;
+        var sel = rule.selectorText || "";
+        if (sel.indexOf(":root") === -1) continue;
+        if (sel.indexOf(".light") !== -1) continue;
+        if (sel.indexOf(".dark") !== -1) continue;
+        for (var k = 0; k < rule.style.length; k++) {
+          var prop = rule.style[k];
+          if (prop.indexOf(fullPrefix) !== 0) continue;
+          if (seen.has(prop)) continue;
+          seen.add(prop);
+          var raw = rule.style.getPropertyValue(prop).trim();
+          var short = prop.slice("--m__".length);
+          result.push({ name: prop, short: short, raw: raw });
+        }
+      }
+    }
+    return result;
+  }
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  /* --- Renderers --- */
+
+  function renderSwatch(container, tokens) {
+    var groupKey = function (short) {
+      var i = short.lastIndexOf("-");
+      if (i === -1) return short;
+      var tail = short.slice(i + 1);
+      return /^\d+$/.test(tail) ? short.slice(0, i) : short;
+    };
+    var order = ["color-white", "color-gray", "color-navy", "color-blue", "color-azure", "color-purple", "color-red", "color-green", "color-yellow", "color-pink", "color-slate"];
+    var cmp = function (a, b) {
+      var ai = order.indexOf(a), bi = order.indexOf(b);
+      if (ai === -1) ai = 999;
+      if (bi === -1) bi = 999;
+      return ai - bi || a.localeCompare(b);
+    };
+
+    var groups = new Map();
+    tokens.forEach(function (t) {
+      var g = groupKey(t.short);
+      if (!groups.has(g)) groups.set(g, []);
+      groups.get(g).push(t);
+    });
+
+    var probe = el("span");
+    probe.style.display = "none";
+    document.body.appendChild(probe);
+
+    Array.from(groups.keys()).sort(cmp).forEach(function (g) {
+      var items = groups.get(g);
+      items.sort(function (a, b) {
+        return a.short.localeCompare(b.short, undefined, { numeric: true });
+      });
+
+      var group = el("div", "guide-tokens__group");
+      group.appendChild(el("h4", "guide-tokens__group-label", g.replace(/^color-/, "")));
+
+      var grid = el("div", "guide-tokens__plates");
+      items.forEach(function (t) {
+        var plate = el("button", "guide-tokens__plate guide-tokens__plate--swatch");
+        plate.type = "button";
+        plate.style.backgroundColor = "var(" + t.name + ")";
+
+        probe.style.backgroundColor = "var(" + t.name + ")";
+        var resolved = getComputedStyle(probe).backgroundColor;
+        var rgbStr = formatRgb(resolved);
+        var parsed = parseRgb(resolved);
+        plate.style.color = parsed && isDarkBg(parsed) ? "#fff" : "#1e1e23";
+
+        plate.appendChild(el("span", "guide-tokens__plate-name", t.short.replace(/^color-/, "")));
+        plate.appendChild(el("span", "guide-tokens__plate-value", rgbStr));
+
+        plate.addEventListener("click", function () {
+          navigator.clipboard.writeText("var(" + t.name + ")");
+          var flash = el("span", "guide-tokens__plate-flash", "var(" + t.name + ")");
+          plate.appendChild(flash);
+          flash.addEventListener("animationend", function () { flash.remove(); });
+        });
+
+        grid.appendChild(plate);
+      });
+      group.appendChild(grid);
+      container.appendChild(group);
+    });
+
+    probe.remove();
+  }
+
+  function renderSquare(container, tokens) {
+    var grid = el("div", "guide-tokens__plates");
+    tokens.forEach(function (t) {
+      var plate = el("div", "guide-tokens__plate guide-tokens__plate--square");
+
+      var box = el("div", "guide-tokens__square");
+      box.style.borderRadius = "var(" + t.name + ")";
+      plate.appendChild(box);
+
+      plate.appendChild(el("span", "guide-tokens__plate-name", t.short));
+      plate.appendChild(el("span", "guide-tokens__plate-value", t.raw));
+
+      grid.appendChild(plate);
+    });
+    container.appendChild(grid);
+  }
+
+  function renderSpace(container, tokens) {
+    var list = el("div", "guide-tokens__rows");
+    tokens.forEach(function (t) {
+      var row = el("div", "guide-tokens__row guide-tokens__row--space");
+
+      var box = el("div", "guide-tokens__space-box");
+      box.style.width = "var(" + t.name + ")";
+      box.style.height = "var(" + t.name + ")";
+      row.appendChild(box);
+
+      row.appendChild(el("span", "guide-tokens__row-label", t.short));
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+  }
+
+  function renderTextSize(container, tokens) {
+    var list = el("div", "guide-tokens__rows");
+    tokens.forEach(function (t) {
+      var row = el("div", "guide-tokens__row");
+
+      var sample = el("span", "guide-tokens__text-sample", "Aa");
+      sample.style.fontSize = "var(" + t.name + ")";
+      row.appendChild(sample);
+
+      row.appendChild(el("span", "guide-tokens__row-label", t.short));
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+  }
+
+  function renderTextWeight(container, tokens) {
+    var list = el("div", "guide-tokens__rows");
+    tokens.forEach(function (t) {
+      var row = el("div", "guide-tokens__row");
+      var sample = el("span", "guide-tokens__text-sample", "Aa");
+      sample.style.fontWeight = "var(" + t.name + ")";
+      sample.style.fontSize = "var(--m__font-size-l)";
+      row.appendChild(sample);
+      row.appendChild(el("span", "guide-tokens__row-label", t.short));
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+  }
+
+  function renderTextFamily(container, tokens) {
+    var list = el("div", "guide-tokens__rows");
+    tokens.forEach(function (t) {
+      var row = el("div", "guide-tokens__row");
+      var sample = el("span", "guide-tokens__text-sample", "Aa Bb 123");
+      sample.style.fontFamily = "var(" + t.name + ")";
+      row.appendChild(sample);
+      row.appendChild(el("span", "guide-tokens__row-label", t.short));
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+  }
+
+  function renderDuration(container, tokens) {
+    var list = el("div", "guide-tokens__rows");
+    tokens.forEach(function (t) {
+      var row = el("div", "guide-tokens__row guide-tokens__row--anim");
+
+      var track = el("div", "guide-tokens__bar-track");
+      var fill = el("div", "guide-tokens__bar-fill guide-tokens__bar-fill--anim");
+      fill.style.transitionDuration = "var(" + t.name + ")";
+      fill.style.transitionTimingFunction = "var(--m__easing-base)";
+      track.appendChild(fill);
+      row.appendChild(track);
+
+      row.appendChild(el("span", "guide-tokens__row-label", t.short));
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+
+      row.addEventListener("mouseenter", function () { fill.classList.add("is-active"); });
+      row.addEventListener("mouseleave", function () { fill.classList.remove("is-active"); });
+
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+  }
+
+  function renderEasing(container, tokens) {
+    var list = el("div", "guide-tokens__rows");
+    tokens.forEach(function (t) {
+      var row = el("div", "guide-tokens__row guide-tokens__row--anim");
+
+      var track = el("div", "guide-tokens__bar-track");
+      var fill = el("div", "guide-tokens__bar-fill guide-tokens__bar-fill--anim");
+      fill.style.transitionDuration = "1s";
+      fill.style.transitionTimingFunction = "var(" + t.name + ")";
+      track.appendChild(fill);
+      row.appendChild(track);
+
+      row.appendChild(el("span", "guide-tokens__row-label", t.short));
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+
+      row.addEventListener("mouseenter", function () { fill.classList.add("is-active"); });
+      row.addEventListener("mouseleave", function () { fill.classList.remove("is-active"); });
+
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+  }
+
+  var renderers = {
+    swatch: renderSwatch,
+    square: renderSquare,
+    space: renderSpace,
+    "text-size": renderTextSize,
+    "text-weight": renderTextWeight,
+    "text-family": renderTextFamily,
+    duration: renderDuration,
+    easing: renderEasing,
+  };
+
+  function init() {
+    var sections = document.querySelectorAll("[data-tokens-prefix]");
+    sections.forEach(function (section) {
+      var prefix = section.dataset.tokensPrefix;
+      var renderType = section.dataset.tokensRender || "bar";
+      var renderer = renderers[renderType];
+      if (!renderer) return;
+      var tokens = collectTokens(prefix);
+      if (!tokens.length) return;
+      renderer(section, tokens);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

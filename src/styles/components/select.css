@@ -62,8 +62,8 @@
     cursor: pointer;
     font-size: inherit;
     line-height: var(--m__line-height-base);
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &:focus-visible {
       outline: none;
@@ -77,12 +77,12 @@
 
   &:not(:has(> label)):hover select {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:not(:has(> label)):hover > svg {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:not(:has(> label)):focus-within {
@@ -102,8 +102,8 @@
     transform: translateY(-50%);
     pointer-events: none;
     color: var(--m__text-caption);
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
   }
 }
 
@@ -125,8 +125,8 @@
     color: var(--m__text-caption);
     cursor: pointer;
     font-weight: 500;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &::after {
       content: ":";
@@ -138,17 +138,17 @@
     & > span:first-child,
     & > label:first-child {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     & .m__select .m__select__value {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     & .m__select > svg {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
   }
 
@@ -206,8 +206,8 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: color var(--m__unhover-transition-duration)
-        var(--m__transition-easing);
+      transition: color var(--m__duration-base)
+        var(--m__easing-base);
     }
 
     & select {
@@ -231,8 +231,8 @@
       pointer-events: none;
       color: var(--m__text-caption);
       flex-shrink: 0;
-      transition: color var(--m__unhover-transition-duration)
-        var(--m__transition-easing);
+      transition: color var(--m__duration-base)
+        var(--m__easing-base);
     }
   }
 }

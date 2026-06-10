@@ -20,9 +20,9 @@ a {
     transparent
   );
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    text-decoration-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    text-decoration-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
     color: var(--m__text-link-hover);
@@ -32,7 +32,7 @@ a {
       transparent
     );
     transition-duration:
-      var(--m__hover-transition-duration), var(--m__hover-transition-duration);
+      var(--m__duration-instant), var(--m__duration-instant);
   }
 }
 
@@ -53,7 +53,7 @@ h1 {
 
 h1.loud {
   font-size: var(--m__font-size-display);
-  font-family: var(--m__font-gothic);
+  font-family: var(--m__font-family-gothic);
   font-weight: var(--m__font-weight-bold);
   color: var(--m__text);
   line-height: 1;
@@ -86,8 +86,8 @@ h6 {
 }
 
 code {
-  font-family: var(--m__font-semi-mono);
-  font-size: var(--m__font-size-mono-m);
+  font-family: var(--m__font-family-semi-mono);
+  font-size: var(--m__font-size-mono);
   font-weight: var(--m__font-weight-regular);
   padding: 0.1em 0.25em;
   border-radius: 0.2rem;
@@ -150,8 +150,8 @@ pre {
   margin-bottom: var(--m__default-margin-bottom);
 
   & code {
-    font-family: var(--m__font-mono);
-    font-size: var(--m__font-size-mono-m);
+    font-family: var(--m__font-family-mono);
+    font-size: var(--m__font-size-mono);
     line-height: 1.6;
     background: none;
     border: none;
@@ -181,9 +181,9 @@ pre {
       transparent
     );
     transition:
-      color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      text-decoration-color var(--m__unhover-transition-duration)
-        var(--m__transition-easing);
+      color var(--m__duration-base) var(--m__easing-base),
+      text-decoration-color var(--m__duration-base)
+        var(--m__easing-base);
 
     &:hover {
       color: var(--m__text-link-hover);
@@ -193,7 +193,7 @@ pre {
         transparent
       );
       transition-duration:
-        var(--m__hover-transition-duration), var(--m__hover-transition-duration);
+        var(--m__duration-instant), var(--m__duration-instant);
     }
   }
 }

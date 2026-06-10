@@ -50,8 +50,8 @@ html:has(.dashboard-layout) {
     color: var(--m__text);
     text-decoration: none;
     font-size: 0.9rem;
-    transition: background-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: background-color var(--m__duration-base)
+      var(--m__easing-base);
 
     & .nav-sidebar__link-icon {
       width: 1rem;
@@ -63,7 +63,7 @@ html:has(.dashboard-layout) {
 
     &:hover {
       background-color: var(--m__bg-surface);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     &.active {
@@ -414,8 +414,8 @@ table.config-details {
   color: var(--m__text-caption);
   text-decoration: none;
   margin-left: -0.22rem;
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   & svg {
     flex-shrink: 0;
@@ -423,7 +423,7 @@ table.config-details {
 
   &:hover {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -602,12 +602,12 @@ table.config-details {
   gap: 0.2rem;
   max-width: 100%;
   padding-right: 0;
-  transition: border-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: border-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     border-color: color-mix(in srgb, currentColor 50%, transparent);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -624,19 +624,19 @@ table.config-details {
   opacity: 0.5;
   line-height: 1;
   flex-shrink: 0;
-  transition: opacity var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: opacity var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     opacity: 1;
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 .bw-tags-cell {
   cursor: pointer;
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover,
   &.bw-cell--active {
@@ -645,7 +645,7 @@ table.config-details {
       var(--m__bg-accent-hover) 5%,
       transparent
     );
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -701,13 +701,13 @@ table.config-details {
 @media (hover: hover) {
   #bw-list tbody tr [data-bw-delete] {
     opacity: 0;
-    transition: opacity var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: opacity var(--m__duration-base)
+      var(--m__easing-base);
   }
 
   #bw-list tbody tr:hover [data-bw-delete] {
     opacity: 1;
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -716,8 +716,8 @@ table.config-details {
 }
 
 #bw-list tbody tr td {
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 }
 
 #bw-list tbody tr:not(.bw-empty-row) td:not(:last-child):hover {
@@ -728,7 +728,7 @@ table.config-details {
   );
   outline: 1px solid color-mix(in srgb, var(--m__text) 20%, transparent);
   outline-offset: -1px;
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 #bw-list tbody tr:not(.bw-empty-row):has(td:last-child:hover) {
@@ -742,7 +742,7 @@ table.config-details {
     var(--m__bg-accent-hover) 5%,
     transparent
   );
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 #bw-list .bw-empty-row td {
@@ -793,8 +793,8 @@ table.config-details {
   padding: 0.45rem 0.65rem;
   border-radius: var(--m__radius-m);
   cursor: pointer;
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   & .m__checkbox {
     margin-top: 0.05rem;
@@ -803,7 +803,7 @@ table.config-details {
 
   &:hover {
     background-color: var(--m__bg-surface);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -923,12 +923,12 @@ table.config-details {
   color: var(--m__text-caption);
   cursor: pointer;
   text-align: left;
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:focus-visible,
@@ -970,8 +970,8 @@ table.config-details {
   color: var(--m__text-caption);
   white-space: nowrap;
   flex-shrink: 0;
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &::after {
     content: ":";
@@ -985,7 +985,7 @@ table.config-details {
 
 .bw-tpl-trigger.has-value:hover .bw-tpl-trigger-label {
   color: var(--m__text-link-hover);
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 #bw-tpl-trigger-text {
@@ -1050,12 +1050,12 @@ table.config-details {
     white-space: normal;
     row-gap: 0.15rem;
   }
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     background-color: var(--m__bg-surface);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &.is-selected {

@@ -6,11 +6,11 @@
   cursor: pointer;
   color: var(--m__text);
   position: relative;
-  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: color var(--m__duration-base) var(--m__easing-base);
 
   &:hover:not(:has(input:disabled)) {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:has(input:disabled) {
@@ -26,8 +26,8 @@
     cursor: pointer;
     flex-shrink: 0;
     transition:
-      background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      background-color var(--m__duration-base) var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base);
 
     &:disabled {
       cursor: not-allowed;
@@ -58,7 +58,7 @@
 
     &:hover:not(:disabled) {
       border-color: var(--m__bg-accent-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
 
       .dark-mode & {
         border-color: var(--m__text-link-hover);
@@ -92,7 +92,7 @@
 
     &:hover:not(:disabled) {
       border-color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     &:checked {

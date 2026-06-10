@@ -20,7 +20,7 @@
 
   & .guide-color-plate__token {
     display: block;
-    font-family: var(--m__font-mono);
+    font-family: var(--m__font-family-mono);
     font-size: var(--m__font-size-xs);
     opacity: 0.7;
     margin: 0;
@@ -41,8 +41,8 @@
     position: relative;
     overflow: hidden;
     transition:
-      border-color 0.3s var(--m__transition-easing),
-      opacity 0.3s var(--m__transition-easing);
+      border-color 0.3s var(--m__easing-base),
+      opacity 0.3s var(--m__easing-base);
 
     &:hover {
       opacity: 1;
@@ -86,8 +86,7 @@
   animation: guide-color-copy-flash 0.4s ease-out forwards;
 }
 
-/* Token grids — used both by raw palette dump and semantic UI palette */
-.guide-palette,
+/* Token dump — populated by tokens-dump.js */
 .guide-tokens {
   display: flex;
   flex-direction: column;
@@ -115,31 +114,15 @@
   gap: 0;
 }
 
-.guide-palette__group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--m__space-xs);
-}
-
-.guide-palette__group-label {
-  margin: 0;
-  font-size: var(--m__font-size-s);
-  font-weight: var(--m__font-weight-medium);
-  color: var(--m__text-caption);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.guide-palette__grid {
-  display: grid;
+[data-tokens-render="swatch"] .guide-tokens__plates {
   grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-  gap: 0;
 }
 
-.guide-palette__plate {
+/* Generic plate (used by swatch and square renderers) */
+.guide-tokens__plate {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: flex-start;
   gap: 0.4rem;
   min-height: 4.5rem;
   padding: 0.5rem 0.6rem;
@@ -147,10 +130,15 @@
   border-radius: 0;
   font: inherit;
   text-align: left;
-  cursor: pointer;
+  background: none;
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s var(--m__transition-easing);
+}
+
+.guide-tokens__plate--swatch {
+  cursor: pointer;
+  justify-content: space-between;
+  transition: transform 0.2s var(--m__easing-base);
 
   &:hover {
     transform: translateY(-1px);
@@ -158,28 +146,113 @@
   }
 }
 
-.guide-palette__name {
+.guide-tokens__plate--square {
+  align-items: center;
+  text-align: center;
+  background-color: var(--m__bg-surface);
+  padding: 1rem 0.5rem 0.6rem;
+  min-height: 7rem;
+}
+
+.guide-tokens__plate-name {
   font-weight: var(--m__font-weight-medium);
   font-size: var(--m__font-size-s);
 }
 
-.guide-palette__value {
-  font-family: var(--m__font-mono);
+.guide-tokens__plate-value {
+  font-family: var(--m__font-family-mono);
   font-size: var(--m__font-size-xs);
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
-.guide-palette__flash {
+.guide-tokens__plate-flash {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--m__font-mono);
+  font-family: var(--m__font-family-mono);
   font-size: var(--m__font-size-xs);
   text-align: center;
   pointer-events: none;
   animation: guide-color-copy-flash 0.4s ease-out forwards;
+}
+
+/* Square renderer (radius) */
+.guide-tokens__square {
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--m__bg-accent);
+  margin-bottom: 0.4rem;
+}
+
+/* Row renderer (bar, text-size, text-weight, text-family, duration, easing) */
+.guide-tokens__rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.guide-tokens__row {
+  display: grid;
+  grid-template-columns: minmax(8rem, auto) minmax(7rem, auto) 1fr;
+  align-items: center;
+  gap: var(--m__space-m);
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--m__border);
+
+  &:last-child {
+    border-bottom: 1px solid var(--m__border);
+  }
+}
+
+.guide-tokens__row-label {
+  font-family: var(--m__font-family-mono);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+}
+
+.guide-tokens__row-value {
+  font-family: var(--m__font-family-mono);
+  font-size: var(--m__font-size-xs);
+  opacity: 0.7;
+}
+
+.guide-tokens__bar-track {
+  display: block;
+  height: 1.4rem;
+  background-color: var(--m__bg-surface);
+  width: 100%;
+}
+
+.guide-tokens__bar-fill {
+  display: block;
+  height: 100%;
+  background-color: var(--m__bg-accent);
+  width: 0;
+}
+
+.guide-tokens__bar-fill--anim {
+  width: 0;
+
+  &.is-active {
+    width: 100%;
+  }
+}
+
+/* Space renderer — square sized to the token value */
+.guide-tokens__row--space {
+  grid-template-columns: 6rem minmax(8rem, auto) minmax(7rem, auto) 1fr;
+  padding: 0.5rem 0 0.5rem 1rem;
+  align-items: center;
+}
+
+.guide-tokens__space-box {
+  background-color: var(--m__text-code-accent);
+}
+
+.guide-tokens__text-sample {
+  font-size: var(--m__font-size-xl);
+  line-height: 1;
 }
 
 /* Emotion colors showcase (from modulate-design) */

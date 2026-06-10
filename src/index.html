@@ -75,7 +75,7 @@ block content %}
       </p>
     </div>
     <div class="m__space XS"></div>
-    <div class="guide-palette"></div>
+    <div class="guide-tokens" data-tokens-prefix="color" data-tokens-render="swatch"></div>
     <div class="m__space M"></div>
 
     <h3>UI Color Palette</h3>
@@ -246,6 +246,18 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
         be placed by whoever assembles the layout.
       </p>
     </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="space" data-tokens-render="space"></div>
+    <div class="m__space M"></div>
+
+    <h3>Radius</h3>
+    <div class="m__text-width">
+      <p>
+        Five corner radii: a four-step scale and a pill for fully-rounded shapes.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="radius" data-tokens-render="square"></div>
     <div class="m__space S"></div>
   </div>
 </ids-nav-item>
@@ -256,6 +268,25 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
 
     <h2>Components</h2>
     <div class="m__space S"></div>
+
+    <h3>Typography tokens</h3>
+    <div class="m__text-width">
+      <p>
+        Font sizes use <code>rem</code> units except <code>font-size-mono</code>,
+        which is <code>em</code> — it sizes inline code relative to the
+        surrounding text.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <h4>Sizes</h4>
+    <div class="guide-tokens" data-tokens-prefix="font-size" data-tokens-render="text-size"></div>
+    <div class="m__space S"></div>
+    <h4>Weights</h4>
+    <div class="guide-tokens" data-tokens-prefix="font-weight" data-tokens-render="text-weight"></div>
+    <div class="m__space S"></div>
+    <h4>Families</h4>
+    <div class="guide-tokens" data-tokens-prefix="font-family" data-tokens-render="text-family"></div>
+    <div class="m__space M"></div>
 
     <h3>Text</h3>
     <div class="m__text-width">
@@ -341,8 +372,8 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
             </p>
           </td>
           <td>
-            <code class="accent">--m__font-size-mono-m</code><br />
-            <code class="accent">--m__font-mono</code><br />
+            <code class="accent">--m__font-size-mono</code><br />
+            <code class="accent">--m__font-family-mono</code><br />
             <code class="accent">--m__font-weight-regular</code><br />
             <code class="accent">--m__text-code</code>
           </td>
@@ -351,7 +382,7 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
           <td><code>h1.loud</code></td>
           <td><h1 class="loud">Documentation</h1></td>
           <td>
-            <code class="accent">--m__font-gothic</code><br />
+            <code class="accent">--m__font-family-gothic</code><br />
             <code class="accent">--m__font-size-display</code>
           </td>
         </tr>
@@ -405,8 +436,8 @@ method: POST</code></pre>
           <td>
             <code class="accent">--m__bg-surface</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__font-mono</code><br />
-            <code class="accent">--m__font-size-mono-m</code>
+            <code class="accent">--m__font-family-mono</code><br />
+            <code class="accent">--m__font-size-mono</code>
           </td>
         </tr>
       </tbody>
@@ -984,8 +1015,8 @@ method: POST</code></pre>
             <code class="accent">--m__bg</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
         <tr>
@@ -1014,8 +1045,8 @@ method: POST</code></pre>
             <code class="accent">--m__bg</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
         <tr>
@@ -1045,8 +1076,8 @@ method: POST</code></pre>
             <code class="accent">--m__bg</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
         <tr>
@@ -1074,8 +1105,8 @@ method: POST</code></pre>
             <code class="accent">--m__bg-accent-hover</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
         <tr>
@@ -1561,6 +1592,24 @@ method: POST</code></pre>
         prescribe which CSS properties should be included in a transition.
       </p>
     </div>
+    <div class="m__space XS"></div>
+    <h3>Durations</h3>
+    <div class="m__text-width">
+      <p>Hover the row to play.</p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="duration" data-tokens-render="duration"></div>
+    <div class="m__space M"></div>
+
+    <h3>Easing</h3>
+    <div class="m__text-width">
+      <p>Hover the row to play at 1s.</p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="easing" data-tokens-render="easing"></div>
+    <div class="m__space M"></div>
+
+    <h3>In components</h3>
     <table>
       <colgroup>
         <col style="width: 15%" />
@@ -1599,9 +1648,9 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__hover-transition-duration</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__duration-instant</code><br />
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
       </tbody>

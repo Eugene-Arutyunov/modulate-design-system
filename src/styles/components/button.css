@@ -51,13 +51,13 @@ button.m__button {
   background-color: var(--m__bg-accent);
   color: var(--m__text-inverted);
   border: none;
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     background-color: var(--m__text-link-hover);
     color: var(--m__text-inverted);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -68,13 +68,13 @@ button.m__button-secondary {
   color: var(--m__text);
   border: none;
   transition:
-    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    background-color var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 
   &:hover {
     background-color: color-mix(in srgb, currentColor 15%, transparent);
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -84,12 +84,12 @@ button.m__button-outline {
   background-color: transparent;
   color: var(--m__text);
   border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -101,18 +101,18 @@ button.m__button-brutal {
   border: 2px solid var(--m__bg-accent);
   font-weight: var(--m__font-weight-medium);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base) var(--m__easing-base);
 
   &:hover {
     color: var(--m__text-link-hover);
     border-color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:active {
     color: var(--m__text-link-pressed);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -145,13 +145,13 @@ button.m__button-compact {
   background-color: var(--m__bg-accent);
   color: var(--m__text-inverted);
   border: 1px solid transparent;
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     background-color: var(--m__text-link-hover);
     color: var(--m__text-inverted);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -163,13 +163,13 @@ button.m__button-secondary-compact {
   color: var(--m__text);
   border: none;
   transition:
-    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    background-color var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 
   &:hover {
     background-color: color-mix(in srgb, currentColor 15%, transparent);
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -180,19 +180,19 @@ button.m__button-outline-compact {
   background-color: transparent;
   color: var(--m__text);
   border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 button.m__button:active,
 button.m__button-compact:active {
   background-color: var(--m__bg-accent-pressed);
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 a.m__button-danger,
@@ -202,13 +202,13 @@ button.m__button-danger {
   color: color-mix(in srgb, var(--m__error) 85%, transparent);
   border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
     color: var(--m__error-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -220,13 +220,13 @@ button.m__button-danger-compact {
   color: color-mix(in srgb, var(--m__error) 80%, transparent);
   border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
     color: var(--m__error-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -234,20 +234,20 @@ button.m__button-danger:active,
 button.m__button-danger-compact:active {
   background-color: transparent;
   color: color-mix(in srgb, var(--m__error) 80%, transparent);
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-secondary:active,
 button.m__button-secondary-compact:active {
   background-color: color-mix(in srgb, currentColor 8%, transparent);
   color: var(--m__text-link-pressed);
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-outline:active,
 button.m__button-outline-compact:active {
   color: var(--m__text-link-pressed);
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-preset {
@@ -261,17 +261,17 @@ button.m__button-preset {
   align-items: flex-start;
   gap: 0.05em;
   line-height: 1.2;
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:active {
     color: var(--m__text-link-pressed);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &[aria-pressed="true"] {
@@ -294,13 +294,13 @@ button.m__button-success {
   color: color-mix(in srgb, var(--m__success) 80%, transparent);
   border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
     color: var(--m__success-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -313,20 +313,20 @@ button.m__button-success-compact {
   color: color-mix(in srgb, var(--m__success) 80%, transparent);
   border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
     color: var(--m__success-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 button.m__button-success:active,
 button.m__button-success-compact:active {
   color: color-mix(in srgb, var(--m__success) 80%, transparent);
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-icon {
@@ -337,8 +337,8 @@ button.m__button-icon {
   border: none;
   align-items: center;
   transition:
-    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    background-color var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 
   & svg {
     display: block;
@@ -349,13 +349,13 @@ button.m__button-icon {
   &:hover {
     background-color: color-mix(in srgb, currentColor 10%, transparent);
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:active {
     background-color: color-mix(in srgb, currentColor 8%, transparent);
     color: var(--m__text-link-pressed);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
 }

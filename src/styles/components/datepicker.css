@@ -24,11 +24,11 @@
       font-size: inherit;
       line-height: var(--m__line-height-base);
       width: 100%;
-      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      transition: color var(--m__duration-base) var(--m__easing-base);
 
       &:is(:hover, :focus-visible) {
         color: var(--m__text-link-hover);
-        transition-duration: var(--m__hover-transition-duration);
+        transition-duration: var(--m__duration-instant);
       }
 
       &:focus-visible {
@@ -60,12 +60,12 @@
       translate: 0 -50%;
       pointer-events: none;
       color: var(--m__text-caption);
-      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      transition: color var(--m__duration-base) var(--m__easing-base);
     }
 
     &:has(input[type="date"]:is(:hover, :focus-visible)) > svg {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
   }
 }
@@ -88,8 +88,8 @@
 
     cursor: pointer;
     color: var(--m__text-caption);
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
   }
 
   & > span {
@@ -98,8 +98,8 @@
     color: var(--m__text-caption);
     font-weight: 500;
     cursor: pointer;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &::after {
       content: ":";
@@ -118,8 +118,8 @@
     font-size: inherit;
     line-height: 1;
     cursor: text;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &::placeholder {
       color: var(--m__text-caption);
@@ -145,12 +145,12 @@
     & > svg:first-child,
     & > span {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     & input {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
   }
 

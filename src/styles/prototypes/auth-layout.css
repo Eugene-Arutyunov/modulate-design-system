@@ -84,8 +84,8 @@
   &.light .auth-layout__icon-tile {
     background-color: var(--auth-layout-icon-bg);
     color: var(--m__text);
-    transition: background-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: background-color var(--m__duration-base)
+      var(--m__easing-base);
   }
 }
 
@@ -130,8 +130,8 @@ a.auth-layout__icon-hover-zone {
   color: var(--m__text);
   filter: drop-shadow(0 0 0.5em var(--auth-layout-icon-shadow-color));
   transition:
-    background-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing),
+    background-color var(--m__duration-base)
+      var(--m__easing-base),
     z-index 0s;
 
   &:first-child {
@@ -177,8 +177,8 @@ a.auth-layout__icon-hover-zone {
     fill: currentColor;
     stroke: none;
     transform-origin: center;
-    transition: transform var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: transform var(--m__duration-base)
+      var(--m__easing-base);
   }
 }
 
@@ -483,11 +483,11 @@ a.auth-layout__icon-hover-zone {
     .auth-layout__icon-hover-zone[data-term="language"]:hover
   )
   .auth-layout__icon-tile[data-term="language"] {
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 
   & svg {
     transform: scale(1.12);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -584,9 +584,9 @@ a.auth-layout__icon-hover-zone {
       transparent
     );
     transition:
-      color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      text-decoration-color var(--m__unhover-transition-duration)
-        var(--m__transition-easing);
+      color var(--m__duration-base) var(--m__easing-base),
+      text-decoration-color var(--m__duration-base)
+        var(--m__easing-base);
 
     &:hover {
       color: var(--m__text-link-hover);
@@ -596,7 +596,7 @@ a.auth-layout__icon-hover-zone {
         transparent
       );
       transition-duration:
-        var(--m__hover-transition-duration), var(--m__hover-transition-duration);
+        var(--m__duration-instant), var(--m__duration-instant);
     }
   }
 }
@@ -714,9 +714,9 @@ a.auth-layout__icon-hover-zone {
       transparent
     );
     transition:
-      color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      text-decoration-color var(--m__unhover-transition-duration)
-        var(--m__transition-easing);
+      color var(--m__duration-base) var(--m__easing-base),
+      text-decoration-color var(--m__duration-base)
+        var(--m__easing-base);
 
     &:hover {
       color: var(--m__text-link-hover);
@@ -726,7 +726,7 @@ a.auth-layout__icon-hover-zone {
         transparent
       );
       transition-duration:
-        var(--m__hover-transition-duration), var(--m__hover-transition-duration);
+        var(--m__duration-instant), var(--m__duration-instant);
     }
   }
 
@@ -739,12 +739,12 @@ a.auth-layout__icon-hover-zone {
       padding-block: 0.35em;
       margin-block: -0.35em;
       line-height: 1;
-      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      transition: color var(--m__duration-base) var(--m__easing-base);
     }
 
     &:hover:not(:has(a:hover)) a {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     &:has(a:hover) {

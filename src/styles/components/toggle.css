@@ -10,11 +10,11 @@
   gap: 0.5rem;
   cursor: pointer;
   color: var(--m__text);
-  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: color var(--m__duration-base) var(--m__easing-base);
 
   &:hover:not(:has(input:disabled)) {
     color: var(--m__text-link-hover);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:has(input:disabled) {
@@ -28,12 +28,12 @@
     flex-shrink: 0;
     width: 2rem;
     height: 1.1rem;
-    border-radius: 999px;
+    border-radius: var(--m__radius-pill);
     background-color: var(--m__border);
     border: none;
     outline: none;
     cursor: pointer;
-    transition: background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    transition: background-color var(--m__duration-base) var(--m__easing-base);
 
     &::after {
       content: '';
@@ -46,8 +46,8 @@
       border-radius: 50%;
       background-color: var(--m__bg);
       transition:
-        transform var(--m__fast-transition-duration) var(--m__transition-easing),
-        background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+        transform var(--m__duration-fast) var(--m__easing-base),
+        background-color var(--m__duration-base) var(--m__easing-base);
     }
 
     &:checked {
@@ -60,7 +60,7 @@
 
     &:hover:not(:disabled) {
       background-color: color-mix(in srgb, var(--m__border) 70%, var(--m__text));
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
 
       .dark-mode & {
         background-color: color-mix(in srgb, var(--m__border) 50%, var(--m__text-link-hover));
@@ -85,16 +85,16 @@
     border: 2px solid var(--m__bg-accent);
     background-color: transparent;
     transition:
-      background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      background-color var(--m__duration-base) var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base);
 
     &::after {
       width: 0.55rem;
       height: 0.55rem;
       background-color: var(--m__bg-accent);
       transition:
-        transform var(--m__fast-transition-duration) var(--m__transition-easing),
-        background-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+        transform var(--m__duration-fast) var(--m__easing-base),
+        background-color var(--m__duration-base) var(--m__easing-base);
     }
 
     &:checked {
@@ -109,13 +109,13 @@
     &:hover:not(:disabled) {
       background-color: transparent;
       border-color: var(--m__text-link-hover);
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
 
       &::after {
         background-color: var(--m__text-link-hover);
         transition-duration:
-          var(--m__fast-transition-duration),
-          var(--m__hover-transition-duration);
+          var(--m__duration-fast),
+          var(--m__duration-instant);
       }
 
       &:checked {
