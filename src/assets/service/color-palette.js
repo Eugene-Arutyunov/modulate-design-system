@@ -77,7 +77,7 @@
     if (parsed) {
       entry.plate.style.color = isDarkBg(parsed)
         ? "var(--m__color-white)"
-        : "var(--m__color-gray-100)";
+        : "var(--m__color-gray-950)";
     }
 
     var name = paletteByRgb.get(rgb);
