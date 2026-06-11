@@ -22,7 +22,15 @@
 
   function isDarkBg(rgb) {
     var l = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
-    return l < 130;
+    var max = Math.max(rgb[0], rgb[1], rgb[2]);
+    var min = Math.min(rgb[0], rgb[1], rgb[2]);
+    var lhsl = (max + min) / 2;
+    var s;
+    if (max === min) s = 0;
+    else if (lhsl > 127.5) s = (max - min) / (510 - max - min);
+    else s = (max - min) / (max + min);
+    var threshold = s > 0.5 ? 140 : 160;
+    return l < threshold;
   }
 
   /* Walk all stylesheets for tokens whose name matches prefix + dash,
@@ -74,7 +82,7 @@
       var tail = short.slice(i + 1);
       return /^\d+$/.test(tail) ? short.slice(0, i) : short;
     };
-    var order = ["color-white", "color-gray", "color-navy", "color-blue", "color-azure", "color-purple", "color-red", "color-green", "color-yellow", "color-pink", "color-slate"];
+    var order = ["color-white", "color-gray", "color-slate", "color-blue", "color-azure", "color-purple", "color-red", "color-orange", "color-yellow", "color-green", "color-emerald", "color-pink"];
     var cmp = function (a, b) {
       var ai = order.indexOf(a), bi = order.indexOf(b);
       if (ai === -1) ai = 999;

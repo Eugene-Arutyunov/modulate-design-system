@@ -26,7 +26,15 @@
 
   function isDarkBg(rgb) {
     var l = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
-    return l < 130;
+    var max = Math.max(rgb[0], rgb[1], rgb[2]);
+    var min = Math.min(rgb[0], rgb[1], rgb[2]);
+    var lhsl = (max + min) / 2;
+    var s;
+    if (max === min) s = 0;
+    else if (lhsl > 127.5) s = (max - min) / (510 - max - min);
+    else s = (max - min) / (max + min);
+    var threshold = s > 0.5 ? 140 : 160;
+    return l < threshold;
   }
 
   /* Palette is theme-independent — collect once. */
@@ -77,7 +85,7 @@
     if (parsed) {
       entry.plate.style.color = isDarkBg(parsed)
         ? "var(--m__color-white)"
-        : "var(--m__color-gray-950)";
+        : "var(--m__color-gray-900)";
     }
 
     var name = paletteByRgb.get(rgb);
