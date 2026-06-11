@@ -1,0 +1,141 @@
+/* Models navigation plaque: family columns on the pricing page
+   (`src/prototypes/pricing.html`) and the vertical variant in the
+   playground sidebar (`src/includes/prototypes/playground-nav-sidebar.html`). */
+
+.models-nav {
+  width: 100%;
+  padding: 0.2rem 0.5rem;
+  background-color: var(--m__bg-surface-color);
+
+  & .models-nav__table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  /* Equal column widths from header count: 4 → 25%, 5 → 20%, etc. */
+  & .models-nav__table:has(thead th:first-child:nth-last-child(4)) {
+    & th,
+    & td {
+      width: 25%;
+    }
+  }
+
+  & .models-nav__table:has(thead th:first-child:nth-last-child(5)) {
+    & th,
+    & td {
+      width: 20%;
+    }
+  }
+
+  & th {
+    padding: 0.4rem 0.5rem 0.4rem 0.35rem;
+    border-bottom: 1px solid var(--m__ui-border-color);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    color: var(--m__text-caption-color);
+    white-space: nowrap;
+    text-align: left;
+    position: static;
+    background-color: transparent;
+  }
+
+  & .models-nav__col-title {
+    display: block;
+    font-family: var(--m__font-semi-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  & td {
+    padding: 0;
+    vertical-align: top;
+  }
+
+  & .models-nav__models {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    padding-top: 0.15em;
+    padding-bottom: 0.5em;
+  }
+
+  & .models-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.5rem 0.3rem 0.35rem;
+    color: var(--m__text-color);
+    text-decoration: none;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    white-space: nowrap;
+    transition: color var(--m__unhover-transition-duration)
+      var(--m__transition-easing);
+
+    &:hover:not(.active) {
+      color: var(--m__text-hover-color);
+      text-decoration: none;
+      transition-duration: var(--m__hover-transition-duration);
+    }
+
+    &.active {
+      background-color: var(--m__background-color);
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  & .models-nav__link-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: currentColor;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  & .models-nav__tier-price {
+    display: block;
+    padding: 0.15rem 0.5rem 0.25rem 0.35rem;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    color: var(--m__text-caption-color);
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: nowrap;
+    line-height: 1.3;
+  }
+}
+
+/* Vertical variant: family groups stacked in a sidebar */
+.models-nav--vertical {
+  display: flex;
+  flex-direction: column;
+  padding: 0.1rem 0.35rem 0.35rem;
+
+  & .models-nav__group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .models-nav__group-title {
+    display: block;
+    padding: 0.5rem 0.5rem 0.1rem 0.35rem;
+    font-family: var(--m__font-semi-mono);
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption-color);
+    white-space: nowrap;
+  }
+
+  & .models-nav__models {
+    padding-bottom: 0.35em;
+  }
+
+  & .models-nav__link-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+}

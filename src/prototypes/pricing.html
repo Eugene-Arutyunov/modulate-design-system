@@ -18,102 +18,32 @@ permalink: /pricing/
     </div>
     <div class="m__space XS"></div>
 
-    <!-- EXPERIMENT: five columns with playground-style model links.
-         Styles are inlined here on purpose so the design system is not touched. -->
-    <style>
-      .models-nav {
-        width: 100%;
-        padding: 0.2rem 0.5rem;
-        background-color: var(--m__bg-surface-color);
-
-        & .models-nav__table {
-          border-collapse: collapse;
-        }
-
-        & th {
-          padding: 0.4rem 1.25rem 0.4rem 0.75rem;
-          border-bottom: 1px solid var(--m__ui-border-color);
-          font-family: var(--m__font-semi-mono);
-          font-size: var(--m__font-size-s);
-          font-weight: var(--m__font-weight-regular);
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          color: var(--m__text-caption-color);
-          white-space: nowrap;
-          text-align: left;
-          position: static;
-          background-color: transparent;
-        }
-
-        & td {
-          padding: 0;
-          vertical-align: top;
-        }
-
-        & .models-nav__models {
-          display: flex;
-          flex-direction: column;
-          gap: 0.15em;
-          padding-top: 0.15em;
-          padding-bottom: 1em;
-        }
-
-        & .models-nav__link {
-          display: flex;
-          align-items: center;
-          gap: 0.45rem;
-          padding: 0.45rem 1.25rem 0.45rem 0.75rem;
-          border-radius: 0.5rem;
-          color: var(--m__text-color);
-          text-decoration: none;
-          font-size: var(--m__font-size-m);
-          font-weight: var(--m__font-weight-medium);
-          white-space: nowrap;
-          transition: background-color var(--m__unhover-transition-duration)
-            var(--m__transition-easing);
-
-          &:hover {
-            background-color: var(--m__background-color);
-            text-decoration: none;
-            transition-duration: var(--m__hover-transition-duration);
-          }
-        }
-
-        & .models-nav__link-icon {
-          width: 1.25rem;
-          height: 1.25rem;
-          color: currentColor;
-          fill: currentColor;
-          flex-shrink: 0;
-        }
-
-        & .models-nav__tier-price {
-          padding: 0.35rem 1.25rem 0.4rem 0.75rem;
-          font-size: var(--m__font-size-s);
-          font-weight: var(--m__font-weight-regular);
-          color: var(--m__text-caption-color);
-          white-space: nowrap;
-          line-height: 1.3;
-        }
-      }
-    </style>
-
     <nav class="models-nav m__rounded" aria-label="Models">
       <table class="models-nav__table">
         <thead>
           <tr>
-            <th scope="col">Escalation</th>
-            <th scope="col">Analysis</th>
-            <th scope="col">Redaction</th>
-            <th scope="col">Transcription</th>
-            <th scope="col">Detection</th>
+            <th scope="col">
+              <span class="models-nav__col-title">Escalation</span>
+            </th>
+            <th scope="col">
+              <span class="models-nav__col-title">Analysis</span>
+            </th>
+            <th scope="col">
+              <span class="models-nav__col-title">Redaction</span>
+            </th>
+            <th scope="col">
+              <span class="models-nav__col-title">Transcription</span>
+            </th>
+            <th scope="col">
+              <span class="models-nav__col-title">Detection</span>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>
               <div class="models-nav__models">
-                <a href="#velma" class="models-nav__link">
+                <a href="#velma" class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -122,7 +52,7 @@ permalink: /pricing/
                   </svg>
                   <span>Velma</span>
                 </a>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -131,7 +61,7 @@ permalink: /pricing/
                   </svg>
                   <span>Velma Mini</span>
                 </span>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -140,11 +70,14 @@ permalink: /pricing/
                   </svg>
                   <span>ToxMod</span>
                 </span>
+                <span class="models-nav__tier-price"
+                  >$&thinsp;0.75&thinsp;–&thinsp;2.00&thinsp;/&thinsp;hr</span
+                >
               </div>
             </td>
             <td>
               <div class="models-nav__models">
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -153,7 +86,7 @@ permalink: /pricing/
                   </svg>
                   <span>Velma</span>
                 </span>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -162,11 +95,16 @@ permalink: /pricing/
                   </svg>
                   <span>Velma Agentic</span>
                 </span>
+                <span class="models-nav__tier-price"
+                  >$&thinsp;0.35&thinsp;–&thinsp;0.50&thinsp;/&thinsp;hr</span
+                >
               </div>
             </td>
             <td>
               <div class="models-nav__models">
-                <a href="#pii-phi-redaction" class="models-nav__link">
+                <a
+                  href="#pii-phi-redaction"
+                  class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -175,11 +113,14 @@ permalink: /pricing/
                   </svg>
                   <span>PII/PHI</span>
                 </a>
+                <span class="models-nav__tier-price"
+                  >$&thinsp;0.05&thinsp;–&thinsp;0.08&thinsp;/&thinsp;hr</span
+                >
               </div>
             </td>
             <td>
               <div class="models-nav__models">
-                <a href="#transcription" class="models-nav__link">
+                <a href="#transcription" class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -188,7 +129,7 @@ permalink: /pricing/
                   </svg>
                   <span>Multilingual</span>
                 </a>
-                <a href="#transcription" class="models-nav__link">
+                <a href="#transcription" class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -197,7 +138,7 @@ permalink: /pricing/
                   </svg>
                   <span>English Fast</span>
                 </a>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -206,7 +147,7 @@ permalink: /pricing/
                   </svg>
                   <span>Medical</span>
                 </span>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -215,11 +156,16 @@ permalink: /pricing/
                   </svg>
                   <span>Agentic</span>
                 </span>
+                <span class="models-nav__tier-price"
+                  >$&thinsp;0.025&thinsp;–&thinsp;0.15&thinsp;/&thinsp;hr</span
+                >
               </div>
             </td>
             <td>
               <div class="models-nav__models">
-                <a href="#deepfake-detection" class="models-nav__link">
+                <a
+                  href="#deepfake-detection"
+                  class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -228,7 +174,9 @@ permalink: /pricing/
                   </svg>
                   <span>Deepfake</span>
                 </a>
-                <a href="#language-detection" class="models-nav__link">
+                <a
+                  href="#language-detection"
+                  class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -237,7 +185,7 @@ permalink: /pricing/
                   </svg>
                   <span>Language</span>
                 </a>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -246,7 +194,9 @@ permalink: /pricing/
                   </svg>
                   <span>AI Music &amp; Singing</span>
                 </span>
-                <a href="#music-speech-detection" class="models-nav__link">
+                <a
+                  href="#music-speech-detection"
+                  class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -255,7 +205,7 @@ permalink: /pricing/
                   </svg>
                   <span>Music &amp; Speech</span>
                 </a>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -264,7 +214,7 @@ permalink: /pricing/
                   </svg>
                   <span>Emotion</span>
                 </span>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -273,7 +223,7 @@ permalink: /pricing/
                   </svg>
                   <span>Voicemail</span>
                 </span>
-                <span class="models-nav__link">
+                <span class="models-nav__link m__rounded">
                   <svg
                     class="models-nav__link-icon"
                     viewBox="0 0 32 32"
@@ -282,15 +232,11 @@ permalink: /pricing/
                   </svg>
                   <span>Audio Event</span>
                 </span>
+                <span class="models-nav__tier-price"
+                  >$&thinsp;0.01&thinsp;–&thinsp;0.25&thinsp;/&thinsp;hr</span
+                >
               </div>
             </td>
-          </tr>
-          <tr>
-            <td class="models-nav__tier-price">$0.75–2.00/hr</td>
-            <td class="models-nav__tier-price">$0.35–0.50/hr</td>
-            <td class="models-nav__tier-price">$0.05–0.08/hr</td>
-            <td class="models-nav__tier-price">$0.025–0.15/hr</td>
-            <td class="models-nav__tier-price">$0.01–0.25/hr</td>
           </tr>
         </tbody>
       </table>
