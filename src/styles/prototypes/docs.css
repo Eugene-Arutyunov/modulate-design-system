@@ -105,26 +105,22 @@
 }
 
 .models-pricing-table {
-  width: auto;
+  --models-pricing-label-col: 12rem;
+  width: 100%;
   table-layout: fixed;
 }
 
-.models-pricing-table.models-pricing-table--4 {
-  width: 100%;
+.models-pricing-table col:nth-child(1) {
+  width: var(--models-pricing-label-col);
 }
 
-.models-pricing-table.models-pricing-table--5 {
-  width: 100%;
+.models-pricing-table--3 col:nth-child(2),
+.models-pricing-table--3 col:nth-child(3) {
+  width: calc((100% - var(--models-pricing-label-col)) / 2);
 }
 
-.models-pricing-table.models-pricing-table--3 {
-  --models-col-scale: 0.75;
-  width: 75%;
-}
-
-.models-pricing-table.models-pricing-table--2 {
-  --models-col-scale: 0.65;
-  width: 65%;
+.models-pricing-table--2 col:nth-child(2) {
+  width: calc(100% - var(--models-pricing-label-col));
 }
 
 /* Match pixel widths of the 4-column table: col % ÷ table scale */
@@ -163,25 +159,6 @@
   font-weight: var(--m__font-weight-regular);
 }
 
-.models-pricing-table--3 col:nth-child(1) {
-  width: calc(20% / var(--models-col-scale));
-}
-
-/* Split remainder so columns sum to 100% — avoids redistributing col 1 */
-.models-pricing-table--3 col:nth-child(2),
-.models-pricing-table--3 col:nth-child(3) {
-  width: calc((100% - 20% / var(--models-col-scale)) / 2);
-}
-
-.models-pricing-table--2 col:nth-child(1) {
-  width: calc(22% / var(--models-col-scale));
-}
-
-/* Split remainder so columns sum to 100% */
-.models-pricing-table--2 col:nth-child(2) {
-  width: calc(100% - 22% / var(--models-col-scale));
-}
-
 .models-pricing-table th {
   font-size: var(--m__font-size-m);
   color: var(--m__text-color);
@@ -203,28 +180,57 @@
   color: var(--m__text-caption-color);
 }
 
-.models-section-heading {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.1em;
+.models-section-intro {
+  --models-pricing-label-col: 12rem;
+  display: grid;
+  grid-template-columns: var(--models-pricing-label-col) 1fr;
+  align-items: start;
+
+  @media (width < 767px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
 }
 
-.models-section-heading__icon {
-  display: inline-block;
-  width: 0.9em;
-  height: 0.9em;
-  line-height: 1;
-  position: relative;
-  top: 0.1em;
-  color: var(--m__text-heading-color);
+.models-section-intro__icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  aspect-ratio: 1;
+  padding: 0.5rem;
+  background-color: var(--m__bg-surface-color);
+  color: var(--m__text-color);
+
+  & svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    stroke: none;
+  }
 }
 
-.models-section-heading__icon svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  fill: currentColor;
-  stroke: none;
+.models-section-intro__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  min-width: 0;
+
+  & h2 {
+    margin: 0;
+  }
+
+  & p {
+    margin: 0;
+  }
+}
+
+.models-table-price {
+  font-family: var(--m__font-semi-mono);
+  font-size: var(--m__font-size-m);
+  font-weight: var(--m__font-weight-bold);
+  color: var(--m__text-color);
 }
 
 .models-column-heading {
@@ -257,13 +263,161 @@
 
 .models-pricing-table tr.models-table-group-row td {
   padding-top: 1.4rem;
-  padding-bottom: 0.35rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid
+    color-mix(in srgb, var(--m__text-color) 10%, transparent);
 }
 
-.models-pricing-table tr.models-table-group-row td h6 {
-  margin: 0;
+.models-pricing-table__group-title {
+  display: block;
+  font-family: var(--m__font-semi-mono);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m__text-caption-color);
 }
 
 .models-pricing-table tr.models-table-group-row + tr td {
-  border-top: 1px solid var(--m__text-color);
+  border-top: none;
+}
+
+.models-pricing-table__col-headers {
+  display: none;
+}
+
+@media (width < 767px) {
+  .pricing-table-wrap {
+    overflow-x: visible;
+  }
+
+  .models-pricing-table {
+    display: block;
+    table-layout: auto;
+
+    & colgroup {
+      display: none;
+    }
+
+    & thead,
+    & tbody {
+      display: block;
+    }
+
+    & tr {
+      display: grid;
+      gap: 0.35rem 0.75rem;
+      padding-block: 0.75rem;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--m__text-color) 12%, transparent);
+    }
+
+    & thead tr {
+      display: none;
+    }
+
+    & th,
+    & td {
+      display: block;
+      padding: 0;
+      border: none;
+    }
+
+    & tbody tr:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .models-pricing-table--3 {
+    & thead {
+      display: none;
+    }
+
+    & .models-pricing-table__col-headers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      padding-block: 0.5rem;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--m__text-color) 12%, transparent);
+
+      & .models-pricing-table__col-headers-label {
+        display: none;
+      }
+
+      & td:nth-child(2) {
+        grid-column: 1;
+      }
+
+      & td:nth-child(3) {
+        grid-column: 2;
+      }
+    }
+
+    & tbody tr {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    & tbody td:first-child:not([colspan]) {
+      grid-column: 1 / -1;
+      font-size: var(--m__font-size-s);
+      font-weight: var(--m__font-weight-medium);
+      color: var(--m__text-color);
+    }
+
+    & tbody td:nth-child(2):not([colspan]) {
+      grid-column: 1;
+    }
+
+    & tbody td:nth-child(3) {
+      grid-column: 2;
+    }
+
+    & tbody td[colspan="2"] {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .models-pricing-table--2 {
+    & thead {
+      display: none;
+    }
+
+    & tbody tr {
+      grid-template-columns: 1fr;
+    }
+
+    & tbody td:first-child:not([colspan]) {
+      grid-column: 1;
+      font-size: var(--m__font-size-s);
+      font-weight: var(--m__font-weight-medium);
+      color: var(--m__text-color);
+    }
+
+    & tbody td:nth-child(2) {
+      grid-column: 1;
+    }
+  }
+
+  .models-pricing-table tr:has(+ tr.models-table-group-row) {
+    border-bottom: none;
+  }
+
+  .models-pricing-table tr.models-table-group-row {
+    display: block;
+    padding-top: 1.4rem;
+    padding-bottom: 0;
+
+    & td {
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid
+        color-mix(in srgb, var(--m__text-color) 10%, transparent);
+    }
+  }
+
+  .models-pricing-table
+    tr.models-table-group-row
+    + tr:not(.models-pricing-table__col-headers) {
+    border-top: none;
+  }
 }

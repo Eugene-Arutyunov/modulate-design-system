@@ -7,49 +7,28 @@
   padding: 0.2rem 0.5rem;
   background-color: var(--m__bg-surface-color);
 
-  & .models-nav__table {
-    table-layout: fixed;
-    width: 100%;
-    border-collapse: collapse;
+  & .models-nav__cols {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
   }
 
-  /* Equal column widths from header count: 4 → 25%, 5 → 20%, etc. */
-  & .models-nav__table:has(thead th:first-child:nth-last-child(4)) {
-    & th,
-    & td {
-      width: 25%;
-    }
-  }
-
-  & .models-nav__table:has(thead th:first-child:nth-last-child(5)) {
-    & th,
-    & td {
-      width: 20%;
-    }
-  }
-
-  & th {
-    padding: 0.4rem 0.5rem 0.4rem 0.35rem;
-    border-bottom: 1px solid var(--m__ui-border-color);
-    font-size: var(--m__font-size-s);
-    font-weight: var(--m__font-weight-regular);
-    color: var(--m__text-caption-color);
-    white-space: nowrap;
-    text-align: left;
-    position: static;
-    background-color: transparent;
+  & .models-nav__col {
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   & .models-nav__col-title {
     display: block;
+    padding: 0.4rem 0.5rem 0.4rem 0.35rem;
+    border-bottom: 1px solid var(--m__ui-border-color);
     font-family: var(--m__font-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-  }
-
-  & td {
-    padding: 0;
-    vertical-align: top;
+    color: var(--m__text-caption-color);
+    white-space: nowrap;
   }
 
   & .models-nav__models {
@@ -94,16 +73,23 @@
     flex-shrink: 0;
   }
 
-  & .models-nav__tier-price {
-    display: block;
-    padding: 0.15rem 0.5rem 0.25rem 0.35rem;
-    font-size: var(--m__font-size-s);
-    font-weight: var(--m__font-weight-regular);
-    color: var(--m__text-caption-color);
-    text-transform: none;
-    letter-spacing: normal;
-    white-space: nowrap;
-    line-height: 1.3;
+  @media (width < 767px) {
+    & .models-nav__cols {
+      flex-wrap: wrap;
+      gap: var(--m__space-s);
+    }
+
+    & .models-nav__col {
+      flex: 1 1 calc(50% - var(--m__space-s) / 2);
+    }
+
+    & .models-nav__col-title {
+      white-space: normal;
+    }
+
+    & .models-nav__link {
+      white-space: normal;
+    }
   }
 }
 

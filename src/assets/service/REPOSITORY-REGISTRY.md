@@ -193,6 +193,8 @@ Public pricing page. Uses `landing-layout.html` — unauthenticated header (Play
 
 Surface plaque with model links grouped by family (Escalation, Analysis, Redaction, Transcription, Detection). Family headers are semi-mono uppercase captions; links carry sprite icons and highlight on hover via `--m__text-hover-color`. The active sidebar link is bold.
 
+**Include:** `src/includes/prototypes/models-pricing-col-headers.html` — mobile-only Batch/Streaming column header row for `--3` pricing tables; hidden on desktop, repeated at the start of each table body and after each group title on mobile.
+
 ---
 
 ## Playground page
