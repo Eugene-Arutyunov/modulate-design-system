@@ -179,19 +179,17 @@
   }
 
   function renderSpace(container, tokens) {
-    var list = el("div", "guide-tokens__rows");
+    var list = el("div", "guide-tokens__space-stack");
     tokens.forEach(function (t) {
-      var row = el("div", "guide-tokens__row guide-tokens__row--space");
-
+      var item = el("div", "guide-tokens__space-item");
+      var label = el("div", "guide-tokens__space-item-label");
+      label.appendChild(el("span", "guide-tokens__space-item-name", t.short));
+      label.appendChild(el("span", "guide-tokens__row-value", t.raw));
+      item.appendChild(label);
       var box = el("div", "guide-tokens__space-box");
-      box.style.width = "var(" + t.name + ")";
       box.style.height = "var(" + t.name + ")";
-      row.appendChild(box);
-
-      row.appendChild(el("span", "guide-tokens__row-label", t.short));
-      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
-
-      list.appendChild(row);
+      item.appendChild(box);
+      list.appendChild(item);
     });
     container.appendChild(list);
   }

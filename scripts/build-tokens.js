@@ -4,11 +4,13 @@ const { transform, browserslistToTargets } = require('lightningcss');
 const browserslist = require('browserslist');
 
 const tokenFiles = [
+  'palette.css',
   'colors.css',
   'typography.css',
   'spacers.css',
   'layout.css',
-  'ui-components.css',
+  'control-padding.css',
+  'inline.css',
   'animations.css',
 ];
 
