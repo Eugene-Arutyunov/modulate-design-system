@@ -14,14 +14,14 @@
   min-height: 6.2rem;
 
   & p {
-    font-weight: 500;
+    font-weight: var(--m__font-weight-medium);
     margin: 0;
   }
 
   & .guide-color-plate__token {
     display: block;
     font-size: var(--m__font-size-xs);
-    font-weight: 500;
+    font-weight: var(--m__font-weight-medium);
     margin: 0;
   }
 
@@ -34,20 +34,20 @@
     color: inherit;
     opacity: 0.7;
     background: none;
-    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
     padding: 0.15rem 0.35rem;
     border-radius: 0.2rem;
     cursor: pointer;
     position: relative;
     overflow: hidden;
     transition:
-      border-color 0.3s var(--m__easing-base),
-      opacity 0.3s var(--m__easing-base);
+      border-color var(--m__duration-base) var(--m__easing-base),
+      opacity var(--m__duration-base) var(--m__easing-base);
 
     &:hover {
       opacity: 1;
       border-color: currentColor;
-      transition-duration: 0s, 0s;
+      transition-duration: var(--m__duration-instant), var(--m__duration-instant);
     }
   }
 
@@ -141,11 +141,11 @@
   justify-content: space-between;
   margin: 0 -1px;
   transform-origin: bottom;
-  transition: transform 0.2s var(--m__easing-base);
+  transition: transform var(--m__duration-medium) var(--m__easing-base);
 
   &:hover {
     transform: scaleY(0.94);
-    transition-duration: 0s;
+    transition-duration: var(--m__duration-instant);
   }
 
   &.guide-tokens__plate--light {
@@ -156,7 +156,7 @@
 .guide-tokens__radius-sample {
   width: 5rem;
   height: 5rem;
-  background-color: var(--m__bg-accent);
+  background-color: color-mix(in srgb, var(--m__error) 20%, transparent);
 }
 
 .guide-tokens__plate-name {
@@ -195,7 +195,7 @@
   align-items: start;
   gap: var(--m__space-m);
   padding: 0.5rem 0;
-  border-top: 1px solid var(--m__border);
+  border-top: var(--m__border-width-s) solid var(--m__border);
 }
 
 .guide-tokens__row-label {
@@ -279,15 +279,18 @@
 }
 
 .guide-tokens__control-sample {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   justify-self: start;
-  background-color: var(--m__color-purple-200);
+  background-color: color-mix(in srgb, var(--m__error) 20%, transparent);
 }
 
 .guide-tokens__control-sample-content {
-  display: block;
+  box-sizing: content-box;
   width: 4rem;
   height: 1rem;
+  flex-shrink: 0;
   background-color: var(--m__bg);
 }
 
@@ -314,7 +317,7 @@
 
     & h3 {
       margin: 0;
-      font-weight: 500;
+      font-weight: var(--m__font-weight-medium);
       color: color-mix(in srgb, var(--m__text) 70%, transparent);
     }
   }
@@ -326,7 +329,7 @@
 
     & .emotion-color-sample {
       padding: 0.3em 0.6em;
-      color: white;
+      color: var(--m__color-white);
     }
   }
 }

@@ -9,8 +9,8 @@
   --online-doc-title-padding-block: 1.5rem;
   --online-doc-callout-bg-color: color-mix(
     in srgb,
-    rgb(40, 95, 235) 12%,
-    rgb(255, 255, 255)
+    var(--m__color-blue-500) 12%,
+    var(--m__color-white)
   );
   /* Print: same value as @page margin (each side). */
   --online-doc-print-margin: 0.5in;
@@ -24,7 +24,7 @@
   margin: 0 auto;
   max-width: 900px;
   padding: 0 0.7rem;
-  color: rgb(20, 20, 50);
+  color: var(--m__color-slate-900);
 
   & a {
     color: inherit;
@@ -85,7 +85,7 @@
     font-size: var(--m__font-size-xxl);
     font-weight: var(--m__font-weight-bold);
     line-height: var(--m__line-height-base);
-    color: rgb(40, 95, 235);
+    color: var(--m__color-blue-500);
   }
 
   & mark.online-doc-highlight {
@@ -123,7 +123,7 @@
     font-family: var(--m__font-family-semi-mono);
     font-weight: var(--m__font-weight-bold);
     line-height: var(--m__line-height-base);
-    color: rgb(40, 95, 235);
+    color: var(--m__color-blue-500);
     background-color: var(--online-doc-callout-bg-color);
     display: inline-block;
     width: fit-content;
@@ -178,14 +178,14 @@
 
   /* Contextual panel — blue tint on white; body copy in callout stays accent blue. */
   & aside.online-doc-callout {
-    color: rgb(40, 95, 235);
+    color: var(--m__color-blue-500);
     background-color: var(--online-doc-callout-bg-color);
     padding: var(--m__widget-padding) calc(2 * var(--m__widget-padding))
       var(--m__widget-padding) var(--m__widget-padding);
 
     & .online-doc-callout__rule {
       border: 0;
-      border-top: 1px solid rgb(40, 95, 235);
+      border-top: var(--m__border-width-s) solid var(--m__color-blue-500);
       margin: 0;
       margin-bottom: var(--m__default-margin-bottom);
       width: 100%;
@@ -206,7 +206,7 @@
       font-weight: var(--m__font-weight-bold);
       text-decoration: underline;
       text-decoration-thickness: 3px;
-      text-decoration-color: rgb(40, 95, 235);
+      text-decoration-color: var(--m__color-blue-500);
       text-underline-offset: 0.18em;
       text-decoration-skip-ink: none;
     }
@@ -226,19 +226,19 @@
     }
 
     & a {
-      color: rgb(35, 84, 207);
+      color: var(--m__color-blue-600);
       text-decoration-color: color-mix(
         in srgb,
-        rgb(35, 84, 207) 35%,
+        var(--m__color-blue-600) 35%,
         transparent
       );
     }
 
     & a:hover {
-      color: rgb(40, 95, 235);
+      color: var(--m__color-blue-500);
       text-decoration-color: color-mix(
         in srgb,
-        rgb(40, 95, 235) 35%,
+        var(--m__color-blue-500) 35%,
         transparent
       );
     }
@@ -248,7 +248,7 @@
       color: inherit;
       text-decoration: underline;
       text-decoration-thickness: 3px;
-      text-decoration-color: rgb(40, 95, 235);
+      text-decoration-color: var(--m__color-blue-500);
       text-underline-offset: 0.18em;
       text-decoration-skip-ink: none;
     }
@@ -265,7 +265,7 @@
       flex-shrink: 0;
       width: 2rem;
       height: 2rem;
-      color: rgb(40, 95, 235);
+      color: var(--m__color-blue-500);
 
       & svg {
         display: block;
@@ -285,7 +285,7 @@
 .title-container {
   background-color: var(--m__bg-accent);
   color: var(--m__text-inverted);
-  border-radius: var(--m__radius-l);
+  border-radius: var(--m__radius-xl);
   margin-top: var(--m__space-m);
   margin-left: calc(-1 * var(--online-doc-title-bleed));
   margin-right: calc(-1 * var(--online-doc-title-bleed));
@@ -297,14 +297,14 @@
     /* Mid between dark-mode --m__text rgb(180, 180, 190) and white. */
     --m__text: rgb(218, 218, 223);
     /* Draft stops — long spans ≈ slow blend, short spans ≈ quick blend. */
-    background-color: rgb(20, 20, 50);
+    background-color: var(--m__color-slate-900);
     /* ~135deg ≈ to bottom right; smaller angle = a bit counter-clockwise. */
     background-image: linear-gradient(
       110deg,
-      rgb(35, 84, 207) 0%,
-      rgb(20, 20, 50) 40%,
-      rgb(50, 50, 70) 75%,
-      rgb(255, 53, 84) 100%
+      var(--m__color-blue-600) 0%,
+      var(--m__color-slate-900) 40%,
+      var(--m__color-slate-700) 75%,
+      var(--m__color-red-500) 100%
     );
     color: var(--m__text);
   }

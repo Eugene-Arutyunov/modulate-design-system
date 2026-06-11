@@ -206,7 +206,7 @@
       item.appendChild(label);
 
       var box = el("div", "m__space " + sizeMod);
-      box.style.backgroundColor = "var(--m__bg-surface)";
+      box.style.backgroundColor = "color-mix(in srgb, var(--m__error) 20%, transparent)";
       item.appendChild(box);
       list.appendChild(item);
     });
