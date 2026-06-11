@@ -1,0 +1,127 @@
+/* Models navigation plaque: family columns on the pricing page
+   (`src/prototypes/pricing.html`) and the vertical variant in the
+   playground sidebar (`src/includes/prototypes/playground-nav-sidebar.html`). */
+
+.models-nav {
+  width: 100%;
+  padding: 0.2rem 0.5rem;
+  background-color: var(--m__bg-surface);
+
+  & .models-nav__cols {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+
+  & .models-nav__col {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  & .models-nav__col-title {
+    display: block;
+    padding: 0.4rem 0.5rem 0.4rem 0.35rem;
+    border-bottom: 1px solid var(--m__border);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+    white-space: nowrap;
+  }
+
+  & .models-nav__models {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    padding-top: 0.15em;
+    padding-bottom: 0.5em;
+  }
+
+  & .models-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.5rem 0.3rem 0.35rem;
+    color: var(--m__text);
+    text-decoration: none;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    white-space: nowrap;
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
+
+    &:hover:not(.active) {
+      color: var(--m__text-link-hover);
+      text-decoration: none;
+      transition-duration: var(--m__duration-instant);
+    }
+
+    &.active {
+      background-color: var(--m__bg);
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  & .models-nav__link-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: currentColor;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  @media (width < 767px) {
+    & .models-nav__cols {
+      flex-wrap: wrap;
+      gap: var(--m__space-s);
+    }
+
+    & .models-nav__col {
+      flex: 1 1 calc(50% - var(--m__space-s) / 2);
+    }
+
+    & .models-nav__col-title {
+      white-space: normal;
+    }
+
+    & .models-nav__link {
+      white-space: normal;
+    }
+  }
+}
+
+/* Vertical variant: family groups stacked in a sidebar */
+.models-nav--vertical {
+  display: flex;
+  flex-direction: column;
+  padding: 0.1rem 0.35rem 0.35rem;
+
+  & .models-nav__group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .models-nav__group-title {
+    display: block;
+    padding: 0.5rem 0.5rem 0.1rem 0.35rem;
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+    white-space: nowrap;
+  }
+
+  & .models-nav__models {
+    padding-bottom: 0.35em;
+  }
+
+  & .models-nav__link-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+}

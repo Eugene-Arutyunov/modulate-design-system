@@ -185,6 +185,18 @@ Public pricing page. Uses `landing-layout.html` — unauthenticated header (Play
 
 ---
 
+## Models navigation plaque
+
+**Styles:** `src/styles/prototypes/models-nav.css`  
+**Used in:** `src/prototypes/pricing.html` (family columns with tier prices, table layout) and `src/includes/prototypes/playground-nav-sidebar.html` (`.models-nav--vertical` — family groups stacked in the playground sidebar).  
+**Bundle:** `src/css-bundle.njk`.
+
+Surface plaque with model links grouped by family (Escalation, Analysis, Redaction, Transcription, Detection). Family headers are semi-mono uppercase captions; links carry sprite icons and highlight on hover via `--m__text-hover-color`. The active sidebar link is bold.
+
+**Include:** `src/includes/prototypes/models-pricing-col-headers.html` — mobile-only Batch/Streaming column header row for `--3` pricing tables; hidden on desktop, repeated at the start of each table body and after each group title on mobile.
+
+---
+
 ## Playground page
 
 **Page:** `src/prototypes/playground.html`  
