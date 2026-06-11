@@ -10,8 +10,8 @@
 }
 
 .docs-model-nav__loading {
-  padding: var(--m__control-inset-padding);
-  color: var(--m__text-caption-color);
+  padding: var(--m__padding-control-m);
+  color: var(--m__text-caption);
   font-size: var(--m__font-size-s);
 }
 
@@ -25,19 +25,19 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.2rem;
-  padding: var(--m__control-inset-padding);
+  padding: var(--m__padding-control-m);
   padding-inline-end: 1rem;
   background: none;
-  border: 1px solid
-    color-mix(in srgb, currentColor 25%, var(--m__background-color));
+  border: var(--m__border-width-s) solid
+    color-mix(in srgb, currentColor 25%, var(--m__bg));
   font: inherit;
   font-size: var(--m__font-size-s);
   text-align: left;
   width: 100%;
   cursor: pointer;
-  color: var(--m__text-color);
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  color: var(--m__text);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:not(:first-child) {
     margin-top: -1px;
@@ -58,8 +58,8 @@
   &:hover {
     position: relative;
     z-index: 1;
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 
   &.active {
@@ -67,7 +67,7 @@
     z-index: 1;
     background-color: color-mix(
       in srgb,
-      var(--m__text-link-color) 8%,
+      var(--m__text-link) 8%,
       transparent
     );
     cursor: default;

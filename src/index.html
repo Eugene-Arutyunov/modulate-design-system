@@ -58,29 +58,49 @@ block content %}
     <h2>Color</h2>
     <div class="m__text-width">
       <p>
-        This is the source of truth for color values in the palette. If a color
-        in the design file differs slightly, consider using the value from here.
-        If it differs significantly, it may be worth checking with the designer.
+        Color lives in two layers. The <strong>palette</strong> holds raw color values —
+        a single source of truth, independent of theme. <strong>Semantic tokens</strong>
+        (text, background, UI) reference palette entries and are the only place themes
+        switch values. In CSS, point to a semantic token when available; reach into the
+        palette only when there is no semantic match.
       </p>
     </div>
     <div class="m__space S"></div>
+
+    <h3>Palette</h3>
+    <div class="m__text-width">
+      <p>
+        Raw colors. Click a swatch to copy the
+        <code>var(--m__color-*)</code> reference.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="color" data-tokens-render="swatch"></div>
+    <div class="m__space L"></div>
+
     <h3>UI Color Palette</h3>
+    <div class="m__text-width">
+      <p>
+        Semantic tokens. These flip with theme; the palette values they point to do not.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
     {% include 'service/color-palette.html' %}
   </div>
 
   <div class="m__wrapper">
     <div class="m__space S"></div>
 
-    <h3>Charts Color Palette</h3>
-    {% include 'service/color-palette-chart.html' %}
+    <div class="guide-tokens__group">
+      <h4 class="guide-tokens__group-label">Charts</h4>
+      {% include 'service/color-palette-chart.html' %}
+    </div>
     <div class="m__space S"></div>
 
-    <h3>Emotion Color Palette</h3>
-    {% include 'service/color-palette-emotion.html' %}
-    <div class="m__space S"></div>
-
-    <h3>Icon Color Palette</h3>
-    {% include 'service/color-palette-icon.html' %}
+    <div class="guide-tokens__group">
+      <h4 class="guide-tokens__group-label">Emotion</h4>
+      {% include 'service/color-palette-emotion.html' %}
+    </div>
     <div class="m__space L"></div>
     <div class="m__text-width">
       <p>
@@ -96,9 +116,9 @@ block content %}
         <div class="m__code-block__toolbar">
           <span>CSS</span>
         </div>
-        <pre><code>color: var(--m__accent-color);
-color: color-mix(in srgb, var(--m__accent-color) 50%, transparent);
-color: color-mix(in srgb, var(--m__accent-color) 50%, var(--m__background-color));</code></pre>
+        <pre><code>color: var(--m__bg-accent);
+color: color-mix(in srgb, var(--m__bg-accent) 50%, transparent);
+color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
       </div>
     </div>
     <div class="m__space S"></div>
@@ -226,18 +246,92 @@ color: color-mix(in srgb, var(--m__accent-color) 50%, var(--m__background-color)
         be placed by whoever assembles the layout.
       </p>
     </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="space" data-tokens-render="space"></div>
+    <div class="m__space M"></div>
+
+    <div class="m__space L"></div>
+    <h3>Paddings</h3>
+    <div class="m__text-width">
+      <p>
+        Internal padding for UI elements grouped by category — controls, widgets, etc.
+        Two-value tokens — <code>padding-block padding-inline</code>.
+        Independent from the spacing scale above.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="padding" data-tokens-render="control-padding"></div>
+    <div class="m__space M"></div>
+
+    <div class="m__space L"></div>
+    <h3>Radius</h3>
+    <div class="m__text-width">
+      <p>
+        Five corner radii: a four-step scale and a pill for fully-rounded shapes.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="radius" data-tokens-render="square"></div>
+    <div class="m__space M"></div>
+    <div class="m__text-width">
+      <p>
+        For squircle corners that scale with the element's font size, use the
+        <code>.m__rounded</code> utility instead — it sets
+        <code>--m__rounded-radius</code> (<code>1.5em</code>) with
+        <code>corner-shape: squircle</code>, and falls back to an SVG mask where
+        <code>corner-shape</code> is unsupported.
+      </p>
+    </div>
+
+    <div class="m__space L"></div>
+    <h3>Border width</h3>
+    <div class="m__text-width">
+      <p>
+        Three stroke weights: <code>s</code> for hairlines and dividers,
+        <code>m</code> for outlined controls (toggles, checkboxes, inputs,
+        outline buttons), <code>l</code> for accent frames like the upload
+        plate.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="border-width" data-tokens-render="border-width"></div>
     <div class="m__space S"></div>
   </div>
 </ids-nav-item>
 
-<ids-nav-item id="components" label="Components">
+<ids-nav-item id="typography" label="Typography">
   <div class="m__wrapper">
     <div class="m__space L"></div>
 
-    <h2>Components</h2>
+    <h2>Typography</h2>
     <div class="m__space S"></div>
 
-    <h3>Text</h3>
+    <h3>Tokens</h3>
+    <div class="m__text-width">
+      <p>
+        Font sizes use <code>rem</code> units except <code>font-size-mono</code>,
+        which is <code>em</code> — it sizes inline code relative to the
+        surrounding text.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens__group">
+      <p class="guide-tokens__group-label">Sizes</p>
+      <div class="guide-tokens" data-tokens-prefix="font-size" data-tokens-render="text-size"></div>
+    </div>
+    <div class="m__space M"></div>
+    <div class="guide-tokens__group">
+      <p class="guide-tokens__group-label">Weights</p>
+      <div class="guide-tokens" data-tokens-prefix="font-weight" data-tokens-render="text-weight"></div>
+    </div>
+    <div class="m__space M"></div>
+    <div class="guide-tokens__group">
+      <p class="guide-tokens__group-label">Families</p>
+      <div class="guide-tokens" data-tokens-prefix="font-family" data-tokens-render="text-family"></div>
+    </div>
+    <div class="m__space M"></div>
+
+    <h3>Blocks</h3>
     <div class="m__text-width">
       <p>
         In this repository, the supported text elements (headings, paragraphs,
@@ -321,17 +415,17 @@ color: color-mix(in srgb, var(--m__accent-color) 50%, var(--m__background-color)
             </p>
           </td>
           <td>
-            <code class="accent">--m__font-size-mono-m</code><br />
-            <code class="accent">--m__font-mono</code><br />
+            <code class="accent">--m__font-size-mono</code><br />
+            <code class="accent">--m__font-family-mono</code><br />
             <code class="accent">--m__font-weight-regular</code><br />
-            <code class="accent">--m__code-color</code>
+            <code class="accent">--m__text-code</code>
           </td>
         </tr>
         <tr>
           <td><code>h1.loud</code></td>
           <td><h1 class="loud">Documentation</h1></td>
           <td>
-            <code class="accent">--m__font-gothic</code><br />
+            <code class="accent">--m__font-family-gothic</code><br />
             <code class="accent">--m__font-size-display</code>
           </td>
         </tr>
@@ -364,7 +458,7 @@ color: color-mix(in srgb, var(--m__accent-color) 50%, var(--m__background-color)
           </td>
           <td>
             <code class="accent">--m__font-size-s</code><br />
-            <code class="accent">--m__text-caption-color</code>
+            <code class="accent">--m__text-caption</code>
           </td>
         </tr>
         <tr>
@@ -383,17 +477,25 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__bg-surface-color</code><br />
+            <code class="accent">--m__bg-surface</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__font-mono</code><br />
-            <code class="accent">--m__font-size-mono-m</code>
+            <code class="accent">--m__font-family-mono</code><br />
+            <code class="accent">--m__font-size-mono</code>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="m__space S"></div>
+  </div>
+</ids-nav-item>
 
-    <h3>Interactive</h3>
+<ids-nav-item id="components" label="Components">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Components</h2>
+    <div class="m__space S"></div>
+
     <table>
       <colgroup>
         <col style="width: 15%" />
@@ -424,13 +526,13 @@ method: POST</code></pre>
             </button>
           </td>
           <td>
-            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__space-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__text-inverted-color</code>
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-inverted</code>
           </td>
         </tr>
         <tr>
@@ -449,12 +551,12 @@ method: POST</code></pre>
             </button>
           </td>
           <td>
-            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__space-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code>
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
           </td>
         </tr>
         <tr>
@@ -473,12 +575,12 @@ method: POST</code></pre>
             </button>
           </td>
           <td>
-            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__space-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code>
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
           </td>
         </tr>
         <tr>
@@ -487,11 +589,11 @@ method: POST</code></pre>
             <button type="button" class="m__button-brutal">Drop or choose file…</button>
           </td>
           <td>
-            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code>
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
           </td>
         </tr>
         <tr>
@@ -502,11 +604,11 @@ method: POST</code></pre>
             </button>
           </td>
           <td>
-            <code class="accent">--m__control-compact-padding</code><br />
+            <code class="accent">--m__padding-control-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__text-inverted-color</code>
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-inverted</code>
           </td>
         </tr>
         <tr>
@@ -515,10 +617,10 @@ method: POST</code></pre>
             <a href="#" class="m__button-secondary-compact">Sign in</a>
           </td>
           <td>
-            <code class="accent">--m__control-compact-padding</code><br />
+            <code class="accent">--m__padding-control-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code>
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
           </td>
         </tr>
         <tr>
@@ -527,10 +629,10 @@ method: POST</code></pre>
             <a href="#" class="m__button-outline-compact">Sign in</a>
           </td>
           <td>
-            <code class="accent">--m__control-compact-padding</code><br />
+            <code class="accent">--m__padding-control-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code>
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
           </td>
         </tr>
         <tr>
@@ -550,9 +652,9 @@ method: POST</code></pre>
           <td>
             <code class="accent">--m__button-preset-padding</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__bg-hover-color</code>
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__bg-accent-hover</code>
           </td>
         </tr>
         <tr>
@@ -561,10 +663,10 @@ method: POST</code></pre>
             <button type="button" class="m__button-danger">Delete</button>
           </td>
           <td>
-            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__ui-error-color</code><br />
-            <code class="accent">--m__ui-error-hover-color</code>
+            <code class="accent">--m__error</code><br />
+            <code class="accent">--m__error-hover</code>
           </td>
         </tr>
         <tr>
@@ -573,10 +675,10 @@ method: POST</code></pre>
             <button type="button" class="m__button-danger-compact">Cancel</button>
           </td>
           <td>
-            <code class="accent">--m__control-compact-padding</code><br />
+            <code class="accent">--m__padding-control-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__ui-error-color</code><br />
-            <code class="accent">--m__ui-error-hover-color</code>
+            <code class="accent">--m__error</code><br />
+            <code class="accent">--m__error-hover</code>
           </td>
         </tr>
         <tr>
@@ -585,10 +687,10 @@ method: POST</code></pre>
             <button type="button" class="m__button-success">Activate</button>
           </td>
           <td>
-            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__ui-success-color</code><br />
-            <code class="accent">--m__ui-success-hover-color</code>
+            <code class="accent">--m__success</code><br />
+            <code class="accent">--m__success-hover</code>
           </td>
         </tr>
         <tr>
@@ -597,10 +699,10 @@ method: POST</code></pre>
             <button type="button" class="m__button-success-compact">Activate</button>
           </td>
           <td>
-            <code class="accent">--m__control-compact-padding</code><br />
+            <code class="accent">--m__padding-control-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__ui-success-color</code><br />
-            <code class="accent">--m__ui-success-hover-color</code>
+            <code class="accent">--m__success</code><br />
+            <code class="accent">--m__success-hover</code>
           </td>
         </tr>
         <tr>
@@ -621,8 +723,8 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__background-color</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__border</code><br />
             <code class="accent">--m__widget-radius</code><br />
             <code class="accent">--m__radius-m</code>
           </td>
@@ -638,12 +740,12 @@ method: POST</code></pre>
             </span>
           </td>
           <td>
-            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__space-xs</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code>
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
           </td>
         </tr>
         <tr>
@@ -667,12 +769,12 @@ method: POST</code></pre>
           </td>
           <td>
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__button-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__space-xs</code><br />
             <code class="accent">--m__space-xxs</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__ui-control-color</code><br />
-            <code class="accent">--m__text-color</code>
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__text</code>
           </td>
         </tr>
         <tr>
@@ -684,11 +786,11 @@ method: POST</code></pre>
             </span>
           </td>
           <td>
-            <code class="accent">--m__button-compact-padding</code><br />
+            <code class="accent">--m__padding-control-xs</code><br />
             <code class="accent">--m__radius-xs</code><br />
             <code class="accent">--m__font-size-s</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__text-color</code>
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code>
           </td>
         </tr>
         <tr>
@@ -702,7 +804,7 @@ method: POST</code></pre>
             <code class="accent">--m__font-size-xs</code><br />
             <code class="accent">--m__font-weight-medium</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__text-caption-color</code>
+            <code class="accent">--m__text-caption</code>
           </td>
         </tr>
         <tr>
@@ -715,7 +817,7 @@ method: POST</code></pre>
           <td>
             <code class="accent">--m__font-size-xs</code><br />
             <code class="accent">--m__font-weight-bold</code><br />
-            <code class="accent">--m__text-color</code>
+            <code class="accent">--m__text</code>
           </td>
         </tr>
         <tr>
@@ -730,11 +832,11 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__button-compact-padding</code><br />
+            <code class="accent">--m__padding-control-xs</code><br />
             <code class="accent">--m__radius-xs</code><br />
             <code class="accent">--m__font-size-s</code><br />
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__bg-hover-color</code>
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__bg-accent-hover</code>
           </td>
         </tr>
         <tr>
@@ -769,16 +871,16 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__control-inset-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-s</code><br />
             <code class="accent">--m__font-size-s</code><br />
-            <code class="accent">--m__ui-control-color</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-caption-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__bg-hover-color</code><br />
-            <code class="accent">--m__ui-error-color</code>
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__error</code>
           </td>
         </tr>
         <tr>
@@ -797,15 +899,15 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__control-inset-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__ui-control-color</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-caption-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
             <code class="accent">--m__line-height-base</code><br />
-            <code class="accent">--m__bg-surface-color</code>
+            <code class="accent">--m__bg-surface</code>
           </td>
         </tr>
         <tr>
@@ -825,14 +927,14 @@ method: POST</code></pre>
             </label>
           </td>
           <td>
-            <code class="accent">--m__button-compact-padding</code><br />
+            <code class="accent">--m__padding-control-xs</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__ui-control-color</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-caption-color</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
             <code class="accent">--m__line-height-base</code><br />
-            <code class="accent">--m__bg-surface-color</code>
+            <code class="accent">--m__bg-surface</code>
           </td>
         </tr>
         <tr>
@@ -847,15 +949,15 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__control-inset-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__ui-control-color</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-caption-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
             <code class="accent">--m__line-height-base</code><br />
-            <code class="accent">--m__bg-hover-color</code>
+            <code class="accent">--m__bg-accent-hover</code>
           </td>
         </tr>
         <tr>
@@ -868,14 +970,14 @@ method: POST</code></pre>
             </label>
           </td>
           <td>
-            <code class="accent">--m__input-padding</code><br />
+            <code class="accent">--m__padding-control-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__ui-control-color</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-caption-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__bg-hover-color</code>
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__bg-accent-hover</code>
           </td>
         </tr>
         <tr>
@@ -893,11 +995,11 @@ method: POST</code></pre>
             </fieldset>
           </td>
           <td>
-            <code class="accent">--m__segmented-control-padding</code><br />
+            <code class="accent">--m__padding-control-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__text-link-color</code>
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link</code>
           </td>
         </tr>
         <tr>
@@ -913,10 +1015,10 @@ method: POST</code></pre>
             </fieldset>
           </td>
           <td>
-            <code class="accent">--m__segmented-control-padding</code><br />
+            <code class="accent">--m__padding-control-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code>
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
           </td>
         </tr>
         <tr>
@@ -930,10 +1032,10 @@ method: POST</code></pre>
             <div class="m__alert-success">Password reset successfully.</div>
           </td>
           <td>
-            <code class="accent">--m__control-inset-padding</code><br />
+            <code class="accent">--m__padding-control-m</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__ui-error-color</code><br />
-            <code class="accent">--m__ui-success-color</code>
+            <code class="accent">--m__error</code><br />
+            <code class="accent">--m__success</code>
           </td>
         </tr>
         <tr>
@@ -957,15 +1059,15 @@ method: POST</code></pre>
             </label>
           </td>
           <td>
-            <code class="accent">--m__ui-border-color</code><br />
+            <code class="accent">--m__border</code><br />
             <code class="accent">--m__radius-xs</code><br />
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__bg-hover-color</code><br />
-            <code class="accent">--m__background-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
         <tr>
@@ -990,12 +1092,12 @@ method: POST</code></pre>
           </td>
           <td>
             <code class="accent">--m__radius-xs</code><br />
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__background-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
         <tr>
@@ -1019,14 +1121,14 @@ method: POST</code></pre>
             </label>
           </td>
           <td>
-            <code class="accent">--m__ui-border-color</code><br />
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__bg-hover-color</code><br />
-            <code class="accent">--m__background-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
         <tr>
@@ -1050,12 +1152,12 @@ method: POST</code></pre>
             </label>
           </td>
           <td>
-            <code class="accent">--m__bg-accent-color</code><br />
-            <code class="accent">--m__bg-hover-color</code><br />
-            <code class="accent">--m__text-color</code><br />
-            <code class="accent">--m__text-hover-color</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
         <tr>
@@ -1073,11 +1175,11 @@ method: POST</code></pre>
             <span class="m__tag" data-tooltip="Conversations in which a service representative handles customer inquiries, complaints, or support requests on behalf of the organization.">Customer Service Call</span>
           </td>
           <td>
-            <code class="accent">--m__background-color</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__border</code><br />
             <code class="accent">--m__radius-s</code><br />
             <code class="accent">--m__font-size-xs</code><br />
-            <code class="accent">--m__text-color</code>
+            <code class="accent">--m__text</code>
           </td>
         </tr>
         <tr>
@@ -1110,13 +1212,13 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__background-color</code><br />
-            <code class="accent">--m__ui-border-color</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__border</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__font-size-s</code><br />
-            <code class="accent">--m__text-caption-color</code><br />
-            <code class="accent">--m__text-link-color</code><br />
-            <code class="accent">--m__text-hover-color</code>
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link</code><br />
+            <code class="accent">--m__text-link-hover</code>
           </td>
         </tr>
       </tbody>
@@ -1541,6 +1643,24 @@ method: POST</code></pre>
         prescribe which CSS properties should be included in a transition.
       </p>
     </div>
+    <div class="m__space XS"></div>
+    <h3>Durations</h3>
+    <div class="m__text-width">
+      <p>Hover the row to play.</p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="duration" data-tokens-render="duration"></div>
+    <div class="m__space M"></div>
+
+    <h3>Easing</h3>
+    <div class="m__text-width">
+      <p>Hover the row to play at 1s.</p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="easing" data-tokens-render="easing"></div>
+    <div class="m__space M"></div>
+
+    <h3>In components</h3>
     <table>
       <colgroup>
         <col style="width: 15%" />
@@ -1579,9 +1699,9 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__hover-transition-duration</code><br />
-            <code class="accent">--m__unhover-transition-duration</code><br />
-            <code class="accent">--m__transition-easing</code>
+            <code class="accent">--m__duration-instant</code><br />
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
           </td>
         </tr>
       </tbody>

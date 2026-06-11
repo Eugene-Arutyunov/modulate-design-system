@@ -38,20 +38,20 @@
 
   function readThemeColors() {
     var style = getComputedStyle(document.body);
-    var textColor = cssVar(style, "--m__text-color");
+    var textColor = cssVar(style, "--m__text");
     return {
-      text: cssVar(style, "--m__text-caption-color"),
+      text: cssVar(style, "--m__text-caption"),
       grid: "color-mix(in srgb, " + textColor + " 12%, transparent)",
-      chartDefault: cssVar(style, "--m__chart-default-color"),
+      chartDefault: cssVar(style, "--m__chart-default"),
       modelColors: [
-        cssVar(style, "--m__chart-model-1-color"),
-        cssVar(style, "--m__chart-model-2-color"),
-        cssVar(style, "--m__chart-model-3-color"),
+        cssVar(style, "--m__chart-model-1"),
+        cssVar(style, "--m__chart-model-2"),
+        cssVar(style, "--m__chart-model-3"),
       ],
-      statusSuccess: cssVar(style, "--m__chart-status-success-color"),
-      statusClientError: cssVar(style, "--m__chart-status-client-error-color"),
-      statusServerError: cssVar(style, "--m__chart-status-server-error-color"),
-      statusProcessing: cssVar(style, "--m__chart-status-processing-color"),
+      statusSuccess: cssVar(style, "--m__chart-status-success"),
+      statusClientError: cssVar(style, "--m__chart-status-client-error"),
+      statusServerError: cssVar(style, "--m__chart-status-server-error"),
+      statusProcessing: cssVar(style, "--m__chart-status-processing"),
     };
   }
 

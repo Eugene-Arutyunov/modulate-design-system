@@ -31,27 +31,27 @@ ids-footnote-link {
 
   /* Not selected state: outlined circle */
   background: transparent;
-  border: 1px solid var(--m__text-color);
-  color: var(--m__text-color);
+  border: var(--m__border-width-s) solid var(--m__text);
+  color: var(--m__text);
 
   &.ids-footnote-link__button--pill {
     width: auto;
     min-width: 1.3em;
     padding: 0 0.35em;
-    border-radius: 9999px;
+    border-radius: var(--m__radius-pill);
   }
 
   /* Selected state: filled circle */
   &.open {
-    background: var(--m__text-color);
-    border: 1px solid transparent;
-    color: var(--m__background-color);
+    background: var(--m__text);
+    border: var(--m__border-width-s) solid transparent;
+    color: var(--m__bg);
   }
 
   /* Hover state for non-selected */
   &:not(.open):hover {
-    border-color: var(--m__text-hover-color);
-    color: var(--m__text-hover-color);
+    border-color: var(--m__text-link-hover);
+    color: var(--m__text-link-hover);
   }
 }
 
@@ -74,7 +74,7 @@ ids-footnote-link {
 aside.ids-footnote {
   /* Reset prose `aside` (page-composition); footnote is overlay UI, not a text block */
   margin: 0;
-  background-color: var(--m__background-color);
+  background-color: var(--m__bg);
   border-radius: 0.3em;
   padding: 0.975em;
 
@@ -83,7 +83,7 @@ aside.ids-footnote {
   font-size: 0.8em;
   z-index: 150;
   box-shadow: 0 0.5em 1em
-    color-mix(in srgb, var(--m__text-color) 30%, transparent);
+    color-mix(in srgb, var(--m__text) 30%, transparent);
 
   /* First paragraph badge - black filled circle */
   p:first-child::before {
@@ -93,8 +93,8 @@ aside.ids-footnote {
     width: 1.3em;
     height: 1.3em;
     border-radius: 50%;
-    background: var(--m__text-color);
-    color: var(--m__background-color);
+    background: var(--m__text);
+    color: var(--m__bg);
     font-size: 1em;
     line-height: 1;
     margin-right: 0.3em;
@@ -105,15 +105,15 @@ aside.ids-footnote {
     width: auto;
     min-width: 1.3em;
     padding: 0 0.3em;
-    border-radius: 9999px;
+    border-radius: var(--m__radius-pill);
     box-sizing: border-box;
   }
 
   /* Scrollability */
   &.scrollable {
     box-shadow:
-      0 0.5em 1em color-mix(in srgb, var(--m__text-color) 50%, transparent),
-      0 -10em 0 color-mix(in srgb, var(--m__text-color) 30%, transparent);
+      0 0.5em 1em color-mix(in srgb, var(--m__text) 50%, transparent),
+      0 -10em 0 color-mix(in srgb, var(--m__text) 30%, transparent);
     overflow: auto;
   }
 }
@@ -136,7 +136,7 @@ aside.ids-footnote {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     box-shadow: 0 0.5em 1em
-      color-mix(in srgb, var(--m__text-color) 30%, transparent);
+      color-mix(in srgb, var(--m__text) 30%, transparent);
   }
 }
 
@@ -155,7 +155,7 @@ html:has(.ids-footnote.scrollable) {
   width: 100%;
   background-color: transparent;
   border: none;
-  color: var(--m__text-link-color);
+  color: var(--m__text-link);
   cursor: pointer;
   font-size: 0.9em;
   padding: 0.5em 0;
@@ -163,7 +163,7 @@ html:has(.ids-footnote.scrollable) {
 
   &:hover,
   &:active {
-    color: var(--m__text-hover-color);
+    color: var(--m__text-link-hover);
   }
 
   svg {

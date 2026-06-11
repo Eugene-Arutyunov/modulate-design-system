@@ -9,32 +9,32 @@
 }
 
 .m__tag {
-  padding: var(--m__button-compact-padding);
+  padding: var(--m__padding-control-xs);
   border-radius: var(--m__radius-xs);
   font-size: var(--m__font-size-s);
   background-color: transparent;
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
 }
 
 .m__tag-flat {
   font-size: var(--m__font-size-xs);
-  padding: var(--m__tag-flat-padding);
+  padding: 0.2em 0.45em;
   border-radius: var(--m__radius-s);
   background-color: color-mix(in srgb, currentColor 15%, transparent);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 
 .m__tag--success {
-  color: var(--m__ui-success-color);
+  color: var(--m__success);
 }
 .m__tag--error {
-  color: var(--m__ui-error-color);
+  color: var(--m__error);
 }
 .m__tag--muted {
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 .m__tag--secondary {
-  color: var(--m__bg-hover-color);
+  color: var(--m__bg-accent-hover);
 }
 
 .m__tag-group {
@@ -46,21 +46,21 @@
 .m__tag-toggle {
   display: inline-flex;
   align-items: center;
-  padding: var(--m__button-compact-padding);
+  padding: var(--m__padding-control-xs);
   border-radius: var(--m__radius-s);
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-medium);
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
-  color: var(--m__text-color);
+  color: var(--m__text);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    background-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    background-color var(--m__duration-base)
+      var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   & input[type="checkbox"],
   & input[type="radio"] {
@@ -73,23 +73,23 @@
   }
 
   &:hover {
-    color: var(--m__text-hover-color);
+    color: var(--m__text-link-hover);
     border-color: color-mix(
       in srgb,
-      var(--m__text-hover-color) 40%,
+      var(--m__text-link-hover) 40%,
       transparent
     );
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:has(input:checked) {
-    color: var(--m__background-color);
-    background-color: var(--m__bg-accent-color);
-    border-color: var(--m__bg-accent-color);
+    color: var(--m__bg);
+    background-color: var(--m__bg-accent);
+    border-color: var(--m__bg-accent);
 
     &:hover {
-      background-color: var(--m__text-hover-color);
-      border-color: var(--m__text-hover-color);
+      background-color: var(--m__text-link-hover);
+      border-color: var(--m__text-link-hover);
     }
   }
 }

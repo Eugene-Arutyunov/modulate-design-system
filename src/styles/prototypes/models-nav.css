@@ -5,7 +5,7 @@
 .models-nav {
   width: 100%;
   padding: 0.2rem 0.5rem;
-  background-color: var(--m__bg-surface-color);
+  background-color: var(--m__bg-surface);
 
   & .models-nav__cols {
     display: flex;
@@ -21,13 +21,13 @@
   & .models-nav__col-title {
     display: block;
     padding: 0.4rem 0.5rem 0.4rem 0.35rem;
-    border-bottom: 1px solid var(--m__ui-border-color);
-    font-family: var(--m__font-semi-mono);
+    border-bottom: var(--m__border-width-s) solid var(--m__border);
+    font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-s);
     font-weight: var(--m__font-weight-regular);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
     white-space: nowrap;
   }
 
@@ -44,22 +44,22 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.3rem 0.5rem 0.3rem 0.35rem;
-    color: var(--m__text-color);
+    color: var(--m__text);
     text-decoration: none;
     font-size: var(--m__font-size-s);
     font-weight: var(--m__font-weight-medium);
     white-space: nowrap;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &:hover:not(.active) {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       text-decoration: none;
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     &.active {
-      background-color: var(--m__background-color);
+      background-color: var(--m__bg);
       cursor: default;
       pointer-events: none;
     }
@@ -107,12 +107,12 @@
   & .models-nav__group-title {
     display: block;
     padding: 0.5rem 0.5rem 0.1rem 0.35rem;
-    font-family: var(--m__font-semi-mono);
+    font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
     font-weight: var(--m__font-weight-regular);
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
     white-space: nowrap;
   }
 

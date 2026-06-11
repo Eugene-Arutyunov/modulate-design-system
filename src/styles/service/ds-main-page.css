@@ -15,25 +15,25 @@
     gap: 0.5rem;
     padding: 0.75rem;
     border-radius: var(--m__widget-radius);
-    background-color: var(--m__bg-surface-color);
+    background-color: var(--m__bg-surface);
     cursor: pointer;
-    transition: background-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: background-color var(--m__duration-base)
+      var(--m__easing-base);
 
     &:hover {
       background-color: color-mix(
         in srgb,
-        var(--m__bg-surface-color) 88%,
+        var(--m__bg-surface) 88%,
         white
       );
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
   }
 
   & .docs-icon-row__icon {
     width: 1.6rem;
     height: 1.6rem;
-    color: var(--m__text-color);
+    color: var(--m__text);
     fill: currentColor;
     flex-shrink: 0;
     transform-origin: center center;
@@ -50,7 +50,7 @@
   & .docs-icon-row__label {
     max-width: 100%;
     font-size: var(--m__font-size-s);
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;

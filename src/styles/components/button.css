@@ -38,8 +38,8 @@ button.m__button-icon {
 .m__button__icon {
   display: block;
   position: relative;
-  width: var(--m__button-icon-size);
-  height: var(--m__button-icon-size);
+  width: 1lh;
+  height: 1lh;
   flex-shrink: 0;
   overflow: hidden;
   align-self: end;
@@ -47,72 +47,72 @@ button.m__button-icon {
 
 a.m__button,
 button.m__button {
-  padding: var(--m__button-padding);
-  background-color: var(--m__bg-accent-color);
-  color: var(--m__text-inverted-color);
+  padding: var(--m__padding-control-m);
+  background-color: var(--m__bg-accent);
+  color: var(--m__text-inverted);
   border: none;
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
-    background-color: var(--m__text-hover-color);
-    color: var(--m__text-inverted-color);
-    transition-duration: var(--m__hover-transition-duration);
+    background-color: var(--m__text-link-hover);
+    color: var(--m__text-inverted);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 a.m__button-secondary,
 button.m__button-secondary {
-  padding: var(--m__button-padding);
+  padding: var(--m__padding-control-m);
   background-color: color-mix(in srgb, currentColor 10%, transparent);
-  color: var(--m__text-color);
+  color: var(--m__text);
   border: none;
   transition:
-    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    background-color var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 
   &:hover {
     background-color: color-mix(in srgb, currentColor 15%, transparent);
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 a.m__button-outline,
 button.m__button-outline {
-  padding: var(--m__button-padding);
+  padding: var(--m__padding-control-m);
   background-color: transparent;
-  color: var(--m__text-color);
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  color: var(--m__text);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 a.m__button-brutal,
 button.m__button-brutal {
-  padding: var(--m__button-padding);
+  padding: var(--m__padding-control-m);
   background-color: transparent;
-  color: var(--m__text-color);
-  border: 2px solid var(--m__bg-accent-color);
+  color: var(--m__text);
+  border: var(--m__border-width-m) solid var(--m__bg-accent);
   font-weight: var(--m__font-weight-medium);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base) var(--m__easing-base);
 
   &:hover {
-    color: var(--m__text-hover-color);
-    border-color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    border-color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:active {
-    color: var(--m__text-active-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-pressed);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -123,7 +123,7 @@ button.m__button-brutal {
   & > :is(button, a):first-of-type {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-    border-right-width: 1px;
+    border-right-width: var(--m__border-width-s);
   }
 
   & > :is(button, a):last-of-type {
@@ -133,154 +133,154 @@ button.m__button-brutal {
   }
 
   &:has(> :is(button, a):last-of-type:hover) > :is(button, a):first-of-type {
-    border-right-color: var(--m__text-hover-color);
+    border-right-color: var(--m__text-link-hover);
   }
 }
 
 a.m__button-compact,
 button.m__button-compact {
-  padding: var(--m__control-compact-padding);
+  padding: var(--m__padding-control-s);
   border-radius: var(--m__radius-s);
 
-  background-color: var(--m__bg-accent-color);
-  color: var(--m__text-inverted-color);
-  border: 1px solid transparent;
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  background-color: var(--m__bg-accent);
+  color: var(--m__text-inverted);
+  border: var(--m__border-width-s) solid transparent;
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
-    background-color: var(--m__text-hover-color);
-    color: var(--m__text-inverted-color);
-    transition-duration: var(--m__hover-transition-duration);
+    background-color: var(--m__text-link-hover);
+    color: var(--m__text-inverted);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 a.m__button-secondary-compact,
 button.m__button-secondary-compact {
-  padding: var(--m__control-compact-padding);
+  padding: var(--m__padding-control-s);
   border-radius: var(--m__radius-s);
   background-color: color-mix(in srgb, currentColor 10%, transparent);
-  color: var(--m__text-color);
+  color: var(--m__text);
   border: none;
   transition:
-    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    background-color var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 
   &:hover {
     background-color: color-mix(in srgb, currentColor 15%, transparent);
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 a.m__button-outline-compact,
 button.m__button-outline-compact {
-  padding: var(--m__control-compact-padding);
+  padding: var(--m__padding-control-s);
   border-radius: var(--m__radius-s);
   background-color: transparent;
-  color: var(--m__text-color);
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  color: var(--m__text);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 button.m__button:active,
 button.m__button-compact:active {
-  background-color: var(--m__bg-active-color);
-  transition-duration: var(--m__hover-transition-duration);
+  background-color: var(--m__bg-accent-pressed);
+  transition-duration: var(--m__duration-instant);
 }
 
 a.m__button-danger,
 button.m__button-danger {
-  padding: var(--m__button-padding);
+  padding: var(--m__padding-control-m);
   background-color: transparent;
-  color: color-mix(in srgb, var(--m__ui-error-color) 85%, transparent);
-  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  color: color-mix(in srgb, var(--m__error) 85%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
-    color: var(--m__ui-error-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__error-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 a.m__button-danger-compact,
 button.m__button-danger-compact {
-  padding: var(--m__control-compact-padding);
+  padding: var(--m__padding-control-s);
   border-radius: var(--m__radius-s);
   background-color: transparent;
-  color: color-mix(in srgb, var(--m__ui-error-color) 80%, transparent);
-  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  color: color-mix(in srgb, var(--m__error) 80%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
-    color: var(--m__ui-error-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__error-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 button.m__button-danger:active,
 button.m__button-danger-compact:active {
   background-color: transparent;
-  color: color-mix(in srgb, var(--m__ui-error-color) 80%, transparent);
-  transition-duration: var(--m__hover-transition-duration);
+  color: color-mix(in srgb, var(--m__error) 80%, transparent);
+  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-secondary:active,
 button.m__button-secondary-compact:active {
   background-color: color-mix(in srgb, currentColor 8%, transparent);
-  color: var(--m__text-active-color);
-  transition-duration: var(--m__hover-transition-duration);
+  color: var(--m__text-link-pressed);
+  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-outline:active,
 button.m__button-outline-compact:active {
-  color: var(--m__text-active-color);
-  transition-duration: var(--m__hover-transition-duration);
+  color: var(--m__text-link-pressed);
+  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-preset {
   flex-grow: 1;
-  padding: var(--m__button-preset-padding);
+  padding: 0.4rem 0.5rem;
   border-radius: var(--m__radius-s);
   background-color: transparent;
-  color: var(--m__text-color);
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  color: var(--m__text);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
   flex-direction: column;
   align-items: flex-start;
   gap: 0.05em;
   line-height: 1.2;
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:active {
-    color: var(--m__text-active-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-pressed);
+    transition-duration: var(--m__duration-instant);
   }
 
   &[aria-pressed="true"] {
-    color: var(--m__text-hover-color);
+    color: var(--m__text-link-hover);
     outline: 1px solid color-mix(in srgb, currentColor 100%, transparent);
     outline-offset: -1px;
     background-color: color-mix(
       in srgb,
-      var(--m__bg-hover-color) 8%,
+      var(--m__bg-accent-hover) 8%,
       transparent
     );
   }
@@ -288,57 +288,57 @@ button.m__button-preset {
 
 a.m__button-success,
 button.m__button-success {
-  padding: var(--m__button-padding);
+  padding: var(--m__padding-control-m);
 
   background-color: transparent;
-  color: color-mix(in srgb, var(--m__ui-success-color) 80%, transparent);
-  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  color: color-mix(in srgb, var(--m__success) 80%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
-    color: var(--m__ui-success-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__success-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 a.m__button-success-compact,
 button.m__button-success-compact {
-  padding: var(--m__control-compact-padding);
+  padding: var(--m__padding-control-s);
   border-radius: var(--m__radius-s);
 
   background-color: transparent;
-  color: color-mix(in srgb, var(--m__ui-success-color) 80%, transparent);
-  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  color: color-mix(in srgb, var(--m__success) 80%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
   transition:
-    color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    border-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base)
+      var(--m__easing-base);
 
   &:hover {
-    color: var(--m__ui-success-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__success-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 button.m__button-success:active,
 button.m__button-success-compact:active {
-  color: color-mix(in srgb, var(--m__ui-success-color) 80%, transparent);
-  transition-duration: var(--m__hover-transition-duration);
+  color: color-mix(in srgb, var(--m__success) 80%, transparent);
+  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-icon {
   padding: 0.3em;
   border-radius: var(--m__radius-s);
   background-color: transparent;
-  color: var(--m__text-color);
+  color: var(--m__text);
   border: none;
   align-items: center;
   transition:
-    background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-    color var(--m__unhover-transition-duration) var(--m__transition-easing);
+    background-color var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 
   & svg {
     display: block;
@@ -348,14 +348,14 @@ button.m__button-icon {
 
   &:hover {
     background-color: color-mix(in srgb, currentColor 10%, transparent);
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:active {
     background-color: color-mix(in srgb, currentColor 8%, transparent);
-    color: var(--m__text-active-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-pressed);
+    transition-duration: var(--m__duration-instant);
   }
 
 }
@@ -374,7 +374,7 @@ button.m__button-inline {
   text-underline-offset: 2px;
 
   &:hover {
-    color: var(--m__text-hover-color);
+    color: var(--m__text-link-hover);
     text-decoration-style: solid;
   }
 }

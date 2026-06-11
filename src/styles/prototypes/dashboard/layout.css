@@ -46,12 +46,12 @@ html:has(.dashboard-layout) {
     align-items: center;
     gap: 0.35rem;
     padding: 0.45rem 1.25rem 0.45rem 0.75rem;
-    border-radius: 0.5rem;
-    color: var(--m__text-color);
+    border-radius: var(--m__radius-l);
+    color: var(--m__text);
     text-decoration: none;
     font-size: 0.9rem;
-    transition: background-color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: background-color var(--m__duration-base)
+      var(--m__easing-base);
 
     & .nav-sidebar__link-icon {
       width: 1rem;
@@ -62,18 +62,18 @@ html:has(.dashboard-layout) {
     }
 
     &:hover {
-      background-color: var(--m__bg-surface-color);
-      transition-duration: var(--m__hover-transition-duration);
+      background-color: var(--m__bg-surface);
+      transition-duration: var(--m__duration-instant);
     }
 
     &.active {
-      background-color: var(--m__bg-surface-color);
-      font-weight: 700;
+      background-color: var(--m__bg-surface);
+      font-weight: var(--m__font-weight-heavy);
     }
 
     & .nav-sidebar__link-caption {
       font-size: var(--m__font-size-s);
-      color: var(--m__text-caption-color);
+      color: var(--m__text-caption);
     }
 
     &:has(.nav-sidebar__link-caption) {
@@ -149,7 +149,7 @@ html:has(.dashboard-layout) {
 
   & .chart-empty {
     font-size: var(--m__font-size-s);
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
   }
 
   & .chart-status-bar {
@@ -157,7 +157,7 @@ html:has(.dashboard-layout) {
     line-height: 1.3;
     min-height: 1.3em;
     font-size: var(--m__font-size-xs);
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
     text-align: center;
   }
 
@@ -168,7 +168,7 @@ html:has(.dashboard-layout) {
     gap: 0.2rem 0.75rem;
     padding-top: 0.65rem;
     font-size: var(--m__font-size-xs);
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
 
     & .chart-legend-item {
       display: inline-flex;
@@ -219,7 +219,7 @@ table.org-details {
     width: 1%;
     white-space: nowrap;
     font-weight: var(--m__font-weight-bold);
-    color: var(--m__text-color);
+    color: var(--m__text);
     background-color: transparent;
     position: static;
     padding-right: 2rem;
@@ -254,8 +254,8 @@ table.org-details {
       display: flex;
       flex-direction: column;
       padding: 0.75rem 0;
-      border-bottom: 1px solid
-        color-mix(in srgb, var(--m__text-color) 12%, transparent);
+      border-bottom: var(--m__border-width-s) solid
+        color-mix(in srgb, var(--m__text) 12%, transparent);
     }
 
     & tbody tr:last-child {
@@ -358,7 +358,7 @@ table.config-details {
   font-size: var(--m__font-size-s);
 
   & .billing-credit-code__description {
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
     margin-bottom: 0;
     flex: 1;
   }
@@ -411,19 +411,19 @@ table.config-details {
   align-items: center;
   gap: 0.1rem;
   font-size: var(--m__font-size-s);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   text-decoration: none;
   margin-left: -0.22rem;
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   & svg {
     flex-shrink: 0;
   }
 
   &:hover {
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -505,8 +505,8 @@ table.config-details {
 
 .config-form {
   & .m__select select {
-    padding: var(--m__input-padding);
-    padding-right: calc(var(--m__input-padding) + 1.4em);
+    padding: var(--m__padding-control-s);
+    padding-right: calc(var(--m__padding-control-s) + 1.4em);
   }
 
   & .m__textfield {
@@ -527,7 +527,7 @@ table.config-details {
   background: linear-gradient(
     to bottom,
     transparent,
-    var(--m__background-color) 40%
+    var(--m__bg) 40%
   );
   margin-top: 0.5rem;
 }
@@ -543,12 +543,12 @@ table.config-details {
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-medium);
   line-height: 1.3;
-  color: var(--m__text-color);
+  color: var(--m__text);
 }
 
 .bw-behavior-desc {
   font-size: var(--m__font-size-xs);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   margin-top: 0.1rem;
   line-height: 1.4;
   display: -webkit-box;
@@ -602,12 +602,12 @@ table.config-details {
   gap: 0.2rem;
   max-width: 100%;
   padding-right: 0;
-  transition: border-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: border-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     border-color: color-mix(in srgb, currentColor 50%, transparent);
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -624,28 +624,28 @@ table.config-details {
   opacity: 0.5;
   line-height: 1;
   flex-shrink: 0;
-  transition: opacity var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: opacity var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
     opacity: 1;
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
 .bw-tags-cell {
   cursor: pointer;
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover,
   &.bw-cell--active {
     background-color: color-mix(
       in srgb,
-      var(--m__bg-hover-color) 5%,
+      var(--m__bg-accent-hover) 5%,
       transparent
     );
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -695,19 +695,19 @@ table.config-details {
 }
 
 #bw-list tbody tr [data-bw-delete] {
-  color: var(--m__ui-error-color);
+  color: var(--m__error);
 }
 
 @media (hover: hover) {
   #bw-list tbody tr [data-bw-delete] {
     opacity: 0;
-    transition: opacity var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: opacity var(--m__duration-base)
+      var(--m__easing-base);
   }
 
   #bw-list tbody tr:hover [data-bw-delete] {
     opacity: 1;
-    transition-duration: var(--m__hover-transition-duration);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -716,33 +716,33 @@ table.config-details {
 }
 
 #bw-list tbody tr td {
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 }
 
 #bw-list tbody tr:not(.bw-empty-row) td:not(:last-child):hover {
   background-color: color-mix(
     in srgb,
-    var(--m__bg-hover-color) 5%,
+    var(--m__bg-accent-hover) 5%,
     transparent
   );
-  outline: 1px solid color-mix(in srgb, var(--m__text-color) 20%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--m__text) 20%, transparent);
   outline-offset: -1px;
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 #bw-list tbody tr:not(.bw-empty-row):has(td:last-child:hover) {
-  outline: 1px solid color-mix(in srgb, var(--m__text-color) 20%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--m__text) 20%, transparent);
   outline-offset: -1px;
 }
 
 #bw-list tbody tr:not(.bw-empty-row):has(td:last-child:hover) td {
   background-color: color-mix(
     in srgb,
-    var(--m__bg-hover-color) 5%,
+    var(--m__bg-accent-hover) 5%,
     transparent
   );
-  transition-duration: var(--m__hover-transition-duration);
+  transition-duration: var(--m__duration-instant);
 }
 
 #bw-list .bw-empty-row td {
@@ -793,8 +793,8 @@ table.config-details {
   padding: 0.45rem 0.65rem;
   border-radius: var(--m__radius-m);
   cursor: pointer;
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   & .m__checkbox {
     margin-top: 0.05rem;
@@ -802,8 +802,8 @@ table.config-details {
   }
 
   &:hover {
-    background-color: var(--m__bg-surface-color);
-    transition-duration: var(--m__hover-transition-duration);
+    background-color: var(--m__bg-surface);
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -820,13 +820,13 @@ table.config-details {
   gap: 0.5rem;
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-medium);
-  color: var(--m__text-color);
+  color: var(--m__text);
   line-height: 1.3;
 }
 
 .bw-add-item-desc {
   font-size: var(--m__font-size-xs);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 10;
@@ -840,7 +840,7 @@ table.config-details {
 
 .bw-add-empty {
   font-size: var(--m__font-size-s);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   text-align: center;
   padding: 1rem 0;
   margin: 0;
@@ -877,14 +877,14 @@ table.config-details {
 
   & label {
     font-size: var(--m__font-size-s);
-    font-weight: 500;
-    color: var(--m__text-color);
+    font-weight: var(--m__font-weight-medium);
+    color: var(--m__text);
   }
 }
 
 .bw-prompt-sep {
   font-size: var(--m__font-size-s);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 
 .bw-prompt-link {
@@ -902,7 +902,7 @@ table.config-details {
 
 .m__label-optional {
   font-weight: var(--m__font-weight-regular);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 
 .bw-tpl-wrap {
@@ -915,39 +915,39 @@ table.config-details {
   justify-content: space-between;
   gap: 0.5rem;
   width: 100%;
-  padding: var(--m__control-inset-padding);
-  background-color: var(--m__ui-control-color);
-  border: 1px solid var(--m__ui-border-color);
+  padding: var(--m__padding-control-m);
+  background-color: var(--m__bg-input);
+  border: var(--m__border-width-s) solid var(--m__border);
   border-radius: var(--m__radius-s);
   font: inherit;
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   cursor: pointer;
   text-align: left;
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:focus-visible,
   &[aria-expanded="true"] {
-    outline: 1px solid var(--m__text-hover-color);
+    outline: 1px solid var(--m__text-link-hover);
     outline-offset: -1px;
     background-color: color-mix(
       in srgb,
-      var(--m__bg-hover-color) 8%,
+      var(--m__bg-accent-hover) 8%,
       transparent
     );
-    color: var(--m__text-hover-color);
+    color: var(--m__text-link-hover);
   }
 
   &.has-value {
-    color: var(--m__text-color);
+    color: var(--m__text);
 
     &:hover {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
     }
   }
 
@@ -966,12 +966,12 @@ table.config-details {
 
 .bw-tpl-trigger-label {
   display: none;
-  font-weight: 500;
-  color: var(--m__text-caption-color);
+  font-weight: var(--m__font-weight-medium);
+  color: var(--m__text-caption);
   white-space: nowrap;
   flex-shrink: 0;
-  transition: color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: color var(--m__duration-base)
+    var(--m__easing-base);
 
   &::after {
     content: ":";
@@ -984,8 +984,8 @@ table.config-details {
 }
 
 .bw-tpl-trigger.has-value:hover .bw-tpl-trigger-label {
-  color: var(--m__text-hover-color);
-  transition-duration: var(--m__hover-transition-duration);
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
 }
 
 #bw-tpl-trigger-text {
@@ -1007,7 +1007,7 @@ table.config-details {
     padding-right: 0;
     scrollbar-gutter: stable;
     scrollbar-width: thin;
-    scrollbar-color: var(--m__ui-border-color) transparent;
+    scrollbar-color: var(--m__border) transparent;
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -1040,7 +1040,7 @@ table.config-details {
   border: none;
   cursor: pointer;
   font: inherit;
-  color: var(--m__text-color);
+  color: var(--m__text);
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
@@ -1050,20 +1050,20 @@ table.config-details {
     white-space: normal;
     row-gap: 0.15rem;
   }
-  transition: background-color var(--m__unhover-transition-duration)
-    var(--m__transition-easing);
+  transition: background-color var(--m__duration-base)
+    var(--m__easing-base);
 
   &:hover {
-    background-color: var(--m__bg-surface-color);
-    transition-duration: var(--m__hover-transition-duration);
+    background-color: var(--m__bg-surface);
+    transition-duration: var(--m__duration-instant);
   }
 
   &.is-selected {
-    color: var(--m__text-link-color);
+    color: var(--m__text-link);
   }
 
   &.is-dimmed {
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
     opacity: 0.6;
 
     & .bw-tpl-item-usecase {
@@ -1074,7 +1074,7 @@ table.config-details {
 
 .bw-tpl-item-usecase {
   flex-shrink: 0;
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   font-weight: var(--m__font-weight-regular);
   font-size: var(--m__font-size-s);
 
@@ -1088,7 +1088,7 @@ table.config-details {
   margin: 0;
   padding: 0.4rem 0.65rem;
   font-size: var(--m__font-size-xs);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 
 .bw-tpl-empty[hidden] {

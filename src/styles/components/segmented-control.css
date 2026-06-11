@@ -3,50 +3,50 @@
   max-width: 100%;
   margin: 0 0 0.75rem;
   padding: 0;
-  border: 2px solid var(--m__text-color);
+  border: var(--m__border-width-m) solid var(--m__text);
   border-radius: var(--m__radius-s);
   overflow: hidden;
 
   & label {
     display: block;
-    padding: var(--m__segmented-control-padding);
+    padding: var(--m__padding-control-s);
     font-size: 0.8em;
-    font-weight: 500;
+    font-weight: var(--m__font-weight-medium);
     cursor: pointer;
-    color: var(--m__text-color);
-    border-right: 1px solid
-      color-mix(in srgb, var(--m__text-color) 20%, transparent);
+    color: var(--m__text);
+    border-right: var(--m__border-width-s) solid
+      color-mix(in srgb, var(--m__text) 20%, transparent);
     min-width: 0;
-    transition: var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: var(--m__duration-base)
+      var(--m__easing-base);
 
     &:last-child {
       border-right: none;
     }
 
     &:hover {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       background-color: color-mix(
         in srgb,
-        var(--m__text-hover-color) 10%,
+        var(--m__text-link-hover) 10%,
         transparent
       );
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     &:has(input:checked) {
       background-color: color-mix(
         in srgb,
-        var(--m__text-link-color) 8%,
+        var(--m__text-link) 8%,
         transparent
       );
       cursor: default;
 
       &:hover {
-        color: var(--m__text-color);
+        color: var(--m__text);
         background-color: color-mix(
           in srgb,
-          var(--m__text-link-color) 8%,
+          var(--m__text-link) 8%,
           transparent
         );
       }
@@ -62,41 +62,41 @@
   display: inline-flex;
   margin: 0 0 0.75rem;
   padding: 0;
-  border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 15%, transparent);
   overflow: hidden;
   border-radius: var(--m__radius-s);
 
   & label {
     display: block;
-    padding: var(--m__segmented-control-padding);
+    padding: var(--m__padding-control-s);
     font-size: 0.8em;
-    font-weight: 500;
+    font-weight: var(--m__font-weight-medium);
     cursor: pointer;
-    color: var(--m__text-color);
-    border-right: 1px solid
-      color-mix(in srgb, var(--m__text-color) 15%, transparent);
-    transition: var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color: var(--m__text);
+    border-right: var(--m__border-width-s) solid
+      color-mix(in srgb, var(--m__text) 15%, transparent);
+    transition: var(--m__duration-base)
+      var(--m__easing-base);
 
     &:last-child {
       border-right: none;
     }
 
     &:hover {
-      color: var(--m__text-hover-color);
+      color: var(--m__text-link-hover);
       background-color: color-mix(
         in srgb,
-        var(--m__text-hover-color) 10%,
+        var(--m__text-link-hover) 10%,
         transparent
       );
-      transition-duration: var(--m__hover-transition-duration);
+      transition-duration: var(--m__duration-instant);
     }
 
     &:has(input:checked) {
-      color: var(--m__text-color);
+      color: var(--m__text);
       background-color: color-mix(
         in srgb,
-        var(--m__text-color) 5%,
+        var(--m__text) 5%,
         transparent
       );
       cursor: default;

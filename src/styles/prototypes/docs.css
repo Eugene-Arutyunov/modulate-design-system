@@ -15,13 +15,13 @@
   font-weight: var(--m__font-weight-medium);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 
 /* Empty / loading state */
 .docs-loading {
   padding: 2rem 0.75rem;
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   font-size: var(--m__font-size-s);
   text-align: center;
 }
@@ -40,7 +40,7 @@
 
 /* Doc content panel — code-block-style wrapper for both quickstart and API spec */
 .docs-panel {
-  background-color: var(--m__bg-surface-color);
+  background-color: var(--m__bg-surface);
   border-radius: var(--m__radius-s);
   overflow: hidden;
   margin-bottom: var(--m__default-margin-bottom);
@@ -49,22 +49,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--m__code-block-toolbar-padding);
-    border-bottom: 1px solid var(--m__ui-border-color);
+    padding: 0.4rem 0.6rem;
+    border-bottom: var(--m__border-width-s) solid var(--m__border);
     font-size: var(--m__font-size-s);
-    color: var(--m__text-caption-color);
+    color: var(--m__text-caption);
   }
 
   & .docs-panel__body {
     padding: 0.5rem 0.7rem;
 
     & pre {
-      border: 1px solid var(--m__ui-border-color);
+      border: var(--m__border-width-s) solid var(--m__border);
     }
 
     & code {
-      font-family: var(--m__font-semi-mono);
-      color: var(--m__code-color);
+      font-family: var(--m__font-family-semi-mono);
+      color: var(--m__text-code);
       background: none;
       border: none;
       padding: 0;
@@ -148,20 +148,20 @@
 
 /* Grouped column headers (e.g. "English Fast" spanning Batch + Streaming) */
 .models-pricing-table__group-header {
-  font-weight: 600;
-  border-bottom: 1px solid var(--m__text-color);
+  font-weight: var(--m__font-weight-bold);
+  border-bottom: var(--m__border-width-s) solid var(--m__text);
 }
 
 /* Sub-labels in second thead row of grouped tables */
 .models-pricing-table--5 thead tr:nth-child(2) th {
   font-size: var(--m__font-size-s);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   font-weight: var(--m__font-weight-regular);
 }
 
 .models-pricing-table th {
   font-size: var(--m__font-size-m);
-  color: var(--m__text-color);
+  color: var(--m__text);
   font-weight: var(--m__font-weight-regular);
 }
 
@@ -171,13 +171,13 @@
 
 .models-pricing-table thead th:first-child {
   font-size: var(--m__font-size-s);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
   font-weight: var(--m__font-weight-regular);
 }
 
 .models-pricing-table tbody td:first-child:not([colspan]) {
   font-size: var(--m__font-size-s);
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 
 .models-section-intro {
@@ -192,6 +192,16 @@
   }
 }
 
+.models-section-heading__icon {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  line-height: 1;
+  position: relative;
+  top: 0.1em;
+  color: var(--m__text);
+}
+
 .models-section-intro__icon-tile {
   display: flex;
   align-items: center;
@@ -199,8 +209,8 @@
   width: 5rem;
   aspect-ratio: 1;
   padding: 0.5rem;
-  background-color: var(--m__bg-surface-color);
-  color: var(--m__text-color);
+  background-color: var(--m__bg-surface);
+  color: var(--m__text);
 
   & svg {
     display: block;
@@ -227,10 +237,10 @@
 }
 
 .models-table-price {
-  font-family: var(--m__font-semi-mono);
+  font-family: var(--m__font-family-semi-mono);
   font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-bold);
-  color: var(--m__text-color);
+  color: var(--m__text);
 }
 
 .models-column-heading {
@@ -264,22 +274,22 @@
 .models-pricing-table tr.models-table-group-row td {
   padding-top: 1.4rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid
-    color-mix(in srgb, var(--m__text-color) 10%, transparent);
+  border-bottom: var(--m__border-width-m) solid
+    color-mix(in srgb, var(--m__text) 10%, transparent);
 }
 
 .models-pricing-table__group-title {
   display: block;
-  font-family: var(--m__font-semi-mono);
+  font-family: var(--m__font-family-semi-mono);
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-regular);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--m__text-caption-color);
+  color: var(--m__text-caption);
 }
 
 .models-pricing-table tr.models-table-group-row + tr td {
-  border-top: none;
+  border-top: var(--m__border-width-s) solid var(--m__text);
 }
 
 .models-pricing-table__col-headers {
@@ -308,8 +318,8 @@
       display: grid;
       gap: 0.35rem 0.75rem;
       padding-block: 0.75rem;
-      border-bottom: 1px solid
-        color-mix(in srgb, var(--m__text-color) 12%, transparent);
+      border-bottom: var(--m__border-width-s) solid
+        color-mix(in srgb, var(--m__text) 12%, transparent);
     }
 
     & thead tr {
@@ -338,8 +348,8 @@
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
       padding-block: 0.5rem;
-      border-bottom: 1px solid
-        color-mix(in srgb, var(--m__text-color) 12%, transparent);
+      border-bottom: var(--m__border-width-s) solid
+        color-mix(in srgb, var(--m__text) 12%, transparent);
 
       & .models-pricing-table__col-headers-label {
         display: none;
@@ -362,7 +372,7 @@
       grid-column: 1 / -1;
       font-size: var(--m__font-size-s);
       font-weight: var(--m__font-weight-medium);
-      color: var(--m__text-color);
+      color: var(--m__text);
     }
 
     & tbody td:nth-child(2):not([colspan]) {
@@ -391,7 +401,7 @@
       grid-column: 1;
       font-size: var(--m__font-size-s);
       font-weight: var(--m__font-weight-medium);
-      color: var(--m__text-color);
+      color: var(--m__text);
     }
 
     & tbody td:nth-child(2) {
@@ -410,8 +420,8 @@
 
     & td {
       padding-bottom: 0.5rem;
-      border-bottom: 2px solid
-        color-mix(in srgb, var(--m__text-color) 10%, transparent);
+      border-bottom: var(--m__border-width-m) solid
+        color-mix(in srgb, var(--m__text) 10%, transparent);
     }
   }
 

@@ -4,13 +4,13 @@
   align-items: center;
   gap: 0.4rem;
   cursor: pointer;
-  color: var(--m__text-color);
+  color: var(--m__text);
   position: relative;
-  transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+  transition: color var(--m__duration-base) var(--m__easing-base);
 
   &:hover:not(:has(input:disabled)) {
-    color: var(--m__text-hover-color);
-    transition-duration: var(--m__hover-transition-duration);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 
   &:has(input:disabled) {
@@ -26,8 +26,8 @@
     cursor: pointer;
     flex-shrink: 0;
     transition:
-      background-color var(--m__unhover-transition-duration) var(--m__transition-easing),
-      border-color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      background-color var(--m__duration-base) var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base);
 
     &:disabled {
       cursor: not-allowed;
@@ -42,7 +42,7 @@
     width: 1rem;
     height: 1rem;
     padding: 0.1rem;
-    color: var(--m__background-color);
+    color: var(--m__bg);
     pointer-events: none;
     opacity: 0;
   }
@@ -54,28 +54,28 @@
 
 .m__checkbox {
   & input[type="checkbox"] {
-    border: 1px solid var(--m__ui-border-color);
+    border: var(--m__border-width-s) solid var(--m__border);
 
     &:hover:not(:disabled) {
-      border-color: var(--m__bg-hover-color);
-      transition-duration: var(--m__hover-transition-duration);
+      border-color: var(--m__bg-accent-hover);
+      transition-duration: var(--m__duration-instant);
 
       .dark-mode & {
-        border-color: var(--m__text-hover-color);
+        border-color: var(--m__text-link-hover);
       }
     }
 
     &:checked {
-      background-color: var(--m__bg-accent-color);
-      border-color: var(--m__bg-accent-color);
+      background-color: var(--m__bg-accent);
+      border-color: var(--m__bg-accent);
 
       &:hover:not(:disabled) {
-        background-color: var(--m__bg-hover-color);
-        border-color: var(--m__bg-hover-color);
+        background-color: var(--m__bg-accent-hover);
+        border-color: var(--m__bg-accent-hover);
 
         .dark-mode & {
-          background-color: var(--m__text-hover-color);
-          border-color: var(--m__text-hover-color);
+          background-color: var(--m__text-link-hover);
+          border-color: var(--m__text-link-hover);
         }
       }
     }
@@ -87,20 +87,20 @@
 
   & input[type="checkbox"] {
     box-sizing: border-box;
-    border: 2px solid var(--m__bg-accent-color);
+    border: var(--m__border-width-m) solid var(--m__bg-accent);
     background-color: transparent;
 
     &:hover:not(:disabled) {
-      border-color: var(--m__text-hover-color);
-      transition-duration: var(--m__hover-transition-duration);
+      border-color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
     }
 
     &:checked {
-      background-color: var(--m__bg-accent-color);
+      background-color: var(--m__bg-accent);
 
       &:hover:not(:disabled) {
-        background-color: var(--m__text-hover-color);
-        border-color: var(--m__text-hover-color);
+        background-color: var(--m__text-link-hover);
+        border-color: var(--m__text-link-hover);
       }
     }
   }

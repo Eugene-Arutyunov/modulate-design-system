@@ -5,8 +5,8 @@
 
   & > label {
     font-size: var(--m__font-size-s);
-    font-weight: 500;
-    color: var(--m__text-color);
+    font-weight: var(--m__font-weight-medium);
+    color: var(--m__text);
     margin-block-end: 0.3rem;
     cursor: pointer;
   }
@@ -15,28 +15,28 @@
     position: relative;
 
     & input[type="date"] {
-      background-color: var(--m__ui-control-color);
-      border: 1px solid var(--m__ui-border-color);
+      background-color: var(--m__bg-input);
+      border: var(--m__border-width-s) solid var(--m__border);
       border-radius: var(--m__radius-s);
-      padding: var(--m__control-inset-padding);
+      padding: var(--m__padding-control-m);
       padding-right: 2.2rem;
-      color: var(--m__text-color);
+      color: var(--m__text);
       font-size: inherit;
       line-height: var(--m__line-height-base);
       width: 100%;
-      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      transition: color var(--m__duration-base) var(--m__easing-base);
 
       &:is(:hover, :focus-visible) {
-        color: var(--m__text-hover-color);
-        transition-duration: var(--m__hover-transition-duration);
+        color: var(--m__text-link-hover);
+        transition-duration: var(--m__duration-instant);
       }
 
       &:focus-visible {
-        outline: 1px solid var(--m__text-hover-color);
+        outline: 1px solid var(--m__text-link-hover);
         outline-offset: -1px;
         background-color: color-mix(
           in srgb,
-          var(--m__bg-hover-color) 8%,
+          var(--m__bg-accent-hover) 8%,
           transparent
         );
       }
@@ -59,13 +59,13 @@
       top: 50%;
       translate: 0 -50%;
       pointer-events: none;
-      color: var(--m__text-caption-color);
-      transition: color var(--m__unhover-transition-duration) var(--m__transition-easing);
+      color: var(--m__text-caption);
+      transition: color var(--m__duration-base) var(--m__easing-base);
     }
 
     &:has(input[type="date"]:is(:hover, :focus-visible)) > svg {
-      color: var(--m__text-hover-color);
-      transition-duration: var(--m__hover-transition-duration);
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
     }
   }
 }
@@ -75,10 +75,10 @@
   flex-direction: row;
   align-items: center;
   overflow: hidden;
-  background-color: var(--m__ui-control-color);
-  border: 1px solid var(--m__ui-border-color);
+  background-color: var(--m__bg-input);
+  border: var(--m__border-width-s) solid var(--m__border);
   border-radius: var(--m__radius-s);
-  padding: var(--m__input-padding);
+  padding: var(--m__padding-control-s);
   cursor: text;
   position: relative;
   & > svg:first-child {
@@ -87,19 +87,19 @@
     flex-shrink: 0;
 
     cursor: pointer;
-    color: var(--m__text-caption-color);
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    color: var(--m__text-caption);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
   }
 
   & > span {
     white-space: nowrap;
     font-size: inherit;
-    color: var(--m__text-caption-color);
-    font-weight: 500;
+    color: var(--m__text-caption);
+    font-weight: var(--m__font-weight-medium);
     cursor: pointer;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &::after {
       content: ":";
@@ -114,15 +114,15 @@
     border-radius: 0;
     flex: 1;
     min-width: 0;
-    color: var(--m__text-color);
+    color: var(--m__text);
     font-size: inherit;
     line-height: 1;
     cursor: text;
-    transition: color var(--m__unhover-transition-duration)
-      var(--m__transition-easing);
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
 
     &::placeholder {
-      color: var(--m__text-caption-color);
+      color: var(--m__text-caption);
     }
 
     &:focus-visible {
@@ -144,22 +144,22 @@
   &:is(:hover, :focus-within) {
     & > svg:first-child,
     & > span {
-      color: var(--m__text-hover-color);
-      transition-duration: var(--m__hover-transition-duration);
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
     }
 
     & input {
-      color: var(--m__text-hover-color);
-      transition-duration: var(--m__hover-transition-duration);
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
     }
   }
 
   &:focus-within {
-    outline: 1px solid var(--m__text-hover-color);
+    outline: 1px solid var(--m__text-link-hover);
     outline-offset: -1px;
     background-color: color-mix(
       in srgb,
-      var(--m__bg-hover-color) 8%,
+      var(--m__bg-accent-hover) 8%,
       transparent
     );
   }
