@@ -104,7 +104,7 @@
   font-family: var(--m__font-family-semi-mono);
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-regular);
-  color: var(--m__text-caption);
+  color: var(--m__text);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -119,7 +119,7 @@
   grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
 }
 
-/* Generic plate (used by swatch and square renderers) */
+/* Generic plate (used by swatch renderer) */
 .guide-tokens__plate {
   display: flex;
   flex-direction: column;
@@ -139,33 +139,24 @@
 .guide-tokens__plate--swatch {
   cursor: pointer;
   justify-content: space-between;
-  transition:
-    box-shadow 0.2s var(--m__easing-base),
-    padding-top 0.2s var(--m__easing-base);
+  margin: 0 -1px;
+  transform-origin: bottom;
+  transition: transform 0.2s var(--m__easing-base);
 
   &:hover {
-    box-shadow: inset 0 4px 0 var(--m__bg);
-    padding-top: calc(0.5rem + 4px);
-    transition-duration: 0s, 0s;
+    transform: scaleY(0.94);
+    transition-duration: 0s;
   }
 
   &.guide-tokens__plate--light {
     box-shadow: inset 0 0 0 1px var(--m__border);
-
-    &:hover {
-      box-shadow:
-        inset 0 4px 0 var(--m__bg),
-        inset 0 0 0 1px var(--m__border);
-    }
   }
 }
 
-.guide-tokens__plate--square {
-  align-items: center;
-  text-align: center;
-  background-color: var(--m__bg-surface);
-  padding: 1rem 0.5rem 0.6rem;
-  min-height: 7rem;
+.guide-tokens__radius-sample {
+  width: 5rem;
+  height: 5rem;
+  background-color: var(--m__bg-accent);
 }
 
 .guide-tokens__plate-name {
@@ -192,14 +183,6 @@
   animation: guide-color-copy-flash 0.4s ease-out forwards;
 }
 
-/* Square renderer (radius) */
-.guide-tokens__square {
-  width: 3rem;
-  height: 3rem;
-  background-color: var(--m__bg-accent);
-  margin-bottom: 0.4rem;
-}
-
 /* Row renderer (bar, text-size, text-weight, text-family, duration, easing) */
 .guide-tokens__rows {
   display: flex;
@@ -208,8 +191,8 @@
 
 .guide-tokens__row {
   display: grid;
-  grid-template-columns: minmax(8rem, auto) minmax(7rem, auto) 1fr;
-  align-items: center;
+  grid-template-columns: 13rem 1fr 14rem;
+  align-items: start;
   gap: var(--m__space-m);
   padding: 0.5rem 0;
   border-top: 1px solid var(--m__border);
@@ -221,13 +204,13 @@
 
 .guide-tokens__row-label {
   font-family: var(--m__font-family-mono);
-  font-size: var(--m__font-size-s);
+  font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-medium);
 }
 
 .guide-tokens__row-value {
   font-family: var(--m__font-family-mono);
-  font-size: var(--m__font-size-xs);
+  font-size: var(--m__font-size-s);
   opacity: 0.7;
 }
 
@@ -272,53 +255,47 @@
   gap: 0.4rem;
 }
 
-.guide-tokens__space-item-name {
-  font-weight: 500;
-}
-
-.guide-tokens__space-box {
-  width: 100%;
-  background-color: var(--m__color-purple-200);
-}
-
 /* Border-width renderer — horizontal line with the token thickness */
-.guide-tokens__row--border-width {
-  grid-template-columns: 6rem minmax(8rem, auto) minmax(7rem, auto) 1fr;
-  padding: 0.5rem 0 0.5rem 1rem;
-  align-items: center;
-}
-
 .guide-tokens__border-line {
-  width: 4rem;
-  background-color: var(--m__text-code-accent);
+  width: 100%;
+  background-color: var(--m__bg-accent);
 }
 
 /* Control padding renderer — sample with the padding applied */
 .guide-tokens__row--control-padding {
-  grid-template-columns: minmax(10rem, auto) minmax(8rem, auto) minmax(8rem, auto) 1fr;
-  padding: 0.5rem 0 0.5rem 1rem;
-  align-items: center;
+  grid-template-columns: 13rem 1fr 14rem;
+  align-items: start;
+
+  & .guide-tokens__row-label {
+    font-size: var(--m__font-size-m);
+  }
+}
+
+.guide-tokens__row--header {
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  color: var(--m__text-caption);
+  border-top: none;
 }
 
 .guide-tokens__control-sample {
   display: inline-block;
-  background-color: var(--m__bg-surface);
-  border: 1px dashed var(--m__border);
+  justify-self: start;
+  background-color: var(--m__color-purple-200);
 }
 
 .guide-tokens__control-sample-content {
-  display: inline-block;
-  background-color: var(--m__bg-accent);
-  color: var(--m__text-inverted);
-  padding: 0.1rem 0.4rem;
-  font-size: var(--m__font-size-s);
-  font-weight: var(--m__font-weight-medium);
+  display: block;
+  width: 4rem;
+  height: 1rem;
+  background-color: var(--m__bg);
 }
 
 .guide-tokens__text-sample {
   font-size: var(--m__font-size-xl);
   line-height: 1;
 }
+
 
 /* Emotion colors showcase (from modulate-design) */
 .emotion-colors-showcase {

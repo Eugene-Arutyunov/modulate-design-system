@@ -9,7 +9,7 @@ const tokenFiles = [
   'typography.css',
   'spacers.css',
   'layout.css',
-  'control-padding.css',
+  'padding.css',
   'inline.css',
   'animations.css',
 ];

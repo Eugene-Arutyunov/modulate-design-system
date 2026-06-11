@@ -145,34 +145,50 @@
   }
 
   function renderSquare(container, tokens) {
-    var grid = el("div", "guide-tokens__plates");
+    var list = el("div", "guide-tokens__rows");
+    renderTextHeader(list);
+
     tokens.forEach(function (t) {
-      var plate = el("div", "guide-tokens__plate guide-tokens__plate--square");
+      var row = el("div", "guide-tokens__row");
 
-      var box = el("div", "guide-tokens__square");
-      box.style.borderRadius = "var(" + t.name + ")";
-      plate.appendChild(box);
+      var label = el("span", "guide-tokens__row-label");
+      label.appendChild(el("code", "accent", t.name));
+      row.appendChild(label);
 
-      plate.appendChild(el("span", "guide-tokens__plate-name", t.short));
-      plate.appendChild(el("span", "guide-tokens__plate-value", t.raw));
+      var plate = el("div", "guide-tokens__radius-sample");
+      plate.style.borderRadius = "var(" + t.name + ")";
+      row.appendChild(plate);
 
-      grid.appendChild(plate);
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+
+      list.appendChild(row);
     });
-    container.appendChild(grid);
+    container.appendChild(list);
   }
 
   function renderControlPadding(container, tokens) {
     var list = el("div", "guide-tokens__rows");
+
+    var header = el("div", "guide-tokens__row guide-tokens__row--control-padding guide-tokens__row--header");
+    header.appendChild(el("span", "guide-tokens__row-header", "Token"));
+    header.appendChild(el("span", "guide-tokens__row-header", "Sample"));
+    header.appendChild(el("span", "guide-tokens__row-header", "Value"));
+    list.appendChild(header);
+
     tokens.forEach(function (t) {
       var row = el("div", "guide-tokens__row guide-tokens__row--control-padding");
 
+      var label = el("span", "guide-tokens__row-label");
+      label.appendChild(el("code", "accent", t.name));
+      row.appendChild(label);
+
       var box = el("div", "guide-tokens__control-sample");
       box.style.padding = "var(" + t.name + ")";
-      box.appendChild(el("span", "guide-tokens__control-sample-content", "Sample"));
+      box.appendChild(el("span", "guide-tokens__control-sample-content"));
       row.appendChild(box);
 
-      row.appendChild(el("span", "guide-tokens__row-label", t.short));
       row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+
       list.appendChild(row);
     });
     container.appendChild(list);
@@ -182,12 +198,15 @@
     var list = el("div", "guide-tokens__space-stack");
     tokens.forEach(function (t) {
       var item = el("div", "guide-tokens__space-item");
+      var sizeMod = t.short.replace(/^space-/, "").toUpperCase();
+
       var label = el("div", "guide-tokens__space-item-label");
-      label.appendChild(el("span", "guide-tokens__space-item-name", t.short));
+      label.appendChild(el("code", null, ".m__space." + sizeMod.toLowerCase()));
       label.appendChild(el("span", "guide-tokens__row-value", t.raw));
       item.appendChild(label);
-      var box = el("div", "guide-tokens__space-box");
-      box.style.height = "var(" + t.name + ")";
+
+      var box = el("div", "m__space " + sizeMod);
+      box.style.backgroundColor = "var(--m__bg-surface)";
       item.appendChild(box);
       list.appendChild(item);
     });
@@ -195,63 +214,121 @@
   }
 
   function renderBorderWidth(container, tokens) {
-    var list = el("div", "guide-tokens__rows");
+    var list = el("div", "guide-tokens__space-stack");
     tokens.forEach(function (t) {
-      var row = el("div", "guide-tokens__row guide-tokens__row--border-width");
+      var item = el("div", "guide-tokens__space-item");
+
+      var label = el("div", "guide-tokens__space-item-label");
+      label.appendChild(el("code", "accent", t.name));
+      label.appendChild(el("span", "guide-tokens__row-value", t.raw));
+      item.appendChild(label);
 
       var line = el("div", "guide-tokens__border-line");
       line.style.height = "var(" + t.name + ")";
-      row.appendChild(line);
+      item.appendChild(line);
 
-      row.appendChild(el("span", "guide-tokens__row-label", t.short));
-      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
-
-      list.appendChild(row);
+      list.appendChild(item);
     });
     container.appendChild(list);
   }
+
+  function renderTextHeader(list) {
+    var header = el("div", "guide-tokens__row guide-tokens__row--header");
+    header.appendChild(el("span", "guide-tokens__row-header", "Token"));
+    header.appendChild(el("span", "guide-tokens__row-header", "Sample"));
+    header.appendChild(el("span", "guide-tokens__row-header", "Value"));
+    list.appendChild(header);
+  }
+
+  function appendTextRow(list, t, sampleText, sampleStyle) {
+    var row = el("div", "guide-tokens__row");
+
+    var label = el("span", "guide-tokens__row-label");
+    label.appendChild(el("code", "accent", t.name));
+    row.appendChild(label);
+
+    var sample = el("span", "guide-tokens__text-sample", sampleText);
+    Object.keys(sampleStyle).forEach(function (k) { sample.style[k] = sampleStyle[k]; });
+    row.appendChild(sample);
+
+    row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+
+    list.appendChild(row);
+  }
+
+  var FONT_SIZE_SAMPLE = {
+    "font-size-display": "Display heading",
+    "font-size-xxxl": "Huge heading",
+    "font-size-xxl": "Large heading",
+    "font-size-xl": "Medium heading",
+    "font-size-l": "Small heading",
+    "font-size-m": "Body text",
+    "font-size-mono": "Code snippet",
+    "font-size-s": "Caption",
+    "font-size-xs": "Fine print"
+  };
+
+  var FONT_SIZE_ORDER = [
+    "font-size-display",
+    "font-size-xxxl",
+    "font-size-xxl",
+    "font-size-xl",
+    "font-size-l",
+    "font-size-m",
+    "font-size-mono",
+    "font-size-s",
+    "font-size-xs"
+  ];
 
   function renderTextSize(container, tokens) {
     var list = el("div", "guide-tokens__rows");
-    tokens.forEach(function (t) {
-      var row = el("div", "guide-tokens__row");
-
-      var sample = el("span", "guide-tokens__text-sample", "Aa");
-      sample.style.fontSize = "var(" + t.name + ")";
-      row.appendChild(sample);
-
-      row.appendChild(el("span", "guide-tokens__row-label", t.short));
-      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
-      list.appendChild(row);
+    renderTextHeader(list);
+    var ordered = tokens.slice().sort(function (a, b) {
+      var ai = FONT_SIZE_ORDER.indexOf(a.short);
+      var bi = FONT_SIZE_ORDER.indexOf(b.short);
+      if (ai === -1) ai = 999;
+      if (bi === -1) bi = 999;
+      return ai - bi;
+    });
+    ordered.forEach(function (t) {
+      var sampleText = FONT_SIZE_SAMPLE[t.short] || "Aa";
+      appendTextRow(list, t, sampleText, { fontSize: "var(" + t.name + ")" });
     });
     container.appendChild(list);
   }
+
+  var FONT_WEIGHT_SAMPLE = {
+    "font-weight-regular": "Regular",
+    "font-weight-medium": "Medium",
+    "font-weight-bold": "Bold"
+  };
 
   function renderTextWeight(container, tokens) {
     var list = el("div", "guide-tokens__rows");
+    renderTextHeader(list);
     tokens.forEach(function (t) {
-      var row = el("div", "guide-tokens__row");
-      var sample = el("span", "guide-tokens__text-sample", "Aa");
-      sample.style.fontWeight = "var(" + t.name + ")";
-      sample.style.fontSize = "var(--m__font-size-l)";
-      row.appendChild(sample);
-      row.appendChild(el("span", "guide-tokens__row-label", t.short));
-      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
-      list.appendChild(row);
+      var sampleText = FONT_WEIGHT_SAMPLE[t.short] || "Aa";
+      appendTextRow(list, t, sampleText, {
+        fontWeight: "var(" + t.name + ")",
+        fontSize: "var(--m__font-size-l)"
+      });
     });
     container.appendChild(list);
   }
 
+  var FONT_FAMILY_SAMPLE = {
+    "font-family-sans": "Inter",
+    "font-family-gothic": "CoFo Gothic",
+    "font-family-semi-mono": "CoFo Sans Semi Mono",
+    "font-family-mono": "CoFo Sans Mono"
+  };
+
   function renderTextFamily(container, tokens) {
     var list = el("div", "guide-tokens__rows");
+    renderTextHeader(list);
     tokens.forEach(function (t) {
-      var row = el("div", "guide-tokens__row");
-      var sample = el("span", "guide-tokens__text-sample", "Aa Bb 123");
-      sample.style.fontFamily = "var(" + t.name + ")";
-      row.appendChild(sample);
-      row.appendChild(el("span", "guide-tokens__row-label", t.short));
-      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
-      list.appendChild(row);
+      var sampleText = FONT_FAMILY_SAMPLE[t.short] || "Aa Bb 123";
+      appendTextRow(list, t, sampleText, { fontFamily: "var(" + t.name + ")" });
     });
     container.appendChild(list);
   }
