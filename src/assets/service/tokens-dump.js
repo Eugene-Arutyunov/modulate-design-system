@@ -201,7 +201,7 @@
       var sizeMod = t.short.replace(/^space-/, "").toUpperCase();
 
       var label = el("div", "guide-tokens__space-item-label");
-      label.appendChild(el("code", null, ".m__space." + sizeMod.toLowerCase()));
+      label.appendChild(el("code", null, ".m__space." + sizeMod));
       label.appendChild(el("span", "guide-tokens__row-value", t.raw));
       item.appendChild(label);
 
@@ -333,10 +333,21 @@
     container.appendChild(list);
   }
 
+  function upcaseModifier(short) {
+    return short.replace(/-([a-z0-9]+)$/, function (_, m) {
+      return "-" + m.toUpperCase();
+    });
+  }
+
   function renderDuration(container, tokens) {
     var list = el("div", "guide-tokens__rows");
+    renderTextHeader(list);
     tokens.forEach(function (t) {
       var row = el("div", "guide-tokens__row guide-tokens__row--anim");
+
+      var label = el("span", "guide-tokens__row-label");
+      label.appendChild(el("code", "accent", t.name));
+      row.appendChild(label);
 
       var track = el("div", "guide-tokens__bar-track");
       var fill = el("div", "guide-tokens__bar-fill guide-tokens__bar-fill--anim");
@@ -345,7 +356,6 @@
       track.appendChild(fill);
       row.appendChild(track);
 
-      row.appendChild(el("span", "guide-tokens__row-label", t.short));
       row.appendChild(el("span", "guide-tokens__row-value", t.raw));
 
       row.addEventListener("mouseenter", function () { fill.classList.add("is-active"); });
@@ -358,8 +368,13 @@
 
   function renderEasing(container, tokens) {
     var list = el("div", "guide-tokens__rows");
+    renderTextHeader(list);
     tokens.forEach(function (t) {
       var row = el("div", "guide-tokens__row guide-tokens__row--anim");
+
+      var label = el("span", "guide-tokens__row-label");
+      label.appendChild(el("code", "accent", t.name));
+      row.appendChild(label);
 
       var track = el("div", "guide-tokens__bar-track");
       var fill = el("div", "guide-tokens__bar-fill guide-tokens__bar-fill--anim");
@@ -368,7 +383,6 @@
       track.appendChild(fill);
       row.appendChild(track);
 
-      row.appendChild(el("span", "guide-tokens__row-label", t.short));
       row.appendChild(el("span", "guide-tokens__row-value", t.raw));
 
       row.addEventListener("mouseenter", function () { fill.classList.add("is-active"); });

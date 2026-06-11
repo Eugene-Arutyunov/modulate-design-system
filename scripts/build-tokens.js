@@ -10,7 +10,6 @@ const tokenFiles = [
   'spacers.css',
   'layout.css',
   'padding.css',
-  'inline.css',
   'animations.css',
 ];
 

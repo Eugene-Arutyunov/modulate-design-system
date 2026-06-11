@@ -68,26 +68,31 @@ Import the full token set or individual modules:
 /* All tokens */
 @import "@eugene-arutyunov/modulate-design-system";
 
-/* Individual modules */
+/* Individual modules — note: `colors` references palette variables,
+   so import `palette` first if you only need the semantic layer. */
+@import "@eugene-arutyunov/modulate-design-system/palette";
 @import "@eugene-arutyunov/modulate-design-system/colors";
 @import "@eugene-arutyunov/modulate-design-system/typography";
 @import "@eugene-arutyunov/modulate-design-system/spacers";
 @import "@eugene-arutyunov/modulate-design-system/layout";
-@import "@eugene-arutyunov/modulate-design-system/ui-components";
+@import "@eugene-arutyunov/modulate-design-system/padding";
 @import "@eugene-arutyunov/modulate-design-system/animations";
+@import "@eugene-arutyunov/modulate-design-system/shadcn";
 ```
 
 ## Available modules
 
-| Module        | Import path                                              |
-| ------------- | -------------------------------------------------------- |
-| All tokens    | `@eugene-arutyunov/modulate-design-system`               |
-| Colors        | `@eugene-arutyunov/modulate-design-system/colors`        |
-| Typography    | `@eugene-arutyunov/modulate-design-system/typography`    |
-| Spacers       | `@eugene-arutyunov/modulate-design-system/spacers`       |
-| Layout        | `@eugene-arutyunov/modulate-design-system/layout`        |
-| UI Components | `@eugene-arutyunov/modulate-design-system/ui-components` |
-| Animations    | `@eugene-arutyunov/modulate-design-system/animations`    |
+| Module     | Import path                                           |
+| ---------- | ----------------------------------------------------- |
+| All tokens | `@eugene-arutyunov/modulate-design-system`            |
+| Palette    | `@eugene-arutyunov/modulate-design-system/palette`    |
+| Colors     | `@eugene-arutyunov/modulate-design-system/colors`     |
+| Typography | `@eugene-arutyunov/modulate-design-system/typography` |
+| Spacers    | `@eugene-arutyunov/modulate-design-system/spacers`    |
+| Layout     | `@eugene-arutyunov/modulate-design-system/layout`     |
+| Padding    | `@eugene-arutyunov/modulate-design-system/padding`    |
+| Animations | `@eugene-arutyunov/modulate-design-system/animations` |
+| shadcn     | `@eugene-arutyunov/modulate-design-system/shadcn`     |
 
 ## Contributing
 
