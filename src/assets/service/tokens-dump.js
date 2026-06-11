@@ -113,6 +113,9 @@
         var rgbStr = formatRgb(resolved);
         var parsed = parseRgb(resolved);
         plate.style.color = parsed && isDarkBg(parsed) ? "#fff" : "#1e1e23";
+        if (parsed && parsed[0] >= 250 && parsed[1] >= 250 && parsed[2] >= 250) {
+          plate.classList.add("guide-tokens__plate--light");
+        }
 
         plate.appendChild(el("span", "guide-tokens__plate-name", t.short.replace(/^color-/, "")));
         plate.appendChild(el("span", "guide-tokens__plate-value", rgbStr));
@@ -176,6 +179,23 @@
       box.style.width = "var(" + t.name + ")";
       box.style.height = "var(" + t.name + ")";
       row.appendChild(box);
+
+      row.appendChild(el("span", "guide-tokens__row-label", t.short));
+      row.appendChild(el("span", "guide-tokens__row-value", t.raw));
+
+      list.appendChild(row);
+    });
+    container.appendChild(list);
+  }
+
+  function renderBorderWidth(container, tokens) {
+    var list = el("div", "guide-tokens__rows");
+    tokens.forEach(function (t) {
+      var row = el("div", "guide-tokens__row guide-tokens__row--border-width");
+
+      var line = el("div", "guide-tokens__border-line");
+      line.style.height = "var(" + t.name + ")";
+      row.appendChild(line);
 
       row.appendChild(el("span", "guide-tokens__row-label", t.short));
       row.appendChild(el("span", "guide-tokens__row-value", t.raw));
@@ -280,6 +300,7 @@
     swatch: renderSwatch,
     square: renderSquare,
     space: renderSpace,
+    "border-width": renderBorderWidth,
     "control-padding": renderControlPadding,
     "text-size": renderTextSize,
     "text-weight": renderTextWeight,
