@@ -130,30 +130,32 @@ permalink: /analysis/redaction/
       position: absolute;
       top: 0;
       height: 100%;
-      background: color-mix(in srgb, var(--m__error) 38%, transparent);
-      border-left: 1px solid var(--m__error);
-      border-right: 1px solid var(--m__error);
+      background: color-mix(in srgb, var(--m__success) 38%, transparent);
       cursor: help;
       transition: background var(--m__duration-base) var(--m__easing-base);
     }
     .pg-redaction-seg:hover {
-      background: color-mix(in srgb, var(--m__error) 55%, transparent);
+      background: color-mix(in srgb, var(--m__success) 55%, transparent);
       transition: background var(--m__duration-instant) var(--m__easing-base);
     }
 
     /* Inline redaction tag ──────────────────────────────────────────────── */
     .pii-tag {
-      display: inline-block;
       font-family: var(--m__font-family-semi-mono);
       font-size: 0.82em;
-      font-weight: 700;
       letter-spacing: 0.02em;
-      color: var(--m__text);
-      background: color-mix(in srgb, var(--m__text) 10%, transparent);
-      border-radius: var(--m__radius-xs);
-      padding: 0.02em 0.32em;
+      color: var(--m__text-code);
       white-space: nowrap;
       cursor: help;
+      transition: color var(--m__duration-base) var(--m__easing-base);
+    }
+    .pg-transcript-text {
+      transition: color var(--m__duration-base) var(--m__easing-base);
+    }
+    .pg-transcript-utterance:hover .pg-transcript-text,
+    .pg-transcript-utterance:hover .pii-tag {
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
     }
     .pg-transcript-flag {
       color: var(--m__text-caption);
