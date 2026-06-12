@@ -1,11 +1,24 @@
 ---
 pageTitle: Deepfake
-permalink: /playground/deepfake/
+permalink: /analysis/deepfake/
 ---
 
 {% extends 'prototypes/playground-layout.html' %}
 
-{% block options %}{% endblock %}
+{% block options %}
+      <div class="pg-options-row pg-plate-header">
+        <span class="pg-plate-header__title">Detect synthetic speech</span>
+      </div>
+{% endblock %}
+
+{% block analyzing_content %}
+      <div class="pg-processing-stages">
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Authenticity
+        </span>
+      </div>
+{% endblock %}
 
 {% block player_clips %}
   <div class="pg-histo-squares df-player-clips">
@@ -30,10 +43,10 @@ permalink: /playground/deepfake/
 {% block speaker_labels %}{% endblock %}
 
 {% block above_output %}
-  <div class="df-card m__rounded">
-    <h2 class="df-title">Deepfake</h2>
-    <div class="df-details"
-      ><span class="df-stat"><span class="df-stat-value">14/25</span> <span class="df-stat-label">deepfake segments</span></span><span class="df-stat"><span class="df-stat-value">3</span> <span class="df-stat-label">segments with &gt;98% conf.</span></span></div>
+  <div class="pg-verdict-statement danger">
+    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">This is a deepfake</a></h2>
+    <div class="pg-verdict-statement-details"
+      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">14/25</span> <span class="pg-verdict-statement-stat-label">deepfake segments</span></span><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">3</span> <span class="pg-verdict-statement-stat-label">segments with &gt;98% conf.</span></span></div>
   </div>
 {% endblock %}
 
@@ -51,38 +64,6 @@ permalink: /playground/deepfake/
     }
     .df-player-clips .pg-histo-bar {
       height: 100%;
-    }
-
-    .df-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--m__space-xxs);
-      min-height: 6rem;
-      padding: var(--m__space-s) var(--m__space-m);
-      margin-bottom: var(--m__space-l);
-      background: var(--m__error);
-      color: white;
-      text-align: center;
-    }
-    .df-title {
-      margin: 0;
-    }
-    .df-details {
-      font-size: var(--m__font-size-s);
-      font-weight: 500;
-    }
-    .df-stat {
-      white-space: nowrap;
-    }
-    .df-stat + .df-stat::before {
-      content: " · ";
-      white-space: pre;
-      opacity: 0.6;
-    }
-    .df-stat-value {
-      font-variant-numeric: tabular-nums;
     }
 
   </style>

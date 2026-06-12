@@ -1,6 +1,6 @@
 ---
 pageTitle: AI Music Detection
-permalink: /playground/ai-music/
+permalink: /analysis/ai-music/
 segments:
   - { t: "0:00 – 0:04", verdict: "ai",      conf: 97.4 }
   - { t: "0:04 – 0:08", verdict: "ai",      conf: 97.7 }
@@ -29,7 +29,20 @@ segments:
 
 {% extends 'prototypes/playground-layout.html' %}
 
-{% block options %}{% endblock %}
+{% block options %}
+      <div class="pg-options-row pg-plate-header">
+        <span class="pg-plate-header__title">Detect AI-generated music</span>
+      </div>
+{% endblock %}
+
+{% block analyzing_content %}
+      <div class="pg-processing-stages">
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          AI music
+        </span>
+      </div>
+{% endblock %}
 
 {% block player_clips %}
   <div class="aim-player-heat">
@@ -40,10 +53,10 @@ segments:
 {% block speaker_labels %}{% endblock %}
 
 {% block above_output %}
-  <div class="aim-card m__rounded">
-    <h2 class="aim-title">AI Vocal Music</h2>
-    <div class="aim-details"
-      ><span class="aim-stat"><span class="aim-stat-value">55.8%</span> <span class="aim-stat-label">AI · Vocal path</span></span><span class="aim-stat"><span class="aim-stat-label">Instrumental: not evaluated</span></span></div>
+  <div class="pg-verdict-statement danger">
+    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">This is AI vocal music</a></h2>
+    <div class="pg-verdict-statement-details"
+      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">55.8%</span> <span class="pg-verdict-statement-stat-label">AI on vocals</span></span><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-label">Instrumental not evaluated</span></span></div>
   </div>
 {% endblock %}
 
@@ -66,39 +79,6 @@ segments:
     .aim-player-heat-cell[data-verdict="ai"]      { background: var(--m__error); }
     .aim-player-heat-cell[data-verdict="not-ai"]  { background: var(--m__success); }
     .aim-player-heat-cell[data-verdict="silence"] { background: var(--m__border); opacity: 1 !important; }
-
-    /* Verdict card ──────────────────────────────────────────────────────── */
-    .aim-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--m__space-xxs);
-      min-height: 6rem;
-      padding: var(--m__space-s) var(--m__space-m);
-      margin-bottom: var(--m__space-l);
-      background: var(--m__error);
-      color: white;
-      text-align: center;
-    }
-    .aim-title {
-      margin: 0;
-    }
-    .aim-details {
-      font-size: var(--m__font-size-s);
-      font-weight: 500;
-    }
-    .aim-stat {
-      white-space: nowrap;
-    }
-    .aim-stat + .aim-stat::before {
-      content: " · ";
-      white-space: pre;
-      opacity: 0.6;
-    }
-    .aim-stat-value {
-      font-variant-numeric: tabular-nums;
-    }
 
     /* Detailed table ────────────────────────────────────────────────────── */
     .aim-detailed td:first-child { font-variant-numeric: tabular-nums; white-space: nowrap; }

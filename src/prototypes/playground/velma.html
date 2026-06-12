@@ -1,16 +1,13 @@
 ---
 pageTitle: Velma
-permalink: /playground/velma/
+permalink: /analysis/velma/
 ---
 
 {% extends 'prototypes/playground-layout.html' %}
 
 {% block options %}
       <div class="pg-options-row pg-velma-setup">
-        <a href="#" class="pg-velma-setup-link">
-          <svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>
-          Set up behaviors
-        </a>
+        <a href="#" class="pg-velma-setup-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Set up behaviors</a>
         <span class="pg-velma-setup-summary">1 conversation type · 2 roles · 5 behaviors</span>
       </div>
 {% endblock %}
@@ -21,6 +18,35 @@ permalink: /playground/velma/
           <span class="pg-upload-primary__label">Drop or choose file…</span>
         </button>
         <button type="button" class="m__button-brutal">Try demo audio</button>
+      </div>
+{% endblock %}
+
+{% block analyzing_content %}
+      <div class="pg-processing-stages">
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Transcript
+        </span>
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Speakers
+        </span>
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Emotions
+        </span>
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Roles
+        </span>
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Behaviors
+        </span>
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Summary
+        </span>
       </div>
 {% endblock %}
 
@@ -48,55 +74,53 @@ permalink: /playground/velma/
     .pg-velma-output .caption {
       color: var(--m__text);
     }
-    .pg-velma-output .m__tag .pg-num,
-    .pg-velma-output .m__tag-flat .pg-num {
-      margin-left: 0.4rem;
-    }
-
     .pg-velma-setup {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       flex-wrap: wrap;
       gap: var(--m__space-xs);
       font-size: var(--m__font-size-s);
     }
     .pg-velma-setup-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem;
       color: var(--m__text);
       font-weight: 500;
-      text-decoration: underline;
-      text-decoration-style: dotted;
-      text-underline-offset: 0.25em;
-      text-decoration-thickness: 1.5px;
+      text-decoration: none;
+      padding-bottom: 0;
+      border-bottom: 1.5px dotted currentColor;
       transition:
         color var(--m__duration-base) var(--m__easing-base),
-        text-decoration-color var(--m__duration-base) var(--m__easing-base);
+        border-bottom-color var(--m__duration-base) var(--m__easing-base);
     }
     .pg-velma-setup-link:hover {
       color: var(--m__text-link-hover);
-      text-decoration-color: currentColor;
       transition-duration: var(--m__duration-instant);
     }
     .pg-velma-setup-link svg {
-      flex: none;
+      display: inline-block;
+      vertical-align: baseline;
+      position: relative;
+      top: 0.25em;
+      margin-right: 0.1rem;
     }
 
-    .pg-behavior-link {
+    a.pg-behavior-link,
+    a.pg-behavior-link:link,
+    a.pg-behavior-link:visited {
       color: var(--m__bg-accent);
       font-weight: var(--m__font-weight-bold);
       text-decoration: none;
       background-image: linear-gradient(currentColor, currentColor);
       background-repeat: no-repeat;
-      background-size: 100% 3.5px;
+      background-size: 100% var(--m__border-width-l);
       background-position: 0 100%;
-      padding-bottom: 0.15em;
+      padding-bottom: 0.22em;
       -webkit-box-decoration-break: clone;
       box-decoration-break: clone;
       transition: color var(--m__duration-base) var(--m__easing-base);
     }
-    .pg-behavior-link:hover {
+    a.pg-behavior-link:hover,
+    a.pg-behavior-link:focus,
+    a.pg-behavior-link:active {
       color: var(--m__text-link-hover);
       transition-duration: var(--m__duration-instant);
     }
@@ -105,6 +129,20 @@ permalink: /playground/velma/
       height: 1em;
       vertical-align: -0.15em;
       margin-right: 0.15em;
+    }
+    .pg-transcript-utterance-header a.pg-behavior-link,
+    .pg-transcript-utterance-header a.pg-behavior-link:link,
+    .pg-transcript-utterance-header a.pg-behavior-link:visited,
+    .pg-transcript-utterance-header a.pg-behavior-link:hover,
+    .pg-transcript-utterance-header a.pg-behavior-link:focus,
+    .pg-transcript-utterance-header a.pg-behavior-link:active {
+      color: inherit;
+      font-family: var(--m__font-family-sans);
+      font-size: var(--m__font-size-s);
+      font-weight: var(--m__font-weight-medium);
+      background-size: 100% var(--m__border-width-m);
+      padding-bottom: 0.1em;
+      transition: none;
     }
 
     .pg-summary-item {
@@ -146,30 +184,82 @@ permalink: /playground/velma/
     .pg-num { font-variant-numeric: tabular-nums; }
 
     /* Speakers table */
-    .pg-speakers-table { table-layout: fixed; }
-    .pg-speakers-table th:nth-child(1) { width: 18%; }
-    .pg-speakers-table th:nth-child(2) { width: 36%; }
-    .pg-speakers-table th:nth-child(3) { width: 12%; }
-    .pg-speakers-table th:nth-child(4) { width: 34%; }
-    .pg-speakers-table td:nth-child(1),
-    .pg-speakers-table td:nth-child(3),
-    .pg-speakers-table td:nth-child(4) { font-size: 0.8rem; }
+    .pg-output-panel table.pg-speakers-table { table-layout: fixed; }
+    .pg-output-panel table.pg-speakers-table th,
+    .pg-output-panel table.pg-speakers-table td { font-size: var(--m__font-size-s); }
+    .pg-speakers-table th:nth-child(1) { width: 33%; }
+    .pg-speakers-table th:nth-child(2) { width: 27%; }
+    .pg-speakers-table th:nth-child(3) { width: 14%; }
+    .pg-speakers-table th:nth-child(4) { width: 26%; }
+    .pg-speakers-table td { vertical-align: top; }
+    .pg-speakers-table .pg-speaker-cell-name {
+      font-weight: var(--m__font-weight-medium);
+    }
+    .pg-speakers-table .pg-speaker-cell-desc {
+      margin-top: 0.15rem;
+      margin-bottom: 0.25rem;
+    }
+    .pg-speakers-table .m__tag-flat {
+      font-size: var(--m__font-size-xs);
+    }
+
+    /* Topics & Sentiment */
+    .pg-topics-type {
+      margin-bottom: var(--m__space-s);
+    }
+    .pg-topics-type .m__tag-flat {
+      margin-left: 0.4rem;
+      font-size: var(--m__font-size-xs);
+    }
+    .pg-topics-type .m__tag-flat .pg-num {
+      font-size: inherit;
+    }
+    .pg-output-panel table.pg-topics-table th,
+    .pg-output-panel table.pg-topics-table td { font-size: var(--m__font-size-s); }
+    .pg-topics-table { table-layout: fixed; }
+    .pg-topics-table th:nth-child(1) { width: 22%; }
+    .pg-topics-table th:nth-child(2) { width: 78%; }
+    .pg-topics-table td { vertical-align: top; }
+    .pg-topics-table .m__tag .pg-num {
+      margin-left: 0.2rem;
+    }
+    .pg-topics-table .m__tag--error .pg-num.muted {
+      color: inherit;
+    }
+
+    .pg-behaviors-cta {
+      display: block;
+      width: 100%;
+      margin-top: var(--m__space-m);
+      text-align: center;
+    }
 
     /* Behaviors table */
+    .pg-output-panel table.pg-behaviors-table th,
+    .pg-output-panel table.pg-behaviors-table td { font-size: var(--m__font-size-s); }
     .pg-behaviors-table { table-layout: fixed; }
-    .pg-behaviors-table th:nth-child(1) { width: 18%; }
-    .pg-behaviors-table th:nth-child(2) { width: 32%; }
-    .pg-behaviors-table th:nth-child(3) { width: 38%; }
-    .pg-behaviors-table th:nth-child(4) { width: 12%; }
-    .pg-behaviors-table td[rowspan] { font-size: 0.8rem; }
-    .pg-behaviors-table td > .m__tag {
+    .pg-behaviors-table th:nth-child(1) { width: 22%; }
+    .pg-behaviors-table th:nth-child(2) { width: 28%; }
+    .pg-behaviors-table th:nth-child(3) { width: 40%; }
+    .pg-behaviors-table th:nth-child(4) { width: 10%; }
+    .pg-behaviors-table .pg-behavior-link {
+      font-size: var(--m__font-size-m);
+    }
+    .pg-behaviors-table .pg-evidence-list {
       display: flex;
-      width: fit-content;
-      margin-top: 0.7rem;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.6rem;
     }
-    .pg-behaviors-table td > .caption {
-      margin-top: 0.3rem;
+    .pg-behaviors-table .pg-evidence-link {
+      font-variant-numeric: tabular-nums;
     }
+    .pg-behaviors-table .pg-evidence-none {
+      color: var(--m__text-caption);
+    }
+    .pg-transcript-utterance[id="clip-evidence"] {
+      scroll-margin-top: var(--m__space-l);
+    }
+    html { scroll-behavior: smooth; }
 
     .pg-transcript-flag {
       color: var(--m__text-caption);
@@ -192,43 +282,6 @@ permalink: /playground/velma/
       <span class="pii-blur">4827 Willow Creek Drive, Apt 5B, Columbus, Ohio 43215</span>.
     </p>
 
-    <div class="m__space S"></div>
-
-    <div class="pg-summary-item">
-      <div class="pg-summary-head">
-        <span>Type: <strong>Customer Service Call</strong></span>
-        <span class="pg-num muted">100%</span>
-        <span class="m__tag">Auto_selected_single_option</span>
-      </div>
-      <div class="caption">Auto-chosen as the only available option.</div>
-    </div>
-
-    <div class="pg-summary-item">
-      <div class="pg-summary-head">
-        <span><strong>1: Customer Service Representative</strong></span>
-        <span class="pg-num muted">100%</span>
-        <span class="m__tag">Inferred</span>
-      </div>
-      <div class="caption">
-        The speaker introduces themselves as Mina from Green Valley Health member services, verifies the
-        caller's identity and details, and accesses and discusses specific account, claim, and medical
-        information on file.
-      </div>
-    </div>
-
-    <div class="pg-summary-item">
-      <div class="pg-summary-head">
-        <span><strong>2: Customer</strong></span>
-        <span class="pg-num muted">100%</span>
-        <span class="m__tag">Inferred</span>
-      </div>
-      <div class="caption">
-        The speaker provides personal verification details, describes issues with an MRI claim and denied
-        prescription, and requests appeal forms and related actions, clearly acting as the caller seeking
-        assistance.
-      </div>
-    </div>
-
     <!-- Speakers ────────────────────────────────────────────────────────── -->
     <div class="m__space L"></div>
     <h2>Speakers</h2>
@@ -244,7 +297,15 @@ permalink: /playground/velma/
         </thead>
         <tbody>
           <tr>
-            <td>Customer Service Representative</td>
+            <td>
+              <span class="pg-speaker-cell-name">Customer Service Representative</span>
+              <div class="pg-speaker-cell-desc">
+                The speaker introduces themselves as Mina from Green Valley Health member services,
+                verifies the caller's identity and details, and accesses and discusses specific account,
+                claim, and medical information on file.
+              </div>
+              <span class="m__tag-flat">Inferred, 100%</span>
+            </td>
             <td>
               <div class="pg-emo-bar" style="width: 76%">
                 <div class="pg-emo-seg" style="width: 4%; background: var(--emotion-tired)"></div>
@@ -273,7 +334,15 @@ permalink: /playground/velma/
             <td>English, American accent</td>
           </tr>
           <tr>
-            <td>Customer</td>
+            <td>
+              <span class="pg-speaker-cell-name">Customer</span>
+              <div class="pg-speaker-cell-desc">
+                The speaker provides personal verification details, describes issues with an MRI claim
+                and denied prescription, and requests appeal forms and related actions, clearly acting
+                as the caller seeking assistance.
+              </div>
+              <span class="m__tag-flat">Inferred, 100%</span>
+            </td>
             <td>
               <div class="pg-emo-bar" style="width: 24%">
                 <div class="pg-emo-seg" style="width: 8%; background: var(--emotion-calm)"></div>
@@ -306,29 +375,43 @@ permalink: /playground/velma/
       </table>
     </div>
 
-    <!-- Topics ──────────────────────────────────────────────────────────── -->
+    <!-- Topics & Sentiment ──────────────────────────────────────────────── -->
     <div class="m__space L"></div>
-    <h2>Topics</h2>
-    <div>
-      <p><strong>Customer Service Representative</strong></p>
-      <div class="m__tag-group">
-        <span class="m__tag">back injury <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
-      </div>
+    <h2>Topics &amp; Sentiment</h2>
+    <div class="pg-topics-type">
+      <strong>Customer Service Call.</strong> The transcript shows a customer contacting a business support line to resolve an order delivery issue with a service provider.<span class="m__tag-flat">Inferred, 95%</span>
     </div>
-    <div class="m__space S"></div>
-    <div>
-      <p><strong>Customer</strong></p>
-      <div class="m__tag-group">
-        <span class="m__tag m__tag--error">back injury <span class="pg-num">-0.50</span></span>
-        <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
-      </div>
+    <div class="pg-results-table-section">
+      <table class="pg-topics-table">
+        <thead>
+          <tr>
+            <th>Speaker</th>
+            <th>Topics</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pg-speaker-cell-name">Customer Service Representative</span></td>
+            <td>
+              <div class="m__tag-group">
+                <span class="m__tag">Customer service <span class="pg-num muted">-0.10</span></span>
+                <span class="m__tag">Delivery delays <span class="pg-num muted">-0.10</span></span>
+                <span class="m__tag">Refund policy <span class="pg-num muted">-0.10</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="pg-speaker-cell-name">Customer</span></td>
+            <td>
+              <div class="m__tag-group">
+                <span class="m__tag m__tag--error">Customer service <span class="pg-num muted">-0.95</span></span>
+                <span class="m__tag m__tag--error">Delivery delays <span class="pg-num muted">-0.95</span></span>
+                <span class="m__tag m__tag--error">Refund policy <span class="pg-num muted">-0.95</span></span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Behaviors ───────────────────────────────────────────────────────── -->
@@ -340,7 +423,7 @@ permalink: /playground/velma/
           <tr>
             <th>Speaker</th>
             <th>Behavior</th>
-            <th>Model reasoning</th>
+            <th>Evidence</th>
             <th>Confidence</th>
           </tr>
         </thead>
@@ -348,56 +431,75 @@ permalink: /playground/velma/
           <tr>
             <td rowspan="5">Customer Service Representative</td>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
-              <span class="m__tag m__tag--success">Detected</span>
-              <div class="caption">Evidence: 2 clips (1 definitive)</div>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
             </td>
-            <td class="pg-reason">Rep references customer's claim and medication request but fails to provide concrete resolution (e.g., approval/denial status, payment) or any firm follow-up commitment.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">No follow-up commitment given</a>
+                <a href="#clip-evidence" class="pg-evidence-link">Resolution status not confirmed</a>
+              </div>
+            </td>
             <td class="pg-num">75%</td>
           </tr>
           <tr>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
             </td>
-            <td class="pg-reason">The speaker is the Customer Service Representative calmly verifying information, confirming details, and providing account data; no statements attributing negative outcomes to the company or explicit dissatisfaction markers present.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">Calm verification, no dissatisfaction</a>
+              </div>
+            </td>
             <td class="pg-num">100%</td>
           </tr>
           <tr>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Coercion Manipulation</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Coercion Manipulation</a>
             </td>
-            <td class="pg-reason">Speaker is Customer Service Representative providing polite verifications and information; no threats, ultimatums, reduced empathy, or pressure tactics observed.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">Polite verification with no pressure</a>
+              </div>
+            </td>
             <td class="pg-num">100%</td>
           </tr>
           <tr>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
             </td>
-            <td class="pg-reason">No customer's stated issue referenced; no resolution confirmation, customer acknowledgment, or closure cues present in clips.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">No closure cues found</a>
+              </div>
+            </td>
             <td class="pg-num">5%</td>
           </tr>
           <tr>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
             </td>
-            <td class="pg-reason">All clips contain professional, factual verification and information sharing with no profanity, slurs, personal attacks, or hostile indicators.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">Professional, factual sharing throughout</a>
+              </div>
+            </td>
             <td class="pg-num">0%</td>
           </tr>
           <tr>
             <td rowspan="1">Customer</td>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
             </td>
-            <td class="pg-reason">No profanity, slurs, sexually-suggestive content, personal attacks, or hostile prosody observed; speech is polite and factual.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">Polite, factual speech with no slurs</a>
+              </div>
+            </td>
             <td class="pg-num">98%</td>
           </tr>
         </tbody>
       </table>
+      <a href="#" class="m__button-outline pg-behaviors-cta">View all configured behaviors</a>
     </div>
 
     <!-- Transcript ──────────────────────────────────────────────────────── -->
@@ -432,13 +534,12 @@ permalink: /playground/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance ec-confident">
+        <div class="pg-transcript-utterance ec-confident" id="clip-evidence">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:32</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
+            <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
             <span class="pg-transcript-emotion">Confident</span>
-            <span class="pg-transcript-flag">English</span>
-            <span class="pg-transcript-accent">American accent</span>
           </div>
           <div class="pg-transcript-text">
             <p>Thank you, Mr. Mercer. For verification, can you confirm the phone number and email we have on file: 614-555-0198, and daniel.mercer82@protonmail.com?</p>
@@ -449,9 +550,8 @@ permalink: /playground/velma/
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:47</span>
             <span class="pg-transcript-speaker">Customer</span>
+            <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
             <span class="pg-transcript-emotion">Disappointed</span>
-            <span class="pg-transcript-flag">English</span>
-            <span class="pg-transcript-accent">American accent</span>
           </div>
           <div class="pg-transcript-text">
             <p>Yes, that's right, although my new callback number is 380-555-4412, and my employer is Harrison Industrial Company at 2150 Fisher Road, Columbus, Ohio.</p>
@@ -462,9 +562,9 @@ permalink: /playground/velma/
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">1:00</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
+            <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
+            <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
             <span class="pg-transcript-emotion">Interested</span>
-            <span class="pg-transcript-flag">English</span>
-            <span class="pg-transcript-accent">American accent</span>
           </div>
           <div class="pg-transcript-text">
             <p>I see your plan is under policy number PPO-77-194402, and the primary care physician listed is Dr. Elena Ruiz at Buckeye Family Clinic, 903 East Main Street, Columbus, Ohio 43205.</p>

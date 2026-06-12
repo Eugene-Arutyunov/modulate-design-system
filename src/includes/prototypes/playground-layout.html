@@ -44,7 +44,10 @@
       </div>
       <div class="pg-upload-overlay pg-upload-overlay--processing" aria-hidden="true">
         <img class="m__loader" src="/assets/service/loader-icon.svg" alt="" aria-hidden="true" />
-        <span>Processing file…</span>
+        <span>Uploading…</span>
+      </div>
+      <div class="pg-upload-overlay pg-upload-overlay--analyzing" aria-hidden="true">
+        {% block analyzing_content %}{% endblock %}
       </div>
       <div class="pg-upload-overlay pg-upload-overlay--exhausted" aria-hidden="true">
         <p>You're out of free trial requests. Sign up to get credits and keep going.</p>
@@ -77,6 +80,7 @@
         <label><input type="radio" name="pg-plate-state" value="initial" checked /><span>initial</span></label>
         <label><input type="radio" name="pg-plate-state" value="file-dropping" /><span>file-dropping</span></label>
         <label><input type="radio" name="pg-plate-state" value="uploading" /><span>uploading</span></label>
+        <label><input type="radio" name="pg-plate-state" value="processing" /><span>processing</span></label>
         <label><input type="radio" name="pg-plate-state" value="uploaded" /><span>uploaded</span></label>
         <label><input type="radio" name="pg-plate-state" value="low-quota" /><span>low-quota</span></label>
         <label><input type="radio" name="pg-plate-state" value="exhausted" /><span>exhausted</span></label>

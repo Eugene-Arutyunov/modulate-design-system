@@ -1,6 +1,6 @@
 ---
 pageTitle: Music Detection
-permalink: /playground/music/
+permalink: /analysis/music/
 segments:
   - { t: "0.00s – 1.15s",   music: 95.6, speech: 7.9 }
   - { t: "1.15s – 2.11s",   music: 94.6, speech: 3.2 }
@@ -22,7 +22,24 @@ segments:
 
 {% extends 'prototypes/playground-layout.html' %}
 
-{% block options %}{% endblock %}
+{% block options %}
+      <div class="pg-options-row pg-plate-header">
+        <span class="pg-plate-header__title">Detect music and speech</span>
+      </div>
+{% endblock %}
+
+{% block analyzing_content %}
+      <div class="pg-processing-stages">
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Music
+        </span>
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Speech
+        </span>
+      </div>
+{% endblock %}
 
 {% block player_clips %}
   <div class="mx-player-heat">
@@ -43,17 +60,16 @@ segments:
 {% endblock %}
 
 {% block above_output %}
-  <div class="mx-verdict m__rounded">
-    <h2 class="mx-verdict-title">Music</h2>
-    <div class="mx-verdict-details"
-      ><span class="mx-verdict-stat"><span class="mx-verdict-stat-value">90%</span> <span class="mx-verdict-stat-label">Music</span></span><span class="mx-verdict-stat"><span class="mx-verdict-stat-value">77%</span> <span class="mx-verdict-stat-label">Speech</span></span></div>
+  <div class="pg-verdict-statement success">
+    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">This is 90% music</a></h2>
+    <div class="pg-verdict-statement-details"
+      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">77%</span> <span class="pg-verdict-statement-stat-label">speech</span></span></div>
   </div>
 {% endblock %}
 
 {% block panel_content %}
   <style>
     .mx-panel,
-    .mx-verdict,
     .media-container { --music-color: var(--m__success); --speech-color: var(--m__error); }
 
     /* Player visualization heatmap ──────────────────────────────────────── */
@@ -77,39 +93,6 @@ segments:
     }
     .mx-player-heat-row[data-row="music"]  .mx-player-heat-cell { background: var(--music-color); }
     .mx-player-heat-row[data-row="speech"] .mx-player-heat-cell { background: var(--speech-color); }
-
-    /* Verdict card ──────────────────────────────────────────────────────── */
-    .mx-verdict {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--m__space-xxs);
-      min-height: 6rem;
-      padding: var(--m__space-s) var(--m__space-m);
-      margin-bottom: var(--m__space-l);
-      background: var(--m__success);
-      color: white;
-      text-align: center;
-    }
-    .mx-verdict-title {
-      margin: 0;
-    }
-    .mx-verdict-details {
-      font-size: var(--m__font-size-s);
-      font-weight: 500;
-    }
-    .mx-verdict-stat {
-      white-space: nowrap;
-    }
-    .mx-verdict-stat + .mx-verdict-stat::before {
-      content: " · ";
-      white-space: pre;
-      opacity: 0.6;
-    }
-    .mx-verdict-stat-value {
-      font-variant-numeric: tabular-nums;
-    }
 
     /* Detailed view ─────────────────────────────────────────────────────── */
     .mx-detailed td:first-child { font-variant-numeric: tabular-nums; white-space: nowrap; }

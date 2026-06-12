@@ -1,16 +1,29 @@
 ---
 pageTitle: Language
-permalink: /playground/language/
+permalink: /analysis/language/
 noOutputTab: true
 ---
 
 {% extends 'prototypes/playground-layout.html' %}
 
-{% block options %}{% endblock %}
+{% block options %}
+      <div class="pg-options-row pg-plate-header">
+        <span class="pg-plate-header__title">Identify spoken language</span>
+      </div>
+{% endblock %}
 
 {% block upload_actions %}
       <div class="pg-upload-actions">
         <button class="m__button-brutal">Choose file…</button>
+      </div>
+{% endblock %}
+
+{% block analyzing_content %}
+      <div class="pg-processing-stages">
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Transcription
+        </span>
       </div>
 {% endblock %}
 
@@ -22,42 +35,11 @@ noOutputTab: true
     .pg-player-dataviz {
       display: none;
     }
-    .lang-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--m__space-xxs);
-      min-height: 6rem;
-      padding: var(--m__space-s) var(--m__space-m);
-      margin-bottom: var(--m__space-l);
-      background: var(--m__success);
-      color: white;
-      text-align: center;
-    }
-    .lang-name {
-      margin: 0;
-    }
-    .lang-details {
-      font-size: var(--m__font-size-s);
-      font-weight: 500;
-    }
-    .lang-stat {
-      white-space: nowrap;
-    }
-    .lang-stat + .lang-stat::before {
-      content: " · ";
-      white-space: pre;
-      opacity: 0.6;
-    }
-    .lang-stat-value {
-      font-variant-numeric: tabular-nums;
-    }
   </style>
 
-  <div class="lang-card m__rounded">
-    <h2 class="lang-name">English</h2>
-    <div class="lang-details"
-      ><span class="lang-stat"><span class="lang-stat-value">99.6%</span> <span class="lang-stat-label">confidence</span></span><span class="lang-stat"><span class="lang-stat-label">First 30s analyzed</span></span></div>
+  <div class="pg-verdict-statement success">
+    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">This is English</a></h2>
+    <div class="pg-verdict-statement-details"
+      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">99.6%</span> <span class="pg-verdict-statement-stat-label">confidence</span></span><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-label">First 30s analyzed</span></span></div>
   </div>
 {% endblock %}
