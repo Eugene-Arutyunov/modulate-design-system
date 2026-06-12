@@ -1,6 +1,6 @@
 ---
 pageTitle: PII/PHI Redaction
-permalink: /playground/redaction/
+permalink: /analysis/redaction/
 ---
 
 {% extends 'prototypes/playground-layout.html' %}
@@ -22,6 +22,19 @@ permalink: /playground/redaction/
         <label class="m__checkbox-brutal pg-stt-option pg-diarization-option">
           <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
         </label>
+      </div>
+{% endblock %}
+
+{% block analyzing_content %}
+      <div class="pg-processing-stages">
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Transcription
+        </span>
+        <span class="pg-processing-stage">
+          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          Redactions
+        </span>
       </div>
 {% endblock %}
 
