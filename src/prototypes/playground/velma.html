@@ -7,10 +7,7 @@ permalink: /analysis/velma/
 
 {% block options %}
       <div class="pg-options-row pg-velma-setup">
-        <a href="#" class="pg-velma-setup-link">
-          <svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>
-          Set up behaviors
-        </a>
+        <a href="#" class="pg-velma-setup-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Set up behaviors</a>
         <span class="pg-velma-setup-summary">1 conversation type · 2 roles · 5 behaviors</span>
       </div>
 {% endblock %}
@@ -108,23 +105,27 @@ permalink: /analysis/velma/
       vertical-align: baseline;
       position: relative;
       top: 0.25em;
-      margin-right: 0;
+      margin-right: 0.1rem;
     }
 
-    .pg-behavior-link {
+    a.pg-behavior-link,
+    a.pg-behavior-link:link,
+    a.pg-behavior-link:visited {
       color: var(--m__bg-accent);
       font-weight: var(--m__font-weight-bold);
       text-decoration: none;
       background-image: linear-gradient(currentColor, currentColor);
       background-repeat: no-repeat;
-      background-size: 100% 3.5px;
+      background-size: 100% var(--m__border-width-l);
       background-position: 0 100%;
-      padding-bottom: 0.15em;
+      padding-bottom: 0.22em;
       -webkit-box-decoration-break: clone;
       box-decoration-break: clone;
       transition: color var(--m__duration-base) var(--m__easing-base);
     }
-    .pg-behavior-link:hover {
+    a.pg-behavior-link:hover,
+    a.pg-behavior-link:focus,
+    a.pg-behavior-link:active {
       color: var(--m__text-link-hover);
       transition-duration: var(--m__duration-instant);
     }
@@ -221,16 +222,15 @@ permalink: /analysis/velma/
     .pg-topics-table td { vertical-align: top; }
 
     /* Behaviors table */
+    .pg-output-panel table.pg-behaviors-table th,
+    .pg-output-panel table.pg-behaviors-table td { font-size: var(--m__font-size-s); }
     .pg-behaviors-table { table-layout: fixed; }
     .pg-behaviors-table th:nth-child(1) { width: 18%; }
     .pg-behaviors-table th:nth-child(2) { width: 32%; }
     .pg-behaviors-table th:nth-child(3) { width: 38%; }
     .pg-behaviors-table th:nth-child(4) { width: 12%; }
-    .pg-behaviors-table td[rowspan] { font-size: 0.8rem; }
-    .pg-behaviors-table td > .m__tag {
-      display: flex;
-      width: fit-content;
-      margin-top: 0.7rem;
+    .pg-behaviors-table .pg-behavior-link {
+      font-size: var(--m__font-size-m);
     }
     .pg-behaviors-table td > .caption {
       margin-top: 0.3rem;
@@ -414,7 +414,6 @@ permalink: /analysis/velma/
             <td rowspan="5">Customer Service Representative</td>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
-              <span class="m__tag m__tag--success">Detected</span>
               <div class="caption">Evidence: 2 clips (1 definitive)</div>
             </td>
             <td class="pg-reason">Rep references customer's claim and medication request but fails to provide concrete resolution (e.g., approval/denial status, payment) or any firm follow-up commitment.</td>
@@ -423,7 +422,6 @@ permalink: /analysis/velma/
           <tr>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">The speaker is the Customer Service Representative calmly verifying information, confirming details, and providing account data; no statements attributing negative outcomes to the company or explicit dissatisfaction markers present.</td>
             <td class="pg-num">100%</td>
@@ -431,7 +429,6 @@ permalink: /analysis/velma/
           <tr>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Coercion Manipulation</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">Speaker is Customer Service Representative providing polite verifications and information; no threats, ultimatums, reduced empathy, or pressure tactics observed.</td>
             <td class="pg-num">100%</td>
@@ -439,7 +436,6 @@ permalink: /analysis/velma/
           <tr>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">No customer's stated issue referenced; no resolution confirmation, customer acknowledgment, or closure cues present in clips.</td>
             <td class="pg-num">5%</td>
@@ -447,7 +443,6 @@ permalink: /analysis/velma/
           <tr>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">All clips contain professional, factual verification and information sharing with no profanity, slurs, personal attacks, or hostile indicators.</td>
             <td class="pg-num">0%</td>
@@ -456,7 +451,6 @@ permalink: /analysis/velma/
             <td rowspan="1">Customer</td>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
-              <span class="m__tag m__tag--muted">Not detected</span>
             </td>
             <td class="pg-reason">No profanity, slurs, sexually-suggestive content, personal attacks, or hostile prosody observed; speech is polite and factual.</td>
             <td class="pg-num">98%</td>
