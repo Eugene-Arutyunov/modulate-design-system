@@ -57,10 +57,10 @@ permalink: /analysis/redaction/
 {% block speaker_labels %}{% endblock %}
 
 {% block above_output %}
-  <div class="pg-redaction-summary m__rounded">
-    <h2 class="pg-redaction-title">31 Redactions</h2>
-    <div class="pg-redaction-details"
-      ><span class="pg-redaction-stat"><span class="pg-redaction-stat-value">108.9s</span> <span class="pg-redaction-stat-label">silenced</span></span><span class="pg-redaction-stat"><span class="pg-redaction-stat-value">53.7%</span> <span class="pg-redaction-stat-label">of audio</span></span></div>
+  <div class="pg-verdict-statement success">
+    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">31 redactions made</a></h2>
+    <div class="pg-verdict-statement-details"
+      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">108.9s</span> <span class="pg-verdict-statement-stat-label">silenced</span></span><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">53.7%</span> <span class="pg-verdict-statement-stat-label">of audio</span></span></div>
   </div>
 {% endblock %}
 
@@ -116,39 +116,6 @@ permalink: /analysis/redaction/
       pointer-events: none;
       color: var(--m__bg-accent);
       font-weight: var(--m__font-weight-medium);
-    }
-
-    /* Redaction summary ─────────────────────────────────────────────────── */
-    .pg-redaction-summary {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--m__space-xxs);
-      min-height: 6rem;
-      padding: var(--m__space-s) var(--m__space-m);
-      margin-bottom: var(--m__space-l);
-      background: var(--m__success);
-      color: white;
-      text-align: center;
-    }
-    .pg-redaction-title {
-      margin: 0;
-    }
-    .pg-redaction-details {
-      font-size: var(--m__font-size-s);
-      font-weight: 500;
-    }
-    .pg-redaction-stat {
-      white-space: nowrap;
-    }
-    .pg-redaction-stat + .pg-redaction-stat::before {
-      content: " · ";
-      white-space: pre;
-      opacity: 0.6;
-    }
-    .pg-redaction-stat-value {
-      font-variant-numeric: tabular-nums;
     }
 
     /* Redaction timeline inside the player visualization ────────────────── */
