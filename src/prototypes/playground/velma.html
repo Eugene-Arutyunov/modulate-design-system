@@ -74,11 +74,6 @@ permalink: /analysis/velma/
     .pg-velma-output .caption {
       color: var(--m__text);
     }
-    .pg-velma-output .m__tag .pg-num,
-    .pg-velma-output .m__tag-flat .pg-num {
-      margin-left: 0.4rem;
-    }
-
     .pg-velma-setup {
       display: flex;
       align-items: baseline;
@@ -200,47 +195,52 @@ permalink: /analysis/velma/
     .pg-speakers-table .m__tag-flat {
       font-size: var(--m__font-size-xs);
     }
-    .pg-speakers-table .m__tag-flat .pg-num {
-      font-size: inherit;
-    }
 
     /* Topics & Sentiment */
     .pg-topics-type {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 0.5rem;
       margin-bottom: var(--m__space-s);
     }
     .pg-topics-type .m__tag-flat {
+      margin-left: 0.4rem;
       font-size: var(--m__font-size-xs);
     }
     .pg-topics-type .m__tag-flat .pg-num {
       font-size: inherit;
     }
-    .pg-topics-type-note {
-      color: var(--m__text-caption);
-    }
     .pg-output-panel table.pg-topics-table th,
     .pg-output-panel table.pg-topics-table td { font-size: var(--m__font-size-s); }
     .pg-topics-table { table-layout: fixed; }
-    .pg-topics-table th:nth-child(1) { width: 25%; }
-    .pg-topics-table th:nth-child(2) { width: 75%; }
+    .pg-topics-table th:nth-child(1) { width: 22%; }
+    .pg-topics-table th:nth-child(2) { width: 78%; }
     .pg-topics-table td { vertical-align: top; }
+    .pg-topics-table .m__tag .pg-num {
+      margin-left: 0.2rem;
+    }
+    .pg-topics-table .m__tag--error .pg-num.muted {
+      color: inherit;
+    }
 
     /* Behaviors table */
     .pg-output-panel table.pg-behaviors-table th,
     .pg-output-panel table.pg-behaviors-table td { font-size: var(--m__font-size-s); }
     .pg-behaviors-table { table-layout: fixed; }
-    .pg-behaviors-table th:nth-child(1) { width: 18%; }
-    .pg-behaviors-table th:nth-child(2) { width: 32%; }
-    .pg-behaviors-table th:nth-child(3) { width: 38%; }
+    .pg-behaviors-table th:nth-child(1) { width: 22%; }
+    .pg-behaviors-table th:nth-child(2) { width: 38%; }
+    .pg-behaviors-table th:nth-child(3) { width: 28%; }
     .pg-behaviors-table th:nth-child(4) { width: 12%; }
     .pg-behaviors-table .pg-behavior-link {
       font-size: var(--m__font-size-m);
     }
-    .pg-behaviors-table td > .caption {
-      margin-top: 0.3rem;
+    .pg-behaviors-table .pg-evidence-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.6rem;
+    }
+    .pg-behaviors-table .pg-evidence-link {
+      font-variant-numeric: tabular-nums;
+    }
+    .pg-behaviors-table .pg-evidence-none {
+      color: var(--m__text-caption);
     }
 
     .pg-transcript-flag {
@@ -286,7 +286,7 @@ permalink: /analysis/velma/
                 verifies the caller's identity and details, and accesses and discusses specific account,
                 claim, and medical information on file.
               </div>
-              <span class="m__tag-flat">Inferred <span class="pg-num muted">100%</span></span>
+              <span class="m__tag-flat">Inferred, 100%</span>
             </td>
             <td>
               <div class="pg-emo-bar" style="width: 76%">
@@ -323,7 +323,7 @@ permalink: /analysis/velma/
                 and denied prescription, and requests appeal forms and related actions, clearly acting
                 as the caller seeking assistance.
               </div>
-              <span class="m__tag-flat">Inferred <span class="pg-num muted">100%</span></span>
+              <span class="m__tag-flat">Inferred, 100%</span>
             </td>
             <td>
               <div class="pg-emo-bar" style="width: 24%">
@@ -361,10 +361,7 @@ permalink: /analysis/velma/
     <div class="m__space L"></div>
     <h2>Topics &amp; Sentiment</h2>
     <div class="pg-topics-type">
-      <strong>Customer Service Call</strong>
-      <span class="pg-num muted">100%</span>
-      <span class="m__tag-flat">Auto_selected_single_option</span>
-      <span class="pg-topics-type-note">Auto-chosen as the only available option.</span>
+      <strong>Customer Service Call.</strong> The transcript shows a customer contacting a business support line to resolve an order delivery issue with a service provider.<span class="m__tag-flat">Inferred, 95%</span>
     </div>
     <div class="pg-results-table-section">
       <table class="pg-topics-table">
@@ -379,11 +376,9 @@ permalink: /analysis/velma/
             <td><span class="pg-speaker-cell-name">Customer Service Representative</span></td>
             <td>
               <div class="m__tag-group">
-                <span class="m__tag">back injury <span class="pg-num muted">0.00</span></span>
-                <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
-                <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
-                <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
-                <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag">Customer service <span class="pg-num muted">-0.10</span></span>
+                <span class="m__tag">Delivery delays <span class="pg-num muted">-0.10</span></span>
+                <span class="m__tag">Refund policy <span class="pg-num muted">-0.10</span></span>
               </div>
             </td>
           </tr>
@@ -391,11 +386,9 @@ permalink: /analysis/velma/
             <td><span class="pg-speaker-cell-name">Customer</span></td>
             <td>
               <div class="m__tag-group">
-                <span class="m__tag m__tag--error">back injury <span class="pg-num">-0.50</span></span>
-                <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
-                <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
-                <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
-                <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag m__tag--error">Customer service <span class="pg-num muted">-0.95</span></span>
+                <span class="m__tag m__tag--error">Delivery delays <span class="pg-num muted">-0.95</span></span>
+                <span class="m__tag m__tag--error">Refund policy <span class="pg-num muted">-0.95</span></span>
               </div>
             </td>
           </tr>
@@ -412,7 +405,7 @@ permalink: /analysis/velma/
           <tr>
             <th>Speaker</th>
             <th>Behavior</th>
-            <th>Model reasoning</th>
+            <th>Evidence</th>
             <th>Confidence</th>
           </tr>
         </thead>
@@ -421,37 +414,49 @@ permalink: /analysis/velma/
             <td rowspan="5">Customer Service Representative</td>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
-              <div class="caption">Evidence: 2 clips (1 definitive)</div>
             </td>
-            <td class="pg-reason">Rep references customer's claim and medication request but fails to provide concrete resolution (e.g., approval/denial status, payment) or any firm follow-up commitment.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#transcript" class="pg-evidence-link">0:32</a>
+                <a href="#transcript" class="pg-evidence-link">0:47</a>
+              </div>
+            </td>
             <td class="pg-num">75%</td>
           </tr>
           <tr>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
             </td>
-            <td class="pg-reason">The speaker is the Customer Service Representative calmly verifying information, confirming details, and providing account data; no statements attributing negative outcomes to the company or explicit dissatisfaction markers present.</td>
+            <td><span class="pg-evidence-none">—</span></td>
             <td class="pg-num">100%</td>
           </tr>
           <tr>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Coercion Manipulation</a>
             </td>
-            <td class="pg-reason">Speaker is Customer Service Representative providing polite verifications and information; no threats, ultimatums, reduced empathy, or pressure tactics observed.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#transcript" class="pg-evidence-link">1:00</a>
+              </div>
+            </td>
             <td class="pg-num">100%</td>
           </tr>
           <tr>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
             </td>
-            <td class="pg-reason">No customer's stated issue referenced; no resolution confirmation, customer acknowledgment, or closure cues present in clips.</td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#transcript" class="pg-evidence-link">0:32</a>
+              </div>
+            </td>
             <td class="pg-num">5%</td>
           </tr>
           <tr>
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
             </td>
-            <td class="pg-reason">All clips contain professional, factual verification and information sharing with no profanity, slurs, personal attacks, or hostile indicators.</td>
+            <td><span class="pg-evidence-none">—</span></td>
             <td class="pg-num">0%</td>
           </tr>
           <tr>
@@ -459,7 +464,7 @@ permalink: /analysis/velma/
             <td>
               <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
             </td>
-            <td class="pg-reason">No profanity, slurs, sexually-suggestive content, personal attacks, or hostile prosody observed; speech is polite and factual.</td>
+            <td><span class="pg-evidence-none">—</span></td>
             <td class="pg-num">98%</td>
           </tr>
         </tbody>
