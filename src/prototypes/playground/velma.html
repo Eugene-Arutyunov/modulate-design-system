@@ -130,12 +130,19 @@ permalink: /analysis/velma/
       vertical-align: -0.15em;
       margin-right: 0.15em;
     }
-    .pg-transcript-utterance-header a.pg-behavior-link {
+    .pg-transcript-utterance-header a.pg-behavior-link,
+    .pg-transcript-utterance-header a.pg-behavior-link:link,
+    .pg-transcript-utterance-header a.pg-behavior-link:visited,
+    .pg-transcript-utterance-header a.pg-behavior-link:hover,
+    .pg-transcript-utterance-header a.pg-behavior-link:focus,
+    .pg-transcript-utterance-header a.pg-behavior-link:active {
+      color: inherit;
       font-family: var(--m__font-family-sans);
       font-size: var(--m__font-size-s);
       font-weight: var(--m__font-weight-medium);
       background-size: 100% var(--m__border-width-m);
       padding-bottom: 0.1em;
+      transition: none;
     }
 
     .pg-summary-item {
@@ -220,14 +227,21 @@ permalink: /analysis/velma/
       color: inherit;
     }
 
+    .pg-behaviors-cta {
+      display: block;
+      width: 100%;
+      margin-top: var(--m__space-m);
+      text-align: center;
+    }
+
     /* Behaviors table */
     .pg-output-panel table.pg-behaviors-table th,
     .pg-output-panel table.pg-behaviors-table td { font-size: var(--m__font-size-s); }
     .pg-behaviors-table { table-layout: fixed; }
     .pg-behaviors-table th:nth-child(1) { width: 22%; }
-    .pg-behaviors-table th:nth-child(2) { width: 38%; }
-    .pg-behaviors-table th:nth-child(3) { width: 28%; }
-    .pg-behaviors-table th:nth-child(4) { width: 12%; }
+    .pg-behaviors-table th:nth-child(2) { width: 28%; }
+    .pg-behaviors-table th:nth-child(3) { width: 40%; }
+    .pg-behaviors-table th:nth-child(4) { width: 10%; }
     .pg-behaviors-table .pg-behavior-link {
       font-size: var(--m__font-size-m);
     }
@@ -242,6 +256,10 @@ permalink: /analysis/velma/
     .pg-behaviors-table .pg-evidence-none {
       color: var(--m__text-caption);
     }
+    .pg-transcript-utterance[id="clip-evidence"] {
+      scroll-margin-top: var(--m__space-l);
+    }
+    html { scroll-behavior: smooth; }
 
     .pg-transcript-flag {
       color: var(--m__text-caption);
@@ -413,62 +431,75 @@ permalink: /analysis/velma/
           <tr>
             <td rowspan="5">Customer Service Representative</td>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
             </td>
             <td>
               <div class="pg-evidence-list">
-                <a href="#transcript" class="pg-evidence-link">0:32</a>
-                <a href="#transcript" class="pg-evidence-link">0:47</a>
+                <a href="#clip-evidence" class="pg-evidence-link">No follow-up commitment given</a>
+                <a href="#clip-evidence" class="pg-evidence-link">Resolution status not confirmed</a>
               </div>
             </td>
             <td class="pg-num">75%</td>
           </tr>
           <tr>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
-            </td>
-            <td><span class="pg-evidence-none">—</span></td>
-            <td class="pg-num">100%</td>
-          </tr>
-          <tr>
-            <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Coercion Manipulation</a>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
             </td>
             <td>
               <div class="pg-evidence-list">
-                <a href="#transcript" class="pg-evidence-link">1:00</a>
+                <a href="#clip-evidence" class="pg-evidence-link">Calm verification, no dissatisfaction</a>
               </div>
             </td>
             <td class="pg-num">100%</td>
           </tr>
           <tr>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Coercion Manipulation</a>
             </td>
             <td>
               <div class="pg-evidence-list">
-                <a href="#transcript" class="pg-evidence-link">0:32</a>
+                <a href="#clip-evidence" class="pg-evidence-link">Polite verification with no pressure</a>
+              </div>
+            </td>
+            <td class="pg-num">100%</td>
+          </tr>
+          <tr>
+            <td>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
+            </td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">No closure cues found</a>
               </div>
             </td>
             <td class="pg-num">5%</td>
           </tr>
           <tr>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
             </td>
-            <td><span class="pg-evidence-none">—</span></td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">Professional, factual sharing throughout</a>
+              </div>
+            </td>
             <td class="pg-num">0%</td>
           </tr>
           <tr>
             <td rowspan="1">Customer</td>
             <td>
-              <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
+              <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Inappropriate Speech</a>
             </td>
-            <td><span class="pg-evidence-none">—</span></td>
+            <td>
+              <div class="pg-evidence-list">
+                <a href="#clip-evidence" class="pg-evidence-link">Polite, factual speech with no slurs</a>
+              </div>
+            </td>
             <td class="pg-num">98%</td>
           </tr>
         </tbody>
       </table>
+      <a href="#" class="m__button-outline pg-behaviors-cta">View all configured behaviors</a>
     </div>
 
     <!-- Transcript ──────────────────────────────────────────────────────── -->
@@ -503,11 +534,11 @@ permalink: /analysis/velma/
           </div>
         </div>
 
-        <div class="pg-transcript-utterance ec-confident">
+        <div class="pg-transcript-utterance ec-confident" id="clip-evidence">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:32</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
-            <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
+            <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
             <span class="pg-transcript-emotion">Confident</span>
           </div>
           <div class="pg-transcript-text">
@@ -519,7 +550,7 @@ permalink: /analysis/velma/
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">0:47</span>
             <span class="pg-transcript-speaker">Customer</span>
-            <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
+            <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Complaints</a>
             <span class="pg-transcript-emotion">Disappointed</span>
           </div>
           <div class="pg-transcript-text">
@@ -531,8 +562,8 @@ permalink: /analysis/velma/
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">1:00</span>
             <span class="pg-transcript-speaker">Customer Service Representative</span>
-            <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
-            <a href="#" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
+            <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Not Resolved</a>
+            <a href="#clip-evidence" class="pg-behavior-link"><svg width="18" height="18" aria-hidden="true"><use href="#behaviors" /></svg>Issue Resolved</a>
             <span class="pg-transcript-emotion">Interested</span>
           </div>
           <div class="pg-transcript-text">
