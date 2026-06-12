@@ -24,6 +24,35 @@ permalink: /playground/velma/
       </div>
 {% endblock %}
 
+{% block analyzing_content %}
+      <div class="pg-processing-stages">
+        <span class="pg-processing-stage">
+          <svg width="20" height="20" aria-hidden="true"><use href="#checkmark" /></svg>
+          Transcript
+        </span>
+        <span class="pg-processing-stage">
+          <svg width="20" height="20" aria-hidden="true"><use href="#checkmark" /></svg>
+          Speakers
+        </span>
+        <span class="pg-processing-stage">
+          <svg width="20" height="20" aria-hidden="true"><use href="#checkmark" /></svg>
+          Emotions
+        </span>
+        <span class="pg-processing-stage">
+          <svg width="20" height="20" aria-hidden="true"><use href="#checkmark" /></svg>
+          Roles
+        </span>
+        <span class="pg-processing-stage">
+          <svg width="20" height="20" aria-hidden="true"><use href="#checkmark" /></svg>
+          Behaviors
+        </span>
+        <span class="pg-processing-stage">
+          <svg width="20" height="20" aria-hidden="true"><use href="#checkmark" /></svg>
+          Summary
+        </span>
+      </div>
+{% endblock %}
+
 {% block speaker_labels %}
       <div class="speaker-labels">
         <div class="speaker-label" data-speaker-index="1">
@@ -55,32 +84,31 @@ permalink: /playground/velma/
 
     .pg-velma-setup {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       flex-wrap: wrap;
       gap: var(--m__space-xs);
       font-size: var(--m__font-size-s);
     }
     .pg-velma-setup-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2rem;
       color: var(--m__text);
       font-weight: 500;
-      text-decoration: underline;
-      text-decoration-style: dotted;
-      text-underline-offset: 0.25em;
-      text-decoration-thickness: 1.5px;
+      text-decoration: none;
+      padding-bottom: 0;
+      border-bottom: 1.5px dotted currentColor;
       transition:
         color var(--m__duration-base) var(--m__easing-base),
-        text-decoration-color var(--m__duration-base) var(--m__easing-base);
+        border-bottom-color var(--m__duration-base) var(--m__easing-base);
     }
     .pg-velma-setup-link:hover {
       color: var(--m__text-link-hover);
-      text-decoration-color: currentColor;
       transition-duration: var(--m__duration-instant);
     }
     .pg-velma-setup-link svg {
-      flex: none;
+      display: inline-block;
+      vertical-align: baseline;
+      position: relative;
+      top: 0.25em;
+      margin-right: 0;
     }
 
     .pg-behavior-link {

@@ -723,6 +723,23 @@
   width: 2rem;
   height: 2rem;
 }
+.pg-processing-stages {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--m__space-xxs) var(--m__space-s);
+  font-weight: var(--m__font-weight-medium);
+  color: var(--m__text);
+}
+.pg-processing-stage {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.pg-processing-stage svg {
+  flex: none;
+}
 .pg-upload-collapsed-cta {
   display: none;
   background: none;
@@ -780,6 +797,26 @@
   position: static;
   inset: auto;
   background: none;
+}
+
+/* processing — collapsed plate, no click, shows stages strip */
+.pg-upload-plate[data-state="processing"] {
+  min-height: 0;
+}
+.pg-upload-plate[data-state="processing"] > .pg-options-row,
+.pg-upload-plate[data-state="processing"] .pg-upload-plate-footer,
+.pg-upload-plate[data-state="processing"] .pg-upload-actions {
+  display: none;
+}
+.pg-upload-plate[data-state="processing"] .pg-upload-plate-body {
+  padding: 0;
+}
+.pg-upload-plate[data-state="processing"] .pg-upload-overlay--analyzing {
+  display: flex;
+  position: static;
+  inset: auto;
+  background: none;
+  padding: var(--m__space-s) var(--m__widget-padding);
 }
 
 /* accept — shrink plate, hide actions + footer, show tiny CTA */
