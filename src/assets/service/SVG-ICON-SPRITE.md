@@ -57,9 +57,9 @@ Product icons that need fixed accent fills reference palette tokens from **`src/
 
 | Token                       | Typical use                           |
 | --------------------------- | ------------------------------------- |
-| **`--m__color-red-500`**     | Alerts, deepfake, medical/STT accents |
-| **`--m__color-yellow-500`**  | Music-related accents                 |
-| **`--m__color-purple-400`**  | Brand accents                         |
+| **`--m__color-red-500`**    | Alerts, deepfake, medical/STT accents |
+| **`--m__color-yellow-500`** | Music-related accents                 |
+| **`--m__color-purple-400`** | Brand accents                         |
 
 In a colored source SVG:
 
@@ -102,6 +102,7 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 - **`stt-med.svg`** → **`#stt-med`**: colored icon — all bars use **`var(--m__color-red-500)`**. Listed in **`COLORED_ICONS`**.
 - **`velma.svg`** → **`#velma`**: colored icon — accent shapes use **`var(--m__color-purple-400)`**; other shapes use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`redaction.svg`** → **`#redaction`**: monochrome; inherits **`currentColor`**.
+- **`language.svg`** → **`#language`**: monochrome Language Detection glyph; inherits **`currentColor`**.
 - **`github.svg`** → **`#github`**: monochrome; inherits **`currentColor`** (used on auth OAuth buttons).
 - **`apple.svg`** → **`#apple`**: monochrome; inherits **`currentColor`** (used on auth OAuth buttons).
 - The build script is `scripts/generate-svg-sprite.js`.

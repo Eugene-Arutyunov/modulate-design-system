@@ -191,7 +191,7 @@ Public pricing page. Uses `landing-layout.html` — unauthenticated header (Play
 **Used in:** `src/prototypes/pricing.html` (family columns with tier prices, table layout) and `src/includes/prototypes/playground-nav-sidebar.html` (`.models-nav--vertical` — family groups stacked in the playground sidebar).  
 **Bundle:** `src/css-bundle.njk`.
 
-Surface plaque with model links grouped by family (Escalation, Analysis, Redaction, Transcription, Detection). Family headers are semi-mono uppercase captions; links carry sprite icons and highlight on hover via `--m__text-hover-color`. The active sidebar link is bold.
+Surface plaque with model links grouped by family (Triage, Analysis, Redaction, Transcription, Detection). Family headers are semi-mono uppercase captions; links carry sprite icons and highlight on hover via `--m__text-hover-color`. The active sidebar link is bold.
 
 **Include:** `src/includes/prototypes/models-pricing-col-headers.html` — mobile-only Batch/Streaming column header row for `--3` pricing tables; hidden on desktop, repeated at the start of each table body and after each group title on mobile.
 
@@ -203,6 +203,18 @@ Surface plaque with model links grouped by family (Escalation, Analysis, Redacti
 **Permalink:** `/playground/`
 
 Placeholder page for the interactive API playground. Uses `landing-layout.html` — unauthenticated header, light theme. Playground link in all nav variants now points to `/playground/` instead of `#`.
+
+---
+
+## Temporary analysis → playground redirects
+
+**Remove by ~2026-07-01** — brief `/analysis/` URLs were shared externally before the playground rename was reverted.
+
+**Include:** `src/includes/prototypes/temp-analysis-redirect.html` — shared `location.replace()` script for redirect stubs.
+
+**Stubs:** `src/prototypes/_temp-redirects/analysis/` — eight minimal pages at `/analysis/` and `/analysis/{velma,redaction,transcription,deepfake,music,ai-music,language}/`, each redirecting to the matching `/playground/…` URL via meta refresh, JS, and a fallback link.
+
+When removing: delete the include, the entire `_temp-redirects/analysis/` directory, and this registry section.
 
 ---
 

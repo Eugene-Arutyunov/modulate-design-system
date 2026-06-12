@@ -1,45 +1,58 @@
 ---
 pageTitle: Language
-permalink: /analysis/language/
+permalink: /playground/language/
 noOutputTab: true
 ---
 
-{% extends 'prototypes/playground-layout.html' %}
+{% extends 'prototypes/playground-layout.html' %} {% block options %}
+<div class="pg-options-row pg-plate-header">
+  <span class="pg-plate-header__title">Identify spoken language</span>
+</div>
+{% endblock %} {% block upload_actions %}
+<div class="pg-upload-actions">
+  <button class="m__button-brutal">Choose file…</button>
+</div>
+{% endblock %} {% block analyzing_content %}
+<div class="pg-processing-stages">
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true">
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1" />
+    </svg>
+    Transcription
+  </span>
+</div>
+{% endblock %} {% block player_clips %}{% endblock %} {% block speaker_labels
+%}{% endblock %} {% block above_output %}
+<style>
+  .pg-player-dataviz {
+    display: none;
+  }
+</style>
 
-{% block options %}
-      <div class="pg-options-row pg-plate-header">
-        <span class="pg-plate-header__title">Identify spoken language</span>
-      </div>
-{% endblock %}
-
-{% block upload_actions %}
-      <div class="pg-upload-actions">
-        <button class="m__button-brutal">Choose file…</button>
-      </div>
-{% endblock %}
-
-{% block analyzing_content %}
-      <div class="pg-processing-stages">
-        <span class="pg-processing-stage">
-          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-          Transcription
-        </span>
-      </div>
-{% endblock %}
-
-{% block player_clips %}{% endblock %}
-{% block speaker_labels %}{% endblock %}
-
-{% block above_output %}
-  <style>
-    .pg-player-dataviz {
-      display: none;
-    }
-  </style>
-
-  <div class="pg-verdict-statement success">
-    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">This is English</a></h2>
-    <div class="pg-verdict-statement-details"
-      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">99.6%</span> <span class="pg-verdict-statement-stat-label">confidence</span></span><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-label">First 30s analyzed</span></span></div>
+<div class="pg-verdict-statement success">
+  <h2 class="pg-verdict-statement-title">
+    <a class="pg-verdict-statement-link" href="#audio-player"
+      >This is English</a
+    >
+  </h2>
+  <div class="pg-verdict-statement-details">
+    <span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-value">99.6%</span>
+      <span class="pg-verdict-statement-stat-label">confidence</span></span
+    ><span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-label"
+        >First 30s analyzed</span
+      ></span
+    >
   </div>
+</div>
 {% endblock %}

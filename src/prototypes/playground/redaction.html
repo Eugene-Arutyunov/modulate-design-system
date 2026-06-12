@@ -1,259 +1,328 @@
 ---
 pageTitle: PII/PHI Redaction
-permalink: /analysis/redaction/
+permalink: /playground/redaction/
 ---
 
-{% extends 'prototypes/playground-layout.html' %}
-
-{% block options %}
-      <div class="pg-options-row pg-redaction-options">
-        <div class="m__textfield m__textfield--no-spin pg-pad-field">
-          <label>Start padding</label>
-          <span class="pg-pad-control">
-            <input type="number" value="80" min="0" /><span class="pg-pad-unit">ms</span>
-          </span>
-        </div>
-        <div class="m__textfield m__textfield--no-spin pg-pad-field">
-          <label>End padding</label>
-          <span class="pg-pad-control">
-            <input type="number" value="10" min="0" /><span class="pg-pad-unit">ms</span>
-          </span>
-        </div>
-        <label class="m__checkbox-brutal pg-stt-option pg-diarization-option">
-          <input type="checkbox" id="opt-diarization" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg> Diarization
-        </label>
-      </div>
-{% endblock %}
-
-{% block analyzing_content %}
-      <div class="pg-processing-stages">
-        <span class="pg-processing-stage">
-          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-          Transcription
-        </span>
-        <span class="pg-processing-stage">
-          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-          Redactions
-        </span>
-      </div>
-{% endblock %}
-
-{% block player_clips %}
-  <div class="pg-redaction-player-track">
-    <div class="pg-redaction-seg" style="left: 8%;  width: 5%"  title="0:16 – 0:26 · Name"></div>
-    <div class="pg-redaction-seg" style="left: 14%; width: 7%"  title="0:28 – 0:42 · Address · ZIP"></div>
-    <div class="pg-redaction-seg" style="left: 23%; width: 4%"  title="0:46 – 0:54 · Date of birth"></div>
-    <div class="pg-redaction-seg" style="left: 30%; width: 6%"  title="1:00 – 1:13 · SSN · Member ID"></div>
-    <div class="pg-redaction-seg" style="left: 39%; width: 5%"  title="1:18 – 1:28 · Phone · Email"></div>
-    <div class="pg-redaction-seg" style="left: 48%; width: 8%"  title="1:36 – 1:53 · Callback · Employer"></div>
-    <div class="pg-redaction-seg" style="left: 59%; width: 4%"  title="1:59 – 2:07 · Workplace address"></div>
-    <div class="pg-redaction-seg" style="left: 66%; width: 6%"  title="2:13 – 2:25 · Account number"></div>
-    <div class="pg-redaction-seg" style="left: 76%; width: 5%"  title="2:33 – 2:43 · Name · Phone"></div>
-    <div class="pg-redaction-seg" style="left: 85%; width: 4%"  title="2:51 – 2:59 · Email"></div>
-    <div class="pg-redaction-seg" style="left: 92%; width: 4%"  title="3:05 – 3:13 · Address"></div>
+{% extends 'prototypes/playground-layout.html' %} {% block options %}
+<div class="pg-options-row pg-redaction-options">
+  <div class="m__textfield m__textfield--no-spin pg-pad-field">
+    <label>Start padding</label>
+    <span class="pg-pad-control">
+      <input type="number" value="80" min="0" /><span class="pg-pad-unit"
+        >ms</span
+      >
+    </span>
   </div>
-{% endblock %}
-
-{% block speaker_labels %}{% endblock %}
-
-{% block above_output %}
-  <div class="pg-verdict-statement success">
-    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">31 redactions made</a></h2>
-    <div class="pg-verdict-statement-details"
-      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">108.9s</span> <span class="pg-verdict-statement-stat-label">silenced</span></span><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">53.7%</span> <span class="pg-verdict-statement-stat-label">of audio</span></span></div>
+  <div class="m__textfield m__textfield--no-spin pg-pad-field">
+    <label>End padding</label>
+    <span class="pg-pad-control">
+      <input type="number" value="10" min="0" /><span class="pg-pad-unit"
+        >ms</span
+      >
+    </span>
   </div>
-{% endblock %}
+  <label class="m__checkbox-brutal pg-stt-option pg-diarization-option">
+    <input type="checkbox" id="opt-diarization" checked /><svg
+      aria-hidden="true">
+      <use href="#checkmark"></use>
+    </svg>
+    Diarization
+  </label>
+</div>
+{% endblock %} {% block analyzing_content %}
+<div class="pg-processing-stages">
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true">
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1" />
+    </svg>
+    Transcription
+  </span>
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true">
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1" />
+    </svg>
+    Redactions
+  </span>
+</div>
+{% endblock %} {% block player_clips %}
+<div class="pg-redaction-player-track">
+  <div
+    class="pg-redaction-seg"
+    style="left: 8%; width: 5%"
+    title="0:16 – 0:26 · Name"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 14%; width: 7%"
+    title="0:28 – 0:42 · Address · ZIP"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 23%; width: 4%"
+    title="0:46 – 0:54 · Date of birth"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 30%; width: 6%"
+    title="1:00 – 1:13 · SSN · Member ID"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 39%; width: 5%"
+    title="1:18 – 1:28 · Phone · Email"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 48%; width: 8%"
+    title="1:36 – 1:53 · Callback · Employer"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 59%; width: 4%"
+    title="1:59 – 2:07 · Workplace address"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 66%; width: 6%"
+    title="2:13 – 2:25 · Account number"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 76%; width: 5%"
+    title="2:33 – 2:43 · Name · Phone"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 85%; width: 4%"
+    title="2:51 – 2:59 · Email"></div>
+  <div
+    class="pg-redaction-seg"
+    style="left: 92%; width: 4%"
+    title="3:05 – 3:13 · Address"></div>
+</div>
+{% endblock %} {% block speaker_labels %}{% endblock %} {% block above_output %}
+<div class="pg-verdict-statement success">
+  <h2 class="pg-verdict-statement-title">
+    <a class="pg-verdict-statement-link" href="#audio-player"
+      >31 redactions made</a
+    >
+  </h2>
+  <div class="pg-verdict-statement-details">
+    <span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-value">108.9s</span>
+      <span class="pg-verdict-statement-stat-label">silenced</span></span
+    ><span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-value">53.7%</span>
+      <span class="pg-verdict-statement-stat-label">of audio</span></span
+    >
+  </div>
+</div>
+{% endblock %} {% block panel_content %}
+<style>
+  /* Padding inputs ────────────────────────────────────────────────────── */
+  .pg-redaction-options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--m__space-s);
+    font-size: var(--m__font-size-s);
+  }
+  /* DS textfield + inline unit suffix; width/suffix are the only custom bits */
+  .pg-redaction-options .pg-pad-field {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--m__space-xxs);
+    margin-bottom: 0;
+  }
+  .pg-redaction-options .m__checkbox-brutal {
+    gap: var(--m__space-xxs);
+  }
+  .pg-redaction-options .pg-pad-field > label {
+    margin: 0;
+    white-space: nowrap;
+  }
+  .pg-pad-control {
+    position: relative;
+    display: block;
+    width: 5rem;
+  }
+  .pg-pad-field input {
+    padding: 0 var(--m__space-xxs);
+    padding-right: 1.6rem;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+    background-color: transparent;
+    border: var(--m__border-width-m) solid var(--m__bg-accent);
+    transition: border-color var(--m__duration-base) var(--m__easing-base);
+  }
+  .pg-pad-field input:hover {
+    border-color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+  .pg-pad-unit {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.45rem;
+    pointer-events: none;
+    color: var(--m__bg-accent);
+    font-weight: var(--m__font-weight-medium);
+  }
 
-{% block panel_content %}
-  <style>
-    /* Padding inputs ────────────────────────────────────────────────────── */
-    .pg-redaction-options {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: var(--m__space-s);
-      font-size: var(--m__font-size-s);
-    }
-    /* DS textfield + inline unit suffix; width/suffix are the only custom bits */
-    .pg-redaction-options .pg-pad-field {
-      flex-direction: row;
-      align-items: center;
-      gap: var(--m__space-xxs);
-      margin-bottom: 0;
-    }
-    .pg-redaction-options .m__checkbox-brutal {
-      gap: var(--m__space-xxs);
-    }
-    .pg-redaction-options .pg-pad-field > label {
-      margin: 0;
-      white-space: nowrap;
-    }
-    .pg-pad-control {
-      position: relative;
-      display: block;
-      width: 5rem;
-    }
-    .pg-pad-field input {
-      padding: 0 var(--m__space-xxs);
-      padding-right: 1.6rem;
-      font-size: inherit;
-      font-weight: inherit;
-      line-height: 1.6;
-      font-variant-numeric: tabular-nums;
-      background-color: transparent;
-      border: var(--m__border-width-m) solid var(--m__bg-accent);
-      transition: border-color var(--m__duration-base) var(--m__easing-base);
-    }
-    .pg-pad-field input:hover {
-      border-color: var(--m__text-link-hover);
-      transition-duration: var(--m__duration-instant);
-    }
-    .pg-pad-unit {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: 0.45rem;
-      pointer-events: none;
-      color: var(--m__bg-accent);
-      font-weight: var(--m__font-weight-medium);
-    }
+  /* Redaction timeline inside the player visualization ────────────────── */
+  .media-container {
+    --player-visualization-height: var(--player-strip-height);
+  }
+  .pg-redaction-player-track {
+    position: absolute;
+    inset: 0;
+  }
+  .pg-redaction-seg {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: color-mix(in srgb, var(--m__success) 38%, transparent);
+    cursor: help;
+    transition: background var(--m__duration-base) var(--m__easing-base);
+  }
+  .pg-redaction-seg:hover {
+    background: color-mix(in srgb, var(--m__success) 55%, transparent);
+    transition: background var(--m__duration-instant) var(--m__easing-base);
+  }
 
-    /* Redaction timeline inside the player visualization ────────────────── */
-    .media-container {
-      --player-visualization-height: var(--player-strip-height);
-    }
-    .pg-redaction-player-track {
-      position: absolute;
-      inset: 0;
-    }
-    .pg-redaction-seg {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      background: color-mix(in srgb, var(--m__success) 38%, transparent);
-      cursor: help;
-      transition: background var(--m__duration-base) var(--m__easing-base);
-    }
-    .pg-redaction-seg:hover {
-      background: color-mix(in srgb, var(--m__success) 55%, transparent);
-      transition: background var(--m__duration-instant) var(--m__easing-base);
-    }
+  /* Inline redaction tag ──────────────────────────────────────────────── */
+  .pii-tag {
+    font-family: var(--m__font-family-semi-mono);
+    font-size: 0.82em;
+    letter-spacing: 0.02em;
+    color: var(--m__text-code);
+    white-space: nowrap;
+    cursor: help;
+    transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+  .pg-transcript-text {
+    transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+  .pg-transcript-utterance:hover .pg-transcript-text,
+  .pg-transcript-utterance:hover .pii-tag {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+  .pg-transcript-flag {
+    color: var(--m__text-caption);
+  }
+</style>
 
-    /* Inline redaction tag ──────────────────────────────────────────────── */
-    .pii-tag {
-      font-family: var(--m__font-family-semi-mono);
-      font-size: 0.82em;
-      letter-spacing: 0.02em;
-      color: var(--m__text-code);
-      white-space: nowrap;
-      cursor: help;
-      transition: color var(--m__duration-base) var(--m__easing-base);
-    }
-    .pg-transcript-text {
-      transition: color var(--m__duration-base) var(--m__easing-base);
-    }
-    .pg-transcript-utterance:hover .pg-transcript-text,
-    .pg-transcript-utterance:hover .pii-tag {
-      color: var(--m__text-link-hover);
-      transition-duration: var(--m__duration-instant);
-    }
-    .pg-transcript-flag {
-      color: var(--m__text-caption);
-    }
-  </style>
-
-  <div class="pg-tab-panel">
-
-    <!-- Redacted transcript ─────────────────────────────────────────────── -->
-    <div class="pg-transcript-container pg-redaction-transcript visible">
-      <div class="pg-transcript-list">
-
-        <div class="pg-transcript-utterance">
-          <div class="pg-transcript-utterance-header">
-            <span class="pg-transcript-time">0:00</span>
-            <span class="pg-transcript-speaker">Speaker 1</span>
-            <span class="pg-transcript-flag">English</span>
-          </div>
-          <div class="pg-transcript-text">
-            <p>
-              Thank you for calling Green Valley Health member services. This is
-              <span class="pii-tag" title="First name">[FIRSTNAME]</span> speaking on a
-              recorded line. Can I confirm I'm speaking with
-              <span class="pii-tag" title="First name">[FIRSTNAME]</span>
-              <span class="pii-tag" title="Last name">[LASTNAME]</span>, born
-              <span class="pii-tag" title="Date of birth">[DATE OF BIRTH]</span>, and living at
-              <span class="pii-tag" title="Address">[ADDRESS]</span>,
-              <span class="pii-tag" title="Address">[ADDRESS]</span>
-              <span class="pii-tag" title="ZIP code">[ZIPCODE]</span>?
-            </p>
-          </div>
+<div class="pg-tab-panel">
+  <!-- Redacted transcript ─────────────────────────────────────────────── -->
+  <div class="pg-transcript-container pg-redaction-transcript visible">
+    <div class="pg-transcript-list">
+      <div class="pg-transcript-utterance">
+        <div class="pg-transcript-utterance-header">
+          <span class="pg-transcript-time">0:00</span>
+          <span class="pg-transcript-speaker">Speaker 1</span>
+          <span class="pg-transcript-flag">English</span>
         </div>
-
-        <div class="pg-transcript-utterance">
-          <div class="pg-transcript-utterance-header">
-            <span class="pg-transcript-time">0:18</span>
-            <span class="pg-transcript-speaker">Speaker 2</span>
-            <span class="pg-transcript-flag">English</span>
-          </div>
-          <div class="pg-transcript-text">
-            <p>
-              Yes, this is <span class="pii-tag" title="First name">[FIRSTNAME]</span>
-              <span class="pii-tag" title="Middle name">[MIDDLENAME]</span>
-              <span class="pii-tag" title="Last name">[LASTNAME]</span>. The last 4 of my Social
-              Security number are <span class="pii-tag" title="Social security number">[SSN]</span>,
-              and my member ID is <span class="pii-tag" title="Protected health information">[PHI]</span>.
-            </p>
-          </div>
+        <div class="pg-transcript-text">
+          <p>
+            Thank you for calling Green Valley Health member services. This is
+            <span class="pii-tag" title="First name">[FIRSTNAME]</span> speaking
+            on a recorded line. Can I confirm I'm speaking with
+            <span class="pii-tag" title="First name">[FIRSTNAME]</span>
+            <span class="pii-tag" title="Last name">[LASTNAME]</span>, born
+            <span class="pii-tag" title="Date of birth">[DATE OF BIRTH]</span>,
+            and living at
+            <span class="pii-tag" title="Address">[ADDRESS]</span>,
+            <span class="pii-tag" title="Address">[ADDRESS]</span>
+            <span class="pii-tag" title="ZIP code">[ZIPCODE]</span>?
+          </p>
         </div>
+      </div>
 
-        <div class="pg-transcript-utterance">
-          <div class="pg-transcript-utterance-header">
-            <span class="pg-transcript-time">0:32</span>
-            <span class="pg-transcript-speaker">Speaker 1</span>
-          </div>
-          <div class="pg-transcript-text">
-            <p>
-              Thank you, <span class="pii-tag" title="Prefix / suffix">[PREFIX SUFFIX]</span>
-              <span class="pii-tag" title="Last name">[LASTNAME]</span>. For verification, can you
-              confirm the phone number and email we have on file:
-              <span class="pii-tag" title="Phone number">[PHONE]</span>, and
-              <span class="pii-tag" title="Email address">[EMAIL]</span>?
-            </p>
-          </div>
+      <div class="pg-transcript-utterance">
+        <div class="pg-transcript-utterance-header">
+          <span class="pg-transcript-time">0:18</span>
+          <span class="pg-transcript-speaker">Speaker 2</span>
+          <span class="pg-transcript-flag">English</span>
         </div>
-
-        <div class="pg-transcript-utterance">
-          <div class="pg-transcript-utterance-header">
-            <span class="pg-transcript-time">0:47</span>
-            <span class="pg-transcript-speaker">Speaker 2</span>
-          </div>
-          <div class="pg-transcript-text">
-            <p>
-              Yes, that's right, although my new callback number is
-              <span class="pii-tag" title="Phone number">[PHONE]</span>, and my employer is
-              <span class="pii-tag" title="Employer">[EMPLOYER]</span> at
-              <span class="pii-tag" title="Workplace address">[WORKPLACE ADDRESS]</span>.
-            </p>
-          </div>
+        <div class="pg-transcript-text">
+          <p>
+            Yes, this is
+            <span class="pii-tag" title="First name">[FIRSTNAME]</span>
+            <span class="pii-tag" title="Middle name">[MIDDLENAME]</span>
+            <span class="pii-tag" title="Last name">[LASTNAME]</span>. The last
+            4 of my Social Security number are
+            <span class="pii-tag" title="Social security number">[SSN]</span>,
+            and my member ID is
+            <span class="pii-tag" title="Protected health information"
+              >[PHI]</span
+            >.
+          </p>
         </div>
+      </div>
 
-        <div class="pg-transcript-utterance">
-          <div class="pg-transcript-utterance-header">
-            <span class="pg-transcript-time">1:00</span>
-            <span class="pg-transcript-speaker">Speaker 1</span>
-          </div>
-          <div class="pg-transcript-text">
-            <p>
-              Perfect, I've updated that for you. To pull up your plan, can you give me your
-              member account number and the last payment amount on file —
-              <span class="pii-tag" title="Account number">[ACCOUNT NUMBER]</span> and
-              <span class="pii-tag" title="Payment amount">[AMOUNT]</span>?
-            </p>
-          </div>
+      <div class="pg-transcript-utterance">
+        <div class="pg-transcript-utterance-header">
+          <span class="pg-transcript-time">0:32</span>
+          <span class="pg-transcript-speaker">Speaker 1</span>
         </div>
+        <div class="pg-transcript-text">
+          <p>
+            Thank you,
+            <span class="pii-tag" title="Prefix / suffix">[PREFIX SUFFIX]</span>
+            <span class="pii-tag" title="Last name">[LASTNAME]</span>. For
+            verification, can you confirm the phone number and email we have on
+            file: <span class="pii-tag" title="Phone number">[PHONE]</span>, and
+            <span class="pii-tag" title="Email address">[EMAIL]</span>?
+          </p>
+        </div>
+      </div>
 
+      <div class="pg-transcript-utterance">
+        <div class="pg-transcript-utterance-header">
+          <span class="pg-transcript-time">0:47</span>
+          <span class="pg-transcript-speaker">Speaker 2</span>
+        </div>
+        <div class="pg-transcript-text">
+          <p>
+            Yes, that's right, although my new callback number is
+            <span class="pii-tag" title="Phone number">[PHONE]</span>, and my
+            employer is
+            <span class="pii-tag" title="Employer">[EMPLOYER]</span> at
+            <span class="pii-tag" title="Workplace address"
+              >[WORKPLACE ADDRESS]</span
+            >.
+          </p>
+        </div>
+      </div>
+
+      <div class="pg-transcript-utterance">
+        <div class="pg-transcript-utterance-header">
+          <span class="pg-transcript-time">1:00</span>
+          <span class="pg-transcript-speaker">Speaker 1</span>
+        </div>
+        <div class="pg-transcript-text">
+          <p>
+            Perfect, I've updated that for you. To pull up your plan, can you
+            give me your member account number and the last payment amount on
+            file —
+            <span class="pii-tag" title="Account number">[ACCOUNT NUMBER]</span>
+            and <span class="pii-tag" title="Payment amount">[AMOUNT]</span>?
+          </p>
+        </div>
       </div>
     </div>
-
   </div>
+</div>
 {% endblock %}

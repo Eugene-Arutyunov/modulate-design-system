@@ -1,17 +1,17 @@
 ---
 pageTitle: Music Detection
-permalink: /analysis/music/
+permalink: /playground/music/
 segments:
-  - { t: "0.00s – 1.15s",   music: 95.6, speech: 7.9 }
-  - { t: "1.15s – 2.11s",   music: 94.6, speech: 3.2 }
-  - { t: "2.11s – 3.07s",   music: 91.4, speech: 2.1 }
-  - { t: "3.07s – 4.03s",   music: 84.7, speech: 1.6 }
-  - { t: "4.03s – 5.18s",   music: 79.3, speech: 99.0 }
-  - { t: "5.18s – 6.14s",   music: 79.8, speech: 99.9 }
-  - { t: "6.14s – 7.10s",   music: 80.3, speech: 97.5 }
-  - { t: "7.10s – 8.06s",   music: 82.7, speech: 100 }
-  - { t: "8.06s – 9.02s",   music: 83.1, speech: 90.4 }
-  - { t: "9.02s – 10.18s",  music: 78.2, speech: 98.2 }
+  - { t: "0.00s – 1.15s", music: 95.6, speech: 7.9 }
+  - { t: "1.15s – 2.11s", music: 94.6, speech: 3.2 }
+  - { t: "2.11s – 3.07s", music: 91.4, speech: 2.1 }
+  - { t: "3.07s – 4.03s", music: 84.7, speech: 1.6 }
+  - { t: "4.03s – 5.18s", music: 79.3, speech: 99.0 }
+  - { t: "5.18s – 6.14s", music: 79.8, speech: 99.9 }
+  - { t: "6.14s – 7.10s", music: 80.3, speech: 97.5 }
+  - { t: "7.10s – 8.06s", music: 82.7, speech: 100 }
+  - { t: "8.06s – 9.02s", music: 83.1, speech: 90.4 }
+  - { t: "9.02s – 10.18s", music: 78.2, speech: 98.2 }
   - { t: "10.18s – 11.14s", music: 74.6, speech: 99.6 }
   - { t: "11.14s – 12.10s", music: 76.1, speech: 95.3 }
   - { t: "12.10s – 13.06s", music: 81.4, speech: 71.8 }
@@ -20,129 +20,184 @@ segments:
   - { t: "15.17s – 16.13s", music: 92.7, speech: 6.1 }
 ---
 
-{% extends 'prototypes/playground-layout.html' %}
-
-{% block options %}
-      <div class="pg-options-row pg-plate-header">
-        <span class="pg-plate-header__title">Detect music and speech</span>
-      </div>
-{% endblock %}
-
-{% block analyzing_content %}
-      <div class="pg-processing-stages">
-        <span class="pg-processing-stage">
-          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-          Music
-        </span>
-        <span class="pg-processing-stage">
-          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-          Speech
-        </span>
-      </div>
-{% endblock %}
-
-{% block player_clips %}
-  <div class="mx-player-heat">
-    <div class="mx-player-heat-row" data-row="music">
-      {% for s in segments %}<div class="mx-player-heat-cell" style="opacity: {{ s.music / 100 }}" title="{{ s.t }} · Music {{ s.music }}%"></div>{% endfor %}
-    </div>
-    <div class="mx-player-heat-row" data-row="speech">
-      {% for s in segments %}<div class="mx-player-heat-cell" style="opacity: {{ s.speech / 100 }}" title="{{ s.t }} · Speech {{ s.speech }}%"></div>{% endfor %}
-    </div>
+{% extends 'prototypes/playground-layout.html' %} {% block options %}
+<div class="pg-options-row pg-plate-header">
+  <span class="pg-plate-header__title">Detect music and speech</span>
+</div>
+{% endblock %} {% block analyzing_content %}
+<div class="pg-processing-stages">
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true">
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1" />
+    </svg>
+    Music
+  </span>
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true">
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1" />
+    </svg>
+    Speech
+  </span>
+</div>
+{% endblock %} {% block player_clips %}
+<div class="mx-player-heat">
+  <div class="mx-player-heat-row" data-row="music">
+    {% for s in segments %}
+    <div
+      class="mx-player-heat-cell"
+      style="opacity: {{ s.music / 100 }}"
+      title="{{ s.t }} · Music {{ s.music }}%"></div>
+    {% endfor %}
   </div>
-{% endblock %}
-
-{% block speaker_labels %}
-  <div class="speaker-labels">
-    <div class="speaker-label" data-speaker-index="1"><span>Music</span></div>
-    <div class="speaker-label" data-speaker-index="2"><span>Speech</span></div>
+  <div class="mx-player-heat-row" data-row="speech">
+    {% for s in segments %}
+    <div
+      class="mx-player-heat-cell"
+      style="opacity: {{ s.speech / 100 }}"
+      title="{{ s.t }} · Speech {{ s.speech }}%"></div>
+    {% endfor %}
   </div>
-{% endblock %}
-
-{% block above_output %}
-  <div class="pg-verdict-statement success">
-    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">This is 90% music</a></h2>
-    <div class="pg-verdict-statement-details"
-      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">77%</span> <span class="pg-verdict-statement-stat-label">speech</span></span></div>
+</div>
+{% endblock %} {% block speaker_labels %}
+<div class="speaker-labels">
+  <div class="speaker-label" data-speaker-index="1"><span>Music</span></div>
+  <div class="speaker-label" data-speaker-index="2"><span>Speech</span></div>
+</div>
+{% endblock %} {% block above_output %}
+<div class="pg-verdict-statement success">
+  <h2 class="pg-verdict-statement-title">
+    <a class="pg-verdict-statement-link" href="#audio-player"
+      >This is 90% music</a
+    >
+  </h2>
+  <div class="pg-verdict-statement-details">
+    <span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-value">77%</span>
+      <span class="pg-verdict-statement-stat-label">speech</span></span
+    >
   </div>
-{% endblock %}
+</div>
+{% endblock %} {% block panel_content %}
+<style>
+  .mx-panel,
+  .media-container {
+    --music-color: var(--m__success);
+    --speech-color: var(--m__error);
+  }
 
-{% block panel_content %}
-  <style>
-    .mx-panel,
-    .media-container { --music-color: var(--m__success); --speech-color: var(--m__error); }
+  /* Player visualization heatmap ──────────────────────────────────────── */
+  .mx-player-heat {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .mx-player-heat-row {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+  .mx-player-heat-cell {
+    flex: 1;
+    transition: filter var(--m__duration-base) var(--m__easing-base);
+  }
+  .mx-player-heat-cell:hover {
+    filter: brightness(1.15);
+  }
+  .mx-player-heat-row[data-row="music"] .mx-player-heat-cell {
+    background: var(--music-color);
+  }
+  .mx-player-heat-row[data-row="speech"] .mx-player-heat-cell {
+    background: var(--speech-color);
+  }
 
-    /* Player visualization heatmap ──────────────────────────────────────── */
-    .mx-player-heat {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    .mx-player-heat-row {
-      flex: 1;
-      display: flex;
-      min-height: 0;
-    }
-    .mx-player-heat-cell {
-      flex: 1;
-      transition: filter var(--m__duration-base) var(--m__easing-base);
-    }
-    .mx-player-heat-cell:hover {
-      filter: brightness(1.15);
-    }
-    .mx-player-heat-row[data-row="music"]  .mx-player-heat-cell { background: var(--music-color); }
-    .mx-player-heat-row[data-row="speech"] .mx-player-heat-cell { background: var(--speech-color); }
+  /* Detailed view ─────────────────────────────────────────────────────── */
+  .mx-detailed td:first-child {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .mx-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .mx-bar {
+    flex: 0 0 130px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--m__border);
+    overflow: hidden;
+  }
+  .mx-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--m__text);
+  }
+  .mx-pct {
+    font-variant-numeric: tabular-nums;
+    min-width: 3.6em;
+  }
+</style>
 
-    /* Detailed view ─────────────────────────────────────────────────────── */
-    .mx-detailed td:first-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .mx-cell { display: flex; align-items: center; gap: 0.6rem; }
-    .mx-bar {
-      flex: 0 0 130px;
-      height: 5px;
-      border-radius: 3px;
-      background: var(--m__border);
-      overflow: hidden;
-    }
-    .mx-bar-fill { height: 100%; border-radius: 3px; background: var(--m__text); }
-    .mx-pct { font-variant-numeric: tabular-nums; min-width: 3.6em; }
-  </style>
-
-  <div class="pg-tab-panel mx-panel">
-
-    <!-- Detailed table ──────────────────────────────────────────────────── -->
-    <div>
-      <div class="pg-results-table-section mx-detailed">
-        <table>
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Music</th>
-              <th>Speech</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for s in segments %}
-            <tr>
-              <td>{{ s.t }}</td>
-              <td>
-                <div class="mx-cell">
-                  <div class="mx-bar"><div class="mx-bar-fill music" style="width: {{ s.music }}%"></div></div>
-                  <span class="mx-pct">{{ s.music }}%</span>
+<div class="pg-tab-panel mx-panel">
+  <!-- Detailed table ──────────────────────────────────────────────────── -->
+  <div>
+    <div class="pg-results-table-section mx-detailed">
+      <table>
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Music</th>
+            <th>Speech</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in segments %}
+          <tr>
+            <td>{{ s.t }}</td>
+            <td>
+              <div class="mx-cell">
+                <div class="mx-bar">
+                  <div
+                    class="mx-bar-fill music"
+                    style="width: {{ s.music }}%"></div>
                 </div>
-              </td>
-              <td>
-                <div class="mx-cell">
-                  <div class="mx-bar"><div class="mx-bar-fill speech" style="width: {{ s.speech }}%"></div></div>
-                  <span class="mx-pct">{{ s.speech }}%</span>
+                <span class="mx-pct">{{ s.music }}%</span>
+              </div>
+            </td>
+            <td>
+              <div class="mx-cell">
+                <div class="mx-bar">
+                  <div
+                    class="mx-bar-fill speech"
+                    style="width: {{ s.speech }}%"></div>
                 </div>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                <span class="mx-pct">{{ s.speech }}%</span>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-
   </div>
+</div>
 {% endblock %}

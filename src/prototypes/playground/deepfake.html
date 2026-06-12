@@ -1,205 +1,253 @@
 ---
 pageTitle: Deepfake
-permalink: /analysis/deepfake/
+permalink: /playground/deepfake/
 ---
 
-{% extends 'prototypes/playground-layout.html' %}
-
-{% block options %}
-      <div class="pg-options-row pg-plate-header">
-        <span class="pg-plate-header__title">Detect synthetic speech</span>
-      </div>
-{% endblock %}
-
-{% block analyzing_content %}
-      <div class="pg-processing-stages">
-        <span class="pg-processing-stage">
-          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-          Authenticity
-        </span>
-      </div>
-{% endblock %}
-
-{% block player_clips %}
-  <div class="pg-histo-squares df-player-clips">
-    <div class="pg-histo-bar authentic" style="opacity: 0.97" title="0:01 · Authentic · 97%"></div>
-    <div class="pg-histo-bar authentic" style="opacity: 0.94" title="0:02 · Authentic · 94%"></div>
-    <div class="pg-histo-bar authentic" style="opacity: 0.91" title="0:03 · Authentic · 91%"></div>
-    <div class="pg-histo-bar authentic" style="opacity: 0.96" title="0:04 · Authentic · 96%"></div>
-    <div class="pg-histo-bar authentic" style="opacity: 0.89" title="0:05 · Authentic · 89%"></div>
-    <div class="pg-histo-bar authentic" style="opacity: 0.93" title="0:06 · Authentic · 93%"></div>
-    <div class="pg-histo-bar synthetic" style="opacity: 0.78" title="0:07 · Synthetic · 78%"></div>
-    <div class="pg-histo-bar synthetic" style="opacity: 0.94" title="0:08 · Synthetic · 94%"></div>
-    <div class="pg-histo-bar synthetic" style="opacity: 0.97" title="0:09 · Synthetic · 97%"></div>
-    <div class="pg-histo-bar synthetic" style="opacity: 0.91" title="0:10 · Synthetic · 91%"></div>
-    <div class="pg-histo-bar synthetic" style="opacity: 0.88" title="0:11 · Synthetic · 88%"></div>
-    <div class="pg-histo-bar synthetic" style="opacity: 0.95" title="0:12 · Synthetic · 95%"></div>
-    <div class="pg-histo-bar authentic" style="opacity: 0.86" title="0:13 · Authentic · 86%"></div>
-    <div class="pg-histo-bar authentic" style="opacity: 0.92" title="0:14 · Authentic · 92%"></div>
-    <div class="pg-histo-bar authentic" title="0:15 · No content"></div>
+{% extends 'prototypes/playground-layout.html' %} {% block options %}
+<div class="pg-options-row pg-plate-header">
+  <span class="pg-plate-header__title">Detect synthetic speech</span>
+</div>
+{% endblock %} {% block analyzing_content %}
+<div class="pg-processing-stages">
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true">
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1" />
+    </svg>
+    Authenticity
+  </span>
+</div>
+{% endblock %} {% block player_clips %}
+<div class="pg-histo-squares df-player-clips">
+  <div
+    class="pg-histo-bar authentic"
+    style="opacity: 0.97"
+    title="0:01 · Authentic · 97%"></div>
+  <div
+    class="pg-histo-bar authentic"
+    style="opacity: 0.94"
+    title="0:02 · Authentic · 94%"></div>
+  <div
+    class="pg-histo-bar authentic"
+    style="opacity: 0.91"
+    title="0:03 · Authentic · 91%"></div>
+  <div
+    class="pg-histo-bar authentic"
+    style="opacity: 0.96"
+    title="0:04 · Authentic · 96%"></div>
+  <div
+    class="pg-histo-bar authentic"
+    style="opacity: 0.89"
+    title="0:05 · Authentic · 89%"></div>
+  <div
+    class="pg-histo-bar authentic"
+    style="opacity: 0.93"
+    title="0:06 · Authentic · 93%"></div>
+  <div
+    class="pg-histo-bar synthetic"
+    style="opacity: 0.78"
+    title="0:07 · Synthetic · 78%"></div>
+  <div
+    class="pg-histo-bar synthetic"
+    style="opacity: 0.94"
+    title="0:08 · Synthetic · 94%"></div>
+  <div
+    class="pg-histo-bar synthetic"
+    style="opacity: 0.97"
+    title="0:09 · Synthetic · 97%"></div>
+  <div
+    class="pg-histo-bar synthetic"
+    style="opacity: 0.91"
+    title="0:10 · Synthetic · 91%"></div>
+  <div
+    class="pg-histo-bar synthetic"
+    style="opacity: 0.88"
+    title="0:11 · Synthetic · 88%"></div>
+  <div
+    class="pg-histo-bar synthetic"
+    style="opacity: 0.95"
+    title="0:12 · Synthetic · 95%"></div>
+  <div
+    class="pg-histo-bar authentic"
+    style="opacity: 0.86"
+    title="0:13 · Authentic · 86%"></div>
+  <div
+    class="pg-histo-bar authentic"
+    style="opacity: 0.92"
+    title="0:14 · Authentic · 92%"></div>
+  <div class="pg-histo-bar authentic" title="0:15 · No content"></div>
+</div>
+{% endblock %} {% block speaker_labels %}{% endblock %} {% block above_output %}
+<div class="pg-verdict-statement danger">
+  <h2 class="pg-verdict-statement-title">
+    <a class="pg-verdict-statement-link" href="#audio-player"
+      >This is a deepfake</a
+    >
+  </h2>
+  <div class="pg-verdict-statement-details">
+    <span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-value">14/25</span>
+      <span class="pg-verdict-statement-stat-label"
+        >deepfake segments</span
+      ></span
+    ><span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-value">3</span>
+      <span class="pg-verdict-statement-stat-label"
+        >segments with &gt;98% conf.</span
+      ></span
+    >
   </div>
-{% endblock %}
+</div>
+{% endblock %} {% block panel_content %}
+<style>
+  /* Deepfake histogram inside the player visualization ────────────────── */
+  .media-container {
+    --player-visualization-height: var(--player-strip-height);
+  }
+  .df-player-clips {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .df-player-clips .pg-histo-bar {
+    height: 100%;
+  }
+</style>
 
-{% block speaker_labels %}{% endblock %}
-
-{% block above_output %}
-  <div class="pg-verdict-statement danger">
-    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">This is a deepfake</a></h2>
-    <div class="pg-verdict-statement-details"
-      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">14/25</span> <span class="pg-verdict-statement-stat-label">deepfake segments</span></span><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">3</span> <span class="pg-verdict-statement-stat-label">segments with &gt;98% conf.</span></span></div>
+<div class="pg-tab-panel">
+  <div class="pg-results-table-section">
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Verdict</th>
+          <th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody id="results-tbody">
+        <tr>
+          <td>0:00 – 0:04</td>
+          <td>
+            <span class="m__tag-flat verdict-authentic">Authentic</span>
+          </td>
+          <td>
+            <div class="pg-confidence-cell">
+              <div class="pg-confidence-bar-track">
+                <div
+                  class="pg-confidence-bar-fill authentic"
+                  style="width: 97%"></div>
+              </div>
+              <span>97.0%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>0:04 – 0:08</td>
+          <td>
+            <span class="m__tag-flat verdict-authentic">Authentic</span>
+          </td>
+          <td>
+            <div class="pg-confidence-cell">
+              <div class="pg-confidence-bar-track">
+                <div
+                  class="pg-confidence-bar-fill authentic"
+                  style="width: 91%"></div>
+              </div>
+              <span>91.2%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>0:08 – 0:12</td>
+          <td>
+            <span class="m__tag-flat verdict-authentic">Authentic</span>
+          </td>
+          <td>
+            <div class="pg-confidence-cell">
+              <div class="pg-confidence-bar-track">
+                <div
+                  class="pg-confidence-bar-fill authentic"
+                  style="width: 93%"></div>
+              </div>
+              <span>93.4%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>0:12 – 0:16</td>
+          <td>
+            <span class="m__tag-flat verdict-synthetic">Synthetic</span>
+          </td>
+          <td>
+            <div class="pg-confidence-cell">
+              <div class="pg-confidence-bar-track">
+                <div
+                  class="pg-confidence-bar-fill synthetic"
+                  style="width: 78%"></div>
+              </div>
+              <span>78.3%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>0:16 – 0:20</td>
+          <td>
+            <span class="m__tag-flat verdict-synthetic">Synthetic</span>
+          </td>
+          <td>
+            <div class="pg-confidence-cell">
+              <div class="pg-confidence-bar-track">
+                <div
+                  class="pg-confidence-bar-fill synthetic"
+                  style="width: 97%"></div>
+              </div>
+              <span>96.8%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>0:20 – 0:24</td>
+          <td>
+            <span class="m__tag-flat verdict-synthetic">Synthetic</span>
+          </td>
+          <td>
+            <div class="pg-confidence-cell">
+              <div class="pg-confidence-bar-track">
+                <div
+                  class="pg-confidence-bar-fill synthetic"
+                  style="width: 88%"></div>
+              </div>
+              <span>87.6%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>0:24 – 0:28</td>
+          <td>
+            <span class="m__tag-flat verdict-authentic">Authentic</span>
+          </td>
+          <td>
+            <div class="pg-confidence-cell">
+              <div class="pg-confidence-bar-track">
+                <div
+                  class="pg-confidence-bar-fill authentic"
+                  style="width: 86%"></div>
+              </div>
+              <span>86.2%</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-{% endblock %}
-
-{% block panel_content %}
-  <style>
-    /* Deepfake histogram inside the player visualization ────────────────── */
-    .media-container {
-      --player-visualization-height: var(--player-strip-height);
-    }
-    .df-player-clips {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .df-player-clips .pg-histo-bar {
-      height: 100%;
-    }
-
-  </style>
-
-  <div class="pg-tab-panel">
-      <div class="pg-results-table-section">
-        <table>
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Verdict</th>
-              <th>Confidence</th>
-            </tr>
-          </thead>
-          <tbody id="results-tbody">
-            <tr>
-              <td>0:00 – 0:04</td>
-              <td>
-                <span class="m__tag-flat verdict-authentic">Authentic</span>
-              </td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div
-                      class="pg-confidence-bar-fill authentic"
-                      style="width: 97%"
-                    ></div>
-                  </div>
-                  <span>97.0%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:04 – 0:08</td>
-              <td>
-                <span class="m__tag-flat verdict-authentic">Authentic</span>
-              </td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div
-                      class="pg-confidence-bar-fill authentic"
-                      style="width: 91%"
-                    ></div>
-                  </div>
-                  <span>91.2%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:08 – 0:12</td>
-              <td>
-                <span class="m__tag-flat verdict-authentic">Authentic</span>
-              </td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div
-                      class="pg-confidence-bar-fill authentic"
-                      style="width: 93%"
-                    ></div>
-                  </div>
-                  <span>93.4%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:12 – 0:16</td>
-              <td>
-                <span class="m__tag-flat verdict-synthetic">Synthetic</span>
-              </td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div
-                      class="pg-confidence-bar-fill synthetic"
-                      style="width: 78%"
-                    ></div>
-                  </div>
-                  <span>78.3%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:16 – 0:20</td>
-              <td>
-                <span class="m__tag-flat verdict-synthetic">Synthetic</span>
-              </td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div
-                      class="pg-confidence-bar-fill synthetic"
-                      style="width: 97%"
-                    ></div>
-                  </div>
-                  <span>96.8%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:20 – 0:24</td>
-              <td>
-                <span class="m__tag-flat verdict-synthetic">Synthetic</span>
-              </td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div
-                      class="pg-confidence-bar-fill synthetic"
-                      style="width: 88%"
-                    ></div>
-                  </div>
-                  <span>87.6%</span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>0:24 – 0:28</td>
-              <td>
-                <span class="m__tag-flat verdict-authentic">Authentic</span>
-              </td>
-              <td>
-                <div class="pg-confidence-cell">
-                  <div class="pg-confidence-bar-track">
-                    <div
-                      class="pg-confidence-bar-fill authentic"
-                      style="width: 86%"
-                    ></div>
-                  </div>
-                  <span>86.2%</span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-  </div>
+</div>
 {% endblock %}

@@ -1,135 +1,197 @@
 ---
 pageTitle: AI Music Detection
-permalink: /analysis/ai-music/
+permalink: /playground/ai-music/
 segments:
-  - { t: "0:00 – 0:04", verdict: "ai",      conf: 97.4 }
-  - { t: "0:04 – 0:08", verdict: "ai",      conf: 97.7 }
-  - { t: "0:08 – 0:12", verdict: "ai",      conf: 97.3 }
-  - { t: "0:12 – 0:16", verdict: "ai",      conf: 97.4 }
-  - { t: "0:16 – 0:20", verdict: "ai",      conf: 96.6 }
+  - { t: "0:00 – 0:04", verdict: "ai", conf: 97.4 }
+  - { t: "0:04 – 0:08", verdict: "ai", conf: 97.7 }
+  - { t: "0:08 – 0:12", verdict: "ai", conf: 97.3 }
+  - { t: "0:12 – 0:16", verdict: "ai", conf: 97.4 }
+  - { t: "0:16 – 0:20", verdict: "ai", conf: 96.6 }
   - { t: "0:20 – 0:24", verdict: "not-ai" }
   - { t: "0:24 – 0:28", verdict: "not-ai" }
-  - { t: "0:28 – 0:32", verdict: "ai",      conf: 97.9 }
+  - { t: "0:28 – 0:32", verdict: "ai", conf: 97.9 }
   - { t: "0:32 – 0:36", verdict: "not-ai" }
-  - { t: "0:36 – 0:40", verdict: "ai",      conf: 97.7 }
-  - { t: "0:40 – 0:44", verdict: "ai",      conf: 97.4 }
+  - { t: "0:36 – 0:40", verdict: "ai", conf: 97.7 }
+  - { t: "0:40 – 0:44", verdict: "ai", conf: 97.4 }
   - { t: "0:44 – 0:48", verdict: "not-ai" }
-  - { t: "0:48 – 0:52", verdict: "ai",      conf: 97.5 }
-  - { t: "0:52 – 0:56", verdict: "ai",      conf: 96.8 }
-  - { t: "0:56 – 1:00", verdict: "ai",      conf: 93.5 }
-  - { t: "1:00 – 1:04", verdict: "ai",      conf: 97.1 }
+  - { t: "0:48 – 0:52", verdict: "ai", conf: 97.5 }
+  - { t: "0:52 – 0:56", verdict: "ai", conf: 96.8 }
+  - { t: "0:56 – 1:00", verdict: "ai", conf: 93.5 }
+  - { t: "1:00 – 1:04", verdict: "ai", conf: 97.1 }
   - { t: "1:04 – 1:08", verdict: "not-ai" }
   - { t: "1:08 – 1:12", verdict: "not-ai" }
-  - { t: "1:12 – 1:16", verdict: "ai",      conf: 96.6 }
+  - { t: "1:12 – 1:16", verdict: "ai", conf: 96.6 }
   - { t: "1:16 – 1:20", verdict: "not-ai" }
   - { t: "1:20 – 1:24", verdict: "not-ai" }
-  - { t: "1:24 – 1:28", verdict: "ai",      conf: 97.0 }
+  - { t: "1:24 – 1:28", verdict: "ai", conf: 97.0 }
   - { t: "1:28 – 1:29", verdict: "silence" }
 ---
 
-{% extends 'prototypes/playground-layout.html' %}
-
-{% block options %}
-      <div class="pg-options-row pg-plate-header">
-        <span class="pg-plate-header__title">Detect AI-generated music</span>
-      </div>
-{% endblock %}
-
-{% block analyzing_content %}
-      <div class="pg-processing-stages">
-        <span class="pg-processing-stage">
-          <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true"><path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" /></svg>
-          AI music
-        </span>
-      </div>
-{% endblock %}
-
-{% block player_clips %}
-  <div class="aim-player-heat">
-    {% for s in segments %}<div class="aim-player-heat-cell" data-verdict="{{ s.verdict }}"{% if s.conf %} style="opacity: {{ s.conf / 100 }}"{% endif %} title="{{ s.t }} · {% if s.verdict == 'ai' %}AI-generated · {{ s.conf }}%{% elif s.verdict == 'not-ai' %}Not AI{% else %}Silence{% endif %}"></div>{% endfor %}
+{% extends 'prototypes/playground-layout.html' %} {% block options %}
+<div class="pg-options-row pg-plate-header">
+  <span class="pg-plate-header__title">Detect AI-generated music</span>
+</div>
+{% endblock %} {% block analyzing_content %}
+<div class="pg-processing-stages">
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true">
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1" />
+    </svg>
+    AI music
+  </span>
+</div>
+{% endblock %} {% block player_clips %}
+<div class="aim-player-heat">
+  {% for s in segments %}
+  <div
+    class="aim-player-heat-cell"
+    data-verdict="{{ s.verdict }}"
+    {%
+    if
+    s.conf
+    %}
+    style="opacity: {{ s.conf / 100 }}"
+    {%
+    endif
+    %}
+    title="{{ s.t }} · {% if s.verdict == 'ai' %}AI-generated · {{ s.conf }}%{% elif s.verdict == 'not-ai' %}Not AI{% else %}Silence{% endif %}"></div>
+  {% endfor %}
+</div>
+{% endblock %} {% block speaker_labels %}{% endblock %} {% block above_output %}
+<div class="pg-verdict-statement danger">
+  <h2 class="pg-verdict-statement-title">
+    <a class="pg-verdict-statement-link" href="#audio-player"
+      >This is AI vocal music</a
+    >
+  </h2>
+  <div class="pg-verdict-statement-details">
+    <span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-value">55.8%</span>
+      <span class="pg-verdict-statement-stat-label">AI on vocals</span></span
+    ><span class="pg-verdict-statement-stat"
+      ><span class="pg-verdict-statement-stat-label"
+        >Instrumental not evaluated</span
+      ></span
+    >
   </div>
-{% endblock %}
+</div>
+{% endblock %} {% block panel_content %}
+<style>
+  /* Single-strip player visualization ────────────────────────────────── */
+  .media-container {
+    --player-visualization-height: var(--player-strip-height);
+  }
+  .aim-player-heat {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+  .aim-player-heat-cell {
+    flex: 1;
+    transition: filter var(--m__duration-base) var(--m__easing-base);
+  }
+  .aim-player-heat-cell:hover {
+    filter: brightness(1.15);
+  }
+  .aim-player-heat-cell[data-verdict="ai"] {
+    background: var(--m__error);
+  }
+  .aim-player-heat-cell[data-verdict="not-ai"] {
+    background: var(--m__success);
+  }
+  .aim-player-heat-cell[data-verdict="silence"] {
+    background: var(--m__border);
+    opacity: 1 !important;
+  }
 
-{% block speaker_labels %}{% endblock %}
+  /* Detailed table ────────────────────────────────────────────────────── */
+  .aim-detailed td:first-child {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .aim-verdict-ai {
+    color: var(--m__error);
+  }
+  .aim-verdict-not-ai {
+    color: var(--m__success);
+  }
+  .aim-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .aim-bar {
+    flex: 0 0 130px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--m__border);
+    overflow: hidden;
+  }
+  .aim-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--m__error);
+  }
+  .aim-pct {
+    font-variant-numeric: tabular-nums;
+    min-width: 3.6em;
+  }
+  .aim-empty {
+    color: var(--m__text-caption);
+  }
+</style>
 
-{% block above_output %}
-  <div class="pg-verdict-statement danger">
-    <h2 class="pg-verdict-statement-title"><a class="pg-verdict-statement-link" href="#audio-player">This is AI vocal music</a></h2>
-    <div class="pg-verdict-statement-details"
-      ><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-value">55.8%</span> <span class="pg-verdict-statement-stat-label">AI on vocals</span></span><span class="pg-verdict-statement-stat"><span class="pg-verdict-statement-stat-label">Instrumental not evaluated</span></span></div>
-  </div>
-{% endblock %}
-
-{% block panel_content %}
-  <style>
-    /* Single-strip player visualization ────────────────────────────────── */
-    .media-container {
-      --player-visualization-height: var(--player-strip-height);
-    }
-    .aim-player-heat {
-      position: absolute;
-      inset: 0;
-      display: flex;
-    }
-    .aim-player-heat-cell {
-      flex: 1;
-      transition: filter var(--m__duration-base) var(--m__easing-base);
-    }
-    .aim-player-heat-cell:hover { filter: brightness(1.15); }
-    .aim-player-heat-cell[data-verdict="ai"]      { background: var(--m__error); }
-    .aim-player-heat-cell[data-verdict="not-ai"]  { background: var(--m__success); }
-    .aim-player-heat-cell[data-verdict="silence"] { background: var(--m__border); opacity: 1 !important; }
-
-    /* Detailed table ────────────────────────────────────────────────────── */
-    .aim-detailed td:first-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .aim-verdict-ai     { color: var(--m__error); }
-    .aim-verdict-not-ai { color: var(--m__success); }
-    .aim-cell { display: flex; align-items: center; gap: 0.6rem; }
-    .aim-bar {
-      flex: 0 0 130px;
-      height: 5px;
-      border-radius: 3px;
-      background: var(--m__border);
-      overflow: hidden;
-    }
-    .aim-bar-fill { height: 100%; border-radius: 3px; background: var(--m__error); }
-    .aim-pct { font-variant-numeric: tabular-nums; min-width: 3.6em; }
-    .aim-empty { color: var(--m__text-caption); }
-  </style>
-
-  <div class="pg-results-table-section aim-detailed">
-    <table>
-      <thead>
-        <tr>
-          <th>Window</th>
-          <th>Type</th>
-          <th>Verdict</th>
-          <th>AI confidence</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for s in segments %}
-        <tr>
-          <td>{{ s.t }}</td>
-          <td>{% if s.verdict == "silence" %}Silence{% else %}Vocal{% endif %}</td>
-          <td>
-            {% if s.verdict == "ai" %}<span class="m__tag-flat aim-verdict-ai">AI</span>{% endif %}
-            {% if s.verdict == "not-ai" %}<span class="m__tag-flat aim-verdict-not-ai">Not AI</span>{% endif %}
-            {% if s.verdict == "silence" %}<span class="m__tag-flat">Silence</span>{% endif %}
-          </td>
-          <td>
-            {% if s.conf %}
-              <div class="aim-cell">
-                <div class="aim-bar"><div class="aim-bar-fill" style="width: {{ s.conf }}%"></div></div>
-                <span class="aim-pct">{{ s.conf }}%</span>
-              </div>
-            {% else %}
-              <span class="aim-empty">—</span>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<div class="pg-results-table-section aim-detailed">
+  <table>
+    <thead>
+      <tr>
+        <th>Window</th>
+        <th>Type</th>
+        <th>Verdict</th>
+        <th>AI confidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in segments %}
+      <tr>
+        <td>{{ s.t }}</td>
+        <td>
+          {% if s.verdict == "silence" %}Silence{% else %}Vocal{% endif %}
+        </td>
+        <td>
+          {% if s.verdict == "ai" %}<span class="m__tag-flat aim-verdict-ai"
+            >AI</span
+          >{% endif %} {% if s.verdict == "not-ai" %}<span
+            class="m__tag-flat aim-verdict-not-ai"
+            >Not AI</span
+          >{% endif %} {% if s.verdict == "silence" %}<span class="m__tag-flat"
+            >Silence</span
+          >{% endif %}
+        </td>
+        <td>
+          {% if s.conf %}
+          <div class="aim-cell">
+            <div class="aim-bar">
+              <div class="aim-bar-fill" style="width: {{ s.conf }}%"></div>
+            </div>
+            <span class="aim-pct">{{ s.conf }}%</span>
+          </div>
+          {% else %}
+          <span class="aim-empty">—</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
