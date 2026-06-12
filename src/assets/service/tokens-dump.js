@@ -333,6 +333,7 @@
     container.appendChild(list);
   }
 
+
   function upcaseModifier(short) {
     return short.replace(/-([a-z0-9]+)$/, function (_, m) {
       return "-" + m.toUpperCase();

@@ -174,14 +174,51 @@ permalink: /analysis/velma/
     .pg-num { font-variant-numeric: tabular-nums; }
 
     /* Speakers table */
-    .pg-speakers-table { table-layout: fixed; }
-    .pg-speakers-table th:nth-child(1) { width: 18%; }
-    .pg-speakers-table th:nth-child(2) { width: 36%; }
-    .pg-speakers-table th:nth-child(3) { width: 12%; }
-    .pg-speakers-table th:nth-child(4) { width: 34%; }
-    .pg-speakers-table td:nth-child(1),
-    .pg-speakers-table td:nth-child(3),
-    .pg-speakers-table td:nth-child(4) { font-size: 0.8rem; }
+    .pg-output-panel table.pg-speakers-table { table-layout: fixed; }
+    .pg-output-panel table.pg-speakers-table th,
+    .pg-output-panel table.pg-speakers-table td { font-size: var(--m__font-size-s); }
+    .pg-speakers-table th:nth-child(1) { width: 33%; }
+    .pg-speakers-table th:nth-child(2) { width: 27%; }
+    .pg-speakers-table th:nth-child(3) { width: 14%; }
+    .pg-speakers-table th:nth-child(4) { width: 26%; }
+    .pg-speakers-table td { vertical-align: top; }
+    .pg-speakers-table .pg-speaker-cell-name {
+      font-weight: var(--m__font-weight-medium);
+    }
+    .pg-speakers-table .pg-speaker-cell-desc {
+      margin-top: 0.15rem;
+      margin-bottom: 0.25rem;
+    }
+    .pg-speakers-table .m__tag-flat {
+      font-size: var(--m__font-size-xs);
+    }
+    .pg-speakers-table .m__tag-flat .pg-num {
+      font-size: inherit;
+    }
+
+    /* Topics & Sentiment */
+    .pg-topics-type {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: var(--m__space-s);
+    }
+    .pg-topics-type .m__tag-flat {
+      font-size: var(--m__font-size-xs);
+    }
+    .pg-topics-type .m__tag-flat .pg-num {
+      font-size: inherit;
+    }
+    .pg-topics-type-note {
+      color: var(--m__text-caption);
+    }
+    .pg-output-panel table.pg-topics-table th,
+    .pg-output-panel table.pg-topics-table td { font-size: var(--m__font-size-s); }
+    .pg-topics-table { table-layout: fixed; }
+    .pg-topics-table th:nth-child(1) { width: 25%; }
+    .pg-topics-table th:nth-child(2) { width: 75%; }
+    .pg-topics-table td { vertical-align: top; }
 
     /* Behaviors table */
     .pg-behaviors-table { table-layout: fixed; }
@@ -220,43 +257,6 @@ permalink: /analysis/velma/
       <span class="pii-blur">4827 Willow Creek Drive, Apt 5B, Columbus, Ohio 43215</span>.
     </p>
 
-    <div class="m__space S"></div>
-
-    <div class="pg-summary-item">
-      <div class="pg-summary-head">
-        <span>Type: <strong>Customer Service Call</strong></span>
-        <span class="pg-num muted">100%</span>
-        <span class="m__tag">Auto_selected_single_option</span>
-      </div>
-      <div class="caption">Auto-chosen as the only available option.</div>
-    </div>
-
-    <div class="pg-summary-item">
-      <div class="pg-summary-head">
-        <span><strong>1: Customer Service Representative</strong></span>
-        <span class="pg-num muted">100%</span>
-        <span class="m__tag">Inferred</span>
-      </div>
-      <div class="caption">
-        The speaker introduces themselves as Mina from Green Valley Health member services, verifies the
-        caller's identity and details, and accesses and discusses specific account, claim, and medical
-        information on file.
-      </div>
-    </div>
-
-    <div class="pg-summary-item">
-      <div class="pg-summary-head">
-        <span><strong>2: Customer</strong></span>
-        <span class="pg-num muted">100%</span>
-        <span class="m__tag">Inferred</span>
-      </div>
-      <div class="caption">
-        The speaker provides personal verification details, describes issues with an MRI claim and denied
-        prescription, and requests appeal forms and related actions, clearly acting as the caller seeking
-        assistance.
-      </div>
-    </div>
-
     <!-- Speakers ────────────────────────────────────────────────────────── -->
     <div class="m__space L"></div>
     <h2>Speakers</h2>
@@ -272,7 +272,15 @@ permalink: /analysis/velma/
         </thead>
         <tbody>
           <tr>
-            <td>Customer Service Representative</td>
+            <td>
+              <span class="pg-speaker-cell-name">Customer Service Representative</span>
+              <div class="pg-speaker-cell-desc">
+                The speaker introduces themselves as Mina from Green Valley Health member services,
+                verifies the caller's identity and details, and accesses and discusses specific account,
+                claim, and medical information on file.
+              </div>
+              <span class="m__tag-flat">Inferred <span class="pg-num muted">100%</span></span>
+            </td>
             <td>
               <div class="pg-emo-bar" style="width: 76%">
                 <div class="pg-emo-seg" style="width: 4%; background: var(--emotion-tired)"></div>
@@ -301,7 +309,15 @@ permalink: /analysis/velma/
             <td>English, American accent</td>
           </tr>
           <tr>
-            <td>Customer</td>
+            <td>
+              <span class="pg-speaker-cell-name">Customer</span>
+              <div class="pg-speaker-cell-desc">
+                The speaker provides personal verification details, describes issues with an MRI claim
+                and denied prescription, and requests appeal forms and related actions, clearly acting
+                as the caller seeking assistance.
+              </div>
+              <span class="m__tag-flat">Inferred <span class="pg-num muted">100%</span></span>
+            </td>
             <td>
               <div class="pg-emo-bar" style="width: 24%">
                 <div class="pg-emo-seg" style="width: 8%; background: var(--emotion-calm)"></div>
@@ -334,29 +350,50 @@ permalink: /analysis/velma/
       </table>
     </div>
 
-    <!-- Topics ──────────────────────────────────────────────────────────── -->
+    <!-- Topics & Sentiment ──────────────────────────────────────────────── -->
     <div class="m__space L"></div>
-    <h2>Topics</h2>
-    <div>
-      <p><strong>Customer Service Representative</strong></p>
-      <div class="m__tag-group">
-        <span class="m__tag">back injury <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
-      </div>
+    <h2>Topics &amp; Sentiment</h2>
+    <div class="pg-topics-type">
+      <strong>Customer Service Call</strong>
+      <span class="pg-num muted">100%</span>
+      <span class="m__tag-flat">Auto_selected_single_option</span>
+      <span class="pg-topics-type-note">Auto-chosen as the only available option.</span>
     </div>
-    <div class="m__space S"></div>
-    <div>
-      <p><strong>Customer</strong></p>
-      <div class="m__tag-group">
-        <span class="m__tag m__tag--error">back injury <span class="pg-num">-0.50</span></span>
-        <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
-        <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
-      </div>
+    <div class="pg-results-table-section">
+      <table class="pg-topics-table">
+        <thead>
+          <tr>
+            <th>Speaker</th>
+            <th>Topics</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pg-speaker-cell-name">Customer Service Representative</span></td>
+            <td>
+              <div class="m__tag-group">
+                <span class="m__tag">back injury <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="pg-speaker-cell-name">Customer</span></td>
+            <td>
+              <div class="m__tag-group">
+                <span class="m__tag m__tag--error">back injury <span class="pg-num">-0.50</span></span>
+                <span class="m__tag">MRI claim <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag">Gabapentin <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag">diabetes <span class="pg-num muted">0.00</span></span>
+                <span class="m__tag">hypertension <span class="pg-num muted">0.00</span></span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Behaviors ───────────────────────────────────────────────────────── -->
