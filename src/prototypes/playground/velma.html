@@ -133,6 +133,10 @@ permalink: /playground/velma/
   .pg-velma-output table td strong {
     font-family: "Inter";
   }
+  .pg-velma-output table th {
+    z-index: 1;
+    background-color: var(--m__bg);
+  }
   .pg-velma-output .caption {
     color: var(--m__text);
   }
@@ -372,14 +376,28 @@ permalink: /playground/velma/
   }
   .pg-behaviors-table .pg-evidence-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 0.6rem;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.65rem;
   }
   .pg-behaviors-table .pg-evidence-link {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      #000 calc(100% - 2rem),
+      transparent
+    );
+    mask-image: linear-gradient(90deg, #000 calc(100% - 2rem), transparent);
+    white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
   .pg-behaviors-table .pg-evidence-none {
     color: var(--m__text-caption);
+  }
+  .pg-model-reasoning {
+    line-height: 1.45;
   }
   .pg-transcript-utterance[id="clip-evidence"] {
     scroll-margin-top: var(--m__space-l);
@@ -626,7 +644,7 @@ permalink: /playground/velma/
         <tr>
           <th>Speaker</th>
           <th>Behavior</th>
-          <th>Evidence</th>
+          <th>Model reasoning</th>
           <th>Confidence</th>
         </tr>
       </thead>
@@ -641,12 +659,17 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The representative continues verification and account review, but
+              does not provide a concrete follow-up commitment, ownership
+              handoff, or confirmed resolution for the caller's issue.
+            </div>
             <div class="pg-evidence-list">
               <a href="#clip-evidence" class="pg-evidence-link"
-                >No follow-up commitment given</a
+                >Thank you, Mr. Mercer. For verification, can you confirm</a
               >
               <a href="#clip-evidence" class="pg-evidence-link"
-                >Resolution status not confirmed</a
+                >I see your plan is under policy number PPO-77-194402</a
               >
             </div>
           </td>
@@ -661,9 +684,14 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The available representative line is procedural and calm, without
+              dissatisfaction, accusation, or negative evaluation that would
+              indicate a complaint from the speaker.
+            </div>
             <div class="pg-evidence-list">
               <a href="#clip-evidence" class="pg-evidence-link"
-                >Calm verification, no dissatisfaction</a
+                >Thank you, Mr. Mercer. For verification, can you confirm</a
               >
             </div>
           </td>
@@ -678,9 +706,17 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The representative asks for confirmation and shares account
+              context without threats, pressure, repeated demands, or attempts
+              to steer the caller against their stated interest.
+            </div>
             <div class="pg-evidence-list">
               <a href="#clip-evidence" class="pg-evidence-link"
-                >Polite verification with no pressure</a
+                >Thank you, Mr. Mercer. For verification, can you confirm</a
+              >
+              <a href="#clip-evidence" class="pg-evidence-link"
+                >I see your plan is under policy number PPO-77-194402</a
               >
             </div>
           </td>
@@ -695,9 +731,14 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The transcript excerpt does not show a closure cue such as issue
+              completion, customer acceptance, or a clear next step that would
+              establish resolution.
+            </div>
             <div class="pg-evidence-list">
               <a href="#clip-evidence" class="pg-evidence-link"
-                >No closure cues found</a
+                >I see your plan is under policy number PPO-77-194402</a
               >
             </div>
           </td>
@@ -712,9 +753,17 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The representative uses professional, factual language throughout
+              the sampled lines, limited to identity verification and account
+              information.
+            </div>
             <div class="pg-evidence-list">
               <a href="#clip-evidence" class="pg-evidence-link"
-                >Professional, factual sharing throughout</a
+                >Thank you for calling Green Valley Health member services</a
+              >
+              <a href="#clip-evidence" class="pg-evidence-link"
+                >I see your plan is under policy number PPO-77-194402</a
               >
             </div>
           </td>
@@ -730,9 +779,16 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The customer confirms identity and provides updated contact and
+              employer information without slurs, insults, or abusive phrasing.
+            </div>
             <div class="pg-evidence-list">
               <a href="#clip-evidence" class="pg-evidence-link"
-                >Polite, factual speech with no slurs</a
+                >Yes, this is Daniel Andrew Mercer</a
+              >
+              <a href="#clip-evidence" class="pg-evidence-link"
+                >Yes, that's right, although my new callback number is</a
               >
             </div>
           </td>
