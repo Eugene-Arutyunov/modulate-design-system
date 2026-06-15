@@ -133,6 +133,10 @@ permalink: /playground/velma/
   .pg-velma-output table td strong {
     font-family: "Inter";
   }
+  .pg-velma-output table th {
+    z-index: 1;
+    background-color: var(--m__bg);
+  }
   .pg-velma-output .caption {
     color: var(--m__text);
   }
@@ -367,19 +371,104 @@ permalink: /playground/velma/
   .pg-behaviors-table th:nth-child(4) {
     width: 10%;
   }
-  .pg-behaviors-table .pg-behavior-link {
+  .pg-behaviors-table td {
+    vertical-align: top;
+  }
+  .pg-behaviors-table .pg-behavior-speaker-cell--last {
+    border-bottom: none;
+  }
+  .pg-behaviors-table .pg-behavior-link,
+  .pg-behaviors-table .pg-behavior-name {
     font-size: var(--m__font-size-m);
+    font-weight: var(--m__font-weight-bold);
+  }
+  .pg-behavior-row--inactive td {
+    color: var(--m__text-caption);
+  }
+  .pg-behavior-row--inactive .pg-behavior-name {
+    color: var(--m__text-caption);
+  }
+  .pg-behavior-row--group-end td:not(.pg-behavior-speaker-cell) {
+    padding-bottom: 1.6rem;
+  }
+  .pg-behavior-row--detected-last td:not(.pg-behavior-speaker-cell) {
+    border-bottom: none;
+  }
+  .pg-behavior-subhead-row td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.3rem;
+    border-bottom: var(--m__border-width-m) solid
+      color-mix(in srgb, var(--m__text) 10%, transparent);
+  }
+  .pg-behavior-subhead {
+    display: block;
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
   }
   .pg-behaviors-table .pg-evidence-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 0.6rem;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.65rem;
+    align-items: flex-start;
   }
   .pg-behaviors-table .pg-evidence-link {
+    --pg-evidence-bg: var(--m__bg-surface);
+    --pg-evidence-bg-hover: color-mix(
+      in srgb,
+      var(--m__bg-accent-hover) 12%,
+      var(--m__bg-surface)
+    );
+    --pg-evidence-pad-right: 0.5rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    max-width: min(100%, 20rem);
+    overflow: hidden;
+    padding: 0.3rem var(--pg-evidence-pad-right) 0.3rem 0.35rem;
+    border-radius: var(--m__rounded-radius);
+    corner-shape: squircle;
+    background-color: var(--pg-evidence-bg);
+    color: var(--m__text);
+    text-decoration: none;
+    white-space: nowrap;
     font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+    transition:
+      background-color var(--m__duration-base) var(--m__easing-base),
+      color var(--m__duration-base) var(--m__easing-base);
   }
-  .pg-behaviors-table .pg-evidence-none {
-    color: var(--m__text-caption);
+  .pg-behaviors-table .pg-evidence-link--fade::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: var(--pg-evidence-pad-right);
+    bottom: 0;
+    width: 1.2rem;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(90deg, transparent, currentColor 100%);
+    color: var(--pg-evidence-bg);
+    transform: translateX(var(--pg-evidence-pad-right));
+    transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+  .pg-behaviors-table .pg-evidence-link:hover,
+  .pg-behaviors-table .pg-evidence-link:focus {
+    background-color: var(--pg-evidence-bg-hover);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+  .pg-behaviors-table .pg-evidence-link--fade:hover::after,
+  .pg-behaviors-table .pg-evidence-link--fade:focus::after {
+    color: var(--pg-evidence-bg-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+  .pg-model-reasoning {
+    line-height: 1.45;
   }
   .pg-transcript-utterance[id="clip-evidence"] {
     scroll-margin-top: var(--m__space-l);
@@ -626,13 +715,16 @@ permalink: /playground/velma/
         <tr>
           <th>Speaker</th>
           <th>Behavior</th>
-          <th>Evidence</th>
+          <th>Model reasoning</th>
           <th>Confidence</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td rowspan="5">Customer Service Representative</td>
+        <tr
+          class="pg-behavior-row pg-behavior-row--detected pg-behavior-row--detected-last">
+          <td rowspan="6" class="pg-behavior-speaker-cell">
+            Customer Service Representative
+          </td>
           <td>
             <a href="#clip-evidence" class="pg-behavior-link"
               ><svg width="18" height="18" aria-hidden="true">
@@ -641,18 +733,97 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The representative continues verification and account review, but
+              does not provide a concrete follow-up commitment, ownership
+              handoff, or confirmed resolution for the caller's issue.
+            </div>
             <div class="pg-evidence-list">
-              <a href="#clip-evidence" class="pg-evidence-link"
-                >No follow-up commitment given</a
+              <a
+                href="#clip-evidence"
+                class="pg-evidence-link pg-evidence-link--fade"
+                >Thank you, Mr. Mercer. For verification, can you confirm</a
               >
-              <a href="#clip-evidence" class="pg-evidence-link"
-                >Resolution status not confirmed</a
+              <a
+                href="#clip-evidence"
+                class="pg-evidence-link pg-evidence-link--fade"
+                >I see your plan is under policy number PPO-77-194402</a
               >
             </div>
           </td>
           <td class="pg-num">75%</td>
         </tr>
-        <tr>
+        <tr class="pg-behavior-subhead-row">
+          <td colspan="3">
+            <span class="pg-behavior-subhead">Not detected</span>
+          </td>
+        </tr>
+        <tr class="pg-behavior-row pg-behavior-row--inactive">
+          <td>
+            <span class="pg-behavior-name pg-behavior-name--inactive"
+              >Complaints</span
+            >
+          </td>
+          <td>
+            <div class="pg-model-reasoning">
+              The available representative lines are procedural and calm,
+              without dissatisfaction, accusation, or negative evaluation that
+              would indicate a complaint from the speaker.
+            </div>
+          </td>
+          <td class="pg-num">100%</td>
+        </tr>
+        <tr class="pg-behavior-row pg-behavior-row--inactive">
+          <td>
+            <span class="pg-behavior-name pg-behavior-name--inactive"
+              >Coercion Manipulation</span
+            >
+          </td>
+          <td>
+            <div class="pg-model-reasoning">
+              The representative asks for confirmation and shares account
+              context without threats, pressure, repeated demands, or attempts
+              to steer the caller against their stated interest.
+            </div>
+          </td>
+          <td class="pg-num">100%</td>
+        </tr>
+        <tr class="pg-behavior-row pg-behavior-row--inactive">
+          <td>
+            <span class="pg-behavior-name pg-behavior-name--inactive"
+              >Issue Resolved</span
+            >
+          </td>
+          <td>
+            <div class="pg-model-reasoning">
+              The transcript excerpt does not show a closure cue such as issue
+              completion, customer acceptance, or a clear next step that would
+              establish resolution.
+            </div>
+          </td>
+          <td class="pg-num">95%</td>
+        </tr>
+        <tr class="pg-behavior-row pg-behavior-row--inactive pg-behavior-row--group-end">
+          <td>
+            <span class="pg-behavior-name pg-behavior-name--inactive"
+              >Inappropriate Speech</span
+            >
+          </td>
+          <td>
+            <div class="pg-model-reasoning">
+              The representative uses professional, factual language throughout
+              the sampled lines, limited to identity verification and account
+              information.
+            </div>
+          </td>
+          <td class="pg-num">100%</td>
+        </tr>
+        <tr class="pg-behavior-row pg-behavior-row--detected">
+          <td
+            rowspan="6"
+            class="pg-behavior-speaker-cell pg-behavior-speaker-cell--last">
+            Customer
+          </td>
           <td>
             <a href="#clip-evidence" class="pg-behavior-link"
               ><svg width="18" height="18" aria-hidden="true">
@@ -661,15 +832,55 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The customer raises an unresolved claims and medication issue,
+              giving corrected contact details while continuing to seek action
+              from the support specialist.
+            </div>
             <div class="pg-evidence-list">
-              <a href="#clip-evidence" class="pg-evidence-link"
-                >Calm verification, no dissatisfaction</a
+              <a
+                href="#clip-evidence"
+                class="pg-evidence-link pg-evidence-link--fade"
+                >Yes, that's right, although my new callback number is</a
               >
             </div>
           </td>
-          <td class="pg-num">100%</td>
+          <td class="pg-num">86%</td>
         </tr>
-        <tr>
+        <tr class="pg-behavior-row pg-behavior-row--detected">
+          <td>
+            <a href="#clip-evidence" class="pg-behavior-link"
+              ><svg width="18" height="18" aria-hidden="true">
+                <use href="#behaviors" /></svg
+              >Issue Not Resolved</a
+            >
+          </td>
+          <td>
+            <div class="pg-model-reasoning">
+              The customer describes an unresolved claim and denied
+              prescription, then continues supplying corrected information
+              without receiving confirmation that either issue has been closed.
+            </div>
+            <div class="pg-evidence-list">
+              <a href="#clip-evidence" class="pg-evidence-link"
+                >Yes, this is Daniel Andrew Mercer</a
+              >
+              <a
+                href="#clip-evidence"
+                class="pg-evidence-link pg-evidence-link--fade"
+                >Yes, that's right, although my new callback number is</a
+              >
+              <a
+                href="#clip-evidence"
+                class="pg-evidence-link pg-evidence-link--fade"
+                >I see your plan is under policy number PPO-77-194402</a
+              >
+            </div>
+          </td>
+          <td class="pg-num">82%</td>
+        </tr>
+        <tr
+          class="pg-behavior-row pg-behavior-row--detected pg-behavior-row--detected-last">
           <td>
             <a href="#clip-evidence" class="pg-behavior-link"
               ><svg width="18" height="18" aria-hidden="true">
@@ -678,71 +889,57 @@ permalink: /playground/velma/
             >
           </td>
           <td>
+            <div class="pg-model-reasoning">
+              The customer applies pressure by linking corrected contact and
+              employer details to the denied care issue, keeping the
+              representative focused on the appeal path.
+            </div>
             <div class="pg-evidence-list">
-              <a href="#clip-evidence" class="pg-evidence-link"
-                >Polite verification with no pressure</a
+              <a
+                href="#clip-evidence"
+                class="pg-evidence-link pg-evidence-link--fade"
+                >Yes, that's right, although my new callback number is</a
               >
             </div>
           </td>
-          <td class="pg-num">100%</td>
+          <td class="pg-num">71%</td>
         </tr>
-        <tr>
+        <tr class="pg-behavior-subhead-row">
+          <td colspan="3">
+            <span class="pg-behavior-subhead">Not detected</span>
+          </td>
+        </tr>
+        <tr class="pg-behavior-row pg-behavior-row--inactive">
           <td>
-            <a href="#clip-evidence" class="pg-behavior-link"
-              ><svg width="18" height="18" aria-hidden="true">
-                <use href="#behaviors" /></svg
-              >Issue Resolved</a
+            <span class="pg-behavior-name pg-behavior-name--inactive"
+              >Issue Resolved</span
             >
           </td>
           <td>
-            <div class="pg-evidence-list">
-              <a href="#clip-evidence" class="pg-evidence-link"
-                >No closure cues found</a
-              >
+            <div class="pg-model-reasoning">
+              The customer continues describing the issue and requested contact
+              updates, with no acceptance cue or statement that the claim or
+              medication concern has been resolved.
             </div>
           </td>
-          <td class="pg-num">5%</td>
+          <td class="pg-num">97%</td>
         </tr>
-        <tr>
+        <tr class="pg-behavior-row pg-behavior-row--inactive">
           <td>
-            <a href="#clip-evidence" class="pg-behavior-link"
-              ><svg width="18" height="18" aria-hidden="true">
-                <use href="#behaviors" /></svg
-              >Inappropriate Speech</a
+            <span class="pg-behavior-name pg-behavior-name--inactive"
+              >Inappropriate Speech</span
             >
           </td>
           <td>
-            <div class="pg-evidence-list">
-              <a href="#clip-evidence" class="pg-evidence-link"
-                >Professional, factual sharing throughout</a
-              >
-            </div>
-          </td>
-          <td class="pg-num">0%</td>
-        </tr>
-        <tr>
-          <td rowspan="1">Customer</td>
-          <td>
-            <a href="#clip-evidence" class="pg-behavior-link"
-              ><svg width="18" height="18" aria-hidden="true">
-                <use href="#behaviors" /></svg
-              >Inappropriate Speech</a
-            >
-          </td>
-          <td>
-            <div class="pg-evidence-list">
-              <a href="#clip-evidence" class="pg-evidence-link"
-                >Polite, factual speech with no slurs</a
-              >
+            <div class="pg-model-reasoning">
+              The customer confirms identity and provides updated contact and
+              employer information without slurs, insults, or abusive phrasing.
             </div>
           </td>
           <td class="pg-num">98%</td>
         </tr>
       </tbody>
     </table>
-    <a href="#" class="m__button-outline pg-behaviors-cta"
-      >View all configured behaviors</a
-    >
   </div>
 
   <!-- Transcript ──────────────────────────────────────────────────────── -->
@@ -838,11 +1035,6 @@ permalink: /playground/velma/
             ><svg width="18" height="18" aria-hidden="true">
               <use href="#behaviors" /></svg
             >Issue Not Resolved</a
-          >
-          <a href="#clip-evidence" class="pg-behavior-link"
-            ><svg width="18" height="18" aria-hidden="true">
-              <use href="#behaviors" /></svg
-            >Issue Resolved</a
           >
           <span class="pg-transcript-emotion">Interested</span>
         </div>
