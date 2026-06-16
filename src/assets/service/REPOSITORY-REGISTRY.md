@@ -150,7 +150,7 @@ Dashboard page navigation in the prototype uses the shared SVG sprite for page i
 **Script:** `src/assets/prototypes/docs.js`  
 **Styles:** `src/styles/prototypes/docs.css`
 
-Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. Two-column layout (`dashboard-layout`): left sidebar lists models loaded from `/assets/data/models.json` with `.m__tag-flat` status labels; right panel shows per-model tabs (Overview / API Spec / Quickstart) via `.m__segmented-control`. Overview is rendered from cached model data. API Spec fetches `/assets/data/model-docs/{identifier}/openapi.yaml` and shows it in `.docs-code-block` with a download button. Quickstart fetches `/assets/data/model-docs/{identifier}/quickstart.md` → `marked.parse()` → `hljs.highlightElement()`; example links come from `models.json`. Marked and highlight.js loaded from CDN via `{% block scripts %}`. Works fully without a backend.
+Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. Two-column layout (`dashboard-layout`): left sidebar lists models loaded from `/assets/data/models.json` with `.m__tag-flat` status labels; right panel shows per-model tabs (Overview / API Spec / Quickstart) via `.m__segmented-control-primary`. Overview is rendered from cached model data. API Spec fetches `/assets/data/model-docs/{identifier}/openapi.yaml` and shows it in `.docs-code-block` with a download button. Quickstart fetches `/assets/data/model-docs/{identifier}/quickstart.md` → `marked.parse()` → `hljs.highlightElement()`; example links come from `models.json`. Marked and highlight.js loaded from CDN via `{% block scripts %}`. Works fully without a backend.
 
 ---
 
@@ -321,7 +321,7 @@ Small inline label for metadata. `.m__tag` shows a bordered outline using `curre
 **Script:** `src/assets/prototypes/dashboard-charts.js`  
 **Data:** `src/assets/prototypes/data/dashboard-charts.json` (static snapshot with 30 days of data, passthrough-copied to site root).  
 **Includes:** `src/includes/prototypes/dashboard/overview/credit-balance-over-time.html`, `usage-by-model.html`, `requests-by-status.html`.  
-**Styles:** `.chart-container`, `.chart-empty`, `.chart-status-bar`, `.m__segmented-control` in `src/styles/prototypes/dashboard/layout.css` and `src/styles/page-composition/wrappers.css`.  
+**Styles:** `.chart-container`, `.chart-empty`, `.chart-status-bar`, `.m__segmented-control-primary` in `src/styles/prototypes/dashboard/layout.css` and `src/styles/page-composition/wrappers.css`.
 **Library:** Chart.js 4.4.0 via CDN, loaded conditionally with `chartJs: true` in page front matter.
 
 Three charts on the dashboard overview page: Credit Balance Over Time (line), Usage by Model (stacked bar), Requests by Status (stacked bar). Each chart has a "Last 7 days / 30 days" radio toggle that filters data client-side. The script fetches the full JSON data file at runtime, filters by selected period, and renders Chart.js canvases. Chart instances are stored and destroyed on re-render. Theme-aware: reads CSS custom properties for grid and label colors. Date filtering uses `fetchedAt` from the JSON as the anchor so mock data remains visible regardless of the current date.

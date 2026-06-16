@@ -91,15 +91,15 @@
       grid-template-columns: 12rem 1fr auto;
       gap: 0;
 
-      & .m__select-compact,
-      & .m__datepicker-compact {
+      & .m__select.S,
+      & .m__datepicker.S {
         margin: 0;
       }
 
       @media (width < 768px) {
         grid-template-columns: 1fr;
 
-        & :is(.m__select-compact, .m__datepicker-compact)::after {
+        & :is(.m__select.S, .m__datepicker.S)::after {
           display: none;
         }
 
@@ -110,7 +110,7 @@
         &
           :is(
             .m__table-filters__dates,
-            .m__table-filters__dates .m__datepicker-compact:last-child
+            .m__table-filters__dates .m__datepicker.S:last-child
           ) {
           background-image: linear-gradient(
             to right,
@@ -142,11 +142,11 @@
       }
     }
 
-    & .m__select-compact .m__select__value {
+    & .m__select.S .m__select__value {
       flex: 0 1 auto;
     }
 
-    & :is(.m__datepicker-compact, .m__select-compact) {
+    & :is(.m__datepicker.S, .m__select.S) {
       background-color: transparent;
       border: none;
       border-radius: 0;
@@ -191,7 +191,7 @@
       padding: 0.4rem var(--m__widget-padding);
     }
 
-    & .m__table-filters__dates :is(.m__datepicker-compact):last-child::after {
+    & .m__table-filters__dates :is(.m__datepicker.S):last-child::after {
       display: none;
     }
 
@@ -306,7 +306,7 @@
     font-size: var(--m__font-size-s);
   }
 
-  .m__segmented-control label {
+  .m__segmented-control-primary label {
     font-size: var(--m__font-size-s);
   }
   button {

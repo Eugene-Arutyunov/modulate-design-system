@@ -11,11 +11,14 @@
     payLabelEl.textContent = formatUSD(val);
   }
 
-  var presetBtns = document.querySelectorAll('[data-credits-preset]');
+  var presetCards = document.querySelectorAll('[data-credits-preset]');
 
   function updatePresetActive() {
-    presetBtns.forEach(function (btn) {
-      btn.setAttribute('aria-pressed', btn.dataset.creditsPreset === input.value ? 'true' : 'false');
+    presetCards.forEach(function (card) {
+      var radio = card.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.checked = card.dataset.creditsPreset === input.value;
+      }
     });
   }
 
@@ -24,12 +27,26 @@
     updatePresetActive();
   });
 
-  presetBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      input.value = btn.dataset.creditsPreset;
-      update();
-      updatePresetActive();
+  function selectPreset(card) {
+    if (!card) return;
+    input.value = card.dataset.creditsPreset;
+    update();
+    updatePresetActive();
+  }
+
+  presetCards.forEach(function (card) {
+    var radio = card.querySelector('input[type="radio"]');
+
+    card.addEventListener('click', function () {
+      selectPreset(card);
     });
+
+    if (radio) {
+      radio.addEventListener('change', function () {
+        if (!radio.checked) return;
+        selectPreset(card);
+      });
+    }
   });
 
   update();

@@ -5,20 +5,23 @@
   function closeMenu() {
     if (!activeList) return;
     activeList.hidden = true;
-    if (activeList._amOriginalParent) {
-      activeList._amOriginalParent.appendChild(activeList);
+    if (activeList._menuButtonOriginalParent) {
+      activeList._menuButtonOriginalParent.appendChild(activeList);
     }
-    activeTrigger.classList.remove("m__action-menu-trigger--active");
+    activeTrigger.classList.remove("m__menu-button-trigger--active");
+    activeTrigger.setAttribute("aria-expanded", "false");
     activeList = null;
     activeTrigger = null;
   }
 
   function openMenu(trigger) {
     closeMenu();
-    var menu = trigger.closest(".m__action-menu");
-    var list = menu.querySelector(".m__action-menu-list");
+    var menu = trigger.closest(".m__menu-button");
+    if (!menu) return;
+    var list = menu.querySelector(".m__menu-button-list");
+    if (!list) return;
 
-    list._amOriginalParent = menu;
+    list._menuButtonOriginalParent = menu;
     document.body.appendChild(list);
 
     var rect = trigger.getBoundingClientRect();
@@ -30,11 +33,12 @@
     list.hidden = false;
     activeList = list;
     activeTrigger = trigger;
-    trigger.classList.add("m__action-menu-trigger--active");
+    trigger.classList.add("m__menu-button-trigger--active");
+    trigger.setAttribute("aria-expanded", "true");
   }
 
   document.addEventListener("click", function (e) {
-    var trigger = e.target.closest(".m__action-menu-trigger");
+    var trigger = e.target.closest(".m__menu-button-trigger");
     if (trigger) {
       if (activeTrigger === trigger) {
         closeMenu();
@@ -43,11 +47,11 @@
       }
       return;
     }
-    if (e.target.closest(".m__action-menu-item")) {
+    if (e.target.closest(".m__menu-button-item")) {
       closeMenu();
       return;
     }
-    if (!e.target.closest(".m__action-menu-list")) {
+    if (!e.target.closest(".m__menu-button-list")) {
       closeMenu();
     }
   });

@@ -1,0 +1,183 @@
+.m__col-actions {
+  text-align: right;
+}
+
+.m__menu-button {
+  display: inline-block;
+}
+
+.m__menu-button.m__split-button {
+  display: inline-flex;
+}
+
+:is(
+  a.m__menu-button-primary,
+  button.m__menu-button-primary,
+  a.m__menu-button-secondary,
+  button.m__menu-button-secondary
+) {
+  gap: var(--m__space-xxs);
+
+  & .m__button__icon {
+    width: 0.72lh;
+    height: 0.72lh;
+    align-self: center;
+    stroke: currentColor;
+    stroke-width: 0.65;
+    stroke-linejoin: round;
+    transition: transform var(--m__duration-base) var(--m__easing-base);
+  }
+
+  &[aria-expanded="true"] .m__button__icon {
+    transform: rotate(180deg);
+  }
+}
+
+:is(
+  a.m__menu-button-primary,
+  button.m__menu-button-primary,
+  a.m__menu-button-secondary,
+  button.m__menu-button-secondary
+).m__menu-button-trigger--active {
+  color: var(--m__text-link-hover);
+}
+
+.m__split-button
+  > :is(
+    a.m__menu-button-primary,
+    button.m__menu-button-primary,
+    a.m__menu-button-secondary,
+    button.m__menu-button-secondary
+  ):last-of-type {
+  padding-inline: var(--m__space-xs);
+}
+
+.m__split-button
+  > :is(
+    a.m__menu-button-primary,
+    button.m__menu-button-primary,
+    a.m__menu-button-secondary,
+    button.m__menu-button-secondary
+  ).S:last-of-type {
+  padding-inline: var(--m__space-xxs);
+}
+
+:is(
+  a.m__menu-button-primary,
+  button.m__menu-button-primary,
+  a.m__menu-button-secondary,
+  button.m__menu-button-secondary
+).m__menu-button-trigger:has(> .m__button__icon:only-child) {
+  align-items: center;
+
+  & > .m__button__icon:only-child {
+    align-self: center;
+  }
+}
+
+button.m__menu-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: calc(1lh + 1rem);
+  block-size: calc(1lh + 1rem);
+  padding: 0;
+  border: none;
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  color: var(--m__text);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
+
+  & svg {
+    display: block;
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  &.M {
+    inline-size: calc(1lh + 1rem);
+    block-size: calc(1lh + 1rem);
+  }
+
+  &.S {
+    inline-size: calc(1lh + 0.6rem);
+    block-size: calc(1lh + 0.6rem);
+
+    & svg {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+  }
+
+  &:hover,
+  &.m__menu-button-trigger--active {
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+
+  &:active {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    color: var(--m__text-link-pressed);
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+.m__menu-button-list {
+  position: fixed;
+  z-index: 200;
+  background-color: var(--m__bg);
+  border: var(--m__border-width-s) solid var(--m__border);
+  border-radius: var(--m__widget-radius);
+  box-shadow: 0 4px 20px color-mix(in srgb, #000 22%, transparent);
+  min-width: 9rem;
+  overflow: hidden;
+  padding: 0.25rem;
+}
+
+.m__menu-button-list[hidden] {
+  display: none;
+}
+
+.m__menu-button-item {
+  font-size: 1rem;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--m__radius-m);
+  font: inherit;
+  color: var(--m__text);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition:
+    background-color var(--m__duration-base)
+      var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
+
+  &:hover {
+    background-color: var(--m__bg-surface);
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+.m__menu-button-item--danger {
+  color: color-mix(in srgb, var(--m__error) 80%, transparent);
+
+  &:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--m__error) 8%,
+      transparent
+    );
+    color: var(--m__error-hover);
+  }
+}

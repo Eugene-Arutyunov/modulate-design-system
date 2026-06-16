@@ -104,7 +104,7 @@ html:has(.dashboard-layout) {
     font-weight: var(--m__font-weight-bold);
   }
 
-  & > .m__segmented-control:first-child {
+  & > .m__segmented-control-primary:first-child {
     margin-top: 0.15rem;
   }
 
@@ -140,9 +140,7 @@ html:has(.dashboard-layout) {
     .m__widget
     :is(
       .m__datepicker,
-      .m__datepicker-compact,
-      .m__select,
-      .m__select-compact
+      .m__select
     ) {
     font-size: var(--m__font-size-s);
   }
@@ -295,7 +293,7 @@ table.org-details {
   align-items: center;
   width: 100%;
 
-  & .m__textfield--compact {
+  & .m__textfield.S {
     margin: 0;
     flex: 1;
   }
@@ -505,8 +503,8 @@ table.config-details {
 
 .config-form {
   & .m__select select {
-    padding: var(--m__padding-control-s);
-    padding-right: calc(var(--m__padding-control-s) + 1.4em);
+    padding: var(--m__padding-input-s);
+    padding-inline-end: 2rem;
   }
 
   & .m__textfield {
@@ -915,7 +913,7 @@ table.config-details {
   justify-content: space-between;
   gap: 0.5rem;
   width: 100%;
-  padding: var(--m__padding-control-m);
+  padding: var(--m__padding-button-m);
   background-color: var(--m__bg-input);
   border: var(--m__border-width-s) solid var(--m__border);
   border-radius: var(--m__radius-s);
