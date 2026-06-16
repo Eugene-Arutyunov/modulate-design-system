@@ -230,7 +230,21 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
     </table>
     <div class="m__space S"></div>
 
-    <h3>Spacing</h3>
+    <h3>Gaps</h3>
+    <div class="m__text-width">
+      <p>
+        Gaps (<code class="accent">--m__gap-*</code>) are the distances
+        <em>inside</em> components — the spacing between an icon and its label,
+        between items in a list, or the inset padding rhythm. Reach for these
+        when building a component.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="gap" data-tokens-render="gap"></div>
+    <div class="m__space M"></div>
+
+    <div class="m__space L"></div>
+    <h3>Spacers</h3>
     <div class="m__text-width">
       <p>
         Components carry a default bottom margin (<code class="accent"
@@ -240,14 +254,15 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
       </p>
       <p>
         Spacing between sections or before headings is handled with explicit
-        spacer elements (<code>.m__space</code>), not margins on content
+        spacer elements (<code>.m__space</code>, backed by
+        <code class="accent">--m__spacer-*</code>), not margins on content
         elements. The idea behind this is that content elements can’t know what
         spacing is appropriate in every context — that’s why the spacer should
         be placed by whoever assembles the layout.
       </p>
     </div>
     <div class="m__space XS"></div>
-    <div class="guide-tokens" data-tokens-prefix="space" data-tokens-render="space"></div>
+    <div class="guide-tokens" data-tokens-prefix="spacer" data-tokens-render="space"></div>
     <div class="m__space M"></div>
 
     <div class="m__space L"></div>
@@ -309,9 +324,9 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
     <h3>Tokens</h3>
     <div class="m__text-width">
       <p>
-        Font sizes use <code>rem</code> units except <code>font-size-mono</code>,
-        which is <code>em</code> — it sizes inline code relative to the
-        surrounding text.
+        Font sizes use <code>rem</code> units except
+        <code>font-size-smaller</code>, which is <code>em</code> — it sizes
+        content slightly smaller than the surrounding text.
       </p>
     </div>
     <div class="m__space XS"></div>
@@ -415,7 +430,7 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
             </p>
           </td>
           <td>
-            <code class="accent">--m__font-size-mono</code><br />
+            <code class="accent">--m__font-size-smaller</code><br />
             <code class="accent">--m__font-family-mono</code><br />
             <code class="accent">--m__font-weight-regular</code><br />
             <code class="accent">--m__text-code</code>
@@ -480,7 +495,7 @@ method: POST</code></pre>
             <code class="accent">--m__bg-surface</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__font-family-mono</code><br />
-            <code class="accent">--m__font-size-mono</code>
+            <code class="accent">--m__font-size-smaller</code>
           </td>
         </tr>
       </tbody>
@@ -528,7 +543,7 @@ method: POST</code></pre>
           <td>
             <code class="accent">--m__padding-button-m</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__bg-accent</code><br />
             <code class="accent">--m__bg-accent-pressed</code><br />
@@ -554,7 +569,7 @@ method: POST</code></pre>
           <td>
             <code class="accent">--m__padding-button-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__bg-accent</code><br />
             <code class="accent">--m__bg-accent-pressed</code><br />
@@ -580,7 +595,7 @@ method: POST</code></pre>
           <td>
             <code class="accent">--m__padding-button-m</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
@@ -605,7 +620,7 @@ method: POST</code></pre>
           <td>
             <code class="accent">--m__padding-button-s</code><br />
             <code class="accent">--m__radius-s</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
@@ -631,7 +646,7 @@ method: POST</code></pre>
             <code class="accent">--m__padding-button-m</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__border-width-m</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__font-weight-medium</code><br />
             <code class="accent">--m__bg-accent</code><br />
@@ -659,7 +674,7 @@ method: POST</code></pre>
             <code class="accent">--m__padding-button-s</code><br />
             <code class="accent">--m__radius-s</code><br />
             <code class="accent">--m__border-width-m</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__font-weight-medium</code><br />
             <code class="accent">--m__bg-accent</code><br />
@@ -687,7 +702,7 @@ method: POST</code></pre>
             <code class="accent">--m__padding-button-m</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__border-width-s</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
@@ -713,7 +728,7 @@ method: POST</code></pre>
             <code class="accent">--m__padding-button-s</code><br />
             <code class="accent">--m__radius-s</code><br />
             <code class="accent">--m__border-width-s</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__button-icon-size</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
@@ -797,7 +812,7 @@ method: POST</code></pre>
             <code class="accent">--m__padding-button-m</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__border-width-m</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__font-weight-medium</code><br />
             <code class="accent">--m__bg-accent</code><br />
             <code class="accent">--m__text</code><br />
@@ -830,7 +845,7 @@ method: POST</code></pre>
             <code class="accent">--m__padding-button-s</code><br />
             <code class="accent">--m__radius-s</code><br />
             <code class="accent">--m__border-width-m</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__font-weight-medium</code><br />
             <code class="accent">--m__bg-accent</code><br />
             <code class="accent">--m__text</code><br />
@@ -864,7 +879,7 @@ method: POST</code></pre>
             <code class="accent">--m__padding-button-m</code><br />
             <code class="accent">--m__radius-m</code><br />
             <code class="accent">--m__border-width-s</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
             <code class="accent">--m__text-link-pressed</code>
@@ -896,7 +911,7 @@ method: POST</code></pre>
             <code class="accent">--m__padding-button-s</code><br />
             <code class="accent">--m__radius-s</code><br />
             <code class="accent">--m__border-width-s</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__text</code><br />
             <code class="accent">--m__text-link-hover</code><br />
             <code class="accent">--m__text-link-pressed</code>
@@ -1098,7 +1113,7 @@ method: POST</code></pre>
             </fieldset>
           </td>
           <td>
-            <code class="accent">--m__space-xxs</code>
+            <code class="accent">--m__gap-xxs</code>
           </td>
         </tr>
         <tr>
@@ -1123,8 +1138,8 @@ method: POST</code></pre>
           <td>
             <code class="accent">--m__padding-button-m</code><br />
             <code class="accent">--m__radius-m</code><br />
-            <code class="accent">--m__space-xs</code><br />
-            <code class="accent">--m__space-xxs</code><br />
+            <code class="accent">--m__gap-xs</code><br />
+            <code class="accent">--m__gap-xxs</code><br />
             <code class="accent">--m__border-width-s</code><br />
             <code class="accent">--m__bg</code><br />
             <code class="accent">--m__text</code><br />
@@ -1134,7 +1149,7 @@ method: POST</code></pre>
         <tr>
           <td><code>.m__tag</code></td>
           <td>
-            <span style="display: inline-flex; gap: var(--m__space-xxs)">
+            <span style="display: inline-flex; gap: var(--m__gap-xxs)">
               <span class="m__tag">Admin</span>
               <span class="m__tag">Internal</span>
             </span>
@@ -1150,7 +1165,7 @@ method: POST</code></pre>
         <tr>
           <td><code>.m__tag-flat</code></td>
           <td>
-            <span style="display: inline-flex; gap: var(--m__space-xxs)">
+            <span style="display: inline-flex; gap: var(--m__gap-xxs)">
               <span class="m__tag-flat">default</span>
             </span>
           </td>
@@ -1190,7 +1205,7 @@ method: POST</code></pre>
             </div>
           </td>
           <td>
-            <code class="accent">--m__space-xxs</code>
+            <code class="accent">--m__gap-xxs</code>
           </td>
         </tr>
         <tr>

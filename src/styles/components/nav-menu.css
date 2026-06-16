@@ -1,7 +1,7 @@
 .m__nav-menu {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: var(--m__gap-nav);
   inline-size: 9rem;
   max-inline-size: 9rem;
 }
@@ -9,10 +9,10 @@
 .m__nav-menu-item {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--m__gap-sidebar-link);
   box-sizing: border-box;
   inline-size: 100%;
-  padding: 0.45rem 1.25rem 0.45rem 0.75rem;
+  padding: var(--m__padding-sidebar-link);
   border-radius: var(--m__radius-l);
   color: var(--m__text);
   text-decoration: none;
@@ -51,8 +51,8 @@
   }
 
   &:has(.m__nav-menu-item__caption) {
-    padding-top: 0.22rem;
-    padding-bottom: 0.22rem;
+    padding-top: var(--m__padding-sidebar-caption);
+    padding-bottom: var(--m__padding-sidebar-caption);
   }
 }
 
@@ -65,5 +65,5 @@ button.m__nav-menu-item {
 }
 
 .m__nav-menu > .m__nav-menu-item:has(.m__nav-menu-item__caption):first-child {
-  padding-top: 0.42rem;
+  padding-top: var(--m__padding-sidebar-caption-first);
 }
