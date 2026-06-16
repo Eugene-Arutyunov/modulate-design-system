@@ -47,7 +47,22 @@
     opacity: 0;
   }
 
-  &:has(input:checked) > svg {
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0.24rem;
+    top: 50%;
+    box-sizing: border-box;
+    width: 0.52rem;
+    height: 0.32rem;
+    border-left: 0.125rem solid var(--m__bg);
+    border-bottom: 0.125rem solid var(--m__bg);
+    transform: translateY(-65%) rotate(-45deg);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  &:has(input:checked)::after {
     opacity: 1;
   }
 }
