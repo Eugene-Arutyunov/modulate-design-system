@@ -29,61 +29,9 @@ html:has(.dashboard-layout) {
   position: sticky;
   top: 1rem;
   flex-shrink: 0;
-  width: max-content;
 
   @media (width < 768px) {
     display: none;
-  }
-
-  & nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-  }
-
-  & .nav-sidebar__link {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.45rem 1.25rem 0.45rem 0.75rem;
-    border-radius: var(--m__radius-l);
-    color: var(--m__text);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: background-color var(--m__duration-base)
-      var(--m__easing-base);
-
-    & .nav-sidebar__link-icon {
-      width: 1rem;
-      height: 1rem;
-      color: currentColor;
-      fill: currentColor;
-      flex-shrink: 0;
-    }
-
-    &:hover {
-      background-color: var(--m__bg-surface);
-      transition-duration: var(--m__duration-instant);
-    }
-
-    &.active {
-      background-color: var(--m__bg-surface);
-      font-weight: var(--m__font-weight-heavy);
-    }
-
-    & .nav-sidebar__link-caption {
-      font-size: var(--m__font-size-s);
-      color: var(--m__text-caption);
-    }
-
-    &:has(.nav-sidebar__link-caption) {
-      padding-top: 0.22rem;
-      padding-bottom: 0.22rem;
-    }
-  }
-
-  & nav > .nav-sidebar__link:has(.nav-sidebar__link-caption):first-child {
-    padding-top: 0.42rem;
   }
 }
 
@@ -905,53 +853,6 @@ table.config-details {
 
 .bw-tpl-wrap {
   position: relative;
-}
-
-.bw-tpl-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  width: 100%;
-  padding: var(--m__padding-button-m);
-  background-color: var(--m__bg-input);
-  border: var(--m__border-width-s) solid var(--m__border);
-  border-radius: var(--m__radius-s);
-  font: inherit;
-  color: var(--m__text-caption);
-  cursor: pointer;
-  text-align: left;
-  transition: color var(--m__duration-base)
-    var(--m__easing-base);
-
-  &:hover {
-    color: var(--m__text-link-hover);
-    transition-duration: var(--m__duration-instant);
-  }
-
-  &:focus-visible,
-  &[aria-expanded="true"] {
-    outline: 1px solid var(--m__text-link-hover);
-    outline-offset: -1px;
-    background-color: color-mix(
-      in srgb,
-      var(--m__bg-accent-hover) 8%,
-      transparent
-    );
-    color: var(--m__text-link-hover);
-  }
-
-  &.has-value {
-    color: var(--m__text);
-
-    &:hover {
-      color: var(--m__text-link-hover);
-    }
-  }
-
-  & svg {
-    flex-shrink: 0;
-  }
 }
 
 .bw-tpl-trigger-value {

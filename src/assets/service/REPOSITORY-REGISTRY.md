@@ -160,7 +160,7 @@ Documentation page. Uses `landing-layout.html` — unauthenticated header (Playg
 **Permalink:** `/index-landing/`  
 **Styles:** `src/styles/prototypes/index-landing.css`
 
-`index-landing.html` is the current compact hero-only landing variant (headline, inline feature line with icons, and CTA row). `index-landing-full-draft.html` keeps the previous long-form full draft for future reuse and copy extraction.
+`index-landing.html` is the current short hero-only landing variant (headline, inline feature line with icons, and CTA row). `index-landing-full-draft.html` keeps the previous long-form full draft for future reuse and copy extraction.
 
 ---
 
@@ -288,7 +288,7 @@ Label + input pair. Label sits above the input. Input uses `--m__ui-control-colo
 **Layout:** `src/includes/prototypes/auth-layout.html`  
 **UI structure:** `src/service/ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`, `/auth/org-select/`).
 
-Four auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link". Select organization shows an `.m__option-list` of orgs with `.m__tag` role labels, and a form to create a new org with a secondary button.
+Four auth screens using `.auth-form` + `.m__textfield` + `.m__button-primary.M`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link". Select organization shows an `.m__option-list` of orgs with `.m__tag` role labels, and a form to create a new org with a secondary button.
 
 **OAuth buttons:** `src/includes/prototypes/auth-oauth-buttons.html` — Google (colored), GitHub and Apple (monochrome `currentColor`). Included on sign-in and create-account pages.
 

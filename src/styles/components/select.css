@@ -80,7 +80,29 @@
     }
   }
 
+  &:is(button) {
+    appearance: none;
+    justify-content: flex-start;
+    padding: var(--m__padding-input-m);
+    padding-inline-end: 2.15rem;
+    font: inherit;
+    color: var(--m__text-caption);
+    cursor: pointer;
+    text-align: left;
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
+  }
+
+  &:is(button).has-value {
+    color: var(--m__text);
+  }
+
   &:not(:has(> label)):hover select {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+
+  &:is(button):hover {
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
@@ -90,7 +112,8 @@
     transition-duration: var(--m__duration-instant);
   }
 
-  &:not(:has(> label)):focus-within {
+  &:not(:has(> label)):focus-within,
+  &:not(:has(> label))[aria-expanded="true"] {
     outline: 1px solid var(--m__text-link-hover);
     outline-offset: -1px;
     background-color: color-mix(
@@ -98,6 +121,11 @@
       var(--m__bg-accent-hover) 8%,
       transparent
     );
+  }
+
+  &:not(:has(> label))[aria-expanded="true"],
+  &:not(:has(> label))[aria-expanded="true"] > svg {
+    color: var(--m__text-link-hover);
   }
 
   & > svg {
