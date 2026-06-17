@@ -1,6 +1,6 @@
 <div class="m__widget">
   <div class="m__table-toolbar">
-    <div class="m__segmented-control-compact" role="group">
+    <div class="m__segmented-control-secondary" role="group">
       <label>
         <input type="radio" name="{{ tabsName }}" {% if activeTab !== 'inactive' %}checked{% endif %} />
         Active
@@ -10,7 +10,7 @@
         Inactive
       </label>
     </div>
-    <button type="button" class="m__button-compact" data-api-key-create>Create API Key</button>
+    <button type="button" class="m__button-primary S" data-api-key-create>Create API Key</button>
   </div>
   <div class="m__table-wrapper">
   <table>
@@ -35,7 +35,7 @@
           <td {% if not row.limits %}class="muted"{% endif %}>{{ row.limits if row.limits else '—' }}</td>
           <td>{{ row.created }}</td>
           <td style="padding-right: 2rem;">
-            <label class="m__toggle" data-api-key-name="{{ row.name }}">
+            <label class="m__toggle-primary" data-api-key-name="{{ row.name }}">
               <input type="checkbox"
                 {% if row.status === 'active' %}checked{% endif %}
                 data-api-key-toggle
@@ -44,8 +44,8 @@
           </td>
           <td class="m__col-actions">
             <div>
-              <button type="button" class="m__button-outline-compact" data-api-key-edit data-api-key-name="{{ row.name }}">Edit</button>
-              <button type="button" class="m__button-danger-compact" data-api-key-delete data-api-key-name="{{ row.name }}">Delete</button>
+              <button type="button" class="m__button-secondary-outline S" data-api-key-edit data-api-key-name="{{ row.name }}">Edit</button>
+              <button type="button" class="m__button-danger-outline S" data-api-key-delete data-api-key-name="{{ row.name }}">Delete</button>
             </div>
           </td>
         </tr>

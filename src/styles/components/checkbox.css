@@ -1,5 +1,5 @@
-.m__checkbox,
-.m__checkbox-brutal {
+.m__checkbox-primary,
+.m__checkbox-secondary {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -47,12 +47,27 @@
     opacity: 0;
   }
 
-  &:has(input:checked) > svg {
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0.22rem;
+    top: 50%;
+    box-sizing: border-box;
+    width: 0.6rem;
+    height: 0.36rem;
+    border-left: 0.125rem solid var(--m__bg);
+    border-bottom: 0.125rem solid var(--m__bg);
+    transform: translateY(-65%) rotate(-45deg);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  &:has(input:checked)::after {
     opacity: 1;
   }
 }
 
-.m__checkbox {
+.m__checkbox-primary {
   & input[type="checkbox"] {
     border: var(--m__border-width-s) solid var(--m__border);
 
@@ -82,7 +97,7 @@
   }
 }
 
-.m__checkbox-brutal {
+.m__checkbox-secondary {
   font-weight: var(--m__font-weight-medium);
 
   & input[type="checkbox"] {

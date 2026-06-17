@@ -9,7 +9,7 @@ permalink: /dashboard/behaviors/detection-package-create/
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
     <div class="nav-sidebar">
-      <nav>{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
     </div>
 
     <main class="dashboard-content">
@@ -25,7 +25,7 @@ permalink: /dashboard/behaviors/detection-package-create/
       <div class="config-fields">
         <div class="config-field">
           <label class="config-field-label">Name</label>
-          <div class="m__textfield m__textfield--compact">
+          <div class="m__textfield M">
             <input type="text" placeholder="" />
           </div>
         </div>
@@ -40,14 +40,14 @@ permalink: /dashboard/behaviors/detection-package-create/
           <div class="bw-toolbar-actions">
             <button
               type="button"
-              class="m__button-outline-compact"
+              class="m__button-secondary-outline S"
               id="bw-scope-add-btn"
             >
               Add existing
             </button>
             <button
               type="button"
-              class="m__button-compact"
+              class="m__button-primary S"
               id="bw-scope-create-btn"
             >
               Create new
@@ -74,7 +74,7 @@ permalink: /dashboard/behaviors/detection-package-create/
       </div>
 
       <div class="config-form-actions">
-        <button type="button" class="m__button-compact">Save package</button>
+        <button type="button" class="m__button-primary S">Save package</button>
       </div>
 
       <div class="m__space XL"></div>
@@ -105,8 +105,8 @@ permalink: /dashboard/behaviors/detection-package-create/
     .bw-toolbar-actions {
       width: 100%;
     }
-    .bw-toolbar-actions .m__button-outline-compact,
-    .bw-toolbar-actions .m__button-compact {
+    .bw-toolbar-actions .m__button-secondary-outline.S,
+    .bw-toolbar-actions .m__button-primary.S {
       flex: 1;
       justify-content: center;
     }
@@ -608,7 +608,7 @@ permalink: /dashboard/behaviors/detection-package-create/
         var label = document.createElement("label");
         label.className = "m__popover-item";
         label.innerHTML =
-          '<span class="m__checkbox"><input type="checkbox"' +
+          '<span class="m__checkbox-primary"><input type="checkbox"' +
           (isActive ? " checked" : "") +
           " />" +
           CHECK_SVG +
@@ -712,7 +712,7 @@ permalink: /dashboard/behaviors/detection-package-create/
         var label = document.createElement("label");
         label.className = "bw-add-item-label";
         label.innerHTML =
-          '<span class="m__checkbox"><input type="checkbox"' +
+          '<span class="m__checkbox-primary"><input type="checkbox"' +
           (isChecked ? " checked" : "") +
           " />" +
           CHECK_SVG +
@@ -772,7 +772,7 @@ permalink: /dashboard/behaviors/detection-package-create/
     // ── Modal: create behavior ───────────────────────────────────────
     document
       .getElementById("modal-behaviors-create")
-      .querySelector(".m__button-compact")
+      .querySelector(".m__button-primary.S")
       .addEventListener("click", function () {
         var name = document.getElementById("behavior-name").value.trim();
         var desc = document.getElementById("behavior-description").value.trim();
@@ -795,7 +795,7 @@ permalink: /dashboard/behaviors/detection-package-create/
     // ── Modal: create type ───────────────────────────────────────────
     document
       .getElementById("modal-conversation-type-create")
-      .querySelector(".m__button-compact")
+      .querySelector(".m__button-primary.S")
       .addEventListener("click", function () {
         var name = document
           .getElementById("conversation-type-name")
@@ -821,7 +821,7 @@ permalink: /dashboard/behaviors/detection-package-create/
     // ── Modal: create role ───────────────────────────────────────────
     document
       .getElementById("modal-role-create")
-      .querySelector(".m__button-compact")
+      .querySelector(".m__button-primary.S")
       .addEventListener("click", function () {
         var name = document.getElementById("role-name").value.trim();
         if (!name) return;
@@ -843,7 +843,7 @@ permalink: /dashboard/behaviors/detection-package-create/
     // ── Modal: edit type ─────────────────────────────────────────────
     document
       .getElementById("modal-conversation-type-edit")
-      .querySelector(".m__button-compact")
+      .querySelector(".m__button-primary.S")
       .addEventListener("click", function () {
         if (!pendingEditTag || pendingEditTag.field !== "types") return;
         var name = document.getElementById("conversation-type-edit-name").value.trim();
@@ -859,7 +859,7 @@ permalink: /dashboard/behaviors/detection-package-create/
     // ── Modal: edit role ──────────────────────────────────────────────
     document
       .getElementById("modal-role-edit")
-      .querySelector(".m__button-compact")
+      .querySelector(".m__button-primary.S")
       .addEventListener("click", function () {
         if (!pendingEditTag || pendingEditTag.field !== "roles") return;
         var name = document.getElementById("role-edit-name").value.trim();
@@ -875,7 +875,7 @@ permalink: /dashboard/behaviors/detection-package-create/
     // ── Modal: edit behavior ─────────────────────────────────────────
     document
       .getElementById("modal-behaviors-edit")
-      .querySelector(".m__button-compact")
+      .querySelector(".m__button-primary.S")
       .addEventListener("click", function () {
         if (pendingEditId === null) return;
         var name = document.getElementById("behavior-edit-name").value.trim();

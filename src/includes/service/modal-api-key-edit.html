@@ -1,14 +1,14 @@
 {% from 'service/modal-wrapper.njk' import modal %}
 {% call modal("modal-api-key-edit", "Edit API Key") %}
 <div class="m__modal__body">
-  <div class="m__textfield">
+  <div class="m__textfield M">
     <label for="edit-key-name">Name</label>
     <input type="text" id="edit-key-name" name="name" autocomplete="off" />
   </div>
 
   <div class="m__space XS"></div>
 
-  <div class="m__textfield">
+  <div class="m__textfield M">
     <label for="edit-key-description">Description</label>
     <textarea id="edit-key-description" name="description"></textarea>
   </div>
@@ -16,11 +16,11 @@
 <div class="m__modal__footer">
   <button
     type="button"
-    class="m__button-outline-compact"
+    class="m__button-secondary-outline S"
     data-modal-close="modal-api-key-edit"
   >
     Cancel
   </button>
-  <button type="button" class="m__button-compact">Save</button>
+  <button type="button" class="m__button-primary S">Save</button>
 </div>
 {% endcall %}

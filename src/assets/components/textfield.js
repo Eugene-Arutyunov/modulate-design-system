@@ -1,6 +1,6 @@
 document.addEventListener('change', (e) => {
-  if (e.target.matches('.m__select-compact select')) {
-    const valueEl = e.target.closest('.m__select')?.querySelector('.m__select__value');
+  if (e.target.matches('.m__select.S select')) {
+    const valueEl = e.target.closest('.m__select.S')?.querySelector('.m__select__value');
     if (valueEl) valueEl.textContent = e.target.options[e.target.selectedIndex].text;
   }
 });

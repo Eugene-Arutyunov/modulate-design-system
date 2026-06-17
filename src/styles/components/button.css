@@ -1,27 +1,26 @@
-a.m__button,
-button.m__button,
-a.m__button-secondary,
-button.m__button-secondary,
-a.m__button-outline,
-button.m__button-outline,
-a.m__button-brutal,
-button.m__button-brutal,
-a.m__button-compact,
-button.m__button-compact,
-a.m__button-secondary-compact,
-button.m__button-secondary-compact,
-a.m__button-outline-compact,
-button.m__button-outline-compact,
-button.m__button-preset,
-a.m__button-danger,
-button.m__button-danger,
-a.m__button-danger-compact,
-button.m__button-danger-compact,
-a.m__button-success,
-button.m__button-success,
-a.m__button-success-compact,
-button.m__button-success-compact,
-button.m__button-icon {
+:root {
+  --m__button-icon-size: 1lh;
+}
+
+:is(
+  a.m__button-primary,
+  button.m__button-primary,
+  a.m__button-secondary,
+  button.m__button-secondary,
+  a.m__button-primary-outline,
+  button.m__button-primary-outline,
+  a.m__button-secondary-outline,
+  button.m__button-secondary-outline,
+  a.m__button-danger-outline,
+  button.m__button-danger-outline,
+  a.m__button-success-outline,
+  button.m__button-success-outline,
+  a.m__menu-button-primary,
+  button.m__menu-button-primary,
+  a.m__menu-button-secondary,
+  button.m__menu-button-secondary,
+  button.m__button-icon
+) {
   display: inline-flex;
   align-items: baseline;
   justify-content: center;
@@ -35,24 +34,56 @@ button.m__button-icon {
   text-overflow: ellipsis;
 }
 
+:is(
+  a.m__button-primary,
+  button.m__button-primary,
+  a.m__button-secondary,
+  button.m__button-secondary,
+  a.m__button-primary-outline,
+  button.m__button-primary-outline,
+  a.m__button-secondary-outline,
+  button.m__button-secondary-outline,
+  a.m__button-danger-outline,
+  button.m__button-danger-outline,
+  a.m__button-success-outline,
+  button.m__button-success-outline,
+  a.m__menu-button-primary,
+  button.m__menu-button-primary,
+  a.m__menu-button-secondary,
+  button.m__menu-button-secondary
+) {
+  padding: var(--m__padding-button-m);
+  border-radius: var(--m__radius-m);
+
+  &.S {
+    padding: var(--m__padding-button-s);
+    border-radius: var(--m__radius-s);
+  }
+
+  &.M {
+    padding: var(--m__padding-button-m);
+    border-radius: var(--m__radius-m);
+  }
+}
+
 .m__button__icon {
   display: block;
   position: relative;
-  width: 1lh;
-  height: 1lh;
+  width: var(--m__button-icon-size);
+  height: var(--m__button-icon-size);
   flex-shrink: 0;
   overflow: hidden;
   align-self: end;
 }
 
-a.m__button,
-button.m__button {
-  padding: var(--m__padding-control-m);
+:is(
+  a.m__button-primary,
+  button.m__button-primary
+) {
   background-color: var(--m__bg-accent);
   color: var(--m__text-inverted);
   border: none;
-  transition: background-color var(--m__duration-base)
-    var(--m__easing-base);
+  transition: background-color var(--m__duration-base) var(--m__easing-base);
 
   &:hover {
     background-color: var(--m__text-link-hover);
@@ -61,9 +92,17 @@ button.m__button {
   }
 }
 
-a.m__button-secondary,
-button.m__button-secondary {
-  padding: var(--m__padding-control-m);
+:is(
+  button.m__button-primary
+):active {
+  background-color: var(--m__bg-accent-pressed);
+  transition-duration: var(--m__duration-instant);
+}
+
+:is(
+  a.m__button-secondary,
+  button.m__button-secondary
+) {
   background-color: color-mix(in srgb, currentColor 10%, transparent);
   color: var(--m__text);
   border: none;
@@ -78,24 +117,20 @@ button.m__button-secondary {
   }
 }
 
-a.m__button-outline,
-button.m__button-outline {
-  padding: var(--m__padding-control-m);
-  background-color: transparent;
-  color: var(--m__text);
-  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
-  transition: color var(--m__duration-base)
-    var(--m__easing-base);
-
-  &:hover {
-    color: var(--m__text-link-hover);
-    transition-duration: var(--m__duration-instant);
-  }
+:is(
+  button.m__button-secondary
+):active {
+  background-color: color-mix(in srgb, currentColor 8%, transparent);
+  color: var(--m__text-link-pressed);
+  transition-duration: var(--m__duration-instant);
 }
 
-a.m__button-brutal,
-button.m__button-brutal {
-  padding: var(--m__padding-control-m);
+:is(
+  a.m__button-primary-outline,
+  button.m__button-primary-outline,
+  a.m__menu-button-primary,
+  button.m__menu-button-primary
+) {
   background-color: transparent;
   color: var(--m__text);
   border: var(--m__border-width-m) solid var(--m__bg-accent);
@@ -109,11 +144,88 @@ button.m__button-brutal {
     border-color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
+}
 
-  &:active {
-    color: var(--m__text-link-pressed);
+:is(
+  button.m__button-primary-outline,
+  button.m__menu-button-primary
+):active {
+  color: var(--m__text-link-pressed);
+  transition-duration: var(--m__duration-instant);
+}
+
+:is(
+  a.m__button-secondary-outline,
+  button.m__button-secondary-outline,
+  a.m__menu-button-secondary,
+  button.m__menu-button-secondary
+) {
+  background-color: transparent;
+  color: var(--m__text);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
+  transition: color var(--m__duration-base) var(--m__easing-base);
+
+  &:hover {
+    color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
+}
+
+:is(
+  button.m__button-secondary-outline,
+  button.m__menu-button-secondary
+):active {
+  color: var(--m__text-link-pressed);
+  transition-duration: var(--m__duration-instant);
+}
+
+:is(
+  a.m__button-danger-outline,
+  button.m__button-danger-outline
+) {
+  background-color: transparent;
+  color: color-mix(in srgb, var(--m__error) 85%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
+  transition:
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base) var(--m__easing-base);
+
+  &:hover {
+    color: var(--m__error-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+:is(
+  button.m__button-danger-outline
+):active {
+  background-color: transparent;
+  color: color-mix(in srgb, var(--m__error) 80%, transparent);
+  transition-duration: var(--m__duration-instant);
+}
+
+:is(
+  a.m__button-success-outline,
+  button.m__button-success-outline
+) {
+  background-color: transparent;
+  color: color-mix(in srgb, var(--m__success) 80%, transparent);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
+  transition:
+    color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base) var(--m__easing-base);
+
+  &:hover {
+    color: var(--m__success-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+:is(
+  button.m__button-success-outline
+):active {
+  color: color-mix(in srgb, var(--m__success) 80%, transparent);
+  transition-duration: var(--m__duration-instant);
 }
 
 .m__split-button {
@@ -135,198 +247,6 @@ button.m__button-brutal {
   &:has(> :is(button, a):last-of-type:hover) > :is(button, a):first-of-type {
     border-right-color: var(--m__text-link-hover);
   }
-}
-
-a.m__button-compact,
-button.m__button-compact {
-  padding: var(--m__padding-control-s);
-  border-radius: var(--m__radius-s);
-
-  background-color: var(--m__bg-accent);
-  color: var(--m__text-inverted);
-  border: var(--m__border-width-s) solid transparent;
-  transition: background-color var(--m__duration-base)
-    var(--m__easing-base);
-
-  &:hover {
-    background-color: var(--m__text-link-hover);
-    color: var(--m__text-inverted);
-    transition-duration: var(--m__duration-instant);
-  }
-}
-
-a.m__button-secondary-compact,
-button.m__button-secondary-compact {
-  padding: var(--m__padding-control-s);
-  border-radius: var(--m__radius-s);
-  background-color: color-mix(in srgb, currentColor 10%, transparent);
-  color: var(--m__text);
-  border: none;
-  transition:
-    background-color var(--m__duration-base) var(--m__easing-base),
-    color var(--m__duration-base) var(--m__easing-base);
-
-  &:hover {
-    background-color: color-mix(in srgb, currentColor 15%, transparent);
-    color: var(--m__text-link-hover);
-    transition-duration: var(--m__duration-instant);
-  }
-}
-
-a.m__button-outline-compact,
-button.m__button-outline-compact {
-  padding: var(--m__padding-control-s);
-  border-radius: var(--m__radius-s);
-  background-color: transparent;
-  color: var(--m__text);
-  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
-  transition: color var(--m__duration-base)
-    var(--m__easing-base);
-
-  &:hover {
-    color: var(--m__text-link-hover);
-    transition-duration: var(--m__duration-instant);
-  }
-}
-
-button.m__button:active,
-button.m__button-compact:active {
-  background-color: var(--m__bg-accent-pressed);
-  transition-duration: var(--m__duration-instant);
-}
-
-a.m__button-danger,
-button.m__button-danger {
-  padding: var(--m__padding-control-m);
-  background-color: transparent;
-  color: color-mix(in srgb, var(--m__error) 85%, transparent);
-  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
-  transition:
-    color var(--m__duration-base) var(--m__easing-base),
-    border-color var(--m__duration-base)
-      var(--m__easing-base);
-
-  &:hover {
-    color: var(--m__error-hover);
-    transition-duration: var(--m__duration-instant);
-  }
-}
-
-a.m__button-danger-compact,
-button.m__button-danger-compact {
-  padding: var(--m__padding-control-s);
-  border-radius: var(--m__radius-s);
-  background-color: transparent;
-  color: color-mix(in srgb, var(--m__error) 80%, transparent);
-  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
-  transition:
-    color var(--m__duration-base) var(--m__easing-base),
-    border-color var(--m__duration-base)
-      var(--m__easing-base);
-
-  &:hover {
-    color: var(--m__error-hover);
-    transition-duration: var(--m__duration-instant);
-  }
-}
-
-button.m__button-danger:active,
-button.m__button-danger-compact:active {
-  background-color: transparent;
-  color: color-mix(in srgb, var(--m__error) 80%, transparent);
-  transition-duration: var(--m__duration-instant);
-}
-
-button.m__button-secondary:active,
-button.m__button-secondary-compact:active {
-  background-color: color-mix(in srgb, currentColor 8%, transparent);
-  color: var(--m__text-link-pressed);
-  transition-duration: var(--m__duration-instant);
-}
-
-button.m__button-outline:active,
-button.m__button-outline-compact:active {
-  color: var(--m__text-link-pressed);
-  transition-duration: var(--m__duration-instant);
-}
-
-button.m__button-preset {
-  flex-grow: 1;
-  padding: 0.4rem 0.5rem;
-  border-radius: var(--m__radius-s);
-  background-color: transparent;
-  color: var(--m__text);
-  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.05em;
-  line-height: 1.2;
-  transition: color var(--m__duration-base)
-    var(--m__easing-base);
-
-  &:hover {
-    color: var(--m__text-link-hover);
-    transition-duration: var(--m__duration-instant);
-  }
-
-  &:active {
-    color: var(--m__text-link-pressed);
-    transition-duration: var(--m__duration-instant);
-  }
-
-  &[aria-pressed="true"] {
-    color: var(--m__text-link-hover);
-    outline: 1px solid color-mix(in srgb, currentColor 100%, transparent);
-    outline-offset: -1px;
-    background-color: color-mix(
-      in srgb,
-      var(--m__bg-accent-hover) 8%,
-      transparent
-    );
-  }
-}
-
-a.m__button-success,
-button.m__button-success {
-  padding: var(--m__padding-control-m);
-
-  background-color: transparent;
-  color: color-mix(in srgb, var(--m__success) 80%, transparent);
-  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
-  transition:
-    color var(--m__duration-base) var(--m__easing-base),
-    border-color var(--m__duration-base)
-      var(--m__easing-base);
-
-  &:hover {
-    color: var(--m__success-hover);
-    transition-duration: var(--m__duration-instant);
-  }
-}
-
-a.m__button-success-compact,
-button.m__button-success-compact {
-  padding: var(--m__padding-control-s);
-  border-radius: var(--m__radius-s);
-
-  background-color: transparent;
-  color: color-mix(in srgb, var(--m__success) 80%, transparent);
-  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 30%, transparent);
-  transition:
-    color var(--m__duration-base) var(--m__easing-base),
-    border-color var(--m__duration-base)
-      var(--m__easing-base);
-
-  &:hover {
-    color: var(--m__success-hover);
-    transition-duration: var(--m__duration-instant);
-  }
-}
-
-button.m__button-success:active,
-button.m__button-success-compact:active {
-  color: color-mix(in srgb, var(--m__success) 80%, transparent);
-  transition-duration: var(--m__duration-instant);
 }
 
 button.m__button-icon {
@@ -357,9 +277,7 @@ button.m__button-icon {
     color: var(--m__text-link-pressed);
     transition-duration: var(--m__duration-instant);
   }
-
 }
-
 
 button.m__button-inline {
   background: none;

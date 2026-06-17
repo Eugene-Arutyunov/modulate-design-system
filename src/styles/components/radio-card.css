@@ -1,0 +1,77 @@
+:root {
+  --m__radio-card-padding: 0.4rem 0.5rem;
+}
+
+.m__radio-card-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--m__space-xxs);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.m__radio-card {
+  display: inline-flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.05em;
+  box-sizing: border-box;
+  padding: var(--m__radio-card-padding);
+  border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  color: var(--m__text);
+  font: inherit;
+  line-height: 1.2;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    color var(--m__duration-base) var(--m__easing-base),
+    background-color var(--m__duration-base) var(--m__easing-base),
+    border-color var(--m__duration-base) var(--m__easing-base);
+}
+
+.m__radio-card:hover {
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
+}
+
+.m__radio-card:active {
+  color: var(--m__text-link-pressed);
+  transition-duration: var(--m__duration-instant);
+}
+
+.m__radio-card:has(input:focus-visible) {
+  outline: var(--m__border-width-m) solid var(--m__text-link-hover);
+  outline-offset: 2px;
+}
+
+.m__radio-card:has(input:checked) {
+  color: var(--m__text-link-hover);
+  outline: 1px solid color-mix(in srgb, currentColor 100%, transparent);
+  outline-offset: -1px;
+  background-color: color-mix(in srgb, var(--m__bg-accent-hover) 8%, transparent);
+}
+
+.m__radio-card input[type="radio"] {
+  appearance: none;
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.m__radio-card__value {
+  font-size: var(--m__font-size-xxl);
+  font-weight: var(--m__font-weight-bold);
+  margin: 0;
+}
+
+.m__radio-card__caption {
+  color: var(--m__text-caption);
+}

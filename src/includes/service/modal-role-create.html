@@ -1,14 +1,14 @@
 {% from 'service/modal-wrapper.njk' import modal %} {% call
 modal("modal-role-create", "Create Role") %}
 <div class="m__modal__body">
-  <div class="m__textfield">
+  <div class="m__textfield M">
     <label for="role-name">Name</label>
     <input type="text" id="role-name" placeholder="" />
   </div>
 
   <div class="m__space XS"></div>
 
-  <div class="m__textfield">
+  <div class="m__textfield M">
     <label for="role-short-description">Short description <span class="m__label-optional">(Optional)</span></label>
     <textarea id="role-short-description" class="m__textarea--autogrow" placeholder=""></textarea>
   </div>
@@ -20,7 +20,7 @@ modal("modal-role-create", "Create Role") %}
     <span class="bw-prompt-sep" aria-hidden="true">·</span>
     <a href="#" class="bw-prompt-link">How to write prompt</a>
   </div>
-  <div class="m__textfield">
+  <div class="m__textfield M">
     <textarea id="role-prompt" class="m__textarea--autogrow" placeholder=""></textarea>
   </div>
   <p class="m__modal__field-hint">Enter a detailed description of this role.</p>
@@ -33,11 +33,11 @@ modal("modal-role-create", "Create Role") %}
 <div class="m__modal__footer">
   <button
     type="button"
-    class="m__button-outline-compact"
+    class="m__button-secondary-outline S"
     data-modal-close="modal-role-create"
   >
     Cancel
   </button>
-  <button type="button" class="m__button-compact">Create</button>
+  <button type="button" class="m__button-primary S">Create</button>
 </div>
 {% endcall %}
