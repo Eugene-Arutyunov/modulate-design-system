@@ -315,7 +315,7 @@ table.config-details {
 
 .billing-credit-code {
   --billing-form-control-block-size: calc(
-    1lh + 0.6rem + (2 * var(--m__border-width-s))
+    1lh + 1rem + (2 * var(--m__border-width-s))
   );
 
   display: flex;
@@ -343,7 +343,7 @@ table.config-details {
 
     & .m__textfield input {
       background-color: transparent;
-      padding: var(--m__padding-input-s);
+      padding: var(--m__padding-input-m);
       min-block-size: var(--billing-form-control-block-size);
 
       &:focus-visible {
@@ -371,7 +371,7 @@ table.config-details {
   --billing-purchase-control-font-size: var(--m__font-size-s);
   --billing-purchase-control-block-size: calc(
     var(--billing-purchase-control-font-size) * var(--m__line-height-base) +
-    0.6rem +
+    1rem +
     (2 * var(--m__border-width-s))
   );
 
@@ -398,29 +398,11 @@ table.config-details {
     margin: 0;
 
     & .m__radio-card {
-      flex-direction: row;
-      align-items: center;
       justify-content: flex-start;
-      gap: 0.35rem;
       block-size: var(--billing-purchase-control-block-size);
       min-block-size: 0;
-      padding: var(--m__padding-input-s);
+      padding: var(--m__padding-input-m);
       overflow: hidden;
-      line-height: var(--m__line-height-base);
-    }
-
-    & .m__radio-card__value {
-      font-size: inherit;
-      font-weight: var(--m__font-weight-regular);
-      line-height: var(--m__line-height-base);
-    }
-
-    & .m__radio-card__caption {
-      font-size: inherit;
-      line-height: var(--m__line-height-base);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
   }
 
@@ -432,7 +414,7 @@ table.config-details {
   & .m__textfield input {
     background-color: transparent;
     font: inherit;
-    padding: var(--m__padding-input-s);
+    padding: var(--m__padding-input-m);
     min-block-size: var(--billing-purchase-control-block-size);
 
     &:focus-visible {

@@ -1,5 +1,5 @@
 :root {
-  --m__radio-card-padding: 0.4rem 0.5rem;
+  --m__radio-card-padding: var(--m__padding-input-s);
 }
 
 .m__radio-card-group {
@@ -15,10 +15,10 @@
 .m__radio-card {
   display: inline-flex;
   flex-grow: 1;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0.05em;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.35rem;
   box-sizing: border-box;
   padding: var(--m__radio-card-padding);
   border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
@@ -26,7 +26,7 @@
   background-color: transparent;
   color: var(--m__text);
   font: inherit;
-  line-height: 1.2;
+  line-height: var(--m__line-height-base);
   text-align: left;
   cursor: pointer;
   text-decoration: none;
@@ -68,11 +68,17 @@
 }
 
 .m__radio-card__value {
-  font-size: var(--m__font-size-xxl);
-  font-weight: var(--m__font-weight-bold);
+  font-size: inherit;
+  font-weight: var(--m__font-weight-regular);
+  line-height: var(--m__line-height-base);
   margin: 0;
 }
 
 .m__radio-card__caption {
   color: var(--m__text-caption);
+  font-size: inherit;
+  line-height: var(--m__line-height-base);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
