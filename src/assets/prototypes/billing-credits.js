@@ -9,14 +9,21 @@
     return '$' + (credits * 0.01).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  function update() {
-    var val = Math.max(0, parseInt(input.value, 10) || 0);
-    payLabelEl.textContent = formatUSD(val);
+  function parseCredits(value) {
+    return Math.max(0, parseInt(String(value).replace(/\D/g, ''), 10) || 0);
+  }
+
+  function formatCreditsInput(value) {
+    var digits = String(value).replace(/\D/g, '');
+    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   function updatePayLabel(credits) {
-    var val = Math.max(0, parseInt(credits, 10) || 0);
-    payLabelEl.textContent = formatUSD(val);
+    payLabelEl.textContent = formatUSD(parseCredits(credits));
+  }
+
+  function update() {
+    updatePayLabel(input.value);
   }
 
   function clearPresets() {
@@ -45,6 +52,7 @@
 
   input.addEventListener('input', function () {
     clearPresets();
+    input.value = formatCreditsInput(input.value);
     update();
   });
 
