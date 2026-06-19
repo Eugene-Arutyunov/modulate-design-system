@@ -14,11 +14,16 @@
     payLabelEl.textContent = formatUSD(val);
   }
 
-  function updatePresetActive() {
+  function updatePayLabel(credits) {
+    var val = Math.max(0, parseInt(credits, 10) || 0);
+    payLabelEl.textContent = formatUSD(val);
+  }
+
+  function clearPresets() {
     presetCards.forEach(function (card) {
       var radio = card.querySelector('input[type="radio"]');
       if (radio) {
-        radio.checked = radio.value === input.value;
+        radio.checked = false;
       }
     });
   }
@@ -27,15 +32,20 @@
     if (!card) return;
     var radio = card.querySelector('input[type="radio"]');
     if (radio) {
-      input.value = radio.value;
+      input.value = '';
       radio.checked = true;
-      update();
+      updatePayLabel(radio.value);
     }
   }
 
-  input.addEventListener('input', function () {
+  input.addEventListener('focus', function () {
+    clearPresets();
     update();
-    updatePresetActive();
+  });
+
+  input.addEventListener('input', function () {
+    clearPresets();
+    update();
   });
 
   presetCards.forEach(function (card) {
@@ -53,6 +63,6 @@
     }
   });
 
-  update();
-  updatePresetActive();
+  var initialPreset = document.querySelector('input[name="credits-preset"]:checked');
+  updatePayLabel(initialPreset ? initialPreset.value : input.value);
 })();
