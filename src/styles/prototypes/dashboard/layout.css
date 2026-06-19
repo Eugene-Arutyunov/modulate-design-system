@@ -236,6 +236,10 @@ table.org-details {
 }
 
 [data-org-edit-form] {
+  --dashboard-inline-edit-control-block-size: calc(
+    1lh + 0.6rem + (2 * var(--m__border-width-s))
+  );
+
   display: none;
   gap: 0.35rem;
   align-items: center;
@@ -244,6 +248,17 @@ table.org-details {
   & .m__textfield {
     margin: 0;
     flex: 1;
+  }
+
+  & .m__textfield input {
+    padding: var(--m__padding-input-s);
+    min-block-size: var(--dashboard-inline-edit-control-block-size);
+  }
+
+  & :is(.m__button-primary, .m__button-secondary-outline) {
+    align-items: center;
+    line-height: var(--m__line-height-base);
+    min-block-size: var(--dashboard-inline-edit-control-block-size);
   }
 }
 
@@ -299,6 +314,10 @@ table.config-details {
 }
 
 .billing-credit-code {
+  --billing-form-control-block-size: calc(
+    1lh + 0.6rem + (2 * var(--m__border-width-s))
+  );
+
   display: flex;
   flex-direction: column;
   font-size: var(--m__font-size-s);
@@ -322,16 +341,26 @@ table.config-details {
       margin: 0;
     }
 
-    & .m__button-primary {
+    & .m__textfield input {
+      background-color: transparent;
+      padding: var(--m__padding-input-s);
+      min-block-size: var(--billing-form-control-block-size);
+
+      &:focus-visible {
+        background-color: transparent;
+      }
+    }
+
+    & .m__button-secondary {
       align-items: center;
       line-height: var(--m__line-height-base);
-      min-block-size: calc(1lh + 1rem + (2 * var(--m__border-width-s)));
+      min-block-size: var(--billing-form-control-block-size);
     }
 
     @media (width < 480px) {
       grid-template-columns: 1fr;
 
-      & .m__button-primary {
+      & .m__button-secondary {
         width: 100%;
       }
     }
@@ -342,7 +371,7 @@ table.config-details {
   --billing-purchase-control-font-size: var(--m__font-size-s);
   --billing-purchase-control-block-size: calc(
     var(--billing-purchase-control-font-size) * var(--m__line-height-base) +
-    1rem +
+    0.6rem +
     (2 * var(--m__border-width-s))
   );
 
@@ -375,7 +404,7 @@ table.config-details {
       gap: 0.35rem;
       block-size: var(--billing-purchase-control-block-size);
       min-block-size: 0;
-      padding: var(--m__padding-input-m);
+      padding: var(--m__padding-input-s);
       overflow: hidden;
       line-height: var(--m__line-height-base);
     }
@@ -401,8 +430,14 @@ table.config-details {
   }
 
   & .m__textfield input {
+    background-color: transparent;
     font: inherit;
+    padding: var(--m__padding-input-s);
     min-block-size: var(--billing-purchase-control-block-size);
+
+    &:focus-visible {
+      background-color: transparent;
+    }
   }
 
   & .billing-pay-btn {
