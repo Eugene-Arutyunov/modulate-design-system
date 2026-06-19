@@ -339,6 +339,8 @@ table.config-details {
 }
 
 .billing-purchase {
+  --billing-purchase-control-block-size: calc(1lh + 1rem + (2 * var(--m__border-width-s)));
+
   margin-bottom: 0.5rem;
   font-size: var(--m__font-size-s);
 
@@ -346,52 +348,76 @@ table.config-details {
     margin-top: 0.75rem;
   }
 
+  & .billing-purchase__controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(8rem, 12rem) max-content;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
   & .billing-purchase__presets {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.375rem;
-    margin-bottom: 0.75rem;
+    margin: 0;
 
-    @media (width < 720px) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    & .m__radio-card {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: flex-start;
+      gap: 0.35rem;
+      min-block-size: var(--billing-purchase-control-block-size);
+      padding: var(--m__padding-input-m);
     }
 
-    @media (width < 420px) {
-      grid-template-columns: 1fr;
+    & .m__radio-card__value {
+      font-size: var(--m__font-size-m);
+      line-height: var(--m__line-height-base);
+    }
+
+    & .m__radio-card__caption {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
-  & .billing-purchase__row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content;
+  & .m__textfield {
+    min-width: 0;
+    margin: 0;
+  }
+
+  & .m__textfield input {
+    min-block-size: var(--billing-purchase-control-block-size);
+  }
+
+  & .billing-pay-btn {
     align-items: center;
-    gap: 0.5rem;
+    line-height: var(--m__line-height-base);
+    min-width: 7.5rem;
+    min-block-size: var(--billing-purchase-control-block-size);
+  }
 
-    &[hidden] {
-      display: none;
+  @media (width < 900px) {
+    & .billing-purchase__controls {
+      grid-template-columns: minmax(0, 1fr) max-content;
     }
 
-    & .m__textfield {
-      margin-bottom: 0;
-      flex: 1;
-      min-width: 0;
-    }
-
-    @media (width < 480px) {
-      grid-template-columns: 1fr;
-
-      & .billing-pay-btn {
-        width: 100%;
-      }
+    & .billing-purchase__presets {
+      grid-column: 1 / -1;
     }
   }
-}
 
-.billing-pay-btn {
-  align-items: center;
-  line-height: var(--m__line-height-base);
-  min-width: 7.5rem;
-  min-block-size: calc(1lh + 1rem + (2 * var(--m__border-width-s)));
+  @media (width < 520px) {
+    & .billing-purchase__controls,
+    & .billing-purchase__presets {
+      grid-template-columns: 1fr;
+    }
+
+    & .billing-pay-btn {
+      width: 100%;
+    }
+  }
 }
 
 .dashboard-back-link {

@@ -1,10 +1,9 @@
 (function () {
   var input = document.querySelector('[data-credits-input]');
   var payLabelEl = document.querySelector('[data-credits-pay-label]');
-  var customRow = document.querySelector('[data-credits-custom-row]');
-  var otherButton = document.querySelector('[data-credits-other]');
+  var presetCards = document.querySelectorAll('[data-credits-preset]');
 
-  if (!input || !payLabelEl || !customRow || !otherButton) return;
+  if (!input || !payLabelEl || !presetCards.length) return;
 
   function formatUSD(credits) {
     return '$' + (credits * 0.01).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -15,33 +14,45 @@
     payLabelEl.textContent = formatUSD(val);
   }
 
-  function setCustomRowOpen(isOpen) {
-    customRow.hidden = !isOpen;
-    otherButton.setAttribute('aria-expanded', String(isOpen));
-    otherButton.setAttribute('aria-pressed', String(isOpen));
+  function updatePresetActive() {
+    presetCards.forEach(function (card) {
+      var radio = card.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.checked = radio.value === input.value;
+      }
+    });
+  }
 
-    if (isOpen) {
-      input.focus();
-      input.select();
+  function selectPreset(card) {
+    if (!card) return;
+    var radio = card.querySelector('input[type="radio"]');
+    if (radio) {
+      input.value = radio.value;
+      radio.checked = true;
+      update();
     }
   }
 
-  var presetCards = document.querySelectorAll('[data-credits-preset]');
-
-  presetCards.forEach(function (card) {
-    card.addEventListener('click', function () {
-      setCustomRowOpen(false);
-    });
-  });
-
-  otherButton.addEventListener('click', function () {
-    setCustomRowOpen(true);
-  });
-
   input.addEventListener('input', function () {
     update();
+    updatePresetActive();
+  });
+
+  presetCards.forEach(function (card) {
+    var radio = card.querySelector('input[type="radio"]');
+
+    card.addEventListener('click', function () {
+      selectPreset(card);
+    });
+
+    if (radio) {
+      radio.addEventListener('change', function () {
+        if (!radio.checked) return;
+        selectPreset(card);
+      });
+    }
   });
 
   update();
-  setCustomRowOpen(false);
+  updatePresetActive();
 })();
