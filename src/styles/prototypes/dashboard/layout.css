@@ -339,7 +339,12 @@ table.config-details {
 }
 
 .billing-purchase {
-  --billing-purchase-control-block-size: calc(1lh + 1rem + (2 * var(--m__border-width-s)));
+  --billing-purchase-control-font-size: var(--m__font-size-m);
+  --billing-purchase-control-block-size: calc(
+    var(--billing-purchase-control-font-size) * var(--m__line-height-base) +
+    1rem +
+    (2 * var(--m__border-width-s))
+  );
 
   margin-bottom: 0.5rem;
   font-size: var(--m__font-size-s);
@@ -353,6 +358,7 @@ table.config-details {
     grid-template-columns: minmax(0, 1fr) minmax(8rem, 12rem) max-content;
     align-items: stretch;
     gap: 0.5rem;
+    font-size: var(--billing-purchase-control-font-size);
   }
 
   & .billing-purchase__presets {
@@ -363,19 +369,25 @@ table.config-details {
 
     & .m__radio-card {
       flex-direction: row;
-      align-items: baseline;
+      align-items: center;
       justify-content: flex-start;
       gap: 0.35rem;
-      min-block-size: var(--billing-purchase-control-block-size);
+      block-size: var(--billing-purchase-control-block-size);
+      min-block-size: 0;
       padding: var(--m__padding-input-m);
+      overflow: hidden;
+      line-height: var(--m__line-height-base);
     }
 
     & .m__radio-card__value {
-      font-size: var(--m__font-size-m);
+      font-size: inherit;
+      font-weight: var(--m__font-weight-regular);
       line-height: var(--m__line-height-base);
     }
 
     & .m__radio-card__caption {
+      font-size: inherit;
+      line-height: var(--m__line-height-base);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -388,6 +400,7 @@ table.config-details {
   }
 
   & .m__textfield input {
+    font: inherit;
     min-block-size: var(--billing-purchase-control-block-size);
   }
 
