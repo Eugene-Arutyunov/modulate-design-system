@@ -1,6 +1,10 @@
 (function () {
   var input = document.querySelector('[data-credits-input]');
   var payLabelEl = document.querySelector('[data-credits-pay-label]');
+  var customRow = document.querySelector('[data-credits-custom-row]');
+  var otherButton = document.querySelector('[data-credits-other]');
+
+  if (!input || !payLabelEl || !customRow || !otherButton) return;
 
   function formatUSD(credits) {
     return '$' + (credits * 0.01).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -11,44 +15,33 @@
     payLabelEl.textContent = formatUSD(val);
   }
 
+  function setCustomRowOpen(isOpen) {
+    customRow.hidden = !isOpen;
+    otherButton.setAttribute('aria-expanded', String(isOpen));
+    otherButton.setAttribute('aria-pressed', String(isOpen));
+
+    if (isOpen) {
+      input.focus();
+      input.select();
+    }
+  }
+
   var presetCards = document.querySelectorAll('[data-credits-preset]');
 
-  function updatePresetActive() {
-    presetCards.forEach(function (card) {
-      var radio = card.querySelector('input[type="radio"]');
-      if (radio) {
-        radio.checked = card.dataset.creditsPreset === input.value;
-      }
+  presetCards.forEach(function (card) {
+    card.addEventListener('click', function () {
+      setCustomRowOpen(false);
     });
-  }
+  });
+
+  otherButton.addEventListener('click', function () {
+    setCustomRowOpen(true);
+  });
 
   input.addEventListener('input', function () {
     update();
-    updatePresetActive();
-  });
-
-  function selectPreset(card) {
-    if (!card) return;
-    input.value = card.dataset.creditsPreset;
-    update();
-    updatePresetActive();
-  }
-
-  presetCards.forEach(function (card) {
-    var radio = card.querySelector('input[type="radio"]');
-
-    card.addEventListener('click', function () {
-      selectPreset(card);
-    });
-
-    if (radio) {
-      radio.addEventListener('change', function () {
-        if (!radio.checked) return;
-        selectPreset(card);
-      });
-    }
   });
 
   update();
-  updatePresetActive();
+  setCustomRowOpen(false);
 })();
