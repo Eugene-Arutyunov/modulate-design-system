@@ -24,6 +24,46 @@ permalink: /dashboard/billing/
 
       <div class="m__space XS"></div>
 
+      <div class="m__widget billing-purchase">
+        <h2>Purchase Credits</h2>
+        <div class="billing-purchase__body">
+          <div class="billing-purchase__controls">
+            <fieldset class="billing-purchase__presets m__radio-card-group" aria-label="Credit presets">
+              <label class="m__radio-card" data-credits-preset="100">
+                <input type="radio" name="credits-preset" value="100" />
+                <span class="m__radio-card__value">100</span>
+                <span class="m__radio-card__caption">$1.00</span>
+              </label>
+              <label class="m__radio-card" data-credits-preset="1000">
+                <input type="radio" name="credits-preset" value="1000" checked />
+                <span class="m__radio-card__value">1,000</span>
+                <span class="m__radio-card__caption">$10.00</span>
+              </label>
+              <label class="m__radio-card" data-credits-preset="10000">
+                <input type="radio" name="credits-preset" value="10000" />
+                <span class="m__radio-card__value">10,000</span>
+                <span class="m__radio-card__caption">$100.00</span>
+              </label>
+            </fieldset>
+            <div class="m__textfield M m__textfield--no-spin">
+              <input
+                type="text"
+                id="credits-amount"
+                inputmode="numeric"
+                pattern="[0-9,]*"
+                data-credits-max="1000000"
+                placeholder="Custom amount"
+                aria-label="Credit amount"
+                data-credits-input
+              />
+            </div>
+            <button type="button" class="m__button-primary M billing-pay-btn" data-credits-pay>Pay <span data-credits-pay-label>$10.00</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="m__space XS"></div>
+
       <div class="dashboard-stats">
         <div class="m__widget">
           <h2>Credit Balance</h2>
@@ -49,47 +89,12 @@ permalink: /dashboard/billing/
             <div class="m__textfield M">
               <input type="text" placeholder="Enter credit code" data-apply-code-input />
             </div>
-            <button type="button" class="m__button-primary S" data-apply-code>Apply Code</button>
+            <button type="button" class="m__button-secondary M" data-apply-code>Apply Code</button>
           </div>
         </div>
       </div>
 
       <div class="m__space XS"></div>
-
-      <div class="m__widget billing-purchase">
-        <h2>Purchase Credits</h2>
-        <div class="billing-purchase__body">
-          <fieldset class="billing-purchase__presets m__radio-card-group" aria-label="Credit amount">
-            <label class="m__radio-card" data-credits-preset="100">
-              <input type="radio" name="credits-preset" value="100" />
-              <span class="m__radio-card__value">100</span>
-              <span class="m__radio-card__caption">Credits · $1.00</span>
-            </label>
-            <label class="m__radio-card" data-credits-preset="1000">
-              <input type="radio" name="credits-preset" value="1000" checked />
-              <span class="m__radio-card__value">1,000</span>
-              <span class="m__radio-card__caption">Credits · $10.00</span>
-            </label>
-            <label class="m__radio-card" data-credits-preset="10000">
-              <input type="radio" name="credits-preset" value="10000" />
-              <span class="m__radio-card__value">10,000</span>
-              <span class="m__radio-card__caption">Credits · $100.00</span>
-            </label>
-          </fieldset>
-          <div class="billing-purchase__row">
-            <div class="m__textfield M m__textfield--no-spin">
-              <input
-                type="number"
-                id="credits-amount"
-                min="100"
-                value="1000"
-                data-credits-input
-              />
-            </div>
-            <button type="button" class="m__button-primary S billing-pay-btn" data-credits-pay>Pay <span data-credits-pay-label>$10.00</span></button>
-          </div>
-        </div>
-      </div>
       <div class="dashboard-section">
         {% set rows = [ { date: '6 Mar 2026, 19:01', type: 'new_account_grant',
         credits: '+1,000', description: 'New account credits' }, { date: '1 Apr
