@@ -7,9 +7,25 @@ permalink: /conversations/
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
-  <main class="dashboard-content">
-    <h1 class="dashboard-page-title">Conversations</h1>
-  </main>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <h1 class="dashboard-page-title">Conversations</h1>
+      <div class="dashboard-section">
+        <p>
+          Review submitted conversations, track processing status, and open
+          completed analysis reports.
+        </p>
+      </div>
+
+      <div class="m__space XS"></div>
+
+      {% include 'service/table-conversations.html' %}
+    </main>
+  </div>
   <div class="m__space XL"></div>
 </div>
 

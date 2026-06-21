@@ -1,0 +1,211 @@
+{% set conversationRows = [
+  {
+    id: 'conv_7839f2',
+    title: 'Refund escalation',
+    href: '/conversations/conv_7839f2/',
+    type: 'Customer Support',
+    status: 'completed',
+    submitted: '15 Apr 2026, 09:12',
+    date: '2026-04-15',
+    duration: '12m 48s',
+    detectionPackage: 'Consumer Fraud Detection',
+    flags: '2',
+    credits: '0.184'
+  },
+  {
+    id: 'conv_7812b8',
+    title: 'Payment failure callback',
+    type: 'Customer Support',
+    status: 'flagged',
+    submitted: '15 Apr 2026, 08:36',
+    date: '2026-04-15',
+    duration: '8m 04s',
+    detectionPackage: 'Institutional Fraud Detection',
+    flags: '5',
+    credits: '0.112'
+  },
+  {
+    id: 'conv_7740a1',
+    title: 'Renewal discovery',
+    type: 'Sales',
+    status: 'completed',
+    submitted: '14 Apr 2026, 16:22',
+    date: '2026-04-14',
+    duration: '24m 11s',
+    detectionPackage: 'Sales Effectiveness',
+    flags: '0',
+    credits: '0.344'
+  },
+  {
+    id: 'conv_7691d5',
+    title: 'Voice chat report',
+    type: 'Trust & Safety',
+    status: 'processing',
+    submitted: '14 Apr 2026, 11:08',
+    date: '2026-04-14',
+    duration: '17m 32s',
+    detectionPackage: 'Moderation',
+    flags: 'N/A',
+    credits: 'N/A'
+  },
+  {
+    id: 'conv_7622f4',
+    title: 'Password reset help',
+    type: 'Enterprise IT Support',
+    status: 'failed',
+    submitted: '13 Apr 2026, 17:30',
+    date: '2026-04-13',
+    duration: '1m 09s',
+    detectionPackage: 'Institutional Fraud Detection',
+    flags: 'N/A',
+    credits: '0'
+  },
+  {
+    id: 'conv_7554f9',
+    title: 'Upsell walkthrough',
+    type: 'Sales',
+    status: 'completed',
+    submitted: '12 Apr 2026, 15:17',
+    date: '2026-04-12',
+    duration: '31m 44s',
+    detectionPackage: 'Sales Effectiveness',
+    flags: '1',
+    credits: '0.429'
+  },
+  {
+    id: 'conv_7490c6',
+    title: 'Harassment appeal',
+    type: 'Trust & Safety',
+    status: 'flagged',
+    submitted: '11 Apr 2026, 19:41',
+    date: '2026-04-11',
+    duration: '6m 53s',
+    detectionPackage: 'Moderation',
+    flags: '4',
+    credits: '0.097'
+  },
+  {
+    id: 'conv_7421e3',
+    title: 'Order status check',
+    type: 'Customer Support',
+    status: 'completed',
+    submitted: '10 Apr 2026, 10:24',
+    date: '2026-04-10',
+    duration: '5m 18s',
+    detectionPackage: 'Consumer Fraud Detection',
+    flags: '0',
+    credits: '0.074'
+  }
+] %}
+
+<div class="m__widget conversations-table" data-conversations-table>
+  <div class="m__widget-header">
+    <div class="m__table-filters conversations-table__filters">
+      <label class="m__searchbar" for="conversations-search">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <use href="#search"></use>
+        </svg>
+        <input
+          type="search"
+          id="conversations-search"
+          placeholder="Search"
+          data-conversations-search />
+      </label>
+    </div>
+  </div>
+
+  <div class="m__table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Conversation</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Submitted</th>
+          <th>Duration</th>
+          <th>Detection Package</th>
+          <th>Flags</th>
+          <th>Credits</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in conversationRows %}
+        <tr
+          data-conversation-row
+          data-status="{{ row.status }}"
+          data-type="{{ row.type }}"
+          data-date="{{ row.date }}"
+          data-search="{{ row.id }} {{ row.title }} {{ row.type }} {{ row.status }} {{ row.detectionPackage }}">
+          <td class="conversations-table__conversation">
+            {% if row.href %}
+            <a href="{{ row.href }}" class="conversations-table__link">
+              <span class="conversations-table__title">{{ row.title }}</span>
+              <code>{{ row.id }}</code>
+            </a>
+            {% else %}
+            <span class="conversations-table__title">{{ row.title }}</span>
+            <code>{{ row.id }}</code>
+            {% endif %}
+          </td>
+          <td>{{ row.type }}</td>
+          <td>
+            {% if row.status == 'completed' %}
+            <span class="m__tag m__tag--success">Completed</span>
+            {% elif row.status == 'flagged' %}
+            <span class="m__tag m__tag--error">Flagged</span>
+            {% elif row.status == 'processing' %}
+            <span class="m__tag m__tag--muted">Processing</span>
+            {% elif row.status == 'failed' %}
+            <span class="m__tag m__tag--error">Failed</span>
+            {% else %}
+            <span class="m__tag-flat">{{ row.status }}</span>
+            {% endif %}
+          </td>
+          <td>{{ row.submitted }}</td>
+          <td>{{ row.duration }}</td>
+          <td>{{ row.detectionPackage }}</td>
+          <td {% if row.flags == '0' or row.flags == 'N/A' %}class="muted"{% endif %}>{{ row.flags }}</td>
+          <td {% if row.credits == '0' or row.credits == 'N/A' %}class="muted"{% endif %}>{{ row.credits }}</td>
+        </tr>
+        {% endfor %}
+        <tr data-conversations-empty hidden>
+          <td colspan="8">
+            <div class="m__table-empty">
+              <p>No conversations match this search.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector("[data-conversations-table]");
+    if (!root) return;
+
+    var searchInput = root.querySelector("[data-conversations-search]");
+    var rows = Array.from(root.querySelectorAll("[data-conversation-row]"));
+    var emptyRow = root.querySelector("[data-conversations-empty]");
+
+    function applyFilters() {
+      var query = searchInput.value.trim().toLowerCase();
+      var visibleCount = 0;
+
+      rows.forEach(function (row) {
+        var matchesSearch = !query || row.dataset.search.toLowerCase().includes(query);
+
+        row.hidden = !matchesSearch;
+        if (matchesSearch) visibleCount += 1;
+      });
+
+      emptyRow.hidden = visibleCount !== 0;
+    }
+
+    searchInput.addEventListener("input", applyFilters);
+    searchInput.addEventListener("change", applyFilters);
+
+    applyFilters();
+  })();
+</script>
