@@ -1,7 +1,6 @@
 ---
 pageTitle: Conversations
 permalink: /conversations/
-chartJs: true
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
@@ -23,45 +22,6 @@ chartJs: true
       </div>
 
       <div class="m__space XS"></div>
-
-      <div class="conversations-overview">
-        <div class="m__widget conversations-analytics-widget">
-          <h2>Audio Inputs</h2>
-          <p class="m__widget__value">8</p>
-          <div class="m__widget__meta-list">
-            <p class="m__widget__meta-item">
-              <span class="m__widget__meta-label">Detected Clips</span>
-              <strong class="m__widget__meta-value">65</strong>
-            </p>
-            <p class="m__widget__meta-item">
-              <span class="m__widget__meta-label">Model Reports</span>
-              <strong class="m__widget__meta-value">21</strong>
-            </p>
-            <p class="m__widget__meta-item">
-              <span class="m__widget__meta-label">Total Duration</span>
-              <strong class="m__widget__meta-value">1:47:00</strong>
-            </p>
-          </div>
-        </div>
-
-        <div class="m__widget conversations-chart-widget" data-component="conversation-volume-over-time">
-          <h2>Audio Input Volume Over Time</h2>
-          <fieldset class="m__segmented-control-secondary" data-chart="conversation-volume">
-            <label
-              ><input type="radio" name="conversation-volume-period" value="7d" checked />Last 7 days</label
-            >
-            <label
-              ><input type="radio" name="conversation-volume-period" value="30d" />30
-              days</label
-            >
-          </fieldset>
-          <div class="chart-container">
-            <canvas id="conversation-volume-chart"></canvas>
-            <p class="chart-empty" hidden>No conversation data for this period.</p>
-          </div>
-          <p class="chart-status-bar"></p>
-        </div>
-      </div>
 
       {% include 'service/table-conversations.html' %}
     </main>

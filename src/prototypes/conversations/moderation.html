@@ -1,0 +1,72 @@
+---
+pageTitle: Moderation
+permalink: /conversations/moderation/
+chartJs: true
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <h1 class="dashboard-page-title">Moderation</h1>
+      <div class="dashboard-section">
+        <p>
+          Review audio inputs that need moderation before reports are finalized.
+        </p>
+      </div>
+
+      <div class="m__space XS"></div>
+
+      <div class="conversations-overview">
+        <div class="m__widget conversations-analytics-widget">
+          <h2>Audio Inputs</h2>
+          <p class="m__widget__value">1</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Detected Clips</span>
+              <strong class="m__widget__meta-value">11</strong>
+            </p>
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Model Reports</span>
+              <strong class="m__widget__meta-value">3</strong>
+            </p>
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Total Duration</span>
+              <strong class="m__widget__meta-value">6:53</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="m__widget conversations-chart-widget" data-component="conversation-volume-over-time">
+          <h2>Moderation Volume Over Time</h2>
+          <fieldset class="m__segmented-control-secondary" data-chart="conversation-volume">
+            <label
+              ><input type="radio" name="conversation-volume-period" value="7d" checked />Last 7 days</label
+            >
+            <label
+              ><input type="radio" name="conversation-volume-period" value="30d" />30
+              days</label
+            >
+          </fieldset>
+          <div class="chart-container">
+            <canvas id="conversation-volume-chart"></canvas>
+            <p class="chart-empty" hidden>No moderation data for this period.</p>
+          </div>
+          <p class="chart-status-bar"></p>
+        </div>
+      </div>
+
+      {% set conversationStatusFilter = 'moderation' %}
+      {% include 'service/table-conversations.html' %}
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

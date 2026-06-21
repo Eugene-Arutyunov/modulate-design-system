@@ -66,7 +66,7 @@
     submitted: '11 Apr 2026, 19:41',
     date: '2026-04-11',
     duration: '6:53',
-    status: 'complete',
+    status: 'moderation',
     detectedClips: 11,
     reports: ['Velma', 'Deepfake', 'Language']
   },
@@ -81,6 +81,8 @@
     reports: ['Velma']
   }
 ] %}
+
+{% set conversationStatusFilter = conversationStatusFilter if conversationStatusFilter else '' %}
 
 <div class="m__widget conversations-table" data-conversations-table>
   <div class="m__widget-header">
@@ -105,13 +107,13 @@
         <tr>
           <th>Audio input</th>
           <th>Status</th>
-          <th>Reports</th>
-          <th>Submitted</th>
+          <th>Analysis</th>
           <th class="m__col-actions"></th>
         </tr>
       </thead>
       <tbody>
         {% for row in conversationRows %}
+        {% if not conversationStatusFilter or row.status == conversationStatusFilter %}
         <tr
           data-conversation-row
           data-date="{{ row.date }}"
@@ -130,7 +132,7 @@
               <div class="conversations-table__audio-text">
                 <span class="conversations-table__title">{{ row.title }}</span>
                 <span class="conversations-table__meta"
-                  >{{ row.duration }} · {{ row.detectedClips }} clips</span
+                  >{{ row.duration }} · {{ row.detectedClips }} clips · {{ row.submitted }}</span
                 >
               </div>
             </div>
@@ -142,6 +144,8 @@
             <span class="m__tag m__tag--muted">Processing</span>
             {% elif row.status == 'failed' %}
             <span class="m__tag m__tag--error">Failed</span>
+            {% elif row.status == 'moderation' %}
+            <span class="m__tag m__tag--warning">Moderation</span>
             {% else %}
             <span class="m__tag-flat">{{ row.status }}</span>
             {% endif %}
@@ -159,17 +163,15 @@
               {% endif %}
               <a
                 href="{{ row.href or '/conversations/conv_7839f2/' }}"
-                class="conversations-table__report">
+                class="conversations-table__report"
+                aria-label="{{ report }} report"
+                data-tooltip="{{ report }}">
                 <svg class="conversations-table__report-icon" viewBox="0 0 32 32" aria-hidden="true">
                   <use href="#{{ reportIcon }}"></use>
                 </svg>
-                <span>{{ report }}</span>
               </a>
               {% endfor %}
             </div>
-          </td>
-          <td class="conversations-table__submitted">
-            {{ row.submitted | replace(', ', ',<br />') | safe }}
           </td>
           <td class="m__col-actions">
             <div class="m__menu-button">
@@ -190,6 +192,7 @@
             </div>
           </td>
         </tr>
+        {% endif %}
         {% endfor %}
       </tbody>
     </table>
