@@ -1125,21 +1125,114 @@ table.config-details {
 }
 
 .conversations-table {
+  & .conversations-table__header {
+    display: grid;
+    grid-template-columns:
+      minmax(14rem, 1fr)
+      max-content
+      minmax(0, 0.55fr)
+      max-content;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  & .conversations-table__filters {
+    grid-column: 2;
+    grid-template-columns: 6.25rem max-content;
+    min-width: 0;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 40%;
+      background-color: var(--m__border);
+    }
+  }
+
+  & .m__datepicker.S.conversations-table__date-range {
+    gap: 0.18rem;
+    min-width: 0;
+  }
+
+  & .m__datepicker.S.conversations-table__date-range input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  & .conversations-table__date-range-value {
+    appearance: none;
+    border: none;
+    background: none;
+    color: var(--m__text);
+    cursor: pointer;
+    flex: 0 0 auto;
+    font: inherit;
+    line-height: 1;
+    padding: 0;
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
+
+    &:is(:hover, :focus-visible) {
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  & .m__datepicker.S.conversations-table__date-range::after {
+    display: none;
+  }
+
+  &
+    .m__datepicker.S.conversations-table__date-range
+    .conversations-table__date-range-separator {
+    flex: 0 0 auto;
+    color: var(--m__text-caption);
+    font-weight: var(--m__font-weight-medium);
+
+    &::after {
+      content: "";
+      margin: 0;
+    }
+  }
+
+  & .conversations-table__actions {
+    grid-column: 4;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: max-content;
+  }
+
   & table {
-    min-width: 44rem;
+    min-width: 52rem;
     table-layout: fixed;
   }
 
   & .conversations-table__col-conversation {
-    width: 52%;
+    width: 37%;
   }
 
   & .conversations-table__col-status {
-    width: 17%;
+    width: 14%;
+  }
+
+  & .conversations-table__col-created {
+    width: 21%;
   }
 
   & .conversations-table__col-analysis {
-    width: 25%;
+    width: 22%;
   }
 
   & .conversations-table__col-actions {
@@ -1151,7 +1244,7 @@ table.config-details {
   }
 
   & .conversations-table__audio {
-    min-width: 22rem;
+    min-width: 16rem;
   }
 
   & .conversations-table__audio-row {
@@ -1248,24 +1341,33 @@ table.config-details {
     min-width: 0;
   }
 
-  & .conversations-table__title {
+  & .conversations-table__audio-link {
     display: block;
     color: inherit;
-    font-weight: var(--m__font-weight-medium);
-    overflow: hidden;
-    text-overflow: ellipsis;
     text-decoration: none;
-    white-space: nowrap;
-
-    &:hover {
-      color: var(--m__text-link-hover);
-    }
 
     &:focus-visible {
       border-radius: 0.18rem;
       outline: 0.06rem solid currentColor;
       outline-offset: 0.12rem;
     }
+
+    &:is(:hover, :focus-visible)
+      :is(.conversations-table__title, .conversations-table__meta) {
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
+    }
+  }
+
+  & .conversations-table__title {
+    display: block;
+    color: inherit;
+    font-weight: var(--m__font-weight-medium);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
+    white-space: nowrap;
   }
 
   & .conversations-table__meta {
@@ -1274,10 +1376,14 @@ table.config-details {
     color: var(--m__text-caption);
     font-size: var(--m__font-size-xs);
     font-variant-numeric: tabular-nums;
+    transition: color var(--m__duration-base)
+      var(--m__easing-base);
   }
 
-  & .conversations-table__duration {
+  & .conversations-table__created {
     color: var(--m__text);
+    font-size: var(--m__font-size-s);
+    white-space: nowrap;
   }
 
   & .conversations-table__status {
@@ -1299,12 +1405,15 @@ table.config-details {
     width: 1.45rem;
     height: 1.45rem;
     color: var(--m__text);
+    filter: grayscale(1) saturate(0);
     text-decoration: none;
-    transition: color var(--m__duration-base)
-      var(--m__easing-base);
+    transition:
+      color var(--m__duration-base) var(--m__easing-base),
+      filter var(--m__duration-base) var(--m__easing-base);
 
-    &:hover {
+    &:is(:hover, :focus-visible) {
       color: var(--m__text-link-hover);
+      filter: none;
       transition-duration: var(--m__duration-instant);
     }
 
@@ -1319,6 +1428,31 @@ table.config-details {
     width: 24px;
     height: 24px;
     flex-shrink: 0;
+  }
+
+  @media (width < 768px) {
+    & .conversations-table__header {
+      grid-template-columns: 1fr;
+    }
+
+    & .conversations-table__filters,
+    & .conversations-table__actions {
+      grid-column: auto;
+    }
+
+    & .conversations-table__actions {
+      justify-content: flex-start;
+      background-image: linear-gradient(
+        to right,
+        transparent var(--m__widget-padding),
+        var(--m__border) var(--m__widget-padding),
+        var(--m__border) calc(100% - var(--m__widget-padding)),
+        transparent calc(100% - var(--m__widget-padding))
+      );
+      background-position: top;
+      background-repeat: no-repeat;
+      background-size: 100% 1px;
+    }
   }
 }
 
@@ -1362,9 +1496,10 @@ table.config-details {
     align-items: center;
     flex-wrap: wrap;
     gap: 0.45rem;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0;
 
     & .dashboard-page-title {
+      line-height: 1;
       margin: 0;
     }
 
@@ -1412,6 +1547,11 @@ table.config-details {
   }
 
   & .conversation-report__output {
+    & .pg-velma-output > p {
+      font-size: 1rem;
+      line-height: var(--m__line-height-base);
+    }
+
     & .pg-results-table-section {
       overflow-x: auto;
     }
