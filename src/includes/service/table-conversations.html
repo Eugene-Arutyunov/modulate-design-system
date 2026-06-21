@@ -3,98 +3,74 @@
     id: 'conv_7839f2',
     title: 'Refund escalation',
     href: '/conversations/conv_7839f2/',
-    type: 'Customer Support',
-    status: 'completed',
     submitted: '15 Apr 2026, 09:12',
     date: '2026-04-15',
     duration: '12m 48s',
-    detectionPackage: 'Consumer Fraud Detection',
-    flags: '2',
-    credits: '0.184'
+    detectedClips: 18,
+    reports: ['Velma', 'Deepfake', 'Language', 'Redaction']
   },
   {
     id: 'conv_7812b8',
     title: 'Payment failure callback',
-    type: 'Customer Support',
-    status: 'flagged',
     submitted: '15 Apr 2026, 08:36',
     date: '2026-04-15',
     duration: '8m 04s',
-    detectionPackage: 'Institutional Fraud Detection',
-    flags: '5',
-    credits: '0.112'
+    detectedClips: 9,
+    reports: ['Velma', 'Deepfake', 'Language']
   },
   {
     id: 'conv_7740a1',
     title: 'Renewal discovery',
-    type: 'Sales',
-    status: 'completed',
     submitted: '14 Apr 2026, 16:22',
     date: '2026-04-14',
     duration: '24m 11s',
-    detectionPackage: 'Sales Effectiveness',
-    flags: '0',
-    credits: '0.344'
+    detectedClips: 6,
+    reports: ['Velma', 'Language']
   },
   {
     id: 'conv_7691d5',
     title: 'Voice chat report',
-    type: 'Trust & Safety',
-    status: 'processing',
     submitted: '14 Apr 2026, 11:08',
     date: '2026-04-14',
     duration: '17m 32s',
-    detectionPackage: 'Moderation',
-    flags: 'N/A',
-    credits: 'N/A'
+    detectedClips: 14,
+    reports: ['Velma', 'Deepfake', 'Language', 'Redaction']
   },
   {
     id: 'conv_7622f4',
     title: 'Password reset help',
-    type: 'Enterprise IT Support',
-    status: 'failed',
     submitted: '13 Apr 2026, 17:30',
     date: '2026-04-13',
     duration: '1m 09s',
-    detectionPackage: 'Institutional Fraud Detection',
-    flags: 'N/A',
-    credits: '0'
+    detectedClips: 2,
+    reports: ['Velma']
   },
   {
     id: 'conv_7554f9',
     title: 'Upsell walkthrough',
-    type: 'Sales',
-    status: 'completed',
     submitted: '12 Apr 2026, 15:17',
     date: '2026-04-12',
     duration: '31m 44s',
-    detectionPackage: 'Sales Effectiveness',
-    flags: '1',
-    credits: '0.429'
+    detectedClips: 5,
+    reports: ['Velma', 'Language']
   },
   {
     id: 'conv_7490c6',
     title: 'Harassment appeal',
-    type: 'Trust & Safety',
-    status: 'flagged',
     submitted: '11 Apr 2026, 19:41',
     date: '2026-04-11',
     duration: '6m 53s',
-    detectionPackage: 'Moderation',
-    flags: '4',
-    credits: '0.097'
+    detectedClips: 11,
+    reports: ['Velma', 'Deepfake', 'Language']
   },
   {
     id: 'conv_7421e3',
     title: 'Order status check',
-    type: 'Customer Support',
-    status: 'completed',
     submitted: '10 Apr 2026, 10:24',
     date: '2026-04-10',
     duration: '5m 18s',
-    detectionPackage: 'Consumer Fraud Detection',
-    flags: '0',
-    credits: '0.074'
+    detectedClips: 0,
+    reports: ['Velma']
   }
 ] %}
 
@@ -112,64 +88,65 @@
           data-conversations-search />
       </label>
     </div>
+    <div class="conversations-table__actions">
+      <button type="button" class="m__button-primary S">New analysis</button>
+    </div>
   </div>
 
   <div class="m__table-wrapper">
     <table>
       <thead>
         <tr>
-          <th>Conversation</th>
-          <th>Type</th>
-          <th>Status</th>
+          <th>Audio input</th>
           <th>Submitted</th>
-          <th>Duration</th>
-          <th>Detection Package</th>
-          <th>Flags</th>
-          <th>Credits</th>
+          <th>Detected clips</th>
+          <th>Reports</th>
         </tr>
       </thead>
       <tbody>
         {% for row in conversationRows %}
         <tr
           data-conversation-row
-          data-status="{{ row.status }}"
-          data-type="{{ row.type }}"
           data-date="{{ row.date }}"
-          data-search="{{ row.id }} {{ row.title }} {{ row.type }} {{ row.status }} {{ row.detectionPackage }}">
-          <td class="conversations-table__conversation">
-            {% if row.href %}
-            <a href="{{ row.href }}" class="conversations-table__link">
-              <span class="conversations-table__title">{{ row.title }}</span>
-              <code>{{ row.id }}</code>
-            </a>
-            {% else %}
-            <span class="conversations-table__title">{{ row.title }}</span>
-            <code>{{ row.id }}</code>
-            {% endif %}
-          </td>
-          <td>{{ row.type }}</td>
-          <td>
-            {% if row.status == 'completed' %}
-            <span class="m__tag m__tag--success">Completed</span>
-            {% elif row.status == 'flagged' %}
-            <span class="m__tag m__tag--error">Flagged</span>
-            {% elif row.status == 'processing' %}
-            <span class="m__tag m__tag--muted">Processing</span>
-            {% elif row.status == 'failed' %}
-            <span class="m__tag m__tag--error">Failed</span>
-            {% else %}
-            <span class="m__tag-flat">{{ row.status }}</span>
-            {% endif %}
+          data-search="{{ row.id }} {{ row.title }} {{ row.submitted }} {{ row.duration }} {{ row.detectedClips }} clips {% for report in row.reports %} {{ report }}{% endfor %}">
+          <td class="conversations-table__audio">
+            <div class="conversations-table__audio-row">
+              <button
+                type="button"
+                class="conversations-table__play"
+                aria-label="Play {{ row.title }}"
+                aria-pressed="false"
+                data-audio-play
+                data-audio-title="{{ row.title }}">
+                <span aria-hidden="true"></span>
+              </button>
+              <div class="conversations-table__audio-text">
+                <span class="conversations-table__title">{{ row.title }}</span>
+                <span class="conversations-table__meta">{{ row.duration }}</span>
+              </div>
+            </div>
           </td>
           <td>{{ row.submitted }}</td>
-          <td>{{ row.duration }}</td>
-          <td>{{ row.detectionPackage }}</td>
-          <td {% if row.flags == '0' or row.flags == 'N/A' %}class="muted"{% endif %}>{{ row.flags }}</td>
-          <td {% if row.credits == '0' or row.credits == 'N/A' %}class="muted"{% endif %}>{{ row.credits }}</td>
+          <td class="conversations-table__num {% if row.detectedClips == 0 %}muted{% endif %}">
+            {{ row.detectedClips }}
+          </td>
+          <td>
+            <div class="m__tag-group conversations-table__reports">
+              {% for report in row.reports %}
+                {% if row.href %}
+                <a href="{{ row.href }}" class="m__tag conversations-table__report">
+                  {{ report }}
+                </a>
+                {% else %}
+                <span class="m__tag conversations-table__report">{{ report }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </td>
         </tr>
         {% endfor %}
         <tr data-conversations-empty hidden>
-          <td colspan="8">
+          <td colspan="4">
             <div class="m__table-empty">
               <p>No conversations match this search.</p>
             </div>
@@ -188,6 +165,17 @@
     var searchInput = root.querySelector("[data-conversations-search]");
     var rows = Array.from(root.querySelectorAll("[data-conversation-row]"));
     var emptyRow = root.querySelector("[data-conversations-empty]");
+    var playButtons = Array.from(root.querySelectorAll("[data-audio-play]"));
+
+    function setPlayState(button, isPlaying) {
+      var title = button.dataset.audioTitle || "audio";
+      button.classList.toggle("is-playing", isPlaying);
+      button.setAttribute("aria-pressed", isPlaying ? "true" : "false");
+      button.setAttribute(
+        "aria-label",
+        (isPlaying ? "Pause " : "Play ") + title
+      );
+    }
 
     function applyFilters() {
       var query = searchInput.value.trim().toLowerCase();
@@ -202,6 +190,16 @@
 
       emptyRow.hidden = visibleCount !== 0;
     }
+
+    playButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var shouldPlay = !button.classList.contains("is-playing");
+        playButtons.forEach(function (otherButton) {
+          setPlayState(otherButton, false);
+        });
+        setPlayState(button, shouldPlay);
+      });
+    });
 
     searchInput.addEventListener("input", applyFilters);
     searchInput.addEventListener("change", applyFilters);

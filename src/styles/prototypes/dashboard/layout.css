@@ -140,7 +140,9 @@ html:has(.dashboard-layout) {
 }
 
 [data-component="credit-balance-over-time"] .chart-container,
-#credit-balance-chart {
+[data-component="conversation-volume-over-time"] .chart-container,
+#credit-balance-chart,
+#conversation-volume-chart {
   height: 8rem !important;
   max-height: 8rem !important;
 }
@@ -1097,7 +1099,30 @@ table.config-details {
   display: none;
 }
 
+.conversations-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.5rem;
+
+  @media (width < 800px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.conversations-analytics-widget,
+.conversations-chart-widget {
+  min-width: 0;
+  min-height: 14rem;
+}
+
 .conversations-table {
+  & .conversations-table__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding-right: var(--m__widget-padding);
+  }
+
   & .conversations-table__filters {
     grid-template-columns: minmax(13rem, 24rem);
 
@@ -1110,28 +1135,52 @@ table.config-details {
     }
   }
 
-  & .conversations-table__conversation {
-    min-width: 10rem;
-
-    & code {
-      display: block;
-      width: fit-content;
-      margin-top: 0.2rem;
-      color: var(--m__text-caption);
-      font-size: var(--m__font-size-xs);
-    }
+  & table {
+    min-width: 52rem;
   }
 
-  & .conversations-table__link {
-    display: inline-block;
-    max-width: 100%;
-    color: inherit;
-    text-decoration: none;
+  & .conversations-table__audio {
+    min-width: 16rem;
+  }
+
+  & .conversations-table__audio-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+  }
+
+  & .conversations-table__play {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.65rem;
+    height: 1.65rem;
+    flex: 0 0 1.65rem;
+    border: var(--m__border-width-s) solid
+      color-mix(in srgb, currentColor 25%, transparent);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--m__text);
+    cursor: pointer;
     transition: color var(--m__duration-base)
-      var(--m__easing-base);
+        var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base),
+      background-color var(--m__duration-base) var(--m__easing-base);
+
+    & span {
+      width: 0;
+      height: 0;
+      margin-left: 0.12rem;
+      border-top: 0.33rem solid transparent;
+      border-bottom: 0.33rem solid transparent;
+      border-left: 0.48rem solid currentColor;
+    }
 
     &:hover {
       color: var(--m__text-link-hover);
+      border-color: color-mix(in srgb, currentColor 50%, transparent);
       transition-duration: var(--m__duration-instant);
     }
 
@@ -1139,11 +1188,88 @@ table.config-details {
       outline: var(--m__border-width-m) solid currentColor;
       outline-offset: 0.2rem;
     }
+
+    &.is-playing {
+      color: var(--m__text-link);
+      background-color: color-mix(
+        in srgb,
+        currentColor 12%,
+        transparent
+      );
+
+      & span {
+        width: 0.5rem;
+        height: 0.66rem;
+        margin-left: 0;
+        border-top: 0;
+        border-bottom: 0;
+        border-left: 0.17rem solid currentColor;
+        border-right: 0.17rem solid currentColor;
+      }
+    }
+  }
+
+  & .conversations-table__audio-text {
+    min-width: 0;
   }
 
   & .conversations-table__title {
     display: block;
     font-weight: var(--m__font-weight-medium);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & .conversations-table__meta {
+    display: block;
+    margin-top: 0.15rem;
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-xs);
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .conversations-table__num {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .conversations-table__reports {
+    min-width: 12rem;
+    gap: 0.3rem;
+  }
+
+  & .conversations-table__report {
+    text-decoration: none;
+    transition: color var(--m__duration-base)
+        var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base);
+
+    &:is(a):hover {
+      color: var(--m__text-link-hover);
+      border-color: color-mix(in srgb, currentColor 50%, transparent);
+      transition-duration: var(--m__duration-instant);
+    }
+  }
+}
+
+@media (width < 768px) {
+  .conversations-table {
+    & .m__widget-header {
+      flex-wrap: wrap;
+      padding-bottom: 0.75rem;
+    }
+
+    & .conversations-table__actions {
+      width: 100%;
+      padding: 0 var(--m__widget-padding);
+      box-sizing: border-box;
+
+      & > * {
+        flex: 1;
+        justify-content: center;
+      }
+    }
   }
 }
 
