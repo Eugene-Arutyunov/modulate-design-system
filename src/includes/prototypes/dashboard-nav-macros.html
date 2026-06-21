@@ -14,14 +14,14 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   href="/pricing/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/pricing/') }}"
   >Pricing</a
->{% endif %} {% if not isDashboard %} {% if currentUrl == '/playground/' %}<span
+>{% endif %} {% if currentUrl == '/playground/' %}<span
   class="prototype-header__link active"
   >Playground</span
 >{% else %}<a
   href="/playground/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/playground/') }}"
   >Playground</a
->{% endif %} {% if currentUrl == '/conversations/' %}<span
+>{% endif %} {% if not isDashboard %} {% if currentUrl == '/conversations/' %}<span
   class="prototype-header__link active"
   >Conversations</span
 >{% else %}<a
@@ -78,14 +78,12 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   role="menuitem"
   >Pricing</a
 >
-{% if not isDashboard %}
 <a
   href="/playground/"
   class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/playground/') }}"
   role="menuitem"
   >Playground</a
 >
-{% endif %}
 <a
   href="/dashboard/overview/"
   class="prototype-header__popover-link {{ 'active' if isDashboard }}"
@@ -132,9 +130,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
     <use href="#transcript"></use>
   </svg>
-  <span>Conversation</span></a
+  <span>Conversations</span></a
 >
-<div class="m__nav-menu-heading">INVESTIGATE</div>
 <a
   href="/conversations/moderation/"
   class="m__nav-menu-item {{ 'active' if pageTitle == 'Moderation' }}"
@@ -270,9 +267,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
     aria-hidden="true">
     <use href="#transcript"></use>
   </svg>
-  <span>Conversation</span></a
+  <span>Conversations</span></a
 >
-<div class="m__nav-menu-heading">INVESTIGATE</div>
 <a
   href="/conversations/moderation/"
   class="prototype-header__popover-link {{ 'active' if pageTitle == 'Moderation' }}"

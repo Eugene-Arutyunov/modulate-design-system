@@ -1,8 +1,8 @@
 {% set conversationRows = [
   {
-    id: 'conv_7839f2',
+    id: '7839f2',
     title: 'Refund escalation',
-    href: '/conversations/conv_7839f2/',
+    href: '/conversations/7839f2/',
     submitted: '15 Apr 2026, 09:12',
     date: '2026-04-15',
     duration: '12:48',
@@ -103,9 +103,15 @@
 
   <div class="m__table-wrapper">
     <table>
+      <colgroup>
+        <col class="conversations-table__col-conversation" />
+        <col class="conversations-table__col-status" />
+        <col class="conversations-table__col-analysis" />
+        <col class="conversations-table__col-actions" />
+      </colgroup>
       <thead>
         <tr>
-          <th>Audio input</th>
+          <th>Conversation</th>
           <th>Status</th>
           <th>Analysis</th>
           <th class="m__col-actions"></th>
@@ -130,10 +136,15 @@
                 <span aria-hidden="true"></span>
               </button>
               <div class="conversations-table__audio-text">
-                <span class="conversations-table__title">{{ row.title }}</span>
-                <span class="conversations-table__meta"
-                  >{{ row.duration }} · {{ row.detectedClips }} clips · {{ row.submitted }}</span
+                <a
+                  href="{{ row.href or '/conversations/7839f2/' }}"
+                  class="conversations-table__title"
+                  >{{ row.title }}</a
                 >
+                <span class="conversations-table__meta">
+                  <span class="conversations-table__duration">{{ row.duration }}</span>
+                  · {{ row.detectedClips }} clips · {{ row.submitted }}
+                </span>
               </div>
             </div>
           </td>
@@ -162,7 +173,7 @@
               {% set reportIcon = 'redaction' %}
               {% endif %}
               <a
-                href="{{ row.href or '/conversations/conv_7839f2/' }}"
+                href="{{ row.href or '/conversations/7839f2/' }}"
                 class="conversations-table__report"
                 aria-label="{{ report }} report"
                 data-tooltip="{{ report }}">
