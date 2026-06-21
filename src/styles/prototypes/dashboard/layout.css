@@ -1128,17 +1128,19 @@ table.config-details {
   & .conversations-table__header {
     display: grid;
     grid-template-columns:
-      minmax(14rem, 1fr)
-      max-content
-      minmax(0, 0.55fr)
+      minmax(12rem, 1fr)
+      minmax(22rem, 34rem)
       max-content;
     align-items: stretch;
     width: 100%;
   }
 
-  & .conversations-table__filters {
-    grid-column: 2;
-    grid-template-columns: 6.25rem max-content;
+  & .conversations-table__header > .m__searchbar {
+    min-width: 12rem;
+  }
+
+  & .conversations-table__header > .conversations-table__filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     min-width: 0;
     position: relative;
 
@@ -1157,6 +1159,7 @@ table.config-details {
   & .m__datepicker.S.conversations-table__date-range {
     gap: 0.18rem;
     min-width: 0;
+    width: 100%;
   }
 
   & .m__datepicker.S.conversations-table__date-range input {
@@ -1207,8 +1210,7 @@ table.config-details {
     }
   }
 
-  & .conversations-table__actions {
-    grid-column: 4;
+  & .conversations-table__header > .conversations-table__actions {
     align-items: center;
     justify-content: flex-end;
     min-width: max-content;
@@ -1435,9 +1437,8 @@ table.config-details {
       grid-template-columns: 1fr;
     }
 
-    & .conversations-table__filters,
-    & .conversations-table__actions {
-      grid-column: auto;
+    & .conversations-table__header > .conversations-table__filters {
+      grid-template-columns: 1fr;
     }
 
     & .conversations-table__actions {
