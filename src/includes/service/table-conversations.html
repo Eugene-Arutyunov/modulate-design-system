@@ -5,7 +5,8 @@
     href: '/conversations/conv_7839f2/',
     submitted: '15 Apr 2026, 09:12',
     date: '2026-04-15',
-    duration: '12m 48s',
+    duration: '12:48',
+    status: 'complete',
     detectedClips: 18,
     reports: ['Velma', 'Deepfake', 'Language', 'Redaction']
   },
@@ -14,7 +15,8 @@
     title: 'Payment failure callback',
     submitted: '15 Apr 2026, 08:36',
     date: '2026-04-15',
-    duration: '8m 04s',
+    duration: '8:04',
+    status: 'complete',
     detectedClips: 9,
     reports: ['Velma', 'Deepfake', 'Language']
   },
@@ -23,7 +25,8 @@
     title: 'Renewal discovery',
     submitted: '14 Apr 2026, 16:22',
     date: '2026-04-14',
-    duration: '24m 11s',
+    duration: '24:11',
+    status: 'processing',
     detectedClips: 6,
     reports: ['Velma', 'Language']
   },
@@ -32,7 +35,8 @@
     title: 'Voice chat report',
     submitted: '14 Apr 2026, 11:08',
     date: '2026-04-14',
-    duration: '17m 32s',
+    duration: '17:32',
+    status: 'complete',
     detectedClips: 14,
     reports: ['Velma', 'Deepfake', 'Language', 'Redaction']
   },
@@ -41,7 +45,8 @@
     title: 'Password reset help',
     submitted: '13 Apr 2026, 17:30',
     date: '2026-04-13',
-    duration: '1m 09s',
+    duration: '1:09',
+    status: 'failed',
     detectedClips: 2,
     reports: ['Velma']
   },
@@ -50,7 +55,8 @@
     title: 'Upsell walkthrough',
     submitted: '12 Apr 2026, 15:17',
     date: '2026-04-12',
-    duration: '31m 44s',
+    duration: '31:44',
+    status: 'complete',
     detectedClips: 5,
     reports: ['Velma', 'Language']
   },
@@ -59,7 +65,8 @@
     title: 'Harassment appeal',
     submitted: '11 Apr 2026, 19:41',
     date: '2026-04-11',
-    duration: '6m 53s',
+    duration: '6:53',
+    status: 'complete',
     detectedClips: 11,
     reports: ['Velma', 'Deepfake', 'Language']
   },
@@ -68,7 +75,8 @@
     title: 'Order status check',
     submitted: '10 Apr 2026, 10:24',
     date: '2026-04-10',
-    duration: '5m 18s',
+    duration: '5:18',
+    status: 'processing',
     detectedClips: 0,
     reports: ['Velma']
   }
@@ -76,19 +84,17 @@
 
 <div class="m__widget conversations-table" data-conversations-table>
   <div class="m__widget-header">
-    <div class="m__table-filters conversations-table__filters">
-      <label class="m__searchbar" for="conversations-search">
-        <svg viewBox="0 0 32 32" aria-hidden="true">
-          <use href="#search"></use>
-        </svg>
-        <input
-          type="search"
-          id="conversations-search"
-          placeholder="Search"
-          data-conversations-search />
-      </label>
-    </div>
-    <div class="conversations-table__actions">
+    <label class="m__searchbar" for="conversations-search">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <use href="#search"></use>
+      </svg>
+      <input
+        type="search"
+        id="conversations-search"
+        placeholder="Search"
+        data-conversations-search />
+    </label>
+    <div class="behaviors-toolbar-actions conversations-table__actions">
       <button type="button" class="m__button-primary S">New analysis</button>
     </div>
   </div>
@@ -98,9 +104,10 @@
       <thead>
         <tr>
           <th>Audio input</th>
-          <th>Submitted</th>
-          <th>Detected clips</th>
+          <th>Status</th>
           <th>Reports</th>
+          <th>Submitted</th>
+          <th class="m__col-actions"></th>
         </tr>
       </thead>
       <tbody>
@@ -108,7 +115,7 @@
         <tr
           data-conversation-row
           data-date="{{ row.date }}"
-          data-search="{{ row.id }} {{ row.title }} {{ row.submitted }} {{ row.duration }} {{ row.detectedClips }} clips {% for report in row.reports %} {{ report }}{% endfor %}">
+          data-search="{{ row.id }} {{ row.title }} {{ row.submitted }} {{ row.duration }} {{ row.status }} {{ row.detectedClips }} clips {% for report in row.reports %} {{ report }}{% endfor %}">
           <td class="conversations-table__audio">
             <div class="conversations-table__audio-row">
               <button
@@ -122,36 +129,68 @@
               </button>
               <div class="conversations-table__audio-text">
                 <span class="conversations-table__title">{{ row.title }}</span>
-                <span class="conversations-table__meta">{{ row.duration }}</span>
+                <span class="conversations-table__meta"
+                  >{{ row.duration }} · {{ row.detectedClips }} clips</span
+                >
               </div>
             </div>
           </td>
-          <td>{{ row.submitted }}</td>
-          <td class="conversations-table__num {% if row.detectedClips == 0 %}muted{% endif %}">
-            {{ row.detectedClips }}
+          <td class="conversations-table__status">
+            {% if row.status == 'complete' %}
+            <span class="m__tag m__tag--success">Complete</span>
+            {% elif row.status == 'processing' %}
+            <span class="m__tag m__tag--muted">Processing</span>
+            {% elif row.status == 'failed' %}
+            <span class="m__tag m__tag--error">Failed</span>
+            {% else %}
+            <span class="m__tag-flat">{{ row.status }}</span>
+            {% endif %}
           </td>
           <td>
-            <div class="m__tag-group conversations-table__reports">
+            <div class="conversations-table__reports">
               {% for report in row.reports %}
-                {% if row.href %}
-                <a href="{{ row.href }}" class="m__tag conversations-table__report">
-                  {{ report }}
-                </a>
-                {% else %}
-                <span class="m__tag conversations-table__report">{{ report }}</span>
-                {% endif %}
+              {% set reportIcon = 'velma' %}
+              {% if report == 'Deepfake' %}
+              {% set reportIcon = 'deepfake' %}
+              {% elif report == 'Language' %}
+              {% set reportIcon = 'language' %}
+              {% elif report == 'Redaction' %}
+              {% set reportIcon = 'redaction' %}
+              {% endif %}
+              <a
+                href="{{ row.href or '/conversations/conv_7839f2/' }}"
+                class="conversations-table__report">
+                <svg class="conversations-table__report-icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#{{ reportIcon }}"></use>
+                </svg>
+                <span>{{ report }}</span>
+              </a>
               {% endfor %}
+            </div>
+          </td>
+          <td class="conversations-table__submitted">
+            {{ row.submitted | replace(', ', ',<br />') | safe }}
+          </td>
+          <td class="m__col-actions">
+            <div class="m__menu-button">
+              <button
+                type="button"
+                class="m__menu-button-icon S m__menu-button-trigger"
+                aria-label="Actions for {{ row.title }}">
+                <svg viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#dots-vertical"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Rename</button>
+                <button type="button" class="m__menu-button-item m__menu-button-item--danger">
+                  Delete
+                </button>
+              </div>
             </div>
           </td>
         </tr>
         {% endfor %}
-        <tr data-conversations-empty hidden>
-          <td colspan="4">
-            <div class="m__table-empty">
-              <p>No conversations match this search.</p>
-            </div>
-          </td>
-        </tr>
       </tbody>
     </table>
   </div>
@@ -164,8 +203,56 @@
 
     var searchInput = root.querySelector("[data-conversations-search]");
     var rows = Array.from(root.querySelectorAll("[data-conversation-row]"));
-    var emptyRow = root.querySelector("[data-conversations-empty]");
     var playButtons = Array.from(root.querySelectorAll("[data-audio-play]"));
+    var activeProgressFrame = null;
+    var activeProgressButton = null;
+    var demoProgressDuration = 8000;
+
+    function setProgress(button, progress) {
+      button.style.setProperty(
+        "--audio-progress",
+        Math.min(Math.max(progress, 0), 1) * 360 + "deg"
+      );
+    }
+
+    function stopProgress(button) {
+      if (button && button !== activeProgressButton) {
+        setProgress(button, 0);
+        return;
+      }
+
+      if (activeProgressFrame) {
+        cancelAnimationFrame(activeProgressFrame);
+      }
+
+      if (activeProgressButton) {
+        setProgress(activeProgressButton, 0);
+      }
+
+      activeProgressFrame = null;
+      activeProgressButton = null;
+    }
+
+    function startProgress(button) {
+      stopProgress();
+      activeProgressButton = button;
+
+      var startedAt = performance.now();
+
+      function tick(now) {
+        var progress = (now - startedAt) / demoProgressDuration;
+        setProgress(button, progress);
+
+        if (progress >= 1) {
+          setPlayState(button, false);
+          return;
+        }
+
+        activeProgressFrame = requestAnimationFrame(tick);
+      }
+
+      activeProgressFrame = requestAnimationFrame(tick);
+    }
 
     function setPlayState(button, isPlaying) {
       var title = button.dataset.audioTitle || "audio";
@@ -175,20 +262,31 @@
         "aria-label",
         (isPlaying ? "Pause " : "Play ") + title
       );
+
+      if (isPlaying) {
+        startProgress(button);
+      } else {
+        stopProgress(button);
+      }
     }
 
     function applyFilters() {
       var query = searchInput.value.trim().toLowerCase();
-      var visibleCount = 0;
+      var lastVisibleRow = null;
 
       rows.forEach(function (row) {
         var matchesSearch = !query || row.dataset.search.toLowerCase().includes(query);
 
+        row.classList.remove("conversations-table__last-visible");
         row.hidden = !matchesSearch;
-        if (matchesSearch) visibleCount += 1;
+        if (matchesSearch) {
+          lastVisibleRow = row;
+        }
       });
 
-      emptyRow.hidden = visibleCount !== 0;
+      if (lastVisibleRow) {
+        lastVisibleRow.classList.add("conversations-table__last-visible");
+      }
     }
 
     playButtons.forEach(function (button) {
