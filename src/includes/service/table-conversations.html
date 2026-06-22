@@ -1,0 +1,443 @@
+{% set conversationRows = [
+  {
+    id: '7839f2',
+    title: 'Refund escalation',
+    href: '/conversations/7839f2/',
+    submitted: '15 Apr 2026, 09:12',
+    date: '2026-04-15',
+    duration: '12:48',
+    status: 'complete',
+    detectedClips: 18,
+    reports: ['Velma', 'Deepfake', 'Language', 'Redaction']
+  },
+  {
+    id: 'conv_7812b8',
+    title: 'Payment failure callback',
+    submitted: '15 Apr 2026, 08:36',
+    date: '2026-04-15',
+    duration: '8:04',
+    status: 'complete',
+    detectedClips: 9,
+    reports: ['Velma', 'Deepfake', 'Language']
+  },
+  {
+    id: 'conv_7740a1',
+    title: 'Renewal discovery',
+    submitted: '14 Apr 2026, 16:22',
+    date: '2026-04-14',
+    duration: '24:11',
+    status: 'processing',
+    detectedClips: 6,
+    reports: ['Velma', 'Language']
+  },
+  {
+    id: 'conv_7691d5',
+    title: 'Voice chat report',
+    submitted: '14 Apr 2026, 11:08',
+    date: '2026-04-14',
+    duration: '17:32',
+    status: 'complete',
+    detectedClips: 14,
+    reports: ['Velma', 'Deepfake', 'Language', 'Redaction']
+  },
+  {
+    id: 'conv_7622f4',
+    title: 'Password reset help',
+    submitted: '13 Apr 2026, 17:30',
+    date: '2026-04-13',
+    duration: '1:09',
+    status: 'failed',
+    detectedClips: 2,
+    reports: ['Velma']
+  },
+  {
+    id: 'conv_7554f9',
+    title: 'Upsell walkthrough',
+    submitted: '12 Apr 2026, 15:17',
+    date: '2026-04-12',
+    duration: '31:44',
+    status: 'complete',
+    detectedClips: 5,
+    reports: ['Velma', 'Language']
+  },
+  {
+    id: 'conv_7490c6',
+    title: 'Harassment appeal',
+    submitted: '11 Apr 2026, 19:41',
+    date: '2026-04-11',
+    duration: '6:53',
+    status: 'moderation',
+    detectedClips: 11,
+    reports: ['Velma', 'Deepfake', 'Language']
+  },
+  {
+    id: 'conv_7421e3',
+    title: 'Order status check',
+    submitted: '10 Apr 2026, 10:24',
+    date: '2026-04-10',
+    duration: '5:18',
+    status: 'processing',
+    detectedClips: 0,
+    reports: ['Velma']
+  }
+] %}
+
+{% set conversationStatusFilter = conversationStatusFilter if conversationStatusFilter else '' %}
+{% set conversationStatusFilterLabel = 'All' %}
+{% if conversationStatusFilter == 'complete' %}
+{% set conversationStatusFilterLabel = 'Complete' %}
+{% elif conversationStatusFilter == 'processing' %}
+{% set conversationStatusFilterLabel = 'Processing' %}
+{% elif conversationStatusFilter == 'failed' %}
+{% set conversationStatusFilterLabel = 'Failed' %}
+{% elif conversationStatusFilter == 'moderation' %}
+{% set conversationStatusFilterLabel = 'Moderation' %}
+{% endif %}
+
+<div class="m__widget conversations-table" data-conversations-table>
+  <div class="m__widget-header">
+    <div class="conversations-table__header">
+      <label class="m__searchbar" for="conversations-search">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <use href="#search"></use>
+        </svg>
+        <input
+          type="search"
+          id="conversations-search"
+          placeholder="Search"
+          data-conversations-search />
+      </label>
+      <div class="m__table-filters conversations-table__filters">
+        <label class="m__select S">
+          <span>Status</span>
+          <div class="m__select__inline-control">
+            <span class="m__select__value">{{ conversationStatusFilterLabel }}</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+              <use href="#chevron-down"></use>
+            </svg>
+            <select id="conversations-filter-status" data-conversations-status-filter>
+              <option value="all">All</option>
+              <option value="complete" {% if conversationStatusFilter == 'complete' %}selected{% endif %}>Complete</option>
+              <option value="processing" {% if conversationStatusFilter == 'processing' %}selected{% endif %}>Processing</option>
+              <option value="failed" {% if conversationStatusFilter == 'failed' %}selected{% endif %}>Failed</option>
+              <option value="moderation" {% if conversationStatusFilter == 'moderation' %}selected{% endif %}>Moderation</option>
+            </select>
+          </div>
+        </label>
+        <div class="m__datepicker S conversations-table__date-range">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <use href="#calendar"></use>
+          </svg>
+          <span>Dates</span>
+          <button
+            type="button"
+            class="conversations-table__date-range-value"
+            data-conversations-start-trigger>
+            <span data-conversations-start-display>16.03.2026</span>
+          </button>
+          <input
+            type="date"
+            id="conversations-filter-start"
+            aria-label="Start date"
+            value="2026-03-16"
+            data-conversations-start-filter />
+          <span class="conversations-table__date-range-separator" aria-hidden="true">&ndash;</span>
+          <button
+            type="button"
+            class="conversations-table__date-range-value"
+            data-conversations-end-trigger>
+            <span data-conversations-end-display>15.04.2026</span>
+          </button>
+          <input
+            type="date"
+            id="conversations-filter-end"
+            aria-label="End date"
+            value="2026-04-15"
+            data-conversations-end-filter />
+        </div>
+      </div>
+      <div class="behaviors-toolbar-actions conversations-table__actions">
+        <button type="button" class="m__button-secondary-outline S">Bulk actions</button>
+        <button type="button" class="m__button-primary S">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="m__table-wrapper">
+    <table>
+      <colgroup>
+        <col class="conversations-table__col-conversation" />
+        <col class="conversations-table__col-status" />
+        <col class="conversations-table__col-created" />
+        <col class="conversations-table__col-analysis" />
+        <col class="conversations-table__col-actions" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Conversation</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Analysis</th>
+          <th class="m__col-actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in conversationRows %}
+        {% if not conversationStatusFilter or row.status == conversationStatusFilter %}
+        <tr
+          data-conversation-row
+          data-date="{{ row.date }}"
+          data-status="{{ row.status }}"
+          data-search="{{ row.id }} {{ row.title }} {{ row.submitted }} {{ row.duration }} {{ row.status }} {{ row.detectedClips }} clips {% for report in row.reports %} {{ report }}{% endfor %}">
+          <td class="conversations-table__audio">
+            <div class="conversations-table__audio-row">
+              <button
+                type="button"
+                class="conversations-table__play"
+                aria-label="Play {{ row.title }}"
+                aria-pressed="false"
+                data-audio-play
+                data-audio-title="{{ row.title }}">
+                <span aria-hidden="true"></span>
+              </button>
+              <div class="conversations-table__audio-text">
+                <a
+                  href="{{ row.href or '/conversations/7839f2/' }}"
+                  class="conversations-table__audio-link">
+                  <span class="conversations-table__title">{{ row.title }}</span>
+                  <span class="conversations-table__meta">
+                    <span class="conversations-table__duration">{{ row.duration }}</span>
+                    · {{ row.detectedClips }} clips
+                  </span>
+                </a>
+              </div>
+            </div>
+          </td>
+          <td class="conversations-table__status">
+            {% if row.status == 'complete' %}
+            <span class="m__tag m__tag--success">Complete</span>
+            {% elif row.status == 'processing' %}
+            <span class="m__tag m__tag--muted">Processing</span>
+            {% elif row.status == 'failed' %}
+            <span class="m__tag m__tag--error">Failed</span>
+            {% elif row.status == 'moderation' %}
+            <span class="m__tag m__tag--warning">Moderation</span>
+            {% else %}
+            <span class="m__tag-flat">{{ row.status }}</span>
+            {% endif %}
+          </td>
+          <td class="conversations-table__created">{{ row.submitted }}</td>
+          <td>
+            <div class="conversations-table__reports">
+              {% for report in row.reports %}
+              {% set reportIcon = 'velma' %}
+              {% if report == 'Deepfake' %}
+              {% set reportIcon = 'deepfake' %}
+              {% elif report == 'Language' %}
+              {% set reportIcon = 'language' %}
+              {% elif report == 'Redaction' %}
+              {% set reportIcon = 'redaction' %}
+              {% endif %}
+              <a
+                href="{{ row.href or '/conversations/7839f2/' }}"
+                class="conversations-table__report"
+                aria-label="{{ report }} report"
+                data-tooltip="{{ report }}">
+                <svg class="conversations-table__report-icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#{{ reportIcon }}"></use>
+                </svg>
+              </a>
+              {% endfor %}
+            </div>
+          </td>
+          <td class="m__col-actions">
+            <div class="m__menu-button">
+              <button
+                type="button"
+                class="m__menu-button-icon S m__menu-button-trigger"
+                aria-label="Actions for {{ row.title }}">
+                <svg viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#dots-vertical"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Rename</button>
+                <button type="button" class="m__menu-button-item m__menu-button-item--danger">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector("[data-conversations-table]");
+    if (!root) return;
+
+    var searchInput = root.querySelector("[data-conversations-search]");
+    var statusFilter = root.querySelector("[data-conversations-status-filter]");
+    var startFilter = root.querySelector("[data-conversations-start-filter]");
+    var endFilter = root.querySelector("[data-conversations-end-filter]");
+    var startTrigger = root.querySelector("[data-conversations-start-trigger]");
+    var endTrigger = root.querySelector("[data-conversations-end-trigger]");
+    var startDisplay = root.querySelector("[data-conversations-start-display]");
+    var endDisplay = root.querySelector("[data-conversations-end-display]");
+    var rows = Array.from(root.querySelectorAll("[data-conversation-row]"));
+    var playButtons = Array.from(root.querySelectorAll("[data-audio-play]"));
+    var activeProgressFrame = null;
+    var activeProgressButton = null;
+    var demoProgressDuration = 8000;
+
+    function setProgress(button, progress) {
+      button.style.setProperty(
+        "--audio-progress",
+        Math.min(Math.max(progress, 0), 1) * 360 + "deg"
+      );
+    }
+
+    function stopProgress(button) {
+      if (button && button !== activeProgressButton) {
+        setProgress(button, 0);
+        return;
+      }
+
+      if (activeProgressFrame) {
+        cancelAnimationFrame(activeProgressFrame);
+      }
+
+      if (activeProgressButton) {
+        setProgress(activeProgressButton, 0);
+      }
+
+      activeProgressFrame = null;
+      activeProgressButton = null;
+    }
+
+    function startProgress(button) {
+      stopProgress();
+      activeProgressButton = button;
+
+      var startedAt = performance.now();
+
+      function tick(now) {
+        var progress = (now - startedAt) / demoProgressDuration;
+        setProgress(button, progress);
+
+        if (progress >= 1) {
+          setPlayState(button, false);
+          return;
+        }
+
+        activeProgressFrame = requestAnimationFrame(tick);
+      }
+
+      activeProgressFrame = requestAnimationFrame(tick);
+    }
+
+    function setPlayState(button, isPlaying) {
+      var title = button.dataset.audioTitle || "audio";
+      button.classList.toggle("is-playing", isPlaying);
+      button.setAttribute("aria-pressed", isPlaying ? "true" : "false");
+      button.setAttribute(
+        "aria-label",
+        (isPlaying ? "Pause " : "Play ") + title
+      );
+
+      if (isPlaying) {
+        startProgress(button);
+      } else {
+        stopProgress(button);
+      }
+    }
+
+    function formatDateValue(value) {
+      var parts = value.split("-");
+      if (parts.length !== 3) return value;
+      return parts[2] + "." + parts[1] + "." + parts[0];
+    }
+
+    function updateDateRangeDisplay() {
+      startDisplay.textContent = formatDateValue(startFilter.value);
+      endDisplay.textContent = formatDateValue(endFilter.value);
+    }
+
+    function openDatePicker(input) {
+      if (input.showPicker) {
+        input.showPicker();
+        return;
+      }
+
+      input.focus();
+      input.click();
+    }
+
+    function applyFilters() {
+      var query = searchInput.value.trim().toLowerCase();
+      var status = statusFilter.value;
+      var startDate = startFilter.value;
+      var endDate = endFilter.value;
+      var lastVisibleRow = null;
+
+      rows.forEach(function (row) {
+        var matchesSearch = !query || row.dataset.search.toLowerCase().includes(query);
+        var matchesStatus = status === "all" || row.dataset.status === status;
+        var rowDate = row.dataset.date || "";
+        var matchesStart = !startDate || rowDate >= startDate;
+        var matchesEnd = !endDate || rowDate <= endDate;
+        var isVisible = matchesSearch && matchesStatus && matchesStart && matchesEnd;
+
+        row.classList.remove("conversations-table__last-visible");
+        row.hidden = !isVisible;
+        if (isVisible) {
+          lastVisibleRow = row;
+        }
+      });
+
+      if (lastVisibleRow) {
+        lastVisibleRow.classList.add("conversations-table__last-visible");
+      }
+    }
+
+    playButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var shouldPlay = !button.classList.contains("is-playing");
+        playButtons.forEach(function (otherButton) {
+          setPlayState(otherButton, false);
+        });
+        setPlayState(button, shouldPlay);
+      });
+    });
+
+    startTrigger.addEventListener("click", function (event) {
+      event.stopPropagation();
+      openDatePicker(startFilter);
+    });
+
+    endTrigger.addEventListener("click", function (event) {
+      event.stopPropagation();
+      openDatePicker(endFilter);
+    });
+
+    searchInput.addEventListener("input", applyFilters);
+    searchInput.addEventListener("change", applyFilters);
+    statusFilter.addEventListener("change", applyFilters);
+    startFilter.addEventListener("change", function () {
+      updateDateRangeDisplay();
+      applyFilters();
+    });
+    endFilter.addEventListener("change", function () {
+      updateDateRangeDisplay();
+      applyFilters();
+    });
+
+    updateDateRangeDisplay();
+    applyFilters();
+  })();
+</script>

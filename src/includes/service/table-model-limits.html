@@ -1,0 +1,74 @@
+<div class="m__widget">
+  <div class="m__table-wrapper">
+    <table class="m__table-baseline model-limits-table">
+      <thead>
+        <tr>
+          <th>Quota</th>
+          <th>Peak utilization</th>
+          <th>Used / Limit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if rows | length %}
+          {% for row in rows %}
+          {% set usagePercent = 8 + (loop.index0 * 6) %}
+          {% set usageUsed = ((row.usage_quota * usagePercent / 100) | round) %}
+          {% set concurrencyUsed = loop.index % row.concurrency_quota %}
+          {% if concurrencyUsed == 0 %}
+            {% set concurrencyUsed = row.concurrency_quota - 1 %}
+          {% endif %}
+          {% set concurrencyPercent = ((concurrencyUsed / row.concurrency_quota * 100) | round) %}
+          <tr>
+            <td>
+              <div class="model-limits-quota">
+                <span class="model-limits-name">{{ row.model_display_label }}</span>
+                <span class="model-limits-meta">Monthly usage</span>
+              </div>
+            </td>
+            <td>
+              <div class="model-limits-progress">
+                <span class="model-limits-progress__track" aria-hidden="true">
+                  <span class="model-limits-progress__bar" style="--limit-progress: {{ usagePercent }}%;"></span>
+                </span>
+                <span class="model-limits-progress__value">{{ usagePercent }}%</span>
+              </div>
+            </td>
+            <td>
+              <span class="model-limits-used">{{ usageUsed | formatNumber }}</span>
+              <span class="muted">/ {{ row.usage_quota | formatNumber }} h</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="model-limits-quota">
+                <span class="model-limits-name">{{ row.model_display_label }}</span>
+                <span class="model-limits-meta">Concurrency</span>
+              </div>
+            </td>
+            <td>
+              <div class="model-limits-progress">
+                <span class="model-limits-progress__track" aria-hidden="true">
+                  <span class="model-limits-progress__bar" style="--limit-progress: {{ concurrencyPercent }}%;"></span>
+                </span>
+                <span class="model-limits-progress__value">{{ concurrencyPercent }}%</span>
+              </div>
+            </td>
+            <td>
+              <span class="model-limits-used">{{ concurrencyUsed | formatNumber }}</span>
+              <span class="muted">/ {{ row.concurrency_quota | formatNumber }} {{ 'conn' if row.model_type == 'streaming' else 'req' }}</span>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="3">
+              <div class="m__table-empty">
+                <p>No model quotas configured for this organization.</p>
+              </div>
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
