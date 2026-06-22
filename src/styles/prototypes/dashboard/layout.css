@@ -137,6 +137,77 @@ html:has(.dashboard-layout) {
       align-self: center;
     }
   }
+
+  & .model-limits-table {
+    min-width: 46rem;
+
+    & th:nth-child(2),
+    & td:nth-child(2) {
+      width: 32%;
+    }
+
+    & th:nth-child(3),
+    & td:nth-child(3) {
+      width: 12rem;
+      padding-left: 3rem;
+      white-space: nowrap;
+    }
+  }
+
+  & .model-limits-quota {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+  }
+
+  & .model-limits-name {
+    font-weight: var(--m__font-weight-bold);
+  }
+
+  & .model-limits-meta {
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-s);
+    text-transform: capitalize;
+  }
+
+  & .model-limits-meta::first-letter {
+    text-transform: uppercase;
+  }
+
+  & .model-limits-progress {
+    display: grid;
+    grid-template-columns: minmax(9rem, 1fr) 2.5rem;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  & .model-limits-progress__track {
+    position: relative;
+    height: 0.5rem;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 999px;
+    background-color: color-mix(in srgb, var(--m__text) 12%, transparent);
+  }
+
+  & .model-limits-progress__bar {
+    display: block;
+    width: var(--limit-progress);
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--m__text);
+  }
+
+  & .model-limits-progress__value {
+    color: var(--m__text-caption);
+    font-weight: var(--m__font-weight-medium);
+    text-align: right;
+  }
+
+  & .model-limits-used {
+    color: var(--m__text);
+  }
 }
 
 [data-component="credit-balance-over-time"] .chart-container,
