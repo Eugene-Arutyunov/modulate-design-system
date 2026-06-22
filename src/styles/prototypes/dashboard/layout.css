@@ -210,6 +210,86 @@ html:has(.dashboard-layout) {
   }
 }
 
+/* Insights */
+
+.insights-page {
+  & .insights-plain-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+
+    & > * {
+      min-width: 0;
+    }
+
+    @media (width < 1100px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (width < 767px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  & .insights-plain-widget {
+    min-height: 10rem;
+  }
+
+  & .insights-widget-value-text {
+    overflow-wrap: anywhere;
+  }
+
+  & .insights-widget-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    & h2 {
+      margin: 0 0 0.25rem;
+    }
+
+    & p {
+      margin: 0;
+      color: var(--m__text-caption);
+      font-size: var(--m__font-size-s);
+      line-height: 1.35;
+    }
+  }
+
+  & .insights-alerts-table {
+    min-width: 42rem;
+  }
+
+  & .insights-empty-row td {
+    padding: 2.5rem 1rem;
+    text-align: center;
+  }
+
+  & .insights-empty-state {
+    display: flex;
+    min-height: 7.5rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    color: var(--m__text-caption);
+
+    & strong {
+      color: var(--m__text);
+      font-size: var(--m__font-size-s);
+      font-weight: var(--m__font-weight-bold);
+    }
+
+    & span {
+      max-width: 28rem;
+      font-size: var(--m__font-size-s);
+      line-height: 1.35;
+    }
+  }
+}
+
 [data-component="credit-balance-over-time"] .chart-container,
 [data-component="conversation-volume-over-time"] .chart-container,
 #credit-balance-chart,
