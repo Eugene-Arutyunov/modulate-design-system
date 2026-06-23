@@ -692,9 +692,52 @@ a.pg-verdict-statement-link:active {
 .pg-upload-plate-footer > * {
   pointer-events: auto;
 }
+
+.pg-upload-collapse {
+  display: none;
+  position: absolute;
+  top: var(--m__space-xxs);
+  right: var(--m__space-xxs);
+  z-index: 12;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--m__bg) 74%, transparent);
+  color: var(--m__text-caption);
+  font: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(0.5rem);
+  transition:
+    color var(--m__duration-base) var(--m__easing-base),
+    background-color var(--m__duration-base) var(--m__easing-base);
+}
+.pg-upload-collapse:hover,
+.pg-upload-collapse:focus-visible {
+  color: var(--m__text-link-hover);
+  background-color: color-mix(in srgb, var(--m__bg) 88%, transparent);
+  transition-duration: var(--m__duration-instant);
+}
+.pg-upload-plate[data-state="initial"] .pg-upload-collapse,
+.pg-upload-plate[data-state="low-quota"] .pg-upload-collapse,
+.pg-upload-plate[data-state="exhausted"] .pg-upload-collapse {
+  display: inline-flex;
+}
 .pg-upload-plate-footer .pg-upload-meta {
   margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: var(--m__space-xxs);
+  font-size: var(--m__font-size-xs);
   font-weight: var(--m__font-weight-medium);
+  line-height: var(--m__line-height-base);
+  white-space: nowrap;
 }
 
 .pg-upload-formats-tags {
@@ -968,14 +1011,14 @@ a.pg-verdict-statement-link:active {
 }
 
 /* low-quota — same look as initial; meta swaps to show the danger digit */
-.pg-upload-meta--low {
+.pg-upload-plate-footer .pg-upload-meta--low {
   display: none;
 }
 .pg-upload-plate[data-state="low-quota"] .pg-upload-meta--default {
   display: none;
 }
 .pg-upload-plate[data-state="low-quota"] .pg-upload-meta--low {
-  display: block;
+  display: inline-flex;
 }
 .pg-upload-meta-danger {
   color: var(--m__error);

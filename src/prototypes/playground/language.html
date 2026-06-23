@@ -4,15 +4,17 @@ permalink: /playground/language/
 noOutputTab: true
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block options %}
+{% set uploadPlateOptions %}
 <div class="pg-options-row pg-plate-header">
   <span class="pg-plate-header__title">Identify spoken language</span>
 </div>
-{% endblock %} {% block upload_actions %}
+{% endset %}
+{% set uploadPlateActions %}
 <div class="pg-upload-actions">
   <button class="m__button-primary-outline M">Choose file…</button>
 </div>
-{% endblock %} {% block analyzing_content %}
+{% endset %}
+{% set uploadPlateAnalyzingContent %}
 <div class="pg-processing-stages">
   <span class="pg-processing-stage">
     <svg
@@ -30,7 +32,8 @@ noOutputTab: true
     Transcription
   </span>
 </div>
-{% endblock %} {% block player_clips %}{% endblock %} {% block speaker_labels
+{% endset %}
+{% extends 'prototypes/playground-layout.html' %} {% block player_clips %}{% endblock %} {% block speaker_labels
 %}{% endblock %} {% block above_output %}
 <style>
   .pg-player-dataviz {

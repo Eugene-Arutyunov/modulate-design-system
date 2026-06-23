@@ -27,11 +27,12 @@ segments:
   - { t: "1:28 – 1:29", verdict: "silence" }
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block options %}
+{% set uploadPlateOptions %}
 <div class="pg-options-row pg-plate-header">
   <span class="pg-plate-header__title">Detect AI-generated music</span>
 </div>
-{% endblock %} {% block analyzing_content %}
+{% endset %}
+{% set uploadPlateAnalyzingContent %}
 <div class="pg-processing-stages">
   <span class="pg-processing-stage">
     <svg
@@ -49,7 +50,8 @@ segments:
     AI music
   </span>
 </div>
-{% endblock %} {% block player_clips %}
+{% endset %}
+{% extends 'prototypes/playground-layout.html' %} {% block player_clips %}
 <div class="aim-player-heat">
   {% for s in segments %}
   <div

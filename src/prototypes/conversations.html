@@ -23,6 +23,15 @@ permalink: /dashboard/conversations/
 
       <div class="m__space XS"></div>
 
+      {% set conversationUploadState = 'uploaded' %}
+      {% set conversationUploadCollapsedLabel = 'Upload conversation' %}
+      {% set conversationUploadCanCollapse = true %}
+      {% include 'service/conversation-upload-plate.html' %}
+      {% set conversationUploadState = 'initial' %}
+      {% set conversationUploadCanCollapse = false %}
+
+      <div class="m__space XS"></div>
+
       {% include 'service/table-conversations.html' %}
     </main>
   </div>

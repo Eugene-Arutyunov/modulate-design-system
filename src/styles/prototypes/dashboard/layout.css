@@ -290,13 +290,15 @@ html:has(.dashboard-layout) {
   }
 }
 
-/* Conversation create */
+/* Conversation upload */
 
 .conversation-create-page {
   & .conversation-create-upload {
     min-height: 21rem;
   }
+}
 
+.conversation-upload-plate {
   & .conversation-upload-button {
     display: inline-flex;
     align-items: baseline;
@@ -331,6 +333,16 @@ html:has(.dashboard-layout) {
     opacity: 0;
     pointer-events: none;
   }
+
+  & .pg-upload-stream {
+    display: none;
+  }
+}
+
+main.dashboard-content
+  .conversation-upload-plate[data-state="uploaded"]
+  .pg-upload-collapsed-cta {
+  min-height: 3rem;
 }
 
 [data-component="credit-balance-over-time"] .chart-container,

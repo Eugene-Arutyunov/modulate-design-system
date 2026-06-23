@@ -1,0 +1,98 @@
+{% set uploadPlateState = conversationUploadState if conversationUploadState else 'initial' %}
+{% set uploadPlateCollapsedLabel = conversationUploadCollapsedLabel if conversationUploadCollapsedLabel else 'Upload conversation' %}
+{% set uploadPlateCanCollapse = conversationUploadCanCollapse if conversationUploadCanCollapse else false %}
+{% set uploadPlateStateInputName = 'conversation-upload-state' %}
+{% set uploadPlateClass = 'conversation-upload-plate conversation-create-upload' %}
+{% set conversationUploadAccept = '.aac,.flac,.m4a,.mp3,.mp4,.ogg,.opus,.wav,.webm' %}
+{% set uploadPlateMetaVariant = 'credits' %}
+{% set uploadPlateCreditCost = '25 credit per gen.' %}
+{% set uploadPlateBalanceCredits = '2,000' %}
+{% set uploadPlateLowBalanceCredits = '2' %}
+{% set uploadPlateCreditBalanceLabel = 'available' %}
+{% set uploadPlateLowCreditBalanceLabel = 'availible' %}
+{% set uploadPlateExhaustedMessage = "You're out of credits. Add credits in Billing to upload more conversations." %}
+{% set uploadPlateExhaustedHref = '/dashboard/billing/' %}
+{% set uploadPlateExhaustedCtaLabel = 'Go to Billing' %}
+{% set uploadPlateActions %}
+<div class="pg-upload-actions">
+  <label class="conversation-upload-button pg-upload-primary">
+    <span class="pg-upload-primary__label">Drop or choose file…</span>
+    <input
+      class="conversation-upload-input"
+      type="file"
+      accept="{{ conversationUploadAccept }}"
+    />
+  </label>
+</div>
+{% endset %} {% set uploadPlateAnalyzingContent %}
+<div class="pg-processing-stages">
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true"
+    >
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+      />
+    </svg>
+    Uploading
+  </span>
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true"
+    >
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+      />
+    </svg>
+    Transcribing
+  </span>
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true"
+    >
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+      />
+    </svg>
+    Analyzing
+  </span>
+  <span class="pg-processing-stage">
+    <svg
+      class="pg-stage-check"
+      width="20"
+      height="20"
+      viewBox="0 0 10 10"
+      aria-hidden="true"
+    >
+      <path
+        d="M 1.5 4.55 L 4 7.95 L 9 2.05"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+      />
+    </svg>
+    Complete
+  </span>
+</div>
+{% endset %} {% include 'prototypes/upload-plate.html' %}

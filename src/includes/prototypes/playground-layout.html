@@ -13,79 +13,16 @@
       </div>
 
       <div class="pg-upload-section">
-      <div class="pg-upload-plate" data-state="initial" id="pg-upload-plate">
-      {% block options %}
-      {% include 'prototypes/playground/stt-options.html' %}
-      {% endblock %}
-
-      <div class="pg-upload-plate-body">
-      {% block upload_actions %}
-      <div class="pg-upload-actions">
-        <button type="button" class="m__button-primary-outline M pg-upload-primary">
-          <span class="pg-upload-primary__label">Drop or choose file…</span>
-        </button>
-        <div class="m__split-button pg-upload-stream" data-open="false">
-          <button type="button" class="m__button-primary-outline M pg-upload-stream__main">Start streaming</button>
-          <button type="button" class="m__menu-button-primary M pg-upload-stream__toggle"
-                  aria-haspopup="menu" aria-expanded="false" aria-label="More streaming options">
-            <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-          </button>
-          <div class="pg-upload-stream__menu" role="menu" hidden>
-            <button type="button" role="menuitem">Stream demo</button>
-            <button type="button" role="menuitem">Stream from file…</button>
-          </div>
-        </div>
-      </div>
-      {% endblock %}
-
-      <div class="pg-upload-overlay pg-upload-overlay--dragging" aria-hidden="true">
-        <span class="pg-upload-overlay__icon" aria-hidden="true">↓</span>
-        <span>Drop the file here</span>
-      </div>
-      <div class="pg-upload-overlay pg-upload-overlay--processing" aria-hidden="true">
-        <img class="m__loader" src="/assets/service/loader-icon.svg" alt="" aria-hidden="true" />
-        <span>Uploading…</span>
-      </div>
-      <div class="pg-upload-overlay pg-upload-overlay--analyzing" aria-hidden="true">
-        {% block analyzing_content %}{% endblock %}
-      </div>
-      <div class="pg-upload-overlay pg-upload-overlay--exhausted" aria-hidden="true">
-        <p>You're out of free trial requests. Sign up to get credits and keep going.</p>
-        <a href="/auth/login/" class="m__button-primary-outline M">Sign up</a>
-      </div>
-      <button type="button" class="pg-upload-collapsed-cta" aria-hidden="true">
-        New analysis
-      </button>
-      </div>
-
-      <div class="pg-upload-plate-footer">
-        <div class="pg-upload-formats-tags">
-          <span class="pg-upload-formats-label">Supports</span>
-          <span class="m__tag-flat">.aac</span>
-          <span class="m__tag-flat">.flac</span>
-          <span class="m__tag-flat">.m4a</span>
-          <span class="m__tag-flat">.mp3</span>
-          <span class="m__tag-flat">.mp4</span>
-          <span class="m__tag-flat">.ogg</span>
-          <span class="m__tag-flat">.opus</span>
-          <span class="m__tag-flat">.wav</span>
-          <span class="pg-upload-formats-label">and</span>
-          <span class="m__tag-flat">.webm</span>
-          <span class="pg-upload-formats-label">up to 50 MB</span>
-        </div>
-        <p class="pg-upload-meta pg-upload-meta--default">9 / 10</p>
-        <p class="pg-upload-meta pg-upload-meta--low"><span class="pg-upload-meta-danger">3</span> / 10</p>
-      </div>
-      <div class="pg-plate-state-switch" role="radiogroup" aria-label="Demo plate state">
-        <label><input type="radio" name="pg-plate-state" value="initial" checked /><span>initial</span></label>
-        <label><input type="radio" name="pg-plate-state" value="file-dropping" /><span>file-dropping</span></label>
-        <label><input type="radio" name="pg-plate-state" value="uploading" /><span>uploading</span></label>
-        <label><input type="radio" name="pg-plate-state" value="processing" /><span>processing</span></label>
-        <label><input type="radio" name="pg-plate-state" value="uploaded" /><span>uploaded</span></label>
-        <label><input type="radio" name="pg-plate-state" value="low-quota" /><span>low-quota</span></label>
-        <label><input type="radio" name="pg-plate-state" value="exhausted" /><span>exhausted</span></label>
-      </div>
-      </div>
+        {% set uploadPlateId = 'pg-upload-plate' %}
+        {% set uploadPlateState = uploadPlateState if uploadPlateState else 'initial' %}
+        {% set uploadPlateCollapsedLabel = 'New analysis' %}
+        {% set uploadPlateStateInputName = 'pg-plate-state' %}
+        {% if not uploadPlateOptions %}
+        {% set uploadPlateOptions %}
+        {% include 'prototypes/playground/stt-options.html' %}
+        {% endset %}
+        {% endif %}
+        {% include 'prototypes/upload-plate.html' %}
       </div>
 
       <div class="m__space L"></div>
@@ -206,25 +143,6 @@
           cb.closest('.pg-stt-option').style.display = fastToggle.checked ? 'none' : '';
         });
       });
-    }
-
-    // Demo-only plate state switcher
-    var plate = document.getElementById('pg-upload-plate');
-    var stateSwitch = document.querySelector('.pg-plate-state-switch');
-    if (plate && stateSwitch) {
-      stateSwitch.addEventListener('change', function (e) {
-        if (e.target.name !== 'pg-plate-state') return;
-        plate.dataset.state = e.target.value;
-        e.target.blur();
-      });
-      var collapsedCta = plate.querySelector('.pg-upload-collapsed-cta');
-      if (collapsedCta) {
-        collapsedCta.addEventListener('click', function () {
-          plate.dataset.state = 'initial';
-          var initial = stateSwitch.querySelector('input[value="initial"]');
-          if (initial) initial.checked = true;
-        });
-      }
     }
 
     // Media-container hover line follows cursor across player + dataviz
