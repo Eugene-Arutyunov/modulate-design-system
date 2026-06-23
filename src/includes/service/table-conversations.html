@@ -2,8 +2,9 @@
   {
     id: '7839f2',
     title: 'Refund escalation',
-    href: '/conversations/7839f2/',
+    href: '/dashboard/conversations/7839f2/',
     submitted: '15 Apr 2026, 09:12',
+    source: 'Ilya Sinelnikov',
     date: '2026-04-15',
     duration: '12:48',
     status: 'complete',
@@ -14,6 +15,7 @@
     id: 'conv_7812b8',
     title: 'Payment failure callback',
     submitted: '15 Apr 2026, 08:36',
+    source: 'Five9',
     date: '2026-04-15',
     duration: '8:04',
     status: 'complete',
@@ -24,6 +26,7 @@
     id: 'conv_7740a1',
     title: 'Renewal discovery',
     submitted: '14 Apr 2026, 16:22',
+    source: 'ServiceOne',
     date: '2026-04-14',
     duration: '24:11',
     status: 'processing',
@@ -34,6 +37,7 @@
     id: 'conv_7691d5',
     title: 'Voice chat report',
     submitted: '14 Apr 2026, 11:08',
+    source: 'API',
     date: '2026-04-14',
     duration: '17:32',
     status: 'complete',
@@ -44,6 +48,7 @@
     id: 'conv_7622f4',
     title: 'Password reset help',
     submitted: '13 Apr 2026, 17:30',
+    source: 'Ilya Sinelnikov',
     date: '2026-04-13',
     duration: '1:09',
     status: 'failed',
@@ -54,6 +59,7 @@
     id: 'conv_7554f9',
     title: 'Upsell walkthrough',
     submitted: '12 Apr 2026, 15:17',
+    source: 'Five9',
     date: '2026-04-12',
     duration: '31:44',
     status: 'complete',
@@ -64,6 +70,7 @@
     id: 'conv_7490c6',
     title: 'Harassment appeal',
     submitted: '11 Apr 2026, 19:41',
+    source: 'ServiceOne',
     date: '2026-04-11',
     duration: '6:53',
     status: 'moderation',
@@ -74,6 +81,7 @@
     id: 'conv_7421e3',
     title: 'Order status check',
     submitted: '10 Apr 2026, 10:24',
+    source: 'API',
     date: '2026-04-10',
     duration: '5:18',
     status: 'processing',
@@ -158,7 +166,7 @@
       </div>
       <div class="behaviors-toolbar-actions conversations-table__actions">
         <button type="button" class="m__button-secondary-outline S">Bulk actions</button>
-        <button type="button" class="m__button-primary S">Create</button>
+        <a href="/dashboard/conversations/create/" class="m__button-primary S">Upload</a>
       </div>
     </div>
   </div>
@@ -168,7 +176,7 @@
       <colgroup>
         <col class="conversations-table__col-conversation" />
         <col class="conversations-table__col-status" />
-        <col class="conversations-table__col-created" />
+        <col class="conversations-table__col-uploaded" />
         <col class="conversations-table__col-analysis" />
         <col class="conversations-table__col-actions" />
       </colgroup>
@@ -176,7 +184,7 @@
         <tr>
           <th>Conversation</th>
           <th>Status</th>
-          <th>Created</th>
+          <th>Uploaded</th>
           <th>Analysis</th>
           <th class="m__col-actions"></th>
         </tr>
@@ -188,7 +196,7 @@
           data-conversation-row
           data-date="{{ row.date }}"
           data-status="{{ row.status }}"
-          data-search="{{ row.id }} {{ row.title }} {{ row.submitted }} {{ row.duration }} {{ row.status }} {{ row.detectedClips }} clips {% for report in row.reports %} {{ report }}{% endfor %}">
+          data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.submitted }} {{ row.duration }} {{ row.status }} {{ row.detectedClips }} clips {% for report in row.reports %} {{ report }}{% endfor %}">
           <td class="conversations-table__audio">
             <div class="conversations-table__audio-row">
               <button
@@ -202,7 +210,7 @@
               </button>
               <div class="conversations-table__audio-text">
                 <a
-                  href="{{ row.href or '/conversations/7839f2/' }}"
+                  href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
                   class="conversations-table__audio-link">
                   <span class="conversations-table__title">{{ row.title }}</span>
                   <span class="conversations-table__meta">
@@ -226,7 +234,10 @@
             <span class="m__tag-flat">{{ row.status }}</span>
             {% endif %}
           </td>
-          <td class="conversations-table__created">{{ row.submitted }}</td>
+          <td class="conversations-table__uploaded">
+            <span class="conversations-table__uploaded-source">{{ row.source }}</span>
+            <span class="conversations-table__uploaded-date">{{ row.submitted }}</span>
+          </td>
           <td>
             <div class="conversations-table__reports">
               {% for report in row.reports %}
@@ -239,7 +250,7 @@
               {% set reportIcon = 'redaction' %}
               {% endif %}
               <a
-                href="{{ row.href or '/conversations/7839f2/' }}"
+                href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
                 class="conversations-table__report"
                 aria-label="{{ report }} report"
                 data-tooltip="{{ report }}">

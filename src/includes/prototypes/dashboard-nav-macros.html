@@ -1,19 +1,13 @@
 {% macro primary_nav(variant, currentUrl) %} {% set isModeration = currentUrl |
-startsWith('/conversations/moderation/') %} {% set isDashboard = (currentUrl |
-startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {% set isDashboardLinkActive = isDashboard and not isModeration %} {% if variant == "bar" %} {% if currentUrl == '/dashboard/overview/' %}<span
-  class="prototype-header__link active"
+startsWith('/dashboard/moderation/') %} {% set isDashboard = currentUrl |
+startsWith('/dashboard/') %} {% set isDashboardLinkActive = isDashboard or
+isModeration %} {% if variant == "bar" %} {% if currentUrl ==
+'/dashboard/overview/' %}<span class="prototype-header__link active"
   >Dashboard</span
 >{% else %}<a
   href="/dashboard/overview/"
   class="prototype-header__link {{ 'active' if isDashboardLinkActive }}"
   >Dashboard</a
->{% endif %} {% if isModeration %}<span
-  class="prototype-header__link active"
-  >Moderation</span
->{% else %}<a
-  href="/conversations/moderation/"
-  class="prototype-header__link {{ 'active' if isModeration }}"
-  >Moderation</a
 >{% endif %} {% if currentUrl == '/playground/' %}<span
   class="prototype-header__link active"
   >Playground</span
@@ -28,18 +22,14 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   href="/pricing/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/pricing/') }}"
   >Pricing</a
->{% endif %} {% if currentUrl ==
-'/models-api-docs/' or currentUrl == '/jobs-api-docs/' %}<span
-  class="prototype-header__link active"
-  >Docs</span
->{% else %}<a
+>{% endif %} {% if currentUrl == '/models-api-docs/' or currentUrl ==
+'/jobs-api-docs/' %}<span class="prototype-header__link active">Docs</span>{%
+else %}<a
   href="/models-api-docs/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
   >Docs</a
->{% endif %} {% elif variant == "landing" %} {% if currentUrl == '/playground/' %}<span
-  class="prototype-header__link active"
-  >Playground</span
->{% else %}<a
+>{% endif %} {% elif variant == "landing" %} {% if currentUrl == '/playground/'
+%}<span class="prototype-header__link active">Playground</span>{% else %}<a
   href="/playground/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/playground/') }}"
   >Playground</a
@@ -50,11 +40,9 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   href="/pricing/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/pricing/') }}"
   >Pricing</a
->{% endif %} {% if currentUrl ==
-'/models-api-docs/' or currentUrl == '/jobs-api-docs/' %}<span
-  class="prototype-header__link active"
-  >Docs</span
->{% else %}<a
+>{% endif %} {% if currentUrl == '/models-api-docs/' or currentUrl ==
+'/jobs-api-docs/' %}<span class="prototype-header__link active">Docs</span>{%
+else %}<a
   href="/models-api-docs/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
   >Docs</a
@@ -64,12 +52,6 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   class="prototype-header__popover-link {{ 'active' if isDashboardLinkActive }}"
   role="menuitem"
   >Dashboard</a
->
-<a
-  href="/conversations/moderation/"
-  class="prototype-header__popover-link {{ 'active' if isModeration }}"
-  role="menuitem"
-  >Moderation</a
 >
 <a
   href="/playground/"
@@ -102,13 +84,15 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
 <a
   href="/dashboard/account/"
   class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Account' }}"
-  role="menuitem">
+  role="menuitem"
+>
   <span class="prototype-header__popover-meta-caption">e@intuition.team</span>
 </a>
 <a
   href="/dashboard/organization/"
   class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Organization' }}"
-  role="menuitem">
+  role="menuitem"
+>
   <span class="prototype-header__popover-meta-caption"
     >Eugene’s Personal Organization, 99&nbsp;users</span
   >
@@ -121,12 +105,12 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
     <use href="#overview"></use>
   </svg>
-  <span>Overview</span></a
+  <span>Home</span></a
 >
 <div class="m__nav-menu-heading">OBSERVE</div>
 <a
-  href="/conversations/"
-  class="m__nav-menu-item {{ 'active' if pageTitle == 'Conversation' or pageTitle == 'Conversations' }}"
+  href="/dashboard/conversations/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Conversation' or pageTitle == 'Conversations' or pageTitle == 'Create Conversation' }}"
   ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
     <use href="#transcript"></use>
   </svg>
@@ -139,6 +123,14 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
     <use href="#star"></use>
   </svg>
   <span>Insights</span></a
+>
+<a
+  href="/dashboard/moderation/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Moderation' }}"
+  ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <use href="#done"></use>
+  </svg>
+  <span>Moderation</span></a
 >
 <div class="m__nav-menu-heading">BUILD</div>
 <a
@@ -252,20 +244,22 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#overview"></use>
   </svg>
-  <span>Overview</span></a
+  <span>Home</span></a
 >
 <div class="m__nav-menu-heading">OBSERVE</div>
 <a
-  href="/conversations/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Conversation' or pageTitle == 'Conversations' }}"
+  href="/dashboard/conversations/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Conversation' or pageTitle == 'Conversations' or pageTitle == 'Create Conversation' }}"
   role="menuitem"
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#transcript"></use>
   </svg>
   <span>Conversations</span></a
@@ -277,7 +271,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#star"></use>
   </svg>
   <span>Insights</span></a
@@ -289,10 +284,24 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#star"></use>
   </svg>
   <span>Alerts</span></a
+>
+<a
+  href="/dashboard/moderation/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Moderation' }}"
+  role="menuitem"
+  ><svg
+    class="prototype-header__popover-link-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true"
+  >
+    <use href="#done"></use>
+  </svg>
+  <span>Moderation</span></a
 >
 <div class="m__nav-menu-heading">BUILD</div>
 <a
@@ -302,7 +311,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#behaviors"></use>
   </svg>
   <span>Behaviors</span></a
@@ -314,7 +324,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#restart"></use>
   </svg>
   <span>Actions</span></a
@@ -326,7 +337,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#batch"></use>
   </svg>
   <span>Jobs</span></a
@@ -339,7 +351,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#api-key"></use>
   </svg>
   <span>API Keys</span></a
@@ -351,7 +364,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#usage"></use>
   </svg>
   <span>Usage</span></a
@@ -363,7 +377,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#models"></use>
   </svg>
   <span>Limits</span></a
@@ -375,7 +390,8 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
   ><svg
     class="prototype-header__popover-link-icon"
     viewBox="0 0 32 32"
-    aria-hidden="true">
+    aria-hidden="true"
+  >
     <use href="#billing"></use>
   </svg>
   <span>Billing</span></a
@@ -386,9 +402,7 @@ startsWith('/dashboard/')) or (currentUrl | startsWith('/conversations/')) %} {%
     href="/internal/users/"
     class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Users & Organizations' }}"
     role="menuitem"
-    ><span class="prototype-header__popover-meta-caption"
-      >Clients</span
-    ></a
+    ><span class="prototype-header__popover-meta-caption">Clients</span></a
   >
   <a
     href="/internal/data/"

@@ -290,6 +290,49 @@ html:has(.dashboard-layout) {
   }
 }
 
+/* Conversation create */
+
+.conversation-create-page {
+  & .conversation-create-upload {
+    min-height: 21rem;
+  }
+
+  & .conversation-upload-button {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--m__space-xxs);
+    padding: var(--m__padding-button-m);
+    border: var(--m__border-width-m) solid var(--m__bg-accent);
+    border-radius: var(--m__radius-m);
+    background-color: transparent;
+    color: var(--m__text);
+    font: inherit;
+    font-weight: var(--m__font-weight-medium);
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      color var(--m__duration-base) var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base);
+
+    &:hover,
+    &:focus-within {
+      color: var(--m__text-link-hover);
+      border-color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
+    }
+  }
+
+  & .conversation-upload-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 [data-component="credit-balance-over-time"] .chart-container,
 [data-component="conversation-volume-over-time"] .chart-container,
 #credit-balance-chart,
@@ -1369,23 +1412,23 @@ table.config-details {
 
   & table {
     min-width: 52rem;
-    table-layout: fixed;
+    table-layout: auto;
   }
 
   & .conversations-table__col-conversation {
-    width: 37%;
+    width: 36%;
+  }
+
+  & .conversations-table__col-uploaded {
+    width: 20%;
   }
 
   & .conversations-table__col-status {
-    width: 14%;
-  }
-
-  & .conversations-table__col-created {
-    width: 21%;
+    width: 12%;
   }
 
   & .conversations-table__col-analysis {
-    width: 22%;
+    width: 26%;
   }
 
   & .conversations-table__col-actions {
@@ -1533,10 +1576,28 @@ table.config-details {
       var(--m__easing-base);
   }
 
-  & .conversations-table__created {
+  & .conversations-table__uploaded {
+    min-width: 11rem;
+  }
+
+  & .conversations-table__uploaded-date,
+  & .conversations-table__uploaded-source {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & .conversations-table__uploaded-source {
     color: var(--m__text);
     font-size: var(--m__font-size-s);
-    white-space: nowrap;
+  }
+
+  & .conversations-table__uploaded-date {
+    margin-top: 0.15rem;
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-xs);
+    font-variant-numeric: tabular-nums;
   }
 
   & .conversations-table__status {

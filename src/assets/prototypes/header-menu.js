@@ -48,7 +48,7 @@
 
   document
     .querySelectorAll(
-      '[data-prototype-auth-sign-in], a[href^="/dashboard/"], a[href="/moderation/"]'
+      '[data-prototype-auth-sign-in], a[href^="/dashboard/"], a[href="/dashboard/moderation/"]'
     )
     .forEach(function (item) {
       item.addEventListener("click", function () {
