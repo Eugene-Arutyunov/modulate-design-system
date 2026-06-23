@@ -1546,6 +1546,7 @@ table.config-details {
   }
 
   & .conversations-table__audio-text {
+    flex: 1 1 auto;
     min-width: 0;
   }
 
@@ -1572,7 +1573,16 @@ table.config-details {
     color: inherit;
     font-weight: var(--m__font-weight-medium);
     overflow: hidden;
-    text-overflow: ellipsis;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 calc(100% - 1.75rem),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      #000 calc(100% - 1.75rem),
+      transparent
+    );
     transition: color var(--m__duration-base)
       var(--m__easing-base);
     white-space: nowrap;
@@ -1719,17 +1729,32 @@ table.config-details {
   & .conversation-report__title-line {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 0.45rem;
+    flex-wrap: nowrap;
+    gap: 0.65rem;
+    min-width: 0;
     margin-bottom: 0;
 
     & .dashboard-page-title {
+      flex: 1 1 auto;
+      min-width: 0;
       line-height: 1;
       margin: 0;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(
+        to right,
+        #000 calc(100% - 2rem),
+        transparent
+      );
+      mask-image: linear-gradient(
+        to right,
+        #000 calc(100% - 2rem),
+        transparent
+      );
+      white-space: nowrap;
     }
 
-    @media (width < 600px) {
-      align-items: flex-start;
+    & .m__tag {
+      flex: 0 0 auto;
     }
   }
 
