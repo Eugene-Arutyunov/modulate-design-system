@@ -1,22 +1,20 @@
 {% macro primary_nav(variant, currentUrl) %} {% set isModeration = currentUrl |
 startsWith('/dashboard/moderation/') %} {% set isDashboard = currentUrl |
 startsWith('/dashboard/') %} {% set isDashboardLinkActive = isDashboard or
-isModeration %} {% if variant == "bar" %} {% if currentUrl ==
-'/dashboard/home/' %}<span class="prototype-header__link active"
-  >Dashboard</span
+isModeration %} {% set isPlaygroundLinkActive = currentUrl |
+startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
+'/dashboard/home/' %}<span class="prototype-header__link active">Dashboard</span
 >{% else %}<a
   href="/dashboard/home/"
   class="prototype-header__link {{ 'active' if isDashboardLinkActive }}"
   >Dashboard</a
->{% endif %} {% if currentUrl == '/playground/' %}<span
-  class="prototype-header__link active"
-  >Playground</span
->{% else %}<a
+>{% endif %}
+<a
   href="/playground/"
-  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/playground/') }}"
+  class="prototype-header__link {{ 'active' if isPlaygroundLinkActive }}"
   >Playground</a
->{% endif %} {% if currentUrl == '/pricing/' %}<span
-  class="prototype-header__link active"
+>
+{% if currentUrl == '/pricing/' %}<span class="prototype-header__link active"
   >Pricing</span
 >{% else %}<a
   href="/pricing/"
@@ -28,13 +26,13 @@ else %}<a
   href="/models-api-docs/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
   >Docs</a
->{% endif %} {% elif variant == "landing" %} {% if currentUrl == '/playground/'
-%}<span class="prototype-header__link active">Playground</span>{% else %}<a
+>{% endif %} {% elif variant == "landing" %}
+<a
   href="/playground/"
-  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/playground/') }}"
+  class="prototype-header__link {{ 'active' if isPlaygroundLinkActive }}"
   >Playground</a
->{% endif %} {% if currentUrl == '/pricing/' %}<span
-  class="prototype-header__link active"
+>
+{% if currentUrl == '/pricing/' %}<span class="prototype-header__link active"
   >Pricing</span
 >{% else %}<a
   href="/pricing/"
@@ -55,7 +53,7 @@ else %}<a
 >
 <a
   href="/playground/"
-  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/playground/') }}"
+  class="prototype-header__popover-link {{ 'active' if isPlaygroundLinkActive }}"
   role="menuitem"
   >Playground</a
 >
@@ -107,7 +105,6 @@ else %}<a
   </svg>
   <span>Home</span></a
 >
-<div class="m__nav-menu-heading">OBSERVE</div>
 <a
   href="/dashboard/conversations/"
   class="m__nav-menu-item {{ 'active' if pageTitle == 'Conversation' or pageTitle == 'Conversations' or pageTitle == 'Create Conversation' }}"
@@ -132,7 +129,7 @@ else %}<a
   </svg>
   <span>Moderation</span></a
 >
-<div class="m__nav-menu-heading">BUILD</div>
+<div class="m__nav-menu-divider" aria-hidden="true"></div>
 <a
   href="/dashboard/behaviors/"
   class="m__nav-menu-item {{ 'active' if pageTitle == 'Behaviors' }}"
@@ -157,7 +154,7 @@ else %}<a
   </svg>
   <span>Jobs</span></a
 >
-<div class="m__nav-menu-heading">MANAGE</div>
+<div class="m__nav-menu-divider" aria-hidden="true"></div>
 <a
   href="/dashboard/api-keys/"
   class="m__nav-menu-item {{ 'active' if pageTitle == 'API Keys' }}"
@@ -182,24 +179,17 @@ else %}<a
   </svg>
   <span>Limits</span></a
 >
-<a
-  href="/dashboard/billing/"
-  class="m__nav-menu-item {{ 'active' if pageTitle == 'Billing' }}"
-  ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
-    <use href="#billing"></use>
-  </svg>
-  <span>Billing</span></a
->
+
 <a
   href="/dashboard/organization/"
-  class="m__nav-menu-item {{ 'active' if pageTitle == 'Organization' }}"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Organization' or pageTitle == 'Billing' or pageTitle == 'Members' }}"
   ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
     <use href="#account"></use>
   </svg>
-  <span>Organization</span></a
+  <span>Settings</span></a
 >
 <div class="prototype-internal-nav">
-  <div class="m__nav-menu-heading">ADMIN</div>
+  <div class="m__nav-menu-divider" aria-hidden="true"></div>
   <a
     href="/internal/users/"
     class="m__nav-menu-item {{ 'active' if pageTitle == 'Users & Organizations' }}"
@@ -383,19 +373,7 @@ else %}<a
   </svg>
   <span>Limits</span></a
 >
-<a
-  href="/dashboard/billing/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Billing' }}"
-  role="menuitem"
-  ><svg
-    class="prototype-header__popover-link-icon"
-    viewBox="0 0 32 32"
-    aria-hidden="true"
-  >
-    <use href="#billing"></use>
-  </svg>
-  <span>Billing</span></a
->
+
 <div class="prototype-internal-nav">
   <div class="m__nav-menu-heading">ADMIN</div>
   <a
@@ -451,4 +429,33 @@ else %}<a
     ></a
   >
 </div>
-{% endif %} {% endmacro %}
+{% endif %} {% endmacro %} {% macro dashboard_nav_settings() %}
+<a href="/dashboard/home/" class="m__nav-menu-item">
+  <svg class="m__nav-menu-item__icon" viewBox="0 0 12 12" aria-hidden="true">
+    <path
+      d="M7.25 2.75 4 6l3.25 3.25"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="square"
+      stroke-linejoin="miter"
+    ></path>
+  </svg>
+  <span>Back</span></a
+>
+<a
+  href="/dashboard/organization/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Organization' }}"
+  ><span>Organization</span></a
+>
+<a
+  href="/dashboard/billing/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Billing' }}"
+  ><span>Billing</span></a
+>
+<a
+  href="/dashboard/members/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Members' }}"
+  ><span>Members</span></a
+>
+{% endmacro %}

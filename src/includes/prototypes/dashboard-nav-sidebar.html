@@ -1,2 +1,4 @@
-{% import 'prototypes/dashboard-nav-macros.html' as dash_nav with context %}
-{{ dash_nav.dashboard_nav_main('sidebar') }}
+{% import 'prototypes/dashboard-nav-macros.html' as dash_nav with context %} {%
+if pageTitle == 'Organization' or pageTitle == 'Billing' or pageTitle ==
+'Members' %} {{ dash_nav.dashboard_nav_settings() }} {% else %} {{
+dash_nav.dashboard_nav_main('sidebar') }} {% endif %}
