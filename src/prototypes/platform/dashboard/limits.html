@@ -1,0 +1,36 @@
+---
+pageTitle: Limits
+permalink: /dashboard/limits/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <h1 class="dashboard-page-title">Limits</h1>
+      <section class="dashboard-section" data-component="limits-intro">
+        <p>
+          Model quotas define how much audio your organization can process each
+          month and how many requests or streaming connections can run at the
+          same time.
+        </p>
+      </section>
+
+      <div class="m__space XS"></div>
+
+      <section class="dashboard-section" data-component="model-limits-table">
+        {% set rows = prototypeModels.models %}
+        {% include 'service/table-model-limits.html' %}
+      </section>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

@@ -1,5 +1,12 @@
+const prototypeModels = require("./src/assets/prototypes/data/models.json");
+
 module.exports = function (conf) {
   conf.addFilter("startsWith", (str, prefix) => str.startsWith(prefix));
+  conf.addFilter("formatNumber", (value) => {
+    const number = Number(value);
+    return Number.isFinite(number) ? number.toLocaleString("en-US") : value;
+  });
+  conf.addGlobalData("prototypeModels", () => prototypeModels);
   conf.addPassthroughCopy("./src/index.js");
   conf.addPassthroughCopy("./src/assets");
   conf.addPassthroughCopy({

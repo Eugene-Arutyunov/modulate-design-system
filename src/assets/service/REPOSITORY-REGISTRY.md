@@ -94,6 +94,18 @@ Section-specific layout for the long home page; kept separate from `color-palett
 
 ---
 
+## Palette lamp page
+
+**Page:** `src/service/palette-lamp.html` → `/palette-lamp/`  
+**Styles:** `src/styles/service/palette-lamp.css`  
+**Script:** `src/assets/service/palette-lamp.js`  
+**Graphic:** `src/includes/assets/palette-lamp.svg`  
+**Bundle:** `src/css-bundle.njk`.
+
+Light-only standalone illustration page. Left side shows primitive palette colors as one continuous five-column grid, grouped in palette order and sorted dark-to-light within each group. The grid uses the design-system palette while the lamp is on, then switches to a more neutral comparison palette when the lamp is off. Right side shows a minimal inline SVG fluorescent lamp with CSS-driven `purple-500` glow; the checkbox below it toggles the `.is-on` state.
+
+---
+
 ## Docs chrome (navbar + footnotes)
 
 **Styles:** `src/styles/service/ids-navbar.css`, `src/styles/service/ids-footnotes.css`  

@@ -1,0 +1,121 @@
+---
+pageTitle: Insights
+permalink: /dashboard/insights/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content insights-page">
+      <h1 class="dashboard-page-title">Insights</h1>
+      <p>
+        Track what is changing across conversations before it becomes a queue
+        problem.
+      </p>
+
+      <div class="m__space S"></div>
+
+      <section
+        class="dashboard-section insights-plain-list"
+        aria-label="Insight summary">
+        <article class="m__widget insights-plain-widget">
+          <h2>Patterns detected</h2>
+          <p class="m__widget__value">12</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">This week</span>
+              <strong class="m__widget__meta-value">+3</strong>
+            </p>
+          </div>
+        </article>
+
+        <article class="m__widget insights-plain-widget">
+          <h2>Behavior shifts</h2>
+          <p class="m__widget__value">7</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Rising</span>
+              <strong class="m__widget__meta-value">5</strong>
+            </p>
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Declining</span>
+              <strong class="m__widget__meta-value">2</strong>
+            </p>
+          </div>
+        </article>
+
+        <article class="m__widget insights-plain-widget">
+          <h2>Anomaly alerts</h2>
+          <p class="m__widget__value">2</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Active</span>
+              <strong class="m__widget__meta-value">1</strong>
+            </p>
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Resolved</span>
+              <strong class="m__widget__meta-value">1</strong>
+            </p>
+          </div>
+        </article>
+
+        <article class="m__widget insights-plain-widget">
+          <h2>Emerging behavior</h2>
+          <p class="m__widget__value insights-widget-value-text">Harassment</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Last week</span>
+              <strong class="m__widget__meta-value">+34%</strong>
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <section class="dashboard-section">
+        <section class="m__widget insights-alerts-table-widget">
+          <div class="insights-widget-title-row">
+            <div>
+              <h2>Anomaly alerts</h2>
+            </div>
+          </div>
+          <div class="m__table-wrapper">
+            <table class="insights-alerts-table">
+              <thead>
+                <tr>
+                  <th>Behavior</th>
+                  <th>Time</th>
+                  <th>Region</th>
+                  <th>Conversation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="insights-empty-row">
+                  <td colspan="4">
+                    <div class="insights-empty-state">
+                      <strong>No anomaly alerts yet</strong>
+                      <span>
+                        Alerts that breach configured thresholds will appear
+                        here.
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <div class="m__space XL"></div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Palette Lamp</title>
+    <meta
+      name="description"
+      content="A light-only palette illustration with a fluorescent lamp." />
+    <link rel="shortcut icon" href="/assets/service/favicon.png" />
+    <link rel="stylesheet" href="/bundle.css" />
+  </head>
+  <body class="palette-lamp-body">
+    <main class="palette-lamp-page is-on" data-palette-lamp>
+      <h1 class="palette-lamp__title">Palette Lamp</h1>
+      {% set paletteTiles = [ { name: "gray-950", on:
+      "var(--m__color-gray-950)", off: "rgb(20, 20, 20)", onValue: "rgb(20, 20,
+      25)", offValue: "rgb(20, 20, 20)", onInk: "var(--m__color-white)", offInk:
+      "var(--m__color-white)" }, { name: "gray-900", on:
+      "var(--m__color-gray-900)", off: "rgb(31, 31, 31)", onValue: "rgb(30, 30,
+      40)", offValue: "rgb(31, 31, 31)", onInk: "var(--m__color-white)", offInk:
+      "var(--m__color-white)" }, { name: "gray-800", on:
+      "var(--m__color-gray-800)", off: "rgb(46, 46, 46)", onValue: "rgb(45, 45,
+      60)", offValue: "rgb(46, 46, 46)", onInk: "var(--m__color-white)", offInk:
+      "var(--m__color-white)" }, { name: "gray-700", on:
+      "var(--m__color-gray-700)", off: "rgb(69, 69, 69)", onValue: "rgb(68, 68,
+      86)", offValue: "rgb(69, 69, 69)", onInk: "var(--m__color-white)", offInk:
+      "var(--m__color-white)" }, { name: "gray-600", on:
+      "var(--m__color-gray-600)", off: "rgb(99, 99, 99)", onValue: "rgb(97, 97,
+      118)", offValue: "rgb(99, 99, 99)", onInk: "var(--m__color-white)",
+      offInk: "var(--m__color-white)" }, { name: "gray-500", on:
+      "var(--m__color-gray-500)", off: "rgb(127, 127, 127)", onValue: "rgb(126,
+      126, 144)", offValue: "rgb(127, 127, 127)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "gray-400", on: "var(--m__color-gray-400)", off: "rgb(154, 154, 154)",
+      onValue: "rgb(153, 153, 170)", offValue: "rgb(154, 154, 154)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "gray-300", on: "var(--m__color-gray-300)", off: "rgb(177, 177, 177)",
+      onValue: "rgb(176, 176, 190)", offValue: "rgb(177, 177, 177)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "gray-200", on: "var(--m__color-gray-200)", off: "rgb(199, 199, 199)",
+      onValue: "rgb(198, 198, 210)", offValue: "rgb(199, 199, 199)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "gray-100", on: "var(--m__color-gray-100)", off: "rgb(221, 221, 221)",
+      onValue: "rgb(220, 220, 230)", offValue: "rgb(221, 221, 221)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "gray-50", on: "var(--m__color-gray-50)", off: "rgb(242, 242, 242)",
+      onValue: "rgb(242, 242, 246)", offValue: "rgb(242, 242, 242)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "slate-900", on: "var(--m__color-slate-900)", off: "rgb(21, 21, 32)",
+      onValue: "rgb(20, 20, 50)", offValue: "rgb(21, 21, 32)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "slate-700", on: "var(--m__color-slate-700)", off: "rgb(64, 64, 78)",
+      onValue: "rgb(62, 63, 97)", offValue: "rgb(64, 64, 78)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "slate-500", on: "var(--m__color-slate-500)", off: "rgb(120, 120, 135)",
+      onValue: "rgb(118, 119, 156)", offValue: "rgb(120, 120, 135)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "slate-300", on: "var(--m__color-slate-300)", off: "rgb(182, 182, 198)",
+      onValue: "rgb(180, 180, 220)", offValue: "rgb(182, 182, 198)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "blue-800", on: "var(--m__color-blue-800)", off: "rgb(20, 55, 150)",
+      onValue: "rgb(30, 50, 160)", offValue: "rgb(20, 55, 150)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "blue-700", on: "var(--m__color-blue-700)", off: "rgb(24, 72, 170)",
+      onValue: "rgb(34, 65, 184)", offValue: "rgb(24, 72, 170)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "blue-600", on: "var(--m__color-blue-600)", off: "rgb(28, 88, 192)",
+      onValue: "rgb(37, 80, 209)", offValue: "rgb(28, 88, 192)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "blue-500", on: "var(--m__color-blue-500)", off: "rgb(32, 104, 220)",
+      onValue: "rgb(40, 95, 235)", offValue: "rgb(32, 104, 220)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "azure-600", on: "var(--m__color-azure-600)", off: "rgb(0, 124, 190)",
+      onValue: "rgb(0, 120, 200)", offValue: "rgb(0, 124, 190)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "azure-500", on: "var(--m__color-azure-500)", off: "rgb(74, 134, 185)",
+      onValue: "rgb(72, 131, 195)", offValue: "rgb(74, 134, 185)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "azure-400", on: "var(--m__color-azure-400)", off: "rgb(113, 142, 180)",
+      onValue: "rgb(110, 140, 190)", offValue: "rgb(113, 142, 180)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "purple-500", on: "var(--m__color-purple-500)", off: "rgb(132, 58, 220)",
+      onValue: "rgb(124, 58, 237)", offValue: "rgb(132, 58, 220)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "purple-400", on: "var(--m__color-purple-400)", off: "rgb(160, 116, 228)",
+      onValue: "rgb(152, 116, 246)", offValue: "rgb(160, 116, 228)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "purple-300", on: "var(--m__color-purple-300)", off: "rgb(192, 164, 240)",
+      onValue: "rgb(185, 163, 252)", offValue: "rgb(192, 164, 240)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "red-600", on: "var(--m__color-red-600)", off: "rgb(220, 30, 30)",
+      onValue: "rgb(220, 30, 58)", offValue: "rgb(220, 30, 30)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "red-500", on: "var(--m__color-red-500)", off: "rgb(238, 62, 62)",
+      onValue: "rgb(238, 64, 86)", offValue: "rgb(238, 62, 62)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "red-400", on: "var(--m__color-red-400)", off: "rgb(255, 92, 92)",
+      onValue: "rgb(255, 90, 113)", offValue: "rgb(255, 92, 92)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "orange-500", on: "var(--m__color-orange-500)", off: "rgb(255, 92, 24)",
+      onValue: "rgb(253, 85, 45)", offValue: "rgb(255, 92, 24)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "orange-400", on: "var(--m__color-orange-400)", off: "rgb(255, 126, 58)",
+      onValue: "rgb(255, 120, 80)", offValue: "rgb(255, 126, 58)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "orange-300", on: "var(--m__color-orange-300)", off: "rgb(255, 154, 92)",
+      onValue: "rgb(255, 150, 110)", offValue: "rgb(255, 154, 92)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "green-800", on: "var(--m__color-green-800)", off: "rgb(32, 110, 38)",
+      onValue: "rgb(20, 110, 47)", offValue: "rgb(32, 110, 38)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "green-600", on: "var(--m__color-green-600)", off: "rgb(60, 147, 62)",
+      onValue: "rgb(48, 147, 77)", offValue: "rgb(60, 147, 62)", onInk:
+      "var(--m__color-white)", offInk: "var(--m__color-white)" }, { name:
+      "green-500", on: "var(--m__color-green-500)", off: "rgb(88, 185, 90)",
+      onValue: "rgb(74, 185, 108)", offValue: "rgb(88, 185, 90)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" }, { name:
+      "green-400", on: "var(--m__color-green-400)", off: "rgb(116, 225, 120)",
+      onValue: "rgb(100, 225, 140)", offValue: "rgb(116, 225, 120)", onInk:
+      "var(--m__color-gray-950)", offInk: "var(--m__color-gray-950)" } ] %}
+
+      <div
+        class="palette-lamp__stage"
+        aria-label="Primitive palette and lamp illustration">
+        <section
+          class="palette-lamp__palette"
+          aria-label="Primitive colors sorted by brightness inside groups">
+          {% for tile in paletteTiles %}
+          <div
+            class="palette-lamp__tile"
+            style="--palette-lamp-tile-on: {{ tile.on }}; --palette-lamp-tile-off: {{ tile.off }}; --palette-lamp-tile-ink-on: {{ tile.onInk }}; --palette-lamp-tile-ink-off: {{ tile.offInk }};">
+            <span>{{ tile.name }}</span>
+            <code class="palette-lamp__tile-value palette-lamp__tile-value--on"
+              >{{ tile.onValue }}</code
+            >
+            <code class="palette-lamp__tile-value palette-lamp__tile-value--off"
+              >{{ tile.offValue }}</code
+            >
+          </div>
+          {% endfor %}
+        </section>
+
+        <section class="palette-lamp__fixture" aria-label="Fluorescent lamp">
+          {% include 'assets/palette-lamp.svg' %}
+          <label class="m__toggle-secondary palette-lamp__toggle">
+            <input type="checkbox" data-palette-lamp-toggle checked />
+            ON
+          </label>
+        </section>
+      </div>
+    </main>
+
+    <script src="/assets/service/palette-lamp.js"></script>
+  </body>
+</html>

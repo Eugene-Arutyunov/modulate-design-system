@@ -7,6 +7,7 @@
     requestStatus: null,
     creditsConsumed: null,
     usageRequestsStatus: null,
+    conversationVolume: null,
   };
 
   var fullData = null;
@@ -178,6 +179,17 @@
     return label + " \u00b7 " + value.toLocaleString("en-US") + " credits";
   }
 
+  function formatConversationVolumeStatusBar(index, chart) {
+    var label = formatDateTick(chart.data.labels[index]);
+    var value = chart.data.datasets[0].data[index];
+    return (
+      label +
+      " \u00b7 " +
+      value.toLocaleString("en-US") +
+      " audio inputs"
+    );
+  }
+
   // --- Bar chart custom legend (doubles as status bar on hover) ---
 
   function buildDefaultLegendHTML(chart) {
@@ -329,6 +341,99 @@
       canvas,
       function () { return charts.creditBalance; },
       formatCreditStatusBar
+    );
+  }
+
+  // --- Conversation Volume ---
+
+  function renderConversationVolumeChart() {
+    if (charts.conversationVolume) charts.conversationVolume.destroy();
+    var canvas = document.getElementById("conversation-volume-chart");
+    if (!canvas || !fullData) return;
+
+    var days = daysFromToggle("conversation-volume");
+    var dataPoints = filterByPeriod(
+      fullData.conversationVolume ? fullData.conversationVolume.data_points : [],
+      days
+    );
+    if (!dataPoints.length) {
+      canvas.parentNode.querySelector(".chart-empty").hidden = false;
+      canvas.hidden = true;
+      return;
+    }
+    canvas.parentNode.querySelector(".chart-empty").hidden = true;
+    canvas.hidden = false;
+
+    var dayMap = new Map();
+    for (var i = 0; i < dataPoints.length; i++) {
+      var dk = dayKey(dataPoints[i].period);
+      dayMap.set(dk, (dayMap.get(dk) || 0) + dataPoints[i].audio_inputs);
+    }
+
+    var sortedDays = Array.from(dayMap.keys()).sort();
+    var values = sortedDays.map(function (d) {
+      return dayMap.get(d);
+    });
+
+    var theme = readThemeColors();
+    var baseRgb = theme.chartDefault;
+
+    charts.conversationVolume = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels: sortedDays,
+        datasets: [
+          {
+            label: "Audio Inputs",
+            data: values,
+            borderColor: "transparent",
+            backgroundColor: function (context) {
+              var solid = rgbToRgba(baseRgb, 0.35);
+              var area = context.chart.chartArea;
+              if (!area) return solid;
+              var grad = context.chart.ctx.createLinearGradient(
+                0,
+                area.top,
+                0,
+                area.bottom
+              );
+              grad.addColorStop(0, solid);
+              grad.addColorStop(0.67, solid);
+              grad.addColorStop(1, rgbToRgba(baseRgb, 0));
+              return grad;
+            },
+            fill: true,
+            tension: 0.15,
+            pointRadius: 0,
+            pointHoverRadius: 2.5,
+            pointHoverBackgroundColor: rgbToRgba(baseRgb, 0.9),
+            pointHoverBorderWidth: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false },
+        },
+        scales: {
+          x: xScaleOptions(theme, sortedDays),
+          y: Object.assign(
+            { beginAtZero: true, grace: "25%" },
+            baseScaleOptions(theme)
+          ),
+        },
+      },
+    });
+
+    attachStatusBar(
+      canvas,
+      function () { return charts.conversationVolume; },
+      formatConversationVolumeStatusBar
     );
   }
 
@@ -676,6 +781,7 @@
 
   var renderMap = {
     "credit-balance": renderCreditBalanceChart,
+    "conversation-volume": renderConversationVolumeChart,
     "usage-by-model": renderUsageByModelChart,
     "request-status": renderRequestStatusChart,
   };
@@ -703,6 +809,7 @@
     renderRequestStatusChart();
     renderCreditsConsumedChart();
     renderUsageRequestsStatusChart();
+    renderConversationVolumeChart();
   }
 
   new MutationObserver(function (mutations) {
