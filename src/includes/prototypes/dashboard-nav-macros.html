@@ -179,10 +179,17 @@ else %}<a
   </svg>
   <span>Limits</span></a
 >
-
+<a
+  href="/dashboard/billing/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Billing' }}"
+  ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+    <use href="#billing"></use>
+  </svg>
+  <span>Billing</span></a
+>
 <a
   href="/dashboard/organization/"
-  class="m__nav-menu-item {{ 'active' if pageTitle == 'Organization' or pageTitle == 'Billing' or pageTitle == 'Members' }}"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Organization' or pageTitle == 'Members' or pageTitle == 'Activity Logs' or pageTitle == 'Alerts' }}"
   ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
     <use href="#account"></use>
   </svg>
@@ -373,6 +380,19 @@ else %}<a
   </svg>
   <span>Limits</span></a
 >
+<a
+  href="/dashboard/billing/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Billing' }}"
+  role="menuitem"
+  ><svg
+    class="prototype-header__popover-link-icon"
+    viewBox="0 0 32 32"
+    aria-hidden="true"
+  >
+    <use href="#billing"></use>
+  </svg>
+  <span>Billing</span></a
+>
 
 <div class="prototype-internal-nav">
   <div class="m__nav-menu-heading">ADMIN</div>
@@ -449,13 +469,18 @@ else %}<a
   ><span>Organization</span></a
 >
 <a
-  href="/dashboard/billing/"
-  class="m__nav-menu-item {{ 'active' if pageTitle == 'Billing' }}"
-  ><span>Billing</span></a
->
-<a
   href="/dashboard/members/"
   class="m__nav-menu-item {{ 'active' if pageTitle == 'Members' }}"
   ><span>Members</span></a
+>
+<a
+  href="/dashboard/activity-logs/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Activity Logs' }}"
+  ><span>Activity Logs</span></a
+>
+<a
+  href="/dashboard/alerts/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Alerts' }}"
+  ><span>Alerts</span></a
 >
 {% endmacro %}
