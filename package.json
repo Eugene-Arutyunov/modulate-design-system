@@ -23,18 +23,20 @@
   ],
   "scripts": {
     "icons:build": "node scripts/generate-svg-sprite.js",
-    "prebuild": "node scripts/generate-svg-sprite.js && rm -rf _site",
+    "icons:3d:build": "node scripts/generate-icon-3d-manifest.js",
+    "prebuild": "node scripts/generate-svg-sprite.js && node scripts/generate-icon-3d-manifest.js && rm -rf _site",
     "build": "eleventy",
-    "build:clean": "node scripts/generate-svg-sprite.js && eleventy",
+    "build:clean": "node scripts/generate-svg-sprite.js && node scripts/generate-icon-3d-manifest.js && eleventy",
     "export:prosocial:single": "node scripts/export-prosocial-single-html.js",
-    "predev": "node scripts/generate-svg-sprite.js",
+    "predev": "node scripts/generate-svg-sprite.js && node scripts/generate-icon-3d-manifest.js",
     "dev": "eleventy --serve",
     "tokens:build": "node scripts/build-tokens.js",
     "prepare": "npm run tokens:build"
   },
   "dependencies": {
+    "browserslist": "^4.24.0",
     "lightningcss": "^1.29.0",
-    "browserslist": "^4.24.0"
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0"

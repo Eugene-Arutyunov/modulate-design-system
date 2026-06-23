@@ -135,6 +135,22 @@ Raw SVG files are normalized into one hidden sprite include. The generator remov
 
 ---
 
+## 3D model icon flow
+
+**Sources:** `src/assets/images/svg-icons-3d-source/*.svg`  
+**Layer maps:** `src/assets/images/svg-icons-3d-source/layers/*.layers.json`  
+**Build script:** `scripts/generate-icon-3d-manifest.js`  
+**Generated data:** `src/assets/service/icon-3d/icons.json`  
+**Renderer:** `src/assets/service/icon-3d/model-icon-3d.js`  
+**Import map:** `src/includes/service/icon-3d-importmap.html`  
+**Styles:** `src/styles/components/model-icon-3d.css`  
+**Demo page:** `src/service/model-icons-3d.html` → `/model-icons-3d/`  
+**Usage docs:** `src/assets/service/ICON-3D.md`.
+
+Browser-rendered model icons use Three.js to extrude SVG shapes into rounded white tiles. The 3D source flow is separate from the flat sprite: prepared 3D SVGs take priority, and the existing flat SVG source acts as fallback for icons without a dedicated 3D drawing. Virtual layers come from `data-3d-layer`, sidecar `shapeLayers`, or base layer `0`; `shapeLayerSpans` lets a shape occupy multiple glyph-depth layers. Runtime settings live in the renderer’s `CONFIG` sections: shared `glyph` and `shadow`, plus per-context `light` and `view` values. Pricing renders individual front-facing tiles with scroll pitch; auth renders the whole overlapping row in one canvas/scene while the existing hover zones keep controlling `data-stack-focus`; the demo page keeps the orbit behavior from the prototype reference while using repository text and layout styles.
+
+---
+
 ## Prosocial standalone export
 
 **Script:** `scripts/export-prosocial-single-html.js`  
@@ -304,7 +320,7 @@ Four auth screens using `.auth-form` + `.m__textfield` + `.m__button-primary.M`.
 
 **OAuth buttons:** `src/includes/prototypes/auth-oauth-buttons.html` — Google (colored), GitHub and Apple (monochrome `currentColor`). Included on sign-in and create-account pages.
 
-**Models panel (right column):** `src/includes/prototypes/auth-layout-models-panel.html` — centered promo block (`max-width: 20rem`, matches `.auth-form`) with h1 and a single overlapping icon row spanning full promo width (overlap from icon count and size). **`.auth-layout__promo-status`** always shows one caption (Velma by default; last hovered icon via **`data-stack-focus`**). **`.auth-layout__promo-links`** sit below the status bar and stay visible. Icons stack left-to-right with negative margin; resting z-index favors Velma; **`data-stack-focus`** on **`.auth-layout__icon-stack`** (set by **`auth-layout-icon-stack.js`**) persists spread z-index and status caption after hover. Tiles cast a centered shadow in the panel background color. Equal-width **`.auth-layout__icon-hover-zones`** sit above the stack; **`:has()`** in **`auth-layout.css`** drives active tile scale. Icon tiles use a **`.light`** island; model links live on hover zones. Footer links and captions use base font size. Uses **`dark-vibrant`** theme. Shown on all auth layout pages; hidden below 768px with the right column.
+**Models panel (right column):** `src/includes/prototypes/auth-layout-models-panel.html` — centered promo block (`max-width: 20rem`, matches `.auth-form`) with h1 and a single overlapping icon row spanning full promo width (overlap from icon count and size). **`.auth-layout__promo-status`** always shows one caption (Velma by default; last hovered icon via **`data-stack-focus`**). **`.auth-layout__promo-links`** sit below the status bar and stay visible. Icons stack left-to-right with negative margin; resting z-index favors Velma in the SVG fallback; **`data-stack-focus`** on **`.auth-layout__icon-stack`** (set by **`auth-layout-icon-stack.js`**) persists spread z-index and status caption after hover. Equal-width **`.auth-layout__icon-hover-zones`** sit above the stack. When 3D icon rendering is available, `model-icon-3d.js` draws the whole icon row as one scene and uses `data-stack-focus` to lift the active tile above the others. Icon tiles use a **`.light`** island; model links live on hover zones. Footer links and captions use base font size. Uses **`dark-vibrant`** theme. Shown on all auth layout pages; hidden below 768px with the right column.
 
 **Auth icon stack script:** `src/assets/prototypes/auth-layout-icon-stack.js` — sets initial **`data-stack-focus="velma"`** on **`.auth-layout__icon-stack`**; on pointer enter over a hover zone, updates focus so z-index spread and status caption match the last active icon.
 
