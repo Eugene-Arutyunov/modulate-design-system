@@ -2,10 +2,10 @@
 startsWith('/dashboard/moderation/') %} {% set isDashboard = currentUrl |
 startsWith('/dashboard/') %} {% set isDashboardLinkActive = isDashboard or
 isModeration %} {% if variant == "bar" %} {% if currentUrl ==
-'/dashboard/overview/' %}<span class="prototype-header__link active"
+'/dashboard/home/' %}<span class="prototype-header__link active"
   >Dashboard</span
 >{% else %}<a
-  href="/dashboard/overview/"
+  href="/dashboard/home/"
   class="prototype-header__link {{ 'active' if isDashboardLinkActive }}"
   >Dashboard</a
 >{% endif %} {% if currentUrl == '/playground/' %}<span
@@ -48,7 +48,7 @@ else %}<a
   >Docs</a
 >{% endif %} {% else %}
 <a
-  href="/dashboard/overview/"
+  href="/dashboard/home/"
   class="prototype-header__popover-link {{ 'active' if isDashboardLinkActive }}"
   role="menuitem"
   >Dashboard</a
@@ -100,8 +100,8 @@ else %}<a
 {% endif %} {% endmacro %} {% macro dashboard_nav_main(variant) %} {% if variant
 == "sidebar" %}
 <a
-  href="/dashboard/overview/"
-  class="m__nav-menu-item {{ 'active' if pageTitle == 'Overview' }}"
+  href="/dashboard/home/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Home' }}"
   ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
     <use href="#overview"></use>
   </svg>
@@ -238,8 +238,8 @@ else %}<a
 </div>
 {% else %}
 <a
-  href="/dashboard/overview/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Overview' }}"
+  href="/dashboard/home/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Home' }}"
   role="menuitem"
   ><svg
     class="prototype-header__popover-link-icon"
