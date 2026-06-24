@@ -306,6 +306,20 @@ html:has(.dashboard-layout) {
       background-color 150ms var(--m__easing-base);
   }
 
+  &[data-expanding="true"] > .conversation-upload-model-row,
+  &[data-expanding="true"] .pg-upload-actions,
+  &[data-expanding="true"] .pg-upload-plate-footer {
+    animation: conversation-upload-reveal 160ms var(--m__easing-base) both;
+  }
+
+  &[data-expanding="true"] .pg-upload-actions {
+    animation-delay: 20ms;
+  }
+
+  &[data-expanding="true"] .pg-upload-plate-footer {
+    animation-delay: 35ms;
+  }
+
   &.pg-upload-plate > .conversation-upload-model-row {
     right: auto;
     width: auto;
@@ -454,13 +468,44 @@ html:has(.dashboard-layout) {
   }
 }
 
+@keyframes conversation-upload-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-0.2rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conversation-upload-plate[data-expanding="true"]
+    > .conversation-upload-model-row,
+  .conversation-upload-plate[data-expanding="true"] .pg-upload-actions,
+  .conversation-upload-plate[data-expanding="true"] .pg-upload-plate-footer {
+    animation: none;
+  }
+}
+
 main.dashboard-content .conversation-upload-plate[data-state="uploaded"] {
   border-color: transparent;
   background-color: var(--m__bg-surface);
+  transition:
+    min-height 150ms var(--m__easing-base),
+    border-color var(--m__duration-base) var(--m__easing-base),
+    background-color var(--m__duration-base) var(--m__easing-base);
 }
 
 main.dashboard-content .conversation-upload-plate[data-state="uploaded"]:hover {
   border-color: transparent;
+  background-color: color-mix(
+    in srgb,
+    var(--m__text-link-hover) 15%,
+    var(--m__bg-surface)
+  );
+  transition-duration: var(--m__duration-instant);
 }
 
 main.dashboard-content

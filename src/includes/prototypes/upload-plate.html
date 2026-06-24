@@ -126,6 +126,7 @@
       var stateSwitch = plate.querySelector('.pg-plate-state-switch');
       var expandButton = plate.querySelector('[data-upload-plate-expand]');
       var collapseButton = plate.querySelector('[data-upload-plate-collapse]');
+      var expandAnimationTimer;
 
       function syncStateSwitch() {
         if (!stateSwitch) return;
@@ -147,6 +148,13 @@
       }
 
       function expandPlate() {
+        if (plate.dataset.state === 'uploaded') {
+          plate.dataset.expanding = 'true';
+          clearTimeout(expandAnimationTimer);
+          expandAnimationTimer = setTimeout(function () {
+            delete plate.dataset.expanding;
+          }, 180);
+        }
         setPlateState('initial');
       }
 
