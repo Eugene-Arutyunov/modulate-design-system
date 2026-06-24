@@ -91,6 +91,7 @@
       <span class="m__tag-flat">.webm</span>
       <span class="pg-upload-formats-label">up to 50 MB</span>
     </div>
+    {% if uploadPlateShowMeta != false %}
     {% if uploadPlateMetaVariant == 'credits' %}
     <p class="pg-upload-meta pg-upload-meta--default">
       <span>{{ uploadPlateBalanceCredits }} cr. {{ uploadPlateCreditBalanceLabel }}</span>
@@ -101,6 +102,7 @@
     {% else %}
     <p class="pg-upload-meta pg-upload-meta--default">9 / 10</p>
     <p class="pg-upload-meta pg-upload-meta--low"><span class="pg-upload-meta-danger">3</span> / 10</p>
+    {% endif %}
     {% endif %}
   </div>
 
