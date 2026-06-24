@@ -5,14 +5,23 @@
 {% set uploadPlateClass = 'conversation-upload-plate conversation-create-upload' %}
 {% set conversationUploadAccept = '.aac,.flac,.m4a,.mp3,.mp4,.ogg,.opus,.wav,.webm' %}
 {% set uploadPlateMetaVariant = 'credits' %}
-{% set uploadPlateCreditCost = '25 credit per gen.' %}
 {% set uploadPlateBalanceCredits = '2,000' %}
 {% set uploadPlateLowBalanceCredits = '2' %}
 {% set uploadPlateCreditBalanceLabel = 'available' %}
-{% set uploadPlateLowCreditBalanceLabel = 'availible' %}
+{% set uploadPlateLowCreditBalanceLabel = 'available' %}
 {% set uploadPlateExhaustedMessage = "You're out of credits. Add credits in Billing to upload more conversations." %}
 {% set uploadPlateExhaustedHref = '/dashboard/billing/' %}
 {% set uploadPlateExhaustedCtaLabel = 'Go to Billing' %}
+{% set uploadPlateOptions %}
+<div class="pg-options-row conversation-upload-model-row">
+  <div class="conversation-upload-model-controls">
+    {% set reportOutputMenuVariant = 'text' %}
+    {% include 'prototypes/conversations/report-output-menu.html' %}
+    {% set reportOutputMenuVariant = 'button' %}
+    <a href="#" class="conversation-upload-model-setup"><span>Settings</span></a>
+  </div>
+</div>
+{% endset %}
 {% set uploadPlateActions %}
 <div class="pg-upload-actions">
   <label class="conversation-upload-button pg-upload-primary">
@@ -24,7 +33,8 @@
     />
   </label>
 </div>
-{% endset %} {% set uploadPlateAnalyzingContent %}
+{% endset %}
+{% set uploadPlateAnalyzingContent %}
 <div class="pg-processing-stages">
   <span class="pg-processing-stage">
     <svg
@@ -95,4 +105,5 @@
     Complete
   </span>
 </div>
-{% endset %} {% include 'prototypes/upload-plate.html' %}
+{% endset %}
+{% include 'prototypes/upload-plate.html' %}

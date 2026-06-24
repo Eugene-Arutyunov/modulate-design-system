@@ -299,6 +299,124 @@ html:has(.dashboard-layout) {
 }
 
 .conversation-upload-plate {
+  &.pg-upload-plate > .conversation-upload-model-row {
+    right: auto;
+    width: auto;
+    min-height: 0;
+    padding: 0.65rem 0.75rem;
+    border-bottom: none;
+    background-color: transparent;
+    pointer-events: auto;
+  }
+
+  & .conversation-upload-model-controls {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: var(--m__font-size-s);
+  }
+
+  & .conversation-upload-model-setup {
+    display: inline-flex;
+    align-items: baseline;
+    align-self: baseline;
+    padding-bottom: 0;
+    border-bottom: 1.5px dotted currentColor;
+    color: var(--m__text);
+    font: inherit;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    text-decoration: none;
+    text-decoration-color: transparent;
+    transition:
+      color var(--m__duration-base) var(--m__easing-base),
+      border-bottom-color var(--m__duration-base) var(--m__easing-base);
+  }
+
+  & .conversation-upload-model-setup:is(:hover, :focus-visible) {
+    border-bottom-style: dotted;
+    color: var(--m__text-link-hover);
+    text-decoration: none;
+    text-decoration-color: transparent;
+    transition-duration: var(--m__duration-instant);
+  }
+
+  & .conversation-report__report-menu--text {
+    display: inline-flex;
+    width: auto;
+    max-width: none;
+  }
+
+  & button.conversation-report__report-trigger--text {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.2em;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--m__text);
+    font: inherit;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    cursor: pointer;
+    transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+
+  &
+    button.conversation-report__report-trigger--text:is(
+      :hover,
+      :focus-visible,
+      .m__menu-button-trigger--active
+    ) {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+
+  & .conversation-report__report-trigger--text:focus-visible {
+    outline: var(--m__border-width-m) solid currentColor;
+    outline-offset: 0.18rem;
+  }
+
+  &
+    .conversation-report__report-trigger--text
+    .conversation-report__report-trigger-label {
+    color: var(--m__text-caption);
+    font-weight: var(--m__font-weight-regular);
+  }
+
+  &
+    .conversation-report__report-trigger--text
+    .conversation-report__report-trigger-text {
+    min-width: 0;
+    font-weight: var(--m__font-weight-medium);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  & .conversation-report__report-trigger--text .m__button__icon {
+    width: 0.85em;
+    height: 0.85em;
+    flex: 0 0 auto;
+    align-self: center;
+    color: var(--m__text-caption);
+    pointer-events: none;
+    stroke: currentColor;
+    stroke-width: 0.65;
+    stroke-linejoin: round;
+    transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+
+  &
+    button.conversation-report__report-trigger--text:is(
+      :hover,
+      :focus-visible,
+      .m__menu-button-trigger--active
+    )
+    .m__button__icon {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+
   & .conversation-upload-button {
     display: inline-flex;
     align-items: baseline;
