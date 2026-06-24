@@ -222,13 +222,13 @@
           </td>
           <td class="conversations-table__status">
             {% if row.status == 'complete' %}
-            <span class="m__tag m__tag--success">Complete</span>
+            <span class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral">Complete</span>
             {% elif row.status == 'processing' %}
-            <span class="m__tag m__tag--muted">Processing</span>
+            <span class="m__tag conversations-table__status-tag conversations-table__status-tag--processing">Processing</span>
             {% elif row.status == 'failed' %}
-            <span class="m__tag m__tag--error">Failed</span>
+            <span class="m__tag conversations-table__status-tag conversations-table__status-tag--failed">Failed</span>
             {% elif row.status == 'moderation' %}
-            <span class="m__tag m__tag--warning">Moderation</span>
+            <span class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral">Moderation</span>
             {% else %}
             <span class="m__tag-flat">{{ row.status }}</span>
             {% endif %}
