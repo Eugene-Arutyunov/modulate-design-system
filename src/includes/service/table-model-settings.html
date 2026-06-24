@@ -1,0 +1,133 @@
+<div class="m__widget model-settings-widget" data-model-settings-table>
+  <div class="m__widget-header">
+    <label class="m__searchbar" for="model-settings-search">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <use href="#search"></use>
+      </svg>
+      <input
+        type="search"
+        id="model-settings-search"
+        placeholder="Search"
+        data-model-settings-search-input
+      />
+    </label>
+  </div>
+
+  <div class="m__table-wrapper">
+    <table class="model-settings-table">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th class="m__col-actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in modelSettingsRows %}
+          <tr
+            data-model-settings-row
+            data-model-settings-search="{{ row.name }} {{ row.description }}"
+          >
+            <td>
+              <div class="model-settings-model">
+                <span class="model-settings-model__icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <use href="#{{ row.icon }}"></use>
+                  </svg>
+                </span>
+                <span class="model-settings-model__copy">
+                  <span class="model-settings-model__title">
+                    {{ row.name }}
+                    {% if row.isDefault %}
+                      <span class="m__tag-flat">Default</span>
+                    {% endif %}
+                  </span>
+                  <span class="model-settings-model__meta">
+                    {{ row.description }}
+                  </span>
+                </span>
+              </div>
+            </td>
+            <td class="m__col-actions">
+              <div class="m__menu-button">
+                <button
+                  type="button"
+                  class="m__menu-button-icon S m__menu-button-trigger"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  aria-label="Actions for {{ row.name }}"
+                >
+                  <svg viewBox="0 0 12 12" aria-hidden="true">
+                    <use href="#dots-vertical"></use>
+                  </svg>
+                </button>
+                <div class="m__menu-button-list" hidden role="menu">
+                  <button
+                    type="button"
+                    class="m__menu-button-item"
+                    role="menuitem"
+                  >
+                    Set default model
+                  </button>
+                  <button
+                    type="button"
+                    class="m__menu-button-item"
+                    role="menuitem"
+                    data-modal-open="modal-model-settings-edit"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+        <tr data-model-settings-empty hidden>
+          <td colspan="2">
+            <div class="m__table-empty">
+              <p>No models found.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector("[data-model-settings-table]");
+    if (!root) return;
+
+    var searchInput = root.querySelector("[data-model-settings-search-input]");
+    var rows = root.querySelectorAll("[data-model-settings-row]");
+    var emptyRow = root.querySelector("[data-model-settings-empty]");
+
+    if (!searchInput || !rows.length) return;
+
+    function applySearch() {
+      var query = searchInput.value.trim().toLowerCase();
+      var visibleCount = 0;
+      var lastVisibleRow = null;
+
+      rows.forEach(function (row) {
+        var searchText = (row.dataset.modelSettingsSearch || "").toLowerCase();
+        var isVisible = !query || searchText.includes(query);
+        row.hidden = !isVisible;
+        row.classList.remove("model-settings-table__last-visible");
+        if (isVisible) {
+          visibleCount += 1;
+          lastVisibleRow = row;
+        }
+      });
+
+      if (lastVisibleRow) {
+        lastVisibleRow.classList.add("model-settings-table__last-visible");
+      }
+
+      if (emptyRow) emptyRow.hidden = visibleCount > 0;
+    }
+
+    searchInput.addEventListener("input", applySearch);
+    applySearch();
+  })();
+</script>

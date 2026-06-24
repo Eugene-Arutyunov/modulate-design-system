@@ -60,6 +60,7 @@
   function selectMenuItem(item) {
     var list = item.closest(".m__menu-button-list");
     if (!list || list.dataset.menuButtonSelect !== "trigger-text") return;
+    if (item.hasAttribute("data-menu-button-action")) return;
 
     var menu = list._menuButtonOriginalParent;
     var trigger = activeTrigger;
