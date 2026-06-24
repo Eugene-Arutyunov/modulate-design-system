@@ -490,21 +490,17 @@ html:has(.dashboard-layout) {
 }
 
 main.dashboard-content .conversation-upload-plate[data-state="uploaded"] {
-  border-color: transparent;
-  background-color: var(--m__bg-surface);
+  border: var(--m__border-width-s) solid
+    color-mix(in srgb, currentColor 25%, transparent);
+  background-color: transparent;
+  color: var(--m__text);
   transition:
     min-height 150ms var(--m__easing-base),
-    border-color var(--m__duration-base) var(--m__easing-base),
-    background-color var(--m__duration-base) var(--m__easing-base);
+    color var(--m__duration-base) var(--m__easing-base);
 }
 
 main.dashboard-content .conversation-upload-plate[data-state="uploaded"]:hover {
-  border-color: transparent;
-  background-color: color-mix(
-    in srgb,
-    var(--m__text-link-hover) 15%,
-    var(--m__bg-surface)
-  );
+  color: var(--m__text-link-hover);
   transition-duration: var(--m__duration-instant);
 }
 
