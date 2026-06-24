@@ -198,7 +198,7 @@
     var list = el("div", "guide-tokens__space-stack");
     tokens.forEach(function (t) {
       var item = el("div", "guide-tokens__space-item");
-      var sizeMod = t.short.replace(/^space-/, "").toUpperCase();
+      var sizeMod = t.short.replace(/^spacer-/, "").toUpperCase();
 
       var label = el("div", "guide-tokens__space-item-label");
       label.appendChild(el("code", null, ".m__space." + sizeMod));
@@ -208,6 +208,26 @@
       var box = el("div", "m__space " + sizeMod);
       box.style.backgroundColor = "color-mix(in srgb, var(--m__error) 20%, transparent)";
       item.appendChild(box);
+      list.appendChild(item);
+    });
+    container.appendChild(list);
+  }
+
+  function renderGap(container, tokens) {
+    var list = el("div", "guide-tokens__space-stack");
+    tokens.forEach(function (t) {
+      var item = el("div", "guide-tokens__space-item");
+
+      var label = el("div", "guide-tokens__space-item-label");
+      label.appendChild(el("code", "accent", t.name));
+      label.appendChild(el("span", "guide-tokens__row-value", t.raw));
+      item.appendChild(label);
+
+      var bar = el("div");
+      bar.style.height = "0.75rem";
+      bar.style.width = "var(" + t.name + ")";
+      bar.style.backgroundColor = "color-mix(in srgb, var(--m__error) 20%, transparent)";
+      item.appendChild(bar);
       list.appendChild(item);
     });
     container.appendChild(list);
@@ -263,7 +283,7 @@
     "font-size-xl": "Medium heading",
     "font-size-l": "Small heading",
     "font-size-m": "Body text",
-    "font-size-mono": "Code snippet",
+    "font-size-smaller": "Slightly smaller text",
     "font-size-s": "Caption",
     "font-size-xs": "Fine print"
   };
@@ -275,7 +295,7 @@
     "font-size-xl",
     "font-size-l",
     "font-size-m",
-    "font-size-mono",
+    "font-size-smaller",
     "font-size-s",
     "font-size-xs"
   ];
@@ -398,6 +418,7 @@
     swatch: renderSwatch,
     square: renderSquare,
     space: renderSpace,
+    gap: renderGap,
     "border-width": renderBorderWidth,
     "control-padding": renderControlPadding,
     "text-size": renderTextSize,
