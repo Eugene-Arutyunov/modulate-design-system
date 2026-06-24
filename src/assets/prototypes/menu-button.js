@@ -30,6 +30,14 @@
     list.style.right = document.documentElement.clientWidth - rect.right + "px";
     list.style.transform = "";
 
+    if (list.classList.contains("conversation-report__report-list")) {
+      var rootFontSize = parseFloat(
+        getComputedStyle(document.documentElement).fontSize
+      );
+      var reportListWidth = 16 * (rootFontSize || 16);
+      list.style.width = Math.max(rect.width, reportListWidth) + "px";
+    }
+
     list.hidden = false;
     activeList = list;
     activeTrigger = trigger;
