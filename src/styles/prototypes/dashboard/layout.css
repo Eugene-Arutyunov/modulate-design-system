@@ -299,6 +299,27 @@ html:has(.dashboard-layout) {
 }
 
 .conversation-upload-plate {
+  &.pg-upload-plate {
+    transition:
+      min-height 150ms var(--m__easing-base),
+      border-color 150ms var(--m__easing-base),
+      background-color 150ms var(--m__easing-base);
+  }
+
+  &[data-expanding="true"] > .conversation-upload-model-row,
+  &[data-expanding="true"] .pg-upload-actions,
+  &[data-expanding="true"] .pg-upload-plate-footer {
+    animation: conversation-upload-reveal 160ms var(--m__easing-base) both;
+  }
+
+  &[data-expanding="true"] .pg-upload-actions {
+    animation-delay: 20ms;
+  }
+
+  &[data-expanding="true"] .pg-upload-plate-footer {
+    animation-delay: 35ms;
+  }
+
   &.pg-upload-plate > .conversation-upload-model-row {
     right: auto;
     width: auto;
@@ -445,6 +466,42 @@ html:has(.dashboard-layout) {
   & .pg-upload-stream {
     display: none;
   }
+}
+
+@keyframes conversation-upload-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-0.2rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conversation-upload-plate[data-expanding="true"]
+    > .conversation-upload-model-row,
+  .conversation-upload-plate[data-expanding="true"] .pg-upload-actions,
+  .conversation-upload-plate[data-expanding="true"] .pg-upload-plate-footer {
+    animation: none;
+  }
+}
+
+main.dashboard-content .conversation-upload-plate[data-state="uploaded"] {
+  border: var(--m__border-width-s) solid
+    color-mix(in srgb, currentColor 25%, transparent);
+  background-color: transparent;
+  color: var(--m__text);
+  transition:
+    min-height 150ms var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
+}
+
+main.dashboard-content .conversation-upload-plate[data-state="uploaded"]:hover {
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
 }
 
 main.dashboard-content
@@ -1715,6 +1772,21 @@ table.config-details {
     min-width: 6.5rem;
   }
 
+  & .conversations-table__status-tag--neutral,
+  & .conversations-table__status-tag--processing {
+    color: var(--m__text-caption);
+  }
+
+  & .conversations-table__status-tag--processing {
+    padding-right: 0;
+    padding-left: 0;
+    border-color: transparent;
+  }
+
+  & .conversations-table__status-tag--failed {
+    color: var(--m__error);
+  }
+
   & .conversations-table__reports {
     display: flex;
     align-items: center;
@@ -1730,15 +1802,11 @@ table.config-details {
     width: 1.45rem;
     height: 1.45rem;
     color: var(--m__text);
-    filter: grayscale(1) saturate(0);
     text-decoration: none;
-    transition:
-      color var(--m__duration-base) var(--m__easing-base),
-      filter var(--m__duration-base) var(--m__easing-base);
+    transition: color var(--m__duration-base) var(--m__easing-base);
 
     &:is(:hover, :focus-visible) {
       color: var(--m__text-link-hover);
-      filter: none;
       transition-duration: var(--m__duration-instant);
     }
 
@@ -1978,7 +2046,6 @@ table.config-details {
 
 .conversation-report__report-item--generate {
   gap: 0;
-  color: var(--m__text-caption);
 }
 
 .conversation-report__report-item--generate
@@ -1993,22 +2060,8 @@ table.config-details {
   flex: 1 1 auto;
 }
 
-.conversation-report__report-item--generate
-  .conversation-report__report-item-icon
-  svg {
-  filter: grayscale(1) saturate(0);
-  transition: filter var(--m__duration-base) var(--m__easing-base);
-}
-
 .conversation-report__report-item--generate:is(:hover, :focus-visible) {
   color: var(--m__text-link-hover);
-}
-
-.conversation-report__report-item--generate:is(:hover, :focus-visible)
-  .conversation-report__report-item-icon
-  svg {
-  filter: none;
-  transition-duration: var(--m__duration-instant);
 }
 
 .conversation-report__report-settings-footer {
@@ -2020,7 +2073,7 @@ table.config-details {
 .conversation-report__report-item--settings {
   min-height: calc(1.3rem + 0.68rem);
   padding-left: 0.55rem;
-  color: var(--m__text-caption);
+  color: var(--m__bg-accent);
 }
 
 .conversation-report__report-item--settings:is(:hover, :focus-visible) {

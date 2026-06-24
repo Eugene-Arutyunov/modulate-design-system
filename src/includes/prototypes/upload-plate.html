@@ -91,6 +91,7 @@
       <span class="m__tag-flat">.webm</span>
       <span class="pg-upload-formats-label">up to 50 MB</span>
     </div>
+    {% if uploadPlateShowMeta != false %}
     {% if uploadPlateMetaVariant == 'credits' %}
     <p class="pg-upload-meta pg-upload-meta--default">
       <span>{{ uploadPlateBalanceCredits }} cr. {{ uploadPlateCreditBalanceLabel }}</span>
@@ -101,6 +102,7 @@
     {% else %}
     <p class="pg-upload-meta pg-upload-meta--default">9 / 10</p>
     <p class="pg-upload-meta pg-upload-meta--low"><span class="pg-upload-meta-danger">3</span> / 10</p>
+    {% endif %}
     {% endif %}
   </div>
 
@@ -124,6 +126,7 @@
       var stateSwitch = plate.querySelector('.pg-plate-state-switch');
       var expandButton = plate.querySelector('[data-upload-plate-expand]');
       var collapseButton = plate.querySelector('[data-upload-plate-collapse]');
+      var expandAnimationTimer;
 
       function syncStateSwitch() {
         if (!stateSwitch) return;
@@ -145,6 +148,13 @@
       }
 
       function expandPlate() {
+        if (plate.dataset.state === 'uploaded') {
+          plate.dataset.expanding = 'true';
+          clearTimeout(expandAnimationTimer);
+          expandAnimationTimer = setTimeout(function () {
+            delete plate.dataset.expanding;
+          }, 180);
+        }
         setPlateState('initial');
       }
 
