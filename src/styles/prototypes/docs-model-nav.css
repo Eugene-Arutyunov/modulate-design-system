@@ -1,11 +1,16 @@
 .docs-model-nav {
   display: flex;
+  flex: 0 0 8rem;
   flex-direction: column;
   gap: var(--m__gap-nav);
+  width: 8rem;
+  max-width: 8rem;
   margin-bottom: var(--m__default-margin-bottom);
 
   @media (width < 767px) {
-    width: max-content;
+    flex: none;
+    width: 100%;
+    max-width: none;
   }
 }
 
@@ -36,8 +41,7 @@
   width: 100%;
   cursor: pointer;
   color: var(--m__text);
-  transition: color var(--m__duration-base)
-    var(--m__easing-base);
+  transition: color var(--m__duration-base) var(--m__easing-base);
 
   &:not(:first-child) {
     margin-top: -1px;
@@ -65,11 +69,7 @@
   &.active {
     position: relative;
     z-index: 1;
-    background-color: color-mix(
-      in srgb,
-      var(--m__text-link) 8%,
-      transparent
-    );
+    background-color: color-mix(in srgb, var(--m__text-link) 8%, transparent);
     cursor: default;
     pointer-events: none;
   }
@@ -78,17 +78,25 @@
     display: block;
     font-weight: var(--m__font-weight-bold);
     margin-bottom: 0.1rem;
+    overflow-wrap: anywhere;
   }
 
   & .docs-model-nav__item-row {
     display: flex;
     align-items: center;
     gap: var(--m__gap-xs3);
+    max-width: 100%;
+    min-width: 0;
 
     & svg {
       flex-shrink: 0;
       width: 0.9em;
       height: 0.9em;
+    }
+
+    & span {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
   }
 }

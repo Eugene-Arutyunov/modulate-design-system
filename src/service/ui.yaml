@@ -76,9 +76,9 @@ current:
     title: Conversations
     sections: []
 
-  - id: dashboard-overview
+  - id: dashboard-home
     route: /web/dashboard
-    title: Overview
+    title: Home
     sections:
       - section:
           widgets:
@@ -438,9 +438,23 @@ target:
     sections: []
 
   - id: conversations
-    route: /conversations
+    route: /dashboard/conversations/
     title: Conversations
     sections: []
+
+  - id: conversations-create
+    route: /dashboard/conversations/create/
+    title: Create Conversation
+    sections:
+      - section:
+          widget: conversation-upload
+
+  - id: moderation
+    route: /dashboard/moderation/
+    title: Moderation
+    sections:
+      - section:
+          text-content: moderation-intro
 
   - id: dashboard-insights
     route: /dashboard/insights/
@@ -448,10 +462,18 @@ target:
     sections:
       - section:
           text-content: insights-intro
+      - section:
+          widgets:
+            - pattern-count
+            - behavior-shifts
+            - anomaly-alerts
+            - largest-cohort-gap
+      - section:
+          widget: anomaly-alerts-table
 
-  - id: dashboard-overview
-    route: /dashboard/overview
-    title: Overview
+  - id: dashboard-home
+    route: /dashboard/home/
+    title: Home
     sections:
       - section:
           widgets:

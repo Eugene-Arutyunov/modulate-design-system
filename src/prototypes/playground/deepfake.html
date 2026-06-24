@@ -1,13 +1,15 @@
 ---
 pageTitle: Deepfake Detection
+pageHeading: AI researcher interview with a cloned voice segment
 permalink: /playground/deepfake/
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block options %}
+{% set uploadPlateOptions %}
 <div class="pg-options-row pg-plate-header">
   <span class="pg-plate-header__title">Detect synthetic speech</span>
 </div>
-{% endblock %} {% block analyzing_content %}
+{% endset %}
+{% set uploadPlateAnalyzingContent %}
 <div class="pg-processing-stages">
   <span class="pg-processing-stage">
     <svg
@@ -25,7 +27,8 @@ permalink: /playground/deepfake/
     Authenticity
   </span>
 </div>
-{% endblock %} {% block player_clips %}
+{% endset %}
+{% extends 'prototypes/playground-layout.html' %} {% block player_clips %}
 <div class="pg-histo-squares df-player-clips">
   <div
     class="pg-histo-bar authentic"

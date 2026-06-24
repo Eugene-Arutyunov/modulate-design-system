@@ -2,27 +2,38 @@
 <header class="prototype-header">
   <a
     href="/index-landing/"
-    class="prototype-header__brand prototype-header__link {{ 'active' if page.url == '/index-landing/' or page.url == '/' }}">
+    class="prototype-header__brand prototype-header__link {{ 'active' if page.url == '/index-landing/' or page.url == '/' }}"
+  >
     <svg class="prototype-header__icon" viewBox="0 0 32 32" aria-hidden="true">
       <use href="#modulate"></use>
     </svg>
     <span class="prototype-header__brand-label">Modulate</span>
   </a>
   <div class="prototype-header__right">
-    <nav class="prototype-header__links">
-      {% if isLanding %} {{ dash_nav.primary_nav('landing', page.url) }}
+    <nav
+      class="prototype-header__links"
+      data-prototype-auth="guest"
+      aria-label="Primary navigation"
+    >
+      {{ dash_nav.primary_nav('landing', page.url) }}
       <a href="/auth/login/" class="m__button-primary S">Sign in</a>
-      {% else %} {{ dash_nav.primary_nav('bar', page.url) }} {% endif %}
     </nav>
-    {% if not isLanding %}
-    <div class="prototype-header__user-wrap">
+    <nav
+      class="prototype-header__links"
+      data-prototype-auth="user"
+      aria-label="Primary navigation"
+    >
+      {{ dash_nav.primary_nav('bar', page.url) }}
+    </nav>
+    <div class="prototype-header__user-wrap" data-prototype-auth="user">
       <button
         type="button"
         class="prototype-header__user-trigger"
         id="header-user-trigger"
         aria-expanded="false"
         aria-haspopup="menu"
-        aria-label="User menu">
+        aria-label="User menu"
+      >
         <span class="prototype-header__user-name">Eugene Arutyunov</span>
         <span class="prototype-header__user-chevron" aria-hidden="true">
           <svg
@@ -31,7 +42,8 @@
             viewBox="0 0 12 12"
             fill="none"
             stroke="currentColor"
-            stroke-width="1">
+            stroke-width="1"
+          >
             <path d="M2 4.5l4 4 4-4" />
           </svg>
         </span>
@@ -41,7 +53,8 @@
         id="header-user-popover"
         role="menu"
         aria-labelledby="header-user-trigger"
-        hidden>
+        hidden
+      >
         {{ dash_nav.dashboard_nav_meta('popover') }}
         <nav class="prototype-header__popover-nav" aria-label="Main">
           {{ dash_nav.primary_nav('popover', page.url) }} {{
@@ -52,7 +65,8 @@
           class="prototype-header__popover-appearance"
           role="menuitem"
           tabindex="0"
-          aria-label="Appearance">
+          aria-label="Appearance"
+        >
           <span class="prototype-header__popover-appearance-label"
             >Appearance</span
           >
@@ -61,20 +75,22 @@
             class="theme-toggle"
             role="switch"
             aria-checked="true"
-            aria-label="Тёмная тема">
+            aria-label="Тёмная тема"
+          >
             <span class="theme-toggle__track">
               <span class="theme-toggle__thumb"></span>
             </span>
           </button>
         </div>
-        <button
-          type="button"
+        <a
+          href="/index-landing/"
           class="prototype-header__popover-logout"
-          role="menuitem">
+          role="menuitem"
+          data-prototype-auth-sign-out
+        >
           Log out
-        </button>
+        </a>
       </div>
     </div>
-    {% endif %}
   </div>
 </header>

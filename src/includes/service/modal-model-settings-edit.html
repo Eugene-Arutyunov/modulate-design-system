@@ -1,0 +1,54 @@
+{% from 'service/modal-wrapper.njk' import modal %}
+{% call modal("modal-model-settings-edit", "Edit model settings") %}
+<div class="m__modal__body model-settings-modal">
+  <div class="model-settings-modal__fields">
+    <div class="m__textfield M m__textfield--no-spin">
+      <label for="model-start-padding">Start padding</label>
+      <div class="model-settings-input-unit">
+        <input
+          type="number"
+          id="model-start-padding"
+          name="start-padding"
+          min="0"
+          step="1"
+          value="80"
+        />
+        <span>ms</span>
+      </div>
+    </div>
+
+    <div class="m__textfield M m__textfield--no-spin">
+      <label for="model-end-padding">End padding</label>
+      <div class="model-settings-input-unit">
+        <input
+          type="number"
+          id="model-end-padding"
+          name="end-padding"
+          min="0"
+          step="1"
+          value="10"
+        />
+        <span>ms</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="m__space XS"></div>
+
+  <label class="m__checkbox-primary model-settings-modal__checkbox">
+    <input type="checkbox" id="model-diarization" name="diarization" checked />
+    <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+    <span>Diarization</span>
+  </label>
+</div>
+<div class="m__modal__footer">
+  <button
+    type="button"
+    class="m__button-secondary-outline S"
+    data-modal-close="modal-model-settings-edit"
+  >
+    Cancel
+  </button>
+  <button type="button" class="m__button-primary S">Save</button>
+</div>
+{% endcall %}

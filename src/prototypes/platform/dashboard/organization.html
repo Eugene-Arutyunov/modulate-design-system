@@ -9,7 +9,9 @@ permalink: /dashboard/organization/
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
     <div class="nav-sidebar">
-      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+      <nav class="m__nav-menu">
+        {% include 'prototypes/dashboard-nav-sidebar.html' %}
+      </nav>
     </div>
 
     <main class="dashboard-content">
@@ -35,7 +37,11 @@ permalink: /dashboard/organization/
                   <div class="m__textfield M">
                     <input type="text" value="Eugene's Personal Organization" />
                   </div>
-                  <button type="button" class="m__button-primary S" data-org-save>
+                  <button
+                    type="button"
+                    class="m__button-primary S"
+                    data-org-save
+                  >
                     Save
                   </button>
                   <button
@@ -102,7 +108,11 @@ permalink: /dashboard/organization/
                       placeholder="Credits (0 to clear)"
                     />
                   </div>
-                  <button type="button" class="m__button-primary S" data-org-save>
+                  <button
+                    type="button"
+                    class="m__button-primary S"
+                    data-org-save
+                  >
                     Save
                   </button>
                   <button
@@ -128,20 +138,6 @@ permalink: /dashboard/organization/
         </table>
       </div>
 
-      <div class="m__space M"></div>
-
-      <div class="dashboard-section">
-        {% set showInviteButton = true %} {% set rows = [ { name: 'Eugene
-        Arutyunov', email: 'e@intuition.team', role: 'Admin', isCurrentUser:
-        true } ] %} {% include 'service/table-members.html' %}
-      </div>
-
-      <div class="dashboard-section">
-        {% set rows = [ { email: 'xneeson@ya.ru', role: 'Developer', invited:
-        '16/04/2026, 22:28:22', expires: '23/04/2026, 22:28:22' } ] %} {%
-        include 'service/table-pending-invites.html' %}
-      </div>
-
       <div class="m__space S"></div>
 
       <button
@@ -156,9 +152,7 @@ permalink: /dashboard/organization/
   <div class="m__space XL"></div>
 </div>
 
-{% include 'service/modal-invite-member.html' %} {% include
-'service/modal-leave-organization.html' %} {% include
-'service/modal-enable-invoice.html' %} {% include
-'service/modal-cancel-invite.html' %}
+{% include 'service/modal-leave-organization.html' %} {% include
+'service/modal-enable-invoice.html' %}
 <script src="/assets/prototypes/organization-modals.js"></script>
 {% endblock %}

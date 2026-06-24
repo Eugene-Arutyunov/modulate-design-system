@@ -249,9 +249,14 @@ When removing: delete the include, the entire `_temp-redirects/analysis/` direct
 ## Conversations page
 
 **Page:** `src/prototypes/conversations.html`  
-**Permalink:** `/conversations/`
+**Permalink:** `/dashboard/conversations/`
 
 Empty placeholder page for conversations. Uses `layout.html`.
+
+**Create page:** `src/prototypes/conversations/create.html`
+**Permalink:** `/dashboard/conversations/create/`
+
+Standalone dashboard upload page opened from the Conversations table `Create` action. Reuses the playground upload plate without the Velma `Set up behaviors` header row.
 
 ---
 

@@ -1,9 +1,10 @@
 ---
 pageTitle: Velma Triage
+pageHeading: Health member appeals denied MRI claim
 permalink: /playground/velma/
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block options %}
+{% set uploadPlateOptions %}
 <div class="pg-options-row pg-velma-setup">
   <a href="#" class="pg-velma-setup-link"
     ><svg width="18" height="18" aria-hidden="true">
@@ -14,14 +15,16 @@ permalink: /playground/velma/
     >1 conversation type · 2 roles · 5 behaviors</span
   >
 </div>
-{% endblock %} {% block upload_actions %}
+{% endset %}
+{% set uploadPlateActions %}
 <div class="pg-upload-actions">
   <button type="button" class="m__button-primary-outline M pg-upload-primary">
     <span class="pg-upload-primary__label">Drop or choose file…</span>
   </button>
   <button type="button" class="m__button-primary-outline M">Try demo audio</button>
 </div>
-{% endblock %} {% block analyzing_content %}
+{% endset %}
+{% set uploadPlateAnalyzingContent %}
 <div class="pg-processing-stages">
   <span class="pg-processing-stage">
     <svg
@@ -114,7 +117,8 @@ permalink: /playground/velma/
     Summary
   </span>
 </div>
-{% endblock %} {% block speaker_labels %}
+{% endset %}
+{% extends 'prototypes/playground-layout.html' %} {% block speaker_labels %}
 <div class="speaker-labels">
   <div class="speaker-label" data-speaker-index="1">
     <span>Customer</span>

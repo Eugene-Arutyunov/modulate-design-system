@@ -1,6 +1,6 @@
 ---
 pageTitle: Conversations
-permalink: /conversations/
+permalink: /dashboard/conversations/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
@@ -20,6 +20,15 @@ permalink: /conversations/
           model reports.
         </p>
       </div>
+
+      <div class="m__space XS"></div>
+
+      {% set conversationUploadState = 'uploaded' %}
+      {% set conversationUploadCollapsedLabel = 'Upload conversation' %}
+      {% set conversationUploadCanCollapse = true %}
+      {% include 'service/conversation-upload-plate.html' %}
+      {% set conversationUploadState = 'initial' %}
+      {% set conversationUploadCanCollapse = false %}
 
       <div class="m__space XS"></div>
 
