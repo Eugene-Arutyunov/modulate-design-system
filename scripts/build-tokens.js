@@ -7,6 +7,7 @@ const tokenFiles = [
   'palette.css',
   'colors.css',
   'typography.css',
+  'gap.css',
   'spacers.css',
   'layout.css',
   'padding.css',
