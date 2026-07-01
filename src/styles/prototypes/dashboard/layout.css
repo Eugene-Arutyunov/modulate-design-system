@@ -1616,87 +1616,6 @@ table.config-details {
     min-width: 0;
   }
 
-  & .conversations-table__play {
-    --audio-progress: 0deg;
-    --audio-button-track: color-mix(in srgb, currentColor 25%, transparent);
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.65rem;
-    height: 1.65rem;
-    flex: 0 0 1.65rem;
-    border: var(--m__border-width-s) solid var(--audio-button-track);
-    border-radius: 50%;
-    background: transparent;
-    color: var(--m__text);
-    cursor: pointer;
-    transition: color var(--m__duration-base) var(--m__easing-base);
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: calc(-1 * var(--m__border-width-s));
-      border-radius: inherit;
-      padding: var(--m__border-width-s);
-      background: conic-gradient(
-        from 0deg,
-        currentColor 0deg var(--audio-progress),
-        transparent var(--audio-progress) 360deg
-      );
-      opacity: 0;
-      pointer-events: none;
-      mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      mask-composite: exclude;
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-    }
-
-    & span {
-      position: relative;
-      z-index: 1;
-      width: 0;
-      height: 0;
-      margin-left: 0.12rem;
-      border-top: 0.33rem solid transparent;
-      border-bottom: 0.33rem solid transparent;
-      border-left: 0.48rem solid currentColor;
-    }
-
-    &:hover {
-      color: var(--m__text-link-hover);
-      transition-duration: var(--m__duration-instant);
-    }
-
-    &:focus-visible {
-      outline: var(--m__border-width-m) solid currentColor;
-      outline-offset: 0.2rem;
-    }
-
-    &.is-playing {
-      color: var(--m__text-link);
-      border-color: transparent;
-
-      &::before {
-        opacity: 1;
-      }
-
-      & span {
-        width: 0.5rem;
-        height: 0.66rem;
-        margin-left: 0;
-        border-top: 0;
-        border-bottom: 0;
-        border-left: 0.17rem solid currentColor;
-        border-right: 0.17rem solid currentColor;
-      }
-    }
-  }
-
   & .conversations-table__audio-text {
     flex: 1 1 auto;
     min-width: 0;
@@ -1716,19 +1635,21 @@ table.config-details {
     &:is(:hover, :focus-visible)
       :is(.conversations-table__title, .conversations-table__meta) {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__duration-instant);
+      transition-duration: 0s;
+      transition-timing-function: ease;
     }
   }
 
   & .conversations-table__title {
     display: -webkit-box;
     color: inherit;
-    font-weight: var(--m__font-weight-medium);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-bold);
     line-height: 1.2;
     overflow: hidden;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-    transition: color var(--m__duration-base) var(--m__easing-base);
+    transition: color 0.5s ease;
     white-space: normal;
   }
 
@@ -1741,6 +1662,7 @@ table.config-details {
     color: var(--m__text-caption);
     font-size: var(--m__font-size-xs);
     font-variant-numeric: tabular-nums;
+    transition: color 0.5s ease;
   }
 
   & .conversations-table__uploaded-line .conversations-table__uploaded-source,
