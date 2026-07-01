@@ -1,106 +1,114 @@
-{% set conversationRows = [
-  {
-    id: '7839f2',
-    title: 'Health member appeals denied MRI claim after urgent back pain referral',
-    href: '/dashboard/conversations/7839f2/',
-    submitted: '15 Apr 2026, 09:12',
-    source: 'Ilya Sinelnikov',
-    date: '2026-04-15',
-    duration: '12:48',
-    status: 'complete',
-    detectedClips: 18,
-    reports: ['Velma', 'Deepfake', 'Language', 'Redaction']
-  },
-  {
-    id: 'conv_7812b8',
-    title: '2026-04-15_surgery-payment-login.mp3',
-    submitted: '15 Apr 2026, 08:36',
-    source: 'Five9',
-    date: '2026-04-15',
-    duration: '8:04',
-    status: 'complete',
-    detectedClips: 9,
-    reports: ['Velma', 'Deepfake', 'Language']
-  },
-  {
-    id: 'conv_7740a1',
-    title: 'Customer weighs renewal after feature gaps',
-    submitted: '14 Apr 2026, 16:22',
-    source: 'ServiceOne',
-    date: '2026-04-14',
-    duration: '24:11',
-    status: 'processing',
-    detectedClips: 6,
-    reports: ['Velma', 'Language']
-  },
-  {
-    id: 'conv_7691d5',
-    title: 'Gender-role argument ends the relationship',
-    submitted: '14 Apr 2026, 11:08',
-    source: 'API',
-    date: '2026-04-14',
-    duration: '17:32',
-    status: 'complete',
-    detectedClips: 14,
-    reports: ['Velma', 'Deepfake', 'Language', 'Redaction']
-  },
-  {
-    id: 'conv_7622f4',
-    title: 'Manager pushes IT for password reset',
-    submitted: '13 Apr 2026, 17:30',
-    source: 'Ilya Sinelnikov',
-    date: '2026-04-13',
-    duration: '1:09',
-    status: 'failed',
-    detectedClips: 2,
-    reports: ['Velma']
-  },
-  {
-    id: 'conv_7554f9',
-    title: '2026-04-12_premium-support-call.mp3',
-    submitted: '12 Apr 2026, 15:17',
-    source: 'Five9',
-    date: '2026-04-12',
-    duration: '31:44',
-    status: 'complete',
-    detectedClips: 5,
-    reports: ['Velma', 'Language']
-  },
-  {
-    id: 'conv_7490c6',
-    title: 'Player disputes harassment report after match',
-    submitted: '11 Apr 2026, 19:41',
-    source: 'ServiceOne',
-    date: '2026-04-11',
-    duration: '6:53',
-    status: 'moderation',
-    detectedClips: 11,
-    reports: ['Velma', 'Deepfake', 'Language']
-  },
-  {
-    id: 'conv_7421e3',
-    title: 'AI bot cannot find customer order',
-    submitted: '10 Apr 2026, 10:24',
-    source: 'API',
-    date: '2026-04-10',
-    duration: '5:18',
-    status: 'processing',
-    detectedClips: 0,
-    reports: ['Velma']
-  }
-] %}
-
-{% set conversationStatusFilter = conversationStatusFilter if conversationStatusFilter else '' %}
-{% set conversationStatusFilterLabel = 'All' %}
-{% if conversationStatusFilter == 'complete' %}
-{% set conversationStatusFilterLabel = 'Complete' %}
-{% elif conversationStatusFilter == 'processing' %}
-{% set conversationStatusFilterLabel = 'Processing' %}
-{% elif conversationStatusFilter == 'failed' %}
-{% set conversationStatusFilterLabel = 'Failed' %}
-{% elif conversationStatusFilter == 'moderation' %}
-{% set conversationStatusFilterLabel = 'Moderation' %}
-{% endif %}
+{% set conversationRows = [ { id: 'conv_7740a1', title: 'Customer weighs renewal
+after feature gaps', submitted: '15 Apr 2026, 10:24', source: 'ServiceOne',
+date: '2026-04-15', duration: '24:11', status: 'processing', detectedClips: 6,
+reports: ['Velma', 'Language'], behavior: 'Bargaining manipulation',
+detectionScore: '+8', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 3
+}, { emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'amused', lane:
+'bottom', span: 2 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
+'happy', lane: 'bottom', span: 1 }, { emotion: 'amused', lane: 'top', span: 2 },
+{ emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'calm', lane:
+'full', span: 2 }, { emotion: 'frustrated', lane: 'top', span: 2 }, { emotion:
+'amused', lane: 'top', span: 2 }, { emotion: 'neutral', lane: 'full', span: 4 },
+{ emotion: 'happy', lane: 'bottom', span: 1 }, { emotion: 'confident', lane:
+'top', span: 1 } ] }, { id: '7839f2', title: 'Health member appeals denied MRI
+claim after urgent back pain referral', href:
+'/dashboard/conversations/7839f2/', submitted: '15 Apr 2026, 09:12', source:
+'Ilya Sinelnikov', date: '2026-04-15', duration: '12:48', status: 'complete',
+detectedClips: 18, reports: ['Velma', 'Deepfake', 'Language', 'Redaction'],
+behavior: 'Harassment', detectionScore: '+15', fingerprint: [ { emotion:
+'neutral', lane: 'full', span: 4 }, { emotion: 'calm', lane: 'top', span: 2 }, {
+emotion: 'neutral', lane: 'bottom', span: 1 }, { emotion: 'confident', lane:
+'bottom', span: 5 }, { emotion: 'neutral', lane: 'full', span: 4 }, { emotion:
+'amused', lane: 'top', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span:
+1 }, { emotion: 'confident', lane: 'full', span: 2 }, { emotion: 'happy', lane:
+'top', span: 1 }, { emotion: 'calm', lane: 'bottom', span: 3 }, { emotion:
+'frustrated', lane: 'full', span: 2 }, { emotion: 'angry', lane: 'full', span: 3
+} ] }, { id: 'conv_7812b8', title: '2026-04-15_surgery-payment-login.mp3',
+submitted: '15 Apr 2026, 08:36', source: 'Five9', date: '2026-04-15', duration:
+'8:04', status: 'complete', detectedClips: 9, reports: ['Deepfake', 'Language'],
+verdict: 'This is a deepfake', fingerprint: [ { emotion: 'neutral', lane:
+'full', span: 2 }, { emotion: 'confident', lane: 'top', span: 3 }, { emotion:
+'amused', lane: 'bottom', span: 2 }, { emotion: 'calm', lane: 'top', span: 4 },
+{ emotion: 'neutral', lane: 'bottom', span: 3 }, { emotion: 'happy', lane:
+'bottom', span: 1 }, { emotion: 'confident', lane: 'top', span: 1 }, { emotion:
+'amused', lane: 'bottom', span: 4 }, { emotion: 'neutral', lane: 'full', span: 3
+}, { emotion: 'calm', lane: 'top', span: 4 }, { emotion: 'happy', lane:
+'bottom', span: 1 } ] }, { id: 'conv_7691d5', title: 'Gender-role argument ends
+the relationship', submitted: '14 Apr 2026, 11:08', source: 'API', date:
+'2026-04-14', duration: '17:32', status: 'complete', detectedClips: 14, reports:
+['Language'], verdict: 'This is English', fingerprint: [ { emotion: 'neutral',
+lane: 'full', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, {
+emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full',
+span: 3 }, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'angry',
+lane: 'top', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion:
+'calm', lane: 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 },
+{ emotion: 'neutral', lane: 'bottom', span: 2 } ] }, { id: 'conv_7622f4', title:
+'Manager pushes IT for password reset', submitted: '13 Apr 2026, 17:30', source:
+'Ilya Sinelnikov', date: '2026-04-13', duration: '1:09', status: 'failed',
+detectedClips: 2, reports: ['Velma'], behavior: 'Social boundary setting',
+detectionScore: '+7', fingerprint: [ { emotion: 'calm', lane: 'full', span: 3 },
+{ emotion: 'happy', lane: 'full', span: 3 }, { emotion: 'neutral', lane: 'full',
+span: 4 }, { emotion: 'happy', lane: 'full', span: 1 }, { emotion: 'neutral',
+lane: 'full', span: 2 }, { emotion: 'happy', lane: 'full', span: 4 }, { emotion:
+'neutral', lane: 'full', span: 2 } ] }, { id: 'conv_7554f9', title:
+'2026-04-12_premium-support-call.mp3', submitted: '12 Apr 2026, 15:17', source:
+'Five9', date: '2026-04-12', duration: '1:59', status: 'complete',
+detectedClips: 5, reports: ['Music & Speech', 'AI Music'], verdict: 'This is AI
+vocal music', fingerprint: [ { color: 'var(--m__error)', lane: 'full', span: 5
+}, { color: 'var(--m__success)', lane: 'full', span: 2 }, { color:
+'var(--m__error)', lane: 'full', span: 1 }, { color: 'var(--m__success)', lane:
+'full', span: 1 }, { color: 'var(--m__error)', lane: 'full', span: 2 }, { color:
+'var(--m__success)', lane: 'full', span: 1 }, { color: 'var(--m__error)', lane:
+'full', span: 4 }, { color: 'var(--m__success)', lane: 'full', span: 2 }, {
+color: 'var(--m__error)', lane: 'full', span: 1 }, { color: 'var(--m__success)',
+lane: 'full', span: 2 }, { color: 'var(--m__error)', lane: 'full', span: 1 } ]
+}, { id: 'conv_7490c6', title: 'Player disputes harassment report after match',
+submitted: '11 Apr 2026, 19:41', source: 'ServiceOne', date: '2026-04-11',
+duration: '30:00', status: 'moderation', detectedClips: 11, reports: ['Velma',
+'Deepfake', 'Language'], behavior: 'Harassment', detectionScore: '+11',
+fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
+'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2
+}, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'angry', lane:
+'top', span: 1 }, { emotion: 'amused', lane: 'bottom', span: 1 }, { emotion:
+'neutral', lane: 'full', span: 1 }, { emotion: 'confident', lane: 'bottom',
+span: 2 }, { emotion: 'angry', lane: 'top', span: 1 }, { emotion: 'neutral',
+lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, {
+emotion: 'angry', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'full',
+span: 1 }, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'amused',
+lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] }, { id:
+'conv_7368c2', title: 'Support agent flags repeated payment threats', submitted:
+'10 Apr 2026, 14:02', source: 'Five9', date: '2026-04-10', duration: '14:06',
+status: 'complete', detectedClips: 8, reports: ['Velma', 'Deepfake'], behavior:
+'Coercion manipulation', detectionScore: '+9', fingerprint: [ { emotion:
+'neutral', lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'top', span:
+1 }, { emotion: 'angry', lane: 'full', span: 2 }, { emotion: 'neutral', lane:
+'bottom', span: 1 }, { emotion: 'confident', lane: 'top', span: 2 }, { emotion:
+'angry', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 3
+}, { emotion: 'frustrated', lane: 'top', span: 2 }, { emotion: 'confident',
+lane: 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] }, {
+id: 'conv_7310aa', title: 'Lobby chat contains phone number and address',
+submitted: '09 Apr 2026, 18:27', source: 'API', date: '2026-04-09', duration:
+'9:42', status: 'complete', detectedClips: 4, reports: ['Redaction',
+'Language'], verdict: 'PII detected', fingerprint: [ { color:
+'var(--m__border)', lane: 'full', span: 3 }, { color: 'color-mix(in srgb,
+var(--m__success) 28%, var(--m__border))', lane: 'full', span: 2 }, { color:
+'var(--m__border)', lane: 'full', span: 1 }, { color: 'color-mix(in srgb,
+var(--m__success) 28%, var(--m__border))', lane: 'full', span: 3 }, { color:
+'var(--m__border)', lane: 'full', span: 1 }, { color: 'color-mix(in srgb,
+var(--m__success) 28%, var(--m__border))', lane: 'full', span: 2 }, { color:
+'var(--m__border)', lane: 'full', span: 1 }, { color: 'color-mix(in srgb,
+var(--m__success) 28%, var(--m__border))', lane: 'full', span: 3 }, { color:
+'var(--m__border)', lane: 'full', span: 1 }, { color: 'color-mix(in srgb,
+var(--m__success) 28%, var(--m__border))', lane: 'full', span: 2 } ] } ] %} {%
+set conversationStatusFilter = conversationStatusFilter if
+conversationStatusFilter else '' %} {% set conversationStatusFilterLabel = 'All'
+%} {% if conversationStatusFilter == 'complete' %} {% set
+conversationStatusFilterLabel = 'Complete' %} {% elif conversationStatusFilter
+== 'processing' %} {% set conversationStatusFilterLabel = 'Processing' %} {%
+elif conversationStatusFilter == 'failed' %} {% set
+conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
+'moderation' %} {% set conversationStatusFilterLabel = 'Moderation' %} {% endif
+%}
 
 <div class="m__widget conversations-table" data-conversations-table>
   <div class="m__widget-header">
@@ -113,22 +121,28 @@
           type="search"
           id="conversations-search"
           placeholder="Search"
-          data-conversations-search />
+          data-conversations-search
+        />
       </label>
       <div class="m__table-filters conversations-table__filters">
         <label class="m__select S">
           <span>Status</span>
           <div class="m__select__inline-control">
-            <span class="m__select__value">{{ conversationStatusFilterLabel }}</span>
+            <span class="m__select__value"
+              >{{ conversationStatusFilterLabel }}</span
+            >
             <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
               <use href="#chevron-down"></use>
             </svg>
-            <select id="conversations-filter-status" data-conversations-status-filter>
+            <select
+              id="conversations-filter-status"
+              data-conversations-status-filter
+            >
               <option value="all">All</option>
-              <option value="complete" {% if conversationStatusFilter == 'complete' %}selected{% endif %}>Complete</option>
-              <option value="processing" {% if conversationStatusFilter == 'processing' %}selected{% endif %}>Processing</option>
-              <option value="failed" {% if conversationStatusFilter == 'failed' %}selected{% endif %}>Failed</option>
-              <option value="moderation" {% if conversationStatusFilter == 'moderation' %}selected{% endif %}>Moderation</option>
+              <option value="complete">Complete</option>
+              <option value="processing">Processing</option>
+              <option value="failed">Failed</option>
+              <option value="moderation">Moderation</option>
             </select>
           </div>
         </label>
@@ -140,7 +154,8 @@
           <button
             type="button"
             class="conversations-table__date-range-value"
-            data-conversations-start-trigger>
+            data-conversations-start-trigger
+          >
             <span data-conversations-start-display>16.03.2026</span>
           </button>
           <input
@@ -148,12 +163,18 @@
             id="conversations-filter-start"
             aria-label="Start date"
             value="2026-03-16"
-            data-conversations-start-filter />
-          <span class="conversations-table__date-range-separator" aria-hidden="true">&ndash;</span>
+            data-conversations-start-filter
+          />
+          <span
+            class="conversations-table__date-range-separator"
+            aria-hidden="true"
+            >&ndash;</span
+          >
           <button
             type="button"
             class="conversations-table__date-range-value"
-            data-conversations-end-trigger>
+            data-conversations-end-trigger
+          >
             <span data-conversations-end-display>15.04.2026</span>
           </button>
           <input
@@ -161,11 +182,14 @@
             id="conversations-filter-end"
             aria-label="End date"
             value="2026-04-15"
-            data-conversations-end-filter />
+            data-conversations-end-filter
+          />
         </div>
       </div>
       <div class="behaviors-toolbar-actions conversations-table__actions">
-        <button type="button" class="m__button-secondary-outline S">Bulk actions</button>
+        <button type="button" class="m__button-secondary-outline S">
+          Bulk actions
+        </button>
       </div>
     </div>
   </div>
@@ -174,113 +198,197 @@
     <table>
       <colgroup>
         <col class="conversations-table__col-conversation" />
-        <col class="conversations-table__col-status" />
-        <col class="conversations-table__col-uploaded" />
-        <col class="conversations-table__col-analysis" />
+        <col class="conversations-table__col-fingerprint" />
+        <col class="conversations-table__col-detection" />
         <col class="conversations-table__col-actions" />
       </colgroup>
       <thead>
         <tr>
           <th>Conversation</th>
-          <th>Status</th>
-          <th>Uploaded</th>
-          <th>Analysis</th>
+          <th>Pattern</th>
+          <th>Result</th>
           <th class="m__col-actions"></th>
         </tr>
       </thead>
       <tbody>
-        {% for row in conversationRows %}
-        {% if not conversationStatusFilter or row.status == conversationStatusFilter %}
+        {% for row in conversationRows %} {% if not conversationStatusFilter or
+        row.status == conversationStatusFilter %}
         <tr
           data-conversation-row
           data-date="{{ row.date }}"
           data-status="{{ row.status }}"
-          data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.submitted }} {{ row.duration }} {{ row.status }} {{ row.detectedClips }} clips {% for report in row.reports %} {{ report }}{% endfor %}">
+          data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.submitted }} {{ row.duration }} {{ row.status }} {{ row.detectedClips }} clips {{ row.behavior }} {{ row.detectionScore }} {{ row.verdict }} {% for report in row.reports %} {{ report }}{% endfor %}"
+        >
           <td class="conversations-table__audio">
             <div class="conversations-table__audio-row">
-              <button
-                type="button"
-                class="conversations-table__play"
-                aria-label="Play {{ row.title }}"
-                aria-pressed="false"
-                data-audio-play
-                data-audio-title="{{ row.title }}">
-                <span aria-hidden="true"></span>
-              </button>
               <div class="conversations-table__audio-text">
                 <a
                   href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
-                  class="conversations-table__audio-link">
-                  <span class="conversations-table__title">{{ row.title }}</span>
-                  <span class="conversations-table__meta">
-                    <span class="conversations-table__duration">{{ row.duration }}</span>
-                    · {{ row.detectedClips }} clips
+                  class="conversations-table__audio-link"
+                >
+                  <span class="conversations-table__title"
+                    >{{ row.title }}</span
+                  >
+                  <span
+                    class="conversations-table__meta conversations-table__uploaded-line"
+                  >
+                    <span class="conversations-table__uploaded-date"
+                      >{{ row.submitted }}</span
+                    >
+                    <span class="conversations-table__uploaded-separator"
+                      >·</span
+                    >
+                    <span class="conversations-table__uploaded-source"
+                      >{{ row.source }}</span
+                    >
                   </span>
                 </a>
               </div>
             </div>
           </td>
-          <td class="conversations-table__status">
-            {% if row.status == 'complete' %}
-            <span class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral">Complete</span>
-            {% elif row.status == 'processing' %}
-            <span class="m__tag conversations-table__status-tag conversations-table__status-tag--processing">Processing</span>
-            {% elif row.status == 'failed' %}
-            <span class="m__tag conversations-table__status-tag conversations-table__status-tag--failed">Failed</span>
-            {% elif row.status == 'moderation' %}
-            <span class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral">Moderation</span>
-            {% else %}
-            <span class="m__tag-flat">{{ row.status }}</span>
+          <td class="conversations-table__fingerprint-cell">
+            {% if row.status != 'processing' %}
+            <a
+              href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
+              class="conversations-table__fingerprint-link"
+              aria-label="Open emotion pattern for {{ row.title }}"
+            >
+              {% set fingerprintWidth = '42%' %} {% if row.duration == '30:00'
+              %} {% set fingerprintWidth = '95%' %} {% elif row.duration ==
+              '24:11' %} {% set fingerprintWidth = '76%' %} {% elif row.duration
+              == '17:32' %} {% set fingerprintWidth = '55%' %} {% elif
+              row.duration == '12:48' %} {% set fingerprintWidth = '42%' %} {%
+              elif row.duration == '14:06' %} {% set fingerprintWidth = '47%' %}
+              {% elif row.duration == '9:42' %} {% set fingerprintWidth = '32%'
+              %} {% elif row.duration == '8:04' %} {% set fingerprintWidth =
+              '27%' %} {% elif row.duration == '5:18' %} {% set fingerprintWidth
+              = '18%' %} {% elif row.duration == '1:59' %} {% set
+              fingerprintWidth = '14%' %} {% elif row.duration == '1:09' %} {%
+              set fingerprintWidth = '8%' %} {% endif %}
+              <span
+                class="conversations-table__fingerprint{% if row.reports[0] == 'AI Music' or row.reports[1] == 'AI Music' %} conversations-table__fingerprint--ai-music{% elif row.reports[0] == 'Redaction' or row.reports[0] == 'PII/PHI' %} conversations-table__fingerprint--pii{% elif row.reports[0] == 'Language' %} conversations-table__fingerprint--language{% endif %}"
+                style="--fingerprint-width: {{ fingerprintWidth }}"
+                aria-hidden="true"
+              >
+                {% for segment in row.fingerprint %}
+                <span
+                  class="conversations-table__fingerprint-segment conversations-table__fingerprint-segment--{{ segment.lane }}"
+                  style="--fingerprint-span: {{ segment.span }}; --fingerprint-color: {% if segment.color %}{{ segment.color }}{% else %}rgba(var(--emotion-{{ segment.emotion }}-RGB), 1){% endif %}"
+                ></span>
+                {% endfor %}
+              </span>
+              <span class="conversations-table__fingerprint-duration"
+                >{{ row.duration }}</span
+              >
+            </a>
             {% endif %}
           </td>
-          <td class="conversations-table__uploaded">
-            <span class="conversations-table__uploaded-source">{{ row.source }}</span>
-            <span class="conversations-table__uploaded-date">{{ row.submitted }}</span>
-          </td>
-          <td>
-            <div class="conversations-table__reports">
-              {% for report in row.reports %}
-              {% set reportIcon = 'velma' %}
-              {% if report == 'Deepfake' %}
-              {% set reportIcon = 'deepfake' %}
-              {% elif report == 'Language' %}
-              {% set reportIcon = 'language' %}
-              {% elif report == 'Redaction' %}
-              {% set reportIcon = 'redaction' %}
-              {% endif %}
+          <td class="conversations-table__detection">
+            {% set mainReport = 'Velma' %} {% if row.behavior %} {% set
+            mainReport = 'Velma' %} {% elif row.reports[0] == 'AI Music' or
+            row.reports[1] == 'AI Music' %} {% set mainReport = 'AI Music' %} {%
+            elif row.reports[0] %} {% set mainReport = row.reports[0] %} {%
+            endif %} {% set mainReportIcon = 'velma' %} {% if mainReport ==
+            'Deepfake' %} {% set mainReportIcon = 'deepfake' %} {% elif
+            mainReport == 'Language' %} {% set mainReportIcon = 'language' %} {%
+            elif mainReport == 'Redaction' or mainReport == 'PII/PHI' %} {% set
+            mainReportIcon = 'redaction' %} {% elif mainReport == 'Music &
+            Speech' %} {% set mainReportIcon = 'music' %} {% elif mainReport ==
+            'AI Music' %} {% set mainReportIcon = 'ai-music' %} {% endif %}
+            <div class="conversations-table__verdict-stack">
               <a
                 href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
-                class="conversations-table__report"
-                aria-label="{{ report }} report"
-                data-tooltip="{{ report }}">
-                <svg class="conversations-table__report-icon" viewBox="0 0 32 32" aria-hidden="true">
-                  <use href="#{{ reportIcon }}"></use>
+                class="conversations-table__verdict-bubble{% if row.status == 'failed' %} conversations-table__verdict-bubble--failed{% endif %}"
+                aria-label="Open {{ mainReport }} result for {{ row.title }}"
+              >
+                <svg
+                  class="conversations-table__verdict-icon"
+                  viewBox="0 0 32 32"
+                  aria-hidden="true"
+                >
+                  <use href="#{{ mainReportIcon }}"></use>
                 </svg>
+                <span class="conversations-table__verdict-text">
+                  {% if row.status == 'processing' %}
+                  <span class="conversations-table__detection-empty"
+                    >Processing</span
+                  >
+                  {% elif row.status == 'failed' %}
+                  <span class="conversations-table__detection-empty"
+                    >Failed</span
+                  >
+                  {% elif row.behavior %}
+                  <span class="conversations-table__detection-name"
+                    >{{ row.behavior }}</span
+                  >
+                  {% if row.detectionScore %}
+                  <span class="conversations-table__detection-score"
+                    >{{ row.detectionScore }}</span
+                  >
+                  {% endif %} {% elif row.verdict %}
+                  <span class="conversations-table__detection-name"
+                    >{{ row.verdict }}</span
+                  >
+                  {% else %}
+                  <span class="conversations-table__detection-empty"
+                    >Unavailable</span
+                  >
+                  {% endif %}
+                </span>
               </a>
-              {% endfor %}
+              <div class="conversations-table__reports">
+                {% for report in row.reports %} {% if report != mainReport %} {%
+                set reportIcon = 'velma' %} {% if report == 'Deepfake' %} {% set
+                reportIcon = 'deepfake' %} {% elif report == 'Language' %} {%
+                set reportIcon = 'language' %} {% elif report == 'Redaction' or
+                report == 'PII/PHI' %} {% set reportIcon = 'redaction' %} {%
+                elif report == 'Music & Speech' %} {% set reportIcon = 'music'
+                %} {% elif report == 'AI Music' %} {% set reportIcon =
+                'ai-music' %} {% endif %}
+                <a
+                  href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
+                  class="conversations-table__report"
+                  aria-label="{{ report }} report"
+                  data-tooltip="{{ report }}"
+                >
+                  <svg
+                    class="conversations-table__report-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true"
+                  >
+                    <use href="#{{ reportIcon }}"></use>
+                  </svg>
+                </a>
+                {% endif %} {% endfor %}
+              </div>
             </div>
           </td>
-          <td class="m__col-actions">
-            <div class="m__menu-button">
+          <td class="m__col-actions conversations-table__row-actions">
+            <div class="m__menu-button conversations-table__actions-menu">
               <button
                 type="button"
                 class="m__menu-button-icon S m__menu-button-trigger"
-                aria-label="Actions for {{ row.title }}">
+                aria-label="Actions for {{ row.title }}"
+              >
                 <svg viewBox="0 0 12 12" aria-hidden="true">
                   <use href="#dots-vertical"></use>
                 </svg>
               </button>
               <div class="m__menu-button-list" hidden>
-                <button type="button" class="m__menu-button-item">Rename</button>
-                <button type="button" class="m__menu-button-item m__menu-button-item--danger">
+                <button type="button" class="m__menu-button-item">
+                  Rename
+                </button>
+                <button
+                  type="button"
+                  class="m__menu-button-item m__menu-button-item--danger"
+                >
                   Delete
                 </button>
               </div>
             </div>
           </td>
         </tr>
-        {% endif %}
-        {% endfor %}
+        {% endif %} {% endfor %}
       </tbody>
     </table>
   </div>
@@ -300,72 +408,6 @@
     var startDisplay = root.querySelector("[data-conversations-start-display]");
     var endDisplay = root.querySelector("[data-conversations-end-display]");
     var rows = Array.from(root.querySelectorAll("[data-conversation-row]"));
-    var playButtons = Array.from(root.querySelectorAll("[data-audio-play]"));
-    var activeProgressFrame = null;
-    var activeProgressButton = null;
-    var demoProgressDuration = 8000;
-
-    function setProgress(button, progress) {
-      button.style.setProperty(
-        "--audio-progress",
-        Math.min(Math.max(progress, 0), 1) * 360 + "deg"
-      );
-    }
-
-    function stopProgress(button) {
-      if (button && button !== activeProgressButton) {
-        setProgress(button, 0);
-        return;
-      }
-
-      if (activeProgressFrame) {
-        cancelAnimationFrame(activeProgressFrame);
-      }
-
-      if (activeProgressButton) {
-        setProgress(activeProgressButton, 0);
-      }
-
-      activeProgressFrame = null;
-      activeProgressButton = null;
-    }
-
-    function startProgress(button) {
-      stopProgress();
-      activeProgressButton = button;
-
-      var startedAt = performance.now();
-
-      function tick(now) {
-        var progress = (now - startedAt) / demoProgressDuration;
-        setProgress(button, progress);
-
-        if (progress >= 1) {
-          setPlayState(button, false);
-          return;
-        }
-
-        activeProgressFrame = requestAnimationFrame(tick);
-      }
-
-      activeProgressFrame = requestAnimationFrame(tick);
-    }
-
-    function setPlayState(button, isPlaying) {
-      var title = button.dataset.audioTitle || "audio";
-      button.classList.toggle("is-playing", isPlaying);
-      button.setAttribute("aria-pressed", isPlaying ? "true" : "false");
-      button.setAttribute(
-        "aria-label",
-        (isPlaying ? "Pause " : "Play ") + title
-      );
-
-      if (isPlaying) {
-        startProgress(button);
-      } else {
-        stopProgress(button);
-      }
-    }
 
     function formatDateValue(value) {
       var parts = value.split("-");
@@ -396,12 +438,14 @@
       var lastVisibleRow = null;
 
       rows.forEach(function (row) {
-        var matchesSearch = !query || row.dataset.search.toLowerCase().includes(query);
+        var matchesSearch =
+          !query || row.dataset.search.toLowerCase().includes(query);
         var matchesStatus = status === "all" || row.dataset.status === status;
         var rowDate = row.dataset.date || "";
         var matchesStart = !startDate || rowDate >= startDate;
         var matchesEnd = !endDate || rowDate <= endDate;
-        var isVisible = matchesSearch && matchesStatus && matchesStart && matchesEnd;
+        var isVisible =
+          matchesSearch && matchesStatus && matchesStart && matchesEnd;
 
         row.classList.remove("conversations-table__last-visible");
         row.hidden = !isVisible;
@@ -414,16 +458,6 @@
         lastVisibleRow.classList.add("conversations-table__last-visible");
       }
     }
-
-    playButtons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        var shouldPlay = !button.classList.contains("is-playing");
-        playButtons.forEach(function (otherButton) {
-          setPlayState(otherButton, false);
-        });
-        setPlayState(button, shouldPlay);
-      });
-    });
 
     startTrigger.addEventListener("click", function (event) {
       event.stopPropagation();
