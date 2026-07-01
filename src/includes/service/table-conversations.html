@@ -71,7 +71,7 @@ detectionScore: '+11', fingerprint: [ { emotion: 'neutral', lane: 'full', span:
 'bottom', span: 2 }, { emotion: 'angry', lane: 'top', span: 3 } ] }, { id:
 'conv_7421e3', title: 'AI bot cannot find customer order', submitted: '10 Apr
 2026, 10:24', source: 'API', date: '2026-04-10', duration: '5:18', status:
-'processing', detectedClips: 0, reports: ['Velma'], behavior: 'Analyzing',
+'processing', detectedClips: 0, reports: ['Velma'], behavior: '',
 detectionScore: '', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 3
 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'neutral', lane:
 'bottom', span: 2 }, { emotion: 'calm', lane: 'full', span: 3 }, { emotion:
@@ -175,14 +175,14 @@ conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
         <col class="conversations-table__col-conversation" />
         <col class="conversations-table__col-fingerprint" />
         <col class="conversations-table__col-detection" />
-        <col class="conversations-table__col-status" />
+        <col class="conversations-table__col-actions" />
       </colgroup>
       <thead>
         <tr>
           <th>Conversation</th>
           <th>Pattern</th>
           <th>Verdict</th>
-          <th>Status</th>
+          <th class="m__col-actions"></th>
         </tr>
       </thead>
       <tbody>
@@ -207,14 +207,14 @@ conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
                   <span
                     class="conversations-table__meta conversations-table__uploaded-line"
                   >
-                    <span class="conversations-table__uploaded-source"
-                      >{{ row.source }}</span
+                    <span class="conversations-table__uploaded-date"
+                      >{{ row.submitted }}</span
                     >
                     <span class="conversations-table__uploaded-separator"
                       >·</span
                     >
-                    <span class="conversations-table__uploaded-date"
-                      >{{ row.submitted }}</span
+                    <span class="conversations-table__uploaded-source"
+                      >{{ row.source }}</span
                     >
                   </span>
                 </a>
@@ -269,7 +269,7 @@ conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
             <div class="conversations-table__verdict-stack">
               <a
                 href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
-                class="conversations-table__verdict-bubble"
+                class="conversations-table__verdict-bubble{% if row.status == 'failed' %} conversations-table__verdict-bubble--failed{% endif %}"
                 aria-label="Open {{ mainReport }} result for {{ row.title }}"
               >
                 <svg
@@ -282,11 +282,11 @@ conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
                 <span class="conversations-table__verdict-text">
                   {% if row.status == 'processing' %}
                   <span class="conversations-table__detection-empty"
-                    >Analyzing</span
+                    >Processing</span
                   >
                   {% elif row.status == 'failed' %}
                   <span class="conversations-table__detection-empty"
-                    >Unavailable</span
+                    >Failed</span
                   >
                   {% elif row.behavior %}
                   <span class="conversations-table__detection-name"
@@ -334,54 +334,27 @@ conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
               </div>
             </div>
           </td>
-          <td class="conversations-table__status">
-            <div class="conversations-table__status-cell">
-              <div class="conversations-table__status-value">
-                {% if row.status == 'complete' %}
-                <span
-                  class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral"
-                  >Complete</span
-                >
-                {% elif row.status == 'processing' %}
-                <span
-                  class="m__tag conversations-table__status-tag conversations-table__status-tag--processing"
-                  >Processing</span
-                >
-                {% elif row.status == 'failed' %}
-                <span
-                  class="m__tag conversations-table__status-tag conversations-table__status-tag--failed"
-                  >Failed</span
-                >
-                {% elif row.status == 'moderation' %}
-                <span
-                  class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral"
-                  >Moderation</span
-                >
-                {% else %}
-                <span class="m__tag-flat">{{ row.status }}</span>
-                {% endif %}
-              </div>
-              <div class="m__menu-button conversations-table__actions-menu">
+          <td class="m__col-actions conversations-table__row-actions">
+            <div class="m__menu-button conversations-table__actions-menu">
+              <button
+                type="button"
+                class="m__menu-button-icon S m__menu-button-trigger"
+                aria-label="Actions for {{ row.title }}"
+              >
+                <svg viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#dots-vertical"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">
+                  Rename
+                </button>
                 <button
                   type="button"
-                  class="m__menu-button-icon S m__menu-button-trigger"
-                  aria-label="Actions for {{ row.title }}"
+                  class="m__menu-button-item m__menu-button-item--danger"
                 >
-                  <svg viewBox="0 0 12 12" aria-hidden="true">
-                    <use href="#dots-vertical"></use>
-                  </svg>
+                  Delete
                 </button>
-                <div class="m__menu-button-list" hidden>
-                  <button type="button" class="m__menu-button-item">
-                    Rename
-                  </button>
-                  <button
-                    type="button"
-                    class="m__menu-button-item m__menu-button-item--danger"
-                  >
-                    Delete
-                  </button>
-                </div>
               </div>
             </div>
           </td>

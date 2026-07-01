@@ -1578,19 +1578,19 @@ table.config-details {
   }
 
   & .conversations-table__col-conversation {
-    width: 32%;
+    width: 39%;
   }
 
   & .conversations-table__col-fingerprint {
-    width: 22%;
+    width: 29%;
   }
 
   & .conversations-table__col-detection {
-    width: 31%;
+    width: 28%;
   }
 
-  & .conversations-table__col-status {
-    width: 15%;
+  & .conversations-table__col-actions {
+    width: 4%;
   }
 
   & .conversations-table__last-visible td {
@@ -1811,11 +1811,24 @@ table.config-details {
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
-    transition: color var(--m__duration-base) var(--m__easing-base);
+    transition:
+      border-color 0.5s ease,
+      color 0.5s ease;
 
     &:is(:hover, :focus-visible) {
       color: var(--m__text-link-hover);
-      transition-duration: var(--m__duration-instant);
+      transition-duration: 0s;
+      transition-timing-function: ease;
+
+      &
+        :is(
+          .conversations-table__verdict-icon,
+          .conversations-table__detection-empty
+        ) {
+        color: inherit;
+        transition-duration: 0s;
+        transition-timing-function: ease;
+      }
     }
 
     &:focus-visible {
@@ -1824,10 +1837,29 @@ table.config-details {
     }
   }
 
+  & .conversations-table__verdict-bubble--failed {
+    border-color: color-mix(in srgb, var(--m__error) 40%, transparent);
+    color: var(--m__error);
+
+    & .conversations-table__verdict-icon {
+      color: var(--m__text);
+    }
+
+    & .conversations-table__detection-empty {
+      color: inherit;
+    }
+
+    &:is(:hover, :focus-visible) {
+      border-color: color-mix(in srgb, currentColor 25%, transparent);
+      color: var(--m__text-link-hover);
+    }
+  }
+
   & .conversations-table__verdict-icon {
     width: 1.18rem;
     height: 1.18rem;
     flex: 0 0 auto;
+    transition: color 0.5s ease;
   }
 
   & .conversations-table__verdict-text {
@@ -1893,6 +1925,7 @@ table.config-details {
   & .conversations-table__detection-empty {
     color: var(--m__text-caption);
     font-size: var(--m__font-size-s);
+    transition: color 0.5s ease;
   }
 
   & .conversations-table__uploaded {
@@ -1934,6 +1967,12 @@ table.config-details {
   & .conversations-table__status-value {
     flex: 1 1 auto;
     min-width: 0;
+  }
+
+  & .conversations-table__row-actions {
+    min-width: 0;
+    text-align: right;
+    vertical-align: top;
   }
 
   & .conversations-table__actions-menu {
