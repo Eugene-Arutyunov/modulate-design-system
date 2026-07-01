@@ -1573,24 +1573,28 @@ table.config-details {
   }
 
   & table {
-    min-width: 52rem;
+    min-width: 72rem;
     table-layout: fixed;
   }
 
   & .conversations-table__col-conversation {
-    width: 40%;
+    width: 25%;
   }
 
-  & .conversations-table__col-uploaded {
-    width: 16%;
+  & .conversations-table__col-fingerprint {
+    width: 14%;
+  }
+
+  & .conversations-table__col-detection {
+    width: 14%;
   }
 
   & .conversations-table__col-status {
-    width: 12%;
+    width: 8%;
   }
 
   & .conversations-table__col-analysis {
-    width: 26%;
+    width: 8%;
   }
 
   & .conversations-table__col-actions {
@@ -1602,7 +1606,7 @@ table.config-details {
   }
 
   & .conversations-table__audio {
-    min-width: 16rem;
+    min-width: 13rem;
   }
 
   & .conversations-table__audio-row {
@@ -1717,35 +1721,205 @@ table.config-details {
   }
 
   & .conversations-table__title {
-    display: block;
+    display: -webkit-box;
     color: inherit;
     font-weight: var(--m__font-weight-medium);
+    line-height: 1.2;
     overflow: hidden;
-    -webkit-mask-image: linear-gradient(
-      to right,
-      #000 calc(100% - 1.75rem),
-      transparent
-    );
-    mask-image: linear-gradient(
-      to right,
-      #000 calc(100% - 1.75rem),
-      transparent
-    );
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     transition: color var(--m__duration-base) var(--m__easing-base);
-    white-space: nowrap;
+    white-space: normal;
   }
 
   & .conversations-table__meta {
-    display: block;
-    margin-top: 0.15rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    margin-top: 0.08rem;
+    min-width: 0;
     color: var(--m__text-caption);
     font-size: var(--m__font-size-xs);
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .conversations-table__uploaded-line .conversations-table__uploaded-source,
+  &
+    .conversations-table__uploaded-line
+    .conversations-table__uploaded-separator,
+  & .conversations-table__uploaded-line .conversations-table__uploaded-date {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  & .conversations-table__uploaded-line .conversations-table__uploaded-source,
+  & .conversations-table__uploaded-line .conversations-table__uploaded-date {
+    display: inline;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & .conversations-table__uploaded-line .conversations-table__uploaded-source {
+    flex: 0 1 auto;
+  }
+
+  &
+    .conversations-table__uploaded-line
+    .conversations-table__uploaded-separator,
+  & .conversations-table__uploaded-line .conversations-table__uploaded-date {
+    flex: 0 0 auto;
+  }
+
+  & .conversations-table__fingerprint-cell {
+    min-width: 10.75rem;
+    vertical-align: top;
+  }
+
+  & .conversations-table__fingerprint-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.28rem;
+    width: 100%;
+    max-width: 100%;
+    color: inherit;
+    text-decoration: none;
+
+    &:is(:hover, :focus-visible) {
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
+
+      & .conversations-table__fingerprint {
+        filter: brightness(112%) saturate(105%);
+      }
+    }
+
+    &:focus-visible {
+      border-radius: 0.35rem;
+      outline: 0.06rem solid currentColor;
+      outline-offset: 0.16rem;
+    }
+  }
+
+  & .conversations-table__fingerprint {
+    display: flex;
+    align-items: stretch;
+    width: auto;
+    max-width: 7.25rem;
+    height: 1.85rem;
+    flex: 1 1 auto;
+    overflow: hidden;
+    border-radius: 0.24rem;
+    background-color: rgba(var(--emotion-neutral-RGB), 0.24);
+    transition: filter var(--m__duration-base) var(--m__easing-base);
+  }
+
+  & .conversations-table__fingerprint-segment {
+    position: relative;
+    flex: var(--fingerprint-span, 1) 1 0;
+    min-width: 0.14rem;
+    height: 100%;
+    background-color: transparent;
+  }
+
+  & .conversations-table__fingerprint-segment::before,
+  & .conversations-table__fingerprint-segment::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background-color: transparent;
+  }
+
+  & .conversations-table__fingerprint-segment::before {
+    top: 0;
+  }
+
+  & .conversations-table__fingerprint-segment::after {
+    bottom: 0;
+  }
+
+  & .conversations-table__fingerprint-segment--top::before,
+  & .conversations-table__fingerprint-segment--full:nth-child(odd)::before,
+  & .conversations-table__fingerprint-segment--bottom::after,
+  & .conversations-table__fingerprint-segment--full:nth-child(even)::after {
+    background-color: var(
+      --fingerprint-color,
+      rgba(var(--emotion-neutral-RGB), 1)
+    );
+  }
+
+  & .conversations-table__fingerprint-duration {
+    align-self: flex-start;
+    color: var(--m__text-caption);
+    flex: 0 0 auto;
+    font-size: var(--m__font-size-xs);
+    line-height: 1;
     font-variant-numeric: tabular-nums;
     transition: color var(--m__duration-base) var(--m__easing-base);
   }
 
+  & .conversations-table__detection {
+    min-width: 8rem;
+  }
+
+  & .conversations-table__detection-link {
+    display: inline-flex;
+    align-items: baseline;
+    max-width: 100%;
+    color: var(--m__text);
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-bold);
+    line-height: 1.15;
+    text-decoration-color: currentColor;
+    text-decoration-line: underline;
+    text-decoration-thickness: 0.15rem;
+    text-underline-offset: 0.24rem;
+    transition: color var(--m__duration-base) var(--m__easing-base);
+
+    &:is(:hover, :focus-visible) {
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
+    }
+
+    &:focus-visible {
+      border-radius: 0.18rem;
+      outline: 0.06rem solid currentColor;
+      outline-offset: 0.16rem;
+    }
+  }
+
+  & .conversations-table__detection-icon {
+    margin-right: 0.22rem;
+    flex: 0 0 auto;
+    font-size: 0.95em;
+    line-height: 1;
+    transform: translateY(0.04em);
+  }
+
+  & .conversations-table__detection-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & .conversations-table__detection-score {
+    margin-left: 0.35rem;
+    flex: 0 0 auto;
+    font-size: 0.85em;
+  }
+
+  & .conversations-table__detection-empty {
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-s);
+  }
+
   & .conversations-table__uploaded {
-    min-width: 11rem;
+    min-width: 9rem;
   }
 
   & .conversations-table__uploaded-date,
@@ -1830,6 +2004,10 @@ table.config-details {
 
     & .conversations-table__header > .conversations-table__filters {
       grid-template-columns: 1fr;
+    }
+
+    & .conversations-table__fingerprint {
+      max-width: 7.25rem;
     }
 
     & .conversations-table__actions {
