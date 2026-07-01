@@ -1737,12 +1737,34 @@ table.config-details {
     transition: filter var(--m__duration-base) var(--m__easing-base);
   }
 
+  & .conversations-table__fingerprint--language {
+    background-color: color-mix(in srgb, var(--m__border) 55%, transparent);
+  }
+
   & .conversations-table__fingerprint-segment {
     position: relative;
     flex: var(--fingerprint-span, 1) 1 0;
     min-width: 0.14rem;
     height: 100%;
     background-color: transparent;
+  }
+
+  &
+    .conversations-table__fingerprint--ai-music
+    .conversations-table__fingerprint-segment,
+  &
+    .conversations-table__fingerprint--pii
+    .conversations-table__fingerprint-segment {
+    background-color: var(
+      --fingerprint-color,
+      rgba(var(--emotion-neutral-RGB), 1)
+    );
+  }
+
+  &
+    .conversations-table__fingerprint--language
+    .conversations-table__fingerprint-segment {
+    display: none;
   }
 
   & .conversations-table__fingerprint-segment::before,
@@ -1753,6 +1775,21 @@ table.config-details {
     right: 0;
     height: 50%;
     background-color: transparent;
+  }
+
+  &
+    .conversations-table__fingerprint--ai-music
+    .conversations-table__fingerprint-segment::before,
+  &
+    .conversations-table__fingerprint--ai-music
+    .conversations-table__fingerprint-segment::after,
+  &
+    .conversations-table__fingerprint--pii
+    .conversations-table__fingerprint-segment::before,
+  &
+    .conversations-table__fingerprint--pii
+    .conversations-table__fingerprint-segment::after {
+    display: none;
   }
 
   & .conversations-table__fingerprint-segment::before {
