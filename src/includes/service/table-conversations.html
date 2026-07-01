@@ -176,17 +176,13 @@ conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
         <col class="conversations-table__col-fingerprint" />
         <col class="conversations-table__col-detection" />
         <col class="conversations-table__col-status" />
-        <col class="conversations-table__col-analysis" />
-        <col class="conversations-table__col-actions" />
       </colgroup>
       <thead>
         <tr>
           <th>Conversation</th>
-          <th>Emotion pattern</th>
+          <th>Pattern</th>
           <th>Verdict</th>
           <th>Status</th>
-          <th>Analysis</th>
-          <th class="m__col-actions"></th>
         </tr>
       </thead>
       <tbody>
@@ -231,7 +227,22 @@ conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
               class="conversations-table__fingerprint-link"
               aria-label="Open emotion pattern for {{ row.title }}"
             >
-              <span class="conversations-table__fingerprint" aria-hidden="true">
+              {% set fingerprintWidth = '6.8rem' %} {% if row.duration ==
+              '31:44' %} {% set fingerprintWidth = '9.8rem' %} {% elif
+              row.duration == '24:11' %} {% set fingerprintWidth = '9rem' %} {%
+              elif row.duration == '17:32' %} {% set fingerprintWidth = '8.2rem'
+              %} {% elif row.duration == '12:48' %} {% set fingerprintWidth =
+              '7.6rem' %} {% elif row.duration == '8:04' %} {% set
+              fingerprintWidth = '6.6rem' %} {% elif row.duration == '6:53' %}
+              {% set fingerprintWidth = '6.2rem' %} {% elif row.duration ==
+              '5:18' %} {% set fingerprintWidth = '5.7rem' %} {% elif
+              row.duration == '1:09' %} {% set fingerprintWidth = '4.5rem' %} {%
+              endif %}
+              <span
+                class="conversations-table__fingerprint"
+                style="--fingerprint-width: {{ fingerprintWidth }}"
+                aria-hidden="true"
+              >
                 {% for segment in row.fingerprint %}
                 <span
                   class="conversations-table__fingerprint-segment conversations-table__fingerprint-segment--{{ segment.lane }}"
@@ -245,120 +256,133 @@ conversationStatusFilterLabel = 'Failed' %} {% elif conversationStatusFilter ==
             </a>
           </td>
           <td class="conversations-table__detection">
-            {% if row.status == 'processing' %}
-            <span class="conversations-table__detection-empty">Analyzing</span>
-            {% elif row.status == 'failed' %}
-            <span class="conversations-table__detection-empty"
-              >Unavailable</span
-            >
-            {% elif row.behavior %}
-            <a
-              href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
-              class="conversations-table__detection-link"
-              aria-label="Open {{ row.behavior }} behavior for {{ row.title }}"
-            >
-              <span
-                class="conversations-table__detection-icon"
-                aria-hidden="true"
-                >✷</span
-              >
-              <span class="conversations-table__detection-name"
-                >{{ row.behavior }}</span
-              >
-              {% if row.detectionScore %}
-              <span class="conversations-table__detection-score"
-                >{{ row.detectionScore }}</span
-              >
-              {% endif %}
-            </a>
-            {% elif row.verdict %}
-            <a
-              href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
-              class="conversations-table__detection-link conversations-table__verdict-link"
-              aria-label="Open {{ row.verdict }} verdict for {{ row.title }}"
-            >
-              <span class="conversations-table__detection-name"
-                >{{ row.verdict }}</span
-              >
-            </a>
-            {% else %}
-            <span class="conversations-table__detection-empty"
-              >Unavailable</span
-            >
-            {% endif %}
-          </td>
-          <td class="conversations-table__status">
-            {% if row.status == 'complete' %}
-            <span
-              class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral"
-              >Complete</span
-            >
-            {% elif row.status == 'processing' %}
-            <span
-              class="m__tag conversations-table__status-tag conversations-table__status-tag--processing"
-              >Processing</span
-            >
-            {% elif row.status == 'failed' %}
-            <span
-              class="m__tag conversations-table__status-tag conversations-table__status-tag--failed"
-              >Failed</span
-            >
-            {% elif row.status == 'moderation' %}
-            <span
-              class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral"
-              >Moderation</span
-            >
-            {% else %}
-            <span class="m__tag-flat">{{ row.status }}</span>
-            {% endif %}
-          </td>
-          <td>
-            <div class="conversations-table__reports">
-              {% for report in row.reports %} {% set reportIcon = 'velma' %} {%
-              if report == 'Deepfake' %} {% set reportIcon = 'deepfake' %} {%
-              elif report == 'Language' %} {% set reportIcon = 'language' %} {%
-              elif report == 'Redaction' or report == 'PII/PHI' %} {% set
-              reportIcon = 'redaction' %} {% elif report == 'Music & Speech' %}
-              {% set reportIcon = 'music' %} {% elif report == 'AI Music' %} {%
-              set reportIcon = 'ai-music' %} {% endif %}
+            {% set mainReport = 'Velma' %} {% if row.behavior %} {% set
+            mainReport = 'Velma' %} {% elif row.reports[0] == 'AI Music' or
+            row.reports[1] == 'AI Music' %} {% set mainReport = 'AI Music' %} {%
+            elif row.reports[0] %} {% set mainReport = row.reports[0] %} {%
+            endif %} {% set mainReportIcon = 'velma' %} {% if mainReport ==
+            'Deepfake' %} {% set mainReportIcon = 'deepfake' %} {% elif
+            mainReport == 'Language' %} {% set mainReportIcon = 'language' %} {%
+            elif mainReport == 'Redaction' or mainReport == 'PII/PHI' %} {% set
+            mainReportIcon = 'redaction' %} {% elif mainReport == 'Music &
+            Speech' %} {% set mainReportIcon = 'music' %} {% elif mainReport ==
+            'AI Music' %} {% set mainReportIcon = 'ai-music' %} {% endif %}
+            <div class="conversations-table__verdict-stack">
               <a
                 href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
-                class="conversations-table__report"
-                aria-label="{{ report }} report"
-                data-tooltip="{{ report }}"
+                class="conversations-table__verdict-bubble"
+                aria-label="Open {{ mainReport }} result for {{ row.title }}"
               >
                 <svg
-                  class="conversations-table__report-icon"
+                  class="conversations-table__verdict-icon"
                   viewBox="0 0 32 32"
                   aria-hidden="true"
                 >
-                  <use href="#{{ reportIcon }}"></use>
+                  <use href="#{{ mainReportIcon }}"></use>
                 </svg>
+                <span class="conversations-table__verdict-text">
+                  {% if row.status == 'processing' %}
+                  <span class="conversations-table__detection-empty"
+                    >Analyzing</span
+                  >
+                  {% elif row.status == 'failed' %}
+                  <span class="conversations-table__detection-empty"
+                    >Unavailable</span
+                  >
+                  {% elif row.behavior %}
+                  <span class="conversations-table__detection-name"
+                    >{{ row.behavior }}</span
+                  >
+                  {% if row.detectionScore %}
+                  <span class="conversations-table__detection-score"
+                    >{{ row.detectionScore }}</span
+                  >
+                  {% endif %} {% elif row.verdict %}
+                  <span class="conversations-table__detection-name"
+                    >{{ row.verdict }}</span
+                  >
+                  {% else %}
+                  <span class="conversations-table__detection-empty"
+                    >Unavailable</span
+                  >
+                  {% endif %}
+                </span>
               </a>
-              {% endfor %}
+              <div class="conversations-table__reports">
+                {% for report in row.reports %} {% if report != mainReport %} {%
+                set reportIcon = 'velma' %} {% if report == 'Deepfake' %} {% set
+                reportIcon = 'deepfake' %} {% elif report == 'Language' %} {%
+                set reportIcon = 'language' %} {% elif report == 'Redaction' or
+                report == 'PII/PHI' %} {% set reportIcon = 'redaction' %} {%
+                elif report == 'Music & Speech' %} {% set reportIcon = 'music'
+                %} {% elif report == 'AI Music' %} {% set reportIcon =
+                'ai-music' %} {% endif %}
+                <a
+                  href="{{ row.href or '/dashboard/conversations/7839f2/' }}"
+                  class="conversations-table__report"
+                  aria-label="{{ report }} report"
+                  data-tooltip="{{ report }}"
+                >
+                  <svg
+                    class="conversations-table__report-icon"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true"
+                  >
+                    <use href="#{{ reportIcon }}"></use>
+                  </svg>
+                </a>
+                {% endif %} {% endfor %}
+              </div>
             </div>
           </td>
-          <td class="m__col-actions">
-            <div class="m__menu-button">
-              <button
-                type="button"
-                class="m__menu-button-icon S m__menu-button-trigger"
-                aria-label="Actions for {{ row.title }}"
-              >
-                <svg viewBox="0 0 12 12" aria-hidden="true">
-                  <use href="#dots-vertical"></use>
-                </svg>
-              </button>
-              <div class="m__menu-button-list" hidden>
-                <button type="button" class="m__menu-button-item">
-                  Rename
-                </button>
+          <td class="conversations-table__status">
+            <div class="conversations-table__status-cell">
+              <div class="conversations-table__status-value">
+                {% if row.status == 'complete' %}
+                <span
+                  class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral"
+                  >Complete</span
+                >
+                {% elif row.status == 'processing' %}
+                <span
+                  class="m__tag conversations-table__status-tag conversations-table__status-tag--processing"
+                  >Processing</span
+                >
+                {% elif row.status == 'failed' %}
+                <span
+                  class="m__tag conversations-table__status-tag conversations-table__status-tag--failed"
+                  >Failed</span
+                >
+                {% elif row.status == 'moderation' %}
+                <span
+                  class="m__tag conversations-table__status-tag conversations-table__status-tag--neutral"
+                  >Moderation</span
+                >
+                {% else %}
+                <span class="m__tag-flat">{{ row.status }}</span>
+                {% endif %}
+              </div>
+              <div class="m__menu-button conversations-table__actions-menu">
                 <button
                   type="button"
-                  class="m__menu-button-item m__menu-button-item--danger"
+                  class="m__menu-button-icon S m__menu-button-trigger"
+                  aria-label="Actions for {{ row.title }}"
                 >
-                  Delete
+                  <svg viewBox="0 0 12 12" aria-hidden="true">
+                    <use href="#dots-vertical"></use>
+                  </svg>
                 </button>
+                <div class="m__menu-button-list" hidden>
+                  <button type="button" class="m__menu-button-item">
+                    Rename
+                  </button>
+                  <button
+                    type="button"
+                    class="m__menu-button-item m__menu-button-item--danger"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           </td>
