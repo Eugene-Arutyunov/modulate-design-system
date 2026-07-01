@@ -1578,7 +1578,7 @@ table.config-details {
   }
 
   & .conversations-table__col-conversation {
-    width: 29%;
+    width: 32%;
   }
 
   & .conversations-table__col-fingerprint {
@@ -1586,7 +1586,7 @@ table.config-details {
   }
 
   & .conversations-table__col-detection {
-    width: 34%;
+    width: 31%;
   }
 
   & .conversations-table__col-status {
@@ -1707,6 +1707,13 @@ table.config-details {
 
       & .conversations-table__fingerprint {
         filter: brightness(112%) saturate(105%);
+        transition-duration: var(--m__duration-instant);
+      }
+
+      & .conversations-table__fingerprint-duration {
+        color: var(--m__text-link-hover);
+        transition-duration: 0s;
+        transition-timing-function: ease;
       }
     }
 
@@ -1773,7 +1780,7 @@ table.config-details {
     font-size: var(--m__font-size-xs);
     line-height: 1;
     font-variant-numeric: tabular-nums;
-    transition: color var(--m__duration-base) var(--m__easing-base);
+    transition: color 0.5s ease;
   }
 
   & .conversations-table__detection {
