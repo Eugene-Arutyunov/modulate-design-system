@@ -1727,10 +1727,10 @@ table.config-details {
   & .conversations-table__fingerprint {
     display: flex;
     align-items: stretch;
-    width: var(--fingerprint-width, 6.8rem);
-    max-width: 100%;
+    width: min(var(--fingerprint-width, 42%), calc(100% - 3.5rem));
+    max-width: calc(100% - 3.5rem);
     height: 1.85rem;
-    flex: 0 1 var(--fingerprint-width, 6.8rem);
+    flex: 0 1 auto;
     overflow: hidden;
     border-radius: 0.24rem;
     background-color: rgba(var(--emotion-neutral-RGB), 0.24);
@@ -2004,7 +2004,7 @@ table.config-details {
     }
 
     & .conversations-table__fingerprint {
-      max-width: 7.25rem;
+      max-width: 100%;
     }
 
     & .conversations-table__actions {
