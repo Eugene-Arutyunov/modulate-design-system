@@ -5,25 +5,243 @@ permalink: /dashboard/moderation/
 
 {% extends 'prototypes/layout.html' %} {% block content %}
 
+{% set reviewRows = [
+  { id: 'UCSF-1042', title: 'Member disputes denied imaging referral', submitted: 'Today, 10:24', source: 'ServiceOne', duration: '12:48', behavior: 'Harassment', score: 87, detections: 3, detectionScore: '+15', status: 'Pending', href: '/dashboard/moderation/7839f2/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 4 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'bottom', span: 5 }, { emotion: 'neutral', lane: 'full', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'full', span: 2 }, { emotion: 'happy', lane: 'top', span: 1 }, { emotion: 'calm', lane: 'bottom', span: 3 }, { emotion: 'frustrated', lane: 'full', span: 2 }, { emotion: 'angry', lane: 'full', span: 3 } ] },
+  { id: 'UCSF-1038', title: 'Caller pressures nurse for supervisor override', submitted: 'Today, 09:12', source: 'API', duration: '8:36', behavior: 'Coercion manipulation', score: 79, detections: 2, detectionScore: '+9', status: 'Pending', href: '/dashboard/moderation/7839f2/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'angry', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 3 }, { emotion: 'frustrated', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] },
+  { id: 'UCSF-1029', title: 'Care team chat includes personal attacks', submitted: 'Yesterday, 16:47', source: 'API', duration: '17:32', behavior: 'Harassment', score: 74, detections: 4, detectionScore: '+11', status: 'In review', href: '/dashboard/moderation/7839f2/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, { emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 3 }, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'angry', lane: 'top', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion: 'calm', lane: 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 2 } ] },
+  { id: 'UCSF-1021', title: 'Patient vents about delayed prescription refill', submitted: 'Yesterday, 11:08', source: 'Five9', duration: '6:18', behavior: 'Complaints', score: 68, detections: 1, detectionScore: '+8', status: 'Pending', href: '/dashboard/moderation/7839f2/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'amused', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'angry', lane: 'full', span: 1 } ] },
+  { id: 'UCSF-1014', title: 'Family member challenges appointment policy', submitted: 'Mon, 14:02', source: 'API', duration: '9:42', behavior: 'Social boundary setting', score: 63, detections: 1, detectionScore: '+7', status: 'Pending', href: '/dashboard/moderation/7839f2/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 1 }, { emotion: 'confident', lane: 'bottom', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 1 }, { emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'happy', lane: 'bottom', span: 1 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] }
+] %}
+
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
     <div class="nav-sidebar">
-      <nav class="m__nav-menu">
-        {% include 'prototypes/dashboard-nav-sidebar.html' %}
-      </nav>
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
     </div>
-    <main class="dashboard-content">
-      <h1 class="dashboard-page-title">Moderation</h1>
-      <div class="dashboard-section">
-        <p>
-          Review conversations that need moderation before reports are
-          finalized.
-        </p>
+
+    <main class="dashboard-content moderation-page" data-moderation-page>
+      <div class="moderation-page__title-row">
+        <div>
+          <h1 class="dashboard-page-title">Moderation</h1>
+          <p>
+            Review conversations flagged by configured behavior detections.
+          </p>
+        </div>
       </div>
+
+      {#
+      <section class="moderation-stats" aria-label="Review queue summary">
+        <article class="m__widget moderation-stat-card">
+          <h2>Flagged conversations</h2>
+          <p class="m__widget__value">5</p>
+        </article>
+        <article class="m__widget moderation-stat-card">
+          <h2>Review queue</h2>
+          <div class="m__widget__meta-list moderation-stat-card__status-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Pending review</span>
+              <strong class="m__widget__meta-value">4</strong>
+            </p>
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">In review</span>
+              <strong class="m__widget__meta-value">1</strong>
+            </p>
+          </div>
+        </article>
+        <article class="m__widget moderation-stat-card">
+          <h2>Confidence threshold</h2>
+          <p class="m__widget__value">60%</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <a href="#" >Edit preferences</a>
+            </p>
+          </div>
+        </article>
+      </section>
+      #}
+
+      <section class="m__widget moderation-table" aria-label="Flagged conversations">
+        <div class="m__widget-header">
+          <div class="moderation-table__header">
+            <label class="m__searchbar" for="moderation-search">
+              <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#search"></use></svg>
+              <input type="search" id="moderation-search" placeholder="Search" data-moderation-search />
+            </label>
+            <label class="m__select S moderation-table__filter moderation-table__filter--behavior">
+              <span>Behavior</span>
+              <div class="m__select__inline-control">
+                <span class="m__select__value" data-behavior-filter-label>All</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                <select id="moderation-filter-behavior" data-behavior-filter>
+                  <option value="all">All</option>
+                  <option value="Harassment">Harassment</option>
+                  <option value="Coercion manipulation">Coercion manipulation</option>
+                  <option value="Complaints">Complaints</option>
+                  <option value="Social boundary setting">Social boundary setting</option>
+                </select>
+              </div>
+            </label>
+            <label class="m__select S moderation-table__filter moderation-table__filter--sort">
+              <span>Sort</span>
+              <div class="m__select__inline-control">
+                <span class="m__select__value" data-sort-filter-label>Score high to low</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                <select id="moderation-sort" data-sort-filter>
+                  <option value="score-desc">Score high to low</option>
+                  <option value="score-asc">Score low to high</option>
+                  <option value="newest">Newest first</option>
+                </select>
+              </div>
+            </label>
+            <div class="behaviors-toolbar-actions moderation-table__actions">
+              <button type="button" class="m__button-secondary-outline S">
+                Bulk actions
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="m__table-wrapper moderation-table__table-wrapper">
+          <table class="moderation-table__table">
+            <colgroup>
+              <col class="moderation-table__col-conversation" />
+              <col class="moderation-table__col-pattern" />
+              <col class="moderation-table__col-detection" />
+              <col class="moderation-table__col-status" />
+              <col class="moderation-table__col-actions" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Conversation</th>
+                <th>Pattern</th>
+                <th>Detection behaviors</th>
+                <th>Status</th>
+                <th class="m__col-actions"></th>
+              </tr>
+            </thead>
+            <tbody data-moderation-tbody>
+              {% for row in reviewRows %}
+              <tr
+                data-review-row
+                data-index="{{ loop.index0 }}"
+                data-behavior="{{ row.behavior }}"
+                data-score="{{ row.score }}"
+                data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {{ row.detectionScore }} {{ row.status }}"
+              >
+                <td class="moderation-table__conversation-cell">
+                  <a href="{{ row.href }}" class="moderation-table__conversation-link">
+                    <span class="moderation-table__title">{{ row.title }}</span>
+                    <span class="moderation-table__meta">{{ row.submitted }} · {{ row.source }}</span>
+                  </a>
+                </td>
+                <td class="moderation-pattern-cell">
+                  <a href="{{ row.href }}" class="moderation-pattern" aria-label="Open moderation pattern for {{ row.title }}">
+                    {% set fingerprintWidth = '42%' %} {% if row.duration == '30:00'
+                    %} {% set fingerprintWidth = '95%' %} {% elif row.duration ==
+                    '24:11' %} {% set fingerprintWidth = '76%' %} {% elif row.duration
+                    == '17:32' %} {% set fingerprintWidth = '55%' %} {% elif
+                    row.duration == '12:48' %} {% set fingerprintWidth = '42%' %} {%
+                    elif row.duration == '14:06' %} {% set fingerprintWidth = '47%' %}
+                    {% elif row.duration == '9:42' %} {% set fingerprintWidth = '32%'
+                    %} {% elif row.duration == '8:36' %} {% set fingerprintWidth =
+                    '29%' %} {% elif row.duration == '8:04' %} {% set fingerprintWidth =
+                    '27%' %} {% elif row.duration == '6:18' %} {% set fingerprintWidth =
+                    '21%' %} {% elif row.duration == '5:18' %} {% set fingerprintWidth
+                    = '18%' %} {% elif row.duration == '1:59' %} {% set
+                    fingerprintWidth = '14%' %} {% elif row.duration == '1:09' %} {%
+                    set fingerprintWidth = '8%' %} {% endif %}
+                    <span class="moderation-pattern__fingerprint" style="--fingerprint-width: {{ fingerprintWidth }}" aria-hidden="true">
+                      {% for segment in row.fingerprint %}
+                      <span
+                        class="moderation-pattern__fingerprint-segment moderation-pattern__fingerprint-segment--{{ segment.lane }}"
+                        style="--fingerprint-span: {{ segment.span }}; --fingerprint-color: {% if segment.color %}{{ segment.color }}{% else %}rgba(var(--emotion-{{ segment.emotion }}-RGB), 1){% endif %}"
+                      ></span>
+                      {% endfor %}
+                    </span>
+                    <span class="moderation-pattern__duration">{{ row.duration }}</span>
+                  </a>
+                </td>
+                <td>
+                  <div class="moderation-behavior-summary">
+                    <a href="{{ row.href }}" class="moderation-table__detection-link moderation-behavior-link" aria-label="Open {{ row.behavior }} result for {{ row.title }}">
+                      <svg class="moderation-behavior-link__icon" viewBox="0 0 32 32" aria-hidden="true">
+                        <use href="#behaviors"></use>
+                      </svg>
+                      <span class="moderation-behavior-link__content">
+                        <span class="moderation-behavior-link__name">{{ row.behavior }}</span>
+                        <span class="moderation-behavior-link__confidence">{{ row.score }}%</span>
+                      </span>
+                    </a>
+                    {% if row.detectionScore %}<span class="moderation-behavior-link__score">{{ row.detectionScore }}</span>{% endif %}
+                  </div>
+                </td>
+                <td>
+                  <span class="m__tag moderation-table__status-tag {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% endif %}">{{ row.status }}</span>
+                </td>
+                <td class="m__col-actions moderation-table__row-actions">
+                  <div class="m__menu-button moderation-table__actions-menu">
+                    <button
+                      type="button"
+                      class="m__menu-button-icon S m__menu-button-trigger"
+                      aria-label="Actions for {{ row.title }}"
+                    >
+                      <svg viewBox="0 0 12 12" aria-hidden="true">
+                        <use href="#dots-vertical"></use>
+                      </svg>
+                    </button>
+                    <div class="m__menu-button-list" hidden>
+                      <a href="{{ row.href }}" class="m__menu-button-item">Review</a>
+                      <button type="button" class="m__menu-button-item">Mark reviewed</button>
+                      <button type="button" class="m__menu-button-item m__menu-button-item--danger">Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
+
+<script>
+  (function () {
+    var root = document.querySelector("[data-moderation-page]");
+    if (!root) return;
+    var rows = Array.from(root.querySelectorAll("[data-review-row]"));
+    var tbody = root.querySelector("[data-moderation-tbody]");
+    var searchInput = root.querySelector("[data-moderation-search]");
+    var behaviorFilter = root.querySelector("[data-behavior-filter]");
+    var behaviorFilterLabel = root.querySelector("[data-behavior-filter-label]");
+    var sortFilter = root.querySelector("[data-sort-filter]");
+    var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
+
+    function applyQueueState() {
+      var query = searchInput.value.trim().toLowerCase();
+      var behavior = behaviorFilter.value;
+      var sort = sortFilter.value;
+      behaviorFilterLabel.textContent = behavior === "all" ? "All" : behavior;
+      sortFilterLabel.textContent = sortFilter.options[sortFilter.selectedIndex].text;
+      rows.forEach(function (row) {
+        var show = (behavior === "all" || row.dataset.behavior === behavior) && (!query || row.dataset.search.toLowerCase().includes(query));
+        row.hidden = !show;
+      });
+      rows.slice().sort(function (a, b) {
+        if (sort === "score-asc") return Number(a.dataset.score) - Number(b.dataset.score);
+        if (sort === "newest") return Number(a.dataset.index) - Number(b.dataset.index);
+        return Number(b.dataset.score) - Number(a.dataset.score);
+      }).forEach(function (row) { tbody.appendChild(row); });
+    }
+
+    searchInput.addEventListener("input", applyQueueState);
+    behaviorFilter.addEventListener("change", applyQueueState);
+    sortFilter.addEventListener("change", applyQueueState);
+    applyQueueState();
+  })();
+</script>
 
 {% endblock %}
