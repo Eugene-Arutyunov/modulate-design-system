@@ -2519,6 +2519,15 @@ table.config-details {
   white-space: nowrap;
 }
 
+.moderation-behavior-link__confidence {
+  flex: 0 0 auto;
+  color: var(--m__bg-accent);
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--m__duration-base) var(--m__easing-base);
+}
+
 .moderation-behavior-link__score {
   flex: 0 0 auto;
   color: var(--m__text-caption);
@@ -2755,52 +2764,34 @@ table.config-details {
   }
 
   & table {
-    min-width: 60rem;
+    min-width: 0;
     table-layout: fixed;
   }
 
   & .moderation-table__col-conversation {
-    width: 32%;
+    width: 36%;
   }
 
   & .moderation-table__col-pattern {
-    width: 21%;
-  }
-
-  & .moderation-table__col-detection {
     width: 22%;
   }
 
-  & .moderation-table__col-confidence {
-    width: 10%;
+  & .moderation-table__col-detection {
+    width: 25%;
   }
 
   & .moderation-table__col-status {
-    width: 11%;
+    width: 12%;
   }
 
   & .moderation-table__col-actions {
-    width: 4%;
+    width: 5%;
   }
 
   & th:nth-child(4),
-  & td:nth-child(4),
-  & th:nth-child(5),
-  & td:nth-child(5) {
+  & td:nth-child(4) {
     padding-left: 1rem;
-  }
-
-  & th:nth-child(4),
-  & th:nth-child(5),
-  & td:nth-child(4),
-  & td:nth-child(5) {
     white-space: nowrap;
-  }
-
-  & .moderation-table__confidence {
-    font-size: var(--m__font-size-s);
-    font-weight: var(--m__font-weight-regular);
-    font-variant-numeric: tabular-nums;
   }
 
   & .moderation-table__status-tag {
@@ -2855,7 +2846,7 @@ table.config-details {
   }
 
   & .moderation-table__conversation-link:hover :is(.moderation-table__title, .moderation-table__meta),
-  & .moderation-table__detection-link:hover :is(.moderation-behavior-link__main, .moderation-behavior-link__score) {
+  & .moderation-table__detection-link:hover :is(.moderation-behavior-link__main, .moderation-behavior-link__confidence, .moderation-behavior-link__score) {
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }

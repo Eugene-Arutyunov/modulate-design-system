@@ -107,7 +107,6 @@ permalink: /dashboard/moderation/
               <col class="moderation-table__col-conversation" />
               <col class="moderation-table__col-pattern" />
               <col class="moderation-table__col-detection" />
-              <col class="moderation-table__col-confidence" />
               <col class="moderation-table__col-status" />
               <col class="moderation-table__col-actions" />
             </colgroup>
@@ -116,7 +115,6 @@ permalink: /dashboard/moderation/
                 <th>Conversation</th>
                 <th>Pattern</th>
                 <th>Detection behaviors</th>
-                <th>Confidence</th>
                 <th>Status</th>
                 <th class="m__col-actions"></th>
               </tr>
@@ -171,11 +169,9 @@ permalink: /dashboard/moderation/
                       </svg>
                       <span class="moderation-behavior-link__name">{{ row.behavior }}</span>
                     </span>
+                    <span class="moderation-behavior-link__confidence">{{ row.score }}%</span>
                     {% if row.detectionScore %}<span class="moderation-behavior-link__score">{{ row.detectionScore }}</span>{% endif %}
                   </a>
-                </td>
-                <td class="moderation-table__confidence-cell">
-                  <span class="moderation-table__confidence">{{ row.score }}%</span>
                 </td>
                 <td>
                   <span class="m__tag moderation-table__status-tag {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% endif %}">{{ row.status }}</span>
