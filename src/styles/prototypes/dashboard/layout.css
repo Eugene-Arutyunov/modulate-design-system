@@ -2485,34 +2485,47 @@ table.config-details {
   }
 }
 
-.moderation-behavior-tag {
+.moderation-behavior-link {
+  display: inline-flex;
+  align-items: baseline;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.moderation-score {
-  display: grid;
-  grid-template-columns: minmax(4rem, 1fr) 2.7rem;
-  align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
+  color: var(--m__bg-accent);
   font-size: var(--m__font-size-s);
-  font-variant-numeric: tabular-nums;
+  font-weight: var(--m__font-weight-bold);
+  line-height: 1.15;
 }
 
-.moderation-score__bar {
-  height: 0.42rem;
-  overflow: hidden;
-  border-radius: 999px;
-  background-color: color-mix(in srgb, var(--m__text) 12%, transparent);
+.moderation-behavior-link__main {
+  display: inline-flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 0.18rem;
+  transition: color var(--m__duration-base) var(--m__easing-base);
+}
 
-  & span {
-    display: block;
-    width: var(--moderation-score, 0%);
-    height: 100%;
-    border-radius: inherit;
-    background-color: var(--m__bg-accent);
-  }
+.moderation-behavior-link__icon {
+  width: 0.95em;
+  height: 0.95em;
+  flex: 0 0 auto;
+  transform: translateY(0.12em);
+  fill: currentColor;
+}
+
+.moderation-behavior-link__name {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.moderation-behavior-link__score {
+  flex: 0 0 auto;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-regular);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--m__duration-base) var(--m__easing-base);
 }
 
 .moderation-detail {
@@ -2742,24 +2755,28 @@ table.config-details {
   }
 
   & table {
-    min-width: 48rem;
+    min-width: 60rem;
     table-layout: fixed;
   }
 
   & .moderation-table__col-conversation {
-    width: 37%;
+    width: 32%;
   }
 
   & .moderation-table__col-pattern {
-    width: 25%;
+    width: 21%;
   }
 
   & .moderation-table__col-detection {
     width: 22%;
   }
 
+  & .moderation-table__col-confidence {
+    width: 10%;
+  }
+
   & .moderation-table__col-status {
-    width: 12%;
+    width: 11%;
   }
 
   & .moderation-table__col-actions {
@@ -2767,8 +2784,23 @@ table.config-details {
   }
 
   & th:nth-child(4),
-  & td:nth-child(4) {
-    padding-left: 1.1rem;
+  & td:nth-child(4),
+  & th:nth-child(5),
+  & td:nth-child(5) {
+    padding-left: 1rem;
+  }
+
+  & th:nth-child(4),
+  & th:nth-child(5),
+  & td:nth-child(4),
+  & td:nth-child(5) {
+    white-space: nowrap;
+  }
+
+  & .moderation-table__confidence {
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    font-variant-numeric: tabular-nums;
   }
 
   & .moderation-table__status-tag {
@@ -2794,8 +2826,7 @@ table.config-details {
   }
 
   & .moderation-table__conversation-link {
-    display: grid;
-    gap: 0.08rem;
+    display: block;
     min-width: 0;
   }
 
@@ -2812,7 +2843,9 @@ table.config-details {
   }
 
   & .moderation-table__meta {
+    display: block;
     overflow: hidden;
+    margin-top: 0.18rem;
     color: var(--m__text-caption);
     font-size: var(--m__font-size-xs);
     font-variant-numeric: tabular-nums;
@@ -2822,14 +2855,12 @@ table.config-details {
   }
 
   & .moderation-table__conversation-link:hover :is(.moderation-table__title, .moderation-table__meta),
-  & .moderation-table__detection-link:hover {
+  & .moderation-table__detection-link:hover :is(.moderation-behavior-link__main, .moderation-behavior-link__score) {
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
 
   & .moderation-table__detection-link {
-    display: grid;
-    gap: 0.35rem;
     min-width: 0;
   }
 
@@ -2978,59 +3009,59 @@ table.config-details {
     }
   }
 
-  & .moderation-review-card {
-    position: static;
-  }
-
-  & .moderation-review-card__header {
-    margin-bottom: 1.35rem;
-
-    & .dashboard-page-title {
-      max-width: 42rem;
-      margin: 0.15rem 0 0;
-      font-size: var(--m__font-size-xxxl);
-      line-height: 1.15;
-    }
-  }
 }
 
-.moderation-review-transcript {
-  & .moderation-review-transcript__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
 
-  & h2 {
-    margin: 0 0 0.2rem;
-  }
 
-  & p {
-    margin: 0;
-    color: var(--m__text-caption);
-    font-size: var(--m__font-size-s);
-  }
+.moderation-review-behaviors .pg-results-table-section {
+  overflow-x: clip;
 }
 
-.moderation-transcript--conversation-style {
-  gap: 0;
-  margin: 0 calc(-1 * var(--m__widget-padding));
+.moderation-review-behaviors__table {
+  width: 100%;
+  min-width: 0;
+}
 
-  & .moderation-transcript__turn {
-    border-radius: 0;
-    background-color: transparent;
-    border-top: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 10%, transparent);
-    padding-inline: var(--m__widget-padding);
-  }
+.moderation-review-behaviors__table th:nth-child(1) {
+  width: 18%;
+}
 
-  & .moderation-transcript__turn:last-child {
-    border-bottom: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 10%, transparent);
-  }
+.moderation-review-behaviors__table th:nth-child(2) {
+  width: 23%;
+}
 
-  & .moderation-transcript__turn.has-detection {
-    background-color: color-mix(in srgb, var(--m__bg-highlight) 8%, transparent);
-    box-shadow: inset 3px 0 0 color-mix(in srgb, var(--m__bg-highlight) 75%, transparent);
-  }
+.moderation-review-behaviors__table th:nth-child(3) {
+  width: 39%;
+}
+
+.moderation-review-behaviors__table th:nth-child(4) {
+  width: 8%;
+}
+
+.moderation-review-behaviors__table th:nth-child(5) {
+  width: 12%;
+}
+
+.moderation-review-behaviors__table th:last-child,
+.moderation-review-behaviors__table td:last-child {
+  padding-right: 0;
+}
+
+.moderation-review-behaviors__table tbody tr:not(:last-child) > td:not(.pg-behavior-speaker-cell),
+.moderation-review-behaviors__table .pg-behavior-row--detected-last:not(:last-child) td:not(.pg-behavior-speaker-cell) {
+  border-bottom: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 12%, transparent);
+}
+
+.moderation-review-behaviors__actions {
+  white-space: nowrap;
+}
+
+.moderation-review-behaviors__action {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 0.45rem;
+}
+
+.moderation-review-behaviors__action + .moderation-review-behaviors__action {
+  margin-left: 0.25rem;
 }

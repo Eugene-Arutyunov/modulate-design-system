@@ -1,6 +1,6 @@
 ---
 pageTitle: Moderation
-permalink: /dashboard/moderation/ucsf-1038/
+permalink: /dashboard/moderation/7839f2/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
@@ -12,82 +12,262 @@ permalink: /dashboard/moderation/ucsf-1038/
       <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
     </div>
 
-    <main class="dashboard-content moderation-review-page" data-moderation-review>
+    <main class="dashboard-content conversation-report moderation-review-page" data-moderation-review>
       <a href="/dashboard/moderation/" class="conversation-report__back">
         <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
-        Review Queue
+        Moderation
       </a>
 
-      <section class="m__widget moderation-detail moderation-review-card" aria-label="Review detection details">
-        <div class="moderation-detail__header moderation-review-card__header">
-          <div>
-            <span class="moderation-detail__eyebrow">UCSF-1038</span>
-            <h1 class="dashboard-page-title">Caller pressures nurse for supervisor override</h1>
-          </div>
-          <div class="moderation-detail__score">
-            <span>Coercion manipulation</span>
-            <strong>79%</strong>
-          </div>
+      <div class="conversation-report__title-row">
+        <div class="conversation-report__title-line">
+          <h1 class="dashboard-page-title">
+            Health member appeals denied MRI claim after urgent back pain
+            referral
+          </h1>
         </div>
+      </div>
 
-        <div class="moderation-detail__review-list" aria-label="Detections to validate">
-          <div class="moderation-detection" data-detection-review>
-            <div class="moderation-detection__meta">
-              <strong>Pressure to bypass protocol</strong>
-              <span>01:48 · 79% confidence</span>
+      <div class="conversation-report__player m__rounded">
+        <div class="media-container">
+          <div class="pg-player-dataviz">
+            <div class="player-visualization">
+              {% include 'prototypes/playground/player-clips.html' %}
             </div>
-            <div class="moderation-detection__actions" role="group" aria-label="Validate pressure to bypass protocol">
-              <button type="button" class="m__button-success-outline S" data-review-choice="true">True</button>
-              <button type="button" class="m__button-danger-outline S" data-review-choice="false">False positive</button>
+            <div class="speaker-labels">
+              <div class="speaker-label" data-speaker-index="1">
+                <span>Customer</span>
+              </div>
+              <div class="speaker-label" data-speaker-index="2">
+                <span>Support specialist</span>
+              </div>
             </div>
-            <span class="moderation-detection__state" data-review-state>Needs review</span>
+            <div class="behaviour-indicators"></div>
+            <div class="behaviour-labels" style="display: none"></div>
           </div>
-
-          <div class="moderation-detection" data-detection-review>
-            <div class="moderation-detection__meta">
-              <strong>Implied consequence</strong>
-              <span>02:36 · 72% confidence</span>
+          <div class="media-box" id="audio-player" data-speaker-count="2">
+            <div class="player-controls">
+              <div class="player-control-spacer"></div>
+              <div class="player-control player-control-center" data-action="play-pause">
+                <a href="#" class="player-icon" data-playing="false">
+                  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+                    <polygon fill="currentColor" points="40 30 40 190 190 110 40 30" />
+                  </svg>
+                </a>
+              </div>
             </div>
-            <div class="moderation-detection__actions" role="group" aria-label="Validate implied consequence">
-              <button type="button" class="m__button-success-outline S" data-review-choice="true">True</button>
-              <button type="button" class="m__button-danger-outline S" data-review-choice="false">False positive</button>
+            <div class="clip-text-caption"><span></span></div>
+            <div class="player-status-caption"><span class="emotion-caption"></span></div>
+            <div class="player-start-time"><span class="start-time">0:00</span></div>
+            <div class="player-total-time"><span class="total-time" data-total-time>12:48</span></div>
+            <div class="player-position-indicator">
+              <div class="player-position-line"></div>
+              <div class="player-position-caption"><span data-current-time>0:00</span></div>
             </div>
-            <span class="moderation-detection__state" data-review-state>Needs review</span>
+            <div class="player-hover-position-indicator">
+              <div class="player-hover-position-line"></div>
+              <div class="player-hover-position-caption"><span data-hover-time>0:00</span></div>
+            </div>
           </div>
+          <div class="pg-media-hover-line" aria-hidden="true"></div>
         </div>
-      </section>
+      </div>
+
+      <div class="pg-output-panel conversation-report__output moderation-review-behaviors">
+        <div class="m__space L"></div>
+        <h2>Behaviors</h2>
+        <div class="pg-results-table-section">
+          <table class="pg-behaviors-table moderation-review-behaviors__table">
+            <thead>
+              <tr>
+                <th>Speaker</th>
+                <th>Behavior</th>
+                <th>Model reasoning</th>
+                <th>Confidence</th>
+                <th>Review</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="pg-behavior-row pg-behavior-row--detected pg-behavior-row--detected-last" data-detection-review>
+                <td class="pg-behavior-speaker-cell">Customer Service Representative</td>
+                <td>
+                  <a href="#clip-evidence" class="pg-behavior-link"
+                    ><svg width="18" height="18" aria-hidden="true">
+                      <use href="#behaviors" /></svg
+                    >Issue Not Resolved</a
+                  >
+                </td>
+                <td>
+                  <div class="pg-model-reasoning">
+                    The representative continues verification and account review, but
+                    does not provide a concrete follow-up commitment, ownership
+                    handoff, or confirmed resolution for the caller's issue.
+                  </div>
+                  <div class="pg-evidence-list">
+                    <a href="#clip-evidence" class="pg-evidence-link pg-evidence-link--fade">Thank you, Mr. Mercer. For verification, can you confirm</a>
+                    <a href="#clip-evidence" class="pg-evidence-link pg-evidence-link--fade">I see your plan is under policy number PPO-77-194402</a>
+                  </div>
+                </td>
+                <td class="pg-num">75%</td>
+                <td class="moderation-review-behaviors__actions">
+                  <button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button>
+                  <button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False</button>
+                </td>
+              </tr>
+              <tr class="pg-behavior-row pg-behavior-row--detected" data-detection-review>
+                <td rowspan="3" class="pg-behavior-speaker-cell pg-behavior-speaker-cell--last">Customer</td>
+                <td>
+                  <a href="#clip-evidence" class="pg-behavior-link"
+                    ><svg width="18" height="18" aria-hidden="true">
+                      <use href="#behaviors" /></svg
+                    >Complaints</a
+                  >
+                </td>
+                <td>
+                  <div class="pg-model-reasoning">
+                    The customer raises an unresolved claims and medication issue,
+                    giving corrected contact details while continuing to seek action
+                    from the support specialist.
+                  </div>
+                  <div class="pg-evidence-list">
+                    <a href="#clip-evidence" class="pg-evidence-link pg-evidence-link--fade">Yes, that's right, although my new callback number is</a>
+                  </div>
+                </td>
+                <td class="pg-num">86%</td>
+                <td class="moderation-review-behaviors__actions">
+                  <button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button>
+                  <button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False</button>
+                </td>
+              </tr>
+              <tr class="pg-behavior-row pg-behavior-row--detected" data-detection-review>
+                <td>
+                  <a href="#clip-evidence" class="pg-behavior-link"
+                    ><svg width="18" height="18" aria-hidden="true">
+                      <use href="#behaviors" /></svg
+                    >Issue Not Resolved</a
+                  >
+                </td>
+                <td>
+                  <div class="pg-model-reasoning">
+                    The customer describes an unresolved claim and denied
+                    prescription, then continues supplying corrected information
+                    without receiving confirmation that either issue has been closed.
+                  </div>
+                  <div class="pg-evidence-list">
+                    <a href="#clip-evidence" class="pg-evidence-link">Yes, this is Daniel Andrew Mercer</a>
+                    <a href="#clip-evidence" class="pg-evidence-link pg-evidence-link--fade">Yes, that's right, although my new callback number is</a>
+                    <a href="#clip-evidence" class="pg-evidence-link pg-evidence-link--fade">I see your plan is under policy number PPO-77-194402</a>
+                  </div>
+                </td>
+                <td class="pg-num">82%</td>
+                <td class="moderation-review-behaviors__actions">
+                  <button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button>
+                  <button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False</button>
+                </td>
+              </tr>
+              <tr class="pg-behavior-row pg-behavior-row--detected pg-behavior-row--detected-last" data-detection-review>
+                <td>
+                  <a href="#clip-evidence" class="pg-behavior-link"
+                    ><svg width="18" height="18" aria-hidden="true">
+                      <use href="#behaviors" /></svg
+                    >Coercion Manipulation</a
+                  >
+                </td>
+                <td>
+                  <div class="pg-model-reasoning">
+                    The customer applies pressure by linking corrected contact and
+                    employer details to the denied care issue, keeping the
+                    representative focused on the appeal path.
+                  </div>
+                  <div class="pg-evidence-list">
+                    <a href="#clip-evidence" class="pg-evidence-link pg-evidence-link--fade">Yes, that's right, although my new callback number is</a>
+                  </div>
+                </td>
+                <td class="pg-num">71%</td>
+                <td class="moderation-review-behaviors__actions">
+                  <button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button>
+                  <button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <div class="m__space XS"></div>
 
-      <section class="m__widget moderation-review-transcript" aria-label="Transcript with behavior context">
-        <div class="moderation-review-transcript__header">
-          <div>
-            <h2>Transcript</h2>
-            <p>Surrounding context is shown inline with flagged behavior spans highlighted.</p>
-          </div>
-          <span class="m__tag-flat">2 detections</span>
-        </div>
+      <section class="pg-output-panel conversation-report__output moderation-review-transcript" aria-label="Transcript with behavior context">
+        <h2>Transcript</h2>
+        <div class="pg-transcript-container pg-velma-transcript visible">
+          <div class="pg-transcript-list">
+            <div class="pg-transcript-utterance ec-neutral">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">1:21</span>
+                <span class="pg-transcript-speaker">Nurse</span>
+                <span class="pg-transcript-emotion">Neutral</span>
+                <span class="pg-transcript-flag">English</span>
+              </div>
+              <div class="pg-transcript-text">
+                <p>The fastest next step is to document the symptoms and route this to the triage queue.</p>
+              </div>
+            </div>
 
-        <div class="moderation-transcript moderation-transcript--conversation-style">
-          <div class="moderation-transcript__turn">
-            <div class="moderation-transcript__speaker"><strong>Nurse</strong><span>01:21</span></div>
-            <p>The fastest next step is to document the symptoms and route this to the triage queue.</p>
-          </div>
-          <div class="moderation-transcript__turn has-detection">
-            <div class="moderation-transcript__speaker"><strong>Caller</strong><span>01:48</span></div>
-            <p>You can skip that queue. <mark data-tooltip="Coercion manipulation · 79% confidence">Just put me through to your supervisor and say it is urgent</mark>. Nobody needs to know we changed the process.</p>
-          </div>
-          <div class="moderation-transcript__turn">
-            <div class="moderation-transcript__speaker"><strong>Nurse</strong><span>02:09</span></div>
-            <p>I can escalate based on clinical criteria, but I cannot change documentation or skip required triage.</p>
-          </div>
-          <div class="moderation-transcript__turn has-detection">
-            <div class="moderation-transcript__speaker"><strong>Caller</strong><span>02:36</span></div>
-            <p>If you do not help me here, <mark data-tooltip="Coercion manipulation · 72% confidence">I will make sure your manager hears that you refused care</mark> when all you had to do was press one button.</p>
-          </div>
-          <div class="moderation-transcript__turn">
-            <div class="moderation-transcript__speaker"><strong>Nurse</strong><span>03:02</span></div>
-            <p>I can stay on the line and submit the urgent note now. The request will still need to follow the documented triage workflow.</p>
+            <div class="pg-transcript-utterance ec-frustrated" id="clip-evidence">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">1:48</span>
+                <span class="pg-transcript-speaker">Caller</span>
+                <a href="#clip-evidence" class="pg-behavior-link">
+                  <svg width="18" height="18" aria-hidden="true">
+                    <use href="#behaviors"></use>
+                  </svg>
+                  Coercion manipulation
+                </a>
+                <span class="pg-transcript-emotion">Frustrated</span>
+              </div>
+              <div class="pg-transcript-text">
+                <p>You can skip that queue. Just put me through to your supervisor and say it is urgent. Nobody needs to know we changed the process.</p>
+              </div>
+            </div>
+
+            <div class="pg-transcript-utterance ec-calm">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">2:09</span>
+                <span class="pg-transcript-speaker">Nurse</span>
+                <span class="pg-transcript-emotion">Calm</span>
+                <span class="pg-transcript-flag">English</span>
+              </div>
+              <div class="pg-transcript-text">
+                <p>I can escalate based on clinical criteria, but I cannot change documentation or skip required triage.</p>
+              </div>
+            </div>
+
+            <div class="pg-transcript-utterance ec-angry">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">2:36</span>
+                <span class="pg-transcript-speaker">Caller</span>
+                <a href="#clip-evidence" class="pg-behavior-link">
+                  <svg width="18" height="18" aria-hidden="true">
+                    <use href="#behaviors"></use>
+                  </svg>
+                  Coercion manipulation
+                </a>
+                <span class="pg-transcript-emotion">Angry</span>
+              </div>
+              <div class="pg-transcript-text">
+                <p>If you do not help me here, I will make sure your manager hears that you refused care when all you had to do was press one button.</p>
+              </div>
+            </div>
+
+            <div class="pg-transcript-utterance ec-neutral">
+              <div class="pg-transcript-utterance-header">
+                <span class="pg-transcript-time">3:02</span>
+                <span class="pg-transcript-speaker">Nurse</span>
+                <span class="pg-transcript-emotion">Neutral</span>
+                <span class="pg-transcript-flag">English</span>
+              </div>
+              <div class="pg-transcript-text">
+                <p>I can stay on the line and submit the urgent note now. The request will still need to follow the documented triage workflow.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -97,6 +277,20 @@ permalink: /dashboard/moderation/ucsf-1038/
 </div>
 
 <script>
+  document.querySelectorAll(".media-container").forEach(function (container) {
+    container.addEventListener("mousemove", function (event) {
+      var rect = container.getBoundingClientRect();
+      container.style.setProperty(
+        "--pg-hover-x",
+        event.clientX - rect.left + "px",
+      );
+      container.dataset.hover = "true";
+    });
+    container.addEventListener("mouseleave", function () {
+      container.dataset.hover = "false";
+    });
+  });
+
   (function () {
     var root = document.querySelector("[data-moderation-review]");
     if (!root) return;
@@ -110,9 +304,11 @@ permalink: /dashboard/moderation/ucsf-1038/
       });
       reviewChoice.classList.add("is-selected");
       review.dataset.reviewResult = reviewChoice.dataset.reviewChoice;
-      state.textContent = reviewChoice.dataset.reviewChoice === "true"
-        ? "Validated true"
-        : "False positive · ready to unflag";
+      if (state) {
+        state.textContent = reviewChoice.dataset.reviewChoice === "true"
+          ? "Validated true"
+          : "False positive · ready to unflag";
+      }
     });
   })();
 </script>
