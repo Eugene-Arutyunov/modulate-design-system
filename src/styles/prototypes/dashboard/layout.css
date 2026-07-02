@@ -2485,31 +2485,63 @@ table.config-details {
   }
 }
 
-.moderation-behavior-link {
-  display: inline-flex;
-  align-items: baseline;
+.moderation-behavior-summary {
+  display: flex;
+  align-items: center;
   max-width: 100%;
+  min-width: 0;
   gap: 0.35rem;
-  color: var(--m__bg-accent);
-  font-size: var(--m__font-size-s);
-  font-weight: var(--m__font-weight-bold);
-  line-height: 1.15;
 }
 
-.moderation-behavior-link__main {
+.moderation-behavior-link {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
+  flex: 0 1 auto;
+  max-width: 100%;
   min-width: 0;
-  gap: 0.18rem;
-  transition: color var(--m__duration-base) var(--m__easing-base);
+  min-height: calc(1.18rem + 0.24rem);
+  overflow: hidden;
+  gap: var(--m__gap-xxs);
+  padding: 0.12rem 0.36rem;
+  border: var(--m__border-width-s) solid
+    color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  color: var(--m__text);
+  line-height: 1.15;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition:
+    border-color 0.5s ease,
+    color 0.5s ease;
+
+  &:is(:hover, :focus-visible) {
+    color: var(--m__text-link-hover);
+    transition-duration: 0s;
+    transition-timing-function: ease;
+  }
+
+  &:focus-visible {
+    outline: var(--m__border-width-m) solid currentColor;
+    outline-offset: 0.12rem;
+  }
 }
 
 .moderation-behavior-link__icon {
-  width: 0.95em;
-  height: 0.95em;
+  width: 0.95rem;
+  height: 0.95rem;
   flex: 0 0 auto;
-  transform: translateY(0.12em);
-  fill: currentColor;
+  transition: color 0.5s ease;
+}
+
+.moderation-behavior-link__content {
+  display: inline-flex;
+  align-items: baseline;
+  min-width: 0;
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-bold);
+  line-height: 1.15;
 }
 
 .moderation-behavior-link__name {
@@ -2521,11 +2553,9 @@ table.config-details {
 
 .moderation-behavior-link__confidence {
   flex: 0 0 auto;
-  color: var(--m__bg-accent);
-  font-size: var(--m__font-size-xs);
-  font-weight: var(--m__font-weight-bold);
+  margin-left: 0.35rem;
+  font-size: 0.82em;
   font-variant-numeric: tabular-nums;
-  transition: color var(--m__duration-base) var(--m__easing-base);
 }
 
 .moderation-behavior-link__score {
@@ -2534,7 +2564,6 @@ table.config-details {
   font-size: var(--m__font-size-xs);
   font-weight: var(--m__font-weight-regular);
   font-variant-numeric: tabular-nums;
-  transition: color var(--m__duration-base) var(--m__easing-base);
 }
 
 .moderation-detail {
@@ -2845,14 +2874,19 @@ table.config-details {
     transition: color var(--m__duration-base) var(--m__easing-base);
   }
 
-  & .moderation-table__conversation-link:hover :is(.moderation-table__title, .moderation-table__meta),
-  & .moderation-table__detection-link:hover :is(.moderation-behavior-link__main, .moderation-behavior-link__confidence, .moderation-behavior-link__score) {
+  & .moderation-table__conversation-link:hover :is(.moderation-table__title, .moderation-table__meta) {
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
 
   & .moderation-table__detection-link {
     min-width: 0;
+  }
+
+  & .moderation-table__detection-link:is(:hover, :focus-visible) {
+    color: var(--m__text-link-hover);
+    transition-duration: 0s;
+    transition-timing-function: ease;
   }
 
   & .moderation-pattern-cell {

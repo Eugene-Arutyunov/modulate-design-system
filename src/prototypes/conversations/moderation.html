@@ -167,16 +167,18 @@ permalink: /dashboard/moderation/
                   </a>
                 </td>
                 <td>
-                  <a href="{{ row.href }}" class="moderation-table__detection-link moderation-behavior-link">
-                    <span class="moderation-behavior-link__main">
+                  <div class="moderation-behavior-summary">
+                    <a href="{{ row.href }}" class="moderation-table__detection-link moderation-behavior-link" aria-label="Open {{ row.behavior }} result for {{ row.title }}">
                       <svg class="moderation-behavior-link__icon" viewBox="0 0 32 32" aria-hidden="true">
                         <use href="#behaviors"></use>
                       </svg>
-                      <span class="moderation-behavior-link__name">{{ row.behavior }}</span>
-                    </span>
-                    <span class="moderation-behavior-link__confidence">{{ row.score }}%</span>
+                      <span class="moderation-behavior-link__content">
+                        <span class="moderation-behavior-link__name">{{ row.behavior }}</span>
+                        <span class="moderation-behavior-link__confidence">{{ row.score }}%</span>
+                      </span>
+                    </a>
                     {% if row.detectionScore %}<span class="moderation-behavior-link__score">{{ row.detectionScore }}</span>{% endif %}
-                  </a>
+                  </div>
                 </td>
                 <td>
                   <span class="m__tag moderation-table__status-tag {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% endif %}">{{ row.status }}</span>
