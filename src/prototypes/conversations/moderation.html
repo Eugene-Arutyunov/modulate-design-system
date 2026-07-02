@@ -23,34 +23,42 @@ permalink: /dashboard/moderation/
     <main class="dashboard-content moderation-page" data-moderation-page>
       <div class="moderation-page__title-row">
         <div>
-          <h1 class="dashboard-page-title">Review Queue</h1>
+          <h1 class="dashboard-page-title">Moderation</h1>
           <p>
-            Conversations are flagged when any configured behavior is detected above the
-            60% confidence threshold. Filter by behavior and sort by score to prioritize review.
+            Review conversations flagged by configured behavior detections.
           </p>
         </div>
-        <span class="m__tag moderation-page__threshold">Threshold &gt; 60%</span>
       </div>
 
-      <div class="moderation-stats" aria-label="Review queue summary">
-        <div class="m__widget moderation-stat-card">
-          <span class="moderation-stat-card__label">Flagged conversations</span>
-          <strong class="moderation-stat-card__value">12</strong>
-          <span class="moderation-stat-card__caption">5 shown in MVP queue</span>
-        </div>
-        <div class="m__widget moderation-stat-card">
-          <span class="moderation-stat-card__label">Pending review</span>
-          <strong class="moderation-stat-card__value">9</strong>
-          <span class="moderation-stat-card__caption">3 already assigned</span>
-        </div>
-        <div class="m__widget moderation-stat-card">
-          <span class="moderation-stat-card__label">Top score</span>
-          <strong class="moderation-stat-card__value">87%</strong>
-          <span class="moderation-stat-card__caption">Harassment detection</span>
-        </div>
-      </div>
-
-      <div class="m__space XS"></div>
+      <section class="moderation-stats" aria-label="Review queue summary">
+        <article class="m__widget moderation-stat-card">
+          <h2>Flagged conversations</h2>
+          <p class="m__widget__value">12</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">5 shown in MVP queue</span>
+            </p>
+          </div>
+        </article>
+        <article class="m__widget moderation-stat-card">
+          <h2>Pending review</h2>
+          <p class="m__widget__value">9</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">3 already assigned</span>
+            </p>
+          </div>
+        </article>
+        <article class="m__widget moderation-stat-card">
+          <h2>Top score</h2>
+          <p class="m__widget__value">87%</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Harassment detection</span>
+            </p>
+          </div>
+        </article>
+      </section>
 
       <section class="m__widget moderation-table" aria-label="Flagged conversations">
         <div class="m__widget-header">
