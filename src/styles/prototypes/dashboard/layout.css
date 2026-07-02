@@ -3072,3 +3072,26 @@ table.config-details {
 .moderation-review-behaviors__action + .moderation-review-behaviors__action {
   margin-left: 0.25rem;
 }
+
+.moderation-review-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--m__gap-xs2);
+  margin-top: var(--m__spacer-l);
+}
+
+.moderation-review-nav__button:last-child {
+  margin-left: auto;
+}
+
+@media (width < 520px) {
+  .moderation-review-nav {
+    flex-direction: column;
+  }
+
+  .moderation-review-nav__button,
+  .moderation-review-nav__button:last-child {
+    width: 100%;
+    margin-left: 0;
+  }
+}
