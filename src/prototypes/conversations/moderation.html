@@ -5,25 +5,194 @@ permalink: /dashboard/moderation/
 
 {% extends 'prototypes/layout.html' %} {% block content %}
 
+{% set reviewRows = [
+  { id: 'UCSF-1042', title: 'Member disputes denied imaging referral', submitted: 'Today, 10:24', source: 'UCSF Health', duration: '12:48', behavior: 'Harassment', score: 87, detections: 3, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', pattern: [8, 12, 42, 58, 76] },
+  { id: 'UCSF-1038', title: 'Caller pressures nurse for supervisor override', submitted: 'Today, 09:12', source: 'UCSF Health', duration: '8:36', behavior: 'Coercion manipulation', score: 79, detections: 2, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', pattern: [21, 64] },
+  { id: 'UCSF-1029', title: 'Care team chat includes personal attacks', submitted: 'Yesterday, 16:47', source: 'UCSF Health', duration: '17:32', behavior: 'Harassment', score: 74, detections: 4, status: 'In review', href: '/dashboard/moderation/ucsf-1038/', pattern: [30, 38, 45, 62] },
+  { id: 'UCSF-1021', title: 'Patient vents about delayed prescription refill', submitted: 'Yesterday, 11:08', source: 'UCSF Health', duration: '6:18', behavior: 'Complaints', score: 68, detections: 1, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', pattern: [36] },
+  { id: 'UCSF-1014', title: 'Family member challenges appointment policy', submitted: 'Mon, 14:02', source: 'UCSF Health', duration: '9:42', behavior: 'Social boundary setting', score: 63, detections: 1, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', pattern: [48] }
+] %}
+
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
     <div class="nav-sidebar">
-      <nav class="m__nav-menu">
-        {% include 'prototypes/dashboard-nav-sidebar.html' %}
-      </nav>
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
     </div>
-    <main class="dashboard-content">
-      <h1 class="dashboard-page-title">Moderation</h1>
-      <div class="dashboard-section">
-        <p>
-          Review conversations that need moderation before reports are
-          finalized.
-        </p>
+
+    <main class="dashboard-content moderation-page" data-moderation-page>
+      <div class="moderation-page__title-row">
+        <div>
+          <h1 class="dashboard-page-title">Review Queue</h1>
+          <p>
+            Conversations are flagged when any configured behavior is detected above the
+            60% confidence threshold. Filter by behavior and sort by score to prioritize review.
+          </p>
+        </div>
+        <span class="m__tag moderation-page__threshold">Threshold &gt; 60%</span>
       </div>
+
+      <div class="moderation-stats" aria-label="Review queue summary">
+        <div class="m__widget moderation-stat-card">
+          <span class="moderation-stat-card__label">Flagged conversations</span>
+          <strong class="moderation-stat-card__value">12</strong>
+          <span class="moderation-stat-card__caption">5 shown in MVP queue</span>
+        </div>
+        <div class="m__widget moderation-stat-card">
+          <span class="moderation-stat-card__label">Pending review</span>
+          <strong class="moderation-stat-card__value">9</strong>
+          <span class="moderation-stat-card__caption">3 already assigned</span>
+        </div>
+        <div class="m__widget moderation-stat-card">
+          <span class="moderation-stat-card__label">Top score</span>
+          <strong class="moderation-stat-card__value">87%</strong>
+          <span class="moderation-stat-card__caption">Harassment detection</span>
+        </div>
+      </div>
+
+      <div class="m__space XS"></div>
+
+      <section class="m__widget moderation-table" aria-label="Flagged conversations">
+        <div class="m__widget-header">
+          <div class="moderation-table__header">
+            <label class="m__searchbar" for="moderation-search">
+              <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#search"></use></svg>
+              <input type="search" id="moderation-search" placeholder="Search queue" data-moderation-search />
+            </label>
+            <div class="m__table-filters moderation-table__filters">
+              <label class="m__select S">
+                <span>Behavior</span>
+                <div class="m__select__inline-control">
+                  <span class="m__select__value" data-behavior-filter-label>All</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                  <select id="moderation-filter-behavior" data-behavior-filter>
+                    <option value="all">All</option>
+                    <option value="Harassment">Harassment</option>
+                    <option value="Coercion manipulation">Coercion manipulation</option>
+                    <option value="Complaints">Complaints</option>
+                    <option value="Social boundary setting">Social boundary setting</option>
+                  </select>
+                </div>
+              </label>
+              <label class="m__select S">
+                <span>Sort</span>
+                <div class="m__select__inline-control">
+                  <span class="m__select__value" data-sort-filter-label>Score high to low</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                  <select id="moderation-sort" data-sort-filter>
+                    <option value="score-desc">Score high to low</option>
+                    <option value="score-asc">Score low to high</option>
+                    <option value="newest">Newest first</option>
+                  </select>
+                </div>
+              </label>
+            </div>
+            <div class="moderation-table__count"><span data-visible-count>5</span> flagged</div>
+          </div>
+        </div>
+
+        <div class="m__table-wrapper moderation-table__table-wrapper">
+          <table class="moderation-table__table">
+            <colgroup>
+              <col class="moderation-table__col-conversation" />
+              <col class="moderation-table__col-pattern" />
+              <col class="moderation-table__col-detection" />
+              <col class="moderation-table__col-status" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Conversation</th>
+                <th>Pattern</th>
+                <th>Detection</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody data-moderation-tbody>
+              {% for row in reviewRows %}
+              <tr
+                data-review-row
+                data-index="{{ loop.index0 }}"
+                data-behavior="{{ row.behavior }}"
+                data-score="{{ row.score }}"
+                data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {{ row.status }}"
+              >
+                <td class="moderation-table__conversation-cell">
+                  <a href="{{ row.href }}" class="moderation-table__conversation-link">
+                    <span class="moderation-table__title">{{ row.title }}</span>
+                    <span class="moderation-table__meta">{{ row.id }} · {{ row.submitted }} · {{ row.source }}</span>
+                  </a>
+                </td>
+                <td>
+                  <a href="{{ row.href }}" class="moderation-pattern" aria-label="Open moderation pattern for {{ row.title }}">
+                    <span class="moderation-pattern__track" aria-hidden="true">
+                      {% for marker in row.pattern %}
+                      <span style="left: {{ marker }}%"></span>
+                      {% endfor %}
+                    </span>
+                    <span class="moderation-pattern__duration">{{ row.duration }}</span>
+                  </a>
+                </td>
+                <td>
+                  <a href="{{ row.href }}" class="moderation-table__detection-link">
+                    <span class="m__tag-flat moderation-behavior-tag">{{ row.behavior }}</span>
+                    <span class="moderation-score" style="--moderation-score: {{ row.score }}%">
+                      <span class="moderation-score__bar" aria-hidden="true"><span></span></span>
+                      <strong>{{ row.score }}%</strong>
+                    </span>
+                  </a>
+                </td>
+                <td>
+                  <span class="m__tag-flat {{ 'm__tag--warning' if row.status == 'Pending' else 'm__tag--secondary' }}">{{ row.status }}</span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
+
+<script>
+  (function () {
+    var root = document.querySelector("[data-moderation-page]");
+    if (!root) return;
+    var rows = Array.from(root.querySelectorAll("[data-review-row]"));
+    var tbody = root.querySelector("[data-moderation-tbody]");
+    var searchInput = root.querySelector("[data-moderation-search]");
+    var behaviorFilter = root.querySelector("[data-behavior-filter]");
+    var behaviorFilterLabel = root.querySelector("[data-behavior-filter-label]");
+    var sortFilter = root.querySelector("[data-sort-filter]");
+    var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
+    var visibleCount = root.querySelector("[data-visible-count]");
+
+    function applyQueueState() {
+      var query = searchInput.value.trim().toLowerCase();
+      var behavior = behaviorFilter.value;
+      var sort = sortFilter.value;
+      var visibleRows = [];
+      behaviorFilterLabel.textContent = behavior === "all" ? "All" : behavior;
+      sortFilterLabel.textContent = sortFilter.options[sortFilter.selectedIndex].text;
+      rows.forEach(function (row) {
+        var show = (behavior === "all" || row.dataset.behavior === behavior) && (!query || row.dataset.search.toLowerCase().includes(query));
+        row.hidden = !show;
+        if (show) visibleRows.push(row);
+      });
+      rows.slice().sort(function (a, b) {
+        if (sort === "score-asc") return Number(a.dataset.score) - Number(b.dataset.score);
+        if (sort === "newest") return Number(a.dataset.index) - Number(b.dataset.index);
+        return Number(b.dataset.score) - Number(a.dataset.score);
+      }).forEach(function (row) { tbody.appendChild(row); });
+      visibleCount.textContent = visibleRows.length;
+    }
+
+    searchInput.addEventListener("input", applyQueueState);
+    behaviorFilter.addEventListener("change", applyQueueState);
+    sortFilter.addEventListener("change", applyQueueState);
+    applyQueueState();
+  })();
+</script>
 
 {% endblock %}

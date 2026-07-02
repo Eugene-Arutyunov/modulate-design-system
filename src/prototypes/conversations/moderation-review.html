@@ -1,0 +1,120 @@
+---
+pageTitle: Moderation
+permalink: /dashboard/moderation/ucsf-1038/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content moderation-review-page" data-moderation-review>
+      <a href="/dashboard/moderation/" class="conversation-report__back">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
+        Review Queue
+      </a>
+
+      <section class="m__widget moderation-detail moderation-review-card" aria-label="Review detection details">
+        <div class="moderation-detail__header moderation-review-card__header">
+          <div>
+            <span class="moderation-detail__eyebrow">UCSF-1038</span>
+            <h1 class="dashboard-page-title">Caller pressures nurse for supervisor override</h1>
+          </div>
+          <div class="moderation-detail__score">
+            <span>Coercion manipulation</span>
+            <strong>79%</strong>
+          </div>
+        </div>
+
+        <div class="moderation-detail__review-list" aria-label="Detections to validate">
+          <div class="moderation-detection" data-detection-review>
+            <div class="moderation-detection__meta">
+              <strong>Pressure to bypass protocol</strong>
+              <span>01:48 · 79% confidence</span>
+            </div>
+            <div class="moderation-detection__actions" role="group" aria-label="Validate pressure to bypass protocol">
+              <button type="button" class="m__button-success-outline S" data-review-choice="true">True</button>
+              <button type="button" class="m__button-danger-outline S" data-review-choice="false">False positive</button>
+            </div>
+            <span class="moderation-detection__state" data-review-state>Needs review</span>
+          </div>
+
+          <div class="moderation-detection" data-detection-review>
+            <div class="moderation-detection__meta">
+              <strong>Implied consequence</strong>
+              <span>02:36 · 72% confidence</span>
+            </div>
+            <div class="moderation-detection__actions" role="group" aria-label="Validate implied consequence">
+              <button type="button" class="m__button-success-outline S" data-review-choice="true">True</button>
+              <button type="button" class="m__button-danger-outline S" data-review-choice="false">False positive</button>
+            </div>
+            <span class="moderation-detection__state" data-review-state>Needs review</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="m__space XS"></div>
+
+      <section class="m__widget moderation-review-transcript" aria-label="Transcript with behavior context">
+        <div class="moderation-review-transcript__header">
+          <div>
+            <h2>Transcript</h2>
+            <p>Surrounding context is shown inline with flagged behavior spans highlighted.</p>
+          </div>
+          <span class="m__tag-flat">2 detections</span>
+        </div>
+
+        <div class="moderation-transcript moderation-transcript--conversation-style">
+          <div class="moderation-transcript__turn">
+            <div class="moderation-transcript__speaker"><strong>Nurse</strong><span>01:21</span></div>
+            <p>The fastest next step is to document the symptoms and route this to the triage queue.</p>
+          </div>
+          <div class="moderation-transcript__turn has-detection">
+            <div class="moderation-transcript__speaker"><strong>Caller</strong><span>01:48</span></div>
+            <p>You can skip that queue. <mark data-tooltip="Coercion manipulation · 79% confidence">Just put me through to your supervisor and say it is urgent</mark>. Nobody needs to know we changed the process.</p>
+          </div>
+          <div class="moderation-transcript__turn">
+            <div class="moderation-transcript__speaker"><strong>Nurse</strong><span>02:09</span></div>
+            <p>I can escalate based on clinical criteria, but I cannot change documentation or skip required triage.</p>
+          </div>
+          <div class="moderation-transcript__turn has-detection">
+            <div class="moderation-transcript__speaker"><strong>Caller</strong><span>02:36</span></div>
+            <p>If you do not help me here, <mark data-tooltip="Coercion manipulation · 72% confidence">I will make sure your manager hears that you refused care</mark> when all you had to do was press one button.</p>
+          </div>
+          <div class="moderation-transcript__turn">
+            <div class="moderation-transcript__speaker"><strong>Nurse</strong><span>03:02</span></div>
+            <p>I can stay on the line and submit the urgent note now. The request will still need to follow the documented triage workflow.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector("[data-moderation-review]");
+    if (!root) return;
+    root.addEventListener("click", function (event) {
+      var reviewChoice = event.target.closest("[data-review-choice]");
+      if (!reviewChoice) return;
+      var review = reviewChoice.closest("[data-detection-review]");
+      var state = review.querySelector("[data-review-state]");
+      review.querySelectorAll("[data-review-choice]").forEach(function (button) {
+        button.classList.remove("is-selected");
+      });
+      reviewChoice.classList.add("is-selected");
+      review.dataset.reviewResult = reviewChoice.dataset.reviewChoice;
+      state.textContent = reviewChoice.dataset.reviewChoice === "true"
+        ? "Validated true"
+        : "False positive · ready to unflag";
+    });
+  })();
+</script>
+
+{% endblock %}
