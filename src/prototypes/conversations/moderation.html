@@ -6,11 +6,11 @@ permalink: /dashboard/moderation/
 {% extends 'prototypes/layout.html' %} {% block content %}
 
 {% set reviewRows = [
-  { id: 'UCSF-1042', title: 'Member disputes denied imaging referral', submitted: 'Today, 10:24', source: 'UCSF Health', duration: '12:48', behavior: 'Harassment', score: 87, detections: 3, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', pattern: [8, 12, 42, 58, 76] },
-  { id: 'UCSF-1038', title: 'Caller pressures nurse for supervisor override', submitted: 'Today, 09:12', source: 'UCSF Health', duration: '8:36', behavior: 'Coercion manipulation', score: 79, detections: 2, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', pattern: [21, 64] },
-  { id: 'UCSF-1029', title: 'Care team chat includes personal attacks', submitted: 'Yesterday, 16:47', source: 'UCSF Health', duration: '17:32', behavior: 'Harassment', score: 74, detections: 4, status: 'In review', href: '/dashboard/moderation/ucsf-1038/', pattern: [30, 38, 45, 62] },
-  { id: 'UCSF-1021', title: 'Patient vents about delayed prescription refill', submitted: 'Yesterday, 11:08', source: 'UCSF Health', duration: '6:18', behavior: 'Complaints', score: 68, detections: 1, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', pattern: [36] },
-  { id: 'UCSF-1014', title: 'Family member challenges appointment policy', submitted: 'Mon, 14:02', source: 'UCSF Health', duration: '9:42', behavior: 'Social boundary setting', score: 63, detections: 1, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', pattern: [48] }
+  { id: 'UCSF-1042', title: 'Member disputes denied imaging referral', submitted: 'Today, 10:24', source: 'UCSF Health', duration: '12:48', behavior: 'Harassment', score: 87, detections: 3, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 4 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'bottom', span: 5 }, { emotion: 'neutral', lane: 'full', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'full', span: 2 }, { emotion: 'happy', lane: 'top', span: 1 }, { emotion: 'calm', lane: 'bottom', span: 3 }, { emotion: 'frustrated', lane: 'full', span: 2 }, { emotion: 'angry', lane: 'full', span: 3 } ] },
+  { id: 'UCSF-1038', title: 'Caller pressures nurse for supervisor override', submitted: 'Today, 09:12', source: 'UCSF Health', duration: '8:36', behavior: 'Coercion manipulation', score: 79, detections: 2, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'angry', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 3 }, { emotion: 'frustrated', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] },
+  { id: 'UCSF-1029', title: 'Care team chat includes personal attacks', submitted: 'Yesterday, 16:47', source: 'UCSF Health', duration: '17:32', behavior: 'Harassment', score: 74, detections: 4, status: 'In review', href: '/dashboard/moderation/ucsf-1038/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, { emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 3 }, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'angry', lane: 'top', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion: 'calm', lane: 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 2 } ] },
+  { id: 'UCSF-1021', title: 'Patient vents about delayed prescription refill', submitted: 'Yesterday, 11:08', source: 'UCSF Health', duration: '6:18', behavior: 'Complaints', score: 68, detections: 1, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'amused', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'angry', lane: 'full', span: 1 } ] },
+  { id: 'UCSF-1014', title: 'Family member challenges appointment policy', submitted: 'Mon, 14:02', source: 'UCSF Health', duration: '9:42', behavior: 'Social boundary setting', score: 63, detections: 1, status: 'Pending', href: '/dashboard/moderation/ucsf-1038/', fingerprint: [ { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 1 }, { emotion: 'confident', lane: 'bottom', span: 2 }, { emotion: 'neutral', lane: 'bottom', span: 1 }, { emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'happy', lane: 'bottom', span: 1 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] }
 ] %}
 
 <div class="m__wrapper">
@@ -130,11 +130,28 @@ permalink: /dashboard/moderation/
                     <span class="moderation-table__meta">{{ row.id }} · {{ row.submitted }} · {{ row.source }}</span>
                   </a>
                 </td>
-                <td>
+                <td class="moderation-pattern-cell">
                   <a href="{{ row.href }}" class="moderation-pattern" aria-label="Open moderation pattern for {{ row.title }}">
-                    <span class="moderation-pattern__track" aria-hidden="true">
-                      {% for marker in row.pattern %}
-                      <span style="left: {{ marker }}%"></span>
+                    {% set fingerprintWidth = '42%' %} {% if row.duration == '30:00'
+                    %} {% set fingerprintWidth = '95%' %} {% elif row.duration ==
+                    '24:11' %} {% set fingerprintWidth = '76%' %} {% elif row.duration
+                    == '17:32' %} {% set fingerprintWidth = '55%' %} {% elif
+                    row.duration == '12:48' %} {% set fingerprintWidth = '42%' %} {%
+                    elif row.duration == '14:06' %} {% set fingerprintWidth = '47%' %}
+                    {% elif row.duration == '9:42' %} {% set fingerprintWidth = '32%'
+                    %} {% elif row.duration == '8:36' %} {% set fingerprintWidth =
+                    '29%' %} {% elif row.duration == '8:04' %} {% set fingerprintWidth =
+                    '27%' %} {% elif row.duration == '6:18' %} {% set fingerprintWidth =
+                    '21%' %} {% elif row.duration == '5:18' %} {% set fingerprintWidth
+                    = '18%' %} {% elif row.duration == '1:59' %} {% set
+                    fingerprintWidth = '14%' %} {% elif row.duration == '1:09' %} {%
+                    set fingerprintWidth = '8%' %} {% endif %}
+                    <span class="moderation-pattern__fingerprint" style="--fingerprint-width: {{ fingerprintWidth }}" aria-hidden="true">
+                      {% for segment in row.fingerprint %}
+                      <span
+                        class="moderation-pattern__fingerprint-segment moderation-pattern__fingerprint-segment--{{ segment.lane }}"
+                        style="--fingerprint-span: {{ segment.span }}; --fingerprint-color: {% if segment.color %}{{ segment.color }}{% else %}rgba(var(--emotion-{{ segment.emotion }}-RGB), 1){% endif %}"
+                      ></span>
                       {% endfor %}
                     </span>
                     <span class="moderation-pattern__duration">{{ row.duration }}</span>
