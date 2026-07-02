@@ -65,37 +65,39 @@ permalink: /dashboard/moderation/
           <div class="moderation-table__header">
             <label class="m__searchbar" for="moderation-search">
               <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#search"></use></svg>
-              <input type="search" id="moderation-search" placeholder="Search queue" data-moderation-search />
+              <input type="search" id="moderation-search" placeholder="Search" data-moderation-search />
             </label>
-            <div class="m__table-filters moderation-table__filters">
-              <label class="m__select S">
-                <span>Behavior</span>
-                <div class="m__select__inline-control">
-                  <span class="m__select__value" data-behavior-filter-label>All</span>
-                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
-                  <select id="moderation-filter-behavior" data-behavior-filter>
-                    <option value="all">All</option>
-                    <option value="Harassment">Harassment</option>
-                    <option value="Coercion manipulation">Coercion manipulation</option>
-                    <option value="Complaints">Complaints</option>
-                    <option value="Social boundary setting">Social boundary setting</option>
-                  </select>
-                </div>
-              </label>
-              <label class="m__select S">
-                <span>Sort</span>
-                <div class="m__select__inline-control">
-                  <span class="m__select__value" data-sort-filter-label>Score high to low</span>
-                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
-                  <select id="moderation-sort" data-sort-filter>
-                    <option value="score-desc">Score high to low</option>
-                    <option value="score-asc">Score low to high</option>
-                    <option value="newest">Newest first</option>
-                  </select>
-                </div>
-              </label>
+            <label class="m__select S moderation-table__filter moderation-table__filter--behavior">
+              <span>Behavior</span>
+              <div class="m__select__inline-control">
+                <span class="m__select__value" data-behavior-filter-label>All</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                <select id="moderation-filter-behavior" data-behavior-filter>
+                  <option value="all">All</option>
+                  <option value="Harassment">Harassment</option>
+                  <option value="Coercion manipulation">Coercion manipulation</option>
+                  <option value="Complaints">Complaints</option>
+                  <option value="Social boundary setting">Social boundary setting</option>
+                </select>
+              </div>
+            </label>
+            <label class="m__select S moderation-table__filter moderation-table__filter--sort">
+              <span>Sort</span>
+              <div class="m__select__inline-control">
+                <span class="m__select__value" data-sort-filter-label>Score high to low</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                <select id="moderation-sort" data-sort-filter>
+                  <option value="score-desc">Score high to low</option>
+                  <option value="score-asc">Score low to high</option>
+                  <option value="newest">Newest first</option>
+                </select>
+              </div>
+            </label>
+            <div class="behaviors-toolbar-actions moderation-table__actions">
+              <button type="button" class="m__button-secondary-outline S">
+                Bulk actions
+              </button>
             </div>
-            <div class="moderation-table__count"><span data-visible-count>5</span> flagged</div>
           </div>
         </div>
 
@@ -211,26 +213,22 @@ permalink: /dashboard/moderation/
     var behaviorFilterLabel = root.querySelector("[data-behavior-filter-label]");
     var sortFilter = root.querySelector("[data-sort-filter]");
     var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
-    var visibleCount = root.querySelector("[data-visible-count]");
 
     function applyQueueState() {
       var query = searchInput.value.trim().toLowerCase();
       var behavior = behaviorFilter.value;
       var sort = sortFilter.value;
-      var visibleRows = [];
       behaviorFilterLabel.textContent = behavior === "all" ? "All" : behavior;
       sortFilterLabel.textContent = sortFilter.options[sortFilter.selectedIndex].text;
       rows.forEach(function (row) {
         var show = (behavior === "all" || row.dataset.behavior === behavior) && (!query || row.dataset.search.toLowerCase().includes(query));
         row.hidden = !show;
-        if (show) visibleRows.push(row);
       });
       rows.slice().sort(function (a, b) {
         if (sort === "score-asc") return Number(a.dataset.score) - Number(b.dataset.score);
         if (sort === "newest") return Number(a.dataset.index) - Number(b.dataset.index);
         return Number(b.dataset.score) - Number(a.dataset.score);
       }).forEach(function (row) { tbody.appendChild(row); });
-      visibleCount.textContent = visibleRows.length;
     }
 
     searchInput.addEventListener("input", applyQueueState);
