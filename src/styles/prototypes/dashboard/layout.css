@@ -3268,7 +3268,9 @@ table.config-details {
 
 .moderation-review-behaviors__table
   tbody
-  tr:not(:last-child)
+  tr:not(:last-child):not(.pg-behavior-row--detected-last):not(
+    .pg-behavior-subhead-row
+  )
   > td:not(.pg-behavior-speaker-cell) {
   border-bottom: var(--m__border-width-s) solid
     color-mix(in srgb, var(--m__text) 12%, transparent);
@@ -3276,7 +3278,10 @@ table.config-details {
 
 .moderation-review-behaviors__table
   .pg-behavior-row--detected-last
-  td:not(.pg-behavior-speaker-cell) {
+  td:not(.pg-behavior-speaker-cell),
+.moderation-review-behaviors__table
+  .pg-behavior-row--detected-last
+  .pg-behavior-speaker-cell {
   border-bottom: none;
 }
 
