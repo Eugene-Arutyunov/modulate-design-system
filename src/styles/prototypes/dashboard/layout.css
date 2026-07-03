@@ -2890,41 +2890,95 @@ table.config-details {
   & .moderation-table__selected-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--m__gap-xxs);
+    align-items: baseline;
+    gap: 0.35rem;
     padding-top: 0;
   }
 
-  & .moderation-table__selected-tag {
+  & :is(.moderation-table__selected-tag, .moderation-table__tag-filter-reset) {
+    padding: 0.12rem 0.36rem;
+    border-radius: var(--m__radius-s);
     background-color: transparent;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-bold);
+    line-height: 1.15;
   }
 
-  & .moderation-table__tag-filter-add {
-    appearance: none;
+  & .moderation-table__selected-tag {
+    gap: 0.25rem;
+    border: var(--m__border-width-s) solid
+      color-mix(in srgb, currentColor 25%, transparent);
+    cursor: text;
+    transition:
+      border-color 0.5s ease,
+      color 0.5s ease;
+  }
+
+  & .moderation-table__selected-tag .bw-tag-item-name {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    cursor: text;
+  }
+
+  & .moderation-table__selected-tag .bw-tag-x {
+    position: relative;
+    padding: 0 0 0 0.05rem;
+    margin: 0;
     cursor: pointer;
+    transition:
+      color 0.5s ease,
+      opacity 0.5s ease;
+  }
+
+  & .moderation-table__selected-tag:has(.bw-tag-x:hover) {
     color: var(--m__text-link-hover);
-    background: transparent;
+    transition-duration: 0s;
+    transition-timing-function: ease;
+  }
+
+  & .moderation-table__selected-tag .bw-tag-x::before {
+    content: "";
+    position: absolute;
+    inset: -0.35rem -0.42rem -0.35rem -0.2rem;
+  }
+
+  & .moderation-table__selected-tag .bw-tag-x:hover {
+    opacity: 1;
+    transition-duration: 0s;
+    transition-timing-function: ease;
+  }
+
+  & .moderation-table__tag-filter-reset {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    color: var(--m__text-caption);
+    font-family: inherit;
     opacity: 0;
     pointer-events: none;
     transition:
-      opacity var(--m__duration-base) var(--m__easing-base),
-      color var(--m__duration-base) var(--m__easing-base),
-      border-color var(--m__duration-base) var(--m__easing-base);
+      color 0.5s ease,
+      opacity 0.5s ease;
   }
 
   &
     .moderation-table__tag-filters:is(:hover, :focus-within)
-    .moderation-table__tag-filter-add {
+    .moderation-table__tag-filter-reset {
     opacity: 1;
     pointer-events: auto;
+    transition:
+      color 0.5s ease,
+      opacity 0s ease;
   }
 
-  & .moderation-table__tag-filter-add:is(:hover, :focus-visible) {
-    border-color: color-mix(
-      in srgb,
-      var(--m__text-link-hover) 40%,
-      transparent
-    );
-    transition-duration: var(--m__duration-instant);
+  & .moderation-table__tag-filter-reset:is(:hover, :focus-visible),
+  &
+    .moderation-table__tag-filters:is(:hover, :focus-within)
+    .moderation-table__tag-filter-reset:is(:hover, :focus-visible) {
+    color: var(--m__text-link-hover);
+    transition:
+      color 0s ease,
+      opacity 0s ease;
   }
 
   & table {
@@ -3215,12 +3269,15 @@ table.config-details {
 .moderation-review-behaviors__table
   tbody
   tr:not(:last-child)
-  > td:not(.pg-behavior-speaker-cell),
-.moderation-review-behaviors__table
-  .pg-behavior-row--detected-last:not(:last-child)
-  td:not(.pg-behavior-speaker-cell) {
+  > td:not(.pg-behavior-speaker-cell) {
   border-bottom: var(--m__border-width-s) solid
     color-mix(in srgb, var(--m__text) 12%, transparent);
+}
+
+.moderation-review-behaviors__table
+  .pg-behavior-row--detected-last
+  td:not(.pg-behavior-speaker-cell) {
+  border-bottom: none;
 }
 
 .moderation-review-behaviors__actions {

@@ -211,12 +211,10 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
           ></div>
           <button
             type="button"
-            class="m__tag moderation-table__tag-filter-add"
-            data-tag-filter-trigger
-            aria-haspopup="true"
-            aria-expanded="false"
+            class="moderation-table__tag-filter-reset"
+            data-tag-filter-reset
           >
-            Choose behaviors
+            Reset
           </button>
         </div>
 
@@ -430,6 +428,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     var tagFilterPopover = root.querySelector("[data-tag-filter-popover]");
     var tagFilterSearch = root.querySelector("[data-tag-filter-search]");
     var selectedTagsContainer = root.querySelector("[data-selected-tags]");
+    var tagFilterReset = root.querySelector("[data-tag-filter-reset]");
     var behaviorFilterLabel = root.querySelector(
       "[data-behavior-filter-label]",
     );
@@ -558,6 +557,15 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       tagOptions.forEach(function (option) {
         if (option.value === chip.dataset.selectedTag) option.checked = false;
       });
+      renderSelectedTags();
+      applyQueueState();
+    });
+    tagFilterReset.addEventListener("click", function () {
+      selectedTags.clear();
+      tagOptions.forEach(function (option) {
+        option.checked = false;
+      });
+      closeTagFilter();
       renderSelectedTags();
       applyQueueState();
     });
