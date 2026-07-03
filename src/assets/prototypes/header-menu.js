@@ -47,9 +47,7 @@
   applyAuthState(readAuthState());
 
   document
-    .querySelectorAll(
-      '[data-prototype-auth-sign-in], a[href^="/dashboard/"], a[href="/dashboard/moderation/"]'
-    )
+    .querySelectorAll('[data-prototype-auth-sign-in], a[href^="/dashboard/"]')
     .forEach(function (item) {
       item.addEventListener("click", function () {
         setAuthState("signed-in");

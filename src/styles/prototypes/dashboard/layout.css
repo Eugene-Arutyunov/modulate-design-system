@@ -57,8 +57,13 @@ html:has(.dashboard-layout) {
     margin-bottom: var(--m__default-margin-bottom);
   }
 
-  & > .m__segmented-control-primary:first-child {
+  & > .m__segmented-control-primary:first-child,
+  & > .conversations-page-nav:first-child {
     margin-top: 0.15rem;
+  }
+
+  & .conversations-page-nav {
+    margin-bottom: 0.75rem;
   }
 
   & .dashboard-section {
@@ -2466,10 +2471,10 @@ table.config-details {
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
 
     & p {
-      margin: 0;
+      margin: 0 0 var(--m__default-margin-bottom);
     }
   }
 }
@@ -2503,9 +2508,10 @@ table.config-details {
 
 .moderation-behavior-summary {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   max-width: 100%;
   min-width: 0;
+  flex-wrap: wrap;
   gap: 0.35rem;
 }
 
@@ -2515,7 +2521,6 @@ table.config-details {
   flex: 0 1 auto;
   max-width: 100%;
   min-width: 0;
-  min-height: calc(1.18rem + 0.24rem);
   overflow: hidden;
   gap: var(--m__gap-xxs);
   padding: 0.12rem 0.36rem;
@@ -2524,6 +2529,7 @@ table.config-details {
   border-radius: var(--m__radius-s);
   background-color: transparent;
   color: var(--m__text);
+  cursor: pointer;
   line-height: 1.15;
   text-decoration: none;
   text-overflow: ellipsis;
@@ -2532,30 +2538,18 @@ table.config-details {
     border-color 0.5s ease,
     color 0.5s ease;
 
-  &:is(:hover, :focus-visible) {
+  &:hover {
     color: var(--m__text-link-hover);
     transition-duration: 0s;
     transition-timing-function: ease;
   }
-
-  &:focus-visible {
-    outline: var(--m__border-width-m) solid currentColor;
-    outline-offset: 0.12rem;
-  }
-}
-
-.moderation-behavior-link__icon {
-  width: 0.95rem;
-  height: 0.95rem;
-  flex: 0 0 auto;
-  transition: color 0.5s ease;
 }
 
 .moderation-behavior-link__content {
   display: inline-flex;
   align-items: baseline;
   min-width: 0;
-  font-size: var(--m__font-size-xs);
+  font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-bold);
   line-height: 1.15;
 }
@@ -2570,16 +2564,32 @@ table.config-details {
 .moderation-behavior-link__confidence {
   flex: 0 0 auto;
   margin-left: 0.35rem;
-  font-size: 0.82em;
+  font-size: var(--m__font-size-xs);
   font-variant-numeric: tabular-nums;
 }
 
-.moderation-behavior-link__score {
+.moderation-behavior-link__score,
+.moderation-behavior-link__more {
   flex: 0 0 auto;
   color: var(--m__text-caption);
   font-size: var(--m__font-size-xs);
-  font-weight: var(--m__font-weight-regular);
+  font-weight: var(--m__font-weight-bold);
   font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+
+.moderation-behavior-link__more {
+  padding-inline: 0.12rem;
+  white-space: nowrap;
+}
+
+.moderation-behavior-link__wrap {
+  display: inline-flex;
+  align-items: baseline;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 1 auto;
+  gap: 0.35rem;
 }
 
 .moderation-detail {
@@ -2728,8 +2738,13 @@ table.config-details {
   background-color: color-mix(in srgb, var(--m__text) 4%, transparent);
 
   &.has-detection {
-    background-color: color-mix(in srgb, var(--m__bg-highlight) 9%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--m__bg-highlight) 30%, transparent);
+    background-color: color-mix(
+      in srgb,
+      var(--m__bg-highlight) 9%,
+      transparent
+    );
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--m__bg-highlight) 30%, transparent);
   }
 
   & .moderation-transcript__speaker {
@@ -2753,7 +2768,11 @@ table.config-details {
   & mark {
     border-radius: 0.25em;
     padding: 0.04em 0.16em;
-    background-color: color-mix(in srgb, var(--m__bg-highlight) 28%, transparent);
+    background-color: color-mix(
+      in srgb,
+      var(--m__bg-highlight) 28%,
+      transparent
+    );
     color: inherit;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
@@ -2786,6 +2805,39 @@ table.config-details {
     position: relative;
   }
 
+  & .moderation-table__filter--behavior {
+    font: inherit;
+    text-align: left;
+  }
+
+  & .moderation-table__filter--behavior:focus-within,
+  & .moderation-table__filter--behavior:focus-visible,
+  & .moderation-table__filter--behavior[aria-expanded="true"] {
+    outline: none;
+    background-color: var(--m__bg-input);
+  }
+
+  &
+    .moderation-table__filter--behavior:is(
+      :focus-visible,
+      [aria-expanded="true"]
+    ),
+  &
+    .moderation-table__filter--behavior:is(
+      :focus-visible,
+      [aria-expanded="true"]
+    )
+    > span:first-child,
+  &
+    .moderation-table__filter--behavior:is(
+      :focus-visible,
+      [aria-expanded="true"]
+    )
+    .m__select__inline-control
+    :is(.m__select__value, svg) {
+    color: var(--m__text-link-hover);
+  }
+
   & .moderation-table__header > .m__searchbar::after,
   & .moderation-table__filter--behavior::after {
     content: "";
@@ -2808,21 +2860,142 @@ table.config-details {
     min-width: max-content;
   }
 
+  & .moderation-table__tag-filters {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--m__gap-xxs);
+    min-height: 2.9rem;
+    margin: calc(-1 * var(--m__widget-padding))
+      calc(-1 * var(--m__widget-padding)) var(--m__widget-padding);
+    padding: 0.5rem var(--m__widget-padding);
+  }
+
+  & .moderation-table__tag-filters[hidden] {
+    display: none;
+  }
+
+  & .moderation-table__tag-filter-label {
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    line-height: 1;
+  }
+
+  & .moderation-table__tag-filter-label::after {
+    content: none;
+  }
+
+  & .moderation-table__selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding-top: 0;
+  }
+
+  & :is(.moderation-table__selected-tag, .moderation-table__tag-filter-reset) {
+    padding: 0.12rem 0.36rem;
+    border-radius: var(--m__radius-s);
+    background-color: transparent;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-bold);
+    line-height: 1.15;
+  }
+
+  & .moderation-table__selected-tag {
+    gap: 0.25rem;
+    border: var(--m__border-width-s) solid
+      color-mix(in srgb, currentColor 25%, transparent);
+    cursor: text;
+    transition:
+      border-color 0.5s ease,
+      color 0.5s ease;
+  }
+
+  & .moderation-table__selected-tag .bw-tag-item-name {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    cursor: text;
+  }
+
+  & .moderation-table__selected-tag .bw-tag-x {
+    position: relative;
+    padding: 0 0 0 0.05rem;
+    margin: 0;
+    cursor: pointer;
+    transition:
+      color 0.5s ease,
+      opacity 0.5s ease;
+  }
+
+  & .moderation-table__selected-tag:has(.bw-tag-x:hover) {
+    color: var(--m__text-link-hover);
+    transition-duration: 0s;
+    transition-timing-function: ease;
+  }
+
+  & .moderation-table__selected-tag .bw-tag-x::before {
+    content: "";
+    position: absolute;
+    inset: -0.35rem -0.42rem -0.35rem -0.2rem;
+  }
+
+  & .moderation-table__selected-tag .bw-tag-x:hover {
+    opacity: 1;
+    transition-duration: 0s;
+    transition-timing-function: ease;
+  }
+
+  & .moderation-table__tag-filter-reset {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    color: var(--m__text-caption);
+    font-family: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      color 0.5s ease,
+      opacity 0.5s ease;
+  }
+
+  &
+    .moderation-table__tag-filters:is(:hover, :focus-within)
+    .moderation-table__tag-filter-reset {
+    opacity: 1;
+    pointer-events: auto;
+    transition:
+      color 0.5s ease,
+      opacity 0s ease;
+  }
+
+  & .moderation-table__tag-filter-reset:is(:hover, :focus-visible),
+  &
+    .moderation-table__tag-filters:is(:hover, :focus-within)
+    .moderation-table__tag-filter-reset:is(:hover, :focus-visible) {
+    color: var(--m__text-link-hover);
+    transition:
+      color 0s ease,
+      opacity 0s ease;
+  }
+
   & table {
     min-width: 0;
     table-layout: fixed;
   }
 
   & .moderation-table__col-conversation {
-    width: 36%;
+    width: 28%;
   }
 
   & .moderation-table__col-pattern {
-    width: 22%;
+    width: 16%;
   }
 
   & .moderation-table__col-detection {
-    width: 25%;
+    width: 39%;
   }
 
   & .moderation-table__col-status {
@@ -2870,9 +3043,9 @@ table.config-details {
     display: -webkit-box;
     overflow: hidden;
     color: inherit;
-    font-size: var(--m__font-size-s);
-    font-weight: var(--m__font-weight-bold);
-    line-height: 1.2;
+    font-size: inherit;
+    font-weight: var(--m__font-weight-regular);
+    line-height: inherit;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     transition: color var(--m__duration-base) var(--m__easing-base);
@@ -2890,7 +3063,9 @@ table.config-details {
     transition: color var(--m__duration-base) var(--m__easing-base);
   }
 
-  & .moderation-table__conversation-link:hover :is(.moderation-table__title, .moderation-table__meta) {
+  &
+    .moderation-table__conversation-link:hover
+    :is(.moderation-table__title, .moderation-table__meta) {
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
@@ -2973,10 +3148,10 @@ table.config-details {
   align-items: stretch;
   width: min(var(--fingerprint-width, 42%), calc(100% - 3.5rem));
   max-width: calc(100% - 3.5rem);
-  height: 1.85rem;
+  height: 1.2rem;
   flex: 0 1 auto;
   overflow: hidden;
-  border-radius: 0.24rem;
+  border-radius: 0.18rem;
   background-color: rgba(var(--emotion-neutral-RGB), 0.24);
   transition: filter var(--m__duration-base) var(--m__easing-base);
 }
@@ -3049,10 +3224,7 @@ table.config-details {
       transition-duration: var(--m__duration-instant);
     }
   }
-
 }
-
-
 
 .moderation-review-behaviors .pg-results-table-section {
   overflow-x: clip;
@@ -3094,9 +3266,23 @@ table.config-details {
   padding-right: 0;
 }
 
-.moderation-review-behaviors__table tbody tr:not(:last-child) > td:not(.pg-behavior-speaker-cell),
-.moderation-review-behaviors__table .pg-behavior-row--detected-last:not(:last-child) td:not(.pg-behavior-speaker-cell) {
-  border-bottom: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 12%, transparent);
+.moderation-review-behaviors__table
+  tbody
+  tr:not(:last-child):not(.pg-behavior-row--detected-last):not(
+    .pg-behavior-subhead-row
+  )
+  > td:not(.pg-behavior-speaker-cell) {
+  border-bottom: var(--m__border-width-s) solid
+    color-mix(in srgb, var(--m__text) 12%, transparent);
+}
+
+.moderation-review-behaviors__table
+  .pg-behavior-row--detected-last
+  td:not(.pg-behavior-speaker-cell),
+.moderation-review-behaviors__table
+  .pg-behavior-row--detected-last
+  .pg-behavior-speaker-cell {
+  border-bottom: none;
 }
 
 .moderation-review-behaviors__actions {
