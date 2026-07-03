@@ -151,7 +151,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <span>Behavior</span>
+              <span>Behaviors</span>
               <span class="m__select__inline-control">
                 <span class="m__select__value" data-behavior-filter-label
                   >All</span
@@ -204,7 +204,6 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
           aria-label="Selected behavior filters"
           hidden
         >
-          <span class="moderation-table__tag-filter-label">Behaviors:</span>
           <div
             class="moderation-table__selected-tags"
             data-selected-tags
@@ -217,7 +216,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
             aria-haspopup="true"
             aria-expanded="false"
           >
-            Choose
+            Choose behaviors
           </button>
         </div>
 
@@ -342,11 +341,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                 <td>
                   <div class="moderation-behavior-summary">
                     {% for behavior in row.behaviors %} {% if loop.index < 3 %}
-                    <a
-                      href="{{ row.href }}"
-                      class="moderation-table__detection-link moderation-behavior-link"
-                      aria-label="Open {{ behavior.name }} result for {{ row.title }}"
-                    >
+                    <span class="moderation-behavior-link">
                       <span class="moderation-behavior-link__content">
                         <span class="moderation-behavior-link__name"
                           >{{ behavior.name }}</span
@@ -355,15 +350,11 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                           >{{ behavior.score }}%</span
                         >
                       </span>
-                    </a>
+                    </span>
                     {% elif loop.index == 3 %} {% if row.behaviors.length > 3
                     %}<span class="moderation-behavior-link__wrap"
                       >{% endif %}
-                      <a
-                        href="{{ row.href }}"
-                        class="moderation-table__detection-link moderation-behavior-link"
-                        aria-label="Open {{ behavior.name }} result for {{ row.title }}"
-                      >
+                      <span class="moderation-behavior-link">
                         <span class="moderation-behavior-link__content">
                           <span class="moderation-behavior-link__name"
                             >{{ behavior.name }}</span
@@ -372,7 +363,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                             >{{ behavior.score }}%</span
                           >
                         </span>
-                      </a>
+                      </span>
                       {% if row.behaviors.length > 3 %}<span
                         class="moderation-behavior-link__more"
                         aria-label="{{ row.behaviors.length - 3 }} more detection behaviors"
