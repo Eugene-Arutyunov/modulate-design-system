@@ -1,0 +1,10 @@
+<nav class="m__segmented-nav conversations-page-nav" aria-label="Conversations sections">
+  <ul>
+    <li{% if page.url == '/dashboard/conversations/' %} class="current"{% endif %}>
+      <a href="/dashboard/conversations/">Browse</a>
+    </li>
+    <li{% if page.url | startsWith('/dashboard/conversations/review/') %} class="current"{% endif %}>
+      <a href="/dashboard/conversations/review/">Review Queue</a>
+    </li>
+  </ul>
+</nav>

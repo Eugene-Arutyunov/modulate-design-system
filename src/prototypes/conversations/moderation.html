@@ -1,23 +1,608 @@
 ---
-pageTitle: Moderation
-permalink: /conversations/moderation/
+pageTitle: Review Queue
+permalink: /dashboard/conversations/review/
 ---
 
-{% extends 'prototypes/layout.html' %} {% block content %}
+{% extends 'prototypes/layout.html' %} {% block content %} {% set reviewRows = [
+{ id: 'UCSF-1042', title: 'Member disputes denied imaging referral', submitted:
+'Today, 10:24', source: 'ServiceOne', duration: '12:48', behavior: 'Harassment',
+tags: ['Customer', 'Agent'], behaviors: [ { name: 'Harassment', score: 87 }, {
+name: 'Threatening language', score: 82 }, { name: 'Escalation risk', score: 76
+}, { name: 'Policy dispute', score: 69 }, { name: 'Negative sentiment', score:
+64 } ], score: 87, detections: 5, status: 'Pending', href:
+'/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
+lane: 'full', span: 4 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion:
+'neutral', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'bottom',
+span: 5 }, { emotion: 'neutral', lane: 'full', span: 4 }, { emotion: 'amused',
+lane: 'top', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, {
+emotion: 'confident', lane: 'full', span: 2 }, { emotion: 'happy', lane: 'top',
+span: 1 }, { emotion: 'calm', lane: 'bottom', span: 3 }, { emotion:
+'frustrated', lane: 'full', span: 2 }, { emotion: 'angry', lane: 'full', span: 3
+} ] }, { id: 'UCSF-1038', title: 'Caller pressures nurse for supervisor
+override', submitted: 'Today, 09:12', source: 'API', duration: '8:36', behavior:
+'Coercion manipulation', tags: ['Customer', 'Agent'], behaviors: [ { name:
+'Coercion manipulation', score: 79 }, { name: 'Vishing', score: 72 }, { name:
+'Pressure tactics', score: 68 }, { name: 'Identity probing', score: 61 } ],
+score: 79, detections: 4, status: 'Pending', href:
+'/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
+lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'top', span: 1 }, {
+emotion: 'angry', lane: 'full', span: 2 }, { emotion: 'neutral', lane: 'bottom',
+span: 1 }, { emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'angry',
+lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 3 }, {
+emotion: 'frustrated', lane: 'top', span: 2 }, { emotion: 'confident', lane:
+'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] }, { id:
+'UCSF-1029', title: 'Care team chat includes personal attacks', submitted:
+'Yesterday, 16:47', source: 'API', duration: '17:32', behavior: 'Harassment',
+tags: ['Agent', 'Manager'], behaviors: [ { name: 'Harassment', score: 74 }, {
+name: 'Personal attacks', score: 70 }, { name: 'Toxicity', score: 66 }, { name:
+'Team conflict', score: 58 }, { name: 'Negative sentiment', score: 54 } ],
+score: 74, detections: 5, status: 'In review', href:
+'/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
+lane: 'full', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, {
+emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full',
+span: 3 }, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'angry',
+lane: 'top', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion:
+'calm', lane: 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 },
+{ emotion: 'neutral', lane: 'bottom', span: 2 } ] }, { id: 'UCSF-1021', title:
+'Patient vents about delayed prescription refill', submitted: 'Yesterday,
+11:08', source: 'Five9', duration: '6:18', behavior: 'Complaints', tags:
+['Customer', 'Agent'], behaviors: [ { name: 'Complaints', score: 68 }, { name:
+'Frustration', score: 63 }, { name: 'Service delay', score: 59 }, { name:
+'Escalation risk', score: 52 } ], score: 68, detections: 4, status: 'Pending',
+href: '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion:
+'neutral', lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 2 }, {
+emotion: 'amused', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane:
+'full', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, {
+emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'neutral', lane:
+'bottom', span: 2 }, { emotion: 'angry', lane: 'full', span: 1 } ] }, { id:
+'UCSF-1014', title: 'Family member challenges appointment policy', submitted:
+'Mon, 14:02', source: 'API', duration: '9:42', behavior: 'Social boundary
+setting', tags: ['Customer', 'Agent'], behaviors: [ { name: 'Social boundary
+setting', score: 63 }, { name: 'Policy dispute', score: 60 }, { name:
+'Frustration', score: 55 }, { name: 'Escalation risk', score: 49 } ], score: 63,
+detections: 4, status: 'Pending', href:
+'/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
+lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 1 }, { emotion:
+'confident', lane: 'bottom', span: 2 }, { emotion: 'neutral', lane: 'bottom',
+span: 1 }, { emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'neutral',
+lane: 'full', span: 2 }, { emotion: 'happy', lane: 'bottom', span: 1 }, {
+emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'bottom',
+span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
+'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2
+} ] } ] %} {% set tagFilterOptions = [ 'Agent', 'Customer', 'Interviewer',
+'Candidate', 'Manager' ] %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
-    <main class="dashboard-content">
-      <h1 class="dashboard-page-title">Moderation</h1>
-      <div class="dashboard-section">
-        <p>
-          Review conversations that need moderation before reports are finalized.
-        </p>
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">
+        {% include 'prototypes/dashboard-nav-sidebar.html' %}
+      </nav>
+    </div>
+
+    <main class="dashboard-content moderation-page" data-moderation-page>
+      {% include 'prototypes/conversations-page-nav.html' %}
+
+      <div class="m__space S"></div>
+
+      <div class="moderation-page__title-row">
+        <div>
+          <h1 class="dashboard-page-title">Review Queue</h1>
+          <p>Review conversations flagged by configured behavior detections.</p>
+        </div>
       </div>
+
+      <div class="m__space XS"></div>
+
+      {#
+      <section class="moderation-stats" aria-label="Review queue summary">
+        <article class="m__widget moderation-stat-card">
+          <h2>Flagged conversations</h2>
+          <p class="m__widget__value">5</p>
+        </article>
+        <article class="m__widget moderation-stat-card">
+          <h2>Review queue</h2>
+          <div class="m__widget__meta-list moderation-stat-card__status-list">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Pending review</span>
+              <strong class="m__widget__meta-value">4</strong>
+            </p>
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">In review</span>
+              <strong class="m__widget__meta-value">1</strong>
+            </p>
+          </div>
+        </article>
+        <article class="m__widget moderation-stat-card">
+          <h2>Confidence threshold</h2>
+          <p class="m__widget__value">60%</p>
+          <div class="m__widget__meta-list">
+            <p class="m__widget__meta-item">
+              <a href="#">Edit preferences</a>
+            </p>
+          </div>
+        </article>
+      </section>
+      #}
+
+      <section
+        class="m__widget moderation-table"
+        aria-label="Flagged conversations"
+      >
+        <div class="m__widget-header">
+          <div class="moderation-table__header">
+            <label class="m__searchbar" for="moderation-search">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <use href="#search"></use>
+              </svg>
+              <input
+                type="search"
+                id="moderation-search"
+                placeholder="Search"
+                data-moderation-search
+              />
+            </label>
+
+            <button
+              type="button"
+              class="m__select S moderation-table__filter moderation-table__filter--behavior"
+              data-tag-filter-trigger
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span>Behaviors</span>
+              <span class="m__select__inline-control">
+                <span class="m__select__value" data-behavior-filter-label
+                  >All</span
+                >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  aria-hidden="true"
+                >
+                  <use href="#chevron-down"></use>
+                </svg>
+              </span>
+            </button>
+
+            <label
+              class="m__select S moderation-table__filter moderation-table__filter--sort"
+            >
+              <span>Sort</span>
+              <div class="m__select__inline-control">
+                <span class="m__select__value" data-sort-filter-label
+                  >Score high to low</span
+                >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  aria-hidden="true"
+                >
+                  <use href="#chevron-down"></use>
+                </svg>
+                <select id="moderation-sort" data-sort-filter>
+                  <option value="score-desc">Score high to low</option>
+                  <option value="score-asc">Score low to high</option>
+                  <option value="newest">Newest first</option>
+                </select>
+              </div>
+            </label>
+            <div class="behaviors-toolbar-actions moderation-table__actions">
+              <button type="button" class="m__button-secondary-outline S">
+                Bulk actions
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="moderation-table__tag-filters"
+          data-tag-filter-root
+          aria-label="Selected behavior filters"
+          hidden
+        >
+          <div
+            class="moderation-table__selected-tags"
+            data-selected-tags
+            aria-live="polite"
+          ></div>
+          <button
+            type="button"
+            class="moderation-table__tag-filter-reset"
+            data-tag-filter-reset
+          >
+            Reset
+          </button>
+        </div>
+
+        <div
+          class="m__popover moderation-table__tag-popover"
+          data-tag-filter-popover
+          hidden
+        >
+          <label class="m__searchbar" for="moderation-tag-filter-search">
+            <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
+              <use href="#search"></use>
+            </svg>
+            <input
+              type="text"
+              id="moderation-tag-filter-search"
+              placeholder="Search…"
+              autocomplete="off"
+              data-tag-filter-search
+            />
+          </label>
+          <div class="m__popover-list">
+            {% for tag in tagFilterOptions %}
+            <label class="m__popover-item" data-tag-filter-option-row>
+              <span class="m__checkbox-primary">
+                <input
+                  type="checkbox"
+                  value="{{ tag }}"
+                  data-tag-filter-option
+                />
+                <svg
+                  viewBox="0 0 32 32"
+                  aria-hidden="true"
+                  width="10"
+                  height="10"
+                >
+                  <use href="#checkmark"></use>
+                </svg>
+              </span>
+              <span class="m__popover-item-name">{{ tag }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="m__table-wrapper moderation-table__table-wrapper">
+          <table class="moderation-table__table">
+            <colgroup>
+              <col class="moderation-table__col-conversation" />
+              <col class="moderation-table__col-pattern" />
+              <col class="moderation-table__col-detection" />
+              <col class="moderation-table__col-status" />
+              <col class="moderation-table__col-actions" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Conversation</th>
+                <th>Pattern</th>
+                <th>Detection behaviors</th>
+                <th>Status</th>
+                <th class="m__col-actions"></th>
+              </tr>
+            </thead>
+            <tbody data-moderation-tbody>
+              {% for row in reviewRows %}
+              <tr
+                data-review-row
+                data-index="{{ loop.index0 }}"
+                data-tags="{% for tag in row.tags %}{{ tag }}{% if not loop.last %}|{% endif %}{% endfor %}"
+                data-score="{{ row.score }}"
+                data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}{{ row.status }}"
+              >
+                <td class="moderation-table__conversation-cell">
+                  <a
+                    href="{{ row.href }}"
+                    class="moderation-table__conversation-link"
+                  >
+                    <span class="moderation-table__title">{{ row.title }}</span>
+                    <span class="moderation-table__meta"
+                      >{{ row.submitted }} · {{ row.source }}</span
+                    >
+                  </a>
+                </td>
+                <td class="moderation-pattern-cell">
+                  <a
+                    href="{{ row.href }}"
+                    class="moderation-pattern"
+                    aria-label="Open moderation pattern for {{ row.title }}"
+                  >
+                    {% set fingerprintWidth = '42%' %} {% if row.duration ==
+                    '30:00' %} {% set fingerprintWidth = '95%' %} {% elif
+                    row.duration == '24:11' %} {% set fingerprintWidth = '76%'
+                    %} {% elif row.duration == '17:32' %} {% set
+                    fingerprintWidth = '55%' %} {% elif row.duration == '12:48'
+                    %} {% set fingerprintWidth = '42%' %} {% elif row.duration
+                    == '14:06' %} {% set fingerprintWidth = '47%' %} {% elif
+                    row.duration == '9:42' %} {% set fingerprintWidth = '32%' %}
+                    {% elif row.duration == '8:36' %} {% set fingerprintWidth =
+                    '29%' %} {% elif row.duration == '8:04' %} {% set
+                    fingerprintWidth = '27%' %} {% elif row.duration == '6:18'
+                    %} {% set fingerprintWidth = '21%' %} {% elif row.duration
+                    == '5:18' %} {% set fingerprintWidth = '18%' %} {% elif
+                    row.duration == '1:59' %} {% set fingerprintWidth = '14%' %}
+                    {% elif row.duration == '1:09' %} {% set fingerprintWidth =
+                    '8%' %} {% endif %}
+                    <span
+                      class="moderation-pattern__fingerprint"
+                      style="--fingerprint-width: {{ fingerprintWidth }}"
+                      aria-hidden="true"
+                    >
+                      {% for segment in row.fingerprint %}
+                      <span
+                        class="moderation-pattern__fingerprint-segment moderation-pattern__fingerprint-segment--{{ segment.lane }}"
+                        style="--fingerprint-span: {{ segment.span }}; --fingerprint-color: {% if segment.color %}{{ segment.color }}{% else %}rgba(var(--emotion-{{ segment.emotion }}-RGB), 1){% endif %}"
+                      ></span>
+                      {% endfor %}
+                    </span>
+                    <span class="moderation-pattern__duration"
+                      >{{ row.duration }}</span
+                    >
+                  </a>
+                </td>
+                <td>
+                  <div class="moderation-behavior-summary">
+                    {% for behavior in row.behaviors %} {% if loop.index < 3 %}
+                    <span class="moderation-behavior-link">
+                      <span class="moderation-behavior-link__content">
+                        <span class="moderation-behavior-link__name"
+                          >{{ behavior.name }}</span
+                        >
+                        <span class="moderation-behavior-link__confidence"
+                          >{{ behavior.score }}%</span
+                        >
+                      </span>
+                    </span>
+                    {% elif loop.index == 3 %} {% if row.behaviors.length > 3
+                    %}<span class="moderation-behavior-link__wrap"
+                      >{% endif %}
+                      <span class="moderation-behavior-link">
+                        <span class="moderation-behavior-link__content">
+                          <span class="moderation-behavior-link__name"
+                            >{{ behavior.name }}</span
+                          >
+                          <span class="moderation-behavior-link__confidence"
+                            >{{ behavior.score }}%</span
+                          >
+                        </span>
+                      </span>
+                      {% if row.behaviors.length > 3 %}<span
+                        class="moderation-behavior-link__more"
+                        aria-label="{{ row.behaviors.length - 3 }} more detection behaviors"
+                        >+{{ row.behaviors.length - 3 }}</span
+                      ></span
+                    >{% endif %} {% endif %} {% endfor %}
+                  </div>
+                </td>
+                <td>
+                  <span
+                    class="m__tag moderation-table__status-tag {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% endif %}"
+                    >{{ row.status }}</span
+                  >
+                </td>
+                <td class="m__col-actions moderation-table__row-actions">
+                  <div class="m__menu-button moderation-table__actions-menu">
+                    <button
+                      type="button"
+                      class="m__menu-button-icon S m__menu-button-trigger"
+                      aria-label="Actions for {{ row.title }}"
+                    >
+                      <svg viewBox="0 0 12 12" aria-hidden="true">
+                        <use href="#dots-vertical"></use>
+                      </svg>
+                    </button>
+                    <div class="m__menu-button-list" hidden>
+                      <a href="{{ row.href }}" class="m__menu-button-item"
+                        >Review</a
+                      >
+                      <button type="button" class="m__menu-button-item">
+                        Mark reviewed
+                      </button>
+                      <button
+                        type="button"
+                        class="m__menu-button-item m__menu-button-item--danger"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
+
+<script>
+  (function () {
+    var root = document.querySelector("[data-moderation-page]");
+    if (!root) return;
+    var rows = Array.from(root.querySelectorAll("[data-review-row]"));
+    var tbody = root.querySelector("[data-moderation-tbody]");
+    var searchInput = root.querySelector("[data-moderation-search]");
+    var tagFilterRoot = root.querySelector("[data-tag-filter-root]");
+    var tagFilterTriggers = Array.from(
+      root.querySelectorAll("[data-tag-filter-trigger]"),
+    );
+    var tagFilterPopover = root.querySelector("[data-tag-filter-popover]");
+    var tagFilterSearch = root.querySelector("[data-tag-filter-search]");
+    var selectedTagsContainer = root.querySelector("[data-selected-tags]");
+    var tagFilterReset = root.querySelector("[data-tag-filter-reset]");
+    var behaviorFilterLabel = root.querySelector(
+      "[data-behavior-filter-label]",
+    );
+    var tagOptions = Array.from(
+      root.querySelectorAll("[data-tag-filter-option]"),
+    );
+    var selectedTags = new Set();
+    var selectedTagRemoveIcon =
+      '<svg viewBox="0 0 12 12" width="8" height="8" fill="none" aria-hidden="true">' +
+      '<line x1="2" y1="2" x2="10" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '<line x1="10" y1="2" x2="2" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      "</svg>";
+    var activeTagFilterTrigger = null;
+    var sortFilter = root.querySelector("[data-sort-filter]");
+    var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
+
+    function positionTagFilter(anchor) {
+      var rect = anchor.getBoundingClientRect();
+      var width = tagFilterPopover.offsetWidth || 240;
+      var left = rect.left;
+      if (left + width > window.innerWidth - 8)
+        left = window.innerWidth - width - 8;
+      tagFilterPopover.style.left = Math.max(8, left) + "px";
+      tagFilterPopover.style.top = rect.bottom + 6 + "px";
+    }
+
+    function closeTagFilter() {
+      tagFilterPopover.hidden = true;
+      activeTagFilterTrigger = null;
+      tagFilterTriggers.forEach(function (trigger) {
+        trigger.setAttribute("aria-expanded", "false");
+      });
+    }
+
+    function openTagFilter(anchor) {
+      activeTagFilterTrigger = anchor;
+      tagFilterPopover.hidden = false;
+      tagFilterTriggers.forEach(function (trigger) {
+        trigger.setAttribute("aria-expanded", String(trigger === anchor));
+      });
+      positionTagFilter(anchor);
+      tagFilterSearch.focus();
+    }
+
+    function renderSelectedTags() {
+      selectedTagsContainer.innerHTML = "";
+      tagFilterRoot.hidden = selectedTags.size === 0;
+      behaviorFilterLabel.textContent =
+        selectedTags.size === 0 ? "All" : selectedTags.size + " selected";
+      Array.from(selectedTags).forEach(function (tag) {
+        var chip = document.createElement("span");
+        chip.className = "m__tag bw-tag-item moderation-table__selected-tag";
+        chip.dataset.selectedTag = tag;
+        chip.innerHTML =
+          '<span class="bw-tag-item-name">' +
+          tag +
+          '</span><button type="button" class="bw-tag-x" aria-label="Remove ' +
+          tag +
+          ' filter">' +
+          selectedTagRemoveIcon +
+          "</button>";
+        selectedTagsContainer.appendChild(chip);
+      });
+    }
+
+    function applyQueueState() {
+      var query = searchInput.value.trim().toLowerCase();
+      var activeTags = Array.from(selectedTags);
+      var sort = sortFilter.value;
+      sortFilterLabel.textContent =
+        sortFilter.options[sortFilter.selectedIndex].text;
+      rows.forEach(function (row) {
+        var rowTags = (row.dataset.tags || "").split("|");
+        var matchesTags =
+          activeTags.length === 0 ||
+          activeTags.some(function (tag) {
+            return rowTags.includes(tag);
+          });
+        var show =
+          matchesTags &&
+          (!query || row.dataset.search.toLowerCase().includes(query));
+        row.hidden = !show;
+      });
+      rows
+        .slice()
+        .sort(function (a, b) {
+          if (sort === "score-asc")
+            return Number(a.dataset.score) - Number(b.dataset.score);
+          if (sort === "newest")
+            return Number(a.dataset.index) - Number(b.dataset.index);
+          return Number(b.dataset.score) - Number(a.dataset.score);
+        })
+        .forEach(function (row) {
+          tbody.appendChild(row);
+        });
+    }
+
+    searchInput.addEventListener("input", applyQueueState);
+    tagFilterTriggers.forEach(function (trigger) {
+      trigger.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (tagFilterPopover.hidden || activeTagFilterTrigger !== trigger) {
+          openTagFilter(trigger);
+        } else {
+          closeTagFilter();
+        }
+      });
+    });
+    tagOptions.forEach(function (option) {
+      option.addEventListener("change", function () {
+        if (option.checked) {
+          selectedTags.add(option.value);
+        } else {
+          selectedTags.delete(option.value);
+        }
+        renderSelectedTags();
+        applyQueueState();
+      });
+    });
+    selectedTagsContainer.addEventListener("click", function (event) {
+      var removeButton = event.target.closest(".bw-tag-x");
+      if (!removeButton) return;
+      var chip = removeButton.closest("[data-selected-tag]");
+      if (!chip) return;
+      selectedTags.delete(chip.dataset.selectedTag);
+      tagOptions.forEach(function (option) {
+        if (option.value === chip.dataset.selectedTag) option.checked = false;
+      });
+      renderSelectedTags();
+      applyQueueState();
+    });
+    tagFilterReset.addEventListener("click", function () {
+      selectedTags.clear();
+      tagOptions.forEach(function (option) {
+        option.checked = false;
+      });
+      closeTagFilter();
+      renderSelectedTags();
+      applyQueueState();
+    });
+    tagFilterSearch.addEventListener("input", function () {
+      var query = tagFilterSearch.value.trim().toLowerCase();
+      tagOptions.forEach(function (option) {
+        option.closest("[data-tag-filter-option-row]").hidden =
+          query && !option.value.toLowerCase().includes(query);
+      });
+    });
+    document.addEventListener("click", function (event) {
+      if (tagFilterPopover.hidden) return;
+      if (tagFilterPopover.contains(event.target)) return;
+      if (event.target.closest("[data-tag-filter-trigger]")) return;
+      closeTagFilter();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeTagFilter();
+    });
+    window.addEventListener("resize", function () {
+      if (!tagFilterPopover.hidden && activeTagFilterTrigger) {
+        positionTagFilter(activeTagFilterTrigger);
+      }
+    });
+    document.addEventListener(
+      "scroll",
+      function () {
+        if (!tagFilterPopover.hidden && activeTagFilterTrigger) {
+          positionTagFilter(activeTagFilterTrigger);
+        }
+      },
+      true,
+    );
+    sortFilter.addEventListener("change", applyQueueState);
+    renderSelectedTags();
+    applyQueueState();
+  })();
+</script>
 
 {% endblock %}

@@ -1,0 +1,161 @@
+---
+pageTitle: Review Queue
+permalink: /dashboard/conversations/review/7839f2/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content conversation-report moderation-review-page" data-moderation-review>
+      <a href="/dashboard/conversations/review/" class="conversation-report__back">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
+        Review Queue
+      </a>
+
+      <div class="conversation-report__title-row">
+        <div class="conversation-report__title-line">
+          <h1 class="dashboard-page-title">
+            Health member appeals denied MRI claim after urgent back pain
+            referral
+          </h1>
+        </div>
+      </div>
+
+      <div class="conversation-report__player m__rounded">
+        <div class="media-container">
+          <div class="pg-player-dataviz">
+            <div class="player-visualization">
+              {% include 'prototypes/playground/player-clips.html' %}
+            </div>
+            <div class="speaker-labels">
+              <div class="speaker-label" data-speaker-index="1">
+                <span>Customer</span>
+              </div>
+              <div class="speaker-label" data-speaker-index="2">
+                <span>Support specialist</span>
+              </div>
+            </div>
+            <div class="behaviour-indicators"></div>
+            <div class="behaviour-labels" style="display: none"></div>
+          </div>
+          <div class="media-box" id="audio-player" data-speaker-count="2">
+            <div class="player-controls">
+              <div class="player-control-spacer"></div>
+              <div class="player-control player-control-center" data-action="play-pause">
+                <a href="#" class="player-icon" data-playing="false">
+                  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+                    <polygon fill="currentColor" points="40 30 40 190 190 110 40 30" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div class="clip-text-caption"><span></span></div>
+            <div class="player-status-caption"><span class="emotion-caption"></span></div>
+            <div class="player-start-time"><span class="start-time">0:00</span></div>
+            <div class="player-total-time"><span class="total-time" data-total-time>12:48</span></div>
+            <div class="player-position-indicator">
+              <div class="player-position-line"></div>
+              <div class="player-position-caption"><span data-current-time>0:00</span></div>
+            </div>
+            <div class="player-hover-position-indicator">
+              <div class="player-hover-position-line"></div>
+              <div class="player-hover-position-caption"><span data-hover-time>0:00</span></div>
+            </div>
+          </div>
+          <div class="pg-media-hover-line" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="pg-output-panel conversation-report__output">
+        {% include 'prototypes/playground/velma-report-output.html' %}
+      </div>
+
+      <nav class="moderation-review-nav" aria-label="Adjacent moderated conversations">
+        <a href="/dashboard/conversations/review/7839f2/" class="m__button-secondary-outline S moderation-review-nav__button">← Previous</a>
+        <a href="/dashboard/conversations/review/7839f2/" class="m__button-secondary-outline S moderation-review-nav__button">Next →</a>
+      </nav>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script>
+  document.querySelectorAll(".media-container").forEach(function (container) {
+    container.addEventListener("mousemove", function (event) {
+      var rect = container.getBoundingClientRect();
+      container.style.setProperty(
+        "--pg-hover-x",
+        event.clientX - rect.left + "px",
+      );
+      container.dataset.hover = "true";
+    });
+    container.addEventListener("mouseleave", function () {
+      container.dataset.hover = "false";
+    });
+  });
+
+  (function () {
+    var root = document.querySelector("[data-moderation-review]");
+    if (!root) return;
+
+    var behaviorTable = root.querySelector(".pg-velma-output .pg-behaviors-table");
+    if (behaviorTable) {
+      behaviorTable.classList.add("moderation-review-behaviors__table");
+
+      var headRow = behaviorTable.querySelector("thead tr");
+      if (headRow && !headRow.querySelector("[data-review-header]")) {
+        var reviewHead = document.createElement("th");
+        reviewHead.setAttribute("aria-label", "Review");
+        reviewHead.setAttribute("data-review-header", "");
+        headRow.appendChild(reviewHead);
+      }
+
+      behaviorTable.querySelectorAll("tbody tr").forEach(function (row) {
+        var subheadCell = row.querySelector(".pg-behavior-subhead");
+        if (subheadCell) {
+          var colspanCell = subheadCell.closest("td");
+          if (colspanCell) colspanCell.colSpan = 4;
+          return;
+        }
+
+        if (!row.classList.contains("pg-behavior-row")) return;
+
+        var actions = document.createElement("td");
+        actions.className = "moderation-review-behaviors__actions";
+
+        if (row.classList.contains("pg-behavior-row--detected")) {
+          row.setAttribute("data-detection-review", "");
+          actions.innerHTML = '<button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False positive</button>';
+        }
+
+        row.appendChild(actions);
+      });
+    }
+
+    root.addEventListener("click", function (event) {
+      var reviewChoice = event.target.closest("[data-review-choice]");
+      if (!reviewChoice) return;
+      var review = reviewChoice.closest("[data-detection-review]");
+      if (!review) return;
+      var state = review.querySelector("[data-review-state]");
+      review.querySelectorAll("[data-review-choice]").forEach(function (button) {
+        button.classList.remove("is-selected");
+      });
+      reviewChoice.classList.add("is-selected");
+      review.dataset.reviewResult = reviewChoice.dataset.reviewChoice;
+      if (state) {
+        state.textContent = reviewChoice.dataset.reviewChoice === "true"
+          ? "Validated true"
+          : "False positive · ready to unflag";
+      }
+    });
+  })();
+</script>
+
+{% endblock %}

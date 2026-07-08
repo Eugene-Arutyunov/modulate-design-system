@@ -1,0 +1,26 @@
+<script>
+  (function () {
+    var signedInClass = "prototype-auth-signed-in";
+    var signedOutClass = "prototype-auth-signed-out";
+    var defaultState = document.body.dataset.prototypeAuthDefault;
+    var state = defaultState === "signed-in" ? "signed-in" : "signed-out";
+
+    try {
+      var storedState = localStorage.getItem("prototype-auth-state");
+
+      if (defaultState === "signed-in") {
+        state = "signed-in";
+        localStorage.setItem("prototype-auth-state", state);
+      } else if (storedState === "signed-in") {
+        state = "signed-in";
+      }
+    } catch (e) {
+      // Keep the server-rendered default when storage is unavailable.
+    }
+
+    document.body.classList.remove(signedInClass, signedOutClass);
+    document.body.classList.add(
+      state === "signed-in" ? signedInClass : signedOutClass
+    );
+  })();
+</script>

@@ -1,0 +1,48 @@
+---
+pageTitle: Members
+permalink: /dashboard/members/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">
+        {% include 'prototypes/dashboard-nav-sidebar.html' %}
+      </nav>
+    </div>
+
+    <main class="dashboard-content">
+      <h1 class="dashboard-page-title">Members</h1>
+
+      <div class="dashboard-section">
+        <p>
+          Manage organization members and pending invitations for Eugene's
+          Personal Organization.
+        </p>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        {% set showInviteButton = true %} {% set rows = [ { name: 'Eugene
+        Arutyunov', email: 'e@intuition.team', role: 'Admin', isCurrentUser:
+        true } ] %} {% include 'service/table-members.html' %}
+      </div>
+
+      <div class="dashboard-section">
+        {% set rows = [ { email: 'xneeson@ya.ru', role: 'Developer', invited:
+        '16/04/2026, 22:28:22', expires: '23/04/2026, 22:28:22' } ] %} {%
+        include 'service/table-pending-invites.html' %}
+      </div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% include 'service/modal-invite-member.html' %} {% include
+'service/modal-cancel-invite.html' %}
+<script src="/assets/prototypes/organization-modals.js"></script>
+{% endblock %}

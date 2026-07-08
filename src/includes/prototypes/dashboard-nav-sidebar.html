@@ -1,2 +1,7 @@
 {% import 'prototypes/dashboard-nav-macros.html' as dash_nav with context %}
-{{ dash_nav.dashboard_nav_main('sidebar') }}
+{% set isSettingsPage = pageTitle == 'Organization' or pageTitle == 'Members' or pageTitle == 'Models' or pageTitle == 'Activity Logs' or pageTitle == 'Alerts' %}
+{% if isSettingsPage %}
+  {{ dash_nav.dashboard_nav_settings() }}
+{% else %}
+  {{ dash_nav.dashboard_nav_main('sidebar') }}
+{% endif %}

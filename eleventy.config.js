@@ -13,6 +13,10 @@ module.exports = function (conf) {
     "./src/assets/fonts": "fonts",
     "./src/assets/prototypes/data/dashboard-charts.json": "dashboard-charts.json",
     "./src/service/ui.yaml": "ui.yaml",
+    "./node_modules/three/build/three.module.js": "assets/vendor/three.module.js",
+    "./node_modules/three/build/three.core.js": "assets/vendor/three.core.js",
+    "./node_modules/three/examples/jsm/loaders/SVGLoader.js":
+      "assets/vendor/three-addons/loaders/SVGLoader.js",
   });
 
   conf.addWatchTarget("./src/styles/");

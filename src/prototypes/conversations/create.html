@@ -1,0 +1,35 @@
+---
+pageTitle: Create Conversation
+permalink: /dashboard/conversations/create/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content conversation-create-page">
+      <a href="/dashboard/conversations/" class="dashboard-back-link">
+        <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
+          <use href="#chevron-left"></use>
+        </svg>
+        Conversations
+      </a>
+      <div class="m__space XS"></div>
+      <h1 class="dashboard-page-title">Create Conversation</h1>
+
+      <section class="dashboard-section">
+        {% include 'service/conversation-upload-plate.html' %}
+      </section>
+
+      <div class="m__space XL"></div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

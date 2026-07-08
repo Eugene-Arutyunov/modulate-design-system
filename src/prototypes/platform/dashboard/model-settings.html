@@ -1,0 +1,81 @@
+---
+pageTitle: Models
+permalink: /dashboard/model-settings/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">
+        {% include 'prototypes/dashboard-nav-sidebar.html' %}
+      </nav>
+    </div>
+
+    <main class="dashboard-content">
+      <h1 class="dashboard-page-title">Models</h1>
+
+      <div class="dashboard-section">
+        <p>
+          Configure models and set the default model used to process
+          conversations.
+        </p>
+      </div>
+
+      <div class="m__space XS"></div>
+
+      <div class="dashboard-section">
+        {% set modelSettingsRows = [
+          {
+            name: 'Velma',
+            description: 'Speech-to-text and conversation analysis',
+            icon: 'velma',
+            isDefault: true
+          },
+          {
+            name: 'PII/PHI',
+            description: 'Sensitive data detection and redaction',
+            icon: 'redaction',
+            isDefault: false
+          },
+          {
+            name: 'Deepfake',
+            description: 'Synthetic voice detection',
+            icon: 'deepfake',
+            isDefault: false
+          },
+          {
+            name: 'Language',
+            description: 'Language detection',
+            icon: 'language',
+            isDefault: false
+          },
+          {
+            name: 'Multilingual',
+            description: 'Multilingual transcription',
+            icon: 'transcript',
+            isDefault: false
+          },
+          {
+            name: 'Music & Speech',
+            description: 'Music and speech segmentation',
+            icon: 'music',
+            isDefault: false
+          },
+          {
+            name: 'AI Music',
+            description: 'AI-generated music detection',
+            icon: 'ai-music',
+            isDefault: false
+          }
+        ] %}
+        {% include 'service/table-model-settings.html' %}
+      </div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% include 'service/modal-model-settings-edit.html' %} {% endblock %}

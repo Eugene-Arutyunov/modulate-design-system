@@ -1,9 +1,10 @@
 ---
 pageTitle: PII/PHI Redaction
+pageHeading: Health plan member verifies PHI details
 permalink: /playground/redaction/
 ---
 
-{% extends 'prototypes/playground-layout.html' %} {% block options %}
+{% set uploadPlateOptions %}
 <div class="pg-options-row pg-redaction-options">
   <div class="m__textfield M m__textfield--no-spin pg-pad-field">
     <label>Start padding</label>
@@ -29,7 +30,8 @@ permalink: /playground/redaction/
     Diarization
   </label>
 </div>
-{% endblock %} {% block analyzing_content %}
+{% endset %}
+{% set uploadPlateAnalyzingContent %}
 <div class="pg-processing-stages">
   <span class="pg-processing-stage">
     <svg
@@ -62,7 +64,8 @@ permalink: /playground/redaction/
     Redactions
   </span>
 </div>
-{% endblock %} {% block player_clips %}
+{% endset %}
+{% extends 'prototypes/playground-layout.html' %} {% block player_clips %}
 <div class="pg-redaction-player-track">
   <div
     class="pg-redaction-seg"

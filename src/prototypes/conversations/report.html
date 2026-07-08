@@ -1,6 +1,6 @@
 ---
 pageTitle: Conversations
-permalink: /conversations/7839f2/
+permalink: /dashboard/conversations/7839f2/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
@@ -9,11 +9,13 @@ permalink: /conversations/7839f2/
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
     <div class="nav-sidebar">
-      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+      <nav class="m__nav-menu">
+        {% include 'prototypes/dashboard-nav-sidebar.html' %}
+      </nav>
     </div>
 
     <main class="dashboard-content conversation-report">
-      <a href="/conversations/" class="conversation-report__back">
+      <a href="/dashboard/conversations/" class="conversation-report__back">
         <svg viewBox="0 0 12 12" aria-hidden="true">
           <use href="#chevron-left"></use>
         </svg>
@@ -22,30 +24,15 @@ permalink: /conversations/7839f2/
 
       <div class="conversation-report__title-row">
         <div class="conversation-report__title-line">
-          <h1 class="dashboard-page-title">Refund escalation</h1>
-          <span class="m__tag m__tag--success">Completed</span>
+          <h1 class="dashboard-page-title">
+            Health member appeals denied MRI claim after urgent back pain
+            referral
+          </h1>
         </div>
-      </div>
-
-      <div class="m__widget m__rounded conversation-report__summary">
-        <dl class="conversation-report__meta">
-          <div>
-            <dt>Type</dt>
-            <dd>Customer Support</dd>
-          </div>
-          <div>
-            <dt>Submitted</dt>
-            <dd>15 Apr 2026, 09:12</dd>
-          </div>
-          <div>
-            <dt>Detection Package</dt>
-            <dd>Consumer Fraud Detection</dd>
-          </div>
-          <div>
-            <dt>Credits</dt>
-            <dd>0.184</dd>
-          </div>
-        </dl>
+        <div class="conversation-report__title-actions">
+          {% set reportOutputMenuVariant = 'button' %}
+          {% include 'prototypes/conversations/report-output-menu.html' %}
+        </div>
       </div>
 
       <div class="conversation-report__player m__rounded">
@@ -70,12 +57,14 @@ permalink: /conversations/7839f2/
               <div class="player-control-spacer"></div>
               <div
                 class="player-control player-control-center"
-                data-action="play-pause">
+                data-action="play-pause"
+              >
                 <a href="#" class="player-icon" data-playing="false">
                   <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
                     <polygon
                       fill="currentColor"
-                      points="40 30 40 190 190 110 40 30" />
+                      points="40 30 40 190 190 110 40 30"
+                    />
                   </svg>
                 </a>
               </div>
@@ -110,6 +99,21 @@ permalink: /conversations/7839f2/
       <div class="pg-output-panel conversation-report__output">
         {% include 'prototypes/playground/velma-report-output.html' %}
       </div>
+
+      <div class="m__space L"></div>
+
+      <div class="pg-bottom-columns conversation-report__bottom">
+        <div class="pg-json-block">
+          <h6 class="pg-section-title">Raw JSON</h6>
+          <div class="pg-json-container">
+            {% include 'prototypes/playground/output-json.html' %}
+          </div>
+        </div>
+
+        <div class="pg-stats-block">
+          {% include 'prototypes/conversations/report-output-stats.html' %}
+        </div>
+      </div>
     </main>
   </div>
   <div class="m__space XL"></div>
@@ -121,7 +125,7 @@ permalink: /conversations/7839f2/
       var rect = container.getBoundingClientRect();
       container.style.setProperty(
         "--pg-hover-x",
-        event.clientX - rect.left + "px"
+        event.clientX - rect.left + "px",
       );
       container.dataset.hover = "true";
     });

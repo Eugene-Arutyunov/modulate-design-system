@@ -7,13 +7,18 @@
     <title>{{ pageTitle if pageTitle else 'Modulate' }}</title>
     <meta
       name="description"
-      content="{{ pageDesc if pageDesc else 'Modulate Developer APIs' }}" />
+      content="{{ pageDesc if pageDesc else 'Modulate Developer APIs' }}"
+    />
     <link rel="shortcut icon" href="/assets/service/favicon-product.png" />
 
     <link rel="stylesheet" href="/bundle.css" />
     {% block head %}{% endblock %}
   </head>
-  <body data-theme-storage-key="prototype-theme">
+  <body
+    class="prototype-auth-signed-out"
+    data-theme-storage-key="prototype-theme"
+    data-prototype-auth-default="signed-out"
+  >
     <script>
       (function () {
         var key = document.body.dataset.themeStorageKey;
@@ -32,10 +37,11 @@
         }
       })();
     </script>
-    {% include 'service/svg-icons-sprite.html' %} {% set islandThemeToggle =
-    true %} {% include 'service/nav-island.html' %} {% set isLanding = true %}
-    {% include 'prototypes/header.html' %} {% block content %}{% endblock %} {%
-    include 'prototypes/footer.html' %}
+    {% include 'prototypes/auth-state-init.html' %} {% include
+    'service/svg-icons-sprite.html' %} {% set islandThemeToggle = true %} {%
+    include 'service/nav-island.html' %} {% set isLanding = true %} {% include
+    'prototypes/header.html' %} {% block content %}{% endblock %} {% include
+    'prototypes/footer.html' %}
     <script src="/assets/service/theme-toggle.js"></script>
     <script src="/assets/service/nav-island.js"></script>
     <script src="/assets/prototypes/header-menu.js"></script>
