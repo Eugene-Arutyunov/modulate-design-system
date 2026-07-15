@@ -194,6 +194,29 @@
   color: var(--m__color-gray-950);
 }
 
+/* Embedded variant — the figure inside a blog post keeps its own light context */
+.palette-lamp-page.palette-lamp-embed {
+  min-height: 0;
+  padding: clamp(1rem, 2vw, 2rem);
+
+  & .palette-lamp__stage {
+    grid-template-columns: minmax(0, 1fr) minmax(12rem, 28%);
+    height: auto;
+  }
+
+  & .palette-lamp__palette {
+    min-height: 30rem;
+  }
+
+  & .palette-lamp__svg {
+    height: min(28rem, 60vh);
+  }
+
+  & .palette-lamp__fixture::before {
+    height: min(26rem, 56vh);
+  }
+}
+
 @media (width < 900px) {
   .palette-lamp-page {
     overflow: auto;

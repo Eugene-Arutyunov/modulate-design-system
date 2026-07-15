@@ -1,21 +1,81 @@
-/* Posts section — /posts/ index and individual post pages */
+/* Blog section — /blog/ index and individual post pages */
 
-.post-date {
-  display: block;
-  font-size: var(--m__font-size-s);
-  color: var(--m__text-caption);
+/* Post meta line above the title: back link, author with photo, date */
+.post-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--m__gap-m);
   margin-bottom: var(--m__spacer-s);
+
+  & .post-meta__author {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--m__gap-xs2);
+  }
+
+  & .post-meta__photo {
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: var(--m__radius-pill);
+    object-fit: cover;
+  }
+
+  & time {
+    color: var(--m__text-caption);
+  }
 }
 
-.posts-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* Homepage row: section navbar with the blog link to its right */
+.navbar-blog-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--m__gap-m);
+}
 
-  & li {
+/* Index page: column title above each series, like models-nav__col-title */
+.posts-list-col-title {
+  display: block;
+  padding: 0.4rem 0 0.2rem;
+  margin-bottom: var(--m__gap-xxs);
+  font-family: var(--m__font-family-semi-mono);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m__text-caption);
+}
+
+/* Index page: plain column of links, no list markers */
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--m__gap-xs2);
+
+  & .posts-list__item {
     display: flex;
     align-items: baseline;
-    gap: var(--m__gap-m2);
-    padding-block: 0.35rem;
+    gap: var(--m__gap-xs2);
+  }
+}
+
+.posts-list__caption {
+  font-size: var(--m__font-size-s);
+  color: var(--m__text-caption);
+  white-space: nowrap;
+}
+
+/* Read next: full-width outline button at the end of a post.
+   The a.-prefixed selector matches the specificity of the base button rules. */
+a.read-next {
+  display: flex;
+  white-space: normal;
+  text-align: center;
+  font-weight: var(--m__font-weight-regular);
+
+  & strong {
+    font-weight: var(--m__font-weight-bold);
   }
 }

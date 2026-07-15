@@ -1,0 +1,141 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Icons — Modulate Design
+System' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="m__text-width">
+    {% set postDate = 'July 7, 2026' %} {% include 'service/post-meta.html' %}
+    <h1 class="loud">Icons</h1>
+
+    <p>Here are the requirements usually applied to icons:</p>
+
+    <ol>
+      <li>Convey meaning</li>
+      <li>Form a system</li>
+      <li>Be distinguishable from each other</li>
+      <li>Integrate into text and interface</li>
+      <li>Convey the product’s image</li>
+    </ol>
+
+    <p>Let’s break down these requirements one by one in more detail.</p>
+
+    <div class="m__space S"></div>
+    <h2>Convey meaning</h2>
+
+    <p>
+      You can think of an icon as a shorthand way of writing other words,
+      something like a hieroglyph. The icon’s superpowers: compactness, built-in
+      localization. The limitation: unfortunately, very few words and concepts
+      can be reliably encoded as icons within a single language environment.
+      Universally understandable ones are even rarer.
+    </p>
+
+    <p>
+      What’s usually done about it:<br />
+      — in critical places, the meaning gets labeled with words<br />
+      — the audience is gradually taught the product’s icon “dialect” (“here’s
+      what this icon means specifically for us”), while avoiding obvious
+      conflicts.
+    </p>
+
+    <p>We do the same.</p>
+
+    <div class="m__space S"></div>
+    <h2>Form a system</h2>
+
+    <p>
+      If you just throw together a random set of graphic thumbnails, each
+      conveying its own meaning, they’ll be hard to perceive as a whole. This
+      isn’t only about aesthetics — differently styled images are obviously
+      noisy and confusing, but there’s a functional side too: a contract with
+      the user. Any system implies something like an agreement about what can
+      and can’t appear on a page, in an interface, in a user flow. This
+      predictability makes complex things feel simpler, and people get
+      frustrated less and trust the product more.
+    </p>
+
+    <p>
+      So we try to maintain consistency in our iconography. This shows up in
+      some very basic constants: how much line thickness and spacing between
+      objects can vary, what level of detail is acceptable. And also: solid
+      fills, no outlines/strokes.
+    </p>
+
+    <div class="m__space S"></div>
+    <h2>Be distinguishable from each other</h2>
+
+    <p>
+      If icons are made too similar to each other, they turn into noise. You can
+      compare this to alphabets: it’s good when an alphabet has letters that
+      look like S, I, A, R, or O — it helps reading; it’s bad when you get
+      something like НПЦШЩ, as in the Cyrillic alphabet — that doesn’t help at
+      all.
+    </p>
+
+    <p>
+      Obsessing over modularity, over-unifying shapes — this is the most common
+      mistake and the main problem with most modern icon sets. It mostly comes
+      from icons being designed and “sold” outside their real context, laid out
+      neatly like candy in a sweet shop. Real-world conditions demand much more
+      diversity.
+    </p>
+
+    <p>
+      So we make icons that are consistent in character but very different in
+      shape.
+    </p>
+
+    <div class="m__space S"></div>
+    <h2>Integrate into text and interface</h2>
+
+    <p>
+      Literally, this means: icons should shrink down to letter size (okay,
+      maybe a bit bigger than a letter, but comparable) without losing
+      functionality, and scale up just as painlessly — the same icon should hold
+      up whether it’s a 16×16 favicon or a 200×200 illustration on an empty
+      state screen. They should also become monochrome without any issues.
+    </p>
+
+    <p>
+      Sure, our preferred version might be in color, and the monochrome version
+      might convey the meaning slightly less well (for example, the deepfake
+      icon relies mostly on color to convey its meaning), but in its monochrome
+      form an icon shouldn’t turn into a different icon or fall apart.
+    </p>
+
+    <p>
+      Most of our icons are monochrome, but not all of our colored icons become
+      monochrome painlessly — that’s a known problem we still need to solve.
+    </p>
+
+    <div class="m__space S"></div>
+    <h2>Convey the product’s image</h2>
+
+    <p>
+      A carefully drawn icon can create a feeling of “something interesting,
+      thoughtful, and well-made is waiting for you here.” This approach is
+      mostly typical for app icons — like in iOS.
+    </p>
+
+    <p>
+      In the Modulate design system, icons originally appeared for dashboard
+      navigation, and they were small to fit into a line. We made model icons
+      using the same recipe, also for navigation.
+    </p>
+
+    <p>
+      But then the Pricing page grew, and to keep the spec tables from all
+      looking the same, we needed clear visual accents. So our simple icons grew
+      to iPhone-icon size. And honestly, they didn’t quite meet the requirement
+      of conveying the product’s image.
+    </p>
+
+    <p>
+      So — sudden announcement — we came up with volumetric versions for them.
+      You can see them live <a href="/model-icons-3d/">here</a>.
+    </p>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

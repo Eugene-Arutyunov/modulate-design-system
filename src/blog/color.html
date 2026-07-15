@@ -1,0 +1,73 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Color — Modulate Design
+System' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="m__text-width">
+    {% set postDate = 'June 18, 2026' %} {% include 'service/post-meta.html' %}
+    <h1 class="loud">Color</h1>
+
+    <p>The familiar problem with digital-first brands looks like this.</p>
+
+    <p>
+      <strong>To serve interface scenarios,</strong> you need a palette that’s
+      very functional and flexible to requirements. It doesn’t matter what the
+      brand’s primary colors are — an error will still be red, success will
+      still be green, and the background color will depend on the user’s
+      preferred theme, which might even change twice a day.
+    </p>
+
+    <p>
+      But <strong>to build a brand</strong> (that is, to create a user
+      experience and accompany it with sensory input unlike anything else — see
+      <a href="/blog/graphic-style/">part 1</a>), you need the opposite: a
+      controlled, simple, strong color signal. 20th-century branding is, more or
+      less, picking a color and painting everything that color for years and
+      years. Like Coca-Cola.
+    </p>
+
+    <p>
+      So the requirement for a digital brand’s color palette is to find an
+      elegant solution to this problem.
+    </p>
+
+    <p>
+      Our solution is this: we give up on one fixed “brand” color and adapt the
+      palette to the needs of the interface, because those come first —
+      including using colors to visualize data (emotions, for example) — but at
+      the same time, we mentally keep a purple lightbulb switched on somewhere
+      in our heads, illuminating an otherwise neutral palette. In other words,
+      we subtly tint everything purple.
+    </p>
+
+    <p>
+      This color shift isn’t mechanical — it’s tuned by hand, by eye, and that’s
+      not an accident: color spaces are nonlinear, and the next step up in
+      precision from “by eye” requires a ton of math, which we don’t need yet.
+    </p>
+
+    <p>
+      The result is a restrained palette that doesn’t get in the way of any
+      task, but isn’t faceless either — it’s <em>recognizable</em>. (This was
+      originally worked out for the preview, and has been expanding and
+      improving ever since. Well, the solution came earlier — the lamp metaphor
+      is from today.)
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+  <div class="palette-lamp-page palette-lamp-embed is-on" data-palette-lamp>
+    {% include 'service/palette-lamp-figure.html' %}
+  </div>
+  <div class="m__space M"></div>
+  <div class="m__text-width">
+    <a href="/blog/icons/" class="m__button-primary-outline read-next"
+      >Read next: <strong>Icons</strong></a
+    >
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script src="/assets/service/palette-lamp.js"></script>
+
+{% endblock %}

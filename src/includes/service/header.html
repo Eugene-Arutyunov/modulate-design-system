@@ -1,8 +1,16 @@
-{% if page.url != '/' and page.url != '/ui/' and page.url != '/tables/' %}
+{% if page.url != '/ui/' and page.url != '/tables/' %}
 <div class="m__wrapper">
   <header class="header">
     <nav class="nav">
-      <a href="/" class="nav-link">Modulate Design System</a>
+      {% if page.url == '/' %}
+      <span class="nav-link">Design System</span>
+      {% else %}
+      <a href="/" class="nav-link">Design System</a>
+      {% endif %} {% if page.url == '/blog/' %}
+      <span class="nav-link">Blog</span>
+      {% else %}
+      <a href="/blog/" class="nav-link">Blog</a>
+      {% endif %}
     </nav>
   </header>
 </div>

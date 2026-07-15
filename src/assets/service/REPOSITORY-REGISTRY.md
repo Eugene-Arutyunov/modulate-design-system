@@ -4,22 +4,29 @@ Index of notable functional blocks for developer navigation. Add a short descrip
 
 ---
 
-## Posts section
+## Blog section
 
-**Pages:** `src/posts/index.html` → `/posts/`  
+**Pages:** `src/blog/index.html` → `/blog/` (“Design at Modulate”)  
 **Individual posts:**
 
-- `src/posts/layers.html` → `/posts/layers/` — April 6, 2026 — Components as Reference Specimens
-- `src/posts/page-composition.html` → `/posts/page-composition/` — April 7, 2026 — The Page Composition Rule
-- `src/posts/layouts.html` → `/posts/layouts/` — April 13, 2026 — Time as the Main Axis
-- `src/posts/mobile.html` → `/posts/mobile/` — April 23, 2026 — Mobile Responsiveness Out of the Box
-- `src/posts/type-scale.html` → `/posts/type-scale/` — May 19, 2026 — Adjusting the Type Scale
-- `src/posts/charts.html` → `/posts/charts/` — June 9, 2026 — Chart.js Integration
+- `src/blog/square-element.html` → `/blog/square-element/` — December 2025 — There has to be a square element (moved from the modulate-design repo; image: `src/assets/images/square-element.png`)
+- `src/blog/layers.html` → `/blog/layers/` — April 6, 2026 — Components as Reference Specimens
+- `src/blog/page-composition.html` → `/blog/page-composition/` — April 7, 2026 — The Page Composition Rule
+- `src/blog/layouts.html` → `/blog/layouts/` — April 13, 2026 — Time as the Main Axis
+- `src/blog/mobile.html` → `/blog/mobile/` — April 23, 2026 — Mobile Responsiveness Out of the Box
+- `src/blog/type-scale.html` → `/blog/type-scale/` — May 19, 2026 — Adjusting the Type Scale
+- `src/blog/graphic-style.html` → `/blog/graphic-style/` — June 8, 2026 — Why Have Your Own Graphic Style
+- `src/blog/charts.html` → `/blog/charts/` — June 9, 2026 — Chart.js Integration
+- `src/blog/color.html` → `/blog/color/` — June 18, 2026 — Color (embeds the palette-lamp figure)
+- `src/blog/icons.html` → `/blog/icons/` — July 7, 2026 — Icons
+- `src/blog/fingerprints.html` → `/blog/fingerprints/` — placeholder page, no date or text yet
 
-**Styles:** `src/styles/service/posts.css` — `.post-date` (caption style above `<h1>`), `.posts-list` (date+link rows on the index page).  
-**Navigation:** linked from `src/includes/service/nav-island.html` as "Posts".
+**Includes:** `src/includes/service/post-meta.html` — the meta line above each post title: “← Blog” link, author(s) with round photos, date (`postDate` Nunjucks variable; omitted on the Fingerprints placeholder; optional `postCoAuthor` + `postCoAuthorPhoto` add a second author).  
+**Author photos:** `src/assets/images/authors/` (square JPEG).  
+**Styles:** `src/styles/service/blog.css` — `.post-meta` (meta line, `.post-meta__photo` round avatar), `.posts-list` (plain column of `.posts-list__item` rows on the index: link with a regular series number and bold title, plus a `.posts-list__caption` date or “soon”), `.posts-list-col-title` (uppercase semi-mono column titles, after `models-nav__col-title`, no rule line), `.read-next` (full-width `m__button-primary-outline` at the end of a post), `.navbar-blog-row` (homepage row that places the blog link next to `ids-navbar`).  
+**Navigation:** linked from `src/includes/service/nav-island.html` as “Blog”, from the homepage next to `ids-navbar`, and from the docs header (`src/includes/service/header.html` renders “Design System” and “Blog” on every DS page including the homepage; the current page is plain text, not a link).
 
-Blog-like section for design system development history. Each post is a standalone page extending `service/layout.html`. Posts are listed newest-first on the index. The Charts post contains the Chart.js integration documentation moved from `src/index.html`.
+Blog for design system development history. Each post is a standalone page extending `service/layout.html`, with the post-meta include above a `h1.loud` title (Gothic display font, same as the design system main page); the spacer before the meta line is `m__space XL` everywhere, matching the homepage (the header itself carries no bottom margin). Posts end with a “Read next” full-width outline button (`a.read-next`: regular-weight label, bold post title) — the next post in the series, or the next by date for standalone posts (the Icons and Fingerprints posts have none yet). The index (titled “Design at Modulate”, `h1.loud`) groups posts into three columns (temporary launch navigation, forward chronological order): System Foundations Series and Graphic Style Series (numbered entries, two unlinked “soon” ones), and Recent posts (Fingerprints pinned on top). Dates are short captions in the same row (`6 Apr`; the year appears only when it isn’t the current one). The Charts post contains the Chart.js integration documentation moved from `src/index.html`.
 
 ---
 
@@ -97,12 +104,13 @@ Section-specific layout for the long home page; kept separate from `color-palett
 ## Palette lamp page
 
 **Page:** `src/service/palette-lamp.html` → `/palette-lamp/`  
-**Styles:** `src/styles/service/palette-lamp.css`  
+**Figure include:** `src/includes/service/palette-lamp-figure.html` (tiles data + stage markup; shared by the page and the Color blog post)  
+**Styles:** `src/styles/service/palette-lamp.css` (including the `.palette-lamp-embed` variant for in-post embedding)  
 **Script:** `src/assets/service/palette-lamp.js`  
 **Graphic:** `src/includes/assets/palette-lamp.svg`  
 **Bundle:** `src/css-bundle.njk`.
 
-Light-only standalone illustration page. Left side shows primitive palette colors as one continuous five-column grid, grouped in palette order and sorted dark-to-light within each group. The grid uses the design-system palette while the lamp is on, then switches to a more neutral comparison palette when the lamp is off. Right side shows a minimal inline SVG fluorescent lamp with CSS-driven `purple-500` glow; the checkbox below it toggles the `.is-on` state.
+Light-only standalone illustration page. Left side shows primitive palette colors as one continuous five-column grid, grouped in palette order and sorted dark-to-light within each group. The grid uses the design-system palette while the lamp is on, then switches to a more neutral comparison palette when the lamp is off. Right side shows a minimal inline SVG fluorescent lamp with CSS-driven `purple-500` glow; the checkbox below it toggles the `.is-on` state. The figure itself lives in the include and keeps its own light context, so the embedded copy on `/blog/color/` stays light in the dark theme.
 
 ---
 

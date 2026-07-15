@@ -1,0 +1,19 @@
+<p class="post-meta">
+  <a href="/blog/">← Blog</a>
+  {% if postDate %}
+  <span class="post-meta__author">
+    <img
+      class="post-meta__photo"
+      src="/assets/images/authors/eugene-arutyunov.jpg"
+      alt="" />
+    Eugene Arutyunov
+  </span>
+  {% if postCoAuthor %}
+  <span class="post-meta__author">
+    <img class="post-meta__photo" src="{{ postCoAuthorPhoto }}" alt="" />
+    {{ postCoAuthor }}
+  </span>
+  {% endif %}
+  <time>{{ postDate }}</time>
+  {% endif %}
+</p>

@@ -7,8 +7,7 @@ block content %}
   <div class="m__space M"></div>
   <div class="m__text-width">
     <p>
-      This document defines the visual language of Modulate products
-      for web. Its core is a combination of tokens and components, and the
+      This document defines the visual language of Modulate products. Its core is a combination of tokens and components, and the
       system itself is UI-library-agnostic. The HTML/CSS here is a
       reference — usable as-is in any vanilla stack. The
       Next.js implementation lives in Storybook.
@@ -48,7 +47,10 @@ block content %}
     </p>
   </div>
   <div class="m__space S"></div>
-  <ids-navbar></ids-navbar>
+  <div class="navbar-blog-row">
+    <ids-navbar></ids-navbar>
+    <a href="/blog/">Learn more about design at Modulate</a>
+  </div>
 </div>
 
 <ids-nav-item id="color" label="Color">
@@ -58,9 +60,9 @@ block content %}
     <h2>Color</h2>
     <div class="m__text-width">
       <p>
-        Color lives in two layers. The <strong>palette</strong> holds raw color values —
+        Color lives in two layers. The <strong>pPalette</strong> holds raw color values —
         a single source of truth, independent of theme. <strong>Semantic tokens</strong>
-        (text, background, UI) reference palette entries and are the only place themes
+        reference palette entries and are the only place themes
         switch values. In CSS, point to a semantic token when available; reach into the
         palette only when there is no semantic match.
       </p>
@@ -68,22 +70,13 @@ block content %}
     <div class="m__space S"></div>
 
     <h3>Palette</h3>
-    <div class="m__text-width">
-      <p>
-        Raw colors. Click a swatch to copy the
-        <code>var(--m__color-*)</code> reference.
-      </p>
-    </div>
+    
     <div class="m__space XS"></div>
     <div class="guide-tokens" data-tokens-prefix="color" data-tokens-render="swatch"></div>
     <div class="m__space L"></div>
 
-    <h3>UI Color Palette</h3>
-    <div class="m__text-width">
-      <p>
-        Semantic tokens. These flip with theme; the palette values they point to do not.
-      </p>
-    </div>
+    <h3>Semantic tokens</h3>
+    
     <div class="m__space XS"></div>
     {% include 'service/color-palette.html' %}
   </div>
@@ -254,7 +247,7 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
       data-tokens-exclude="checkbox, tag-group, toggle, popover-item, modal, table-toolbar, table-filters, table-empty"></div>
     <div class="m__space M"></div>
 
-    <div class="m__space L"></div>
+    
     <h3>Spacers</h3>
     <div class="m__text-width">
       <p>
@@ -276,7 +269,7 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
     <div class="guide-tokens" data-tokens-prefix="spacer" data-tokens-render="space"></div>
     <div class="m__space M"></div>
 
-    <div class="m__space L"></div>
+
     <h3>Paddings</h3>
     <div class="m__text-width">
       <p>
@@ -291,7 +284,6 @@ color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
     <div class="guide-tokens" data-tokens-prefix="padding" data-tokens-render="control-padding"></div>
     <div class="m__space M"></div>
 
-    <div class="m__space L"></div>
     <h3>Radius</h3>
     <div class="m__text-width">
       <p>
@@ -2044,7 +2036,7 @@ method: POST</code></pre>
 
     <h3>Charts</h3>
     <div class="m__text-width">
-      <p>Charts — <a href="/posts/charts/">see post</a>.</p>
+      <p>Charts — <a href="/blog/charts/">see post</a>.</p>
     </div>
     <div class="m__space S"></div>
   </div>
@@ -2138,7 +2130,7 @@ method: POST</code></pre>
         </p>
       </aside>
     </div>
-    <div class="m__space S"></div>
+    <div class="m__space XL"></div>
   </div>
 </ids-nav-item>
 <script src="/assets/prototypes/menu-button.js"></script>
