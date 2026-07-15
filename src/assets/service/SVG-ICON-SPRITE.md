@@ -59,6 +59,7 @@ Product icons that need fixed accent fills reference palette tokens from **`src/
 | --------------------------- | ------------------------------------- |
 | **`--m__color-red-500`**    | Alerts, deepfake, medical/STT accents |
 | **`--m__color-yellow-500`** | Music-related accents                 |
+| **`--m__color-green-500`**  | Voice match accents                   |
 | **`--m__color-purple-400`** | Brand accents                         |
 
 In a colored source SVG:
@@ -100,6 +101,8 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 - **`ai-music.svg`** → **`#ai-music`**: colored icon — outer ring and waveform frame use **`currentColor`**; inner ring and accent bars use **`var(--m__color-yellow-500)`**. Listed in **`COLORED_ICONS`**.
 - **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use **`var(--m__color-red-500)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`stt-med.svg`** → **`#stt-med`**: colored icon — all bars use **`var(--m__color-red-500)`**. Listed in **`COLORED_ICONS`**.
+- **`accent.svg`** → **`#accent`**: colored icon — top stripe uses **`var(--m__color-red-500)`**; the road/wave shape uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
+- **`voice-match.svg`** → **`#voice-match`**: colored icon — top bars use **`currentColor`**; bottom (mirrored) bars use **`var(--m__color-green-500)`**. Listed in **`COLORED_ICONS`**.
 - **`velma.svg`** → **`#velma`**: colored icon — accent shapes use **`var(--m__color-purple-400)`**; other shapes use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`redaction.svg`** → **`#redaction`**: monochrome; inherits **`currentColor`**.
 - **`language.svg`** → **`#language`**: monochrome Language Detection glyph; inherits **`currentColor`**.

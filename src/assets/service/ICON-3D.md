@@ -39,6 +39,9 @@ designer or developer to tune depth ordering without editing path data.
 
 `shapeLayerSpans` controls how many base glyph depths a shape occupies. A value
 of `2` starts at the shape’s layer and spans that layer plus the next one.
+Fractional values are allowed: `0.5` makes a shape half as thick as the base
+glyph depth, `1.5` makes it half a layer thicker (see `voice-match`, where the
+span of each bar follows its height).
 
 ```json
 {

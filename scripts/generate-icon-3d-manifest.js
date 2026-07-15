@@ -27,14 +27,17 @@ const OUTPUT_FILE = path.join(
 );
 
 const REQUIRED_ICON_IDS = [
+  "accent",
   "ai-music",
   "deepfake",
+  "emotions",
   "language",
   "music",
   "redaction",
   "stt-med",
   "transcript",
   "velma",
+  "voice-match",
 ];
 
 const FILL_MAP = new Map([
