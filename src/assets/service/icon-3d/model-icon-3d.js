@@ -561,7 +561,7 @@ function createIconMeshes(parts, host, options = {}, renderConfig) {
     .forEach((part) => {
       part.shapes.forEach((shape) => {
         const glyphDepth = options.depth ?? glyph.depth;
-        const layerSpan = Math.max(1, part.layerSpan || 1);
+        const layerSpan = part.layerSpan > 0 ? part.layerSpan : 1;
         const bevelSize = glyph.bevel;
         const bevelThickness = bevelSize > 0 ? bevelSize * 0.9 : 0;
         const geometry = new THREE.ExtrudeGeometry(shape, {
@@ -570,7 +570,7 @@ function createIconMeshes(parts, host, options = {}, renderConfig) {
           bevelThickness,
           bevelSize,
           bevelSegments: 3,
-          curveSegments: 10,
+          curveSegments: 20,
         });
         const material = createMaterial(part.fill, host, {
           roughness: glyph.roughness,

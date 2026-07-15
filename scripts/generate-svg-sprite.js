@@ -20,6 +20,7 @@ const OUTPUT_FILE = path.join(
 // Icons that keep their original fill colors instead of using currentColor.
 // These are typically brand/vendor logos that must render in their trademark colors.
 const COLORED_ICONS = new Set([
+  "accent",
   "ai-music",
   "google",
   "microsoft",
@@ -29,6 +30,7 @@ const COLORED_ICONS = new Set([
   "music",
   "stt-med",
   "velma",
+  "voice-match",
 ]);
 
 const SHAPE_TAGS = new Set([
