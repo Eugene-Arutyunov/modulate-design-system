@@ -1,8 +1,6 @@
 const stack = document.querySelector(".auth-layout__icon-stack");
 
 if (stack) {
-  stack.dataset.stackFocus = "velma";
-
   stack.querySelectorAll(".auth-layout__icon-hover-zone[data-term]").forEach(
     (zone) => {
       zone.addEventListener("pointerenter", () => {
@@ -10,4 +8,12 @@ if (stack) {
       });
     },
   );
+
+  const zones = stack.querySelector(".auth-layout__icon-hover-zones");
+
+  if (zones) {
+    zones.addEventListener("pointerleave", () => {
+      delete stack.dataset.stackFocus;
+    });
+  }
 }

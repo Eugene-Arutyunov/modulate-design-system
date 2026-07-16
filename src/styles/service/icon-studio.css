@@ -1,0 +1,396 @@
+/* Icon Studio (`/icon-studio/`) — pick a model icon, tune light and backdrop,
+   set the pose, and take a screenshot. Controls sit in-flow above the
+   full-width stage rectangle, directly on the page background. */
+
+.icon-studio {
+  & .icon-studio__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--m__gap-xxxl);
+    row-gap: var(--m__gap-s);
+    align-items: start;
+
+    @media (width < 960px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  & .icon-studio__col {
+    display: grid;
+    gap: var(--m__gap-s);
+  }
+
+  & fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  & legend {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    /* Reserve the Reset button height so its appearance doesn't shift the
+       rows below. */
+    min-height: 1.1rem;
+    padding: 0;
+    margin-bottom: 0.35rem;
+    font-size: var(--m__font-size-xs);
+    line-height: 1;
+    font-weight: var(--m__font-weight-bold);
+  }
+
+  /* Small outline button next to the group title; JS shows it only when
+     something in the group differs from the defaults. */
+  & .icon-studio__reset {
+    padding: 0.1rem 0.3rem;
+    border: var(--m__border-width-s) solid
+      color-mix(in srgb, currentColor 40%, transparent);
+    border-radius: var(--m__radius-s);
+    background: none;
+    color: var(--m__text-caption);
+    font: inherit;
+    font-size: 0.65rem;
+    font-weight: var(--m__font-weight-medium);
+    line-height: 1.1;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--m__text);
+      border-color: currentColor;
+    }
+  }
+
+  /* Direct children only: labels nested inside rows (e.g. the segmented
+     control) keep their component styling. */
+  & fieldset > label {
+    display: grid;
+    grid-template-columns: 4rem minmax(5rem, 1fr) 2.4rem;
+    gap: 0.35rem;
+    align-items: center;
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-caption);
+  }
+
+  & fieldset > label.icon-studio__check {
+    display: flex;
+    gap: 0.35rem;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--m__text);
+    }
+  }
+
+  /* Non-label rows (dropdowns, segmented controls): same first column as
+     the labels, the control spans the input + output columns. */
+  & .icon-studio__row {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 0.35rem;
+    align-items: center;
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-caption);
+  }
+
+  & output {
+    overflow: hidden;
+    font-family: var(--m__font-family-mono);
+    font-size: 0.72rem;
+    color: var(--m__text);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Flat range: thin track with a filled progress part and a round thumb.
+     JS keeps --icon-studio-range-progress in sync with the value. */
+  & input[type="range"] {
+    --icon-studio-range-progress: 0%;
+    --icon-studio-range-track: 0.12em;
+    --icon-studio-range-thumb: 0.65em;
+
+    min-width: 0;
+    height: 1.1rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+
+    &::-webkit-slider-runnable-track {
+      height: var(--icon-studio-range-track);
+      border: 0;
+      border-radius: 0;
+      background: linear-gradient(
+        to right,
+        var(--m__text-caption) 0%,
+        var(--m__text-caption) var(--icon-studio-range-progress),
+        var(--m__border) var(--icon-studio-range-progress),
+        var(--m__border) 100%
+      );
+    }
+
+    &::-webkit-slider-thumb {
+      width: var(--icon-studio-range-thumb);
+      height: var(--icon-studio-range-thumb);
+      margin-top: calc(
+        (var(--icon-studio-range-track) - var(--icon-studio-range-thumb)) / 2
+      );
+      border: 0;
+      border-radius: 50%;
+      background: var(--m__text);
+      box-shadow: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    &::-moz-range-track {
+      height: var(--icon-studio-range-track);
+      border: 0;
+      border-radius: 0;
+      background: var(--m__border);
+    }
+
+    &::-moz-range-progress {
+      height: var(--icon-studio-range-track);
+      border: 0;
+      border-radius: 0;
+      background: var(--m__text-caption);
+    }
+
+    &::-moz-range-thumb {
+      width: var(--icon-studio-range-thumb);
+      height: var(--icon-studio-range-thumb);
+      border: 0;
+      border-radius: 50%;
+      background: var(--m__text);
+      box-shadow: none;
+    }
+  }
+
+  /* Custom dropdowns (icon picker, palette): summary shows the current
+     value, the open state drops an absolutely positioned list. */
+  & .icon-studio__dropdown,
+  & .icon-studio__palette {
+    position: relative;
+
+    & summary {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+      padding: 0.15rem 0.25rem;
+      border: 1px solid var(--m__border);
+      border-radius: var(--m__radius-s);
+      background-color: var(--m__bg);
+      color: var(--m__text);
+      font-size: var(--m__font-size-xs);
+      list-style: none;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+  }
+
+  & .icon-studio__palette summary {
+    font-family: var(--m__font-family-mono);
+    font-size: 0.72rem;
+  }
+
+  & .icon-studio__dropdown summary svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+    color: var(--m__text);
+    fill: currentColor;
+  }
+
+  & .icon-studio__dropdown-list {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    z-index: 30;
+    min-width: 100%;
+    padding: 0.25rem;
+    border: 1px solid var(--m__border);
+    border-radius: var(--m__radius-s);
+    background-color: var(--m__bg-surface);
+    box-shadow: 0 0.5rem 2rem
+      color-mix(in srgb, var(--m__text) 18%, transparent);
+
+    & button {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+      width: 100%;
+      padding: 0.25rem 0.35rem;
+      border: 0;
+      border-radius: var(--m__radius-s);
+      background: none;
+      color: var(--m__text);
+      font: inherit;
+      font-size: var(--m__font-size-xs);
+      font-weight: var(--m__font-weight-medium);
+      white-space: nowrap;
+      text-align: left;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--m__text-link-hover);
+        background-color: color-mix(
+          in srgb,
+          var(--m__text-link-hover) 10%,
+          transparent
+        );
+      }
+
+      & svg {
+        width: 1.1rem;
+        height: 1.1rem;
+        flex-shrink: 0;
+        fill: currentColor;
+      }
+    }
+  }
+
+  & .icon-studio__swatch {
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--m__text) 25%, transparent);
+    border-radius: var(--m__radius-s);
+  }
+
+  /* Design-system-style palette: flush rectangles, 4 per row, token names
+     written small inside each plate. */
+  & .icon-studio__palette-grid {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(4, 6rem);
+    gap: 0;
+    overflow: auto;
+    max-height: 60vh;
+    border: 1px solid var(--m__border);
+    background-color: var(--m__bg-surface);
+    box-shadow: 0 0.5rem 2rem
+      color-mix(in srgb, var(--m__text) 18%, transparent);
+  }
+
+  & .icon-studio__palette-color {
+    display: flex;
+    align-items: flex-end;
+    height: 2.4rem;
+    padding: 0.25rem 0.35rem;
+    border: 0;
+    border-radius: 0;
+    font-family: var(--m__font-family-mono);
+    font-size: 0.62rem;
+    line-height: 1;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      outline: 2px solid var(--m__text);
+      outline-offset: -2px;
+    }
+  }
+
+  /* 2D pad for the key light: X maps to the light angle, Y to its height.
+     The pad renders a sphere in the tile material under the same light
+     scheme as the icon; the vertical slider on the right is the light Z. */
+  & .icon-studio__light-pad {
+    position: relative;
+    margin-top: 0.35rem;
+    aspect-ratio: 2.4;
+    overflow: hidden;
+    border: 1px solid var(--m__border);
+    border-radius: var(--m__radius-s);
+    background-color: var(--m__color-slate-900);
+    cursor: crosshair;
+    touch-action: none;
+
+    & .icon-studio__light-pad-canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  }
+
+  /* The type selector keeps this heavier than the generic range rule, so
+     its fixed 1.1rem height doesn't shrink the vertical slider. */
+  & input[type="range"].icon-studio__light-z {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.1rem;
+    width: 1.1rem;
+    height: calc(100% - 0.7rem);
+    writing-mode: vertical-lr;
+    direction: rtl;
+
+    /* No progress fill on the vertical slider: the horizontal gradient
+       logic doesn't rotate with the writing mode. */
+    &::-webkit-slider-runnable-track {
+      background: var(--m__border);
+    }
+
+    &::-moz-range-track {
+      background: var(--m__border);
+    }
+
+    &::-moz-range-progress {
+      background: var(--m__border);
+    }
+  }
+
+  & .icon-studio__light-knob {
+    position: absolute;
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 1px solid var(--m__bg-surface);
+    border-radius: 50%;
+    background-color: var(--m__color-yellow-500);
+    box-shadow: 0 0 0 1px var(--m__border);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  & .icon-studio__light-output {
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  & .icon-studio__anim-preset {
+    margin: 0;
+    justify-self: start;
+  }
+
+  /* The screenshot target. Aspect and background come from the controls via
+     inline styles; the fixed text color keeps currentColor glyph parts
+     independent of the page theme. */
+  & .icon-studio__stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background-color: var(--m__color-slate-900);
+    color: var(--m__color-gray-900);
+    cursor: crosshair;
+
+    & .icon-studio__canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

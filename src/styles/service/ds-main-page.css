@@ -58,6 +58,47 @@
   }
 }
 
+.docs-icon-row--3d {
+  & .docs-icon-row__item {
+    padding: 0;
+    background-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  /* The slot square is the reference box for the 3D tile: the model at its
+     default front-facing rotation projects to exactly this square. The
+     canvas bleeds half a grid gap outward on each side, so neighboring
+     canvases touch and the gaps double as rotation headroom. */
+  & .docs-icon-row__icon {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+
+    & svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Vertical bleed is 1.5 gaps per side (vs half a gap horizontally):
+       rotated corners need more headroom above and below, and extra canvas
+       height doesn't change the icon size — the camera scale is anchored to
+       the host square, not the canvas. */
+    & .m__model-icon-3d__canvas {
+      inset: calc(var(--m__gap-xs) * -1.5) calc(var(--m__gap-xs) / -2);
+      width: calc(100% + var(--m__gap-xs));
+      height: calc(100% + var(--m__gap-xs) * 3);
+    }
+  }
+
+  & .docs-icon-row__label {
+    margin-bottom: var(--m__gap-s);
+  }
+}
+
 @keyframes docs-icon-fly-away {
   0% {
     transform: translate(0, 0) scale(1);

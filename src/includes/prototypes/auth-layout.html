@@ -36,8 +36,17 @@
 
       {% include 'prototypes/auth-layout-models-panel.html' %}
     </div>
+    {% if not hideNavIsland %} {% include 'service/nav-island.html' %} {% endif
+    %}
     <script src="/assets/components/textfield.js"></script>
     <script src="/assets/prototypes/auth-layout-icon-stack.js"></script>
     <script src="/assets/prototypes/header-menu.js"></script>
+    {% if not hideNavIsland %}
+    <script src="/assets/service/nav-island.js"></script>
+    {% endif %}
+    {% include 'service/icon-3d-importmap.html' %}
+    <script
+      type="module"
+      src="/assets/service/icon-3d/model-icon-3d.js"></script>
   </body>
 </html>

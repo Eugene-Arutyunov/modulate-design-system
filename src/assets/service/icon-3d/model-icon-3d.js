@@ -35,7 +35,7 @@ const CONFIG = {
   authTile: {
     size: 38,
     radius: 9,
-    depth: 5,
+    depth: 9.9,
     bevelThickness: 0.5,
     bevelSize: 0.5,
     color: "var(--m__color-gray-100)",
@@ -44,9 +44,9 @@ const CONFIG = {
     clearcoatRoughness: 0.57,
   },
   authGlyph: {
-    depth: 2.3,
+    depth: 2.4,
     bevel: 0,
-    lift: 1.3,
+    lift: 0,
     roughness: 0.66,
     clearcoat: 1,
     clearcoatRoughness: 0.47,
@@ -54,8 +54,8 @@ const CONFIG = {
   authShadow: {
     blur: 1.6,
     tint: 1.3,
-    opacity: 0.19,
-    bleed: 0.5,
+    opacity: 0.08,
+    bleed: 0.3,
   },
   authReflection: {
     envMapIntensity: 0.59,
@@ -69,13 +69,26 @@ const CONFIG = {
       cursorYaw: 0.65,
       baseRotation: { x: 0, y: 0, z: 0 },
     },
+    home: {
+      // World units mapped onto the host box (not the canvas): 38 would make
+      // the front-view tile match the host square exactly, 39.5 leaves a hair
+      // of air that lines the rotated projections up with the grid gaps.
+      height: 39.5,
+      scale: 1,
+      scrollPitch: 0.3,
+      cursorZone: 100,
+      cursorPitch: 0.5,
+      cursorYaw: 0.65,
+      baseRotation: { x: 0, y: 0, z: 0 },
+    },
     auth: {
       height: 54,
-      scale: 1,
-      baseRotation: { x: 0.12, y: -1.06, z: 0 },
-      activeRotation: { x: 0.12, y: -0.84, z: 0 },
-      activeLift: 18,
-      activeScale: 1.08,
+      scale: 0.69,
+      zoom: 1.09,
+      baseRotation: { x: -0.27, y: -0.58, z: -0.01 },
+      activeRotation: { x: 0, y: 0, z: 0 },
+      activeLift: 32,
+      activeScale: 1.32,
     },
   },
   light: {
@@ -87,11 +100,11 @@ const CONFIG = {
       z: 80,
     },
     auth: {
-      keyIntensity: 1.49,
-      ambientIntensity: 2.58,
-      angle: 0,
-      y: 80,
-      z: 80,
+      keyIntensity: 2,
+      ambientIntensity: 1.46,
+      angle: -43,
+      y: 60,
+      z: 60,
     },
   },
 };
@@ -708,6 +721,11 @@ function rebuildEntity(entity) {
   );
   entity.scene.add(entity.model);
   entity.viewHeight = getViewConfig(entity.mode).height;
+
+  if (entity.mode === "home") {
+    entity.model.scale.setScalar(CONFIG.view.home.scale || 1);
+  }
+
   entity.isReady = false;
 }
 
@@ -759,6 +777,11 @@ function initStandaloneIcon(host, icon) {
     renderMode: mode === "auth" ? "auth" : "pricing",
   };
   const model = createIconModel(icon, host, modelOptions, lightConfig);
+
+  if (mode === "home") {
+    model.scale.setScalar(CONFIG.view.home.scale || 1);
+  }
+
   const entity = {
     type: "icon",
     mode,
@@ -834,10 +857,65 @@ function createStackModels(tiles, manifest, scene, transforms = new Map()) {
     .filter(Boolean);
 }
 
-function initStack(stack, manifest) {
-  const tiles = Array.from(stack.querySelectorAll("[data-model-icon-3d]"));
+function parseStackIconTerms(value) {
+  if (!value) {
+    return null;
+  }
 
-  if (!tiles.length) {
+  const terms = value.split(/[\s,]+/).filter(Boolean);
+
+  return terms.length ? terms : null;
+}
+
+function applyStackIconSet(entity, terms) {
+  const allowed = terms ? new Set(terms) : null;
+  const visibleTiles = [];
+
+  entity.allTiles.forEach((tile) => {
+    const isVisible = !allowed || allowed.has(tile.dataset.term);
+
+    tile.style.display = isVisible ? "" : "none";
+
+    if (isVisible) {
+      visibleTiles.push(tile);
+    }
+  });
+  visibleTiles.forEach((tile, index) => {
+    tile.style.marginLeft = index === 0 ? "0" : "";
+  });
+  entity.host
+    .querySelectorAll(".auth-layout__icon-hover-zone")
+    .forEach((zone) => {
+      const isVisible = !allowed || allowed.has(zone.dataset.term);
+
+      zone.style.display = isVisible ? "" : "none";
+    });
+  entity.host.style.setProperty(
+    "--auth-layout-icon-count",
+    String(Math.max(visibleTiles.length, 2)),
+  );
+
+  const focusVisible = visibleTiles.some(
+    (tile) => tile.dataset.term === entity.host.dataset.stackFocus,
+  );
+
+  if (!focusVisible) {
+    delete entity.host.dataset.stackFocus;
+  }
+
+  entity.tiles = visibleTiles;
+  entity.models.forEach((model) => {
+    entity.scene.remove(model);
+    disposeObject(model);
+  });
+  entity.models = createStackModels(entity.tiles, entity.manifest, entity.scene);
+  ensureFrameLoop();
+}
+
+function initStack(stack, manifest) {
+  const allTiles = Array.from(stack.querySelectorAll("[data-model-icon-3d]"));
+
+  if (!allTiles.length) {
     return;
   }
 
@@ -845,25 +923,61 @@ function initStack(stack, manifest) {
   const renderer = createEntityRenderer(canvas);
   const scene = createScene(CONFIG.light.auth, renderer, "auth");
   const camera = createCamera();
-  const models = createStackModels(tiles, manifest, scene);
   const entity = {
     type: "stack",
     host: stack,
-    tiles,
+    allTiles,
+    tiles: allTiles,
     manifest,
     canvas,
     renderer,
     scene,
     camera,
-    models,
+    models: [],
     viewHeight: CONFIG.view.auth.height,
     isReady: false,
     visible: true,
   };
 
   stack.prepend(canvas);
+  applyStackIconSet(
+    entity,
+    parseStackIconTerms(stack.getAttribute("data-model-icon-3d-icons")),
+  );
   initIntersection(entity, stack);
   entities.add(entity);
+}
+
+function initStackIconControls() {
+  const controls = Array.from(
+    document.querySelectorAll("[data-model-icon-3d-icon]"),
+  );
+  const stacks = Array.from(entities).filter(
+    (entity) => entity.type === "stack",
+  );
+
+  if (!controls.length || !stacks.length) {
+    return;
+  }
+
+  const shownTerms = new Set(
+    stacks[0].tiles.map((tile) => tile.dataset.term),
+  );
+
+  controls.forEach((control) => {
+    control.checked = shownTerms.has(
+      control.getAttribute("data-model-icon-3d-icon"),
+    );
+    control.addEventListener("change", () => {
+      const terms = controls
+        .filter((item) => item.checked)
+        .map((item) => item.getAttribute("data-model-icon-3d-icon"));
+
+      stacks.forEach((entity) => {
+        applyStackIconSet(entity, terms);
+      });
+    });
+  });
 }
 
 function updateEntity(entity, time) {
@@ -874,7 +988,7 @@ function updateEntity(entity, time) {
 
   updateMaterialColors(entity.model, entity.host, "var(--m__bg-surface)");
 
-  if (entity.mode === "demo") {
+  if (entity.mode === "demo" || entity.mode === "home") {
     updateDemoRotation(entity);
     return;
   }
@@ -930,7 +1044,15 @@ function getLightConfig(mode) {
 }
 
 function getViewConfig(mode) {
-  return mode === "auth" ? CONFIG.view.auth : CONFIG.view.pricing;
+  if (mode === "auth") {
+    return CONFIG.view.auth;
+  }
+
+  if (mode === "home") {
+    return CONFIG.view.home;
+  }
+
+  return CONFIG.view.pricing;
 }
 
 function updateStackEntity(entity) {
@@ -948,10 +1070,15 @@ function updateStackEntity(entity) {
     ? (rect.width - tileRect.width) * worldPerPx / (entity.models.length - 1)
     : 0;
   const viewWidth = entity.viewHeight * (rect.width / Math.max(rect.height, 1));
-  const activeTerm = entity.host.dataset.stackFocus || entity.models[0].userData.term;
+  const activeTerm = entity.host.dataset.stackFocus || null;
+
+  // Returning to rest after losing hover eases ~1.5x slower than moving
+  // into the active state, so the settle reads calmer than the pickup.
+  const RETURN_EASE = 1 / 1.5;
 
   entity.models.forEach((model, index) => {
     const isActive = model.userData.term === activeTerm;
+    const ease = isActive ? 1 : RETURN_EASE;
     const targetScale = (tileWorld / CONFIG.authTile.size)
       * CONFIG.view.auth.scale
       * (isActive ? CONFIG.view.auth.activeScale : 1);
@@ -959,19 +1086,19 @@ function updateStackEntity(entity) {
     const targetY = isActive ? 1.3 : 0;
     const targetZ = isActive ? CONFIG.view.auth.activeLift : index * 0.08;
 
-    model.position.x += (targetX - model.position.x) * 0.18;
-    model.position.y += (targetY - model.position.y) * 0.18;
-    model.position.z += (targetZ - model.position.z) * 0.22;
-    model.scale.x += (targetScale - model.scale.x) * 0.18;
-    model.scale.y += (targetScale - model.scale.y) * 0.18;
-    model.scale.z += (targetScale - model.scale.z) * 0.18;
+    model.position.x += (targetX - model.position.x) * 0.18 * ease;
+    model.position.y += (targetY - model.position.y) * 0.18 * ease;
+    model.position.z += (targetZ - model.position.z) * 0.22 * ease;
+    model.scale.x += (targetScale - model.scale.x) * 0.18 * ease;
+    model.scale.y += (targetScale - model.scale.y) * 0.18 * ease;
+    model.scale.z += (targetScale - model.scale.z) * 0.18 * ease;
     const targetRotation = isActive
       ? CONFIG.view.auth.activeRotation
       : CONFIG.view.auth.baseRotation;
 
-    model.rotation.x += (targetRotation.x - model.rotation.x) * 0.16;
-    model.rotation.y += (targetRotation.y - model.rotation.y) * 0.16;
-    model.rotation.z += (targetRotation.z - model.rotation.z) * 0.16;
+    model.rotation.x += (targetRotation.x - model.rotation.x) * 0.16 * ease;
+    model.rotation.y += (targetRotation.y - model.rotation.y) * 0.16 * ease;
+    model.rotation.z += (targetRotation.z - model.rotation.z) * 0.16 * ease;
     updateMaterialColors(
       model,
       model.userData.host,
@@ -1020,12 +1147,29 @@ function clamp(value, min, max) {
 
 function getRenderViewHeight(entity, canvasRect) {
   if (entity.type !== "stack") {
+    if (entity.mode === "home") {
+      // The home canvas bleeds past the host square into the grid gaps, so
+      // reproject: viewHeight is defined per host box, the camera needs it
+      // per canvas. This keeps the front-view tile equal to the host square
+      // while the bleed area stays as rotation headroom.
+      const hostRect = entity.host.getBoundingClientRect();
+
+      return entity.viewHeight
+        * (canvasRect.height / Math.max(hostRect.height, 1));
+    }
+
     return entity.viewHeight;
   }
 
   const hostRect = entity.host.getBoundingClientRect();
+  // Zoom only affects the camera mapping, not the DOM-derived model sizing
+  // in updateStackEntity, so it scales the whole scene projection instead of
+  // being compensated by the per-model scale targets.
+  const zoom = CONFIG.view.auth.zoom > 0 ? CONFIG.view.auth.zoom : 1;
 
-  return entity.viewHeight * (canvasRect.height / Math.max(hostRect.height, 1));
+  return entity.viewHeight
+    * (canvasRect.height / Math.max(hostRect.height, 1))
+    / zoom;
 }
 
 function initSettingsControls() {
@@ -1101,6 +1245,10 @@ function applyLiveSetting(path) {
       entity.viewHeight = entity.type === "stack"
         ? CONFIG.view.auth.height
         : getViewConfig(entity.mode).height;
+
+      if (entity.mode === "home" && entity.model) {
+        entity.model.scale.setScalar(CONFIG.view.home.scale || 1);
+      }
     });
 
     return true;
@@ -1227,6 +1375,7 @@ function initModelIcons() {
       });
 
       initSettingsControls();
+      initStackIconControls();
       ensureFrameLoop();
     })
     .catch((error) => {
@@ -1235,3 +1384,17 @@ function initModelIcons() {
 }
 
 initModelIcons();
+
+// Shared building blocks for page-specific tools (see icon-studio.js).
+export {
+  CONFIG,
+  clamp,
+  createCamera,
+  createEntityRenderer,
+  createIconModel,
+  createScene,
+  disposeObject,
+  getManifest,
+  resizeCamera,
+  updateSceneLight,
+};

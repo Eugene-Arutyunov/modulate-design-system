@@ -62,3 +62,44 @@ white becomes `var(--m__bg-surface)` so spacer shapes match the tile face.
 Pages include `service/icon-3d-importmap.html` before loading
 `/assets/service/icon-3d/model-icon-3d.js`. Markup keeps the original SVG inside
 the tile as fallback; the renderer hides it only after a canvas is ready.
+
+## Auth stack icon set
+
+The auth icon stack (`includes/prototypes/auth-layout-models-panel.html`)
+lists every available tile in the markup. The `data-model-icon-3d-icons`
+attribute on the stack element is the default-set config: a space- or
+comma-separated list of `data-term` values. Icons missing from the list are
+hidden (tile, hover zone, and 3D model), and `--auth-layout-icon-count` is
+updated so the overlap stays correct. Removing the attribute shows all icons.
+
+The settings panel lives only on the sandbox page `/auth/3d-icons-sandbox/`
+(`prototypes/platform/auth/3d-icons-sandbox.html`, include
+`includes/prototypes/auth-icon-3d-settings.html`); the other auth pages show
+the configured result without controls. The panel holds the auth-specific
+render controls plus per-icon checkboxes (`data-model-icon-3d-icon`) that
+toggle the set live. The panel component is `.icon-3d-settings`
+(`styles/components/model-icon-3d.css`); the sandbox adds
+`.icon-3d-settings--left`.
+
+## Icon Studio
+
+`/icon-studio/` (`service/icon-studio.html`,
+`assets/service/icon-3d/icon-studio.js`, styles
+`styles/service/icon-studio.css`) is a screenshot workbench: one icon on a
+full-width stage with adjustable aspect (2:1–5:4) and a background from the
+base palette. Controls sit in-flow above the stage: icon, size, horizontal
+position, rotation X/Y/Z, light (angle and height on a 2D pad, Z and
+intensities as sliders), shadow opacity, and color bleed. Tile and glyph
+geometry are not editable there. Moving the cursor over the stage orbits the
+icon; a click captures the pose as the new base rotation and freezes tracking
+until the pointer leaves the stage. An optional oscillating rotation around
+one axis (speed and amplitude, off by default) is available for animation
+checks. The module imports shared blocks exported from `model-icon-3d.js`.
+
+## Home rows
+
+The 6-per-row 3D grids on the design-system home page and `/blog/icons/` use
+`data-model-icon-3d-mode="home"`: the camera scale anchors to the host square
+(`view.home.height`, 38 = exact tile match), and the canvas bleeds into the
+grid gaps as rotation headroom (`.docs-icon-row--3d`,
+`styles/service/ds-main-page.css`).

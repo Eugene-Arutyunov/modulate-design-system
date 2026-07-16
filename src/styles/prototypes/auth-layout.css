@@ -36,12 +36,12 @@
 
 .auth-layout__promo {
   width: 100%;
-  max-width: 20rem;
+  max-width: 24rem;
   color: inherit;
 
   & .auth-layout__promo-heading {
-    margin: 0 0 var(--m__spacer-m);
-    font-size: 1.6rem;
+    margin: 0 0 var(--m__spacer-s);
+    font-size: 2rem;
     font-weight: var(--m__font-weight-heavy);
     line-height: 1.2;
     color: inherit;
@@ -66,7 +66,7 @@
 }
 
 .auth-layout__icon-stack {
-  --auth-layout-icon-count: 8;
+  --auth-layout-icon-count: 11;
   --auth-layout-icon-size: 4.45em;
   --auth-layout-icon-overlap: calc(
     (var(--auth-layout-icon-count) * var(--auth-layout-icon-size) - 100%) /
@@ -139,34 +139,46 @@ a.auth-layout__icon-hover-zone {
   }
 
   &[data-term="velma"] {
-    z-index: 8;
+    z-index: 11;
   }
 
   &[data-term="transcription"] {
-    z-index: 7;
+    z-index: 10;
   }
 
   &[data-term="deepfake-detection"] {
-    z-index: 6;
+    z-index: 9;
   }
 
   &[data-term="pii-phi-redaction"] {
-    z-index: 5;
+    z-index: 8;
   }
 
   &[data-term="music-speech-detection"] {
-    z-index: 4;
+    z-index: 7;
   }
 
   &[data-term="speech-to-text"] {
-    z-index: 3;
+    z-index: 6;
   }
 
   &[data-term="ai-music"] {
-    z-index: 2;
+    z-index: 5;
   }
 
   &[data-term="language"] {
+    z-index: 4;
+  }
+
+  &[data-term="emotion-detection"] {
+    z-index: 3;
+  }
+
+  &[data-term="accent-identification"] {
+    z-index: 2;
+  }
+
+  &[data-term="voice-match"] {
     z-index: 1;
   }
 
@@ -737,13 +749,6 @@ a.auth-layout__icon-hover-zone {
   }
 }
 
-.auth-layout__icon-stack:not([data-stack-focus]) {
-  & .light .auth-layout__icon-tile[data-term="velma"] {
-    background-color: var(--auth-layout-icon-bg-active);
-    transition-duration: var(--m__duration-instant);
-  }
-}
-
 .auth-layout__icon-stack[data-stack-focus="velma"] {
   & .light .auth-layout__icon-tile[data-term="velma"] {
     background-color: var(--auth-layout-icon-bg-active);
@@ -829,11 +834,14 @@ a.auth-layout__icon-hover-zone {
   display: grid;
   margin-bottom: var(--m__spacer-s);
 
-  & > .auth-layout__promo-caption {
+  & > .auth-layout__promo-caption,
+  & > .auth-layout__promo-links {
     grid-area: 1 / 1;
   }
 }
 
+/* Sits in the same grid cell as the captions: visible at rest, replaced by
+   the hovered caption without a transition (only the 3D graphic animates). */
 .auth-layout__promo-links {
   display: flex;
   flex-wrap: wrap;
@@ -907,13 +915,25 @@ a.auth-layout__icon-hover-zone {
 .auth-layout__promo:has(.auth-layout__icon-stack[data-stack-focus="ai-music"])
   .auth-layout__promo-caption[data-term="ai-music"],
 .auth-layout__promo:has(.auth-layout__icon-stack[data-stack-focus="language"])
-  .auth-layout__promo-caption[data-term="language"] {
+  .auth-layout__promo-caption[data-term="language"],
+.auth-layout__promo:has(
+    .auth-layout__icon-stack[data-stack-focus="emotion-detection"]
+  )
+  .auth-layout__promo-caption[data-term="emotion-detection"],
+.auth-layout__promo:has(
+    .auth-layout__icon-stack[data-stack-focus="accent-identification"]
+  )
+  .auth-layout__promo-caption[data-term="accent-identification"],
+.auth-layout__promo:has(
+    .auth-layout__icon-stack[data-stack-focus="voice-match"]
+  )
+  .auth-layout__promo-caption[data-term="voice-match"] {
   visibility: visible;
 }
 
-.auth-layout__promo:has(.auth-layout__icon-stack:not([data-stack-focus]))
-  .auth-layout__promo-caption[data-term="velma"] {
-  visibility: visible;
+.auth-layout__promo:has(.auth-layout__icon-stack[data-stack-focus])
+  .auth-layout__promo-links {
+  visibility: hidden;
 }
 
 .auth-layout__header.prototype-header {

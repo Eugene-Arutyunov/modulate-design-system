@@ -36,123 +36,68 @@
   }
 }
 
-.model-icons-3d-demo {
-  padding-right: min(23rem, 34vw);
+/* Floating panel with live render settings. Fixed to the right edge by
+   default; the --left variant pins it to the left edge above the auth form
+   on /auth/3d-icons-sandbox/. */
+.icon-3d-settings {
+  position: fixed;
+  top: var(--m__spacer-s);
+  right: var(--m__spacer-s);
+  z-index: 20;
+  width: min(22rem, calc(100vw - var(--m__spacer-s) * 2));
+  max-height: calc(100vh - var(--m__spacer-s) * 2);
+  overflow: auto;
+  padding: 0.45rem;
+  border: 1px solid var(--m__border);
+  background-color: var(--m__bg-surface);
+  box-shadow: 0 1rem 3rem color-mix(in srgb, var(--m__text) 12%, transparent);
 
-  & .model-icons-3d-demo__intro {
-    max-width: 44rem;
-  }
+  /* Login page: the panel takes the whole left half of the viewport, with
+     the icon checkboxes in a narrow first column and the render settings in
+     two wide columns (20/40/40). */
+  &.icon-3d-settings--left {
+    right: auto;
+    left: var(--m__spacer-s);
+    bottom: var(--m__spacer-s);
+    width: calc(50vw - var(--m__spacer-s) * 2);
+    max-height: none;
 
-  & .model-icons-3d-demo__section-header {
-    max-width: 44rem;
-    margin-bottom: var(--m__space-s);
+    & .icon-3d-settings__grid {
+      grid-template-columns: 20fr 40fr 40fr;
+      align-items: start;
 
-    & h2 {
-      margin: 0 0 var(--m__space-xs);
-    }
-
-    & p {
-      margin: 0;
-      color: var(--m__text-caption);
-    }
-  }
-
-  & .model-icons-3d-demo__settings {
-    position: fixed;
-    top: var(--m__space-s);
-    right: var(--m__space-s);
-    z-index: 20;
-    width: min(22rem, calc(100vw - var(--m__space-s) * 2));
-    max-height: calc(100vh - var(--m__space-s) * 2);
-    overflow: auto;
-    padding: 0.45rem;
-    border: 1px solid var(--m__border);
-    background-color: var(--m__bg-surface);
-    box-shadow: 0 1rem 3rem color-mix(in srgb, var(--m__text) 12%, transparent);
-  }
-
-  & .model-icons-3d-demo__settings-intro {
-    margin-bottom: var(--m__space-xs);
-
-    & h2 {
-      margin: 0;
-      font-size: var(--m__font-size-m);
-    }
-
-    & p {
-      display: none;
+      @media (width < 960px) {
+        grid-template-columns: 1fr;
+      }
     }
   }
 
-  & .model-icons-3d-demo__settings-tabs {
+  & .icon-3d-settings__col {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.2rem;
-    margin-bottom: 0.35rem;
-    padding: 0.2rem;
-    border-radius: var(--m__radius-s);
-    background-color: var(--m__bg);
+    gap: 0.35rem;
   }
 
-  & .model-icons-3d-demo__settings-tabs input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  & .model-icons-3d-demo__settings-tabs label {
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 0.35rem 0.5rem;
-    border-radius: calc(var(--m__radius-s) - 0.1rem);
-    font-size: var(--m__font-size-xs);
-    color: var(--m__text-caption);
-    cursor: pointer;
-  }
-
-  & .model-icons-3d-demo__settings-tabs input:checked + label {
-    background-color: var(--m__bg-surface);
-    color: var(--m__text);
-    box-shadow: 0 0 0 1px var(--m__border);
-  }
-
-  & .model-icons-3d-demo__settings-grid {
+  & .icon-3d-settings__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.35rem;
   }
 
-  &:has(#model-icons-3d-settings-pricing:checked)
-    .model-icons-3d-demo__settings-grid
-    fieldset:nth-of-type(n + 5):not(:nth-of-type(9)) {
-    display: none;
-  }
-
-  &:has(#model-icons-3d-settings-auth:checked)
-    .model-icons-3d-demo__settings-grid
-    fieldset:nth-of-type(-n + 4),
-  &:has(#model-icons-3d-settings-auth:checked)
-    .model-icons-3d-demo__settings-grid
-    fieldset:nth-of-type(9) {
-    display: none;
-  }
-
-  & .model-icons-3d-demo__settings fieldset {
+  & fieldset {
     margin: 0;
     padding: 0.35rem;
     border: 1px solid var(--m__border);
     border-radius: var(--m__radius-s);
   }
 
-  & .model-icons-3d-demo__settings legend {
+  & legend {
     padding: 0 0.2rem;
     font-size: var(--m__font-size-xs);
     line-height: 1;
     font-weight: var(--m__font-weight-bold);
   }
 
-  & .model-icons-3d-demo__reset {
+  & .icon-3d-settings__reset {
     display: block;
     margin: -0.1rem 0 0.3rem auto;
     padding: 0.15rem 0.35rem;
@@ -166,11 +111,11 @@
     cursor: pointer;
   }
 
-  & .model-icons-3d-demo__reset:hover {
+  & .icon-3d-settings__reset:hover {
     color: var(--m__text);
   }
 
-  & .model-icons-3d-demo__settings fieldset label {
+  & fieldset label {
     display: grid;
     grid-template-columns: minmax(5.6rem, 0.9fr) minmax(5rem, 1fr) 2.4rem;
     gap: 0.35rem;
@@ -184,11 +129,21 @@
     }
   }
 
-  & .model-icons-3d-demo__settings input {
+  & fieldset label.icon-3d-settings__icon-toggle {
+    display: flex;
+    gap: 0.35rem;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--m__text);
+    }
+  }
+
+  & input {
     min-width: 0;
   }
 
-  & .model-icons-3d-demo__settings input[type="text"] {
+  & input[type="text"] {
     width: 100%;
     padding: 0.25em 0.4em;
     border: 1px solid var(--m__border);
@@ -198,7 +153,7 @@
     font: inherit;
   }
 
-  & .model-icons-3d-demo__settings output {
+  & output {
     overflow: hidden;
     font-family: var(--m__font-family-mono);
     font-size: 0.72rem;
@@ -207,82 +162,10 @@
     white-space: nowrap;
   }
 
-  & .model-icons-3d-demo__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--m__space-s);
-    margin-bottom: var(--m__default-margin-bottom);
-  }
-
-  & .model-icons-3d-demo__card {
-    padding: var(--m__space-s);
-    background-color: transparent;
-  }
-
-  & .model-icons-3d-demo__slot {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 14rem;
-    aspect-ratio: 1;
-    margin: 0 auto var(--m__space-xs);
-    padding: 0;
-    background-color: transparent;
-    color: var(--m__text);
-  }
-
-  & .model-icons-3d-demo__slot svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    fill: currentColor;
-  }
-
-  & .model-icons-3d-demo__label {
-    display: block;
-    font-size: var(--m__font-size-s);
-    text-align: center;
-    color: var(--m__text-caption);
-  }
-
-  & .model-icons-3d-demo__auth-preview {
-    width: 100%;
-    overflow: visible;
-  }
-
-  & .model-icons-3d-demo__auth-preview .auth-layout__right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 18.75rem;
-    width: 100%;
-    padding: var(--m__space-m);
-    border-radius: var(--m__radius-l);
-    overflow: visible;
-    background-color: var(--m__bg);
-    color: var(--m__text);
-  }
-
-  & .model-icons-3d-demo__auth-preview .auth-layout__promo {
-    max-width: 24rem;
-    width: 100%;
-    margin: 0 auto;
-    overflow: visible;
-  }
-
-  & .model-icons-3d-demo__auth-preview .auth-layout__icon-stack {
-    --auth-layout-icon-count: 11;
-
-    margin-bottom: 0;
-  }
-
   @media (width < 960px) {
-    padding-right: 0;
-
-    & .model-icons-3d-demo__settings {
-      position: static;
-      width: auto;
-      max-height: none;
-    }
+    position: static;
+    width: auto;
+    max-height: none;
   }
 }
+

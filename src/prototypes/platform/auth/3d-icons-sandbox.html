@@ -1,0 +1,61 @@
+---
+pageTitle: 3D Icons Sandbox
+permalink: /auth/3d-icons-sandbox/
+hideNavIsland: true
+---
+
+{% extends 'prototypes/auth-layout.html' %} {% block content %}
+
+<form class="auth-form" action="#" method="post" novalidate>
+  <h1>Sign in</h1>
+  <div class="m__space XS"></div>
+
+  <div class="m__textfield M">
+    <label for="login-email">Email</label>
+    <input
+      type="email"
+      id="login-email"
+      name="email"
+      autocomplete="email"
+      aria-describedby="auth-tf-email-invalid-error"
+    />
+    <div class="m__textfield__message" id="auth-tf-email-invalid-error">
+      <span>Enter a valid email address</span>
+    </div>
+  </div>
+
+  <div class="m__textfield M">
+    <div class="auth-form__textfield-header">
+      <label for="login-password">Password</label>
+      <a href="/auth/reset-password/">Forgot password?</a>
+    </div>
+    <input
+      type="password"
+      id="login-password"
+      name="password"
+      autocomplete="current-password"
+    />
+  </div>
+
+  <div class="auth-form__actions">
+    <a
+      href="/auth/org-select/"
+      class="m__button-primary M"
+      data-prototype-auth-sign-in
+    >
+      Sign in
+    </a>
+  </div>
+
+  <div class="m__space XS"></div>
+
+  <a href="/auth/signup/" class="auth-form__link">Create account</a>
+
+  <div class="m__space M"></div>
+
+  {% include 'prototypes/auth-oauth-buttons.html' %}
+</form>
+
+{% include 'prototypes/auth-icon-3d-settings.html' %}
+
+{% endblock %}
