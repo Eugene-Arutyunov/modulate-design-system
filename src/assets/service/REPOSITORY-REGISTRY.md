@@ -10,23 +10,22 @@ Index of notable functional blocks for developer navigation. Add a short descrip
 **Individual posts:**
 
 - `src/blog/square-element.html` → `/blog/square-element/` — December 2025 — There has to be a square element (moved from the modulate-design repo; image: `src/assets/images/square-element.png`)
-- `src/blog/layers.html` → `/blog/layers/` — April 6, 2026 — Components as Reference Specimens
+- `src/blog/layers.html` → `/blog/layers/` — April 6, 2026 — What the Design System Is Made Of (table of the five layers with live token and component examples, `.layers-table` in `blog.css`)
 - `src/blog/page-composition.html` → `/blog/page-composition/` — April 7, 2026 — The Page Composition Rule
 - `src/blog/layouts.html` → `/blog/layouts/` — April 13, 2026 — Time as the Main Axis
 - `src/blog/mobile.html` → `/blog/mobile/` — April 23, 2026 — Mobile Responsiveness Out of the Box
 - `src/blog/type-scale.html` → `/blog/type-scale/` — May 19, 2026 — Adjusting the Type Scale
 - `src/blog/graphic-style.html` → `/blog/graphic-style/` — June 8, 2026 — Why Have Your Own Graphic Style
-- `src/blog/charts.html` → `/blog/charts/` — June 9, 2026 — Chart.js Integration
 - `src/blog/color.html` → `/blog/color/` — June 18, 2026 — Color (embeds the palette-lamp figure)
 - `src/blog/icons.html` → `/blog/icons/` — July 7, 2026 — Icons
 - `src/blog/fingerprints.html` → `/blog/fingerprints/` — placeholder page, no date or text yet
 
 **Includes:** `src/includes/service/post-meta.html` — the meta line above each post title: “← Blog” link, author(s) with round photos, date (`postDate` Nunjucks variable; omitted on the Fingerprints placeholder; optional `postCoAuthor` + `postCoAuthorPhoto` add a second author).  
 **Author photos:** `src/assets/images/authors/` (square JPEG).  
-**Styles:** `src/styles/service/blog.css` — `.post-meta` (meta line, `.post-meta__photo` round avatar), `.posts-list` (plain column of `.posts-list__item` rows on the index: link with a regular series number and bold title, plus a `.posts-list__caption` date or “soon”), `.posts-list-col-title` (uppercase semi-mono column titles, after `models-nav__col-title`, no rule line), `.read-next` (full-width `m__button-primary-outline` at the end of a post), `.navbar-blog-row` (homepage row that places the blog link next to `ids-navbar`).  
+**Styles:** `src/styles/service/blog.css` — `.post-meta` (meta line, `.post-meta__photo` round avatar), `.posts-list` (plain column of `.posts-list__item` rows on the index: bold title link with a `.posts-list__caption` date or “Soon” running inline right after the title), `.posts-list-col-title` (uppercase semi-mono column titles, after `models-nav__col-title`, no rule line), `.layers-table` (layers post: token stacks and live components inside table cells), `.read-next` (full-width `m__button-primary-outline` at the end of a post), `.navbar-blog-row` (homepage row that places the blog link next to `ids-navbar`).  
 **Navigation:** linked from `src/includes/service/nav-island.html` as “Blog”, from the homepage next to `ids-navbar`, and from the docs header (`src/includes/service/header.html` renders “Design System” and “Blog” on every DS page including the homepage; the current page is plain text, not a link).
 
-Blog for design system development history. Each post is a standalone page extending `service/layout.html`, with the post-meta include above a `h1.loud` title (Gothic display font, same as the design system main page); the spacer before the meta line is `m__space XL` everywhere, matching the homepage (the header itself carries no bottom margin). Posts end with a “Read next” full-width outline button (`a.read-next`: regular-weight label, bold post title) — the next post in the series, or the next by date for standalone posts (the Icons and Fingerprints posts have none yet). The index (titled “Design at Modulate”, `h1.loud`) groups posts into three columns (temporary launch navigation, forward chronological order): System Foundations Series and Graphic Style Series (numbered entries, two unlinked “soon” ones), and Recent posts (Fingerprints pinned on top). Dates are short captions in the same row (`6 Apr`; the year appears only when it isn’t the current one). The Charts post contains the Chart.js integration documentation moved from `src/index.html`.
+Blog for design system development history. Each post is a standalone page extending `service/layout.html`, with the post-meta include above a `h1.loud` title (Gothic display font, same as the design system main page); the spacer before the meta line is `m__space XL` everywhere, matching the homepage (the header itself carries no bottom margin). Posts end with a “Read next” full-width outline button (`a.read-next`: regular-weight label, bold post title) — the next post in the series, or the next by date for standalone posts (the Icons and Fingerprints posts have none yet). The index (titled “Design at Modulate”, `h1.loud`) groups posts into three columns (temporary launch navigation, forward chronological order): System Foundations Series and Graphic Style Series, and Recent posts. Unpublished posts (Typography, “I’m Not a Designer”, Fingerprints) are unlinked with a “Soon” caption. Dates are short captions running inline after the title (`6 Apr`; the year appears only when it isn’t the current one).
 
 ---
 
@@ -370,6 +369,14 @@ Small inline label for metadata. `.m__tag` shows a bordered outline using `curre
 Three charts on the dashboard overview page: Credit Balance Over Time (line), Usage by Model (stacked bar), Requests by Status (stacked bar). Each chart has a "Last 7 days / 30 days" radio toggle that filters data client-side. The script fetches the full JSON data file at runtime, filters by selected period, and renders Chart.js canvases. Chart instances are stored and destroyed on re-render. Theme-aware: reads CSS custom properties for grid and label colors. Date filtering uses `fetchedAt` from the JSON as the anchor so mock data remains visible regardless of the current date.
 
 Hover interaction uses `interaction: { mode: "index", intersect: false }` on all charts — the active zone covers the full chart height at each day position. On the line chart, `pointHoverRadius: 5` shows a dot on hover; bar charts use Chart.js default column highlighting. A `<p class="chart-status-bar">` element below each chart shows the date and dataset values for the hovered position via `mousemove` / `mouseleave` listeners attached once per canvas via `attachStatusBar`.
+
+## Chart.js integration page
+
+**Page:** `src/charts.html` → `/charts/`
+
+Documentation of the opinionated Chart.js defaults with two live sample widgets and footnoted implementation details. Moved out of the blog (formerly `/blog/charts/`); linked from the Charts section of `src/index.html`.
+
+---
 
 ## Design-system chart samples
 

@@ -1,24 +1,103 @@
-{% extends 'service/layout.html' %} {% set pageTitle = 'Components as Reference
-Specimens — Modulate Design System' %} {% block content %}
+{% extends 'service/layout.html' %} {% set pageTitle = 'What the Design System
+Is Made Of — Modulate Design System' %} {% block content %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <div class="m__text-width">
     {% set postDate = 'April 6, 2026' %} {% include 'service/post-meta.html' %}
-    <h1 class="loud">Components as Reference Specimens</h1>
+    <h1 class="loud">What the Design System Is Made Of</h1>
 
     <p>
       The design system is code in a repository. At the top level, there are
       five layers:
     </p>
 
-    <ul>
-      <li>Service functions</li>
-      <li>Layouts</li>
-      <li>Prototype</li>
-      <li>Components</li>
-      <li>Tokens</li>
-    </ul>
+    <table class="layers-table">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Service functions</td>
+          <td><a href="/ui/">UI Scheme</a></td>
+        </tr>
+        <tr>
+          <td>Layouts</td>
+          <td>
+            <a href="/auth/login/">authorization</a>,
+            <a href="/pricing/">pricing page</a>,
+            <a href="/dashboard/home/">dashboard</a>
+          </td>
+        </tr>
+        <tr>
+          <td>Prototype</td>
+          <td><a href="/playground/velma/">Playground</a></td>
+        </tr>
+        <tr>
+          <td>Tokens</td>
+          <td>
+            <div class="layers-table__tokens">
+              <div class="layers-table__token-stack">
+                <span
+                  class="layers-table__token-color"
+                  style="
+                    background-color: var(--m__color-purple-500);
+                    color: var(--m__color-white);
+                  "
+                  ><code>purple-500</code></span
+                >
+                <span
+                  class="layers-table__token-color"
+                  style="
+                    background-color: var(--m__color-slate-500);
+                    color: var(--m__color-white);
+                  "
+                  ><code>slate-500</code></span
+                >
+                <span
+                  class="layers-table__token-color"
+                  style="
+                    background-color: var(--m__color-purple-300);
+                    color: var(--m__color-gray-950);
+                  "
+                  ><code>purple-300</code></span
+                >
+              </div>
+              <div class="layers-table__token-stack">
+                <span class="layers-table__token-spacer">
+                  <span style="height: var(--m__spacer-s)"></span>
+                  <code>spacer-s</code>
+                </span>
+                <span class="layers-table__token-spacer">
+                  <span style="height: var(--m__spacer-m)"></span>
+                  <code>spacer-m</code>
+                </span>
+                <span class="layers-table__token-spacer">
+                  <span style="height: var(--m__spacer-l)"></span>
+                  <code>spacer-l</code>
+                </span>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Components</td>
+          <td>
+            <div class="layers-table__components">
+              <button class="m__button-primary">Button</button>
+              <label class="m__toggle-primary">
+                <input type="checkbox" checked />
+                Toggle
+              </label>
+              <span class="m__tag">Tag</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <p>
       The core of the system is the combination of components and tokens. This
@@ -39,10 +118,9 @@ Specimens — Modulate Design System' %} {% block content %}
       prescription.
     </p>
 
-    <p>
-      The concreteness of tokens drives speed and reliability.<br />
-      The abstraction of components enables quality.
-    </p>
+    <p>The concreteness of tokens drives speed and reliability.</p>
+
+    <p>The abstraction of components enables quality.</p>
   </div>
   <div class="m__space M"></div>
   <div class="m__text-width">

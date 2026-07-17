@@ -11,7 +11,7 @@
   & .post-meta__author {
     display: inline-flex;
     align-items: center;
-    gap: var(--m__gap-xs2);
+    gap: var(--m__gap-xxs);
   }
 
   & .post-meta__photo {
@@ -52,19 +52,75 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--m__gap-xs2);
+  gap: var(--m__gap-xs);
 
   & .posts-list__item {
-    display: flex;
-    align-items: baseline;
-    gap: var(--m__gap-xs2);
+    display: block;
   }
 }
 
+/* Date runs inline right after the post title */
 .posts-list__caption {
+  margin-left: var(--m__gap-xxxs);
   font-size: var(--m__font-size-s);
   color: var(--m__text-caption);
   white-space: nowrap;
+}
+
+/* Layers post: table of system layers with live token and component examples */
+.layers-table {
+  & td:first-child {
+    width: 40%;
+  }
+
+  & .layers-table__tokens {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--m__gap-xl);
+  }
+
+  & .layers-table__token-stack {
+    flex: 1;
+    max-width: 11rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--m__border-width-s);
+  }
+
+  & .layers-table__token-color {
+    display: block;
+    padding: 0.3rem 0.5rem;
+  }
+
+  & .layers-table__token-spacer {
+    display: flex;
+    align-items: center;
+    gap: var(--m__gap-xs);
+
+    & > span {
+      flex: 1;
+      background-color: color-mix(in srgb, var(--m__text) 12%, transparent);
+    }
+  }
+
+  & code {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+  }
+
+  & .layers-table__token-spacer code {
+    color: var(--m__text-caption);
+  }
+
+  & .layers-table__components {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--m__gap-xl);
+  }
 }
 
 /* Read next: full-width outline button at the end of a post.
