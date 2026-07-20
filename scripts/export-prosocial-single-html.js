@@ -4,7 +4,7 @@ const { execSync } = require("child_process");
 
 const ROOT_DIR = path.resolve(__dirname, "..");
 const BUILD_DIR = path.join(ROOT_DIR, "_site");
-const HTML_INPUT = path.join(BUILD_DIR, "online-docs", "prosocial", "index.html");
+const HTML_INPUT = path.join(BUILD_DIR, "tools", "online-docs", "prosocial", "index.html");
 const CSS_INPUT = path.join(BUILD_DIR, "bundle.css");
 const FONTS_SOURCE_DIR = path.join(ROOT_DIR, "src", "assets", "fonts");
 const OUTPUT_DIR = path.join(ROOT_DIR, "dist-publish", "prosocial-single");

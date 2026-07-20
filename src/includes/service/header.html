@@ -3,13 +3,21 @@
   <header class="header">
     <nav class="nav">
       {% if page.url == '/' %}
+      <span class="nav-link">Home</span>
+      {% else %}
+      <a href="/" class="nav-link">Home</a>
+      {% endif %} {% if page.url == '/design-system/' %}
       <span class="nav-link">Design System</span>
       {% else %}
-      <a href="/" class="nav-link">Design System</a>
+      <a href="/design-system/" class="nav-link">Design System</a>
       {% endif %} {% if page.url == '/blog/' %}
       <span class="nav-link">Blog</span>
       {% else %}
       <a href="/blog/" class="nav-link">Blog</a>
+      {% endif %} {% if page.url == '/tools/' %}
+      <span class="nav-link">Tools</span>
+      {% else %}
+      <a href="/tools/" class="nav-link">Tools</a>
       {% endif %}
     </nav>
   </header>

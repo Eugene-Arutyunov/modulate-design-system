@@ -1,0 +1,174 @@
+/* Home page (`src/index.html`) — promo grid of teaser cards linking into
+   the site sections. A card is either one big link (an <a> card or a
+   [data-promo-link] block with a unified click zone) or a plain card
+   holding several independent links (the posts card). */
+
+.home-promo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--m__gap-xl);
+
+  @media (width < 767px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  & .home-promo__card {
+    display: block;
+    overflow: hidden;
+    padding: var(--m__widget-padding);
+    border-radius: var(--m__widget-radius);
+    background-color: var(--m__bg-surface);
+    color: var(--m__text);
+    text-decoration: none;
+  }
+
+  & .home-promo__card--wide {
+    grid-column: 1 / -1;
+  }
+
+  /* One-big-link cards: the unified hover cue is a background shift;
+     inner elements keep their own hover styles but not their own clicks. */
+  & .home-promo__card--link {
+    cursor: pointer;
+    transition: background-color var(--m__duration-base) var(--m__easing-base);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--m__bg-surface) 88%, white);
+      transition-duration: var(--m__duration-instant);
+    }
+  }
+
+  /* Palette teaser: the card is the palette grid itself, same composition
+     as the Icon Studio background dropdown — flush plates, 4 per row,
+     token names written small inside. Populated by home-promo.js. */
+  & .home-promo__card--palette {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    aspect-ratio: 5 / 4;
+    padding: 0;
+  }
+
+  & .home-promo__palette-color {
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    padding: 0.25rem 0.35rem;
+    font-family: var(--m__font-family-mono);
+    font-size: 0.62rem;
+    line-height: 1;
+    white-space: nowrap;
+
+    &:hover {
+      outline: 2px solid var(--m__text);
+      outline-offset: -2px;
+    }
+  }
+
+  /* 3D icons teaser: the design-system grid rearranged 3×2, no labels,
+     on a single dark blue plaque. Placed after --link so the plaque
+     hover overrides the surface hover. */
+  & .home-promo__card--icons {
+    display: flex;
+    align-items: center;
+    padding: calc(var(--m__gap-xs) * 1.5);
+    background-color: var(--m__color-slate-900);
+
+    &:hover {
+      background-color: var(--m__color-slate-700);
+    }
+  }
+
+  & .home-promo__icons-grid {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--m__gap-xs);
+  }
+
+  /* Same slot-square geometry as .docs-icon-row--3d: the host square is
+     the reference box, the canvas bleeds into the grid gaps for rotation
+     headroom. Separate classes because docs-icon-copy.js binds
+     click-to-copy to every .docs-icon-row__item. */
+  & .home-promo__icon {
+    width: 100%;
+    aspect-ratio: 1;
+    color: var(--m__color-gray-300);
+
+    & svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+
+    & .m__model-icon-3d__canvas {
+      inset: calc(var(--m__gap-xs) * -1.5) calc(var(--m__gap-xs) / -2);
+      width: calc(100% + var(--m__gap-xs));
+      height: calc(100% + var(--m__gap-xs) * 3);
+    }
+  }
+
+  /* Components teaser: a brick-like flex-wrap cluster of components plus
+     the playground sidebar chunk on the right. */
+  & .home-promo__card--components {
+    display: flex;
+    gap: var(--m__gap-xl);
+
+    @media (width >= 767px) {
+      aspect-ratio: 2 / 1;
+    }
+
+    @media (width < 767px) {
+      flex-direction: column;
+    }
+  }
+
+  & .home-promo__components-cluster {
+    display: flex;
+    flex: 7;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: var(--m__gap-l);
+    min-width: 0;
+
+    & .m__option-list {
+      width: 18rem;
+      max-width: 100%;
+      margin-bottom: 0;
+    }
+  }
+
+  & .home-promo__components-side {
+    flex: 3;
+    min-width: 0;
+  }
+
+  /* Typography teaser: two heading specimens, styled with the same tokens
+     as h1.loud and h2 (real heading tags would pollute the outline from
+     inside a link). The display specimen steps down to xxxl — the full
+     display size doesn't fit a half-width card. */
+  & .home-promo__type-display {
+    display: block;
+    margin-bottom: var(--m__gap-xl);
+    font-family: var(--m__font-family-gothic);
+    font-size: var(--m__font-size-xxxl);
+    font-weight: var(--m__font-weight-bold);
+    line-height: 1;
+  }
+
+  & .home-promo__type-heading {
+    display: block;
+    font-size: var(--m__font-size-xxl);
+    font-weight: var(--m__font-weight-bold);
+    line-height: var(--m__line-height-base);
+  }
+
+  /* UI scheme teaser: reuses the Page composition illustration. */
+  & .home-promo__card--ui {
+    & .ui-arch-diagram {
+      min-height: 0;
+    }
+  }
+}

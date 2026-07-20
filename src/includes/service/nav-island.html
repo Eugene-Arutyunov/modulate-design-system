@@ -2,10 +2,12 @@
   <button type="button" class="nav-island__close" aria-label="Close navigation">
     ×
   </button>
-  <a href="/" class="nav-island__link">Design System</a>
+  <a href="/" class="nav-island__link">Home</a>
+  <a href="/design-system/" class="nav-island__link">Design System</a>
   <a href="/blog/" class="nav-island__link">Blog</a>
+  <a href="/tools/" class="nav-island__link">Tools</a>
+  <a href="/auth/login/" class="nav-island__link">Log in</a>
   <a href="/dashboard/home/" class="nav-island__link">Dashboard</a>
-  <a href="/auth/login/" class="nav-island__link">Login</a>
   <a href="/playground/velma/" class="nav-island__link">Playground</a>
   <a href="/ui/" class="nav-island__link">UI Scheme</a>
   {% if islandThemeToggle %}
@@ -21,3 +23,13 @@
   </button>
   {% endif %}
 </nav>
+<script>
+  // Restores the island before first paint; the key matches nav-island.js.
+  (function () {
+    try {
+      if (sessionStorage.getItem("nav-island-open") === "1") {
+        document.querySelector(".nav-island").classList.add("is-open");
+      }
+    } catch (e) {}
+  })();
+</script>
