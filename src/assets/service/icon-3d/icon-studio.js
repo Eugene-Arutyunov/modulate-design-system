@@ -603,16 +603,15 @@ function applyStage(studio) {
 // these families are hidden as backdrops, and the listed families come first
 // in this order. Families missing from the list (including future ones)
 // follow in stylesheet order.
-const PALETTE_EXCLUDED_FAMILIES = ["orange", "yellow"];
+const PALETTE_EXCLUDED_FAMILIES = ["orange", "yellow", "azure"];
 const PALETTE_FAMILY_ORDER = [
   "slate",
   "white",
   "gray",
   "blue",
-  "azure",
-  "pink",
   "green",
   "red",
+  "pink",
 ];
 
 // The palette comes straight from the stylesheet: every --m__color-* custom

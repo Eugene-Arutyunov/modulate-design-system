@@ -1,20 +1,12 @@
 (function () {
   "use strict";
 
-  // Palette teaser: same rules as the Icon Studio background dropdown —
-  // tokens come straight from the stylesheet, these families are excluded,
-  // the listed families come first in this order.
-  var PALETTE_EXCLUDED_FAMILIES = ["orange", "yellow"];
-  var PALETTE_FAMILY_ORDER = [
-    "slate",
-    "white",
-    "gray",
-    "blue",
-    "azure",
-    "pink",
-    "green",
-    "red",
-  ];
+  // Palette teaser: same ordering rules as the Icon Studio background
+  // dropdown — tokens come straight from the stylesheet, these families are
+  // excluded, the listed families come first in this order. Grays and white
+  // are dropped on top of the studio list to fit five flush rows of four.
+  var PALETTE_EXCLUDED_FAMILIES = ["orange", "yellow", "azure", "gray", "white"];
+  var PALETTE_FAMILY_ORDER = ["slate", "blue", "green", "red", "pink"];
 
   function getPaletteTokens() {
     var tokens = [];

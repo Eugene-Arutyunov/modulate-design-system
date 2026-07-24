@@ -1,52 +1,92 @@
 /* Home page (`src/index.html`) — promo grid of teaser cards linking into
-   the site sections. A card is either one big link (an <a> card or a
-   [data-promo-link] block with a unified click zone) or a plain card
-   holding several independent links (the posts card). */
+   the site sections. Every card is one big link: an <a> card or a
+   [data-promo-link] block with a unified click zone. Each card opens with
+   a title in the top-left corner and an .m__space.L below it; rounding
+   comes from .m__rounded in the markup. */
 
 .home-promo {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--m__gap-xl);
+  gap: calc(var(--m__gap-xl) * 1.5);
 
   @media (width < 767px) {
     grid-template-columns: minmax(0, 1fr);
   }
 
   & .home-promo__card {
+    --m__rounded-radius: 2em;
+
     display: block;
-    overflow: hidden;
-    padding: var(--m__widget-padding);
-    border-radius: var(--m__widget-radius);
+    padding: calc(var(--m__gap-xs) * 1.5);
     background-color: var(--m__bg-surface);
     color: var(--m__text);
     text-decoration: none;
+    box-shadow: 0 0.35rem 1.1rem
+      color-mix(in srgb, var(--m__text-link) 25%, transparent);
+    transition:
+      background-color var(--m__duration-slow) var(--m__easing-base),
+      box-shadow var(--m__duration-slow) var(--m__easing-base);
+
+    &:hover {
+      box-shadow: 0 0.35rem 1.1rem
+        color-mix(in srgb, var(--m__text-link-hover) 35%, transparent);
+      transition-duration: var(--m__duration-instant);
+    }
+  }
+
+  & .home-promo__card-title {
+    display: block;
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+    transition: color var(--m__duration-slow) var(--m__easing-base);
   }
 
   & .home-promo__card--wide {
     grid-column: 1 / -1;
   }
 
-  /* One-big-link cards: the unified hover cue is a background shift;
-     inner elements keep their own hover styles but not their own clicks. */
   & .home-promo__card--link {
     cursor: pointer;
-    transition: background-color var(--m__duration-base) var(--m__easing-base);
+  }
+
+  /* Surface cards signal hover through the title color; the background
+     stays put. */
+  &
+    .home-promo__card:not(.home-promo__card--accent):hover
+    .home-promo__card-title {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+
+  /* Accent cards (palette, icons) sit on the dark plaque and signal hover
+     through the background; their title goes white on hover. */
+  & .home-promo__card--accent {
+    background-color: var(--m__bg-accent);
+    color: var(--m__text-inverted);
 
     &:hover {
-      background-color: color-mix(in srgb, var(--m__bg-surface) 88%, white);
-      transition-duration: var(--m__duration-instant);
+      background-color: var(--m__bg-accent-hover);
+
+      & .home-promo__card-title {
+        color: var(--m__color-white);
+        transition-duration: var(--m__duration-instant);
+      }
     }
   }
 
-  /* Palette teaser: the card is the palette grid itself, same composition
-     as the Icon Studio background dropdown — flush plates, 4 per row,
-     token names written small inside. Populated by home-promo.js. */
-  & .home-promo__card--palette {
+  /* Palette teaser: the same composition as the Icon Studio background
+     dropdown — flush plates, 4 per row, token names written small inside.
+     Populated by home-promo.js. The 3/2 box makes the five rows span the
+     same height as the two icon rows in the neighbour card. */
+  & .home-promo__palette-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-auto-rows: 1fr;
-    aspect-ratio: 5 / 4;
-    padding: 0;
+    aspect-ratio: 3 / 2;
   }
 
   & .home-promo__palette-color {
@@ -58,42 +98,38 @@
     font-size: 0.62rem;
     line-height: 1;
     white-space: nowrap;
-
-    &:hover {
-      outline: 2px solid var(--m__text);
-      outline-offset: -2px;
-    }
   }
 
-  /* 3D icons teaser: the design-system grid rearranged 3×2, no labels,
-     on a single dark blue plaque. Placed after --link so the plaque
-     hover overrides the surface hover. */
+  /* 3D icons teaser: the design-system grid rearranged 3×2, no labels.
+     The card is a column so the grid fills the leftover height and the
+     bottom padding stays as slim as the sides. */
   & .home-promo__card--icons {
     display: flex;
-    align-items: center;
-    padding: calc(var(--m__gap-xs) * 1.5);
-    background-color: var(--m__color-slate-900);
-
-    &:hover {
-      background-color: var(--m__color-slate-700);
-    }
+    flex-direction: column;
   }
 
   & .home-promo__icons-grid {
     display: grid;
     flex: 1;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-content: center;
     gap: var(--m__gap-xs);
   }
 
   /* Same slot-square geometry as .docs-icon-row--3d: the host square is
      the reference box, the canvas bleeds into the grid gaps for rotation
      headroom. Separate classes because docs-icon-copy.js binds
-     click-to-copy to every .docs-icon-row__item. */
+     click-to-copy to every .docs-icon-row__item. The accent plaque flips
+     light in the dark theme, so there the icons' currentColor flips to
+     the light-theme text color to keep the same contrast. */
   & .home-promo__icon {
     width: 100%;
     aspect-ratio: 1;
     color: var(--m__color-gray-300);
+
+    :where(.dark, .dark-mode, .dark-vibrant) & {
+      color: var(--m__color-gray-800);
+    }
 
     & svg {
       display: block;
@@ -110,14 +146,24 @@
   }
 
   /* Components teaser: a brick-like flex-wrap cluster of components plus
-     the playground sidebar chunk on the right. */
+     the playground sidebar chunk on the right. Pieces whose own background
+     is the surface token would vanish against the card, so just here they
+     get a slightly darker plate. */
   & .home-promo__card--components {
-    display: flex;
-    gap: var(--m__gap-xl);
-
-    @media (width >= 767px) {
-      aspect-ratio: 2 / 1;
+    & .models-nav,
+    & .m__nav-menu-item:hover,
+    & .m__nav-menu-item.active {
+      background-color: color-mix(
+        in srgb,
+        var(--m__bg-surface) 93%,
+        var(--m__text)
+      );
     }
+  }
+
+  & .home-promo__components-body {
+    display: flex;
+    gap: calc(var(--m__gap-xl) * 2);
 
     @media (width < 767px) {
       flex-direction: column;
@@ -130,7 +176,7 @@
     flex-wrap: wrap;
     align-items: flex-start;
     align-content: flex-start;
-    gap: var(--m__gap-l);
+    gap: calc(var(--m__gap-l) * 2);
     min-width: 0;
 
     & .m__option-list {

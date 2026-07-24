@@ -7,6 +7,15 @@ Rule — Modulate Design System' %} {% block content %}
     {% set postDate = 'April 7, 2026' %} {% include 'service/post-meta.html' %}
     <h1 class="loud">The Page Composition Rule</h1>
 
+    <aside class="post-abstract">
+      <span class="posts-list-col-title">Abstract</span>
+      <p>
+        A section holds one or more widgets or a single text-content block —
+        never both side by side. This one rule keeps design and development
+        predictable and objects isolated from each other.
+      </p>
+    </aside>
+
     <p>Page composition follows a single rule:</p>
 
     <blockquote>
@@ -17,21 +26,31 @@ Rule — Modulate Design System' %} {% block content %}
       </p>
     </blockquote>
 
-    <p>Three primitives:</p>
+    <div class="post-primitives-row">
+      <div class="post-primitives-row__text">
+        <p>Three primitives:</p>
 
-    <ul>
-      <li>
-        <strong>Section</strong> — rectangular container, full width, occupying
-        the full column.
-      </li>
-      <li>
-        <strong>Widget</strong> — interactive element or data presentation,
-        rendered as a card with rounded corners.
-      </li>
-      <li>
-        <strong>Text-content</strong> — free-form HTML with shared styles.
-      </li>
-    </ul>
+        <ul>
+          <li>
+            <strong>Section</strong> — rectangular container, full width,
+            occupying the full column.
+          </li>
+          <li>
+            <strong>Widget</strong> — interactive element or data presentation,
+            rendered as a card with rounded corners.
+          </li>
+          <li>
+            <strong>Text-content</strong> — free-form HTML with shared styles.
+          </li>
+        </ul>
+      </div>
+      <aside
+        class="ui-arch-diagram ui-arch-diagram--layout-only post-primitives-row__figure"
+        aria-hidden="true"
+      >
+        {% include 'service/ui-arch-diagram-layout.html' %}
+      </aside>
+    </div>
 
     <p>Why such strict rules?</p>
 

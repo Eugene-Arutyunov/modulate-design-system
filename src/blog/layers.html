@@ -7,11 +7,21 @@ Is Made Of — Modulate Design System' %} {% block content %}
     {% set postDate = 'April 6, 2026' %} {% include 'service/post-meta.html' %}
     <h1 class="loud">What the Design System Is Made Of</h1>
 
+    <aside class="post-abstract">
+      <span class="posts-list-col-title">Abstract</span>
+      <p>
+        The design system is code in a repository, organized into five layers.
+        Its core is the tokens-and-components pair: tokens keep knowledge
+        concrete, components hold it at the right level of abstraction.
+      </p>
+    </aside>
+
     <p>
       The design system is code in a repository. At the top level, there are
       five layers:
     </p>
 
+    <div class="m__space S"></div>
     <table class="layers-table">
       <thead>
         <tr>
@@ -22,64 +32,69 @@ Is Made Of — Modulate Design System' %} {% block content %}
       <tbody>
         <tr>
           <td>Service functions</td>
-          <td><a href="/ui/">UI Scheme</a></td>
+          <td>
+            <a href="/ui/">UI Scheme</a>,
+            <a href="/design-system/">Design System Page</a>
+          </td>
         </tr>
         <tr>
           <td>Layouts</td>
           <td>
-            <a href="/auth/login/">authorization</a>,
-            <a href="/pricing/">pricing page</a>,
-            <a href="/dashboard/home/">dashboard</a>
+            <a href="/auth/login/">Authorization</a>,
+            <a href="/pricing/">Pricing page</a>,
+            <a href="/dashboard/home/">Dashboard</a>
           </td>
         </tr>
         <tr>
           <td>Prototype</td>
-          <td><a href="/playground/velma/">Playground</a></td>
+          <td>
+            <a href="/playground/velma/">Playground</a>,
+            <a href="/dashboard/behaviors/">Behaviors</a>,
+            <a href="/dashboard/conversations/">Conversations</a>
+          </td>
         </tr>
         <tr>
           <td>Tokens</td>
           <td>
-            <div class="layers-table__tokens">
-              <div class="layers-table__token-stack">
-                <span
-                  class="layers-table__token-color"
-                  style="
-                    background-color: var(--m__color-purple-500);
-                    color: var(--m__color-white);
-                  "
-                  ><code>purple-500</code></span
-                >
-                <span
-                  class="layers-table__token-color"
-                  style="
-                    background-color: var(--m__color-slate-500);
-                    color: var(--m__color-white);
-                  "
-                  ><code>slate-500</code></span
-                >
-                <span
-                  class="layers-table__token-color"
-                  style="
-                    background-color: var(--m__color-purple-300);
-                    color: var(--m__color-gray-950);
-                  "
-                  ><code>purple-300</code></span
-                >
-              </div>
-              <div class="layers-table__token-stack">
-                <span class="layers-table__token-spacer">
-                  <span style="height: var(--m__spacer-s)"></span>
-                  <code>spacer-s</code>
-                </span>
-                <span class="layers-table__token-spacer">
-                  <span style="height: var(--m__spacer-m)"></span>
-                  <code>spacer-m</code>
-                </span>
-                <span class="layers-table__token-spacer">
-                  <span style="height: var(--m__spacer-l)"></span>
-                  <code>spacer-l</code>
-                </span>
-              </div>
+            <div class="layers-table__token-colors">
+              <span
+                class="layers-table__token-color"
+                style="
+                  background-color: var(--m__color-purple-500);
+                  color: var(--m__color-white);
+                "
+                >purple-500</span
+              >
+              <span
+                class="layers-table__token-color"
+                style="
+                  background-color: var(--m__color-slate-500);
+                  color: var(--m__color-white);
+                "
+                >slate-500</span
+              >
+              <span
+                class="layers-table__token-color"
+                style="
+                  background-color: var(--m__color-purple-300);
+                  color: var(--m__color-gray-950);
+                "
+                >purple-300</span
+              >
+            </div>
+            <div class="layers-table__token-spacers">
+              <span class="layers-table__token-spacer">
+                <span style="height: var(--m__spacer-s)"></span>
+                <code>spacer-s</code>
+              </span>
+              <span class="layers-table__token-spacer">
+                <span style="height: var(--m__spacer-m)"></span>
+                <code>spacer-m</code>
+              </span>
+              <span class="layers-table__token-spacer">
+                <span style="height: var(--m__spacer-l)"></span>
+                <code>spacer-l</code>
+              </span>
             </div>
           </td>
         </tr>
@@ -87,17 +102,32 @@ Is Made Of — Modulate Design System' %} {% block content %}
           <td>Components</td>
           <td>
             <div class="layers-table__components">
-              <button class="m__button-primary">Button</button>
+              <button class="m__button-primary">
+                <svg
+                  class="m__button__icon"
+                  viewBox="0 0 32 32"
+                  aria-hidden="true"
+                >
+                  <use href="#api-key"></use>
+                </svg>
+                Create API key
+              </button>
               <label class="m__toggle-primary">
                 <input type="checkbox" checked />
-                Toggle
+                On
               </label>
-              <span class="m__tag">Tag</span>
+              <label class="m__checkbox-secondary">
+                <input type="checkbox" checked /><svg aria-hidden="true">
+                  <use href="#checkmark"></use></svg
+                >Voice reports
+              </label>
+              <span class="m__tag">Admin</span>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+    <div class="m__space S"></div>
 
     <p>
       The core of the system is the combination of components and tokens. This
@@ -124,7 +154,9 @@ Is Made Of — Modulate Design System' %} {% block content %}
   </div>
   <div class="m__space M"></div>
   <div class="m__text-width">
-    <a href="/blog/page-composition/" class="m__button-primary-outline read-next"
+    <a
+      href="/blog/page-composition/"
+      class="m__button-primary-outline read-next"
       >Read next: <strong>The Page Composition Rule</strong></a
     >
   </div>
