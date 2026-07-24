@@ -16,9 +16,9 @@ Promo grid: two card sizes (full width and 50%, gap `--m__gap-xl`), two behavior
 
 ## Tools section
 
-**Pages:** `src/tools/index.html` → `/tools/`; `src/tools/icon-studio.html` → `/tools/icon-studio/`; `src/tools/fingerprint-studio.html` → `/tools/fingerprint-studio/` (placeholder); `src/tools/scatterplot.html` → `/tools/scatterplot/` (placeholder); `src/tools/charts.html` → `/tools/charts/`; `src/tools/online-docs/*` → `/tools/online-docs/*`.
+**Pages:** `src/tools/index.html` → `/tools/`; `src/tools/icon-studio.html` → `/tools/icon-studio/`; `src/tools/fingerprint-studio.html` → `/tools/fingerprint-studio/` (placeholder); `src/tools/scatterplot.html` → `/tools/scatterplot/` (placeholder); `src/tools/charts.html` → `/tools/charts/`; `src/tools/online-docs/*` → `/tools/online-docs/*`; `src/tools/square-element.html` → `/tools/square-element/`.
 
-Working tools around the design system, grouped on the index into three lists: **Studios** (screenshot sandboxes — Icon Studio, Fingerprint Studio), **Builders** (constructors — Scatterplot), and **Documents** (technical documents — Chart.js Integration, plus direct links to the two online-doc case studies). The index reuses the blog-index list pattern (`posts-list`, `posts-list-col-title`).
+Working tools around the design system, grouped on the index into three lists: **Studios** (screenshot sandboxes — Icon Studio, Fingerprint Studio), **Builders** (constructors — Scatterplot), and **Documents** (technical documents — Chart.js Integration, direct links to the two online-doc case studies, plus “There has to be a square element”, moved from the blog with no redirect). The index reuses the blog-index list pattern (`posts-list`, `posts-list-col-title`).
 
 ---
 
@@ -27,23 +27,21 @@ Working tools around the design system, grouped on the index into three lists: *
 **Pages:** `src/blog/index.html` → `/blog/` (“By Design”)  
 **Individual posts:**
 
-- `src/blog/square-element.html` → `/blog/square-element/` — December 2025 — There has to be a square element (moved from the modulate-design repo; image: `src/assets/images/square-element.png`)
-- `src/blog/layers.html` → `/blog/layers/` — April 6, 2026 — What the Design System Is Made Of (table of the five layers with live token and component examples, `.layers-table` in `blog.css`)
+- `src/blog/layers.html` → `/blog/layers/` — April 6, 2026 — What the System Is Made Of (table of the five layers with live token and component examples, `.layers-table` in `blog.css`)
 - `src/blog/page-composition.html` → `/blog/page-composition/` — April 7, 2026 — The Page Composition Rule
-- `src/blog/layouts.html` → `/blog/layouts/` — April 13, 2026 — Time as the Main Axis
-- `src/blog/mobile.html` → `/blog/mobile/` — April 23, 2026 — Mobile Responsiveness Out of the Box
-- `src/blog/type-scale.html` → `/blog/type-scale/` — May 19, 2026 — Adjusting the Type Scale
+- `src/blog/layouts.html` → `/blog/layouts/` — April 13, 2026 — Time as the Main Axis (includes “Part 2. Mobile Responsiveness Out of the Box” and “Part 3. Adjusting the Type Scale”, formerly separate posts at `/blog/mobile/` and `/blog/type-scale/`, merged with no redirects)
 - `src/blog/graphic-style.html` → `/blog/graphic-style/` — June 8, 2026 — Why Have Your Own Graphic Style
-- `src/blog/color.html` → `/blog/color/` — June 18, 2026 — Color (embeds the palette-lamp figure)
-- `src/blog/icons.html` → `/blog/icons/` — July 7, 2026 — Icons
+- `src/blog/color.html` → `/blog/color/` — June 18, 2026 — Color Under a Purple Lightbulb (embeds the palette-lamp figure)
+- `src/blog/icons.html` → `/blog/icons/` — July 7, 2026 — Five Requirements for Icons
 - `src/blog/fingerprints.html` → `/blog/fingerprints/` — placeholder page, no date or text yet
+- `src/blog/not-a-designer.html` → `/blog/not-a-designer/` — no date yet (publishes with the public launch) — Why You Can’t Seriously Say “I’m Not a Designer” (standalone, by Ilya Sinelnikov)
 
-**Includes:** `src/includes/service/post-meta.html` — the meta line above each post title: “← Blog” link, author(s) with round photos, date (`postDate` Nunjucks variable; omitted on the Fingerprints placeholder; optional `postCoAuthor` + `postCoAuthorPhoto` add a second author).  
+**Includes:** `src/includes/service/post-meta.html` — the meta line above each post title: “← Blog” link (overridable via `backHref`/`backLabel`), author(s) with round photos, date (`postDate` Nunjucks variable; the whole author/date block is omitted when neither `postDate` nor `postAuthor` is set, as on the Fingerprints placeholder; `postAuthor` + `postAuthorPhoto` replace the default Eugene Arutyunov; optional `postCoAuthor` + `postCoAuthorPhoto` add a second author).  
 **Author photos:** `src/assets/images/authors/` (square JPEG).  
 **Styles:** `src/styles/service/blog.css` — `.post-meta` (meta line, `.post-meta__photo` round avatar), `.posts-list` (plain column of `.posts-list__item` rows on the index: bold title link with a `.posts-list__caption` date or “Soon” running inline right after the title), `.posts-list-col-title` (uppercase semi-mono column titles, after `models-nav__col-title`, no rule line), `.layers-table` (layers post: token stacks and live components inside table cells), `.read-next` (full-width `m__button-primary-outline` at the end of a post), `.navbar-blog-row` (homepage row that places the blog link next to `ids-navbar`).  
 **Navigation:** linked from `src/includes/service/nav-island.html` as “Blog”, from the design-system page next to `ids-navbar`, and from the docs header (`src/includes/service/header.html` renders “Home”, “Design System”, “Blog”, and “Tools” on every DS page; the current page is plain text, not a link).
 
-Blog for design system development history. Each post is a standalone page extending `service/layout.html`, with the post-meta include above a `h1.loud` title (Gothic display font, same as the design system main page); the spacer before the meta line is `m__space XL` everywhere, matching the homepage (the header itself carries no bottom margin). Posts end with a “Read next” full-width outline button (`a.read-next`: regular-weight label, bold post title) — the next post in the series, or the next by date for standalone posts (the Icons and Fingerprints posts have none yet). The index (titled “By Design”, `h1.loud`) groups posts into three columns (temporary launch navigation, forward chronological order): System Foundations Series and Graphic Style Series, and Recent posts. Unpublished posts (Typography, “I’m Not a Designer”, Fingerprints) are unlinked with a “Soon” caption. Dates are short captions running inline after the title (`6 Apr`; the year appears only when it isn’t the current one).
+Blog for design system development history. Each post is a standalone page extending `service/layout.html`, with the post-meta include above a `h1.loud` title (Gothic display font, same as the design system main page); the spacer before the meta line is `m__space XL` everywhere, matching the homepage (the header itself carries no bottom margin). Posts end with a “Read next” full-width outline button (`a.read-next`: regular-weight label, bold post title) — the next post in the series, or the next by date for standalone posts (the Icons and Fingerprints posts have none yet). The index (titled “By Design”, `h1.loud`) groups posts into three columns (temporary launch navigation, forward chronological order): System Foundations Series and Graphic Style Series, and Recent posts. Unpublished posts carry a “Soon” caption: Fingerprints is unlinked, “I’m Not a Designer” (standalone, out of the Graphic Style series) is written and linked; the Typography post was cancelled. “There has to be a square element” moved to the Tools Documents list (`/tools/square-element/`, uses `backHref`/`backLabel` on the post-meta include). Dates are short captions running inline after the title (`6 Apr`; the year appears only when it isn’t the current one).
 
 ---
 
@@ -65,6 +63,16 @@ Switches between light and dark theme. Supports multiple `.theme-toggle` element
 **Used in:** `src/includes/service/layout.html`, `src/includes/prototypes/layout.html`, `src/includes/prototypes/landing-layout.html`, `src/includes/prototypes/auth-layout.html` (without the theme toggle).
 
 Fixed-position element in the bottom-left corner of every page. Hidden by default; the Option-N hotkey (`event.altKey` + `event.code === 'KeyN'`, ignored while typing in a field) toggles it, and the × button hides it. The open state is kept in `sessionStorage` under `nav-island-open` (`1` = open), so the island survives navigation within the tab; a small inline script in the include restores it before first paint, and `nav-island.js` owns the hotkey and buttons. Contains links for cross-navigation between the home page (`/`), design system (`/design-system/`), blog (`/blog/`), tools (`/tools/`), login (`/auth/login/`), dashboard (`/dashboard/home/`), playground (`/playground/velma/`), and UI Scheme (`/ui/`). The include also renders the theme toggle (controlled by the Nunjucks variable `islandThemeToggle`).
+
+---
+
+## Prototype notice banner
+
+**Markup:** `src/includes/prototypes/prototype-banner.html` (markup + inline dismiss script)  
+**Styles:** `src/styles/prototypes/banner.css`  
+**Used in:** `src/includes/prototypes/layout.html`, `src/includes/prototypes/landing-layout.html`, `src/includes/prototypes/auth-layout.html` (before the header / auth columns).
+
+Full-width yellow band (`--m__bg-highlight` yellow, `slate-900` ink) at the very top of every prototype page: “This is a design prototype — the real product lives at platform.modulate.ai”, with a × button on the right. Rendered `hidden` and un-hidden by the inline script before first paint unless the `prototype-banner-dismissed=1` cookie is set; the × sets that cookie for a year (`path=/`), so dismissal sticks across all prototype pages. Not used on design-system pages or the online-doc case studies.
 
 ---
 

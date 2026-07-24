@@ -2,7 +2,27 @@
    the site sections. Every card is one big link: an <a> card or a
    [data-promo-link] block with a unified click zone. Each card opens with
    a title in the top-left corner and an .m__space.L below it; rounding
-   comes from .m__rounded in the markup. */
+   is plain border-radius plus corner-shape: squircle where supported
+   (Chrome), so the translucent outline can follow the corners. */
+
+/* The promo grid is immune to theme switching: the .light class in the
+   markup pins all color tokens to their light-theme values. The two
+   .dark-mode structural tweaks from component styles that would still
+   reach inside are pinned back to the light look below. */
+.dark-mode .home-promo .m__loader {
+  filter: brightness(0.65);
+}
+
+.dark-mode
+  .home-promo
+  .m__toggle-secondary
+  input[type="checkbox"]:checked::after,
+.dark-mode
+  .home-promo
+  .m__toggle-secondary
+  input[type="checkbox"]:hover:not(:disabled):checked::after {
+  box-shadow: none;
+}
 
 .home-promo {
   display: grid;
@@ -13,23 +33,36 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* Every card — light and dark alike — wears the same shadow and the
+     same translucent outline at half the shadow's opacity; on hover both
+     recolor together. The colors are pinned to palette tokens (the
+     light-theme values of text-link and text-link-hover) so the chrome
+     is identical in every theme. */
   & .home-promo__card {
-    --m__rounded-radius: 2em;
-
     display: block;
     padding: calc(var(--m__gap-xs) * 1.5);
-    background-color: var(--m__bg-surface);
+    border: var(--m__border-width-s) solid
+      color-mix(in srgb, var(--m__color-slate-700) 12.5%, transparent);
+    border-radius: 2em;
+    corner-shape: squircle;
+    background-color: var(--m__color-white);
     color: var(--m__text);
     text-decoration: none;
     box-shadow: 0 0.35rem 1.1rem
-      color-mix(in srgb, var(--m__text-link) 25%, transparent);
+      color-mix(in srgb, var(--m__color-slate-700) 25%, transparent);
     transition:
       background-color var(--m__duration-slow) var(--m__easing-base),
+      border-color var(--m__duration-slow) var(--m__easing-base),
       box-shadow var(--m__duration-slow) var(--m__easing-base);
 
     &:hover {
+      border-color: color-mix(
+        in srgb,
+        var(--m__color-blue-500) 17.5%,
+        transparent
+      );
       box-shadow: 0 0.35rem 1.1rem
-        color-mix(in srgb, var(--m__text-link-hover) 35%, transparent);
+        color-mix(in srgb, var(--m__color-blue-500) 35%, transparent);
       transition-duration: var(--m__duration-instant);
     }
   }
@@ -80,8 +113,8 @@
 
   /* Palette teaser: the same composition as the Icon Studio background
      dropdown — flush plates, 4 per row, token names written small inside.
-     Populated by home-promo.js. The 3/2 box makes the five rows span the
-     same height as the two icon rows in the neighbour card. */
+     Populated by home-promo.js. The 3/2 box keeps the five rows in a
+     stable proportion regardless of the neighbour card's height. */
   & .home-promo__palette-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -119,17 +152,14 @@
   /* Same slot-square geometry as .docs-icon-row--3d: the host square is
      the reference box, the canvas bleeds into the grid gaps for rotation
      headroom. Separate classes because docs-icon-copy.js binds
-     click-to-copy to every .docs-icon-row__item. The accent plaque flips
-     light in the dark theme, so there the icons' currentColor flips to
-     the light-theme text color to keep the same contrast. */
+     click-to-copy to every .docs-icon-row__item. The 3D glyph reads
+     currentColor from this host, and it sits on the always-light gray-100
+     tile — so it gets the light-theme text color (gray-800) in both
+     themes, regardless of the plaque behind. */
   & .home-promo__icon {
     width: 100%;
     aspect-ratio: 1;
-    color: var(--m__color-gray-300);
-
-    :where(.dark, .dark-mode, .dark-vibrant) & {
-      color: var(--m__color-gray-800);
-    }
+    color: var(--m__color-gray-800);
 
     & svg {
       display: block;
@@ -146,28 +176,13 @@
   }
 
   /* Components teaser: a brick-like flex-wrap cluster of components plus
-     the playground sidebar chunk on the right. Pieces whose own background
-     is the surface token would vanish against the card, so just here they
-     get a slightly darker plate. */
-  & .home-promo__card--components {
-    & .models-nav,
-    & .m__nav-menu-item:hover,
-    & .m__nav-menu-item.active {
-      background-color: color-mix(
-        in srgb,
-        var(--m__bg-surface) 93%,
-        var(--m__text)
-      );
-    }
-  }
-
+     the playground sidebar chunk on the left, in its normal playground
+     colors — against the white card the surface token reads fine.
+     The sidebar-to-cluster gap matches the gap between cluster pieces. */
   & .home-promo__components-body {
     display: flex;
-    gap: calc(var(--m__gap-xl) * 2);
-
-    @media (width < 767px) {
-      flex-direction: column;
-    }
+    gap: calc(var(--m__gap-l) * 2);
+    padding: 0 3rem 2rem 3rem;
   }
 
   & .home-promo__components-cluster {
@@ -178,37 +193,43 @@
     align-content: flex-start;
     gap: calc(var(--m__gap-l) * 2);
     min-width: 0;
+  }
 
-    & .m__option-list {
-      width: 18rem;
-      max-width: 100%;
-      margin-bottom: 0;
+  /* On mobile the sidebar chunk hides; only the component flow stays. */
+  & .home-promo__components-side {
+    flex: 2;
+    min-width: 0;
+
+    @media (width < 767px) {
+      display: none;
     }
   }
 
-  & .home-promo__components-side {
-    flex: 3;
-    min-width: 0;
+  /* Typography teaser: specimens of the main text styles — the h1.loud
+     display heading, an .m__code-block, and a caption. Styled with the
+     same tokens as the real elements (real heading tags would pollute
+     the outline from inside a link). All specimen text is painted
+     slate-700; only the code-block toolbar keeps its own caption color. */
+  & .home-promo__card--type {
+    padding-right: 6.4rem;
+    color: var(--m__color-slate-700);
   }
 
-  /* Typography teaser: two heading specimens, styled with the same tokens
-     as h1.loud and h2 (real heading tags would pollute the outline from
-     inside a link). The display specimen steps down to xxxl — the full
-     display size doesn't fit a half-width card. */
   & .home-promo__type-display {
     display: block;
     margin-bottom: var(--m__gap-xl);
     font-family: var(--m__font-family-gothic);
-    font-size: var(--m__font-size-xxxl);
+    font-size: var(--m__font-size-display);
     font-weight: var(--m__font-weight-bold);
-    line-height: 1;
+    /* A one-off exception: tighter than the h1.loud line-height of 1. */
+    line-height: 0.8;
   }
 
-  & .home-promo__type-heading {
+  & .home-promo__type-caption {
     display: block;
-    font-size: var(--m__font-size-xxl);
-    font-weight: var(--m__font-weight-bold);
+    font-size: var(--m__font-size-s);
     line-height: var(--m__line-height-base);
+    color: inherit;
   }
 
   /* UI scheme teaser: reuses the Page composition illustration. */
@@ -217,4 +238,13 @@
       min-height: 0;
     }
   }
+}
+
+/* In the dark page theme the dark plaques would melt into the page
+   background, so their outline steps up to a far more opaque mix. It
+   also holds through hover, where the plaque signals through its
+   background anyway. (Placed after the .home-promo block so it wins
+   the tie against the hover border recolor.) */
+.dark-mode .home-promo .home-promo__card--accent {
+  border-color: color-mix(in srgb, var(--m__color-slate-700) 70%, transparent);
 }

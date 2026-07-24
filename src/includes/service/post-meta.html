@@ -1,19 +1,23 @@
 <p class="post-meta">
-  <a href="/blog/">← Blog</a>
-  {% if postDate %}
+  <a href="{{ backHref if backHref else '/blog/' }}"
+    >← {{ backLabel if backLabel else 'Blog' }}</a
+  >
+  {% if postDate or postAuthor %}
   <span class="post-meta__author">
     <img
       class="post-meta__photo"
-      src="/assets/images/authors/eugene-arutyunov.jpg"
-      alt="" />
-    Eugene Arutyunov
+      src="{{ postAuthorPhoto if postAuthorPhoto else
+        '/assets/images/authors/eugene-arutyunov.jpg' }}"
+      alt=""
+    />
+    {{ postAuthor if postAuthor else 'Eugene Arutyunov' }}
   </span>
   {% if postCoAuthor %}
   <span class="post-meta__author">
     <img class="post-meta__photo" src="{{ postCoAuthorPhoto }}" alt="" />
     {{ postCoAuthor }}
   </span>
-  {% endif %}
+  {% endif %} {% if postDate %}
   <time>{{ postDate }}</time>
-  {% endif %}
+  {% endif %} {% endif %}
 </p>
