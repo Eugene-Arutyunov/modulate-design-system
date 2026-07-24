@@ -4,28 +4,44 @@ Index of notable functional blocks for developer navigation. Add a short descrip
 
 ---
 
+## Home page
+
+**Page:** `src/index.html` → `/`
+
+“Design at Modulate” — the site root. A short intro describing what lives on the site (design system reference, the “By Design” blog, prototypes, tools), followed by a promo grid of teaser cards (`.home-promo`, styles in `src/styles/service/home.css`, script `src/assets/service/home-promo.js`). Extends `service/layout.html`. The design-system documentation itself lives at `/design-system/` (`src/design-system.html`, formerly the root page).
+
+Promo grid: two card sizes (full width and 50%, gap `--m__gap-xl`), two behaviors. One-big-link cards (`.home-promo__card--link`) navigate as a whole — either an `<a>` card or a `[data-promo-link]` block with JS click delegation (inner hovers work, clicks are unified, `preventDefault` keeps showcase controls from changing state); the posts card holds several independent links. Cards: selected blog posts (three `posts-list` columns under one shared title), palette (the Icon Studio background-dropdown composition, 5:4, populated by home-promo.js from `--m__color-*` tokens with the same family order/exclusions), 3D icons (3×2 `data-model-icon-3d` home-mode grid on a `slate-900` plaque, needs the icon-3d importmap + `model-icon-3d.js` module included at the end of the page), components (2:1, a flex-wrap brick cluster ~70% plus a static copy of the playground Detection sidebar chunk ~30%; sidebar links and option-list items are `<span>`s so the card has a single click zone), typography specimens, and the Page composition illustration (`service/ui-arch-diagram-layout.html`) linking to `/ui/`. The home 3D icon slots use their own classes (not `.docs-icon-row__item`) because `docs-icon-copy.js` binds click-to-copy to that class globally. Fingerprints and infographics cards are planned but not built yet.
+
+---
+
+## Tools section
+
+**Pages:** `src/tools/index.html` → `/tools/`; `src/tools/icon-studio.html` → `/tools/icon-studio/`; `src/tools/fingerprint-studio.html` → `/tools/fingerprint-studio/` (placeholder); `src/tools/scatterplot.html` → `/tools/scatterplot/` (placeholder); `src/tools/charts.html` → `/tools/charts/`; `src/tools/online-docs/*` → `/tools/online-docs/*`; `src/tools/square-element.html` → `/tools/square-element/`.
+
+Working tools around the design system, grouped on the index into three lists: **Studios** (screenshot sandboxes — Icon Studio, Fingerprint Studio), **Builders** (constructors — Scatterplot), and **Documents** (technical documents — Chart.js Integration, direct links to the two online-doc case studies, plus “There has to be a square element”, moved from the blog with no redirect). The index reuses the blog-index list pattern (`posts-list`, `posts-list-col-title`).
+
+---
+
 ## Blog section
 
-**Pages:** `src/blog/index.html` → `/blog/` (“Design at Modulate”)  
+**Pages:** `src/blog/index.html` → `/blog/` (“By Design”)  
 **Individual posts:**
 
-- `src/blog/square-element.html` → `/blog/square-element/` — December 2025 — There has to be a square element (moved from the modulate-design repo; image: `src/assets/images/square-element.png`)
-- `src/blog/layers.html` → `/blog/layers/` — April 6, 2026 — What the Design System Is Made Of (table of the five layers with live token and component examples, `.layers-table` in `blog.css`)
+- `src/blog/layers.html` → `/blog/layers/` — April 6, 2026 — What the System Is Made Of (table of the five layers with live token and component examples, `.layers-table` in `blog.css`)
 - `src/blog/page-composition.html` → `/blog/page-composition/` — April 7, 2026 — The Page Composition Rule
-- `src/blog/layouts.html` → `/blog/layouts/` — April 13, 2026 — Time as the Main Axis
-- `src/blog/mobile.html` → `/blog/mobile/` — April 23, 2026 — Mobile Responsiveness Out of the Box
-- `src/blog/type-scale.html` → `/blog/type-scale/` — May 19, 2026 — Adjusting the Type Scale
+- `src/blog/layouts.html` → `/blog/layouts/` — April 13, 2026 — Time as the Main Axis (includes “Part 2. Mobile Responsiveness Out of the Box” and “Part 3. Adjusting the Type Scale”, formerly separate posts at `/blog/mobile/` and `/blog/type-scale/`, merged with no redirects)
 - `src/blog/graphic-style.html` → `/blog/graphic-style/` — June 8, 2026 — Why Have Your Own Graphic Style
-- `src/blog/color.html` → `/blog/color/` — June 18, 2026 — Color (embeds the palette-lamp figure)
-- `src/blog/icons.html` → `/blog/icons/` — July 7, 2026 — Icons
+- `src/blog/color.html` → `/blog/color/` — June 18, 2026 — Color Under a Purple Lightbulb (embeds the palette-lamp figure)
+- `src/blog/icons.html` → `/blog/icons/` — July 7, 2026 — Five Requirements for Icons
 - `src/blog/fingerprints.html` → `/blog/fingerprints/` — placeholder page, no date or text yet
+- `src/blog/not-a-designer.html` → `/blog/not-a-designer/` — no date yet (publishes with the public launch) — Why You Can’t Seriously Say “I’m Not a Designer” (standalone, by Ilya Sinelnikov)
 
-**Includes:** `src/includes/service/post-meta.html` — the meta line above each post title: “← Blog” link, author(s) with round photos, date (`postDate` Nunjucks variable; omitted on the Fingerprints placeholder; optional `postCoAuthor` + `postCoAuthorPhoto` add a second author).  
+**Includes:** `src/includes/service/post-meta.html` — the meta line above each post title: “← Blog” link (overridable via `backHref`/`backLabel`), author(s) with round photos, date (`postDate` Nunjucks variable; the whole author/date block is omitted when neither `postDate` nor `postAuthor` is set, as on the Fingerprints placeholder; `postAuthor` + `postAuthorPhoto` replace the default Eugene Arutyunov; optional `postCoAuthor` + `postCoAuthorPhoto` add a second author).  
 **Author photos:** `src/assets/images/authors/` (square JPEG).  
 **Styles:** `src/styles/service/blog.css` — `.post-meta` (meta line, `.post-meta__photo` round avatar), `.posts-list` (plain column of `.posts-list__item` rows on the index: bold title link with a `.posts-list__caption` date or “Soon” running inline right after the title), `.posts-list-col-title` (uppercase semi-mono column titles, after `models-nav__col-title`, no rule line), `.layers-table` (layers post: token stacks and live components inside table cells), `.read-next` (full-width `m__button-primary-outline` at the end of a post), `.navbar-blog-row` (homepage row that places the blog link next to `ids-navbar`).  
-**Navigation:** linked from `src/includes/service/nav-island.html` as “Blog”, from the homepage next to `ids-navbar`, and from the docs header (`src/includes/service/header.html` renders “Design System” and “Blog” on every DS page including the homepage; the current page is plain text, not a link).
+**Navigation:** linked from `src/includes/service/nav-island.html` as “Blog”, from the design-system page next to `ids-navbar`, and from the docs header (`src/includes/service/header.html` renders “Home”, “Design System”, “Blog”, and “Tools” on every DS page; the current page is plain text, not a link).
 
-Blog for design system development history. Each post is a standalone page extending `service/layout.html`, with the post-meta include above a `h1.loud` title (Gothic display font, same as the design system main page); the spacer before the meta line is `m__space XL` everywhere, matching the homepage (the header itself carries no bottom margin). Posts end with a “Read next” full-width outline button (`a.read-next`: regular-weight label, bold post title) — the next post in the series, or the next by date for standalone posts (the Icons and Fingerprints posts have none yet). The index (titled “Design at Modulate”, `h1.loud`) groups posts into three columns (temporary launch navigation, forward chronological order): System Foundations Series and Graphic Style Series, and Recent posts. Unpublished posts (Typography, “I’m Not a Designer”, Fingerprints) are unlinked with a “Soon” caption. Dates are short captions running inline after the title (`6 Apr`; the year appears only when it isn’t the current one).
+Blog for design system development history. Each post is a standalone page extending `service/layout.html`, with the post-meta include above a `h1.loud` title (Gothic display font, same as the design system main page); the spacer before the meta line is `m__space XL` everywhere, matching the homepage (the header itself carries no bottom margin). Posts end with a “Read next” full-width outline button (`a.read-next`: regular-weight label, bold post title) — the next post in the series, or the next by date for standalone posts (the Icons and Fingerprints posts have none yet). The index (titled “By Design”, `h1.loud`) groups posts into three columns (temporary launch navigation, forward chronological order): System Foundations Series and Graphic Style Series, and Recent posts. Unpublished posts carry a “Soon” caption: Fingerprints is unlinked, “I’m Not a Designer” (standalone, out of the Graphic Style series) is written and linked; the Typography post was cancelled. “There has to be a square element” moved to the Tools Documents list (`/tools/square-element/`, uses `backHref`/`backLabel` on the post-meta include). Dates are short captions running inline after the title (`6 Apr`; the year appears only when it isn’t the current one).
 
 ---
 
@@ -35,7 +51,7 @@ Blog for design system development history. Each post is a standalone page exten
 **Styles:** `src/styles/service/theme-toggle.css` (shared control).  
 **Used in:** `src/includes/service/header.html` (prototype popover toggle), `src/includes/service/nav-island.html` (DS pages), `src/includes/prototypes/layout.html` (script tag), `src/includes/service/layout.html` (script tag).
 
-Switches between light and dark theme. Supports multiple `.theme-toggle` elements at once. The storage key is taken from `body[data-theme-storage-key]`, which keeps prototype pages and design-system pages independent (`prototype-theme` vs `design-system-theme`). The initial theme is applied by a small inline script right after `<body>` in layouts so the correct theme is set before first paint (avoids flash). Landing pages (index-landing, docs, pricing) are intentionally light-only and have no theme toggle.
+Switches between light and dark theme. Supports multiple `.theme-toggle` elements at once. The storage key is taken from `body[data-theme-storage-key]`, which keeps prototype pages and design-system pages independent (`prototype-theme` vs `design-system-theme`). The initial theme is applied by a small inline script right after `<body>` in layouts so the correct theme is set before first paint (avoids flash). Landing pages (docs, pricing) are intentionally light-only and have no theme toggle.
 
 ---
 
@@ -43,9 +59,20 @@ Switches between light and dark theme. Supports multiple `.theme-toggle` element
 
 **Markup:** `src/includes/service/nav-island.html`  
 **Styles:** `src/styles/service/nav-island.css`  
-**Used in:** `src/includes/service/layout.html`, `src/includes/prototypes/layout.html`, `src/includes/prototypes/landing-layout.html`.
+**Script:** `src/assets/service/nav-island.js`  
+**Used in:** `src/includes/service/layout.html`, `src/includes/prototypes/layout.html`, `src/includes/prototypes/landing-layout.html`, `src/includes/prototypes/auth-layout.html` (without the theme toggle).
 
-Fixed-position element in the bottom-left corner of every page. Contains four icon-links for cross-navigation between the design system (`/`), prototype landing (`/index-landing/`), dashboard (`/dashboard/overview/`), and UI Architecture (`/ui/`). On DS pages the include also renders the theme toggle (controlled by the Nunjucks variable `islandThemeToggle`). The island is semi-transparent at rest and becomes fully opaque on hover, using `backdrop-filter` and `opacity` transition with the shared timing tokens.
+Fixed-position element in the bottom-left corner of every page. Hidden by default; the Option-N hotkey (`event.altKey` + `event.code === 'KeyN'`, ignored while typing in a field) toggles it, and the × button hides it. The open state is kept in `sessionStorage` under `nav-island-open` (`1` = open), so the island survives navigation within the tab; a small inline script in the include restores it before first paint, and `nav-island.js` owns the hotkey and buttons. Contains links for cross-navigation between the home page (`/`), design system (`/design-system/`), blog (`/blog/`), tools (`/tools/`), login (`/auth/login/`), dashboard (`/dashboard/home/`), playground (`/playground/velma/`), and UI Scheme (`/ui/`). The include also renders the theme toggle (controlled by the Nunjucks variable `islandThemeToggle`).
+
+---
+
+## Prototype notice banner
+
+**Markup:** `src/includes/prototypes/prototype-banner.html` (markup + inline dismiss script)  
+**Styles:** `src/styles/prototypes/banner.css`  
+**Used in:** `src/includes/prototypes/layout.html`, `src/includes/prototypes/landing-layout.html`, `src/includes/prototypes/auth-layout.html` (before the header / auth columns).
+
+Full-width yellow band (`--m__bg-highlight` yellow, `slate-900` ink) at the very top of every prototype page: “This is a design prototype — the real product lives at platform.modulate.ai”, with a × button on the right. Rendered `hidden` and un-hidden by the inline script before first paint unless the `prototype-banner-dismissed=1` cookie is set; the × sets that cookie for a year (`path=/`), so dismissal sticks across all prototype pages. Not used on design-system pages or the online-doc case studies.
 
 ---
 
@@ -93,10 +120,10 @@ Global tag-level styles for prose elements: headings, paragraphs, links, inline 
 
 **Styles:** `src/styles/service/ds-main-page.css`  
 **Scripts:** `src/assets/service/docs-icon-copy.js` — click on a Graphics → Icons tile copies a standalone SVG (resolved fills) to the clipboard.  
-**Used in:** `src/index.html` (e.g. Graphics → Icons `.docs-icon-row`, Animations `.docs-animation-samples`).  
+**Used in:** `src/design-system.html` (e.g. Graphics → Icons `.docs-icon-row`, Animations `.docs-animation-samples`).  
 **Bundle:** `src/css-bundle.njk`.
 
-Section-specific layout for the long home page; kept separate from `color-palette.css` (swatches and emotion showcase).
+Section-specific layout for the long design-system page (`/design-system/`); kept separate from `color-palette.css` (swatches and emotion showcase).
 
 ---
 
@@ -151,10 +178,10 @@ Raw SVG files are normalized into one hidden sprite include. The generator remov
 **Renderer:** `src/assets/service/icon-3d/model-icon-3d.js`  
 **Import map:** `src/includes/service/icon-3d-importmap.html`  
 **Styles:** `src/styles/components/model-icon-3d.css`, `src/styles/service/icon-studio.css`  
-**Icon Studio:** `src/service/icon-studio.html` + `src/assets/service/icon-3d/icon-studio.js` → `/icon-studio/`  
+**Icon Studio:** `src/tools/icon-studio.html` + `src/assets/service/icon-3d/icon-studio.js` → `/tools/icon-studio/`  
 **Usage docs:** `src/assets/service/ICON-3D.md`.
 
-Browser-rendered model icons use Three.js to extrude SVG shapes into rounded white tiles. The 3D source flow is separate from the flat sprite: prepared 3D SVGs take priority, and the existing flat SVG source acts as fallback for icons without a dedicated 3D drawing. Virtual layers come from `data-3d-layer`, sidecar `shapeLayers`, or base layer `0`; `shapeLayerSpans` lets a shape occupy multiple glyph-depth layers. Runtime settings live in the renderer’s `CONFIG` sections: shared `glyph` and `shadow`, plus per-context `light` and `view` values. Pricing renders individual front-facing tiles with scroll pitch; auth renders the whole overlapping row in one canvas/scene while the existing hover zones keep controlling `data-stack-focus`; `home` mode drives the 6-per-row grids on the design-system home page and `/blog/icons/` with canvas bleed into the grid gaps. Icon Studio (`/icon-studio/`) is the screenshot workbench: one icon on a full-width stage with aspect and base-palette background controls, a 2D light pad, cursor orbit with click-to-capture pose, and an optional oscillating rotation.
+Browser-rendered model icons use Three.js to extrude SVG shapes into rounded white tiles. The 3D source flow is separate from the flat sprite: prepared 3D SVGs take priority, and the existing flat SVG source acts as fallback for icons without a dedicated 3D drawing. Virtual layers come from `data-3d-layer`, sidecar `shapeLayers`, or base layer `0`; `shapeLayerSpans` lets a shape occupy multiple glyph-depth layers. Runtime settings live in the renderer’s `CONFIG` sections: shared `glyph` and `shadow`, plus per-context `light` and `view` values. Pricing renders individual front-facing tiles with scroll pitch; auth renders the whole overlapping row in one canvas/scene while the existing hover zones keep controlling `data-stack-focus`; `home` mode drives the 6-per-row grids on the design-system page and `/blog/icons/` with canvas bleed into the grid gaps. Icon Studio (`/tools/icon-studio/`) is the screenshot workbench: one icon on a full-width stage with aspect and base-palette background controls, a 2D light pad, cursor orbit with click-to-capture pose, and an optional oscillating rotation.
 
 ---
 
@@ -162,7 +189,7 @@ Browser-rendered model icons use Three.js to extrude SVG shapes into rounded whi
 
 **Script:** `scripts/export-prosocial-single-html.js`  
 **Command:** `npm run export:prosocial:single`  
-**Input:** built `/_site/online-docs/prosocial/index.html` + `/_site/bundle.css` and `src/assets/fonts/*`  
+**Input:** built `/_site/tools/online-docs/prosocial/index.html` + `/_site/bundle.css` and `src/assets/fonts/*`  
 **Output:** `dist-publish/prosocial-single/prosocial.html` + `dist-publish/prosocial-single/fonts/*`.
 
 Builds a publish-ready single HTML version of the Prosocial online doc by inlining `/bundle.css` into a `<style>` tag, removing the favicon link, and copying only font files referenced by CSS into a sibling `fonts` folder.
@@ -174,28 +201,16 @@ Builds a publish-ready single HTML version of the Prosocial online doc by inlini
 **Markup:** `src/includes/prototypes/dashboard-nav-sidebar.html` (imports macros), `src/includes/prototypes/dashboard-nav-macros.html` (single source for sidebar + mobile menu links), `src/includes/service/header.html` (imports the same macros for the bar and popover).  
 **Styles:** `src/styles/prototypes/layout.css`, `src/styles/prototypes/header.css`.
 
-Dashboard page navigation in the prototype uses the shared SVG sprite for page icons. Link targets and order are defined once in `dashboard-nav-macros.html` (`dashboard_nav_meta` + `dashboard_nav_main` with variant `sidebar` or `popover`). The sidebar starts with one caption-style link (organization); the account email link appears only in the header popover. Then dashboard icon links, then internal tool links; the prototype header logo uses sprite symbol `#modulate`. Primary header links are defined in `primary_nav('bar'|'popover'|'landing')`: full bar + popover on signed-in pages; **landing** (`index-landing`, `isLanding`) shows only Playground and Docs before Sign in.
+Dashboard page navigation in the prototype uses the shared SVG sprite for page icons. Link targets and order are defined once in `dashboard-nav-macros.html` (`dashboard_nav_meta` + `dashboard_nav_main` with variant `sidebar` or `popover`). The sidebar starts with one caption-style link (organization); the account email link appears only in the header popover. Then dashboard icon links, then internal tool links; the prototype header logo uses sprite symbol `#modulate`. Primary header links are defined in `primary_nav('bar'|'popover'|'landing')`: full bar + popover on signed-in pages; **landing** (`isLanding`, used by the docs and pricing pages) shows only Playground and Docs before Sign in.
 
 ---
 
 ## Docs page
 
 **Page:** `src/prototypes/docs.html`  
-**Permalink:** `/docs/`  
-**Script:** `src/assets/prototypes/docs.js`  
-**Styles:** `src/styles/prototypes/docs.css`
+**Permalink:** `/docs/`
 
-Documentation page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. Two-column layout (`dashboard-layout`): left sidebar lists models loaded from `/assets/data/models.json` with `.m__tag-flat` status labels; right panel shows per-model tabs (Overview / API Spec / Quickstart) via `.m__segmented-control-primary`. Overview is rendered from cached model data. API Spec fetches `/assets/data/model-docs/{identifier}/openapi.yaml` and shows it in `.docs-code-block` with a download button. Quickstart fetches `/assets/data/model-docs/{identifier}/quickstart.md` → `marked.parse()` → `hljs.highlightElement()`; example links come from `models.json`. Marked and highlight.js loaded from CDN via `{% block scripts %}`. Works fully without a backend.
-
----
-
-## Landing page drafts
-
-**Pages:** `src/prototypes/index-landing.html`, `src/prototypes/index-landing-full-draft.html`  
-**Permalink:** `/index-landing/`  
-**Styles:** `src/styles/prototypes/index-landing.css`
-
-`index-landing.html` is the current short hero-only landing variant (headline, inline feature line with icons, and CTA row). `index-landing-full-draft.html` keeps the previous long-form full draft for future reuse and copy extraction.
+Stub page. Uses `landing-layout.html` — unauthenticated header (Playground + Docs + Pricing + Sign in), light theme. A single paragraph pointing to the external documentation platform (`https://docs.modulate.ai/` with a trailing ↗). The former in-repo API docs prototype (models/jobs pages, `docs.js`, the model sidebar) was removed; the prototype landing page (`/index-landing/`) was removed as well — the prototype header brand and “Log out” now lead to `/auth/login/`, matching the product.
 
 ---
 
@@ -299,7 +314,7 @@ Two separate page wrappers:
 
 **Styles:** `src/styles/page-composition/wrappers.css` — `.m__wrapper.full-width` is full viewport width with horizontal padding matching `.prototype-header` (`1rem` via `--m__wrapper-full-width-outer-pad`). Child `.m__wrapper__surface` is a full-width panel (`--m__bg-surface-color`, `--m__widget-radius`). Nested `.m__wrapper__inset` uses `width` / `margin-inline` math so its content column aligns with a plain `.m__wrapper` (1050px cap and `0.7rem` side padding).
 
-**Pages:** `src/prototypes/models-api-docs.html`, `src/prototypes/jobs-api-docs.html`.
+**Pages:** currently none in the repo (the former API-docs prototype pages used it); the pattern stays available as part of the design system.
 
 ---
 
@@ -372,16 +387,16 @@ Hover interaction uses `interaction: { mode: "index", intersect: false }` on all
 
 ## Chart.js integration page
 
-**Page:** `src/charts.html` → `/charts/`
+**Page:** `src/tools/charts.html` → `/tools/charts/`
 
-Documentation of the opinionated Chart.js defaults with two live sample widgets and footnoted implementation details. Moved out of the blog (formerly `/blog/charts/`); linked from the Charts section of `src/index.html`.
+Documentation of the opinionated Chart.js defaults with two live sample widgets and footnoted implementation details. Moved out of the blog (formerly `/blog/charts/`, then `/charts/`); linked from the Charts section of `src/design-system.html` and the Tools index.
 
 ---
 
 ## Design-system chart samples
 
 **Script:** `src/assets/service/ds-charts.js`
-**Page:** Charts section in `src/index.html`.
+**Page:** Charts section in `src/design-system.html`.
 **Library:** Chart.js 4.4.0 via CDN, loaded from `ds-layout.html`.
 
 Two sample charts (line and stacked bar) rendered with hardcoded data on the design-system documentation page. Demonstrates the opinionated Chart.js configuration that all product charts should follow. Re-renders on theme change via MutationObserver.
@@ -390,11 +405,11 @@ Two sample charts (line and stacked bar) rendered with hardcoded data on the des
 
 ## Online Docs prototype
 
-**Page:** `src/prototypes/online-docs.html`, `src/prototypes/online-docs/toxmod.html`, `src/prototypes/online-docs/prosocial.html`  
-**Permalink:** `/online-docs/`, `/online-docs/toxmod/`, `/online-docs/prosocial/`  
+**Page:** `src/tools/online-docs/toxmod.html`, `src/tools/online-docs/prosocial.html`  
+**Permalink:** `/tools/online-docs/toxmod/`, `/tools/online-docs/prosocial/`  
 **Layout:** `src/includes/prototypes/online-docs-layout.html` (includes `service/svg-icons-sprite.html` for `<use>` icons in case study markup).  
 **Styles:** `src/styles/prototypes/online-docs.css`  
 **Include:** `src/includes/prototypes/activision-logo.html` (Activision wordmark SVG, `currentColor`, used on the ToxMod case study footer).  
 **Wrapper:** `.m__online-doc-wrapper` sets default body ink **`rgb(20, 20, 50)`** and `a { color: inherit }` (title hero keeps its own theme). **`p.accent`** and **`aside.online-doc-callout`** body copy use accent blue **`rgb(40, 95, 235)`**; links in the callout use **`rgb(35, 84, 207)`** with hover **`rgb(40, 95, 235)`**. **`h1`** in the wrapper uses `--m__font-mono`. **`h4.online-doc-kicker`** — uppercase kicker. **`m__text-width`** — **80%** / **100%** mobile. **`aside.online-doc-callout`**: **2× right padding**; **`online-doc-callout-block`** — **`margin-bottom: 1.5rem`**; first grid class **`online-doc-callout-sequence`** with **`online-doc-callout-item`** (icon + **`__body`**) and sprite **`#behaviors`**, **`#overview-muted`**, **`#done`**, **`#decrease`** (prosocial case study); second grid has **`mark`** + thick blue underline on headline figures; **`m__sequence`** **two columns** on screen (**`--columns: 1`** / full-width items when **`width < 767px`**), **`--m__font-size-xl`**, **`strong`** mono; **print:** page breaks + letter sheet like `.title-container`. **`.title-container`**: when **`width < 767px`**, no horizontal negative margins; horizontal **`padding`** matches vertical (**`--online-doc-title-padding-block`**); hero **`h1`** **`font-size: 3em`** (wider viewports use **`3.5em`** from the wrapper rule). **`.title-container__footer`**: one flex row (**`align-items: baseline`**), **`title-container__footer-spacer`** (`flex: 1`) pushes contact links right; on narrow viewports the spacer line-breaks so links sit on the next row. **`title-container__logo-slot--activision`**: **`bottom: -0.35em`** (visual nudge vs. text links).
 
-Print-oriented document prototype. **Experimental / isolated:** doc-specific variables and components belong only in `online-docs.css`, not in `src/styles/tokens/` or other shared DS files, until the pattern is promoted. Uses `online-docs-layout.html` (no product header or footer). Wrapper `.m__online-doc-wrapper` is a centered reading column; `@page { size: letter }` with margins, break rules, `12pt` print body, and `print-color-adjust: exact`. Browser print headers/footers are turned off in the print dialog, not via CSS. Index links to two sample case studies.
+Print-oriented document prototype. **Experimental / isolated:** doc-specific variables and components belong only in `online-docs.css`, not in `src/styles/tokens/` or other shared DS files, until the pattern is promoted. Uses `online-docs-layout.html` (no product header or footer). Wrapper `.m__online-doc-wrapper` is a centered reading column; `@page { size: letter }` with margins, break rules, `12pt` print body, and `print-color-adjust: exact`. Browser print headers/footers are turned off in the print dialog, not via CSS. The former `/online-docs/` index page was removed; the two case studies are linked directly from the Tools index.

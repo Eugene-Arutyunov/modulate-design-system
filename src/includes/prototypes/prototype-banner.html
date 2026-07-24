@@ -1,0 +1,31 @@
+<div class="prototype-banner" data-prototype-banner hidden>
+  <span class="prototype-banner__text"
+    >This is a design prototype — the real product lives at
+    <a href="https://platform.modulate.ai">platform.modulate.ai</a></span
+  >
+  <button
+    type="button"
+    class="prototype-banner__close"
+    aria-label="Dismiss the prototype notice"
+  >
+    ×
+  </button>
+</div>
+<script>
+  // Runs inline so the banner state is settled before first paint;
+  // dismissal persists in a cookie shared by all prototype pages.
+  (function () {
+    var banner = document.querySelector("[data-prototype-banner]");
+    if (!banner) return;
+    if (!/(?:^|;\s*)prototype-banner-dismissed=1/.test(document.cookie)) {
+      banner.hidden = false;
+    }
+    banner
+      .querySelector(".prototype-banner__close")
+      .addEventListener("click", function () {
+        banner.hidden = true;
+        document.cookie =
+          "prototype-banner-dismissed=1; path=/; max-age=31536000";
+      });
+  })();
+</script>

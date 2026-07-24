@@ -67,48 +67,62 @@
   white-space: nowrap;
 }
 
+/* Post pages: annotation card between the title and the body — a widget-like
+   surface panel (base aside styles) with a small-caps heading. Authored via
+   the post-abstract skill. */
+.post-abstract {
+  margin-block: var(--m__spacer-s);
+  font-size: var(--m__font-size-s);
+
+  & .posts-list-col-title {
+    padding-top: 0;
+  }
+
+  & p:last-child {
+    margin-bottom: 0;
+  }
+}
+
 /* Layers post: table of system layers with live token and component examples */
 .layers-table {
   & td:first-child {
     width: 40%;
   }
 
-  & .layers-table__tokens {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--m__gap-xl);
-  }
-
-  & .layers-table__token-stack {
-    flex: 1;
-    max-width: 11rem;
+  /* Color tokens: full-width row of flush plates, same composition as the
+     palette teaser on the homepage; spacers stack below at full width. */
+  & .layers-table__token-colors {
     display: grid;
-    grid-auto-rows: auto;
-    gap: var(--m__border-width-s);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: var(--m__gap-l);
   }
 
   & .layers-table__token-color {
-    display: block;
-    padding: 0.3rem 0.5rem;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    aspect-ratio: 2 / 1;
+    padding: 0.25rem 0.35rem;
+    font-family: var(--m__font-family-mono);
+    font-size: 0.62rem;
+    line-height: 1;
+    white-space: nowrap;
   }
 
-  & .layers-table__token-stack:has(.layers-table__token-spacer) {
-    grid-template-columns: 1fr max-content;
+  & .layers-table__token-spacers {
+    display: flex;
+    flex-direction: column;
+    gap: var(--m__border-width-s);
   }
 
   & .layers-table__token-spacer {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-    align-items: end;
+    display: flex;
+    align-items: center;
     gap: var(--m__gap-xs);
 
     & > span {
+      flex: 1;
       background-color: color-mix(in srgb, var(--m__text) 12%, transparent);
-    }
-
-    & > code {
-      justify-self: start;
     }
   }
 
@@ -129,6 +143,35 @@
     align-items: center;
     flex-wrap: wrap;
     gap: var(--m__gap-xl);
+  }
+}
+
+/* Page-composition post: the Three-primitives list with the section/widget
+   layout illustration (same include as the UI scheme card on the homepage)
+   to its right; the aside renders as a widget-like surface panel. */
+.post-primitives-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--m__gap-xl);
+
+  & .post-primitives-row__text {
+    flex: 3;
+    min-width: 0;
+  }
+
+  & .post-primitives-row__figure {
+    flex: 2;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+  }
+
+  @media (width < 767px) {
+    flex-direction: column;
+
+    & .post-primitives-row__figure {
+      width: 100%;
+    }
   }
 }
 

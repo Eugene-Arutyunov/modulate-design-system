@@ -7,6 +7,15 @@ Modulate Design System' %} {% block content %}
     {% set postDate = 'April 13, 2026' %} {% include 'service/post-meta.html' %}
     <h1 class="loud">Time as the Main Axis</h1>
 
+    <aside class="post-abstract">
+      <span class="posts-list-col-title">Abstract</span>
+      <p>
+        The main axis of interface layout is not X or Y but time: fast zones for
+        repeated actions, slow zones for reading. Two parts follow — mobile
+        responsiveness out of the box, and adjusting the type scale.
+      </p>
+    </aside>
+
     <p>
       Interface design is fundamentally about matching a flow of information
       with a real human being.
@@ -21,13 +30,16 @@ Modulate Design System' %} {% block content %}
 
   <img
     src="/assets/images/layouts-fullscreen-maps.png"
-    alt="Google Maps: the interface occupies the entire screen" />
+    alt="Google Maps: the interface occupies the entire screen"
+  />
   <img
     src="/assets/images/layouts-column-medium.png"
-    alt="A Medium article: content flows along a single vertical column" />
+    alt="A Medium article: content flows along a single vertical column"
+  />
   <img
     src="/assets/images/layouts-centered-cursor.png"
-    alt="Cursor sign-in: a single centered form" />
+    alt="Cursor sign-in: a single centered form"
+  />
 
   <div class="m__text-width">
     <p>The main axis in interface layout is not X and Y. It's time.</p>
@@ -61,11 +73,96 @@ Modulate Design System' %} {% block content %}
       structure of the content — what the user does quickly, what they do slowly
       — gives a principled basis for the decision.
     </p>
+
+    <div class="m__space L"></div>
+    <h2>Part 2. Mobile Responsiveness Out of the Box</h2>
+
+    <p>Prototypes support mobile responsiveness out of the box.</p>
+
+    <p>
+      The primary target is desktop, but mobile matters. A mobile layout isn't a
+      separate initiative — it's basic accessibility. Getting it wrong means the
+      product becomes unusable for a portion of users before any deliberate
+      mobile work begins.
+    </p>
+
+    <p>
+      The solution is to get layout and navigation right once and maintain
+      responsiveness at the component level. The intermediate layer is
+      <a href="/blog/page-composition/">the widget-and-text-block rule</a>:
+      because widgets and text blocks are isolated, each adapts independently
+      without side effects on its neighbors.
+    </p>
+
+    <p>
+      Full mobile optimization is a somewhat different problem: interactive
+      charts, controls sized for fingers, correct behavior under slow
+      connections, offline states, and so on. All of that can be built on top of
+      the pre-prepared foundation whenever the time is right.
+    </p>
+
+    <p>
+      The distinction matters. "Mobile-ready" means the structure holds.
+      "Mobile-optimized" means the experience is designed for it. The design
+      system provides the former; the latter is deliberate product work on top.
+    </p>
+
+    <div class="m__space L"></div>
+    <h2>Part 3. Adjusting the Type Scale</h2>
+
+    <p>We’ve adjusted the text scale and layout width.</p>
+
+    <p>
+      The design system is built to allow these adjustments. The base font size,
+      the text-width cap, the spacing — all of these are tokens, and the whole
+      system reacts when any of them change.
+    </p>
+
+    <p>
+      Feedback from the team was that the font felt too large, and also that
+      there was a shortage of horizontal space. Large type and narrow width are,
+      in a sense, the same problem.
+    </p>
+
+    <p>The advantages of large text in a narrow column:</p>
+
+    <ul>
+      <li>easy to read</li>
+      <li>the width constraint is disciplining</li>
+      <li>it forces thinking about composition</li>
+      <li>
+        human attention is limited; a narrow column forces building a coherent
+        narrative
+      </li>
+      <li>
+        when the base font is well above the minimum, it allows meaningful
+        contrast with larger headings and smaller captions
+      </li>
+    </ul>
+
+    <p>The disadvantages:</p>
+
+    <ul>
+      <li>can feel unnatural in a platform-product context</li>
+      <li>makes it hard to fill tables and horizontally extended components</li>
+      <li>less fits on screen vertically</li>
+    </ul>
+
+    <p>
+      It's useful to start a design project with less space than you think you
+      need. Constraints are generative.
+    </p>
+
+    <p>
+      But having designed enough and run into real constraints, we decided to
+      listen and move toward more breathing room. The base font went from 125%
+      to 118%, and the text width widened slightly.
+    </p>
   </div>
   <div class="m__space M"></div>
   <div class="m__text-width">
-    <a href="/blog/mobile/" class="m__button-primary-outline read-next"
-      >Read next: <strong>Mobile Responsiveness Out of the Box</strong></a
+    <a href="/blog/graphic-style/" class="m__button-primary-outline read-next"
+      >Read next: <strong>Why Have Your Own Graphic Style</strong></a
     >
   </div>
   <div class="m__space XL"></div>

@@ -83,7 +83,7 @@ toggle the set live. The panel component is `.icon-3d-settings`
 
 ## Icon Studio
 
-`/icon-studio/` (`service/icon-studio.html`,
+`/tools/icon-studio/` (`tools/icon-studio.html`,
 `assets/service/icon-3d/icon-studio.js`, styles
 `styles/service/icon-studio.css`) is a screenshot workbench: one icon on a
 full-width stage with adjustable aspect (2:1–5:4) and a background from the

@@ -1,0 +1,2294 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Modulate Design System' %} {%
+block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <h1 class="loud">Modulate Design System</h1>
+  <div class="m__space M"></div>
+  <div class="m__text-width">
+    <p>
+      This document defines the visual language of Modulate products. Its core is a combination of tokens and components, and the
+      system itself is UI-library-agnostic. The HTML/CSS here is a
+      reference — usable as-is in any vanilla stack. The
+      Next.js implementation lives in Storybook.
+    </p>
+  </div>
+  <div class="m__space S"></div>
+  <table>
+    <colgroup>
+      <col style="width: 15%" />
+      <col style="width: 45%" />
+      <col style="width: 40%" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>What it is</th>
+        <th>Developer’s rule</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Component</code></td>
+        <td>A styled UI element, static or interactive.</td>
+        <td>Treat this as a reference — implement idiomatically for your stack.</td>
+      </tr>
+      <tr>
+        <td><code class="accent">Token</code></td>
+        <td>A named CSS variable storing a single property value.</td>
+        <td>Use tokens as-is: don’t rename, don’t alias, don’t generalize.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="m__space S"></div>
+  <div class="m__text-width">
+    <p>
+      Beyond this, the design system covers color, layout, page composition, graphics, and animation.
+    </p>
+  </div>
+  <div class="m__space S"></div>
+  <div class="navbar-blog-row">
+    <ids-navbar></ids-navbar>
+    <a href="/blog/">Learn more about design at Modulate</a>
+  </div>
+</div>
+
+<ids-nav-item id="color" label="Color">
+  <div class="m__wrapper">
+    <div class="m__space XL"></div>
+
+    <h2>Color</h2>
+    <div class="m__text-width">
+      <p>
+        Color lives in two layers. The <strong>pPalette</strong> holds raw color values —
+        a single source of truth, independent of theme. <strong>Semantic tokens</strong>
+        reference palette entries and are the only place themes
+        switch values. In CSS, point to a semantic token when available; reach into the
+        palette only when there is no semantic match.
+      </p>
+    </div>
+    <div class="m__space S"></div>
+
+    <h3>Palette</h3>
+    
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="color" data-tokens-render="swatch"></div>
+    <div class="m__space L"></div>
+
+    <h3>Semantic tokens</h3>
+    
+    <div class="m__space XS"></div>
+    {% include 'service/color-palette.html' %}
+  </div>
+
+  <div class="m__wrapper">
+    <div class="m__space S"></div>
+
+    <div class="guide-tokens__group">
+      <h4 class="guide-tokens__group-label">Charts</h4>
+      {% include 'service/color-palette-chart.html' %}
+    </div>
+    <div class="m__space S"></div>
+
+    <div class="guide-tokens__group">
+      <h4 class="guide-tokens__group-label">Emotion</h4>
+      {% include 'service/color-palette-emotion.html' %}
+    </div>
+    <div class="m__space L"></div>
+    <div class="m__text-width">
+      <p>
+        Each variable stores a full color value, for example:
+        <code>rgb(253, 47, 75)</code>. To apply transparency, or to blend a
+        color toward the background, use <code>color-mix()</code> directly in
+        selector properties — this keeps the token list short and makes the
+        intent explicit in the code.
+      </p>
+    </div>
+    <div class="m__text-width">
+      <div class="m__code-block">
+        <div class="m__code-block__toolbar">
+          <span>CSS</span>
+        </div>
+        <pre><code>color: var(--m__bg-accent);
+color: color-mix(in srgb, var(--m__bg-accent) 50%, transparent);
+color: color-mix(in srgb, var(--m__bg-accent) 50%, var(--m__bg));</code></pre>
+      </div>
+    </div>
+    <div class="m__space S"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="layout" label="Layout">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Layout</h2>
+    <div class="m__space S"></div>
+
+    <h3>Units</h3>
+    <div class="m__text-width">
+      <p>
+        The main unit is <code>rem</code>, used for text sizes and spacing;
+        <code>em</code> is reserved for inline elements.
+      </p>
+      <p>
+        <code>:root</code> currently sets <code>font-size: 118%</code>, which
+        gives <code>1rem ≈ 18.9px</code>. This can be tuned more precisely
+        later, including with separate values for desktop and mobile if needed.
+      </p>
+      <p>
+        The system supports two layout modes: desktop and mobile. Media queries
+        look at viewport width rather than device type.
+      </p>
+    </div>
+    <div class="m__space S"></div>
+
+    <h3>Page composition</h3>
+    <div class="m__text-width">
+      <p>
+        Pages are composed of stacked full-width sections,
+        <ids-footnote-link>not column grids</ids-footnote-link>. Each section
+        always spans the full available width and takes as much height as its
+        content needs; sections are self-contained and can be reordered without
+        side effects. Complex layouts live inside sections, not across them.
+      </p>
+      <ids-footnote>
+        <p>
+          Navigation is an exception — it can live outside the section flow and does not count as part of it.
+        </p>
+      </ids-footnote>
+      <div class="m__sequence XL gap-M">
+        <div class="m__sequence-item">
+          <p>
+            Section content is either a <strong>Widget</strong> or
+            <strong>Text-content</strong>. A widget is an interactive element or
+            a dedicated component for presenting data. It's normally presented
+            as a card with rounded corners.
+          </p>
+          <p>Text-content is free-form HTML with shared styles applied.</p>
+          <p>
+            A section may contain: one or several Widgets, or one Text-content
+            block (which always spans the full width).
+          </p>
+        </div>
+        <div class="m__sequence-item">
+          <aside class="ui-arch-diagram ui-arch-diagram--layout-only">
+            {% include 'service/ui-arch-diagram-layout.html' %}
+          </aside>
+        </div>
+      </div>
+    </div>
+    <div class="m__space L"></div>
+    <table>
+      <colgroup>
+        <col style="width: 18%" />
+        <col style="width: 57%" />
+        <col style="width: 25%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Sample</th>
+          <th>Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>.m__widget</code></td>
+          <td>
+            <div class="m__widget">
+              This is for interactive elements and purpose-built widgets that
+              display data.
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__widget-radius</code><br />
+            <code class="accent">--m__widget-padding</code>
+          </td>
+        </tr>
+        <tr>
+          <td>Text-content</td>
+          <td>
+
+            <p>
+              This is for documentation-style copy with
+              <a href="https://modulate.ai">links</a>, inline
+              <code>code</code>, headings, and lists, when the content is
+              mostly unstructured HTML rather than a purpose-built UI widget.
+            </p>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="m__space S"></div>
+
+    <h3>Gaps</h3>
+    <div class="m__text-width">
+      <p>
+        Gaps (<code class="accent">--m__gap-*</code>) are the distances
+        <em>inside</em> components — the spacing between an icon and its label,
+        between items in a list, or the inset padding rhythm. Reach for these
+        when building a component.
+      </p>
+      <p>
+        Besides the shared scale below, individual components carry their own
+        gap tokens (<code class="accent">--m__gap-checkbox</code>,
+        <code class="accent">--m__gap-toggle</code>,
+        <code class="accent">--m__gap-table-toolbar</code> and so on) for spacing
+        tuned to that component. They are not part of the general scale.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div
+      class="guide-tokens"
+      data-tokens-prefix="gap"
+      data-tokens-render="gap"
+      data-tokens-exclude="checkbox, tag-group, toggle, popover-item, modal, table-toolbar, table-filters, table-empty"></div>
+    <div class="m__space M"></div>
+
+    
+    <h3>Spacers</h3>
+    <div class="m__text-width">
+      <p>
+        Components carry a default bottom margin (<code class="accent"
+          >--m__default-margin-bottom</code
+        >) and no top margin. This keeps vertical stacking predictable and makes
+        it easy to top-align elements placed side by side.
+      </p>
+      <p>
+        Spacing between sections or before headings is handled with explicit
+        spacer elements (<code>.m__space</code>, backed by
+        <code class="accent">--m__spacer-*</code>), not margins on content
+        elements. The idea behind this is that content elements can’t know what
+        spacing is appropriate in every context — that’s why the spacer should
+        be placed by whoever assembles the layout.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="spacer" data-tokens-render="space"></div>
+    <div class="m__space M"></div>
+
+
+    <h3>Paddings</h3>
+    <div class="m__text-width">
+      <p>
+        Internal padding for UI elements grouped by category — controls, inputs,
+        sidebar links, etc. Most are two-value tokens
+        (<code>padding-block padding-inline</code>); some are full four-value
+        shorthands (<code>top right bottom left</code>) where the inset is asymmetric.
+        Independent from the spacing scale above.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="padding" data-tokens-render="control-padding"></div>
+    <div class="m__space M"></div>
+
+    <h3>Radius</h3>
+    <div class="m__text-width">
+      <p>
+        Five corner radii: a four-step scale and a pill for fully-rounded shapes.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="radius" data-tokens-render="square"></div>
+    <div class="m__space M"></div>
+    <div class="m__text-width">
+      <p>
+        For squircle corners that scale with the element's font size, use the
+        <code>.m__rounded</code> utility instead — it sets
+        <code>--m__rounded-radius</code> (<code>1.5em</code>) with
+        <code>corner-shape: squircle</code>, and falls back to an SVG mask where
+        <code>corner-shape</code> is unsupported.
+      </p>
+    </div>
+
+    <div class="m__space L"></div>
+    <h3>Border width</h3>
+    <div class="m__text-width">
+      <p>
+        Three stroke weights: <code>s</code> for hairlines and dividers,
+        <code>m</code> for outlined controls (toggles, checkboxes, inputs,
+        outline buttons), <code>l</code> for accent frames like the upload
+        plate.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="border-width" data-tokens-render="border-width"></div>
+    <div class="m__space S"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="typography" label="Typography">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Typography</h2>
+    <div class="m__space S"></div>
+
+    <h3>Tokens</h3>
+    <div class="m__text-width">
+      <p>
+        Font sizes use <code>rem</code> units except
+        <code>font-size-smaller</code>, which is <code>em</code> — it sizes
+        content slightly smaller than the surrounding text.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens__group">
+      <p class="guide-tokens__group-label">Sizes</p>
+      <div class="guide-tokens" data-tokens-prefix="font-size" data-tokens-render="text-size"></div>
+    </div>
+    <div class="m__space M"></div>
+    <div class="guide-tokens__group">
+      <p class="guide-tokens__group-label">Weights</p>
+      <div class="guide-tokens" data-tokens-prefix="font-weight" data-tokens-render="text-weight"></div>
+    </div>
+    <div class="m__space M"></div>
+    <div class="guide-tokens__group">
+      <p class="guide-tokens__group-label">Families</p>
+      <div class="guide-tokens" data-tokens-prefix="font-family" data-tokens-render="text-family"></div>
+    </div>
+    <div class="m__space M"></div>
+
+    <h3>Blocks</h3>
+    <div class="m__text-width">
+      <p>
+        In this repository, the supported text elements (headings, paragraphs,
+        links, lists, inline code) are styled through their HTML tags. In
+        production, especially when combining different versions or styling
+        systems, that approach can let styles leak inward or
+        <ids-footnote-link>outward</ids-footnote-link>.
+      </p>
+      <ids-footnote>
+        <p>
+          Common responses include:</p>
+          <ul>
+              <li>scoping styles at the component boundary, using class-based selectors instead of bare tags where outward leakage is a concern,</li>
+              <li>adding component-level CSS resets where inward leakage is a concern,</li>
+              <li>or another approach that fits the stack.</li>
+            </ul>
+        </p>
+      </ids-footnote>
+      <p>
+        The same elements show up inside interactive components and inside
+        widgets, and on their own as unstructured HTML in Text-content sections.
+      </p>
+    </div>
+    <div class="m__space M"></div>
+    <table>
+      <colgroup>
+        <col style="width: 15%" />
+        <col style="width: 60%" />
+        <col style="width: 25%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Sample</th>
+          <th>Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>p</code></td>
+          <td>
+            <p>
+              High-performance API that transforms spoken audio into sharp,
+              actionable insights: detecting fraud, surfacing social toxicity,
+              and spotlighting positive human behavior with impressive speed and
+              precision.
+            </p>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>strong</code></td>
+          <td>
+            <p>
+              High-performance API that transforms spoken audio into
+              <strong
+                >sharp, actionable insights: detecting fraud, surfacing social
+                toxicity,</strong
+              >
+              and spotlighting positive human behavior with impressive speed and
+              precision.
+            </p>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>a</code></td>
+          <td>
+            <p>
+              License: <a href="https://modulate.ai/contact">Proprietary</a>
+            </p>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>code</code></td>
+          <td>
+            <p>
+              Authenticate via the <code>Authorization</code> header using
+              <code>Basic</code> auth.
+            </p>
+          </td>
+          <td>
+            <code class="accent">--m__font-size-smaller</code><br />
+            <code class="accent">--m__font-family-mono</code><br />
+            <code class="accent">--m__font-weight-regular</code><br />
+            <code class="accent">--m__text-code</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>h1.loud</code></td>
+          <td><h1 class="loud">Documentation</h1></td>
+          <td>
+            <code class="accent">--m__font-family-gothic</code><br />
+            <code class="accent">--m__font-size-display</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>h1</code></td>
+          <td><h1>Modulate Platform API (0.1.0)</h1></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>h2</code></td>
+          <td><h2>List all jobs associated with the account</h2></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>ul</code></td>
+          <td>
+            <ul>
+              <li>The username should be equal to your account ID.</li>
+              <li>The password should be equal to your API key.</li>
+            </ul>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>.caption</code></td>
+          <td>
+            <p class="caption">
+              Supported formats: MP3, WAV, OGG, FLAC. Maximum file size 500 MB.
+            </p>
+          </td>
+          <td>
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__text-caption</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__code-block</code></td>
+          <td>
+            <div class="m__code-block">
+              <div class="m__code-block__toolbar">
+                <span>example.yaml</span>
+              </div>
+              <pre><code>endpoint: /api/velma-2-stt-batch
+method: POST</code></pre>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__bg-surface</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__font-family-mono</code><br />
+            <code class="accent">--m__font-size-smaller</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="m__space S"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="components" label="Components">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Components</h2>
+    <div class="m__space S"></div>
+
+    <table>
+      <colgroup>
+        <col style="width: 15%" />
+        <col style="width: 60%" />
+        <col style="width: 25%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Sample</th>
+          <th>Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>.m__button-primary.M</code></td>
+          <td>
+            <button type="button" class="m__button-primary M">Create API key</button>
+            &nbsp;
+            <button type="button" class="m__button-primary M">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#api-key"></use>
+              </svg>
+              Create API key
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__bg-accent-pressed</code><br />
+            <code class="accent">--m__text-inverted</code><br />
+            <code class="accent">--m__text-link-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-primary.S</code></td>
+          <td>
+            <button type="button" class="m__button-primary S">Create API key</button>
+            &nbsp;
+            <button type="button" class="m__button-primary S">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#api-key"></use>
+              </svg>
+              Create API key
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__bg-accent-pressed</code><br />
+            <code class="accent">--m__text-inverted</code><br />
+            <code class="accent">--m__text-link-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-secondary.M</code></td>
+          <td>
+            <button type="button" class="m__button-secondary M">Sign in</button>
+            &nbsp;
+            <button type="button" class="m__button-secondary M">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#google"></use>
+              </svg>
+              Continue with Google
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-secondary.S</code></td>
+          <td>
+            <button type="button" class="m__button-secondary S">Sign in</button>
+            &nbsp;
+            <button type="button" class="m__button-secondary S">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#google"></use>
+              </svg>
+              Continue with Google
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-primary-outline.M</code></td>
+          <td>
+            <button type="button" class="m__button-primary-outline M">Choose file</button>
+            &nbsp;
+            <button type="button" class="m__button-primary-outline M">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#streaming"></use>
+              </svg>
+              Start streaming
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__border-width-m</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-primary-outline.S</code></td>
+          <td>
+            <button type="button" class="m__button-primary-outline S">Choose file</button>
+            &nbsp;
+            <button type="button" class="m__button-primary-outline S">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#streaming"></use>
+              </svg>
+              Start streaming
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__border-width-m</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-secondary-outline.M</code></td>
+          <td>
+            <button type="button" class="m__button-secondary-outline M">Cancel</button>
+            &nbsp;
+            <button type="button" class="m__button-secondary-outline M">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#overview"></use>
+              </svg>
+              Continue with Google
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-secondary-outline.S</code></td>
+          <td>
+            <a href="#" class="m__button-secondary-outline S">Cancel</a>
+            &nbsp;
+            <button type="button" class="m__button-secondary-outline S">
+              <svg
+                class="m__button__icon"
+                viewBox="0 0 32 32"
+                aria-hidden="true">
+                <use href="#overview"></use>
+              </svg>
+              Continue with Google
+            </button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__button-icon-size</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-danger-outline.M</code></td>
+          <td>
+            <button type="button" class="m__button-danger-outline M">Delete</button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__error</code><br />
+            <code class="accent">--m__error-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-danger-outline.S</code></td>
+          <td>
+            <button type="button" class="m__button-danger-outline S">Delete</button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__error</code><br />
+            <code class="accent">--m__error-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-success-outline.M</code></td>
+          <td>
+            <button type="button" class="m__button-success-outline M">Activate</button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__success</code><br />
+            <code class="accent">--m__success-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__button-success-outline.S</code></td>
+          <td>
+            <button type="button" class="m__button-success-outline S">Activate</button>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__success</code><br />
+            <code class="accent">--m__success-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__menu-button-primary.M</code></td>
+          <td>
+            <div class="m__menu-button">
+              <button
+                type="button"
+                class="m__menu-button-primary M m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                Start streaming
+                <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#chevron-down"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Stream demo</button>
+                <button type="button" class="m__menu-button-item">Stream from file...</button>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__border-width-m</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__menu-button-primary.S</code></td>
+          <td>
+            <div class="m__menu-button">
+              <button
+                type="button"
+                class="m__menu-button-primary S m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                Start streaming
+                <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#chevron-down"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Stream demo</button>
+                <button type="button" class="m__menu-button-item">Stream from file...</button>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__border-width-m</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__menu-button-secondary.M</code></td>
+          <td>
+            <div class="m__menu-button">
+              <button
+                type="button"
+                class="m__menu-button-secondary M m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                Actions
+                <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#chevron-down"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Edit</button>
+                <button type="button" class="m__menu-button-item">Duplicate</button>
+                <button type="button" class="m__menu-button-item m__menu-button-item--danger">Delete</button>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__menu-button-secondary.S</code></td>
+          <td>
+            <div class="m__menu-button">
+              <button
+                type="button"
+                class="m__menu-button-secondary S m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                Actions
+                <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#chevron-down"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Edit</button>
+                <button type="button" class="m__menu-button-item">Duplicate</button>
+                <button type="button" class="m__menu-button-item m__menu-button-item--danger">Delete</button>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__menu-button-icon.M</code></td>
+          <td>
+            <div class="m__menu-button">
+              <button
+                type="button"
+                class="m__menu-button-icon M m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-label="Actions"
+              >
+                <svg viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#dots-vertical"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Edit</button>
+                <button type="button" class="m__menu-button-item">Duplicate</button>
+                <button type="button" class="m__menu-button-item m__menu-button-item--danger">Delete</button>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__menu-button-icon.S</code></td>
+          <td>
+            <div class="m__menu-button">
+              <button
+                type="button"
+                class="m__menu-button-icon S m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-label="Actions"
+              >
+                <svg viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#dots-vertical"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Edit</button>
+                <button type="button" class="m__menu-button-item">Duplicate</button>
+                <button type="button" class="m__menu-button-item m__menu-button-item--danger">Delete</button>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__nav-menu-item</code></td>
+          <td>
+            <nav class="m__nav-menu" aria-label="Sample navigation">
+              <a href="#" class="m__nav-menu-item active">
+                <svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#overview"></use>
+                </svg>
+                <span>Overview</span>
+              </a>
+            </nav>
+          </td>
+          <td>
+            <code class="accent">--m__gap-nav-menu-item</code><br />
+            <code class="accent">--m__padding-nav-menu-item</code><br />
+            <code class="accent">--m__padding-nav-menu-caption</code><br />
+            <code class="accent">--m__padding-nav-menu-caption-first</code><br />
+            <code class="accent">--m__radius-l</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__bg-surface</code><br />
+            <code class="accent">--m__font-weight-heavy</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__duration-instant</code><br />
+            <code class="accent">--m__easing-base</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__nav-menu</code></td>
+          <td>
+            <nav class="m__nav-menu" aria-label="Dashboard navigation">
+              <a href="#" class="m__nav-menu-item active">
+                <svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#overview"></use>
+                </svg>
+                <span>Overview</span>
+              </a>
+              <a href="#" class="m__nav-menu-item">
+                <svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#api-key"></use>
+                </svg>
+                <span>API Keys</span>
+              </a>
+              <a href="#" class="m__nav-menu-item">
+                <svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#usage"></use>
+                </svg>
+                <span>Usage</span>
+              </a>
+              <a href="#" class="m__nav-menu-item">
+                <svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#behaviors"></use>
+                </svg>
+                <span>Behaviors</span>
+              </a>
+              <a href="#" class="m__nav-menu-item">
+                <svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#billing"></use>
+                </svg>
+                <span>Billing</span>
+              </a>
+              <a href="#" class="m__nav-menu-item">
+                <svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#account"></use>
+                </svg>
+                <span>Organization</span>
+              </a>
+            </nav>
+          </td>
+          <td>
+            <code class="accent">--m__gap-nav</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__split-button</code></td>
+          <td>
+            <div class="m__menu-button m__split-button">
+              <button type="button" class="m__button-primary-outline M">Start streaming</button>
+              <button
+                type="button"
+                class="m__menu-button-primary M m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-label="Streaming options"
+              >
+                <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#chevron-down"></use>
+                </svg>
+              </button>
+              <div class="m__menu-button-list" hidden>
+                <button type="button" class="m__menu-button-item">Stream demo</button>
+                <button type="button" class="m__menu-button-item">Stream from file...</button>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__border-width-m</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text-link-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__radio-card</code></td>
+          <td>
+            <label class="m__radio-card">
+              <input type="radio" name="docs-credit-card" value="1000" checked />
+              <span class="m__radio-card__value">1,000</span>
+              <span class="m__radio-card__caption">$10.00</span>
+            </label>
+          </td>
+          <td>
+            <code class="accent">--m__radio-card-padding</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-weight-regular</code><br />
+            <code class="accent">--m__line-height-base</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__text-link-pressed</code><br />
+            <code class="accent">--m__bg-accent-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__radio-card-group</code></td>
+          <td>
+            <fieldset class="m__radio-card-group" aria-label="Credit amount">
+              <label class="m__radio-card">
+                <input type="radio" name="docs-credit-amount" value="100" />
+                <span class="m__radio-card__value">100</span>
+                <span class="m__radio-card__caption">$1.00</span>
+              </label>
+              <label class="m__radio-card">
+                <input type="radio" name="docs-credit-amount" value="1000" checked />
+                <span class="m__radio-card__value">1,000</span>
+                <span class="m__radio-card__caption">$10.00</span>
+              </label>
+            </fieldset>
+          </td>
+          <td>
+            <code class="accent">--m__gap-xxxs</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__option-list</code></td>
+          <td>
+            <div class="m__option-list" style="max-width: 20rem">
+              <a href="#" class="m__option-list__item">
+                <span class="m__option-list__item-label">Personal</span>
+                <span class="m__option-list__item-tags">
+                  <span class="m__tag">Admin</span>
+                </span>
+              </a>
+              <a href="#" class="m__option-list__item">
+                <span class="m__option-list__item-label">Sinelnikov Corp.</span>
+                <span class="m__option-list__item-tags">
+                  <span class="m__tag">Admin</span>
+                  <span class="m__tag">Internal</span>
+                </span>
+              </a>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__gap-s</code><br />
+            <code class="accent">--m__gap-xxxs</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__tag</code></td>
+          <td>
+            <span style="display: inline-flex; gap: var(--m__gap-xxxs)">
+              <span class="m__tag">Admin</span>
+              <span class="m__tag">Internal</span>
+            </span>
+          </td>
+          <td>
+            <code class="accent">--m__padding-control-xs</code><br />
+            <code class="accent">--m__radius-xs</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__border-width-s</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__tag-flat</code></td>
+          <td>
+            <span style="display: inline-flex; gap: var(--m__gap-xxxs)">
+              <span class="m__tag-flat">default</span>
+            </span>
+          </td>
+          <td>
+            <code class="accent">--m__font-size-xs</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__text-caption</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__chip</code></td>
+          <td>
+            <label class="m__chip"><input type="checkbox" checked />Social Conversation</label>
+          </td>
+          <td>
+            <code class="accent">--m__padding-control-xs</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__chip-group</code></td>
+          <td>
+            <div class="m__chip-group" style="max-width: 20rem">
+              <label class="m__chip"><input type="checkbox" />Customer Service Call</label>
+              <label class="m__chip"><input type="checkbox" checked />Social Conversation</label>
+              <label class="m__chip"><input type="checkbox" />Enterprise IT support</label>
+              <label class="m__chip"><input type="checkbox" checked />General Media Narration</label>
+              <label class="m__chip"><input type="checkbox" />Multiple Speakers</label>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__gap-xxxs</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__textfield.M</code></td>
+          <td>
+            <div class="m__textfield M" style="max-width: 16rem">
+              <label for="docs-tf-email">Email</label>
+              <input type="email" id="docs-tf-email" name="email" />
+            </div>
+            <div class="m__space S"></div>
+            <div class="m__textfield M" style="max-width: 16rem">
+              <label for="docs-tf-password">Password</label>
+              <input type="password" id="docs-tf-password" name="password" />
+            </div>
+            <div class="m__space S"></div>
+            <div class="m__textfield M" style="max-width: 16rem">
+              <label for="docs-tf-disabled">Email</label>
+              <input type="email" id="docs-tf-disabled" disabled />
+            </div>
+            <div class="m__space S"></div>
+            <div class="m__textfield M" style="max-width: 16rem">
+              <label for="docs-tf-invalid">Email</label>
+              <input
+                type="email"
+                id="docs-tf-invalid"
+                name="email"
+                aria-invalid="true"
+                aria-describedby="docs-tf-invalid-error" />
+              <div class="m__textfield__message" id="docs-tf-invalid-error">
+                <span>Enter a valid email address</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-input-m</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__error</code><br />
+            <code class="accent">--m__line-height-base</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__select.M</code></td>
+          <td>
+            <div class="m__select M" style="max-width: 16rem">
+              <label for="docs-select">Model</label>
+              <div class="m__select__control">
+                <select id="docs-select">
+                  <option>All models</option>
+                  <option>Option A</option>
+                  <option>Option B</option>
+                </select>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-input-m</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__line-height-base</code><br />
+            <code class="accent">--m__bg-surface</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__select.S</code></td>
+          <td>
+            <label class="m__select S" style="max-width: 16rem">
+              <span>Model</span>
+              <div class="m__select__inline-control">
+                <span class="m__select__value">All</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                <select id="docs-sc-model">
+                  <option>All</option>
+                  <option>Option A</option>
+                  <option>Option B</option>
+                </select>
+              </div>
+            </label>
+          </td>
+          <td>
+            <code class="accent">--m__padding-input-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__line-height-base</code><br />
+            <code class="accent">--m__bg-surface</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__datepicker.M</code></td>
+          <td>
+            <div class="m__datepicker M" style="max-width: 16rem">
+              <label for="docs-dp-date">Date</label>
+              <div class="m__datepicker__field">
+                <input type="date" id="docs-dp-date" value="2026-04-20" />
+                <svg width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><use href="#calendar"></use></svg>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-input-m</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__line-height-base</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__datepicker.S</code></td>
+          <td>
+            <label class="m__datepicker S" for="docs-dp-date-s" style="max-width: 16rem">
+              <svg width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><use href="#calendar"></use></svg>
+              <span>Date</span>
+              <input type="date" id="docs-dp-date-s" value="2026-04-20" />
+            </label>
+          </td>
+          <td>
+            <code class="accent">--m__padding-input-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-size-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__bg-input</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__line-height-base</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__segmented-control-primary</code></td>
+          <td>
+            <fieldset class="m__segmented-control-primary">
+              <label
+                ><input type="radio" name="docs-period" value="7d" />Last 7
+                days</label
+              >
+              <label
+                ><input type="radio" name="docs-period" value="30d" checked />30
+                days</label
+              >
+            </fieldset>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__border-width-m</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link</code><br />
+            <code class="accent">--m__text-link-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__segmented-control-secondary</code></td>
+          <td>
+            <fieldset class="m__segmented-control-secondary">
+              <label
+                ><input type="radio" name="docs-period-secondary" value="active" checked />Active</label
+              >
+              <label
+                ><input type="radio" name="docs-period-secondary" value="inactive" />Inactive</label
+              >
+            </fieldset>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-s</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>.m__alert-error</code><br />
+            <code>.m__alert-success</code>
+          </td>
+          <td>
+            <div class="m__alert-error">This reset link is invalid or has expired.</div>
+            <div class="m__space XS"></div>
+            <div class="m__alert-success">Password reset successfully.</div>
+          </td>
+          <td>
+            <code class="accent">--m__padding-button-m</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__error</code><br />
+            <code class="accent">--m__success</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>.m__checkbox-primary</code>
+          </td>
+          <td>
+            <label class="m__checkbox-primary">
+              <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+              Unchecked
+            </label>
+            <div class="m__space XS"></div>
+            <label class="m__checkbox-primary">
+              <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+              Checked
+            </label>
+            <div class="m__space XS"></div>
+            <label class="m__checkbox-primary">
+              <input type="checkbox" disabled /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+              Disabled
+            </label>
+          </td>
+          <td>
+            <code class="accent">--m__radius-xs</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__bg-accent-hover</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__gap-checkbox</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>.m__checkbox-secondary</code>
+          </td>
+          <td>
+            <label class="m__checkbox-secondary">
+              <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+              Unchecked
+            </label>
+            <div class="m__space XS"></div>
+            <label class="m__checkbox-secondary">
+              <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+              Checked
+            </label>
+            <div class="m__space XS"></div>
+            <label class="m__checkbox-secondary">
+              <input type="checkbox" disabled /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+              Disabled
+            </label>
+          </td>
+          <td>
+            <code class="accent">--m__radius-xs</code><br />
+            <code class="accent">--m__border-width-m</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__gap-checkbox</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>.m__toggle-primary</code>
+          </td>
+          <td>
+            <label class="m__toggle-primary">
+              <input type="checkbox" />
+              Off
+            </label>
+            <div class="m__space XS"></div>
+            <label class="m__toggle-primary">
+              <input type="checkbox" checked />
+              On
+            </label>
+            <div class="m__space XS"></div>
+            <label class="m__toggle-primary">
+              <input type="checkbox" disabled />
+              Disabled
+            </label>
+          </td>
+          <td>
+            <code class="accent">--m__radius-pill</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__gap-toggle</code>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <code>.m__toggle-secondary</code>
+          </td>
+          <td>
+            <label class="m__toggle-secondary">
+              <input type="checkbox" />
+              Off
+            </label>
+            <div class="m__space XS"></div>
+            <label class="m__toggle-secondary">
+              <input type="checkbox" checked />
+              On
+            </label>
+            <div class="m__space XS"></div>
+            <label class="m__toggle-secondary">
+              <input type="checkbox" disabled />
+              Disabled
+            </label>
+          </td>
+          <td>
+            <code class="accent">--m__radius-pill</code><br />
+            <code class="accent">--m__border-width-m</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__bg-accent</code><br />
+            <code class="accent">--m__font-weight-medium</code><br />
+            <code class="accent">--m__text</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__gap-toggle</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__loader</code></td>
+          <td>
+            <img class="m__loader" src="/assets/service/loader-icon.svg" alt="" aria-hidden="true" />
+          </td>
+          <td>
+            <code class="accent">--m__loader-size</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__tooltip</code></td>
+          <td>
+            <span class="m__tag" data-tooltip="Conversations in which a service representative handles customer inquiries, complaints, or support requests on behalf of the organization.">Hover me to see the tooltip</span>
+          </td>
+          <td>
+            <code class="accent">--m__color-gray-950</code><br />
+            <code class="accent">--m__color-gray-50</code><br />
+            <code class="accent">--m__padding-control-xs</code><br />
+            <code class="accent">--m__radius-s</code><br />
+            <code class="accent">--m__font-size-xs</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__popover</code></td>
+          <td>
+            <div style="position: relative; height: 14rem;">
+              <div class="m__popover" style="position: absolute; top: 0; left: 0; width: 15rem;">
+                <div class="m__searchbar">
+                  <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14"><use href="#search"></use></svg>
+                  <input type="text" placeholder="Search…" />
+                </div>
+                <div class="m__popover-list">
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary"><input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg></span>
+                    <span class="m__popover-item-name">Customer Service Call</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary"><input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg></span>
+                    <span class="m__popover-item-name">Sales Outreach</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary"><input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg></span>
+                    <span class="m__popover-item-name">Hiring Interview</span>
+                  </label>
+                </div>
+                <div class="m__popover-footer">
+                  <button type="button" class="m__popover-new-btn">Create new</button>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__bg</code><br />
+            <code class="accent">--m__bg-surface</code><br />
+            <code class="accent">--m__border</code><br />
+            <code class="accent">--m__border-width-s</code><br />
+            <code class="accent">--m__widget-radius</code><br />
+            <code class="accent">--m__radius-m</code><br />
+            <code class="accent">--m__font-size-xs</code><br />
+            <code class="accent">--m__text-caption</code><br />
+            <code class="accent">--m__text-link</code><br />
+            <code class="accent">--m__text-link-hover</code><br />
+            <code class="accent">--m__gap-popover-item</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="m__text-width">
+      <aside>
+        <h4>Button vs anchor</h4>
+        <p>
+          Use <code>&lt;button&gt;</code> for actions (submit, toggle, delete).
+          Use <code>&lt;a&gt;</code> for links, navigation to a URL. Some
+          actions may result in navigation, the distinction is a link could be
+          shared or saved to bookmarks.
+        </p>
+      </aside>
+    </div>
+    <div class="m__text-width">
+      <aside>
+        <h4>Hover area and clickability</h4>
+        <p>
+          Every clickable element must change on hover. No non-clickable element
+          should. The hover area and the click area must be identical — and
+          where possible, both should be larger than the visual size of the
+          element to make targeting comfortable.
+        </p>
+      </aside>
+    </div>
+    <div class="m__text-width">
+      <aside>
+        <h4>Acceptable hover states</h4>
+        <p>
+          Acceptable hover changes: recoloring text or underline (including
+          opacity), brightening an image, elevating a block. Avoid inverting
+          color or contrast, zooming an image inside a block, or hiding existing
+          content.
+        </p>
+      </aside>
+    </div>
+    <div class="m__text-width">
+      <aside>
+        <h4>Hover timing</h4>
+        <p>
+          Hover always responds instantly — zero transition, no exceptions.
+          Unhover animates back, 0.3–0.5s. All elements within a block animate
+          in sync, in both directions.
+        </p>
+      </aside>
+    </div>
+    <div class="m__space S"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="graphics" label="Graphics">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Graphics</h2>
+    <div class="m__space S"></div>
+
+    <h3>Icons</h3>
+    <div class="m__text-width">
+      <p>
+        Icons are collected into one hidden SVG sprite and then reused through
+        <code>&lt;use&gt;</code>. This keeps each icon defined once, avoids
+        duplicated SVG markup, and makes color inheritance and updates easier to
+        manage.
+      </p>
+
+      <p>
+        Here are the current icons and their ids. A tile click copies a
+        standalone SVG with resolved colors for Illustrator, Figma, or similar
+        tools.
+      </p>
+
+      <div class="docs-icon-row">
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#modulate"></use>
+          </svg>
+          <span class="docs-icon-row__label">#modulate</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#ai-music"></use>
+          </svg>
+          <span class="docs-icon-row__label">#ai-music</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#account"></use>
+          </svg>
+          <span class="docs-icon-row__label">#account</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#api-docs"></use>
+          </svg>
+          <span class="docs-icon-row__label">#api-docs</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#api-key"></use>
+          </svg>
+          <span class="docs-icon-row__label">#api-key</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#batch"></use>
+          </svg>
+          <span class="docs-icon-row__label">#batch</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#behaviors"></use>
+          </svg>
+          <span class="docs-icon-row__label">#behaviors</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#billing"></use>
+          </svg>
+          <span class="docs-icon-row__label">#billing</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#decrease"></use>
+          </svg>
+          <span class="docs-icon-row__label">#decrease</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#done"></use>
+          </svg>
+          <span class="docs-icon-row__label">#done</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#calendar"></use>
+          </svg>
+          <span class="docs-icon-row__label">#calendar</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#models"></use>
+          </svg>
+          <span class="docs-icon-row__label">#models</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#music"></use>
+          </svg>
+          <span class="docs-icon-row__label">#music</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#overview"></use>
+          </svg>
+          <span class="docs-icon-row__label">#overview</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#redaction"></use>
+          </svg>
+          <span class="docs-icon-row__label">#redaction</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#prosocial"></use>
+          </svg>
+          <span class="docs-icon-row__label">#prosocial</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#stt-med"></use>
+          </svg>
+          <span class="docs-icon-row__label">#stt-med</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#streaming"></use>
+          </svg>
+          <span class="docs-icon-row__label">#streaming</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#transcript"></use>
+          </svg>
+          <span class="docs-icon-row__label">#transcript</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#velma"></use>
+          </svg>
+          <span class="docs-icon-row__label">#velma</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#usage"></use>
+          </svg>
+          <span class="docs-icon-row__label">#usage</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#search"></use>
+          </svg>
+          <span class="docs-icon-row__label">#search</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#deepfake"></use>
+          </svg>
+          <span class="docs-icon-row__label">#deepfake</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#emotions"></use>
+          </svg>
+          <span class="docs-icon-row__label">#emotions</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#language"></use>
+          </svg>
+          <span class="docs-icon-row__label">#language</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#accent"></use>
+          </svg>
+          <span class="docs-icon-row__label">#accent</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#voice-match"></use>
+          </svg>
+          <span class="docs-icon-row__label">#voice-match</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#apple"></use>
+          </svg>
+          <span class="docs-icon-row__label">#apple</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#facebook"></use>
+          </svg>
+          <span class="docs-icon-row__label">#facebook</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#github"></use>
+          </svg>
+          <span class="docs-icon-row__label">#github</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#google"></use>
+          </svg>
+          <span class="docs-icon-row__label">#google</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 32 32"
+            aria-hidden="true">
+            <use href="#microsoft"></use>
+          </svg>
+          <span class="docs-icon-row__label">#microsoft</span>
+        </div>
+      </div>
+      <div class="m__space S"></div>
+      <p>
+        Brand icons and selected signal icons (for example
+        <code>#deepfake</code>, <code>#emotions</code>, and <code>#music</code>)
+        keep fixed accent fills where needed; other shapes use
+        <code>currentColor</code> and inherit <code>color</code> from the parent.
+      </p>
+
+      <p>
+        The model icons also render as browser-generated 3D shapes. Need one
+        as an image? Open <a href="/tools/icon-studio/">Icon Studio</a> — pick an
+        icon and a backdrop, set the angle, and take a screenshot.
+      </p>
+
+      <div class="docs-icon-row docs-icon-row--3d">
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="velma"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#velma"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#velma</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="transcript"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#transcript"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#transcript</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="deepfake"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#deepfake"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#deepfake</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="redaction"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#redaction"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#redaction</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="music"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#music"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#music</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="stt-med"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#stt-med"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#stt-med</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="ai-music"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#ai-music"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#ai-music</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="language"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#language"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#language</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="accent"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#accent"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#accent</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="emotions"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#emotions"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#emotions</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <span
+            class="docs-icon-row__icon"
+            data-model-icon-3d="voice-match"
+            data-model-icon-3d-mode="home"
+            aria-hidden="true">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#voice-match"></use>
+            </svg>
+          </span>
+          <span class="docs-icon-row__label">#voice-match</span>
+        </div>
+      </div>
+      <div class="m__space S"></div>
+      <p>UI icons — used for interactive controls:</p>
+      <div class="docs-icon-row">
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 12 12"
+            aria-hidden="true">
+            <use href="#chevron-down"></use>
+          </svg>
+          <span class="docs-icon-row__label">#chevron-down</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 12 12"
+            aria-hidden="true">
+            <use href="#chevron-left"></use>
+          </svg>
+          <span class="docs-icon-row__label">#chevron-left</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 16 16"
+            aria-hidden="true">
+            <use href="#close"></use>
+          </svg>
+          <span class="docs-icon-row__label">#close</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 10 10"
+            aria-hidden="true">
+            <use href="#checkmark"></use>
+          </svg>
+          <span class="docs-icon-row__label">#checkmark</span>
+        </div>
+        <div class="docs-icon-row__item">
+          <svg
+            class="docs-icon-row__icon"
+            viewBox="0 0 12 12"
+            aria-hidden="true">
+            <use href="#dots-vertical"></use>
+          </svg>
+          <span class="docs-icon-row__label">#dots</span>
+        </div>
+      </div>
+    </div>
+    <div class="m__space S"></div>
+
+    <h3>Charts</h3>
+    <div class="m__text-width">
+      <p>Charts — <a href="/tools/charts/">see the Chart.js integration page</a>.</p>
+    </div>
+    <div class="m__space S"></div>
+  </div>
+</ids-nav-item>
+
+<ids-nav-item id="animations" label="Animations">
+  <div class="m__wrapper">
+    <div class="m__space L"></div>
+
+    <h2>Animations</h2>
+    <div class="m__text-width">
+      <p>
+        Animation tokens define timing only. The system provides tokens for
+        instant hover, animated unhover, and shared easing, but it does not
+        prescribe which CSS properties should be included in a transition.
+      </p>
+    </div>
+    <div class="m__space XS"></div>
+    <h3>Durations</h3>
+    <div class="m__text-width">
+      <p>Hover the row to play.</p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="duration" data-tokens-render="duration"></div>
+    <div class="m__space M"></div>
+
+    <h3>Easing</h3>
+    <div class="m__text-width">
+      <p>Hover the row to play at 1s.</p>
+    </div>
+    <div class="m__space XS"></div>
+    <div class="guide-tokens" data-tokens-prefix="easing" data-tokens-render="easing"></div>
+    <div class="m__space M"></div>
+
+    <h3>In components</h3>
+    <table>
+      <colgroup>
+        <col style="width: 15%" />
+        <col style="width: 60%" />
+        <col style="width: 25%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Interaction</th>
+          <th>Sample</th>
+          <th>Tokens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>hover</code></td>
+          <td>
+            <div class="docs-animation-samples">
+              <div class="docs-animation-samples__text">
+                <p><a href="https://modulate.ai">Text link</a></p>
+              </div>
+              <button type="button" class="m__button-primary M">Button</button>
+              <div class="nav-sidebar docs-animation-samples__sidebar">
+                <nav class="m__nav-menu">
+                  <a href="#" class="m__nav-menu-item">
+                    <svg
+                      class="m__nav-menu-item__icon"
+                      viewBox="0 0 32 32"
+                      aria-hidden="true">
+                      <use href="#overview"></use>
+                    </svg>
+                    <span>Sidebar item</span>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </td>
+          <td>
+            <code class="accent">--m__duration-instant</code><br />
+            <code class="accent">--m__duration-base</code><br />
+            <code class="accent">--m__easing-base</code>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="m__space S"></div>
+    <div class="m__text-width">
+      <aside>
+        <h4>Scroll-triggered animation</h4>
+        <p>
+          If an element is meant to animate on scroll, then: entering the
+          viewport transitions it to its active state (≈0.3s); leaving returns
+          it to its initial state (≈0.1s); this can repeat indefinitely. Scroll
+          position only triggers the state switch — it never drives the
+          animation phase directly.
+        </p>
+      </aside>
+    </div>
+    <div class="m__space XL"></div>
+  </div>
+</ids-nav-item>
+<script src="/assets/prototypes/menu-button.js"></script>
+{% include 'service/icon-3d-importmap.html' %}
+<script type="module" src="/assets/service/icon-3d/model-icon-3d.js"></script>
+{% endblock %}

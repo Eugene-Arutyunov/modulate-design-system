@@ -18,11 +18,12 @@ startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
   href="/pricing/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/pricing/') }}"
   >Pricing</a
->{% endif %} {% if currentUrl == '/models-api-docs/' or currentUrl ==
-'/jobs-api-docs/' %}<span class="prototype-header__link active">Docs</span>{%
-else %}<a
-  href="/models-api-docs/"
-  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
+>{% endif %} {% if currentUrl == '/docs/' %}<span
+  class="prototype-header__link active"
+  >Docs</span
+>{% else %}<a
+  href="/docs/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/docs/') }}"
   >Docs</a
 >{% endif %} {% elif variant == "landing" %}
 <a
@@ -36,11 +37,12 @@ else %}<a
   href="/pricing/"
   class="prototype-header__link {{ 'active' if currentUrl | startsWith('/pricing/') }}"
   >Pricing</a
->{% endif %} {% if currentUrl == '/models-api-docs/' or currentUrl ==
-'/jobs-api-docs/' %}<span class="prototype-header__link active">Docs</span>{%
-else %}<a
-  href="/models-api-docs/"
-  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
+>{% endif %} {% if currentUrl == '/docs/' %}<span
+  class="prototype-header__link active"
+  >Docs</span
+>{% else %}<a
+  href="/docs/"
+  class="prototype-header__link {{ 'active' if currentUrl | startsWith('/docs/') }}"
   >Docs</a
 >{% endif %} {% else %}
 <a
@@ -62,8 +64,8 @@ else %}<a
   >Pricing</a
 >
 <a
-  href="/models-api-docs/"
-  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/models-api-docs/') or currentUrl | startsWith('/jobs-api-docs/') }}"
+  href="/docs/"
+  class="prototype-header__popover-link {{ 'active' if currentUrl | startsWith('/docs/') }}"
   role="menuitem"
   >Docs</a
 >
