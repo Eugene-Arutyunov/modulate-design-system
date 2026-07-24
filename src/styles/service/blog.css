@@ -93,7 +93,7 @@
   }
 
   & .layers-table__token-stack:has(.layers-table__token-spacer) {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr max-content;
   }
 
   & .layers-table__token-spacer {
@@ -105,6 +105,10 @@
 
     & > span {
       background-color: color-mix(in srgb, var(--m__text) 12%, transparent);
+    }
+
+    & > code {
+      justify-self: start;
     }
   }
 
