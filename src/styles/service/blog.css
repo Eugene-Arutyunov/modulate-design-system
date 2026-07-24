@@ -82,8 +82,8 @@
   & .layers-table__token-stack {
     flex: 1;
     max-width: 11rem;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-auto-rows: auto;
     gap: var(--m__border-width-s);
   }
 
@@ -92,13 +92,18 @@
     padding: 0.3rem 0.5rem;
   }
 
+  & .layers-table__token-stack:has(.layers-table__token-spacer) {
+    grid-template-columns: 1fr auto;
+  }
+
   & .layers-table__token-spacer {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: end;
     gap: var(--m__gap-xs);
 
     & > span {
-      flex: 1;
       background-color: color-mix(in srgb, var(--m__text) 12%, transparent);
     }
   }
