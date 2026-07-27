@@ -1,0 +1,172 @@
+/* Modulate Fingerprint (`/tools/modulate-fingerprint/`) — controls above the
+   fingerprint rendered on the page background. Control chrome (panel grid,
+   fieldsets, ranges) is reused from icon-studio.css via the shared
+   `icon-studio` class; this file adds what the fingerprint itself needs:
+   the derived-format elements (equal windows, amplitude bars, speak-time
+   bar) and the small-scale examples. */
+
+.fingerprint-studio {
+  /* Re-renders rebuild the clip nodes; without this the playground's
+     emotion-color fade-in replays on every keystroke and checkbox flip. */
+  --emotion-color-delay: 0s;
+  --emotion-color-duration: 0s;
+
+  & .fingerprint-studio__segmented {
+    margin: 0;
+    justify-self: start;
+
+    /* Match the button/checkbox size instead of the component's 0.8em. */
+    & label {
+      font-size: var(--m__font-size-xs);
+    }
+  }
+
+  /* Full-width action row: no label column, buttons share the space. */
+  & .fingerprint-studio__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: var(--m__font-size-xs);
+
+    & button {
+      flex: 1;
+    }
+
+    & + .fingerprint-studio__actions {
+      margin-top: 0.35rem;
+    }
+  }
+
+  & .fingerprint-studio__names textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 0.25rem 0.5rem;
+    font: inherit;
+    font-size: var(--m__font-size-xs);
+    resize: vertical;
+    color: var(--m__text);
+    background-color: var(--m__bg-input);
+    border: var(--m__border-width-s) solid var(--m__border);
+    border-radius: var(--m__radius-s);
+
+    &:focus-visible {
+      outline: 1px solid var(--m__text-link-hover);
+      outline-offset: -1px;
+    }
+  }
+
+  /* The fingerprint sits directly on the page background, full container
+     width by default; the Width control scales it via an inline style. */
+  & .fingerprint-studio__frame {
+    width: 100%;
+  }
+
+  /* The player theme is switched locally on the frame, independent of the
+     page theme: `dark-mode` / `light-mode` classes cover the `--m__*`
+     tokens, but the playground `--ids__*` light values live only on `:root`,
+     so they are restated here for the light frame. */
+  & .fingerprint-studio__frame.fp-theme-light {
+    --ids__background-RGB: 255, 255, 255;
+    --ids__bg-surface-RGB: 242, 242, 246;
+    --ids__bg-accent-RGB: 20, 20, 50;
+    --ids__text-RGB: 30, 30, 35;
+    --ids__text-caption-RGB: 150, 150, 170;
+    --ids__text-hover-RGB: 40, 95, 235;
+    --ids__UI-border-RGB: 220, 220, 230;
+  }
+
+  /* Equal detection windows (synthetic voice / AI music modes). */
+  & .fp-heat {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+
+  & .fp-heat-cell {
+    flex: 1;
+  }
+
+  /* Amplitude mode: narrow bars, positioned inline by the renderer. */
+  & .fp-amp-bar {
+    position: absolute;
+  }
+
+  /* Speak-time bar: a real player-component instance (media-container →
+     transcript-clip), sized down to a strip so segment hovers still work. */
+  & .fp-speaktime {
+    border-radius: 3px;
+    overflow: hidden;
+
+    & .pg-player-dataviz {
+      height: 2rem;
+    }
+  }
+
+  /* Miniature fingerprint (table rows, bricks). The plate is painted in
+     the opposite theme — dark on a light page and vice versa — so the
+     miniatures read as objects, not as holes in the background. */
+  & .fp-mini {
+    position: relative;
+    overflow: hidden;
+    height: 1.35em;
+    border-radius: 3px;
+    background: var(--m__color-gray-900);
+    flex-shrink: 0;
+  }
+
+  .dark-mode & .fp-mini {
+    background: var(--m__color-gray-50);
+  }
+
+  & .fp-mini-clip {
+    position: absolute;
+  }
+
+  & .fp-mini-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--m__gap-xxs);
+  }
+
+  & .fp-mini-time {
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-s);
+  }
+
+  /* Speak-time example row: the bar width is the speaker's share of this
+     track, so the track needs a defined width. */
+  & .fingerprint-studio__speaktime {
+    display: flex;
+    align-items: center;
+    gap: var(--m__gap-s);
+  }
+
+  & .fingerprint-studio__speaktime-bar {
+    width: min(28rem, 100%);
+    flex-shrink: 0;
+  }
+
+  & .fingerprint-studio__caption {
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-s);
+    white-space: nowrap;
+  }
+
+  /* Miniatures-in-a-table example: the left part of a conversations row —
+     fingerprint + name. */
+  & .fingerprint-studio__table {
+    max-width: 640px;
+
+    & .fp-example-fp-cell {
+      width: 40%;
+    }
+  }
+
+  /* Brick-wall sample: miniatures at the table scale, varying widths,
+     flowing like inline blocks with slightly roomier gaps. */
+  & .fingerprint-studio__bricks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--m__gap-s);
+  }
+}

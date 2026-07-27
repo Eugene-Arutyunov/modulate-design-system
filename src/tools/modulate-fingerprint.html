@@ -1,0 +1,279 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Modulate Fingerprint' %}
+{% block content %}
+
+<!-- The `icon-studio` class reuses the studio control styles (panel grid,
+     fieldsets, ranges, palette dropdown); `fingerprint-studio` adds the
+     fingerprint-specific parts on top. -->
+<main class="m__wrapper icon-studio fingerprint-studio">
+  <div class="m__space XL"></div>
+
+  <h1>Modulate Fingerprint</h1>
+
+  <div class="m__space M"></div>
+
+  <div class="m__text-width">
+    <p>
+      The Modulate fingerprint is the house data visualization for
+      conversations. The X axis is a timeline that operates on fragments of
+      speech — clips — rather than raw audio; the Y axis discretely splits the
+      picture by speaker, one lane per voice. The standard encoding is color
+      for detected emotions and a glyph for detected behaviors.
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <section class="icon-studio__panel" aria-label="Studio controls">
+    <div class="icon-studio__grid">
+      <fieldset>
+        <legend>Conversation</legend>
+        <div class="icon-studio__row">
+          <span>Mode</span>
+          <div class="m__segmented-control-secondary fingerprint-studio__segmented">
+            <label>
+              <input
+                type="radio"
+                name="fp-mode"
+                value="transcript"
+                data-fp-mode
+                checked />
+              Transcript
+            </label>
+            <label>
+              <input type="radio" name="fp-mode" value="detection" data-fp-mode />
+              Detection
+            </label>
+          </div>
+        </div>
+        <div data-fp-transcript-only>
+          <div class="icon-studio__row">
+            <span>Speakers</span>
+            <div class="m__segmented-control-secondary fingerprint-studio__segmented">
+              <label>
+                <input type="radio" name="fp-speakers" value="1" data-fp-speakers />
+                1
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="fp-speakers"
+                  value="2"
+                  data-fp-speakers
+                  checked />
+                2
+              </label>
+              <label>
+                <input type="radio" name="fp-speakers" value="3" data-fp-speakers />
+                3
+              </label>
+              <label>
+                <input type="radio" name="fp-speakers" value="4" data-fp-speakers />
+                4
+              </label>
+              <label>
+                <input type="radio" name="fp-speakers" value="5" data-fp-speakers />
+                5
+              </label>
+              <label>
+                <input type="radio" name="fp-speakers" value="6" data-fp-speakers />
+                6
+              </label>
+              <label>
+                <input type="radio" name="fp-speakers" value="7" data-fp-speakers />
+                7
+              </label>
+            </div>
+          </div>
+          <div class="icon-studio__row">
+            <span>Names</span>
+            <div class="fingerprint-studio__names">
+              <textarea
+                data-fp-names
+                rows="2"
+                aria-label="Speaker names, comma-separated"></textarea>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Display</legend>
+        <label>
+          Length
+          <input data-fp-length type="range" min="1" max="20" step="1" />
+          <output></output>
+        </label>
+        <label>
+          Width
+          <input data-fp-width type="range" min="50" max="100" step="5" />
+          <output></output>
+        </label>
+        <div class="icon-studio__row">
+          <span>Theme</span>
+          <div class="m__segmented-control-secondary fingerprint-studio__segmented">
+            <label>
+              <input
+                type="radio"
+                name="fp-theme"
+                value="dark"
+                data-fp-theme
+                checked />
+              Dark
+            </label>
+            <label>
+              <input type="radio" name="fp-theme" value="light" data-fp-theme />
+              Light
+            </label>
+          </div>
+        </div>
+        <label class="icon-studio__check">
+          <input data-fp-emotions type="checkbox" checked />
+          Emotions
+        </label>
+        <label class="icon-studio__check">
+          <input data-fp-behaviours type="checkbox" />
+          Behaviors
+        </label>
+        <label class="icon-studio__check">
+          <input data-fp-amplitude type="checkbox" />
+          Amplitude
+        </label>
+        <label class="icon-studio__check">
+          <input data-fp-player type="checkbox" checked />
+          Player
+        </label>
+        <label class="icon-studio__check">
+          <input data-fp-labels type="checkbox" checked />
+          Speaker labels
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Data</legend>
+        <div class="fingerprint-studio__actions">
+          <button
+            class="m__button-secondary-outline S"
+            type="button"
+            data-fp-regenerate>
+            Regenerate
+          </button>
+        </div>
+        <div class="fingerprint-studio__actions">
+          <button
+            class="m__button-secondary-outline S"
+            type="button"
+            data-fp-export>
+            Export
+          </button>
+          <button
+            class="m__button-secondary-outline S"
+            type="button"
+            data-fp-import>
+            Import
+          </button>
+          <input type="file" accept=".json" data-fp-import-input hidden />
+        </div>
+      </fieldset>
+    </div>
+  </section>
+
+  <div class="m__space S"></div>
+
+  <div class="fingerprint-studio__frame" data-fp-frame></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <h2>The base format and its derivatives</h2>
+    <p>
+      The base format flexes within fixed ranges: it can be combined with the
+      player or stand alone; the number of speakers can be 1, 2 or N, each on
+      its own lane; it scales from an icon to a miniature to the full view;
+      and it can show bare clips, clips with emotions, or emotions with
+      behaviors.
+    </p>
+    <p>
+      Derived formats appear when the rules bend further: color encodes
+      another data layer instead of emotions (synthetic voice, AI music); the
+      audio is split into segments other than utterances, including equal
+      windows; one speaker's clips are glued into a speak-time bar; or the Y
+      axis doubles as amplitude, imitating a waveform.
+    </p>
+    <p>
+      It is important to understand that these derived formats cannot serve
+      as the basis of recognizable brand imagery. They exist to solve
+      specific tasks — when an idea tied to a particular model needs to be
+      visualized, and needs to be visualized the Modulate way.
+    </p>
+  </div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <h2>Scale</h2>
+    <p>
+      Scale is a narrative rather than a control. The same language reads as
+      an icon, as a miniature in a table, and at full size in the player.
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <!-- Two icon tiles copied verbatim from the design-system page (Graphics →
+       Icons): same markup, same bundle styles, same click-to-copy script. -->
+  <div class="docs-icon-row">
+    <div class="docs-icon-row__item">
+      <svg
+        class="docs-icon-row__icon"
+        viewBox="0 0 32 32"
+        aria-hidden="true">
+        <use href="#emotions"></use>
+      </svg>
+      <span class="docs-icon-row__label">#emotions</span>
+    </div>
+    <div class="docs-icon-row__item">
+      <svg
+        class="docs-icon-row__icon"
+        viewBox="0 0 32 32"
+        aria-hidden="true">
+        <use href="#deepfake"></use>
+      </svg>
+      <span class="docs-icon-row__label">#deepfake</span>
+    </div>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__speaktime">
+    <div class="fingerprint-studio__speaktime-bar" data-fp-example-speaktime></div>
+    <span
+      class="fingerprint-studio__caption"
+      data-fp-example-speaktime-caption></span>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__table">
+    <table>
+      <thead>
+        <tr>
+          <th>Fingerprint</th>
+          <th>Conversation</th>
+        </tr>
+      </thead>
+      <tbody data-fp-example-table></tbody>
+    </table>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__bricks" data-fp-example-bricks></div>
+
+  <div class="m__space XL"></div>
+</main>
+
+<script
+  type="module"
+  src="/assets/service/fingerprint/fingerprint-studio.js"></script>
+
+{% endblock %}
