@@ -29,7 +29,7 @@
         <legend>Conversation</legend>
         <div class="icon-studio__row">
           <span>Mode</span>
-          <div class="m__segmented-control-secondary fingerprint-studio__segmented">
+          <div class="m__segmented-control-secondary S fingerprint-studio__segmented">
             <label>
               <input
                 type="radio"
@@ -48,7 +48,7 @@
         <div data-fp-transcript-only>
           <div class="icon-studio__row">
             <span>Speakers</span>
-            <div class="m__segmented-control-secondary fingerprint-studio__segmented">
+            <div class="m__segmented-control-secondary S fingerprint-studio__segmented">
               <label>
                 <input type="radio" name="fp-speakers" value="1" data-fp-speakers />
                 1
@@ -84,6 +84,10 @@
               </label>
             </div>
           </div>
+          <label class="icon-studio__check">
+            <input data-fp-labels type="checkbox" checked />
+            Speaker labels
+          </label>
           <div class="icon-studio__row">
             <span>Names</span>
             <div class="fingerprint-studio__names">
@@ -98,19 +102,9 @@
 
       <fieldset>
         <legend>Display</legend>
-        <label>
-          Length
-          <input data-fp-length type="range" min="1" max="20" step="1" />
-          <output></output>
-        </label>
-        <label>
-          Width
-          <input data-fp-width type="range" min="50" max="100" step="5" />
-          <output></output>
-        </label>
         <div class="icon-studio__row">
           <span>Theme</span>
-          <div class="m__segmented-control-secondary fingerprint-studio__segmented">
+          <div class="m__segmented-control-secondary S fingerprint-studio__segmented">
             <label>
               <input
                 type="radio"
@@ -126,26 +120,34 @@
             </label>
           </div>
         </div>
-        <label class="icon-studio__check">
-          <input data-fp-emotions type="checkbox" checked />
-          Emotions
+        <label>
+          Length
+          <input data-fp-length type="range" min="1" max="20" step="1" />
+          <output></output>
         </label>
-        <label class="icon-studio__check">
-          <input data-fp-behaviours type="checkbox" />
-          Behaviors
+        <label>
+          Width
+          <input data-fp-width type="range" min="50" max="100" step="5" />
+          <output></output>
         </label>
-        <label class="icon-studio__check">
-          <input data-fp-amplitude type="checkbox" />
-          Amplitude
-        </label>
-        <label class="icon-studio__check">
-          <input data-fp-player type="checkbox" checked />
-          Player
-        </label>
-        <label class="icon-studio__check">
-          <input data-fp-labels type="checkbox" checked />
-          Speaker labels
-        </label>
+        <div class="fingerprint-studio__checks">
+          <label class="icon-studio__check">
+            <input data-fp-emotions type="checkbox" checked />
+            Emotions
+          </label>
+          <label class="icon-studio__check">
+            <input data-fp-behaviours type="checkbox" />
+            Behaviors
+          </label>
+          <label class="icon-studio__check">
+            <input data-fp-amplitude type="checkbox" />
+            Amplitude
+          </label>
+          <label class="icon-studio__check">
+            <input data-fp-player type="checkbox" checked />
+            Player
+          </label>
+        </div>
       </fieldset>
 
       <fieldset>
@@ -183,43 +185,91 @@
 
   <div class="m__space L"></div>
 
+  <!-- Every illustration below is a preconfigured instance of the same
+       renderer the studio uses, rendered by fingerprint-studio.js. -->
   <div class="m__text-width">
-    <h2>The base format and its derivatives</h2>
+    <h2>The base format</h2>
     <p>
-      The base format flexes within fixed ranges: it can be combined with the
-      player or stand alone; the number of speakers can be 1, 2 or N, each on
-      its own lane; it scales from an icon to a miniature to the full view;
-      and it can show bare clips, clips with emotions, or emotions with
-      behaviors.
-    </p>
-    <p>
-      Derived formats appear when the rules bend further: color encodes
-      another data layer instead of emotions (synthetic voice, AI music); the
-      audio is split into segments other than utterances, including equal
-      windows; one speaker's clips are glued into a speak-time bar; or the Y
-      axis doubles as amplitude, imitating a waveform.
-    </p>
-    <p>
-      It is important to understand that these derived formats cannot serve
-      as the basis of recognizable brand imagery. They exist to solve
-      specific tasks — when an idea tied to a particular model needs to be
-      visualized, and needs to be visualized the Modulate way.
-    </p>
-  </div>
-
-  <div class="m__space L"></div>
-
-  <div class="m__text-width">
-    <h2>Scale</h2>
-    <p>
-      Scale is a narrative rather than a control. The same language reads as
-      an icon, as a miniature in a table, and at full size in the player.
+      The base format flexes within fixed ranges. Every picture below is the
+      same component — only the settings differ. The fingerprint can be
+      combined with the player: it is the player's data visualization.
     </p>
   </div>
 
   <div class="m__space M"></div>
 
-  <!-- Two icon tiles copied verbatim from the design-system page (Graphics →
+  <div class="fingerprint-studio__demo dark-mode" data-fp-demo="player"></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>Or it can stand alone, as pure data.</p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__demo dark-mode" data-fp-demo="standalone"></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>
+      The number of speakers is 1, 2 or N — each voice gets its own lane. A
+      single speaker reads as one strip:
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__demo dark-mode" data-fp-demo="single"></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>A full room splits the same height into lanes:</p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__demo dark-mode" data-fp-demo="many"></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>
+      The displayed information is a dial too. Bare clips only mark who
+      spoke and when:
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__demo dark-mode" data-fp-demo="bare"></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>
+      Detected emotions add color, and detected behaviors add a glyph on top:
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__demo dark-mode" data-fp-demo="behaviours"></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>
+      At the icon scale the language compresses to a few bars. These are
+      actual design-system icons:
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <!-- Icon tiles copied verbatim from the design-system page (Graphics →
        Icons): same markup, same bundle styles, same click-to-copy script. -->
   <div class="docs-icon-row">
     <div class="docs-icon-row__item">
@@ -240,15 +290,24 @@
       </svg>
       <span class="docs-icon-row__label">#deepfake</span>
     </div>
+    <div class="docs-icon-row__item">
+      <svg
+        class="docs-icon-row__icon"
+        viewBox="0 0 32 32"
+        aria-hidden="true">
+        <use href="#voice-match"></use>
+      </svg>
+      <span class="docs-icon-row__label">#voice-match</span>
+    </div>
   </div>
 
-  <div class="m__space M"></div>
+  <div class="m__space L"></div>
 
-  <div class="fingerprint-studio__speaktime">
-    <div class="fingerprint-studio__speaktime-bar" data-fp-example-speaktime></div>
-    <span
-      class="fingerprint-studio__caption"
-      data-fp-example-speaktime-caption></span>
+  <div class="m__text-width">
+    <p>
+      Between the icon and the full view live miniatures — fingerprints in a
+      table row, next to the conversations they belong to:
+    </p>
   </div>
 
   <div class="m__space M"></div>
@@ -265,9 +324,70 @@
     </table>
   </div>
 
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>Or a plain flow of conversations, wrapping like text:</p>
+  </div>
+
   <div class="m__space M"></div>
 
   <div class="fingerprint-studio__bricks" data-fp-example-bricks></div>
+
+  <div class="m__space XL"></div>
+
+  <div class="m__text-width">
+    <h2>Derived formats</h2>
+    <p>Derived formats appear when the rules bend further.</p>
+    <p>
+      Color can encode another data layer instead of emotions — synthetic
+      voice or AI music detection. The segmentation changes with it: equal
+      windows instead of utterances.
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__demo dark-mode" data-fp-demo="detection"></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>
+      One speaker's clips can be glued together into a speak-time bar: the
+      width is their share of the conversation.
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__speaktime">
+    <div class="fingerprint-studio__speaktime-bar dark-mode" data-fp-example-speaktime></div>
+    <span
+      class="fingerprint-studio__caption"
+      data-fp-example-speaktime-caption></span>
+  </div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>And the Y axis can double as amplitude, imitating a waveform.</p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <div class="fingerprint-studio__demo dark-mode" data-fp-demo="amplitude"></div>
+
+  <div class="m__space L"></div>
+
+  <div class="m__text-width">
+    <p>
+      It is important to understand that these derived formats cannot serve
+      as the basis of recognizable brand imagery. They exist to solve
+      specific tasks — when an idea tied to a particular model needs to be
+      visualized, and needs to be visualized the Modulate way.
+    </p>
+  </div>
 
   <div class="m__space XL"></div>
 </main>

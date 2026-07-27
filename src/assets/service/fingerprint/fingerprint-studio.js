@@ -385,6 +385,43 @@ const EXAMPLE_ROWS = [
   },
 ];
 
+// Inline illustrations for the text part: each is the studio renderer with
+// a fixed conversation and the settings the thought talks about.
+const DEMOS = {
+  player: {
+    data: { speakers: 2, durationSec: 300, seed: 41 },
+    opts: { player: true },
+  },
+  standalone: {
+    data: { speakers: 2, durationSec: 240, seed: 42 },
+    opts: { labels: false },
+  },
+  single: {
+    data: { speakers: 1, durationSec: 180, seed: 43 },
+    opts: {},
+  },
+  many: {
+    data: { speakers: 5, durationSec: 360, seed: 44 },
+    opts: {},
+  },
+  bare: {
+    data: { speakers: 2, durationSec: 240, seed: 45 },
+    opts: { emotions: false },
+  },
+  behaviours: {
+    data: { speakers: 2, durationSec: 300, seed: 46 },
+    opts: { behaviours: true },
+  },
+  detection: {
+    data: { speakers: 1, durationSec: 240, seed: 47 },
+    opts: { mode: "detection" },
+  },
+  amplitude: {
+    data: { speakers: 2, durationSec: 300, seed: 48 },
+    opts: { amplitude: true },
+  },
+};
+
 // Brick-wall sample: miniatures at exactly the table scale (same height,
 // same seconds-per-rem), without time labels, flowing like inline blocks.
 const BRICK_ROWS = [
@@ -411,6 +448,16 @@ const BRICK_ROWS = [
 ];
 
 function renderExamples() {
+  document.querySelectorAll("[data-fp-demo]").forEach((node) => {
+    const demo = DEMOS[node.dataset.fpDemo];
+
+    if (!demo) return;
+    renderFingerprint(node, generateConversation(demo.data), {
+      names: DEFAULT_NAMES,
+      ...demo.opts,
+    });
+  });
+
   const speakBar = document.querySelector("[data-fp-example-speaktime]");
 
   if (speakBar) {

@@ -14,10 +14,55 @@
   & .fingerprint-studio__segmented {
     margin: 0;
     justify-self: start;
+  }
 
-    /* Match the button/checkbox size instead of the component's 0.8em. */
-    & label {
-      font-size: var(--m__font-size-xs);
+  /* Panel geometry on top of icon-studio.css: a narrower label column (all
+     the captions fit), top-aligned labels, and a little air between rows. */
+  & .icon-studio__row {
+    grid-template-columns: 3.4rem 1fr;
+    align-items: start;
+    margin-bottom: 0.55rem;
+
+    /* Optical top alignment with the control's own inner padding. */
+    & > span:first-child {
+      padding-top: 0.3em;
+    }
+  }
+
+  & fieldset > label:not(.icon-studio__check) {
+    grid-template-columns: 3.4rem minmax(5rem, 1fr) 2.4rem;
+    margin-bottom: 0.55rem;
+  }
+
+  /* The check styling from icon-studio.css only covers direct fieldset
+     children; here checks also live inside wrappers. */
+  & .icon-studio__check {
+    display: flex;
+    gap: 0.35rem;
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-caption);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--m__text);
+    }
+  }
+
+  & [data-fp-transcript-only] .icon-studio__check {
+    margin-bottom: 0.55rem;
+  }
+
+  /* Display checkboxes in one line; the gap between neighbours is 2× the
+     gap between a checkbox and its own caption. The row never wraps — on
+     narrow windows it may spill into the (empty) column gutter. */
+  & .fingerprint-studio__checks {
+    display: flex;
+    gap: 0.7rem;
+    width: max-content;
+    margin-bottom: 0.55rem;
+
+    & .icon-studio__check {
+      white-space: nowrap;
     }
   }
 
@@ -61,6 +106,12 @@
     width: 100%;
   }
 
+  /* Inline illustrations in the text part: preconfigured instances of the
+     same renderer, capped to the table width. */
+  & .fingerprint-studio__demo {
+    max-width: 640px;
+  }
+
   /* The player theme is switched locally on the frame, independent of the
      page theme: `dark-mode` / `light-mode` classes cover the `--m__*`
      tokens, but the playground `--ids__*` light values live only on `:root`,
@@ -89,6 +140,48 @@
   /* Amplitude mode: narrow bars, positioned inline by the renderer. */
   & .fp-amp-bar {
     position: absolute;
+  }
+
+  /* Hover captions: emotion name to the left of the total time, transcript
+     line in the player's clip-text slot. `.visible` shows instantly, its
+     removal fades the caption out (the transition switch trick from
+     player.css). */
+  & .fp-media .player-total-time {
+    display: flex;
+    gap: 0.6em;
+    align-items: baseline;
+  }
+
+  & .fp-emotion-caption {
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity var(--m__duration-xslow) var(--m__easing-base);
+
+    &.visible {
+      opacity: 1;
+      transition: opacity var(--m__duration-instant) var(--m__easing-base);
+    }
+  }
+
+  /* The transcript line must dissolve shortly before the play button: cap
+     the caption width and widen the fade, matching the player strip bg. */
+  & .fp-media .clip-text-caption {
+    width: 40%;
+
+    &::after {
+      width: 3em;
+      background: linear-gradient(to right, transparent, var(--m__bg-surface));
+    }
+  }
+
+  /* Player-less fingerprints: the emotion name lives on its own line below
+     the rounded container, left-aligned. Fixed height so hovering doesn't
+     shift the layout. */
+  & .fp-emotion-strip {
+    height: 1.1rem;
+    margin-top: 0.35rem;
+    line-height: 1.1rem;
+    text-align: left;
   }
 
   /* Speak-time bar: a real player-component instance (media-container →

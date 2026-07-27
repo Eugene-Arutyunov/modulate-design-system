@@ -43,6 +43,35 @@ const BEHAVIOURS = [
   "Social boundary setting",
 ];
 
+// Fragments the fake transcript is stitched from — support-call and voice-chat
+// small talk; only the first line ever shows in the player caption.
+const TRANSCRIPT_CHUNKS = [
+  "yeah I hear you",
+  "let me pull that up",
+  "so what happened next",
+  "that's not what I said",
+  "can you walk me through it one more time",
+  "one second",
+  "I'm looking at the account right now",
+  "it should be back by tonight",
+  "honestly I'm not sure",
+  "we shipped that fix last week",
+  "the match was already over by then",
+  "he kept pushing after I asked him to stop",
+  "that's fair",
+  "give me a moment",
+  "I'll flag it for the team",
+  "did you try restarting the client",
+  "the report went through on our side",
+  "it still says pending on my end",
+  "we can escalate this if you want",
+  "no worries at all",
+  "I appreciate your patience",
+  "the logs don't show anything unusual",
+  "that was a completely different lobby",
+  "okay let's take it from the top",
+];
+
 // Kiki glyph (outline + shape) from assets/service/behaviour-icon-kiki.svg;
 // inlined so the outline path can carry the emotion color via CSS.
 const KIKI_SVG =
@@ -149,6 +178,7 @@ export function generateConversation({ speakers = 2, durationSec = 480, seed, bi
         durationSec: round2(clipDuration),
         emotion: pick(rng, group.emotions),
         amplitude: round2(range(rng, 0.6, 1)),
+        text: fakeUtterance(rng, clipDuration),
       });
       cursor += clipDuration;
     }
@@ -242,6 +272,21 @@ function assignBehaviours(rng, clips) {
   for (let i = 0; i < count; i += 1) {
     pool[i].behaviour = pick(rng, BEHAVIOURS);
   }
+}
+
+// Word count roughly follows the clip duration, capped: the caption is a
+// single clipped line, so a monologue doesn't need its full text.
+function fakeUtterance(rng, durationSec) {
+  const target = Math.min(3 + durationSec * 2.2, 28);
+  const words = [];
+
+  while (words.length < target) {
+    words.push(...pick(rng, TRANSCRIPT_CHUNKS).split(" "));
+  }
+
+  const text = words.join(" ");
+
+  return `${text.charAt(0).toUpperCase()}${text.slice(1)}.`;
 }
 
 function shuffle(rng, list) {
@@ -386,6 +431,10 @@ export function renderFingerprint(root, data, options = {}) {
   }
 
   root.appendChild(container);
+
+  if (opts.mode === "transcript" && !opts.amplitude) {
+    bindClipCaptions(root, container, opts);
+  }
 }
 
 function renderTranscriptClips(viz, data, opts, lanes) {
@@ -395,6 +444,7 @@ function renderTranscriptClips(viz, data, opts, lanes) {
     const clipViz = el("div", "clip-visualization");
 
     node.dataset.speakerIndex = clip.speaker;
+    node._fpClip = clip;
     node.style.left = `${pct(clip.startSec, data.durationSec)}%`;
     node.style.width = `${pct(clip.durationSec, data.durationSec)}%`;
     // The stylesheet only enumerates lane offsets for up to 5 speakers;
@@ -402,6 +452,61 @@ function renderTranscriptClips(viz, data, opts, lanes) {
     clipViz.style.top = `${((clip.speaker - 1) * 100) / lanes}%`;
     node.appendChild(clipViz);
     viz.appendChild(node);
+  });
+}
+
+/* Hover captions ─────────────────────────────────────────────────────── */
+
+// Hovering a clip (its whole vertical zone — the clip node is full-height)
+// shows the emotion name and a line of the transcript: instantly in, fade
+// out on leave (the `.visible` class carries the transition switch).
+//
+// With the player: the emotion name sits to the left of the total time, the
+// transcript line goes into the player's own clip-text caption slot. Without
+// the player there is no transcript, and the emotion name moves to a strip
+// below the rounded container, left-aligned.
+function bindClipCaptions(root, container, opts) {
+  const clipNodes = container.querySelectorAll(".transcript-clip");
+
+  if (!clipNodes.length) return;
+
+  const transcript = opts.player ? container.querySelector(".clip-text-caption") : null;
+  const transcriptSpan = transcript ? transcript.querySelector("span") : null;
+  let emotionSpan = null;
+
+  if (opts.emotions) {
+    if (opts.player) {
+      emotionSpan = container.querySelector(".fp-emotion-caption");
+    } else {
+      const strip = el("div", "fp-emotion-strip");
+
+      emotionSpan = el("span", "fp-emotion-caption");
+      strip.appendChild(emotionSpan);
+      root.appendChild(strip);
+    }
+  }
+
+  clipNodes.forEach((node) => {
+    const clip = node._fpClip;
+
+    if (!clip) return;
+
+    node.addEventListener("mouseenter", () => {
+      if (emotionSpan) {
+        emotionSpan.textContent =
+          clip.emotion.charAt(0).toUpperCase() + clip.emotion.slice(1);
+        emotionSpan.style.color = emotionColor(clip.emotion);
+        emotionSpan.classList.add("visible");
+      }
+      if (transcript && clip.text) {
+        transcriptSpan.textContent = clip.text;
+        transcript.classList.add("visible");
+      }
+    });
+    node.addEventListener("mouseleave", () => {
+      if (emotionSpan) emotionSpan.classList.remove("visible");
+      if (transcript) transcript.classList.remove("visible");
+    });
   });
 }
 
@@ -446,7 +551,7 @@ function buildSpans(data, opts) {
 }
 
 // Waveform imitation: each span is sliced into narrow bars whose heights
-// walk around the span's amplitude, vertically centered in the lane. The
+// walk around the span's amplitude, sitting on the bottom of the lane. The
 // slices are normalized so the span's peak reaches the full lane height.
 function renderAmplitude(viz, spans, lanes) {
   const laneHeight = 100 / lanes;
@@ -476,7 +581,7 @@ function renderAmplitude(viz, spans, lanes) {
 
       bar.style.left = `${span.startPct + (span.widthPct * i) / slices}%`;
       bar.style.width = `${span.widthPct / slices}%`;
-      bar.style.top = `${(span.lane - 1) * laneHeight + (laneHeight - height) / 2}%`;
+      bar.style.top = `${span.lane * laneHeight - height}%`;
       bar.style.height = `${height}%`;
       bar.style.backgroundColor = span.color;
       if (span.opacity !== 1) bar.style.opacity = span.opacity;
@@ -547,6 +652,7 @@ function buildPlayer(data, lanes) {
     <div class="player-status-caption"><span class="emotion-caption"></span></div>
     <div class="player-start-time"><span class="start-time">0:00</span></div>
     <div class="player-total-time">
+      <span class="fp-emotion-caption"></span>
       <span class="total-time" data-total-time>${formatTime(data.durationSec)}</span>
     </div>
     <div class="player-position-indicator">
