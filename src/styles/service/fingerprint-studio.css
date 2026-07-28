@@ -164,8 +164,15 @@
   }
 
   /* The transcript line must dissolve shortly before the play button: cap
-     the caption width and widen the fade, matching the player strip bg. */
+     the caption width and widen the fade, matching the player strip bg.
+     Base playground geometry (top: viz-height) predates the modular strip
+     and lands outside the 3rem `overflow: hidden` box — reposition into
+     the strip, after the 0:00 caption. */
   & .fp-media .clip-text-caption {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    left: 3.2em;
     width: 40%;
 
     &::after {

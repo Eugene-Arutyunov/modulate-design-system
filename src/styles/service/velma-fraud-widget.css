@@ -1,0 +1,585 @@
+/* Velma Fraud Demo studio (`/tools/velma-fraud-demo-widget/`).
+
+   Studio chrome (panel, stage) + the widget itself. The widget plate is
+   hard dark-mode (like the fingerprint illustrations): the `dark-mode`
+   class on the root resolves the `--m__*` / `--ids__*` tokens, so these
+   rules stay theme-agnostic. Fingerprint player internals come from
+   player.css / playground.css in the bundle; velma-fraud-embed.css bakes
+   the same rules with literal values for the Webflow export. */
+
+.velma-fraud-studio {
+  & .velma-fraud-studio__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: var(--m__font-size-xs);
+
+    & button {
+      flex: 1;
+    }
+  }
+
+  /* Isolated stage, scatterplot pattern: full page width, target-site
+     frame 1140px collapsing to 100% below 1139px, em base 16 → 14px. */
+  & .velma-fraud-studio__stage {
+    width: 100%;
+    margin: 0 0 3rem;
+    box-sizing: border-box;
+  }
+
+  & .velma-fraud-studio__frame {
+    width: 1140px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 1139px) {
+    & .velma-fraud-studio__frame {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 992px) {
+    & .velma-fraud-widget {
+      font-size: 14px;
+    }
+  }
+}
+
+/* ── Widget plate ─────────────────────────────────────────────────────── */
+
+.velma-fraud-widget {
+  /* Signal-kind accents from the emotion group palette. */
+  --vf-language-RGB: var(--emotion-calm-grounded-group-RGB);
+  --vf-speaker-RGB: var(--emotion-low-energy-negative-group-RGB);
+  --vf-deepfake-RGB: var(--emotion-attack-rejection-group-RGB);
+  --vf-emotion-RGB: var(--emotion-threat-uncertainty-group-RGB);
+  --vf-behavior-RGB: var(--emotion-excited-engaged-group-RGB);
+
+  /* No delayed emotion-color fade-in — clips reveal on our own clock. */
+  --emotion-color-delay: 0s;
+  --emotion-color-duration: 0s;
+
+  font-family: var(--m__font-family-sans);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--m__text);
+  background-color: var(--m__bg);
+  border: 1px solid var(--m__border);
+  border-radius: 1em;
+  overflow: hidden;
+}
+
+/* ── Top bar ──────────────────────────────────────────────────────────── */
+
+.velma-fraud-widget .vf-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.8em 1.1em;
+  border-bottom: 1px solid var(--m__border);
+}
+
+.velma-fraud-widget .vf-top__left {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  min-width: 0;
+}
+
+.velma-fraud-widget .vf-top__dot {
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background-color: var(--m__success);
+  box-shadow: 0 0 0.5em var(--m__success);
+  animation: vf-pulse 2s infinite;
+}
+
+@keyframes vf-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.velma-fraud-widget .vf-top__title {
+  font-size: 0.875em;
+  font-weight: var(--m__font-weight-bold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.velma-fraud-widget .vf-top__subtitle {
+  font-weight: var(--m__font-weight-regular);
+  color: var(--m__text-caption);
+}
+
+.velma-fraud-widget .vf-top__mode {
+  flex: none;
+  font-family: var(--m__font-family-mono);
+  font-size: 0.6875em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--m__text-caption);
+  border: 1px solid var(--m__border);
+  border-radius: 1em;
+  padding: 0.3em 0.8em;
+}
+
+/* ── Fingerprint player ───────────────────────────────────────────────── */
+
+.velma-fraud-widget .vf-player {
+  /* Strips scale with the widget's em base (playground default is rem). */
+  --player-strip-height: 3em;
+
+  & .pg-player-dataviz {
+    cursor: pointer;
+  }
+
+  /* Progressive reveal: clips and behaviour glyphs enter on the clock. */
+  & .transcript-clip {
+    transition: opacity var(--m__duration-slow) var(--m__easing-base);
+
+    &.vf-pending {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  & .behaviour-indicator {
+    transition: opacity var(--m__duration-slow) var(--m__easing-base);
+
+    &.vf-pending {
+      opacity: 0;
+    }
+  }
+
+  /* Playhead across dataviz + strip (the indicator is a direct child of
+     the container here, so the playground `.media-box …` rules miss it;
+     base player.css also leaves it zero-width — stretch it). */
+  & .player-position-indicator {
+    right: 0;
+    z-index: 3;
+  }
+
+  &[data-playback-started="true"] .player-position-line {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Transcript hover line inside the strip, after the current time. */
+  & .clip-text-caption {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    left: 3.2em;
+    width: 34%;
+    color: var(--m__text-caption);
+
+    &::after {
+      width: 3em;
+      background: linear-gradient(to right, transparent, var(--m__bg-surface));
+    }
+  }
+
+  /* Emotion name to the left of the total time. */
+  & .player-total-time {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6em;
+  }
+
+  & .vf-emotion-caption {
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity var(--m__duration-xslow) var(--m__easing-base);
+
+    &.visible {
+      opacity: 1;
+      transition: opacity var(--m__duration-instant) var(--m__easing-base);
+    }
+  }
+}
+
+/* ── Fraud risk meter, verdict, actions ───────────────────────────────── */
+
+.velma-fraud-widget .vf-meter {
+  padding: 1em 1.1em;
+  border-bottom: 1px solid var(--m__border);
+}
+
+.velma-fraud-widget .vf-meter__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.5em;
+}
+
+.velma-fraud-widget .vf-meter__label {
+  font-size: 0.6875em;
+  font-weight: var(--m__font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--m__text-caption);
+}
+
+.velma-fraud-widget .vf-meter__value {
+  font-family: var(--m__font-family-mono);
+  font-size: 0.875em;
+  color: var(--m__text-caption);
+  transition: color var(--m__duration-medium) var(--m__easing-base);
+
+  &.vf-warn {
+    color: rgba(var(--vf-behavior-RGB), 1);
+  }
+
+  &.vf-crit {
+    color: var(--m__error);
+  }
+}
+
+.velma-fraud-widget .vf-meter__bar {
+  position: relative;
+  height: 0.5em;
+  border-radius: 0.25em;
+  background-color: var(--m__bg-surface);
+  overflow: visible;
+}
+
+.velma-fraud-widget .vf-meter__fill {
+  position: relative;
+  height: 100%;
+  width: 0;
+  border-radius: 0.25em;
+  overflow: hidden;
+  transition: width 0.3s linear;
+
+  /* Gradient anchored to the full bar: the fill is a clipping window,
+     `--vf-fill` (0..1, set from JS) stretches the gradient back out. */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: calc(100% / var(--vf-fill, 1));
+    background-image: linear-gradient(
+      90deg,
+      rgba(var(--emotion-calm-grounded-group-RGB), 1),
+      rgba(var(--emotion-threat-uncertainty-group-RGB), 1),
+      rgba(var(--emotion-excited-engaged-group-RGB), 1),
+      rgba(var(--emotion-attack-rejection-group-RGB), 1)
+    );
+  }
+}
+
+.velma-fraud-widget .vf-meter__threshold {
+  position: absolute;
+  top: -0.3em;
+  bottom: -0.3em;
+  width: 2px;
+  margin-left: -1px;
+  background-color: var(--m__error);
+
+  &::after {
+    content: attr(data-label);
+    position: absolute;
+    right: 0.5em;
+    top: -1.4em;
+    font-family: var(--m__font-family-mono);
+    font-size: 0.625em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    color: var(--m__error);
+  }
+}
+
+.velma-fraud-widget .vf-verdict {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+  margin-top: 1em;
+  opacity: 0;
+  transform: translateY(0.3em);
+  transition: opacity var(--m__duration-slow) var(--m__easing-base),
+    transform var(--m__duration-slow) var(--m__easing-base);
+
+  &.vf-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.velma-fraud-widget .vf-verdict__badge {
+  flex: none;
+  font-size: 0.6875em;
+  font-weight: var(--m__font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--m__error);
+  border: 1px solid var(--m__error);
+  border-radius: 1em;
+  padding: 0.25em 0.8em;
+}
+
+.velma-fraud-widget .vf-verdict__text {
+  font-size: 0.8125em;
+  color: var(--m__text);
+}
+
+.velma-fraud-widget .vf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 0.8em;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.velma-fraud-widget .vf-chip {
+  font-size: 0.75em;
+  color: var(--m__text);
+  background-color: var(--m__bg-surface);
+  border: 1px solid var(--m__border);
+  border-radius: 1.2em;
+  padding: 0.35em 1em;
+  opacity: 0;
+  transform: translateY(0.4em);
+  transition: opacity var(--m__duration-slow) var(--m__easing-base),
+    transform var(--m__duration-slow) var(--m__easing-base);
+
+  &.vf-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Transcript + signal feed ─────────────────────────────────────────── */
+
+.velma-fraud-widget .vf-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+}
+
+@media (max-width: 768px) {
+  .velma-fraud-widget .vf-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.velma-fraud-widget .vf-panel-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.8em 1.1em 0.6em;
+  font-size: 0.6875em;
+  font-weight: var(--m__font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--m__text-caption);
+  background-color: var(--m__bg);
+}
+
+.velma-fraud-widget .vf-panel-head__live {
+  color: var(--m__success);
+  font-weight: var(--m__font-weight-regular);
+}
+
+.velma-fraud-widget .vf-transcript,
+.velma-fraud-widget .vf-signals {
+  height: 21em;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.velma-fraud-widget .vf-signals {
+  border-left: 1px solid var(--m__border);
+}
+
+@media (max-width: 768px) {
+  .velma-fraud-widget .vf-transcript {
+    height: 17em;
+    border-bottom: 1px solid var(--m__border);
+  }
+
+  .velma-fraud-widget .vf-signals {
+    height: 15em;
+    border-left: 0;
+  }
+}
+
+/* Transcript utterances */
+
+.velma-fraud-widget .vf-utterances {
+  padding: 0 1.1em 1em;
+}
+
+.velma-fraud-widget .vf-utt {
+  margin-bottom: 0.9em;
+  opacity: 0;
+  transform: translateY(0.4em);
+  transition: opacity var(--m__duration-slow) var(--m__easing-base),
+    transform var(--m__duration-slow) var(--m__easing-base);
+
+  &.vf-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.velma-fraud-widget .vf-utt__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  margin-bottom: 0.3em;
+}
+
+.velma-fraud-widget .vf-utt__time {
+  font-family: var(--m__font-family-mono);
+  font-size: 0.6875em;
+  color: var(--m__text-caption);
+}
+
+.velma-fraud-widget .vf-utt__speaker {
+  font-size: 0.6875em;
+  font-weight: var(--m__font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 1em;
+  padding: 0.15em 0.7em;
+}
+
+.velma-fraud-widget .vf-utt[data-speaker="1"] .vf-utt__speaker {
+  color: rgba(var(--vf-behavior-RGB), 1);
+  background-color: rgba(var(--vf-behavior-RGB), 0.14);
+}
+
+.velma-fraud-widget .vf-utt[data-speaker="2"] .vf-utt__speaker {
+  color: rgba(var(--vf-language-RGB), 1);
+  background-color: rgba(var(--vf-language-RGB), 0.14);
+}
+
+.velma-fraud-widget .vf-utt__bubble {
+  font-size: 0.8125em;
+  color: var(--m__text);
+  background-color: var(--m__bg-surface);
+  border-radius: 0.6em;
+  padding: 0.6em 0.9em;
+  transition: background-color var(--m__duration-medium) var(--m__easing-base);
+}
+
+.velma-fraud-widget .vf-utt.vf-active .vf-utt__bubble {
+  background-color: var(--m__border);
+}
+
+/* Signal feed */
+
+.velma-fraud-widget .vf-signal-list {
+  padding: 0 1.1em 1em;
+}
+
+.velma-fraud-widget .vf-signals__empty {
+  font-size: 0.75em;
+  color: var(--m__text-caption);
+  padding: 0.4em 0;
+}
+
+.velma-fraud-widget .vf-sig {
+  --vf-sig-RGB: 128, 128, 128;
+
+  border-left: 2px solid rgba(var(--vf-sig-RGB), 1);
+  padding: 0.1em 0 0.1em 0.8em;
+  margin-bottom: 0.9em;
+  opacity: 0;
+  transform: translateY(0.4em);
+  transition: opacity var(--m__duration-slow) var(--m__easing-base),
+    transform var(--m__duration-slow) var(--m__easing-base);
+
+  &.vf-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  &[data-kind="language"] {
+    --vf-sig-RGB: var(--vf-language-RGB);
+  }
+
+  &[data-kind="speaker"] {
+    --vf-sig-RGB: var(--vf-speaker-RGB);
+  }
+
+  &[data-kind="deepfake"] {
+    --vf-sig-RGB: var(--vf-deepfake-RGB);
+  }
+
+  &[data-kind="emotion"] {
+    --vf-sig-RGB: var(--vf-emotion-RGB);
+  }
+
+  &[data-kind="behavior"] {
+    --vf-sig-RGB: var(--vf-behavior-RGB);
+  }
+}
+
+.velma-fraud-widget .vf-sig__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6em;
+}
+
+.velma-fraud-widget .vf-sig__type {
+  font-family: var(--m__font-family-mono);
+  font-size: 0.625em;
+  font-weight: var(--m__font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(var(--vf-sig-RGB), 1);
+}
+
+.velma-fraud-widget .vf-sig__time {
+  font-family: var(--m__font-family-mono);
+  font-size: 0.625em;
+  color: var(--m__text-caption);
+}
+
+.velma-fraud-widget .vf-sig__label {
+  font-size: 0.75em;
+  color: var(--m__text);
+  margin: 0.15em 0 0.3em;
+}
+
+.velma-fraud-widget .vf-sig__conf {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.velma-fraud-widget .vf-sig__bar {
+  flex: 1;
+  height: 0.2em;
+  border-radius: 0.1em;
+  background-color: var(--m__bg-surface);
+  overflow: hidden;
+}
+
+.velma-fraud-widget .vf-sig__fill {
+  height: 100%;
+  border-radius: 0.1em;
+  background-color: rgba(var(--vf-sig-RGB), 0.8);
+}
+
+.velma-fraud-widget .vf-sig__val {
+  font-family: var(--m__font-family-mono);
+  font-size: 0.625em;
+  color: var(--m__text-caption);
+}

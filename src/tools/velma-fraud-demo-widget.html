@@ -1,0 +1,85 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Velma Fraud Demo Widget' %}
+{% block content %}
+
+<!-- Outer `velma-fraud-studio` owns the stage bleed; inner
+     `m__wrapper.icon-studio` keeps the panel at the DS content width. -->
+<main class="velma-fraud-studio">
+  <div class="m__wrapper icon-studio">
+    <div class="m__space XL"></div>
+
+    <h1>Velma Fraud Demo Widget</h1>
+
+    <div class="m__space M"></div>
+
+    <div class="m__text-width">
+      <p>
+        Interactive fraud-call demo on the fingerprint player: press play and
+        watch Velma flag deepfake windows, behaviours and emotion shifts in a
+        sample account-takeover call. Responsive preview matches the target
+        embed geometry (1140px). Export JSON to swap the conversation, or
+        static HTML for Webflow — upload the mp3 to the site assets and point
+        <code>meta.audioUrl</code> at it (without audio the widget runs on a
+        simulated clock).
+      </p>
+    </div>
+
+    <div class="m__space M"></div>
+
+    <section class="icon-studio__panel" aria-label="Studio controls">
+      <div class="icon-studio__grid">
+        <fieldset aria-label="Playback">
+          <div class="velma-fraud-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-vf-replay>
+              Replay
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset aria-label="Export and import">
+          <div class="velma-fraud-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-vf-export>
+              Export JSON
+            </button>
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-vf-import>
+              Import
+            </button>
+            <input type="file" accept=".json" data-vf-import-input hidden />
+          </div>
+          <div class="m__space S"></div>
+          <div class="velma-fraud-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-vf-export-html>
+              Export HTML
+            </button>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <div class="m__space M"></div>
+  </div>
+
+  <div class="velma-fraud-studio__stage" data-vf-stage>
+    <div class="velma-fraud-studio__frame">
+      <div data-vf-widget></div>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/service/velma-fraud/velma-fraud-widget.js" defer></script>
+<script
+  type="module"
+  src="/assets/service/velma-fraud/velma-fraud-studio.js"></script>
+
+{% endblock %}
