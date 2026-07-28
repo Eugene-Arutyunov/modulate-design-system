@@ -16,9 +16,9 @@ Promo grid: two card sizes (full width and 50%, gap `--m__gap-xl`), two behavior
 
 ## Tools section
 
-**Pages:** `src/tools/index.html` → `/tools/`; `src/tools/icon-studio.html` → `/tools/icon-studio/`; `src/tools/modulate-fingerprint.html` → `/tools/modulate-fingerprint/`; `src/tools/scatterplot.html` → `/tools/scatterplot/` (placeholder); `src/tools/charts.html` → `/tools/charts/`; `src/tools/online-docs/*` → `/tools/online-docs/*`; `src/tools/square-element.html` → `/tools/square-element/`.
+**Pages:** `src/tools/index.html` → `/tools/`; `src/tools/icon-studio.html` → `/tools/icon-studio/`; `src/tools/modulate-fingerprint.html` → `/tools/modulate-fingerprint/`; `src/tools/scatterplot.html` → `/tools/scatterplot/`; `src/tools/charts.html` → `/tools/charts/`; `src/tools/online-docs/*` → `/tools/online-docs/*`; `src/tools/square-element.html` → `/tools/square-element/`.
 
-Working tools around the design system, grouped on the index into three lists: **Studios** (screenshot sandboxes — Icon Studio, Modulate Fingerprint), **Builders** (constructors — Scatterplot), and **Documents** (technical documents — Chart.js Integration, direct links to the two online-doc case studies, plus “There has to be a square element”, moved from the blog with no redirect). The index reuses the blog-index list pattern (`posts-list`, `posts-list-col-title`).
+Working tools around the design system, grouped on the index into three lists: **Studios** (screenshot sandboxes — Icon Studio, Modulate Fingerprint), **Builders** (constructors — Scatterplot: responsive/screenshot preview of `#conv-scatter` with JSON export/import), and **Documents** (technical documents — Chart.js Integration, direct links to the two online-doc case studies, plus “There has to be a square element”, moved from the blog with no redirect). The index reuses the blog-index list pattern (`posts-list`, `posts-list-col-title`).
 
 ---
 

@@ -1,0 +1,625 @@
+.scatterplot-embed {
+  --ids__text-RGB: 20, 20, 50;
+  --ids__text-link-RGB: 50, 50, 70;
+  --ids__text-hover-RGB: 40, 95, 235;
+  --ids__text-caption-RGB: 150, 150, 170;
+  --ids__text-inverted-RGB: 242, 242, 246;
+  --ids__text-accent-RGB: 20, 20, 50;
+  --ids__background-RGB: 255, 255, 255;
+  --ids__bg-surface-RGB: 242, 242, 246;
+  --ids__bg-surface-light-RGB: 249, 249, 251;
+  --ids__bg-accent-RGB: 20, 20, 50;
+  --ids__bg-hover-RGB: var(--ids__text-hover-RGB);
+  --ids__bg-mark-RGB: 255, 200, 29;
+  --ids__UI-control-RGB: var(--ids__bg-surface-RGB);
+  --ids__UI-border-RGB: 220, 220, 230;
+  --ids__UI-error-RGB: 255, 53, 84;
+  --ids__UI-success-RGB: 21, 207, 135;
+  --vendor-modulate-RGB: 99, 102, 241;
+  --vendor-modulate-gradient-2-RGB: 200, 102, 255;
+  --vendor-openai-RGB: 0, 0, 0;
+  --vendor-xai-RGB: 0, 0, 0;
+  --vendor-gemini-RGB: 0, 130, 244;
+  --vendor-deepseek-RGB: 0, 130, 244;
+  --vendor-nvidia-RGB: 133, 183, 55;
+  --vendor-mistral-RGB: 225, 100, 150;
+  --vendor-assemblyai-RGB: 37, 69, 211;
+  --vendor-deepgram-RGB: 0, 200, 220;
+  --vendor-elevenlabs-RGB: 150, 200, 255;
+  --vendor-gladia-RGB: 210, 190, 255;
+  --vendor-microsoft-RGB: 75, 164, 234;
+  --vendor-amazon-RGB: 255, 153, 100;
+  --vendor-speechmatics-RGB: 40, 90, 110;
+  --vendor-whispeak-RGB: 135, 58, 226;
+  --vendor-hiya-RGB: 80, 120, 180;
+  --vendor-gray-border-RGB: 100, 100, 100;
+  --highlight-zone-green-RGB: 0, 255, 0;
+  --scatterplot-label-font-size: .875em;
+  --scatterplot-point-size: .875em;
+  --scatterplot-axis-font-size: .8125em;
+  box-sizing: border-box;
+  width: 1140px;
+  max-width: 100%;
+  margin: 0 auto;
+
+  @media (width <= 1139px) {
+    width: 100%;
+  }
+
+  @media (width <= 992px) {
+    & .scatterplot-wrapper {
+      font-size: 14px;
+    }
+  }
+
+  & .scatterplot-wrapper a {
+    color: rgb(var(--ids__text-link-RGB));
+    text-underline-offset: .2em;
+    text-decoration-skip-ink: none;
+    text-decoration: underline 1px;
+    text-decoration-color: rgba(var(--ids__text-link-RGB), .2);
+    transition: color .5s, text-decoration .5s;
+
+    &:hover {
+      color: rgb(var(--ids__text-hover-RGB));
+      text-decoration-color: rgba(var(--ids__text-hover-RGB), .2);
+      transition: color, text-decoration;
+    }
+  }
+
+  & .scatterplot-wrapper {
+    color: rgba(var(--ids__text-RGB), 1);
+    background-color: rgba(var(--ids__bg-surface-light-RGB), 1);
+    border: 1px solid rgba(var(--ids__UI-border-RGB), .5);
+    box-sizing: border-box;
+    border-radius: .5em;
+    margin: 0;
+    padding: 1.25em 3em .625em;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 16px;
+
+    @media (width <= 768px) {
+      padding: 1.25em 1em .625em;
+      font-size: 15px;
+      overflow: hidden;
+    }
+
+    & .scatterplot-title {
+      opacity: .8;
+      text-align: center;
+      margin: 0 0 .4167em;
+      font-size: 1.5em;
+      font-weight: 600;
+
+      @media (width <= 768px) {
+        font-size: 1.4em;
+      }
+    }
+
+    & .scatterplot-subtitle {
+      width: 100%;
+      color: rgba(var(--ids__text-RGB), .7);
+      opacity: .8;
+      text-align: center;
+      margin: 0 auto 1.5625em;
+      font-size: 1em;
+
+      @media (width <= 768px) {
+        font-size: .9em;
+      }
+    }
+
+    & .padding-spacer {
+      height: 3.75em;
+    }
+  }
+
+  & .scatterplot-container {
+    margin-top: 1.25em;
+
+    & .scatterplot-aria {
+      border-left: 1px solid rgba(var(--ids__text-RGB), .5);
+      width: 100%;
+      height: 25em;
+      position: relative;
+
+      @media (width <= 768px) {
+        width: calc(100% - 2em);
+        height: 20em;
+        margin-left: 2em;
+      }
+
+      & .scatterplot-background-highlight {
+        z-index: 1;
+        pointer-events: none;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+      }
+
+      & .scatterplot-background-highlight-ellipse {
+        background-color: rgba(var(--highlight-zone-green-RGB), .3);
+        filter: blur(50px);
+        opacity: 1;
+        border-radius: 50%;
+        width: 110%;
+        height: 50%;
+        position: absolute;
+        top: -32%;
+        left: -51%;
+      }
+
+      & .scatterplot-background-highlight-label {
+        display: none;
+      }
+
+      &:before {
+        content: "";
+        width: var(--left-section-end, 80%);
+        background-color: rgba(var(--ids__text-RGB), .5);
+        height: 1px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+
+      &:after {
+        content: "";
+        width: var(--right-section-width, 15%);
+        background-color: rgba(var(--ids__text-RGB), .5);
+        height: 1px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+    }
+
+    & .scatterplot-axis-x-label, & .scatterplot-axis-y-label {
+      font-size: var(--scatterplot-axis-font-size, .8125em);
+      color: rgba(var(--ids__text-RGB), .8);
+      pointer-events: none;
+      background-color: rgba(var(--ids__bg-surface-light-RGB), 1);
+      z-index: 10;
+      padding: 0 .1538em;
+      font-weight: 600;
+      position: absolute;
+    }
+
+    & .scatterplot-axis-x-label {
+      bottom: -2.3077em;
+      transform: translateX(-50%);
+    }
+
+    & .scatterplot-axis-y-label {
+      text-align: right;
+      transform: translateY(-50%) translateX(calc(-100% - .9231em));
+    }
+  }
+
+  & .scatterplot-point-label {
+    font-size: var(--scatterplot-label-font-size, .875em);
+    color: rgba(var(--ids__text-RGB), 1);
+    pointer-events: none;
+    transform: translate(calc(var(--scatterplot-point-size, .875em) / 2 - .0714em),
+      calc(-.5lh - .1429em - .0714em));
+    white-space: nowrap;
+    z-index: 1;
+    background-color: rgba(var(--ids__bg-surface-light-RGB), 1);
+    opacity: .6;
+    border-radius: .1429em;
+    padding: .1429em .2857em;
+    transition: opacity .2s;
+    position: absolute;
+
+    @media (width <= 768px) {
+      white-space: normal;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      min-width: 5em;
+      max-width: 9.5em;
+      padding: .1429em .2857em .1429em .5em;
+      font-size: .7em;
+    }
+  }
+
+  & .scatterplot-point-label[data-vendor="Modulate"] {
+    color: rgba(var(--vendor-modulate-RGB), 1);
+  }
+
+  & .scatterplot-point-label-active {
+    opacity: 1;
+  }
+
+  & .scatterplot-point-label-left {
+    transform: translate(calc(-100% - var(--scatterplot-point-size, .875em) / 2 - 0px),
+      calc(-.5lh - .1429em - .0714em));
+    text-align: right;
+  }
+
+  & .scatterplot-point {
+    width: var(--point-size, var(--scatterplot-point-size, .875em));
+    height: var(--point-size, var(--scatterplot-point-size, .875em));
+    border: var(--point-border, none);
+    box-sizing: border-box;
+    z-index: 2;
+    background: var(--point-bg, rgba(var(--ids__text-RGB), 1));
+    border-radius: 50%;
+    transition: transform .2s;
+    position: absolute;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  & .scatterplot-point.filled {
+    --point-bg: rgba(var(--brand-color), 1);
+  }
+
+  & .scatterplot-point.outlined {
+    --point-bg: rgba(var(--ids__bg-surface-RGB), 1);
+    --point-border: 2px solid rgba(var(--brand-color), 1);
+  }
+
+  & .scatterplot-point.outlined.vendor-gray-border {
+    --point-border: 2px solid rgba(var(--vendor-gray-border-RGB), 1);
+  }
+
+  & .vendor-modulate {
+    --brand-color: var(--vendor-modulate-RGB);
+  }
+
+  & .vendor-openai {
+    --brand-color: var(--vendor-openai-RGB);
+  }
+
+  & .vendor-xai {
+    --brand-color: var(--vendor-xai-RGB);
+  }
+
+  & .vendor-gemini {
+    --brand-color: var(--vendor-gemini-RGB);
+  }
+
+  & .vendor-deepseek {
+    --brand-color: var(--vendor-deepseek-RGB);
+  }
+
+  & .vendor-nvidia {
+    --brand-color: var(--vendor-nvidia-RGB);
+  }
+
+  & .vendor-mistral, & .vendor-mistral-ai {
+    --brand-color: var(--vendor-mistral-RGB);
+  }
+
+  & .vendor-google {
+    --brand-color: var(--vendor-gemini-RGB);
+  }
+
+  & .vendor-assemblyai {
+    --brand-color: var(--vendor-assemblyai-RGB);
+  }
+
+  & .vendor-deepgram {
+    --brand-color: var(--vendor-deepgram-RGB);
+  }
+
+  & .vendor-elevenlabs {
+    --brand-color: var(--vendor-elevenlabs-RGB);
+  }
+
+  & .vendor-speechmatics {
+    --brand-color: var(--vendor-speechmatics-RGB);
+  }
+
+  & .vendor-gladia {
+    --brand-color: var(--vendor-gladia-RGB);
+  }
+
+  & .vendor-microsoft {
+    --brand-color: var(--vendor-microsoft-RGB);
+  }
+
+  & .vendor-amazon {
+    --brand-color: var(--vendor-amazon-RGB);
+  }
+
+  & .vendor-resemble-ai, & .vendor-deep-learning-media-system-laboratory {
+    --brand-color: var(--vendor-gray-border-RGB);
+  }
+
+  & .vendor-whispeak {
+    --brand-color: var(--vendor-whispeak-RGB);
+  }
+
+  & .vendor-df-arena-ml-researchers-no-company, & .vendor-momenta, & .vendor-syntra, & .vendor-singapore-agency-science-technology-research {
+    --brand-color: var(--vendor-gray-border-RGB);
+  }
+
+  & .vendor-hiya {
+    --brand-color: var(--vendor-hiya-RGB);
+  }
+
+  & .vendor-df-arena {
+    --brand-color: var(--vendor-gray-border-RGB);
+  }
+
+  & .scatterplot-point.vendor-modulate-gradient {
+    --point-bg: linear-gradient(to right,
+      rgba(var(--vendor-modulate-RGB), 1),
+      rgba(var(--vendor-modulate-gradient-2-RGB), 1));
+  }
+
+  & .scatterplot-point-active {
+    z-index: 10;
+    transition: transform;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+  & .scatterplot-axis-label-x {
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: rgba(var(--ids__text-caption-RGB), 1);
+    margin: 0;
+    font-size: .8em;
+    position: absolute;
+    bottom: -4.29688em;
+    left: 50%;
+    transform: translateX(-50%);
+
+    @media (width <= 768px) {
+      text-align: center;
+      width: 100%;
+      bottom: -3.5em;
+    }
+  }
+
+  & .scatterplot-axis-label-y {
+    transform-origin: center;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: rgba(var(--ids__text-caption-RGB), 1);
+    white-space: nowrap;
+    margin: 0;
+    font-size: .8em;
+    position: absolute;
+    top: 50%;
+    left: -4.29688em;
+    transform: translateX(-50%) translateY(0%) rotate(-90deg);
+
+    @media (width <= 768px) {
+      left: -2.8em;
+    }
+  }
+
+  & .scatterplot-container .scatterplot-aria--y-fades {
+    border-left: none;
+  }
+
+  & .scatterplot-y-axis-line {
+    background: linear-gradient(to bottom,
+      rgba(var(--ids__text-RGB), .5) 80%,
+      transparent 100%);
+    pointer-events: none;
+    z-index: 10;
+    width: 1px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  & .scatterplot-tick-x, & .scatterplot-tick-y {
+    background-color: rgba(var(--ids__text-RGB), .5);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  & .scatterplot-tick-x {
+    width: 1px;
+    height: .75em;
+    bottom: -.75em;
+    transform: translateX(-50%);
+
+    @media (width <= 768px) {
+      height: .35em;
+      bottom: -.35em;
+    }
+  }
+
+  & .scatterplot-tick-y {
+    width: .75em;
+    height: 1px;
+    left: -.75em;
+    transform: translateY(-50%);
+
+    @media (width <= 768px) {
+      width: .35em;
+      left: -.35em;
+    }
+  }
+
+  & .scatterplot-grid-line-x, & .scatterplot-grid-line-y {
+    background-color: rgba(var(--ids__text-RGB), .1);
+    pointer-events: none;
+    z-index: 0;
+    position: absolute;
+  }
+
+  & .scatterplot-grid-line-x {
+    width: 1px;
+    height: 100%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+
+  & .scatterplot-grid-line-x-left {
+    clip-path: inset(0 25% 0 0);
+    width: 1px;
+    height: 100%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+
+  & .scatterplot-grid-line-x-right {
+    clip-path: inset(0 0 0 25%);
+    width: 1px;
+    height: 100%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+
+  & .scatterplot-grid-line-y {
+    height: 1px;
+    transform: translateY(-50%);
+  }
+
+  & .scatterplot-grid-line-y-left {
+    width: var(--left-section-end, 80%);
+    left: 0;
+  }
+
+  & .scatterplot-grid-line-y-right {
+    width: var(--right-section-width, 15%);
+    right: 0;
+  }
+
+  & .scatterplot-axis-x-tick, & .scatterplot-axis-y-tick {
+    background-color: rgba(var(--ids__text-RGB), 1);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  & .scatterplot-axis-x-tick {
+    width: 2px;
+    height: .75em;
+    bottom: -.75em;
+    transform: translateX(-50%);
+  }
+
+  & .scatterplot-axis-y-tick {
+    width: .75em;
+    height: 2px;
+    left: -.75em;
+    transform: translateY(-50%);
+  }
+
+  & .scatterplot-static-label {
+    font-size: var(--scatterplot-axis-font-size, .8125em);
+    color: rgba(var(--ids__text-RGB), .8);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  & .scatterplot-static-label-zero {
+    bottom: -2.3077em;
+    left: -1.7692em;
+
+    @media (width <= 768px) {
+      bottom: -1.6em;
+      left: -1.2em;
+    }
+  }
+
+  & .scatterplot-static-label-cost {
+    bottom: -2.3077em;
+    transform: translateX(-50%);
+
+    @media (width <= 768px) {
+      bottom: -1.6em;
+    }
+  }
+
+  & .scatterplot-static-label-score {
+    text-align: right;
+    transform: translateY(-50%) translateX(calc(-100% - 1.0769em));
+
+    @media (width <= 768px) {
+      transform: translateY(-50%) translateX(calc(-100% - .6em));
+    }
+  }
+
+  & .scatterplot-axis-break {
+    pointer-events: none;
+    align-items: center;
+    height: .625em;
+    display: flex;
+    position: absolute;
+    bottom: .4375em;
+  }
+
+  & .scatterplot-axis-break-left {
+    justify-content: flex-start;
+  }
+
+  & .scatterplot-axis-break-right {
+    justify-content: flex-end;
+  }
+
+  & .scatterplot-axis-break-left:after, & .scatterplot-axis-break-right:after {
+    content: "";
+    background-color: rgba(var(--ids__text-RGB), .5);
+    transform-origin: center;
+    width: 1.6875em;
+    height: 1px;
+    position: absolute;
+    bottom: -.5em;
+    left: -.875em;
+    transform: rotate(-65deg);
+  }
+
+  @media (width <= 768px) {
+    & .scatterplot-axis-break {
+      height: .291667em;
+      bottom: .204167em;
+    }
+
+    & .scatterplot-axis-break-left:after, & .scatterplot-axis-break-right:after {
+      width: .7875em;
+      bottom: -.233333em;
+      left: -.408333em;
+    }
+  }
+
+  & .vendors {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: .625em .9375em;
+    padding: 1.25em 2.5em;
+    display: flex;
+
+    @media (width <= 768px) {
+      padding: 1em 0;
+    }
+  }
+
+  & .vendor-item {
+    align-items: center;
+    gap: .375em;
+    display: flex;
+  }
+
+  & .vendor-item .scatterplot-point {
+    flex-shrink: 0;
+    width: .625em;
+    height: .625em;
+    position: static;
+    transform: none;
+  }
+
+  & .vendor-item .scatterplot-point.outlined {
+    --point-border: 1px solid rgba(var(--brand-color), 1);
+  }
+
+  & .vendor-item .scatterplot-point.outlined.vendor-gray-border {
+    --point-border: 1px solid rgba(var(--vendor-gray-border-RGB), 1);
+  }
+
+  & .vendor-label {
+    color: rgba(var(--ids__text-RGB), 1);
+    white-space: nowrap;
+    font-size: .875em;
+  }
+}
