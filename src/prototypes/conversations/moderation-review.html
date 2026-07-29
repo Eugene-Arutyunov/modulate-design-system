@@ -25,6 +25,70 @@ permalink: /dashboard/conversations/review/7839f2/
             referral
           </h1>
         </div>
+        <div class="conversation-report__title-actions">
+          <div
+            class="m__menu-button conversation-report__report-menu moderation-review-status"
+            data-review-status-control
+            data-status="in-review"
+          >
+            <button
+              type="button"
+              class="m__menu-button-secondary M m__menu-button-trigger conversation-report__report-trigger moderation-review-status__trigger"
+              aria-haspopup="menu"
+              aria-expanded="false"
+            >
+              <span
+                class="conversation-report__report-trigger-text"
+                data-review-status-label
+                >In review</span
+              >
+              <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+                <use href="#chevron-down"></use>
+              </svg>
+            </button>
+            <div
+              class="m__menu-button-list conversation-report__report-list"
+              hidden
+              role="menu"
+              data-menu-button-select="trigger-text"
+              data-review-status-list
+            >
+              <div class="conversation-report__report-items" role="presentation">
+                <button
+                  type="button"
+                  class="m__menu-button-item conversation-report__report-item"
+                  role="menuitem"
+                  data-review-status-option="pending"
+                >
+                  <span class="conversation-report__report-item-title"
+                    >Pending</span
+                  >
+                </button>
+                <button
+                  type="button"
+                  class="m__menu-button-item conversation-report__report-item is-active"
+                  role="menuitem"
+                  aria-current="true"
+                  data-review-status-option="in-review"
+                >
+                  <span class="conversation-report__report-item-title"
+                    >In review</span
+                  >
+                </button>
+                <button
+                  type="button"
+                  class="m__menu-button-item conversation-report__report-item"
+                  role="menuitem"
+                  data-review-status-option="reviewed"
+                >
+                  <span class="conversation-report__report-item-title"
+                    >Reviewed</span
+                  >
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="conversation-report__player m__rounded">
@@ -73,6 +137,7 @@ permalink: /dashboard/conversations/review/7839f2/
       </div>
 
       <div class="pg-output-panel conversation-report__output">
+        {% set velmaReportOutputReview = true %}
         {% include 'prototypes/playground/velma-report-output.html' %}
       </div>
 
@@ -103,6 +168,23 @@ permalink: /dashboard/conversations/review/7839f2/
   (function () {
     var root = document.querySelector("[data-moderation-review]");
     if (!root) return;
+
+    var statusControl = root.querySelector("[data-review-status-control]");
+    var statusLabel = root.querySelector("[data-review-status-label]");
+
+    function updateReviewStatus(option) {
+      if (!statusControl || !option) return;
+      statusControl.dataset.status = option.dataset.reviewStatusOption;
+      if (statusLabel) {
+        statusLabel.textContent = option.textContent.trim();
+      }
+    }
+
+    document.addEventListener("click", function (event) {
+      var statusOption = event.target.closest("[data-review-status-option]");
+      if (!statusOption) return;
+      updateReviewStatus(statusOption);
+    });
 
     var behaviorTable = root.querySelector(".pg-velma-output .pg-behaviors-table");
     if (behaviorTable) {
