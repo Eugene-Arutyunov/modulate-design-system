@@ -2791,7 +2791,7 @@ table.config-details {
 
   & .moderation-table__header {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) max-content;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) max-content;
     align-items: stretch;
     width: 100%;
   }
@@ -2800,36 +2800,56 @@ table.config-details {
     min-width: 0;
   }
 
+  & .moderation-table__status-filter {
+    display: flex;
+    min-width: 0;
+  }
+
+  & .moderation-table__status-filter > .moderation-table__filter {
+    width: 100%;
+  }
+
   & .moderation-table__header > .m__searchbar,
-  & .moderation-table__filter--behavior {
+  & .moderation-table__filter--behavior,
+  & .moderation-table__filter--status {
     position: relative;
   }
 
-  & .moderation-table__filter--behavior {
+  & :is(.moderation-table__filter--behavior, .moderation-table__filter--status) {
     font: inherit;
     text-align: left;
   }
 
-  & .moderation-table__filter--behavior:focus-within,
-  & .moderation-table__filter--behavior:focus-visible,
-  & .moderation-table__filter--behavior[aria-expanded="true"] {
+  & :is(
+    .moderation-table__filter--behavior,
+    .moderation-table__filter--status
+  ):is(:focus-within, :focus-visible, [aria-expanded="true"]) {
     outline: none;
     background-color: var(--m__bg-input);
   }
 
   &
-    .moderation-table__filter--behavior:is(
+    :is(
+      .moderation-table__filter--behavior,
+      .moderation-table__filter--status
+    ):is(
       :focus-visible,
       [aria-expanded="true"]
     ),
   &
-    .moderation-table__filter--behavior:is(
+    :is(
+      .moderation-table__filter--behavior,
+      .moderation-table__filter--status
+    ):is(
       :focus-visible,
       [aria-expanded="true"]
     )
     > span:first-child,
   &
-    .moderation-table__filter--behavior:is(
+    :is(
+      .moderation-table__filter--behavior,
+      .moderation-table__filter--status
+    ):is(
       :focus-visible,
       [aria-expanded="true"]
     )
@@ -2839,7 +2859,8 @@ table.config-details {
   }
 
   & .moderation-table__header > .m__searchbar::after,
-  & .moderation-table__filter--behavior::after {
+  & .moderation-table__filter--behavior::after,
+  & .moderation-table__filter--status::after {
     content: "";
     position: absolute;
     right: 0;
@@ -3024,6 +3045,10 @@ table.config-details {
     color: var(--m__text-caption);
   }
 
+  & .moderation-table__status-tag--reviewed {
+    color: var(--m__success);
+  }
+
   & .moderation-table__row-actions > div {
     align-items: flex-start;
   }
@@ -3091,7 +3116,8 @@ table.config-details {
     }
 
     & .moderation-table__header > .m__searchbar::after,
-    & .moderation-table__filter--behavior::after {
+    & .moderation-table__filter--behavior::after,
+    & .moderation-table__filter--status::after {
       display: none;
     }
 
@@ -3108,6 +3134,85 @@ table.config-details {
       background-repeat: no-repeat;
       background-size: 100% 1px;
     }
+  }
+}
+
+.moderation-table__status-list {
+  min-width: min(16rem, calc(100vw - 2rem));
+}
+
+.moderation-table__status-option {
+  gap: 0.36rem;
+  padding: 0.43rem 0.6rem;
+  font-size: var(--m__font-size-smaller);
+  font-weight: var(--m__font-weight-regular);
+  line-height: var(--m__line-height-base);
+}
+
+.moderation-table__status-option-check {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 1rem;
+  color: transparent;
+}
+
+.moderation-table__status-option-check svg {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+.moderation-table__status-option-check::after {
+  content: "";
+  position: absolute;
+  left: 0.18rem;
+  top: 50%;
+  box-sizing: border-box;
+  width: 0.7rem;
+  height: 0.42rem;
+  border-left: 0.14rem solid currentColor;
+  border-bottom: 0.14rem solid currentColor;
+  transform: translateY(-65%) rotate(-45deg);
+}
+
+.moderation-table__status-option.is-active
+  .moderation-table__status-option-check {
+  color: currentColor;
+}
+
+.moderation-table__status-edit {
+  padding: 0.43rem 0.6rem;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-smaller);
+  font-weight: var(--m__font-weight-regular);
+  line-height: var(--m__line-height-base);
+}
+
+.moderation-status-modal__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--m__gap-xxs);
+}
+
+.moderation-status-modal__item {
+  cursor: default;
+}
+
+.moderation-status-modal__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--m__gap-xs);
+}
+
+.moderation-status-modal__field {
+  margin-bottom: 0;
+}
+
+@media (width < 520px) {
+  .moderation-status-modal__form {
+    grid-template-columns: 1fr;
   }
 }
 

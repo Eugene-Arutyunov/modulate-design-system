@@ -167,6 +167,136 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
               </span>
             </button>
 
+            <div class="m__menu-button moderation-table__status-filter">
+              <button
+                type="button"
+                class="m__select S moderation-table__filter moderation-table__filter--status m__menu-button-trigger"
+                data-status-filter-trigger
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <span>Status</span>
+                <span class="m__select__inline-control">
+                  <span class="m__select__value" data-status-filter-label
+                    >All</span
+                  >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </span>
+              </button>
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__status-list"
+                hidden
+                role="menu"
+                data-status-filter-list
+              >
+                <div
+                  class="conversation-report__report-items"
+                  role="presentation"
+                  data-status-filter-options
+                >
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option is-active"
+                    role="menuitemradio"
+                    aria-checked="true"
+                    data-status-filter-option=""
+                  >
+                    <span
+                      class="conversation-report__report-item-icon moderation-table__status-option-check"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 12 12">
+                        <use href="#checkmark"></use>
+                      </svg>
+                    </span>
+                    <span class="conversation-report__report-item-title"
+                      >All</span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option"
+                    role="menuitemradio"
+                    aria-checked="false"
+                    data-status-filter-option="Pending"
+                  >
+                    <span
+                      class="conversation-report__report-item-icon moderation-table__status-option-check"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 12 12">
+                        <use href="#checkmark"></use>
+                      </svg>
+                    </span>
+                    <span class="conversation-report__report-item-title"
+                      >Pending</span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option"
+                    role="menuitemradio"
+                    aria-checked="false"
+                    data-status-filter-option="In review"
+                  >
+                    <span
+                      class="conversation-report__report-item-icon moderation-table__status-option-check"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 12 12">
+                        <use href="#checkmark"></use>
+                      </svg>
+                    </span>
+                    <span class="conversation-report__report-item-title"
+                      >In review</span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option"
+                    role="menuitemradio"
+                    aria-checked="false"
+                    data-status-filter-option="Reviewed"
+                  >
+                    <span
+                      class="conversation-report__report-item-icon moderation-table__status-option-check"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 12 12">
+                        <use href="#checkmark"></use>
+                      </svg>
+                    </span>
+                    <span class="conversation-report__report-item-title"
+                      >Reviewed</span
+                    >
+                  </button>
+                </div>
+                <div
+                  class="conversation-report__report-settings-footer"
+                  role="presentation"
+                >
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item conversation-report__report-item--settings moderation-table__status-edit"
+                    role="menuitem"
+                    data-menu-button-action="edit-status-list"
+                    data-modal-open="modal-status-list"
+                  >
+                    <span class="conversation-report__report-item-title"
+                      >Edit status list</span
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <label
               class="m__select S moderation-table__filter moderation-table__filter--sort"
             >
@@ -284,6 +414,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                 data-index="{{ loop.index0 }}"
                 data-tags="{% for tag in row.tags %}{{ tag }}{% if not loop.last %}|{% endif %}{% endfor %}"
                 data-score="{{ row.score }}"
+                data-status="{{ row.status }}"
                 data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}{{ row.status }}"
               >
                 <td class="moderation-table__conversation-cell">
@@ -372,7 +503,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                 </td>
                 <td>
                   <span
-                    class="m__tag moderation-table__status-tag {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% endif %}"
+                    class="m__tag moderation-table__status-tag {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% elif row.status == 'Reviewed' %}moderation-table__status-tag--reviewed{% endif %}"
                     >{{ row.status }}</span
                   >
                 </td>
@@ -409,6 +540,64 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
           </table>
         </div>
       </section>
+
+      <div
+        class="m__modal-backdrop"
+        id="modal-status-list"
+        hidden
+        aria-modal="true"
+        role="dialog"
+        aria-labelledby="modal-status-list-title"
+      >
+        <div class="m__modal moderation-status-modal">
+          <div class="m__modal__header">
+            <h2 class="m__modal__title" id="modal-status-list-title">
+              Status list
+            </h2>
+            <button
+              type="button"
+              class="m__modal__close"
+              aria-label="Close"
+              data-modal-close="modal-status-list"
+            >
+              <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+                <use href="#close"></use>
+              </svg>
+            </button>
+          </div>
+          <div class="m__modal__body">
+            <div class="moderation-status-modal__list" data-status-modal-list>
+              <span class="m__tag moderation-status-modal__item">Pending</span>
+              <span class="m__tag moderation-status-modal__item">In review</span>
+              <span class="m__tag moderation-status-modal__item">Reviewed</span>
+            </div>
+            <div class="m__space S"></div>
+            <form class="moderation-status-modal__form" data-status-add-form>
+              <div class="m__textfield M moderation-status-modal__field">
+                <label for="status-list-new">New status</label>
+                <input
+                  type="text"
+                  id="status-list-new"
+                  placeholder="Status name"
+                  data-status-add-input
+                />
+              </div>
+              <button type="submit" class="m__button-secondary-outline M">
+                Add
+              </button>
+            </form>
+          </div>
+          <div class="m__modal__footer">
+            <button
+              type="button"
+              class="m__button-primary S"
+              data-modal-close="modal-status-list"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
   <div class="m__space XL"></div>
@@ -444,6 +633,14 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     var activeTagFilterTrigger = null;
     var sortFilter = root.querySelector("[data-sort-filter]");
     var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
+    var statusFilterLabel = root.querySelector("[data-status-filter-label]");
+    var statusFilterOptionsRoot = root.querySelector(
+      "[data-status-filter-options]",
+    );
+    var statusModalList = root.querySelector("[data-status-modal-list]");
+    var statusAddForm = root.querySelector("[data-status-add-form]");
+    var statusAddInput = root.querySelector("[data-status-add-input]");
+    var selectedStatus = "";
 
     function positionTagFilter(anchor) {
       var rect = anchor.getBoundingClientRect();
@@ -500,6 +697,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       var sort = sortFilter.value;
       sortFilterLabel.textContent =
         sortFilter.options[sortFilter.selectedIndex].text;
+      statusFilterLabel.textContent = selectedStatus || "All";
       rows.forEach(function (row) {
         var rowTags = (row.dataset.tags || "").split("|");
         var matchesTags =
@@ -507,8 +705,11 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
           activeTags.some(function (tag) {
             return rowTags.includes(tag);
           });
+        var matchesStatus =
+          !selectedStatus || row.dataset.status === selectedStatus;
         var show =
           matchesTags &&
+          matchesStatus &&
           (!query || row.dataset.search.toLowerCase().includes(query));
         row.hidden = !show;
       });
@@ -576,6 +777,81 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
           query && !option.value.toLowerCase().includes(query);
       });
     });
+    function setStatusFilter(status) {
+      selectedStatus = status || "";
+      statusFilterLabel.textContent = selectedStatus || "All";
+      statusFilterOptionsRoot
+        .querySelectorAll("[data-status-filter-option]")
+        .forEach(function (option) {
+          var isSelected =
+            option.dataset.statusFilterOption === selectedStatus;
+          option.classList.toggle("is-active", isSelected);
+          option.setAttribute("aria-checked", String(isSelected));
+        });
+      applyQueueState();
+    }
+
+    function createStatusOption(status) {
+      var option = document.createElement("button");
+      var check = document.createElement("span");
+      var checkIcon = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg",
+      );
+      var checkUse = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "use",
+      );
+      var title = document.createElement("span");
+      option.type = "button";
+      option.className =
+        "m__menu-button-item conversation-report__report-item moderation-table__status-option";
+      option.setAttribute("role", "menuitemradio");
+      option.setAttribute("aria-checked", "false");
+      option.dataset.statusFilterOption = status;
+      check.className =
+        "conversation-report__report-item-icon moderation-table__status-option-check";
+      check.setAttribute("aria-hidden", "true");
+      checkIcon.setAttribute("viewBox", "0 0 12 12");
+      checkUse.setAttribute("href", "#checkmark");
+      checkIcon.appendChild(checkUse);
+      check.appendChild(checkIcon);
+      title.className = "conversation-report__report-item-title";
+      title.textContent = status;
+      option.appendChild(check);
+      option.appendChild(title);
+      return option;
+    }
+
+    function addStatus(status) {
+      var normalized = status.trim();
+      if (!normalized) return;
+      var exists = Array.from(
+        statusFilterOptionsRoot.querySelectorAll("[data-status-filter-option]"),
+      ).some(function (option) {
+        return option.dataset.statusFilterOption === normalized;
+      });
+      if (exists) return;
+      statusFilterOptionsRoot.appendChild(createStatusOption(normalized));
+      var item = document.createElement("span");
+      item.className = "m__tag moderation-status-modal__item";
+      item.textContent = normalized;
+      statusModalList.appendChild(item);
+    }
+
+    document.addEventListener("click", function (event) {
+      var statusOption = event.target.closest("[data-status-filter-option]");
+      if (!statusOption) return;
+      setStatusFilter(statusOption.dataset.statusFilterOption || "");
+    });
+
+    statusAddForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      addStatus(statusAddInput.value);
+      statusAddInput.value = "";
+      statusAddInput.focus();
+    });
+
     document.addEventListener("click", function (event) {
       if (tagFilterPopover.hidden) return;
       if (tagFilterPopover.contains(event.target)) return;
