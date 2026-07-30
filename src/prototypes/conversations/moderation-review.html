@@ -3,7 +3,8 @@ pageTitle: Review Queue
 permalink: /dashboard/conversations/review/7839f2/
 ---
 
-{% extends 'prototypes/layout.html' %} {% block content %}
+{% extends 'prototypes/layout.html' %} {% block content %} {% set
+statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
@@ -24,6 +25,117 @@ permalink: /dashboard/conversations/review/7839f2/
             Health member appeals denied MRI claim after urgent back pain
             referral
           </h1>
+        </div>
+        <div class="conversation-report__title-actions">
+          <div
+            class="m__menu-button conversation-report__report-menu moderation-review-status"
+            data-review-status-control
+            data-status="in-review"
+          >
+            <button
+              type="button"
+              class="m__menu-button-secondary M m__menu-button-trigger conversation-report__report-trigger moderation-review-status__trigger"
+              aria-haspopup="menu"
+              aria-expanded="false"
+            >
+              <span
+                class="conversation-report__report-trigger-text"
+                data-review-status-label
+                >In review</span
+              >
+              <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+                <use href="#chevron-down"></use>
+              </svg>
+            </button>
+            <div
+              class="m__menu-button-list conversation-report__report-list moderation-table__status-list"
+              hidden
+              role="menu"
+              data-menu-button-select="trigger-text"
+              data-review-status-list
+            >
+              <div
+                class="conversation-report__report-items"
+                role="presentation"
+                data-review-status-options
+              >
+                <button
+                  type="button"
+                  class="m__menu-button-item conversation-report__report-item moderation-table__status-option"
+                  role="menuitemradio"
+                  aria-checked="false"
+                  data-review-status-option="pending"
+                >
+                  <span
+                    class="conversation-report__report-item-icon moderation-table__status-option-check"
+                    aria-hidden="true"
+                  >
+                    <svg viewBox="0 0 12 12">
+                      <use href="#checkmark"></use>
+                    </svg>
+                  </span>
+                  <span class="conversation-report__report-item-title"
+                    >Pending</span
+                  >
+                </button>
+                <button
+                  type="button"
+                  class="m__menu-button-item conversation-report__report-item moderation-table__status-option is-active"
+                  role="menuitemradio"
+                  aria-checked="true"
+                  aria-current="true"
+                  data-review-status-option="in-review"
+                >
+                  <span
+                    class="conversation-report__report-item-icon moderation-table__status-option-check"
+                    aria-hidden="true"
+                  >
+                    <svg viewBox="0 0 12 12">
+                      <use href="#checkmark"></use>
+                    </svg>
+                  </span>
+                  <span class="conversation-report__report-item-title"
+                    >In review</span
+                  >
+                </button>
+                <button
+                  type="button"
+                  class="m__menu-button-item conversation-report__report-item moderation-table__status-option"
+                  role="menuitemradio"
+                  aria-checked="false"
+                  data-review-status-option="reviewed"
+                >
+                  <span
+                    class="conversation-report__report-item-icon moderation-table__status-option-check"
+                    aria-hidden="true"
+                  >
+                    <svg viewBox="0 0 12 12">
+                      <use href="#checkmark"></use>
+                    </svg>
+                  </span>
+                  <span class="conversation-report__report-item-title"
+                    >Reviewed</span
+                  >
+                </button>
+              </div>
+              <div
+                class="conversation-report__report-settings-footer"
+                role="presentation"
+              >
+                <button
+                  type="button"
+                  class="m__menu-button-item conversation-report__report-item conversation-report__report-item--settings moderation-table__status-edit"
+                  role="menuitem"
+                  data-menu-button-action="edit-status-list"
+                  data-modal-open="modal-status-list"
+                >
+                  <span class="conversation-report__report-item-title"
+                    >Edit status list</span
+                  >
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -73,6 +185,7 @@ permalink: /dashboard/conversations/review/7839f2/
       </div>
 
       <div class="pg-output-panel conversation-report__output">
+        {% set velmaReportOutputReview = true %}
         {% include 'prototypes/playground/velma-report-output.html' %}
       </div>
 
@@ -80,6 +193,139 @@ permalink: /dashboard/conversations/review/7839f2/
         <a href="/dashboard/conversations/review/7839f2/" class="m__button-secondary-outline S moderation-review-nav__button">← Previous</a>
         <a href="/dashboard/conversations/review/7839f2/" class="m__button-secondary-outline S moderation-review-nav__button">Next →</a>
       </nav>
+
+      <div
+        class="m__modal-backdrop"
+        id="modal-status-list"
+        hidden
+        aria-modal="true"
+        role="dialog"
+        aria-labelledby="modal-status-list-title"
+        data-modal-autofocus="false"
+      >
+        <div class="m__modal moderation-status-modal">
+          <div class="m__modal__header">
+            <h2 class="m__modal__title" id="modal-status-list-title">
+              Status list
+            </h2>
+            <button
+              type="button"
+              class="m__modal__close"
+              aria-label="Close"
+              data-modal-close="modal-status-list"
+            >
+              <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+                <use href="#close"></use>
+              </svg>
+            </button>
+          </div>
+          <div class="m__modal__body">
+            <div class="moderation-status-modal__list" data-status-modal-list>
+              {% for status in statusListOptions %}
+              <span
+                class="m__tag bw-tag-item moderation-status-modal__item"
+                data-status-modal-item="{{ status }}"
+              >
+                <span class="bw-tag-item-name">{{ status }}</span>
+                <button
+                  type="button"
+                  class="bw-tag-x"
+                  aria-label="Remove {{ status }} status"
+                  data-status-remove="{{ status }}"
+                >
+                  <svg
+                    viewBox="0 0 12 12"
+                    width="8"
+                    height="8"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <line
+                      x1="2"
+                      y1="2"
+                      x2="10"
+                      y2="10"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                    <line
+                      x1="10"
+                      y1="2"
+                      x2="2"
+                      y2="10"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+              </span>
+              {% endfor %}
+            </div>
+            <div class="m__space S"></div>
+            <form class="moderation-status-modal__form" data-status-add-form>
+              <div class="m__textfield M moderation-status-modal__field">
+                <label for="status-list-new">New status</label>
+                <input
+                  type="text"
+                  id="status-list-new"
+                  data-status-add-input
+                />
+              </div>
+              <button type="submit" class="m__button-secondary-outline M">
+                Add
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div
+        class="m__modal-backdrop"
+        id="modal-status-remove-confirm"
+        hidden
+        aria-modal="true"
+        role="dialog"
+        aria-labelledby="modal-status-remove-confirm-title"
+        aria-describedby="modal-status-remove-confirm-text"
+      >
+        <div class="m__modal">
+          <div class="m__modal__header">
+            <h2 class="m__modal__title" id="modal-status-remove-confirm-title">
+              Delete status?
+            </h2>
+            <button
+              type="button"
+              class="m__modal__close"
+              aria-label="Close"
+              data-modal-close="modal-status-remove-confirm"
+            >
+              <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+                <use href="#close"></use>
+              </svg>
+            </button>
+          </div>
+          <div class="m__modal__body">
+            <p id="modal-status-remove-confirm-text"></p>
+          </div>
+          <div class="m__modal__footer">
+            <button
+              type="button"
+              class="m__button-secondary-outline S"
+              data-modal-close="modal-status-remove-confirm"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="m__button-danger-outline S"
+              id="modal-status-remove-confirm-btn"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
   <div class="m__space XL"></div>
@@ -103,6 +349,174 @@ permalink: /dashboard/conversations/review/7839f2/
   (function () {
     var root = document.querySelector("[data-moderation-review]");
     if (!root) return;
+
+    var statusControl = root.querySelector("[data-review-status-control]");
+    var statusLabel = root.querySelector("[data-review-status-label]");
+    var statusOptionsRoot = root.querySelector("[data-review-status-options]");
+    var statusModalList = root.querySelector("[data-status-modal-list]");
+    var statusAddForm = root.querySelector("[data-status-add-form]");
+    var statusAddInput = root.querySelector("[data-status-add-input]");
+    var statusRemoveConfirmModal = document.getElementById(
+      "modal-status-remove-confirm",
+    );
+    var statusRemoveConfirmText = document.getElementById(
+      "modal-status-remove-confirm-text",
+    );
+    var statusRemoveConfirmButton = document.getElementById(
+      "modal-status-remove-confirm-btn",
+    );
+    var selectedTagRemoveIcon =
+      '<svg viewBox="0 0 12 12" width="8" height="8" fill="none" aria-hidden="true">' +
+      '<line x1="2" y1="2" x2="10" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '<line x1="10" y1="2" x2="2" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      "</svg>";
+    var pendingStatusRemove = "";
+
+    function updateReviewStatus(option) {
+      if (!statusControl || !option) return;
+      statusControl.dataset.status = option.dataset.reviewStatusOption;
+      if (statusLabel) {
+        statusLabel.textContent = option.textContent.trim();
+      }
+      root
+        .querySelectorAll("[data-review-status-option]")
+        .forEach(function (item) {
+          var isSelected = item === option;
+          item.classList.toggle("is-active", isSelected);
+          item.setAttribute("aria-checked", String(isSelected));
+          if (isSelected) {
+            item.setAttribute("aria-current", "true");
+          } else {
+            item.removeAttribute("aria-current");
+          }
+        });
+    }
+
+    function getStatusOptionLabel(option) {
+      var title = option.querySelector(".conversation-report__report-item-title");
+      return title ? title.textContent.trim() : "";
+    }
+
+    function getStatusValue(status) {
+      return status.trim().toLowerCase().replace(/\s+/g, "-");
+    }
+
+    function createStatusOption(status) {
+      var option = document.createElement("button");
+      var check = document.createElement("span");
+      var checkIcon = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg",
+      );
+      var checkUse = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "use",
+      );
+      var title = document.createElement("span");
+      option.type = "button";
+      option.className =
+        "m__menu-button-item conversation-report__report-item moderation-table__status-option";
+      option.setAttribute("role", "menuitemradio");
+      option.setAttribute("aria-checked", "false");
+      option.dataset.reviewStatusOption = getStatusValue(status);
+      check.className =
+        "conversation-report__report-item-icon moderation-table__status-option-check";
+      check.setAttribute("aria-hidden", "true");
+      checkIcon.setAttribute("viewBox", "0 0 12 12");
+      checkUse.setAttribute("href", "#checkmark");
+      checkIcon.appendChild(checkUse);
+      check.appendChild(checkIcon);
+      title.className = "conversation-report__report-item-title";
+      title.textContent = status;
+      option.appendChild(check);
+      option.appendChild(title);
+      return option;
+    }
+
+    function createStatusChip(status) {
+      var item = document.createElement("span");
+      var title = document.createElement("span");
+      var remove = document.createElement("button");
+      item.className = "m__tag bw-tag-item moderation-status-modal__item";
+      item.dataset.statusModalItem = status;
+      title.className = "bw-tag-item-name";
+      title.textContent = status;
+      remove.type = "button";
+      remove.className = "bw-tag-x";
+      remove.dataset.statusRemove = status;
+      remove.setAttribute("aria-label", "Remove " + status + " status");
+      remove.innerHTML = selectedTagRemoveIcon;
+      item.appendChild(title);
+      item.appendChild(remove);
+      return item;
+    }
+
+    function addStatus(status) {
+      var normalized = status.trim();
+      if (!normalized) return;
+      var exists = Array.from(
+        statusOptionsRoot.querySelectorAll("[data-review-status-option]"),
+      ).some(function (option) {
+        return getStatusOptionLabel(option) === normalized;
+      });
+      if (exists) return;
+      statusOptionsRoot.appendChild(createStatusOption(normalized));
+      statusModalList.appendChild(createStatusChip(normalized));
+    }
+
+    function removeStatus(status) {
+      if (!status) return;
+      var wasSelected = statusLabel && statusLabel.textContent.trim() === status;
+      statusOptionsRoot
+        .querySelectorAll("[data-review-status-option]")
+        .forEach(function (option) {
+          if (getStatusOptionLabel(option) === status) option.remove();
+        });
+      statusModalList
+        .querySelectorAll("[data-status-modal-item]")
+        .forEach(function (item) {
+          if (item.dataset.statusModalItem === status) item.remove();
+        });
+      if (wasSelected) {
+        var nextOption = statusOptionsRoot.querySelector(
+          "[data-review-status-option]",
+        );
+        if (nextOption) updateReviewStatus(nextOption);
+      }
+    }
+
+    function requestRemoveStatus(status) {
+      if (!status) return;
+      pendingStatusRemove = status;
+      statusRemoveConfirmText.textContent =
+        'Are you sure you want to delete "' +
+        status +
+        '" from the status list?';
+      window.M.openModal(statusRemoveConfirmModal);
+    }
+
+    document.addEventListener("click", function (event) {
+      var statusOption = event.target.closest("[data-review-status-option]");
+      if (!statusOption) return;
+      updateReviewStatus(statusOption);
+    });
+    statusAddForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      addStatus(statusAddInput.value);
+      statusAddInput.value = "";
+      statusAddInput.focus();
+    });
+    statusModalList.addEventListener("click", function (event) {
+      var removeButton = event.target.closest("[data-status-remove]");
+      if (!removeButton) return;
+      requestRemoveStatus(removeButton.dataset.statusRemove);
+    });
+    statusRemoveConfirmButton.addEventListener("click", function () {
+      if (!pendingStatusRemove) return;
+      removeStatus(pendingStatusRemove);
+      pendingStatusRemove = "";
+      window.M.closeModal(statusRemoveConfirmModal);
+    });
 
     var behaviorTable = root.querySelector(".pg-velma-output .pg-behaviors-table");
     if (behaviorTable) {

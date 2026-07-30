@@ -1,6 +1,7 @@
 <div class="pg-tab-panel pg-velma-output">
   <div class="m__space S"></div>
 
+  {% if not velmaReportOutputReview %}
   <!-- Speech Summary ──────────────────────────────────────────────────── -->
   <h2>Speech Summary</h2>
   <p>
@@ -221,9 +222,12 @@
       </tbody>
     </table>
   </div>
+  {% endif %}
 
   <!-- Behaviors ───────────────────────────────────────────────────────── -->
+  {% if not velmaReportOutputReview %}
   <div class="m__space L"></div>
+  {% endif %}
   <h2>Behaviors</h2>
   <div class="pg-results-table-section">
     <table class="pg-behaviors-table">
@@ -237,8 +241,10 @@
       </thead>
       <tbody>
         <tr
-          class="pg-behavior-row pg-behavior-row--detected pg-behavior-row--detected-last">
-          <td rowspan="6" class="pg-behavior-speaker-cell">
+          class="pg-behavior-row pg-behavior-row--detected{% if not velmaReportOutputReview %} pg-behavior-row--detected-last{% endif %}">
+          <td
+            rowspan="{% if velmaReportOutputReview %}1{% else %}6{% endif %}"
+            class="pg-behavior-speaker-cell">
             Customer Service Representative
           </td>
           <td>
@@ -269,6 +275,7 @@
           </td>
           <td class="pg-num">75%</td>
         </tr>
+        {% if not velmaReportOutputReview %}
         <tr class="pg-behavior-subhead-row">
           <td colspan="3">
             <span class="pg-behavior-subhead">Not detected</span>
@@ -334,9 +341,10 @@
           </td>
           <td class="pg-num">100%</td>
         </tr>
+        {% endif %}
         <tr class="pg-behavior-row pg-behavior-row--detected">
           <td
-            rowspan="6"
+            rowspan="{% if velmaReportOutputReview %}3{% else %}6{% endif %}"
             class="pg-behavior-speaker-cell pg-behavior-speaker-cell--last">
             Customer
           </td>
@@ -420,6 +428,7 @@
           </td>
           <td class="pg-num">71%</td>
         </tr>
+        {% if not velmaReportOutputReview %}
         <tr class="pg-behavior-subhead-row">
           <td colspan="3">
             <span class="pg-behavior-subhead">Not detected</span>
@@ -454,6 +463,7 @@
           </td>
           <td class="pg-num">98%</td>
         </tr>
+        {% endif %}
       </tbody>
     </table>
   </div>
