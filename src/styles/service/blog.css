@@ -175,6 +175,93 @@
   }
 }
 
+/* Not-a-designer post: proximity figure — two product grids drawn as an
+   inline SVG. The cards keep fixed light colors in both themes (they read as
+   product screenshots); the annotation layer around them — panel titles,
+   dimension marks, explainer captions — follows the theme tokens. */
+.proximity-grid-figure {
+  margin: 0 0 var(--m__spacer-l);
+
+  & .proximity-grid-figure__panels {
+    display: flex;
+    gap: var(--m__gap-l);
+
+    @media (width < 767px) {
+      flex-direction: column;
+    }
+  }
+
+  & svg {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    height: auto;
+  }
+
+  & .pxg-title {
+    font-family: var(--m__font-family-sans);
+    font-size: 15px;
+    font-weight: var(--m__font-weight-bold);
+    fill: var(--m__text);
+  }
+
+  & .pxg-name {
+    font-family: var(--m__font-family-sans);
+    font-size: 11.5px;
+    font-weight: var(--m__font-weight-bold);
+    fill: #14161a;
+  }
+
+  & .pxg-cat {
+    font-family: var(--m__font-family-sans);
+    font-size: 10.5px;
+    fill: #8b9099;
+  }
+
+  & .pxg-price {
+    font-family: var(--m__font-family-sans);
+    font-size: 11.5px;
+    font-weight: var(--m__font-weight-medium);
+    fill: #14161a;
+  }
+
+  & .pxg-cap {
+    font-family: var(--m__font-family-sans);
+    font-size: 13.5px;
+    fill: var(--m__text-caption);
+  }
+
+  & .pxg-num {
+    font-family: var(--m__font-family-semi-mono);
+    font-size: 11.5px;
+    font-weight: var(--m__font-weight-bold);
+    fill: #b45309;
+  }
+
+  & .pxg-card {
+    fill: #fcfcfd;
+    stroke: #e6e8ec;
+  }
+
+  & .pxg-shot {
+    fill: #f1f2f5;
+  }
+
+  & .pxg-mark {
+    stroke: #d9a45c;
+    stroke-width: 1;
+    fill: none;
+  }
+}
+
+/* Dark theme: lift the dimension numbers to the same amber as the marks —
+   the light-theme #b45309 is too dim on a dark background. */
+.dark .proximity-grid-figure .pxg-num,
+.dark-mode .proximity-grid-figure .pxg-num,
+.dark-vibrant .proximity-grid-figure .pxg-num {
+  fill: #d9a45c;
+}
+
 /* Read next: full-width outline button at the end of a post.
    The a.-prefixed selector matches the specificity of the base button rules. */
 a.read-next {
