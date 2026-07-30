@@ -2174,6 +2174,7 @@ table.config-details {
     display: inline-flex;
     width: 100%;
     max-width: 14rem;
+    font-size: var(--m__font-size-m);
   }
 
   & button.m__menu-button-secondary.conversation-report__report-trigger {
@@ -2182,10 +2183,8 @@ table.config-details {
     width: 100%;
     gap: 0.4rem;
     max-width: 100%;
-    padding: 0.34rem 0.55rem;
     border-width: var(--m__border-width-m);
     border-color: var(--m__bg-accent);
-    font-size: var(--m__font-size-s);
     font-weight: var(--m__font-weight-medium);
     transition:
       color 0.5s ease,
@@ -2218,7 +2217,6 @@ table.config-details {
     min-width: 0;
     flex: 0 1 auto;
     font-weight: var(--m__font-weight-medium);
-    line-height: 1.2;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -2275,13 +2273,13 @@ table.config-details {
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  padding: 0.34rem 0.55rem;
+  padding: 0.45rem 0.65rem;
   border-radius: var(--m__rounded-radius);
   corner-shape: squircle;
   color: var(--m__text);
-  font-size: var(--m__font-size-s);
+  font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-medium);
-  line-height: 1.2;
+  line-height: var(--m__line-height-base);
   text-decoration: none;
   white-space: nowrap;
 }
@@ -3160,10 +3158,9 @@ table.config-details {
 
 .moderation-table__status-option {
   gap: 0.36rem;
-  padding: 0.43rem 0.6rem;
-  font-size: var(--m__font-size-smaller);
+  padding: 0.45rem 0.65rem;
+  font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-regular);
-  line-height: var(--m__line-height-base);
 }
 
 .moderation-table__status-option-check {
@@ -3199,11 +3196,10 @@ table.config-details {
 }
 
 .moderation-table__status-edit {
-  padding: 0.43rem 0.6rem;
+  padding: 0.45rem 0.65rem;
   color: var(--m__bg-accent);
-  font-size: var(--m__font-size-smaller);
+  font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-regular);
-  line-height: var(--m__line-height-base);
 }
 
 .moderation-status-modal__list {
@@ -3393,9 +3389,16 @@ table.config-details {
     }
   }
 
-  & .moderation-review-status__trigger {
-    min-height: calc(1.3rem + 0.68rem + (2 * var(--m__border-width-s)));
+  & .moderation-review-status .moderation-table__status-list {
+    min-width: min(14rem, calc(100vw - 2rem));
   }
+
+  @media (width >= 720px) {
+    & .moderation-review-status {
+      transform: translateY(-0.4rem);
+    }
+  }
+
 }
 
 .moderation-review-behaviors .pg-results-table-section {
@@ -3466,6 +3469,36 @@ table.config-details {
   display: inline-flex;
   align-items: center;
   padding-inline: 0.45rem;
+}
+
+.moderation-review-behaviors__action:is(
+  .m__button-success-outline,
+  .m__button-danger-outline
+) {
+  border: var(--m__border-width-m) solid currentColor;
+  font-weight: var(--m__font-weight-medium);
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease,
+    border-color 0.5s ease;
+}
+
+.moderation-review-behaviors__action.m__button-success-outline {
+  color: var(--m__success);
+}
+
+.moderation-review-behaviors__action.m__button-danger-outline {
+  color: var(--m__error);
+}
+
+.moderation-review-behaviors__action.m__button-success-outline:hover {
+  color: color-mix(in srgb, var(--m__success-hover) 82%, var(--m__text) 18%);
+  transition-duration: 0s;
+}
+
+.moderation-review-behaviors__action.m__button-danger-outline:hover {
+  color: color-mix(in srgb, var(--m__error-hover) 82%, var(--m__text) 18%);
+  transition-duration: 0s;
 }
 
 .moderation-review-behaviors__action + .moderation-review-behaviors__action {
