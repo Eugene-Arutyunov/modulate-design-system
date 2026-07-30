@@ -70,7 +70,8 @@ emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'bottom',
 span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
 'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2
 } ] } ] %} {% set tagFilterOptions = [ 'Agent', 'Customer', 'Interviewer',
-'Candidate', 'Manager' ] %}
+'Candidate', 'Manager' ] %} {% set statusListOptions = [ 'Pending', 'In review',
+'Reviewed' ] %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
@@ -567,9 +568,47 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
           </div>
           <div class="m__modal__body">
             <div class="moderation-status-modal__list" data-status-modal-list>
-              <span class="m__tag moderation-status-modal__item">Pending</span>
-              <span class="m__tag moderation-status-modal__item">In review</span>
-              <span class="m__tag moderation-status-modal__item">Reviewed</span>
+              {% for status in statusListOptions %}
+              <span
+                class="m__tag bw-tag-item moderation-status-modal__item"
+                data-status-modal-item="{{ status }}"
+              >
+                <span class="bw-tag-item-name">{{ status }}</span>
+                <button
+                  type="button"
+                  class="bw-tag-x"
+                  aria-label="Remove {{ status }} status"
+                  data-status-remove="{{ status }}"
+                >
+                  <svg
+                    viewBox="0 0 12 12"
+                    width="8"
+                    height="8"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <line
+                      x1="2"
+                      y1="2"
+                      x2="10"
+                      y2="10"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                    <line
+                      x1="10"
+                      y1="2"
+                      x2="2"
+                      y2="10"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+              </span>
+              {% endfor %}
             </div>
             <div class="m__space S"></div>
             <form class="moderation-status-modal__form" data-status-add-form>
@@ -823,6 +862,24 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       return option;
     }
 
+    function createStatusChip(status) {
+      var item = document.createElement("span");
+      var title = document.createElement("span");
+      var remove = document.createElement("button");
+      item.className = "m__tag bw-tag-item moderation-status-modal__item";
+      item.dataset.statusModalItem = status;
+      title.className = "bw-tag-item-name";
+      title.textContent = status;
+      remove.type = "button";
+      remove.className = "bw-tag-x";
+      remove.dataset.statusRemove = status;
+      remove.setAttribute("aria-label", "Remove " + status + " status");
+      remove.innerHTML = selectedTagRemoveIcon;
+      item.appendChild(title);
+      item.appendChild(remove);
+      return item;
+    }
+
     function addStatus(status) {
       var normalized = status.trim();
       if (!normalized) return;
@@ -833,10 +890,22 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       });
       if (exists) return;
       statusFilterOptionsRoot.appendChild(createStatusOption(normalized));
-      var item = document.createElement("span");
-      item.className = "m__tag moderation-status-modal__item";
-      item.textContent = normalized;
-      statusModalList.appendChild(item);
+      statusModalList.appendChild(createStatusChip(normalized));
+    }
+
+    function removeStatus(status) {
+      if (!status) return;
+      statusFilterOptionsRoot
+        .querySelectorAll("[data-status-filter-option]")
+        .forEach(function (option) {
+          if (option.dataset.statusFilterOption === status) option.remove();
+        });
+      statusModalList
+        .querySelectorAll("[data-status-modal-item]")
+        .forEach(function (item) {
+          if (item.dataset.statusModalItem === status) item.remove();
+        });
+      if (selectedStatus === status) setStatusFilter("");
     }
 
     document.addEventListener("click", function (event) {
@@ -850,6 +919,11 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       addStatus(statusAddInput.value);
       statusAddInput.value = "";
       statusAddInput.focus();
+    });
+    statusModalList.addEventListener("click", function (event) {
+      var removeButton = event.target.closest("[data-status-remove]");
+      if (!removeButton) return;
+      removeStatus(removeButton.dataset.statusRemove);
     });
 
     document.addEventListener("click", function (event) {

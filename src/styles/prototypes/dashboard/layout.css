@@ -3196,7 +3196,53 @@ table.config-details {
 }
 
 .moderation-status-modal__item {
-  cursor: default;
+  gap: 0.25rem;
+  padding: 0.12rem 0.36rem;
+  border: var(--m__border-width-s) solid
+    color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  cursor: text;
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-bold);
+  line-height: 1.15;
+  transition:
+    border-color 0.5s ease,
+    color 0.5s ease;
+}
+
+.moderation-status-modal__item .bw-tag-item-name {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  cursor: text;
+}
+
+.moderation-status-modal__item .bw-tag-x {
+  position: relative;
+  padding: 0 0 0 0.05rem;
+  margin: 0;
+  cursor: pointer;
+  transition:
+    color 0.5s ease,
+    opacity 0.5s ease;
+}
+
+.moderation-status-modal__item:has(.bw-tag-x:hover) {
+  color: var(--m__text-link-hover);
+  transition-duration: 0s;
+  transition-timing-function: ease;
+}
+
+.moderation-status-modal__item .bw-tag-x::before {
+  content: "";
+  position: absolute;
+  inset: -0.35rem -0.42rem -0.35rem -0.2rem;
+}
+
+.moderation-status-modal__item .bw-tag-x:hover {
+  opacity: 1;
+  transition-duration: 0s;
+  transition-timing-function: ease;
 }
 
 .moderation-status-modal__form {
