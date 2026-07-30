@@ -11,8 +11,10 @@
       document.body.style.paddingRight = scrollbarWidth + "px";
       document.documentElement.style.overflow = "hidden";
     }
-    var firstInput = backdrop.querySelector("input, select, textarea");
-    if (firstInput) firstInput.focus();
+    if (backdrop.dataset.modalAutofocus !== "false") {
+      var firstInput = backdrop.querySelector("input, select, textarea");
+      if (firstInput) firstInput.focus();
+    }
   }
 
   function closeModal(backdrop) {

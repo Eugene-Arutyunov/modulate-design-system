@@ -549,6 +549,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
         aria-modal="true"
         role="dialog"
         aria-labelledby="modal-status-list-title"
+        data-modal-autofocus="false"
       >
         <div class="m__modal moderation-status-modal">
           <div class="m__modal__header">
@@ -617,7 +618,6 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                 <input
                   type="text"
                   id="status-list-new"
-                  placeholder="Status name"
                   data-status-add-input
                 />
               </div>
@@ -626,13 +626,50 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
               </button>
             </form>
           </div>
+        </div>
+      </div>
+      <div
+        class="m__modal-backdrop"
+        id="modal-status-remove-confirm"
+        hidden
+        aria-modal="true"
+        role="dialog"
+        aria-labelledby="modal-status-remove-confirm-title"
+        aria-describedby="modal-status-remove-confirm-text"
+      >
+        <div class="m__modal">
+          <div class="m__modal__header">
+            <h2 class="m__modal__title" id="modal-status-remove-confirm-title">
+              Delete status?
+            </h2>
+            <button
+              type="button"
+              class="m__modal__close"
+              aria-label="Close"
+              data-modal-close="modal-status-remove-confirm"
+            >
+              <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+                <use href="#close"></use>
+              </svg>
+            </button>
+          </div>
+          <div class="m__modal__body">
+            <p id="modal-status-remove-confirm-text"></p>
+          </div>
           <div class="m__modal__footer">
             <button
               type="button"
-              class="m__button-primary S"
-              data-modal-close="modal-status-list"
+              class="m__button-secondary-outline S"
+              data-modal-close="modal-status-remove-confirm"
             >
-              Done
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="m__button-danger-outline S"
+              id="modal-status-remove-confirm-btn"
+            >
+              Delete
             </button>
           </div>
         </div>
@@ -679,7 +716,17 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     var statusModalList = root.querySelector("[data-status-modal-list]");
     var statusAddForm = root.querySelector("[data-status-add-form]");
     var statusAddInput = root.querySelector("[data-status-add-input]");
+    var statusRemoveConfirmModal = document.getElementById(
+      "modal-status-remove-confirm",
+    );
+    var statusRemoveConfirmText = document.getElementById(
+      "modal-status-remove-confirm-text",
+    );
+    var statusRemoveConfirmButton = document.getElementById(
+      "modal-status-remove-confirm-btn",
+    );
     var selectedStatus = "";
+    var pendingStatusRemove = "";
 
     function positionTagFilter(anchor) {
       var rect = anchor.getBoundingClientRect();
@@ -908,6 +955,16 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       if (selectedStatus === status) setStatusFilter("");
     }
 
+    function requestRemoveStatus(status) {
+      if (!status) return;
+      pendingStatusRemove = status;
+      statusRemoveConfirmText.textContent =
+        'Are you sure you want to delete "' +
+        status +
+        '" from the status list?';
+      window.M.openModal(statusRemoveConfirmModal);
+    }
+
     document.addEventListener("click", function (event) {
       var statusOption = event.target.closest("[data-status-filter-option]");
       if (!statusOption) return;
@@ -923,7 +980,13 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     statusModalList.addEventListener("click", function (event) {
       var removeButton = event.target.closest("[data-status-remove]");
       if (!removeButton) return;
-      removeStatus(removeButton.dataset.statusRemove);
+      requestRemoveStatus(removeButton.dataset.statusRemove);
+    });
+    statusRemoveConfirmButton.addEventListener("click", function () {
+      if (!pendingStatusRemove) return;
+      removeStatus(pendingStatusRemove);
+      pendingStatusRemove = "";
+      window.M.closeModal(statusRemoveConfirmModal);
     });
 
     document.addEventListener("click", function (event) {
