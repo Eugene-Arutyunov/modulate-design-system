@@ -355,6 +355,7 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
     var reviewerName = reviewerNameElement
       ? reviewerNameElement.textContent.trim()
       : "Current reviewer";
+    var activeEvidenceTarget = null;
 
     var statusControl = root.querySelector("[data-review-status-control]");
     var statusLabel = root.querySelector("[data-review-status-label]");
@@ -559,6 +560,27 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
     }
 
     root.addEventListener("click", function (event) {
+      var evidenceLink = event.target.closest(".pg-evidence-link[href^='#']");
+      if (evidenceLink) {
+        var target = root.querySelector(evidenceLink.getAttribute("href"));
+        if (!target) return;
+        event.preventDefault();
+        if (activeEvidenceTarget) {
+          activeEvidenceTarget.classList.remove("is-evidence-highlighted");
+        }
+        activeEvidenceTarget = target;
+        target.classList.add("is-evidence-highlighted");
+        evidenceLink.blur();
+        target.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "auto"
+            : "smooth",
+          block: "center",
+        });
+        return;
+      }
+
       var reviewChoice = event.target.closest("[data-review-choice]");
       if (!reviewChoice) return;
       var review = reviewChoice.closest("[data-detection-review]");
