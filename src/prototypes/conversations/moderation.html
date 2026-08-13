@@ -69,9 +69,11 @@ lane: 'full', span: 2 }, { emotion: 'happy', lane: 'bottom', span: 1 }, {
 emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'bottom',
 span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
 'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2
-} ] } ] %} {% set tagFilterOptions = [ 'Agent', 'Customer', 'Interviewer',
-'Candidate', 'Manager' ] %} {% set statusListOptions = [ 'Pending', 'In review',
-'Reviewed' ] %}
+} ] } ] %} {% set behaviorFilterOptions = [ 'Harassment', 'Threatening language',
+'Escalation risk', 'Policy dispute', 'Negative sentiment', 'Coercion manipulation',
+'Vishing', 'Pressure tactics', 'Identity probing', 'Personal attacks', 'Toxicity',
+'Team conflict', 'Complaints', 'Frustration', 'Service delay', 'Social boundary
+setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
@@ -148,7 +150,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
             <button
               type="button"
               class="m__select S moderation-table__filter moderation-table__filter--behavior"
-              data-tag-filter-trigger
+              data-behavior-filter-trigger
               aria-haspopup="true"
               aria-expanded="false"
             >
@@ -331,19 +333,19 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
 
         <div
           class="moderation-table__tag-filters"
-          data-tag-filter-root
+          data-behavior-filter-root
           aria-label="Selected behavior filters"
           hidden
         >
           <div
             class="moderation-table__selected-tags"
-            data-selected-tags
+            data-selected-behaviors
             aria-live="polite"
           ></div>
           <button
             type="button"
             class="moderation-table__tag-filter-reset"
-            data-tag-filter-reset
+            data-behavior-filter-reset
           >
             Reset
           </button>
@@ -351,7 +353,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
 
         <div
           class="m__popover moderation-table__tag-popover"
-          data-tag-filter-popover
+          data-behavior-filter-popover
           hidden
         >
           <label class="m__searchbar" for="moderation-tag-filter-search">
@@ -363,17 +365,17 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
               id="moderation-tag-filter-search"
               placeholder="Search…"
               autocomplete="off"
-              data-tag-filter-search
+              data-behavior-filter-search
             />
           </label>
           <div class="m__popover-list">
-            {% for tag in tagFilterOptions %}
-            <label class="m__popover-item" data-tag-filter-option-row>
+            {% for behavior in behaviorFilterOptions %}
+            <label class="m__popover-item" data-behavior-filter-option-row>
               <span class="m__checkbox-primary">
                 <input
                   type="checkbox"
-                  value="{{ tag }}"
-                  data-tag-filter-option
+                  value="{{ behavior }}"
+                  data-behavior-filter-option
                 />
                 <svg
                   viewBox="0 0 32 32"
@@ -384,7 +386,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                   <use href="#checkmark"></use>
                 </svg>
               </span>
-              <span class="m__popover-item-name">{{ tag }}</span>
+              <span class="m__popover-item-name">{{ behavior }}</span>
             </label>
             {% endfor %}
           </div>
@@ -404,7 +406,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
               <tr
                 data-review-row
                 data-index="{{ loop.index0 }}"
-                data-tags="{% for tag in row.tags %}{{ tag }}{% if not loop.last %}|{% endif %}{% endfor %}"
+                data-behaviors="{% for behavior in row.behaviors %}{{ behavior.name }}{% if not loop.last %}|{% endif %}{% endfor %}"
                 data-score="{{ row.score }}"
                 data-status="{{ row.status }}"
                 data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}{{ row.status }}"
@@ -677,27 +679,35 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     var rows = Array.from(root.querySelectorAll("[data-review-row]"));
     var tbody = root.querySelector("[data-moderation-tbody]");
     var searchInput = root.querySelector("[data-moderation-search]");
-    var tagFilterRoot = root.querySelector("[data-tag-filter-root]");
-    var tagFilterTriggers = Array.from(
-      root.querySelectorAll("[data-tag-filter-trigger]"),
+    var behaviorFilterRoot = root.querySelector("[data-behavior-filter-root]");
+    var behaviorFilterTriggers = Array.from(
+      root.querySelectorAll("[data-behavior-filter-trigger]"),
     );
-    var tagFilterPopover = root.querySelector("[data-tag-filter-popover]");
-    var tagFilterSearch = root.querySelector("[data-tag-filter-search]");
-    var selectedTagsContainer = root.querySelector("[data-selected-tags]");
-    var tagFilterReset = root.querySelector("[data-tag-filter-reset]");
+    var behaviorFilterPopover = root.querySelector(
+      "[data-behavior-filter-popover]",
+    );
+    var behaviorFilterSearch = root.querySelector(
+      "[data-behavior-filter-search]",
+    );
+    var selectedBehaviorsContainer = root.querySelector(
+      "[data-selected-behaviors]",
+    );
+    var behaviorFilterReset = root.querySelector(
+      "[data-behavior-filter-reset]",
+    );
     var behaviorFilterLabel = root.querySelector(
       "[data-behavior-filter-label]",
     );
-    var tagOptions = Array.from(
-      root.querySelectorAll("[data-tag-filter-option]"),
+    var behaviorOptions = Array.from(
+      root.querySelectorAll("[data-behavior-filter-option]"),
     );
-    var selectedTags = new Set();
-    var selectedTagRemoveIcon =
+    var selectedBehaviors = new Set();
+    var selectedBehaviorRemoveIcon =
       '<svg viewBox="0 0 12 12" width="8" height="8" fill="none" aria-hidden="true">' +
       '<line x1="2" y1="2" x2="10" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
       '<line x1="10" y1="2" x2="2" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
       "</svg>";
-    var activeTagFilterTrigger = null;
+    var activeBehaviorFilterTrigger = null;
     var sortFilter = root.querySelector("[data-sort-filter]");
     var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
     var statusFilterLabel = root.querySelector("[data-status-filter-label]");
@@ -719,73 +729,75 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     var selectedStatus = "";
     var pendingStatusRemove = "";
 
-    function positionTagFilter(anchor) {
+    function positionBehaviorFilter(anchor) {
       var rect = anchor.getBoundingClientRect();
-      var width = tagFilterPopover.offsetWidth || 240;
+      var width = behaviorFilterPopover.offsetWidth || 240;
       var left = rect.left;
       if (left + width > window.innerWidth - 8)
         left = window.innerWidth - width - 8;
-      tagFilterPopover.style.left = Math.max(8, left) + "px";
-      tagFilterPopover.style.top = rect.bottom + 6 + "px";
+      behaviorFilterPopover.style.left = Math.max(8, left) + "px";
+      behaviorFilterPopover.style.top = rect.bottom + 6 + "px";
     }
 
-    function closeTagFilter() {
-      tagFilterPopover.hidden = true;
-      activeTagFilterTrigger = null;
-      tagFilterTriggers.forEach(function (trigger) {
+    function closeBehaviorFilter() {
+      behaviorFilterPopover.hidden = true;
+      activeBehaviorFilterTrigger = null;
+      behaviorFilterTriggers.forEach(function (trigger) {
         trigger.setAttribute("aria-expanded", "false");
       });
     }
 
-    function openTagFilter(anchor) {
-      activeTagFilterTrigger = anchor;
-      tagFilterPopover.hidden = false;
-      tagFilterTriggers.forEach(function (trigger) {
+    function openBehaviorFilter(anchor) {
+      activeBehaviorFilterTrigger = anchor;
+      behaviorFilterPopover.hidden = false;
+      behaviorFilterTriggers.forEach(function (trigger) {
         trigger.setAttribute("aria-expanded", String(trigger === anchor));
       });
-      positionTagFilter(anchor);
-      tagFilterSearch.focus();
+      positionBehaviorFilter(anchor);
+      behaviorFilterSearch.focus();
     }
 
-    function renderSelectedTags() {
-      selectedTagsContainer.innerHTML = "";
-      tagFilterRoot.hidden = selectedTags.size === 0;
+    function renderSelectedBehaviors() {
+      selectedBehaviorsContainer.innerHTML = "";
+      behaviorFilterRoot.hidden = selectedBehaviors.size === 0;
       behaviorFilterLabel.textContent =
-        selectedTags.size === 0 ? "All" : selectedTags.size + " selected";
-      Array.from(selectedTags).forEach(function (tag) {
+        selectedBehaviors.size === 0
+          ? "All"
+          : selectedBehaviors.size + " selected";
+      Array.from(selectedBehaviors).forEach(function (behavior) {
         var chip = document.createElement("span");
         chip.className = "m__tag bw-tag-item moderation-table__selected-tag";
-        chip.dataset.selectedTag = tag;
+        chip.dataset.selectedBehavior = behavior;
         chip.innerHTML =
           '<span class="bw-tag-item-name">' +
-          tag +
+          behavior +
           '</span><button type="button" class="bw-tag-x" aria-label="Remove ' +
-          tag +
+          behavior +
           ' filter">' +
-          selectedTagRemoveIcon +
+          selectedBehaviorRemoveIcon +
           "</button>";
-        selectedTagsContainer.appendChild(chip);
+        selectedBehaviorsContainer.appendChild(chip);
       });
     }
 
     function applyQueueState() {
       var query = searchInput.value.trim().toLowerCase();
-      var activeTags = Array.from(selectedTags);
+      var activeBehaviors = Array.from(selectedBehaviors);
       var sort = sortFilter.value;
       sortFilterLabel.textContent =
         sortFilter.options[sortFilter.selectedIndex].text;
       statusFilterLabel.textContent = selectedStatus || "All";
       rows.forEach(function (row) {
-        var rowTags = (row.dataset.tags || "").split("|");
-        var matchesTags =
-          activeTags.length === 0 ||
-          activeTags.some(function (tag) {
-            return rowTags.includes(tag);
+        var rowBehaviors = (row.dataset.behaviors || "").split("|");
+        var matchesBehaviors =
+          activeBehaviors.length === 0 ||
+          activeBehaviors.some(function (behavior) {
+            return rowBehaviors.includes(behavior);
           });
         var matchesStatus =
           !selectedStatus || row.dataset.status === selectedStatus;
         var show =
-          matchesTags &&
+          matchesBehaviors &&
           matchesStatus &&
           (!query || row.dataset.search.toLowerCase().includes(query));
         row.hidden = !show;
@@ -805,52 +817,56 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     }
 
     searchInput.addEventListener("input", applyQueueState);
-    tagFilterTriggers.forEach(function (trigger) {
+    behaviorFilterTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function (event) {
         event.stopPropagation();
-        if (tagFilterPopover.hidden || activeTagFilterTrigger !== trigger) {
-          openTagFilter(trigger);
+        if (
+          behaviorFilterPopover.hidden ||
+          activeBehaviorFilterTrigger !== trigger
+        ) {
+          openBehaviorFilter(trigger);
         } else {
-          closeTagFilter();
+          closeBehaviorFilter();
         }
       });
     });
-    tagOptions.forEach(function (option) {
+    behaviorOptions.forEach(function (option) {
       option.addEventListener("change", function () {
         if (option.checked) {
-          selectedTags.add(option.value);
+          selectedBehaviors.add(option.value);
         } else {
-          selectedTags.delete(option.value);
+          selectedBehaviors.delete(option.value);
         }
-        renderSelectedTags();
+        renderSelectedBehaviors();
         applyQueueState();
       });
     });
-    selectedTagsContainer.addEventListener("click", function (event) {
+    selectedBehaviorsContainer.addEventListener("click", function (event) {
       var removeButton = event.target.closest(".bw-tag-x");
       if (!removeButton) return;
-      var chip = removeButton.closest("[data-selected-tag]");
+      var chip = removeButton.closest("[data-selected-behavior]");
       if (!chip) return;
-      selectedTags.delete(chip.dataset.selectedTag);
-      tagOptions.forEach(function (option) {
-        if (option.value === chip.dataset.selectedTag) option.checked = false;
+      selectedBehaviors.delete(chip.dataset.selectedBehavior);
+      behaviorOptions.forEach(function (option) {
+        if (option.value === chip.dataset.selectedBehavior)
+          option.checked = false;
       });
-      renderSelectedTags();
+      renderSelectedBehaviors();
       applyQueueState();
     });
-    tagFilterReset.addEventListener("click", function () {
-      selectedTags.clear();
-      tagOptions.forEach(function (option) {
+    behaviorFilterReset.addEventListener("click", function () {
+      selectedBehaviors.clear();
+      behaviorOptions.forEach(function (option) {
         option.checked = false;
       });
-      closeTagFilter();
-      renderSelectedTags();
+      closeBehaviorFilter();
+      renderSelectedBehaviors();
       applyQueueState();
     });
-    tagFilterSearch.addEventListener("input", function () {
-      var query = tagFilterSearch.value.trim().toLowerCase();
-      tagOptions.forEach(function (option) {
-        option.closest("[data-tag-filter-option-row]").hidden =
+    behaviorFilterSearch.addEventListener("input", function () {
+      var query = behaviorFilterSearch.value.trim().toLowerCase();
+      behaviorOptions.forEach(function (option) {
+        option.closest("[data-behavior-filter-option-row]").hidden =
           query && !option.value.toLowerCase().includes(query);
       });
     });
@@ -981,30 +997,30 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     });
 
     document.addEventListener("click", function (event) {
-      if (tagFilterPopover.hidden) return;
-      if (tagFilterPopover.contains(event.target)) return;
-      if (event.target.closest("[data-tag-filter-trigger]")) return;
-      closeTagFilter();
+      if (behaviorFilterPopover.hidden) return;
+      if (behaviorFilterPopover.contains(event.target)) return;
+      if (event.target.closest("[data-behavior-filter-trigger]")) return;
+      closeBehaviorFilter();
     });
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") closeTagFilter();
+      if (event.key === "Escape") closeBehaviorFilter();
     });
     window.addEventListener("resize", function () {
-      if (!tagFilterPopover.hidden && activeTagFilterTrigger) {
-        positionTagFilter(activeTagFilterTrigger);
+      if (!behaviorFilterPopover.hidden && activeBehaviorFilterTrigger) {
+        positionBehaviorFilter(activeBehaviorFilterTrigger);
       }
     });
     document.addEventListener(
       "scroll",
       function () {
-        if (!tagFilterPopover.hidden && activeTagFilterTrigger) {
-          positionTagFilter(activeTagFilterTrigger);
+        if (!behaviorFilterPopover.hidden && activeBehaviorFilterTrigger) {
+          positionBehaviorFilter(activeBehaviorFilterTrigger);
         }
       },
       true,
     );
     sortFilter.addEventListener("change", applyQueueState);
-    renderSelectedTags();
+    renderSelectedBehaviors();
     applyQueueState();
   })();
 </script>
