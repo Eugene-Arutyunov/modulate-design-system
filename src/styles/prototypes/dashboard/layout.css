@@ -2806,7 +2806,7 @@ table.config-details {
 
   & .moderation-table__header {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) max-content;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) max-content;
     align-items: stretch;
     width: 100%;
   }
@@ -2815,29 +2815,41 @@ table.config-details {
     min-width: 0;
   }
 
-  & .moderation-table__status-filter {
+  & :is(
+    .moderation-table__status-filter,
+    .moderation-table__result-filter
+  ) {
     display: flex;
     min-width: 0;
   }
 
-  & .moderation-table__status-filter > .moderation-table__filter {
+  &
+    :is(.moderation-table__status-filter, .moderation-table__result-filter)
+    > .moderation-table__filter {
     width: 100%;
   }
 
   & .moderation-table__header > .m__searchbar,
   & .moderation-table__filter--behavior,
-  & .moderation-table__filter--status {
+  & .moderation-table__filter--status,
+  & .moderation-table__filter--result {
     position: relative;
   }
 
-  & :is(.moderation-table__filter--behavior, .moderation-table__filter--status) {
+  &
+    :is(
+      .moderation-table__filter--behavior,
+      .moderation-table__filter--status,
+      .moderation-table__filter--result
+    ) {
     font: inherit;
     text-align: left;
   }
 
   & :is(
     .moderation-table__filter--behavior,
-    .moderation-table__filter--status
+    .moderation-table__filter--status,
+    .moderation-table__filter--result
   ):is(:focus-within, :focus-visible, [aria-expanded="true"]) {
     outline: none;
     background-color: var(--m__bg-input);
@@ -2846,7 +2858,8 @@ table.config-details {
   &
     :is(
       .moderation-table__filter--behavior,
-      .moderation-table__filter--status
+      .moderation-table__filter--status,
+      .moderation-table__filter--result
     ):is(
       :focus-visible,
       [aria-expanded="true"]
@@ -2854,7 +2867,8 @@ table.config-details {
   &
     :is(
       .moderation-table__filter--behavior,
-      .moderation-table__filter--status
+      .moderation-table__filter--status,
+      .moderation-table__filter--result
     ):is(
       :focus-visible,
       [aria-expanded="true"]
@@ -2863,7 +2877,8 @@ table.config-details {
   &
     :is(
       .moderation-table__filter--behavior,
-      .moderation-table__filter--status
+      .moderation-table__filter--status,
+      .moderation-table__filter--result
     ):is(
       :focus-visible,
       [aria-expanded="true"]
@@ -2875,7 +2890,8 @@ table.config-details {
 
   & .moderation-table__header > .m__searchbar::after,
   & .moderation-table__filter--behavior::after,
-  & .moderation-table__filter--status::after {
+  & .moderation-table__filter--status::after,
+  & .moderation-table__filter--result::after {
     content: "";
     position: absolute;
     right: 0;
@@ -3132,7 +3148,8 @@ table.config-details {
 
     & .moderation-table__header > .m__searchbar::after,
     & .moderation-table__filter--behavior::after,
-    & .moderation-table__filter--status::after {
+    & .moderation-table__filter--status::after,
+    & .moderation-table__filter--result::after {
       display: none;
     }
 
@@ -3152,7 +3169,8 @@ table.config-details {
   }
 }
 
-.moderation-table__status-list {
+.moderation-table__status-list,
+.moderation-table__result-list {
   min-width: min(16rem, calc(100vw - 2rem));
 }
 

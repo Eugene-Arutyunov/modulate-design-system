@@ -33,8 +33,9 @@ emotion: 'frustrated', lane: 'top', span: 2 }, { emotion: 'confident', lane:
 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] }, { id:
 '7691d5', title: 'Care team chat includes personal attacks', submitted:
 'Yesterday, 16:47', source: 'API', duration: '17:32', behavior: 'Harassment',
-tags: ['Agent', 'Manager'], behaviors: [ { name: 'Harassment', score: 74 }, {
-name: 'Personal attacks', score: 70 }, { name: 'Toxicity', score: 66 }, { name:
+tags: ['Agent', 'Manager'], behaviors: [ { name: 'Harassment', score: 74,
+result: 'true' }, { name: 'Personal attacks', score: 70, result: 'false' }, {
+name: 'Toxicity', score: 66 }, { name:
 'Team conflict', score: 58 }, { name: 'Negative sentiment', score: 54 } ],
 score: 74, detections: 5, status: 'In review', href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
@@ -46,9 +47,10 @@ lane: 'top', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion:
 { emotion: 'neutral', lane: 'bottom', span: 2 } ] }, { id: '7622f4', title:
 'Patient vents about delayed prescription refill', submitted: 'Yesterday,
 11:08', source: 'Five9', duration: '6:18', behavior: 'Complaints', tags:
-['Customer', 'Agent'], behaviors: [ { name: 'Complaints', score: 68 }, { name:
-'Frustration', score: 63 }, { name: 'Service delay', score: 59 }, { name:
-'Escalation risk', score: 52 } ], score: 68, detections: 4, status: 'Pending',
+['Customer', 'Agent'], behaviors: [ { name: 'Complaints', score: 68, result:
+'true' }, { name: 'Frustration', score: 63, result: 'false' }, { name: 'Service
+delay', score: 59, result: 'true' }, { name: 'Escalation risk', score: 52,
+result: 'false' } ], score: 68, detections: 4, status: 'Reviewed',
 href: '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion:
 'neutral', lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 2 }, {
 emotion: 'amused', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane:
@@ -58,9 +60,10 @@ emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'neutral', lane:
 '7554f9', title: 'Family member challenges appointment policy', submitted:
 'Mon, 14:02', source: 'API', duration: '9:42', behavior: 'Social boundary
 setting', tags: ['Customer', 'Agent'], behaviors: [ { name: 'Social boundary
-setting', score: 63 }, { name: 'Policy dispute', score: 60 }, { name:
-'Frustration', score: 55 }, { name: 'Escalation risk', score: 49 } ], score: 63,
-detections: 4, status: 'Pending', href:
+setting', score: 63, result: 'true' }, { name: 'Policy dispute', score: 60,
+result: 'false' }, { name: 'Frustration', score: 55, result: 'false' }, { name:
+'Escalation risk', score: 49, result: 'true' } ], score: 63, detections: 4,
+status: 'Reviewed', href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
 lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 1 }, { emotion:
 'confident', lane: 'bottom', span: 2 }, { emotion: 'neutral', lane: 'bottom',
@@ -300,6 +303,66 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               </div>
             </div>
 
+            <div class="m__menu-button moderation-table__result-filter">
+              <button
+                type="button"
+                class="m__select S moderation-table__filter moderation-table__filter--result m__menu-button-trigger"
+                data-result-filter-trigger
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <span>Verdict</span>
+                <span class="m__select__inline-control">
+                  <span class="m__select__value" data-result-filter-label
+                    >All</span
+                  >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </span>
+              </button>
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__result-list"
+                hidden
+                role="menu"
+              >
+                <div
+                  class="conversation-report__report-items"
+                  role="presentation"
+                  data-result-filter-options
+                >
+                  {% for result in [ { value: '', label: 'All' }, { value:
+                  'true', label: 'True positive' }, { value: 'false', label:
+                  'False positive' } ] %}
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not result.value %} is-active{% endif %}"
+                    role="menuitemradio"
+                    aria-checked="{% if not result.value %}true{% else %}false{% endif %}"
+                    data-result-filter-option="{{ result.value }}"
+                  >
+                    <span
+                      class="conversation-report__report-item-icon moderation-table__status-option-check"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 12 12">
+                        <use href="#checkmark"></use>
+                      </svg>
+                    </span>
+                    <span class="conversation-report__report-item-title"
+                      >{{ result.label }}</span
+                    >
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
             <label
               class="m__select S moderation-table__filter moderation-table__filter--sort"
             >
@@ -407,6 +470,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 data-review-row
                 data-index="{{ loop.index0 }}"
                 data-behaviors="{% for behavior in row.behaviors %}{{ behavior.name }}{% if not loop.last %}|{% endif %}{% endfor %}"
+                data-behavior-results="{% for behavior in row.behaviors %}{% if behavior.result %}{{ behavior.name }}::{{ behavior.result }}|{% endif %}{% endfor %}"
                 data-score="{{ row.score }}"
                 data-status="{{ row.status }}"
                 data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}{{ row.status }}"
@@ -711,6 +775,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var statusFilterOptionsRoot = root.querySelector(
       "[data-status-filter-options]",
     );
+    var resultFilterLabel = root.querySelector("[data-result-filter-label]");
+    var resultFilterOptionsRoot = root.querySelector(
+      "[data-result-filter-options]",
+    );
     var statusModalList = root.querySelector("[data-status-modal-list]");
     var statusAddForm = root.querySelector("[data-status-add-form]");
     var statusAddInput = root.querySelector("[data-status-add-input]");
@@ -724,6 +792,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       "modal-status-remove-confirm-btn",
     );
     var selectedStatus = "";
+    var selectedResult = "";
     var pendingStatusRemove = "";
 
     function positionBehaviorFilter(anchor) {
@@ -784,8 +853,24 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       sortFilterLabel.textContent =
         sortFilter.options[sortFilter.selectedIndex].text;
       statusFilterLabel.textContent = selectedStatus || "All";
+      resultFilterLabel.textContent =
+        selectedResult === "true"
+          ? "True positive"
+          : selectedResult === "false"
+            ? "False positive"
+            : "All";
       rows.forEach(function (row) {
         var rowBehaviors = (row.dataset.behaviors || "").split("|");
+        var behaviorResults = (row.dataset.behaviorResults || "")
+          .split("|")
+          .filter(Boolean)
+          .map(function (entry) {
+            var separatorIndex = entry.lastIndexOf("::");
+            return {
+              behavior: entry.slice(0, separatorIndex),
+              result: entry.slice(separatorIndex + 2),
+            };
+          });
         var matchesBehaviors =
           activeBehaviors.length === 0 ||
           activeBehaviors.some(function (behavior) {
@@ -793,9 +878,19 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           });
         var matchesStatus =
           !selectedStatus || row.dataset.status === selectedStatus;
+        var matchesResult =
+          !selectedResult ||
+          behaviorResults.some(function (review) {
+            return (
+              review.result === selectedResult &&
+              (activeBehaviors.length === 0 ||
+                activeBehaviors.includes(review.behavior))
+            );
+          });
         var show =
           matchesBehaviors &&
           matchesStatus &&
+          matchesResult &&
           (!query || row.dataset.search.toLowerCase().includes(query));
         row.hidden = !show;
       });
@@ -875,6 +970,19 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         .forEach(function (option) {
           var isSelected =
             option.dataset.statusFilterOption === selectedStatus;
+          option.classList.toggle("is-active", isSelected);
+          option.setAttribute("aria-checked", String(isSelected));
+        });
+      applyQueueState();
+    }
+
+    function setResultFilter(result) {
+      selectedResult = result || "";
+      resultFilterOptionsRoot
+        .querySelectorAll("[data-result-filter-option]")
+        .forEach(function (option) {
+          var isSelected =
+            option.dataset.resultFilterOption === selectedResult;
           option.classList.toggle("is-active", isSelected);
           option.setAttribute("aria-checked", String(isSelected));
         });
@@ -973,6 +1081,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       var statusOption = event.target.closest("[data-status-filter-option]");
       if (!statusOption) return;
       setStatusFilter(statusOption.dataset.statusFilterOption || "");
+    });
+
+    document.addEventListener("click", function (event) {
+      var resultOption = event.target.closest("[data-result-filter-option]");
+      if (!resultOption) return;
+      setResultFilter(resultOption.dataset.resultFilterOption || "");
     });
 
     statusAddForm.addEventListener("submit", function (event) {
