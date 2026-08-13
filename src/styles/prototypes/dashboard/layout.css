@@ -3515,8 +3515,53 @@ table.config-details {
   transition-duration: 0s;
 }
 
+.moderation-review-behaviors__action.m__button-success-outline.is-selected {
+  background-color: color-mix(in srgb, var(--m__success) 10%, var(--m__bg));
+}
+
+.moderation-review-behaviors__action.m__button-danger-outline.is-selected {
+  background-color: color-mix(in srgb, var(--m__error) 10%, var(--m__bg));
+}
+
+[data-review-result]
+  .moderation-review-behaviors__action:not(.is-selected) {
+  color: var(--m__text-caption);
+}
+
+[data-review-result]
+  .moderation-review-behaviors__action.m__button-success-outline:not(.is-selected):hover {
+  color: color-mix(in srgb, var(--m__success-hover) 82%, var(--m__text) 18%);
+}
+
+[data-review-result]
+  .moderation-review-behaviors__action.m__button-danger-outline:not(.is-selected):hover {
+  color: color-mix(in srgb, var(--m__error-hover) 82%, var(--m__text) 18%);
+}
+
 .moderation-review-behaviors__action + .moderation-review-behaviors__action {
   margin-left: 0.25rem;
+}
+
+.moderation-review-behaviors__reviewer {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-medium);
+  line-height: 1.3;
+  text-align: right;
+}
+
+.moderation-review-behaviors__reviewer[hidden] {
+  display: none;
+}
+
+[data-review-result="true"] .moderation-review-behaviors__reviewer {
+  color: var(--m__success);
+}
+
+[data-review-result="false"] .moderation-review-behaviors__reviewer {
+  color: var(--m__error);
 }
 
 .moderation-review-nav {

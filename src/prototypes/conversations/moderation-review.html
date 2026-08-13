@@ -349,6 +349,12 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
   (function () {
     var root = document.querySelector("[data-moderation-review]");
     if (!root) return;
+    var reviewerNameElement = document.querySelector(
+      ".prototype-header__user-name",
+    );
+    var reviewerName = reviewerNameElement
+      ? reviewerNameElement.textContent.trim()
+      : "Current reviewer";
 
     var statusControl = root.querySelector("[data-review-status-control]");
     var statusLabel = root.querySelector("[data-review-status-label]");
@@ -545,7 +551,7 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
 
         if (row.classList.contains("pg-behavior-row--detected")) {
           row.setAttribute("data-detection-review", "");
-          actions.innerHTML = '<button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False positive</button>';
+          actions.innerHTML = '<button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False positive</button><span class="moderation-review-behaviors__reviewer" data-review-state aria-live="polite" hidden></span>';
         }
 
         row.appendChild(actions);
@@ -564,9 +570,8 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       reviewChoice.classList.add("is-selected");
       review.dataset.reviewResult = reviewChoice.dataset.reviewChoice;
       if (state) {
-        state.textContent = reviewChoice.dataset.reviewChoice === "true"
-          ? "Validated true"
-          : "False positive · ready to unflag";
+        state.textContent = "Marked by " + reviewerName;
+        state.hidden = false;
       }
     });
   })();
