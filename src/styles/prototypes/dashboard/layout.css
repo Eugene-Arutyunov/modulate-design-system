@@ -2560,6 +2560,10 @@ table.config-details {
   }
 }
 
+.moderation-behavior-link[hidden] {
+  display: none;
+}
+
 .moderation-behavior-link__content {
   display: inline-flex;
   align-items: baseline;
@@ -2596,6 +2600,28 @@ table.config-details {
 .moderation-behavior-link__more {
   padding-inline: 0.12rem;
   white-space: nowrap;
+}
+
+.moderation-behavior-summary .moderation-behavior-overflow__trigger {
+  appearance: none;
+  padding: 0 0.12rem;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--m__font-size-xs);
+  line-height: 1.15;
+  cursor: pointer;
+  transition: color var(--m__duration-base) var(--m__easing-base);
+
+  &:is(:hover, :focus-visible) {
+    color: var(--m__text-link-hover);
+    outline: none;
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+.moderation-behavior-overflow__trigger[hidden] {
+  display: none;
 }
 
 .moderation-behavior-link__wrap {

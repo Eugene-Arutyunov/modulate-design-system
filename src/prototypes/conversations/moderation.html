@@ -551,12 +551,33 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                           >
                         </span>
                       </span>
-                      {% if row.behaviors.length > 3 %}<span
-                        class="moderation-behavior-link__more"
-                        aria-label="{{ row.behaviors.length - 3 }} more detection behaviors"
-                        >+{{ row.behaviors.length - 3 }}</span
-                      ></span
-                    >{% endif %} {% endif %} {% endfor %}
+                      {% if row.behaviors.length > 3 %}
+                      <button
+                        type="button"
+                        class="moderation-behavior-link__more moderation-behavior-overflow__trigger"
+                        aria-label="Show {{ row.behaviors.length - 3 }} more behaviors for {{ row.title }}"
+                        aria-expanded="false"
+                        data-behavior-overflow-trigger
+                      >
+                        +{{ row.behaviors.length - 3 }}
+                      </button>
+                      </span>
+                      {% endif %} {% elif loop.index > 3 %}
+                      <span
+                        class="moderation-behavior-link"
+                        data-behavior-overflow-item
+                        hidden
+                      >
+                        <span class="moderation-behavior-link__content">
+                          <span class="moderation-behavior-link__name"
+                            >{{ behavior.name }}</span
+                          >
+                          <span class="moderation-behavior-link__confidence"
+                            >{{ behavior.score }}%</span
+                          >
+                        </span>
+                      </span>
+                      {% endif %} {% endfor %}
                   </div>
                 </td>
                 <td>
@@ -804,6 +825,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var behaviorOptions = Array.from(
       root.querySelectorAll("[data-behavior-filter-option]"),
     );
+    var behaviorOverflowTriggers = Array.from(
+      root.querySelectorAll("[data-behavior-overflow-trigger]"),
+    );
     var selectedBehaviors = new Set();
     var selectedBehaviorRemoveIcon =
       '<svg viewBox="0 0 12 12" width="8" height="8" fill="none" aria-hidden="true">' +
@@ -954,6 +978,18 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     }
 
     searchInput.addEventListener("input", applyQueueState);
+    behaviorOverflowTriggers.forEach(function (trigger) {
+      trigger.addEventListener("click", function () {
+        var summary = trigger.closest(".moderation-behavior-summary");
+        summary
+          .querySelectorAll("[data-behavior-overflow-item]")
+          .forEach(function (item) {
+            item.hidden = false;
+          });
+        trigger.setAttribute("aria-expanded", "true");
+        trigger.hidden = true;
+      });
+    });
     behaviorFilterTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function (event) {
         event.stopPropagation();
