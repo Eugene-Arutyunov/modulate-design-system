@@ -473,7 +473,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 data-behavior-results="{% for behavior in row.behaviors %}{% if behavior.result %}{{ behavior.name }}::{{ behavior.result }}|{% endif %}{% endfor %}"
                 data-score="{{ row.score }}"
                 data-status="{{ row.status }}"
-                data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}{{ row.status }}"
+                data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}"
               >
                 <td class="moderation-table__conversation-cell">
                   <a
@@ -560,10 +560,52 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                   </div>
                 </td>
                 <td>
-                  <span
-                    class="m__tag moderation-table__status-tag {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% elif row.status == 'Reviewed' %}moderation-table__status-tag--reviewed{% endif %}"
-                    >{{ row.status }}</span
-                  >
+                  <div class="m__menu-button moderation-table__row-status-menu">
+                    <button
+                      type="button"
+                      class="m__tag m__menu-button-trigger moderation-table__status-tag moderation-table__status-trigger {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% elif row.status == 'Reviewed' %}moderation-table__status-tag--reviewed{% endif %}"
+                      aria-label="Change status for {{ row.title }}"
+                      aria-haspopup="menu"
+                      aria-expanded="false"
+                      data-row-status-trigger
+                    >
+                      {{ row.status }}
+                    </button>
+                    <div
+                      class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__row-status-list"
+                      hidden
+                      role="menu"
+                    >
+                      <div
+                        class="conversation-report__report-items"
+                        role="presentation"
+                        data-row-status-options
+                        data-row-index="{{ loop.index0 }}"
+                      >
+                        {% for status in statusListOptions %}
+                        <button
+                          type="button"
+                          class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if status == row.status %} is-active{% endif %}"
+                          role="menuitemradio"
+                          aria-checked="{% if status == row.status %}true{% else %}false{% endif %}"
+                          data-row-status-option="{{ status }}"
+                        >
+                          <span
+                            class="conversation-report__report-item-icon moderation-table__status-option-check"
+                            aria-hidden="true"
+                          >
+                            <svg viewBox="0 0 12 12">
+                              <use href="#checkmark"></use>
+                            </svg>
+                          </span>
+                          <span class="conversation-report__report-item-title"
+                            >{{ status }}</span
+                          >
+                        </button>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
                 </td>
                 <td class="m__col-actions moderation-table__row-actions">
                   <div class="m__menu-button moderation-table__actions-menu">
@@ -891,7 +933,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           matchesBehaviors &&
           matchesStatus &&
           matchesResult &&
-          (!query || row.dataset.search.toLowerCase().includes(query));
+          (!query ||
+            (row.dataset.search + " " + row.dataset.status)
+              .toLowerCase()
+              .includes(query));
         row.hidden = !show;
       });
       rows
@@ -989,7 +1034,30 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       applyQueueState();
     }
 
-    function createStatusOption(status) {
+    function updateRowStatus(row, status) {
+      var trigger = row.querySelector("[data-row-status-trigger]");
+      row.dataset.status = status;
+      trigger.textContent = status;
+      trigger.classList.remove(
+        "moderation-table__status-tag--pending",
+        "moderation-table__status-tag--in-review",
+        "moderation-table__status-tag--reviewed",
+      );
+      if (status === "Pending") {
+        trigger.classList.add("moderation-table__status-tag--pending");
+      } else if (status === "In review") {
+        trigger.classList.add("moderation-table__status-tag--in-review");
+      } else if (status === "Reviewed") {
+        trigger.classList.add("moderation-table__status-tag--reviewed");
+      }
+      row.querySelectorAll("[data-row-status-option]").forEach(function (option) {
+        var isSelected = option.dataset.rowStatusOption === status;
+        option.classList.toggle("is-active", isSelected);
+        option.setAttribute("aria-checked", String(isSelected));
+      });
+    }
+
+    function createStatusOption(status, optionType) {
       var option = document.createElement("button");
       var check = document.createElement("span");
       var checkIcon = document.createElementNS(
@@ -1006,7 +1074,11 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         "m__menu-button-item conversation-report__report-item moderation-table__status-option";
       option.setAttribute("role", "menuitemradio");
       option.setAttribute("aria-checked", "false");
-      option.dataset.statusFilterOption = status;
+      if (optionType === "row") {
+        option.dataset.rowStatusOption = status;
+      } else {
+        option.dataset.statusFilterOption = status;
+      }
       check.className =
         "conversation-report__report-item-icon moderation-table__status-option-check";
       check.setAttribute("aria-hidden", "true");
@@ -1049,6 +1121,11 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       });
       if (exists) return;
       statusFilterOptionsRoot.appendChild(createStatusOption(normalized));
+      root
+        .querySelectorAll("[data-row-status-options]")
+        .forEach(function (options) {
+          options.appendChild(createStatusOption(normalized, "row"));
+        });
       statusModalList.appendChild(createStatusChip(normalized));
     }
 
@@ -1059,12 +1136,24 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         .forEach(function (option) {
           if (option.dataset.statusFilterOption === status) option.remove();
         });
+      root
+        .querySelectorAll("[data-row-status-option]")
+        .forEach(function (option) {
+          if (option.dataset.rowStatusOption === status) option.remove();
+        });
+      rows.forEach(function (row) {
+        if (row.dataset.status === status) updateRowStatus(row, "Pending");
+      });
       statusModalList
         .querySelectorAll("[data-status-modal-item]")
         .forEach(function (item) {
           if (item.dataset.statusModalItem === status) item.remove();
         });
-      if (selectedStatus === status) setStatusFilter("");
+      if (selectedStatus === status) {
+        setStatusFilter("");
+      } else {
+        applyQueueState();
+      }
     }
 
     function requestRemoveStatus(status) {
@@ -1081,6 +1170,26 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       var statusOption = event.target.closest("[data-status-filter-option]");
       if (!statusOption) return;
       setStatusFilter(statusOption.dataset.statusFilterOption || "");
+    });
+
+    document.addEventListener("click", function (event) {
+      var statusOption = event.target.closest("[data-row-status-option]");
+      if (!statusOption) return;
+      var options = statusOption.closest("[data-row-status-options]");
+      var row = rows.find(function (candidate) {
+        return candidate.dataset.index === options.dataset.rowIndex;
+      });
+      if (!row) return;
+      updateRowStatus(row, statusOption.dataset.rowStatusOption);
+      options
+        .querySelectorAll("[data-row-status-option]")
+        .forEach(function (option) {
+          var isSelected =
+            option.dataset.rowStatusOption === row.dataset.status;
+          option.classList.toggle("is-active", isSelected);
+          option.setAttribute("aria-checked", String(isSelected));
+        });
+      applyQueueState();
     });
 
     document.addEventListener("click", function (event) {

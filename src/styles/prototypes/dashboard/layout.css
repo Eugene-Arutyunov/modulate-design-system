@@ -3068,6 +3068,24 @@ table.config-details {
     font-size: var(--m__font-size-s);
   }
 
+  & .moderation-table__status-trigger {
+    appearance: none;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color var(--m__duration-base) var(--m__easing-base);
+  }
+
+  &
+    .moderation-table__status-trigger:is(
+      :hover,
+      :focus-visible,
+      .m__menu-button-trigger--active
+    ) {
+    border-color: color-mix(in srgb, currentColor 45%, transparent);
+    outline: none;
+    transition-duration: var(--m__duration-instant);
+  }
+
   & .moderation-table__status-tag--pending {
     color: var(--m__error);
   }
@@ -3170,7 +3188,8 @@ table.config-details {
 }
 
 .moderation-table__status-list,
-.moderation-table__result-list {
+.moderation-table__result-list,
+.moderation-table__row-status-list {
   min-width: min(16rem, calc(100vw - 2rem));
 }
 
