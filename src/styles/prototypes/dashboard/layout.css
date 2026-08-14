@@ -2290,7 +2290,7 @@ table.config-details {
 }
 
 .conversation-report__report-item.is-active
-  .conversation-report__report-item-title {
+.conversation-report__report-item-title {
   font-weight: var(--m__font-weight-bold);
 }
 
@@ -3782,6 +3782,13 @@ table.config-details {
   display: none;
 }
 
+.moderation-verdict-comment-modal__empty-state {
+  margin: auto !important;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+  text-align: center;
+}
+
 .moderation-verdict-comment-modal__composer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -3813,21 +3820,19 @@ table.config-details {
   color: var(--m__text-link-hover);
 }
 
-.moderation-verdict-comment-modal__editing-preview {
-  overflow: hidden;
-  color: var(--m__text-caption);
-  font-weight: var(--m__font-weight-regular);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .moderation-verdict-comment-modal__composer-field {
   margin-top: auto;
   flex: 0 0 auto;
 }
 
-.moderation-verdict-comment-modal__composer input {
+.moderation-verdict-comment-modal__composer textarea.m__textarea--autogrow {
   min-width: 0;
+  min-height: auto;
+  max-height: calc(5 * 1.3em + 1rem);
+}
+
+.moderation-verdict-comment-modal__composer .m__button-primary {
+  border: var(--m__border-width-s) solid transparent;
 }
 
 .moderation-verdict-comment-modal__comment {
@@ -3841,6 +3846,21 @@ table.config-details {
   gap: var(--m__gap-s);
   color: var(--m__text);
   font-size: var(--m__font-size-s);
+}
+
+.moderation-verdict-comment-modal__comment-identity {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: var(--m__gap-xs);
+  font-size: var(--m__font-size-xs);
+}
+
+.moderation-verdict-comment-modal__comment-timestamp {
+  flex-shrink: 0;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-regular);
 }
 
 .moderation-verdict-comment-modal__comment-actions {
@@ -3869,9 +3889,9 @@ table.config-details {
 }
 
 .moderation-verdict-comment-modal__comment p {
-  margin-top: 0.1rem !important;
+  margin-top: 0 !important;
   color: var(--m__text);
-  font-size: var(--m__font-size-s);
+  font-size: var(--m__font-size-m);
   line-height: 1.45;
   white-space: pre-wrap;
   overflow-wrap: anywhere;

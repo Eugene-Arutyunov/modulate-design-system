@@ -389,23 +389,20 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
                       Cancel
                     </button>
                   </div>
-                  <span
-                    class="moderation-verdict-comment-modal__editing-preview"
-                    data-review-comment-editing-preview
-                  ></span>
                 </div>
                 <div class="moderation-verdict-comment-modal__composer">
-                  <input
-                    type="text"
+                  <textarea
                     id="verdict-comment"
+                    class="m__textarea--autogrow"
+                    rows="1"
                     maxlength="500"
                     aria-label="Write a comment"
                     placeholder="Write a comment..."
                     data-review-comment-input
-                  />
+                  ></textarea>
                   <button
                     type="submit"
-                    class="m__button-secondary-outline M"
+                    class="m__button-primary M"
                     data-review-comment-submit
                   >
                     Send
@@ -463,9 +460,6 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
     var commentEditingState = commentModal.querySelector(
       "[data-review-comment-editing-state]",
     );
-    var commentEditingPreview = commentModal.querySelector(
-      "[data-review-comment-editing-preview]",
-    );
     var commentSubmit = commentModal.querySelector(
       "[data-review-comment-submit]",
     );
@@ -493,6 +487,32 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       return reviewComments.get(review);
     }
 
+    function formatCommentTimestamp(value) {
+      var date = new Date(value);
+      var now = new Date();
+      var targetDay = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+      );
+      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var dayDifference = Math.round((today - targetDay) / 86400000);
+      var dayLabel =
+        dayDifference === 0
+          ? "Today"
+          : dayDifference === 1
+            ? "Yesterday"
+            : date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              });
+      var timeLabel = date.toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      return dayLabel + ", " + timeLabel;
+    }
+
     function updateCommentSummary(review) {
       var comments = getReviewComments(review);
       var trigger = review.querySelector("[data-review-comment-trigger]");
@@ -512,7 +532,6 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       commentInput.setAttribute("aria-label", "Write a comment");
       commentSubmit.textContent = "Send";
       commentEditingState.hidden = true;
-      commentEditingPreview.textContent = "";
     }
 
     function renderCommentList() {
@@ -520,16 +539,33 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         ? getReviewComments(activeCommentReview)
         : [];
       commentList.replaceChildren();
+      if (!comments.length) {
+        var emptyState = document.createElement("p");
+        emptyState.className =
+          "moderation-verdict-comment-modal__empty-state";
+        emptyState.textContent = "No comments yet";
+        commentList.appendChild(emptyState);
+      }
       comments.forEach(function (comment, index) {
         var item = document.createElement("article");
         var header = document.createElement("div");
+        var identity = document.createElement("div");
         var author = document.createElement("strong");
+        var timestamp = document.createElement("time");
         var text = document.createElement("p");
         item.className = "moderation-verdict-comment-modal__comment";
         header.className = "moderation-verdict-comment-modal__comment-header";
+        identity.className =
+          "moderation-verdict-comment-modal__comment-identity";
         author.textContent = comment.author;
+        if (!comment.createdAt) comment.createdAt = new Date().toISOString();
+        timestamp.className =
+          "moderation-verdict-comment-modal__comment-timestamp";
+        timestamp.dateTime = comment.createdAt;
+        timestamp.textContent = formatCommentTimestamp(comment.createdAt);
         text.textContent = comment.text;
-        header.appendChild(author);
+        identity.append(author, timestamp);
+        header.appendChild(identity);
         if (comment.author === reviewerName) {
           var actions = document.createElement("span");
           var edit = document.createElement("button");
@@ -550,7 +586,7 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         item.append(header, text);
         commentList.appendChild(item);
       });
-      commentList.hidden = comments.length === 0;
+      commentList.hidden = false;
     }
 
     var statusControl = root.querySelector("[data-review-status-control]");
@@ -825,7 +861,6 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         commentInput.setAttribute("aria-label", "Edit comment");
         commentSubmit.textContent = "Save";
         commentEditingState.hidden = false;
-        commentEditingPreview.textContent = editingComment.text;
         commentInput.focus();
         commentInput.setSelectionRange(
           commentInput.value.length,
@@ -877,7 +912,11 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       if (editingCommentIndex >= 0 && comments[editingCommentIndex]) {
         comments[editingCommentIndex].text = value;
       } else {
-        comments.push({ author: reviewerName, text: value });
+        comments.push({
+          author: reviewerName,
+          text: value,
+          createdAt: new Date().toISOString(),
+        });
       }
       updateCommentSummary(activeCommentReview);
       resetCommentEditor();
