@@ -3563,6 +3563,19 @@ table.config-details {
   white-space: nowrap;
 }
 
+.moderation-review-behaviors__controls {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 100%;
+  text-align: left;
+}
+
+.moderation-review-behaviors__choices {
+  display: flex;
+  align-items: center;
+}
+
 .moderation-review-behaviors__action {
   display: inline-flex;
   align-items: center;
@@ -3626,26 +3639,242 @@ table.config-details {
   margin-left: 0.25rem;
 }
 
-.moderation-review-behaviors__reviewer {
+.moderation-review-behaviors__review-meta {
   display: block;
   margin-top: 0.4rem;
-  color: var(--m__text-caption);
+  color: var(--m__text);
   font-size: var(--m__font-size-xs);
   font-weight: var(--m__font-weight-medium);
   line-height: 1.3;
   text-align: right;
 }
 
-.moderation-review-behaviors__reviewer[hidden] {
+.moderation-review-behaviors__review-meta[hidden] {
   display: none;
 }
 
-[data-review-result="true"] .moderation-review-behaviors__reviewer {
+@media (hover: hover) {
+  [data-detection-review]:not([data-review-comment-count])
+    .moderation-review-behaviors__review-meta {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--m__duration-base) var(--m__easing-base);
+  }
+
+  [data-detection-review]:not([data-review-comment-count]):hover
+    .moderation-review-behaviors__review-meta,
+  [data-detection-review]:not([data-review-comment-count])
+    .moderation-review-behaviors__review-meta:focus-within {
+    opacity: 1;
+    pointer-events: auto;
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+.moderation-review-behaviors__comment-link {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--m__text-link);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--m__text-link) 20%,
+    transparent
+  );
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+  transition:
+    color var(--m__duration-base) var(--m__easing-base),
+    text-decoration-color var(--m__duration-base) var(--m__easing-base);
+}
+
+.moderation-review-behaviors__comment-link:hover {
+  color: var(--m__text-link-hover);
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--m__text-link-hover) 20%,
+    transparent
+  );
+  transition-duration: var(--m__duration-instant);
+}
+
+.moderation-verdict-comment-modal {
+  max-width: 34rem;
+}
+
+.moderation-verdict-comment-modal form {
+  display: flex;
+  height: min(34rem, calc(100dvh - 6rem));
+  max-height: calc(100dvh - 6rem);
+  flex-direction: column;
+}
+
+.moderation-verdict-comment-modal .m__modal__body {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.moderation-verdict-comment-modal__title {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--m__gap-s);
+}
+
+.moderation-verdict-comment-modal__behavior {
+  display: inline;
+  padding-bottom: 0.22em;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% var(--m__border-width-l);
+  color: var(--m__bg-accent);
+  font-size: var(--m__font-size-m);
+  font-weight: var(--m__font-weight-bold);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.moderation-verdict-comment-modal__behavior svg {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.15em;
+  vertical-align: -0.15em;
+}
+
+.moderation-verdict-comment-modal__verdict {
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  white-space: nowrap;
+}
+
+.moderation-verdict-comment-modal__verdict[hidden] {
+  display: none;
+}
+
+.moderation-verdict-comment-modal__verdict[data-review-verdict="true"] {
   color: var(--m__success);
 }
 
-[data-review-result="false"] .moderation-review-behaviors__reviewer {
+.moderation-verdict-comment-modal__verdict[data-review-verdict="false"] {
   color: var(--m__error);
+}
+
+.moderation-verdict-comment-modal__thread {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--m__gap-m);
+  margin-bottom: var(--m__spacer-m);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.moderation-verdict-comment-modal__thread[hidden] {
+  display: none;
+}
+
+.moderation-verdict-comment-modal__composer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--m__gap-xs);
+}
+
+.moderation-verdict-comment-modal__editing-state {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin-bottom: 0.3rem;
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-medium);
+}
+
+.moderation-verdict-comment-modal__editing-state[hidden] {
+  display: none;
+}
+
+.moderation-verdict-comment-modal__editing-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--m__gap-xs);
+}
+
+.moderation-verdict-comment-modal__editing-header > span {
+  color: var(--m__text-link-hover);
+}
+
+.moderation-verdict-comment-modal__editing-preview {
+  overflow: hidden;
+  color: var(--m__text-caption);
+  font-weight: var(--m__font-weight-regular);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.moderation-verdict-comment-modal__composer-field {
+  margin-top: auto;
+  flex: 0 0 auto;
+}
+
+.moderation-verdict-comment-modal__composer input {
+  min-width: 0;
+}
+
+.moderation-verdict-comment-modal__comment {
+  padding: 0;
+}
+
+.moderation-verdict-comment-modal__comment-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--m__gap-s);
+  color: var(--m__text);
+  font-size: var(--m__font-size-s);
+}
+
+.moderation-verdict-comment-modal__comment-actions {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  font-size: var(--m__font-size-xs);
+}
+
+@media (hover: hover) {
+  .moderation-verdict-comment-modal__comment-actions {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--m__duration-base) var(--m__easing-base);
+  }
+
+  .moderation-verdict-comment-modal__comment:hover
+    .moderation-verdict-comment-modal__comment-actions,
+  .moderation-verdict-comment-modal__comment:focus-within
+    .moderation-verdict-comment-modal__comment-actions {
+    opacity: 1;
+    pointer-events: auto;
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+.moderation-verdict-comment-modal__comment p {
+  margin-top: 0.1rem !important;
+  color: var(--m__text);
+  font-size: var(--m__font-size-s);
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .moderation-review-nav {

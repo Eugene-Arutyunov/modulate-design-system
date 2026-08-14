@@ -326,6 +326,96 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
           </div>
         </div>
       </div>
+      <div
+        class="m__modal-backdrop"
+        id="modal-verdict-comment"
+        hidden
+        aria-modal="true"
+        role="dialog"
+        aria-labelledby="modal-verdict-comment-title"
+      >
+        <div class="m__modal moderation-verdict-comment-modal">
+          <form data-review-comment-form>
+            <div class="m__modal__header">
+              <div class="moderation-verdict-comment-modal__title">
+                <h2
+                  class="m__modal__title moderation-verdict-comment-modal__behavior"
+                  id="modal-verdict-comment-title"
+                  data-review-comment-behavior
+                >
+                  Behavior
+                </h2>
+                <span
+                  class="moderation-verdict-comment-modal__verdict"
+                  data-review-comment-verdict
+                  hidden
+                ></span>
+              </div>
+              <button
+                type="button"
+                class="m__modal__close"
+                aria-label="Close"
+                data-review-comment-cancel
+              >
+                <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+                  <use href="#close"></use>
+                </svg>
+              </button>
+            </div>
+            <div class="m__modal__body">
+              <div
+                class="moderation-verdict-comment-modal__thread"
+                data-review-comment-list
+                aria-live="polite"
+                hidden
+              ></div>
+              <div
+                class="m__textfield M moderation-verdict-comment-modal__composer-field"
+              >
+                <div
+                  class="moderation-verdict-comment-modal__editing-state"
+                  data-review-comment-editing-state
+                  hidden
+                >
+                  <div
+                    class="moderation-verdict-comment-modal__editing-header"
+                  >
+                    <span>Edit comment</span>
+                    <button
+                      type="button"
+                      class="moderation-review-behaviors__comment-link"
+                      data-review-comment-edit-cancel
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <span
+                    class="moderation-verdict-comment-modal__editing-preview"
+                    data-review-comment-editing-preview
+                  ></span>
+                </div>
+                <div class="moderation-verdict-comment-modal__composer">
+                  <input
+                    type="text"
+                    id="verdict-comment"
+                    maxlength="500"
+                    aria-label="Write a comment"
+                    placeholder="Write a comment..."
+                    data-review-comment-input
+                  />
+                  <button
+                    type="submit"
+                    class="m__button-secondary-outline M"
+                    data-review-comment-submit
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </main>
   </div>
   <div class="m__space XL"></div>
@@ -356,6 +446,112 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       ? reviewerNameElement.textContent.trim()
       : "Current reviewer";
     var activeEvidenceTarget = null;
+    var activeCommentReview = null;
+    var editingCommentIndex = -1;
+    var reviewComments = new WeakMap();
+
+    var commentModal = document.getElementById("modal-verdict-comment");
+    var commentForm = commentModal.querySelector("[data-review-comment-form]");
+    var commentInput = commentModal.querySelector("[data-review-comment-input]");
+    var commentBehavior = commentModal.querySelector(
+      "[data-review-comment-behavior]",
+    );
+    var commentVerdict = commentModal.querySelector(
+      "[data-review-comment-verdict]",
+    );
+    var commentList = commentModal.querySelector("[data-review-comment-list]");
+    var commentEditingState = commentModal.querySelector(
+      "[data-review-comment-editing-state]",
+    );
+    var commentEditingPreview = commentModal.querySelector(
+      "[data-review-comment-editing-preview]",
+    );
+    var commentSubmit = commentModal.querySelector(
+      "[data-review-comment-submit]",
+    );
+
+    function setReviewResult(review, value) {
+      var state = review.querySelector("[data-review-state]");
+      var meta = review.querySelector("[data-review-meta]");
+      var nextValue = review.dataset.reviewResult === value ? "" : value;
+      review.querySelectorAll("[data-review-choice]").forEach(function (button) {
+        var isSelected = button.dataset.reviewChoice === nextValue;
+        button.classList.toggle("is-selected", isSelected);
+        button.setAttribute("aria-pressed", String(isSelected));
+      });
+      if (nextValue) {
+        review.dataset.reviewResult = nextValue;
+      } else {
+        delete review.dataset.reviewResult;
+      }
+      if (state) state.textContent = nextValue ? reviewerName : "";
+      if (meta) meta.hidden = false;
+    }
+
+    function getReviewComments(review) {
+      if (!reviewComments.has(review)) reviewComments.set(review, []);
+      return reviewComments.get(review);
+    }
+
+    function updateCommentSummary(review) {
+      var comments = getReviewComments(review);
+      var trigger = review.querySelector("[data-review-comment-trigger]");
+      if (comments.length) {
+        review.dataset.reviewCommentCount = String(comments.length);
+      } else {
+        delete review.dataset.reviewCommentCount;
+      }
+      trigger.textContent = comments.length
+        ? comments.length + " comment" + (comments.length === 1 ? "" : "s")
+        : "Add comment";
+    }
+
+    function resetCommentEditor() {
+      editingCommentIndex = -1;
+      commentInput.value = "";
+      commentInput.setAttribute("aria-label", "Write a comment");
+      commentSubmit.textContent = "Send";
+      commentEditingState.hidden = true;
+      commentEditingPreview.textContent = "";
+    }
+
+    function renderCommentList() {
+      var comments = activeCommentReview
+        ? getReviewComments(activeCommentReview)
+        : [];
+      commentList.replaceChildren();
+      comments.forEach(function (comment, index) {
+        var item = document.createElement("article");
+        var header = document.createElement("div");
+        var author = document.createElement("strong");
+        var text = document.createElement("p");
+        item.className = "moderation-verdict-comment-modal__comment";
+        header.className = "moderation-verdict-comment-modal__comment-header";
+        author.textContent = comment.author;
+        text.textContent = comment.text;
+        header.appendChild(author);
+        if (comment.author === reviewerName) {
+          var actions = document.createElement("span");
+          var edit = document.createElement("button");
+          var remove = document.createElement("button");
+          actions.className =
+            "moderation-verdict-comment-modal__comment-actions";
+          edit.type = "button";
+          edit.className = "moderation-review-behaviors__comment-link";
+          edit.dataset.modalCommentEdit = String(index);
+          edit.textContent = "Edit";
+          remove.type = "button";
+          remove.className = "moderation-review-behaviors__comment-link";
+          remove.dataset.modalCommentDelete = String(index);
+          remove.textContent = "Delete";
+          actions.append(edit, remove);
+          header.appendChild(actions);
+        }
+        item.append(header, text);
+        commentList.appendChild(item);
+      });
+      commentList.hidden = comments.length === 0;
+    }
 
     var statusControl = root.querySelector("[data-review-status-control]");
     var statusLabel = root.querySelector("[data-review-status-label]");
@@ -552,7 +748,7 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
 
         if (row.classList.contains("pg-behavior-row--detected")) {
           row.setAttribute("data-detection-review", "");
-          actions.innerHTML = '<button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False positive</button><span class="moderation-review-behaviors__reviewer" data-review-state aria-live="polite" hidden></span>';
+          actions.innerHTML = '<div class="moderation-review-behaviors__controls"><div class="moderation-review-behaviors__choices"><button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true" aria-pressed="false">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false" aria-pressed="false">False positive</button></div><div class="moderation-review-behaviors__review-meta" data-review-meta><button type="button" class="moderation-review-behaviors__comment-link" data-review-comment-trigger>Add comment</button></div></div>';
         }
 
         row.appendChild(actions);
@@ -582,19 +778,111 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       }
 
       var reviewChoice = event.target.closest("[data-review-choice]");
-      if (!reviewChoice) return;
-      var review = reviewChoice.closest("[data-detection-review]");
-      if (!review) return;
-      var state = review.querySelector("[data-review-state]");
-      review.querySelectorAll("[data-review-choice]").forEach(function (button) {
-        button.classList.remove("is-selected");
-      });
-      reviewChoice.classList.add("is-selected");
-      review.dataset.reviewResult = reviewChoice.dataset.reviewChoice;
-      if (state) {
-        state.textContent = "Marked by " + reviewerName;
-        state.hidden = false;
+      if (reviewChoice) {
+        var review = reviewChoice.closest("[data-detection-review]");
+        if (!review) return;
+        setReviewResult(review, reviewChoice.dataset.reviewChoice);
+        return;
       }
+
+      var commentTrigger = event.target.closest("[data-review-comment-trigger]");
+      if (commentTrigger) {
+        activeCommentReview = commentTrigger.closest("[data-detection-review]");
+        var behaviorLabel = activeCommentReview.querySelector(
+          ".pg-behavior-link",
+        );
+        var selectedChoice = activeCommentReview.querySelector(
+          "[data-review-choice].is-selected",
+        );
+        commentBehavior.innerHTML = behaviorLabel
+          ? behaviorLabel.innerHTML
+          : "Behavior";
+        var selectedResult = selectedChoice
+          ? selectedChoice.dataset.reviewChoice
+          : "";
+        commentVerdict.textContent =
+          selectedResult === "true"
+            ? "True"
+            : selectedResult === "false"
+              ? "False positive"
+              : "";
+        commentVerdict.dataset.reviewVerdict = selectedResult;
+        commentVerdict.hidden = !selectedResult;
+        resetCommentEditor();
+        renderCommentList();
+        window.M.openModal(commentModal);
+        return;
+      }
+
+      var modalCommentEdit = event.target.closest("[data-modal-comment-edit]");
+      if (modalCommentEdit && activeCommentReview) {
+        editingCommentIndex = Number(modalCommentEdit.dataset.modalCommentEdit);
+        var editingComment = getReviewComments(activeCommentReview)[
+          editingCommentIndex
+        ];
+        if (!editingComment) return;
+        commentInput.value = editingComment.text;
+        commentInput.setAttribute("aria-label", "Edit comment");
+        commentSubmit.textContent = "Save";
+        commentEditingState.hidden = false;
+        commentEditingPreview.textContent = editingComment.text;
+        commentInput.focus();
+        commentInput.setSelectionRange(
+          commentInput.value.length,
+          commentInput.value.length,
+        );
+        return;
+      }
+
+      var commentEditCancel = event.target.closest(
+        "[data-review-comment-edit-cancel]",
+      );
+      if (commentEditCancel) {
+        resetCommentEditor();
+        commentInput.focus();
+        return;
+      }
+
+      var modalCommentDelete = event.target.closest(
+        "[data-modal-comment-delete]",
+      );
+      if (modalCommentDelete && activeCommentReview) {
+        var deletingCommentIndex = Number(
+          modalCommentDelete.dataset.modalCommentDelete,
+        );
+        getReviewComments(activeCommentReview).splice(deletingCommentIndex, 1);
+        resetCommentEditor();
+        renderCommentList();
+        updateCommentSummary(activeCommentReview);
+        return;
+      }
+
+      var commentCancel = event.target.closest("[data-review-comment-cancel]");
+      if (commentCancel) {
+        activeCommentReview = null;
+        window.M.closeModal(commentModal);
+        return;
+      }
+    });
+
+    commentForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (!activeCommentReview) return;
+      var value = commentInput.value.trim();
+      if (!value) {
+        commentInput.focus();
+        return;
+      }
+      var comments = getReviewComments(activeCommentReview);
+      if (editingCommentIndex >= 0 && comments[editingCommentIndex]) {
+        comments[editingCommentIndex].text = value;
+      } else {
+        comments.push({ author: reviewerName, text: value });
+      }
+      updateCommentSummary(activeCommentReview);
+      resetCommentEditor();
+      renderCommentList();
+      commentInput.focus();
     });
   })();
 </script>
