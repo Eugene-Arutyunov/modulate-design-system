@@ -481,9 +481,13 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                     class="moderation-table__conversation-link"
                   >
                     <span class="moderation-table__title">{{ row.title }}</span>
-                    <span class="moderation-table__meta"
-                      >{{ row.submitted }} · {{ row.source }} · {{ row.id }}</span
-                    >
+                    <span class="moderation-table__meta">
+                      <span
+                        class="m__tag-flat moderation-table__conversation-id"
+                        >{{ row.id }}</span
+                      >
+                      <span>{{ row.submitted }} · {{ row.source }}</span>
+                    </span>
                   </a>
                 </td>
                 <td class="moderation-pattern-cell">

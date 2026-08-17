@@ -3152,7 +3152,9 @@ table.config-details {
   }
 
   & .moderation-table__meta {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--m__gap-xxxs);
     overflow: hidden;
     margin-top: 0.18rem;
     color: var(--m__text-caption);
@@ -3161,6 +3163,17 @@ table.config-details {
     text-overflow: ellipsis;
     white-space: nowrap;
     transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+
+  & .moderation-table__conversation-id {
+    flex: 0 0 auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .moderation-table__meta > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &
@@ -3492,11 +3505,32 @@ table.config-details {
   margin-left: auto;
 }
 
-.m__select.S.moderation-review-behaviors__filter {
+.moderation-review-behaviors__filter {
   width: 14rem;
   min-width: 14rem;
-  padding: var(--m__padding-input-m);
-  font: inherit;
+  gap: 0.1em;
+}
+
+.moderation-review-behaviors__filter-label {
+  flex: 0 0 auto;
+  color: var(--m__text);
+}
+
+.moderation-review-behaviors__filter-value {
+  color: var(--m__text);
+}
+
+.moderation-review-behaviors__filter:is(
+    :hover,
+    :focus-visible,
+    [aria-expanded="true"],
+    .m__menu-button-trigger--active
+  )
+  :is(
+    .moderation-review-behaviors__filter-label,
+    .moderation-review-behaviors__filter-value
+  ) {
+  color: inherit;
 }
 
 .moderation-review-behaviors__verdict-filter {
@@ -3637,7 +3671,7 @@ table.config-details {
     flex: 1 1 0;
   }
 
-  .m__select.S.moderation-review-behaviors__filter {
+  .moderation-review-behaviors__filter {
     width: 100%;
     min-width: 0;
   }
