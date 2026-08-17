@@ -228,7 +228,148 @@
   {% if not velmaReportOutputReview %}
   <div class="m__space L"></div>
   {% endif %}
+  {% if velmaReportOutputReview %}
+  <div class="moderation-review-behaviors__heading">
+    <h2>Behaviors</h2>
+    <div
+      class="moderation-review-behaviors__filters"
+      aria-label="Behavior table filters"
+    >
+      <button
+        type="button"
+        class="m__menu-button-secondary M conversation-report__report-trigger moderation-review-behaviors__filter"
+        data-review-behavior-filter-trigger
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <span class="moderation-review-behaviors__filter-label"
+          >Behaviors:</span
+        >
+        <span
+          class="conversation-report__report-trigger-text moderation-review-behaviors__filter-value"
+          data-review-behavior-filter-label
+          >All</span
+        >
+        <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+          <use href="#chevron-down"></use>
+        </svg>
+      </button>
+      <div
+        class="m__menu-button moderation-review-behaviors__verdict-filter"
+      >
+        <button
+          type="button"
+          class="m__menu-button-secondary M m__menu-button-trigger conversation-report__report-trigger moderation-review-behaviors__filter"
+          aria-haspopup="menu"
+          aria-expanded="false"
+        >
+          <span class="moderation-review-behaviors__filter-label"
+            >Verdict:</span
+          >
+          <span
+            class="conversation-report__report-trigger-text moderation-review-behaviors__filter-value"
+            data-review-verdict-filter-label
+            >All</span
+          >
+          <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
+            <use href="#chevron-down"></use>
+          </svg>
+        </button>
+        <div
+          class="m__menu-button-list conversation-report__report-list moderation-review-behaviors__verdict-list"
+          hidden
+          role="menu"
+          data-review-verdict-filter-options
+        >
+          {% for verdict in [ { value: '', label: 'All' }, { value: 'true',
+          label: 'True positive' }, { value: 'false', label: 'False positive' }
+          ] %}
+          <button
+            type="button"
+            class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not verdict.value %} is-active{% endif %}"
+            role="menuitemradio"
+            aria-checked="{% if not verdict.value %}true{% else %}false{% endif %}"
+            data-review-verdict-filter-option="{{ verdict.value }}"
+          >
+            <span
+              class="conversation-report__report-item-icon moderation-table__status-option-check"
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 12 12">
+                <use href="#checkmark"></use>
+              </svg>
+            </span>
+            <span class="conversation-report__report-item-title"
+              >{{ verdict.label }}</span
+            >
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="moderation-review-behaviors__tag-filters"
+    data-review-behavior-filter-root
+    aria-label="Selected behavior filters"
+    hidden
+  >
+    <div
+      class="moderation-review-behaviors__selected-tags"
+      data-review-selected-behaviors
+      aria-live="polite"
+    ></div>
+    <button
+      type="button"
+      class="moderation-review-behaviors__filter-reset"
+      data-review-behavior-filter-reset
+    >
+      Reset
+    </button>
+  </div>
+  <div
+    class="m__popover moderation-review-behaviors__filter-popover"
+    data-review-behavior-filter-popover
+    hidden
+  >
+    <label class="m__searchbar" for="review-behavior-filter-search">
+      <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
+        <use href="#search"></use>
+      </svg>
+      <input
+        type="text"
+        id="review-behavior-filter-search"
+        placeholder="Search…"
+        autocomplete="off"
+        data-review-behavior-filter-search
+      />
+    </label>
+    <div class="m__popover-list">
+      {% for behavior in [ 'Issue Not Resolved', 'Complaints', 'Coercion Manipulation' ] %}
+      <label class="m__popover-item" data-review-behavior-filter-option-row>
+        <span class="m__checkbox-primary">
+          <input
+            type="checkbox"
+            value="{{ behavior }}"
+            data-review-behavior-filter-option
+          />
+          <svg
+            viewBox="0 0 32 32"
+            aria-hidden="true"
+            width="10"
+            height="10"
+          >
+            <use href="#checkmark"></use>
+          </svg>
+        </span>
+        <span class="m__popover-item-name">{{ behavior }}</span>
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
   <h2>Behaviors</h2>
+  {% endif %}
   <div class="pg-results-table-section">
     <table class="pg-behaviors-table">
       <thead>
@@ -264,12 +405,20 @@
               <a
                 href="#clip-evidence"
                 class="pg-evidence-link pg-evidence-link--fade"
-                >Thank you, Mr. Mercer. For verification, can you confirm</a
+                >{% if velmaReportOutputReview %}Thank you, Mr. Mercer. For
+                verification, can you confirm the phone number and email we have
+                on file: 614-555-0198, and
+                daniel.mercer82@protonmail.com?{% else %}Thank you, Mr. Mercer.
+                For verification, can you confirm{% endif %}</a
               >
               <a
-                href="#clip-evidence"
+                href="#clip-evidence-100"
                 class="pg-evidence-link pg-evidence-link--fade"
-                >I see your plan is under policy number PPO-77-194402</a
+                >{% if velmaReportOutputReview %}I see your plan is under policy
+                number PPO-77-194402, and the primary care physician listed is
+                Dr. Elena Ruiz at Buckeye Family Clinic, 903 East Main Street,
+                Columbus, Ohio 43205.{% else %}I see your plan is under policy
+                number PPO-77-194402{% endif %}</a
               >
             </div>
           </td>
@@ -363,9 +512,13 @@
             </div>
             <div class="pg-evidence-list">
               <a
-                href="#clip-evidence"
+                href="#clip-evidence-047"
                 class="pg-evidence-link pg-evidence-link--fade"
-                >Yes, that's right, although my new callback number is</a
+                >{% if velmaReportOutputReview %}Yes, that's right, although my
+                new callback number is 380-555-4412, and my employer is Harrison
+                Industrial Company at 2150 Fisher Road, Columbus, Ohio.{% else
+                %}Yes, that's right, although my new callback number is{% endif
+                %}</a
               >
             </div>
           </td>
@@ -386,18 +539,29 @@
               without receiving confirmation that either issue has been closed.
             </div>
             <div class="pg-evidence-list">
-              <a href="#clip-evidence" class="pg-evidence-link"
-                >Yes, this is Daniel Andrew Mercer</a
+              <a href="#clip-evidence-018" class="pg-evidence-link"
+                >{% if velmaReportOutputReview %}Yes, this is Daniel Andrew
+                Mercer. The last four of my Social Security number are 4421, and
+                my member ID is GVH-88394127.{% else %}Yes, this is Daniel Andrew
+                Mercer{% endif %}</a
               >
               <a
-                href="#clip-evidence"
+                href="#clip-evidence-047"
                 class="pg-evidence-link pg-evidence-link--fade"
-                >Yes, that's right, although my new callback number is</a
+                >{% if velmaReportOutputReview %}Yes, that's right, although my
+                new callback number is 380-555-4412, and my employer is Harrison
+                Industrial Company at 2150 Fisher Road, Columbus, Ohio.{% else
+                %}Yes, that's right, although my new callback number is{% endif
+                %}</a
               >
               <a
-                href="#clip-evidence"
+                href="#clip-evidence-100"
                 class="pg-evidence-link pg-evidence-link--fade"
-                >I see your plan is under policy number PPO-77-194402</a
+                >{% if velmaReportOutputReview %}I see your plan is under policy
+                number PPO-77-194402, and the primary care physician listed is
+                Dr. Elena Ruiz at Buckeye Family Clinic, 903 East Main Street,
+                Columbus, Ohio 43205.{% else %}I see your plan is under policy
+                number PPO-77-194402{% endif %}</a
               >
             </div>
           </td>
@@ -420,9 +584,13 @@
             </div>
             <div class="pg-evidence-list">
               <a
-                href="#clip-evidence"
+                href="#clip-evidence-047"
                 class="pg-evidence-link pg-evidence-link--fade"
-                >Yes, that's right, although my new callback number is</a
+                >{% if velmaReportOutputReview %}Yes, that's right, although my
+                new callback number is 380-555-4412, and my employer is Harrison
+                Industrial Company at 2150 Fisher Road, Columbus, Ohio.{% else
+                %}Yes, that's right, although my new callback number is{% endif
+                %}</a
               >
             </div>
           </td>
@@ -464,6 +632,26 @@
           <td class="pg-num">98%</td>
         </tr>
         {% endif %}
+        {% if velmaReportOutputReview %}
+        <tr
+          class="moderation-review-behaviors__empty-row"
+          data-review-behavior-filter-empty
+          hidden
+        >
+          <td colspan="5">
+            <div class="moderation-review-behaviors__empty-state">
+              <p>No behaviors match these filters.</p>
+              <button
+                type="button"
+                class="m__button-secondary-outline S"
+                data-review-behavior-filter-empty-reset
+              >
+                Reset filters
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% endif %}
       </tbody>
     </table>
   </div>
@@ -493,7 +681,10 @@
         </div>
       </div>
 
-      <div class="pg-transcript-utterance ec-calm">
+      <div
+        class="pg-transcript-utterance ec-calm"
+        id="clip-evidence-018"
+      >
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">0:18</span>
           <span class="pg-transcript-speaker">Customer</span>
@@ -515,11 +706,16 @@
           <span class="pg-transcript-speaker"
             >Customer Service Representative</span
           >
-          <a href="#clip-evidence" class="pg-behavior-link"
-            ><svg width="18" height="18" aria-hidden="true">
-              <use href="#behaviors" /></svg
-            >Issue Not Resolved</a
-          >
+          <span class="pg-transcript-behavior">
+            <a href="#clip-evidence" class="pg-behavior-link"
+              ><svg width="18" height="18" aria-hidden="true">
+                <use href="#behaviors" /></svg
+              >Issue Not Resolved</a
+            >
+            {% if velmaReportOutputReview %}
+            <span class="pg-transcript-behavior-confidence">75%</span>
+            {% endif %}
+          </span>
           <span class="pg-transcript-emotion">Confident</span>
         </div>
         <div class="pg-transcript-text">
@@ -531,15 +727,23 @@
         </div>
       </div>
 
-      <div class="pg-transcript-utterance ec-disappointed">
+      <div
+        class="pg-transcript-utterance ec-disappointed"
+        id="clip-evidence-047"
+      >
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">0:47</span>
           <span class="pg-transcript-speaker">Customer</span>
-          <a href="#clip-evidence" class="pg-behavior-link"
-            ><svg width="18" height="18" aria-hidden="true">
-              <use href="#behaviors" /></svg
-            >Complaints</a
-          >
+          <span class="pg-transcript-behavior">
+            <a href="#clip-evidence" class="pg-behavior-link"
+              ><svg width="18" height="18" aria-hidden="true">
+                <use href="#behaviors" /></svg
+              >Complaints</a
+            >
+            {% if velmaReportOutputReview %}
+            <span class="pg-transcript-behavior-confidence">86%</span>
+            {% endif %}
+          </span>
           <span class="pg-transcript-emotion">Disappointed</span>
         </div>
         <div class="pg-transcript-text">
@@ -551,17 +755,25 @@
         </div>
       </div>
 
-      <div class="pg-transcript-utterance ec-interested">
+      <div
+        class="pg-transcript-utterance ec-interested"
+        id="clip-evidence-100"
+      >
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">1:00</span>
           <span class="pg-transcript-speaker"
             >Customer Service Representative</span
           >
-          <a href="#clip-evidence" class="pg-behavior-link"
-            ><svg width="18" height="18" aria-hidden="true">
-              <use href="#behaviors" /></svg
-            >Issue Not Resolved</a
-          >
+          <span class="pg-transcript-behavior">
+            <a href="#clip-evidence" class="pg-behavior-link"
+              ><svg width="18" height="18" aria-hidden="true">
+                <use href="#behaviors" /></svg
+              >Issue Not Resolved</a
+            >
+            {% if velmaReportOutputReview %}
+            <span class="pg-transcript-behavior-confidence">75%</span>
+            {% endif %}
+          </span>
           <span class="pg-transcript-emotion">Interested</span>
         </div>
         <div class="pg-transcript-text">

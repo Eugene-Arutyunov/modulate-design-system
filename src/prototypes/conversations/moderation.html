@@ -4,7 +4,7 @@ permalink: /dashboard/conversations/review/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %} {% set reviewRows = [
-{ id: 'UCSF-1042', title: 'Member disputes denied imaging referral', submitted:
+{ id: '7839f2', title: 'Member disputes denied imaging referral', submitted:
 'Today, 10:24', source: 'ServiceOne', duration: '12:48', behavior: 'Harassment',
 tags: ['Customer', 'Agent'], behaviors: [ { name: 'Harassment', score: 87 }, {
 name: 'Threatening language', score: 82 }, { name: 'Escalation risk', score: 76
@@ -18,7 +18,7 @@ lane: 'top', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, {
 emotion: 'confident', lane: 'full', span: 2 }, { emotion: 'happy', lane: 'top',
 span: 1 }, { emotion: 'calm', lane: 'bottom', span: 3 }, { emotion:
 'frustrated', lane: 'full', span: 2 }, { emotion: 'angry', lane: 'full', span: 3
-} ] }, { id: 'UCSF-1038', title: 'Caller pressures nurse for supervisor
+} ] }, { id: '7812b8', title: 'Caller pressures nurse for supervisor
 override', submitted: 'Today, 09:12', source: 'API', duration: '8:36', behavior:
 'Coercion manipulation', tags: ['Customer', 'Agent'], behaviors: [ { name:
 'Coercion manipulation', score: 79 }, { name: 'Vishing', score: 72 }, { name:
@@ -31,10 +31,11 @@ span: 1 }, { emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'angry',
 lane: 'bottom', span: 1 }, { emotion: 'neutral', lane: 'full', span: 3 }, {
 emotion: 'frustrated', lane: 'top', span: 2 }, { emotion: 'confident', lane:
 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 } ] }, { id:
-'UCSF-1029', title: 'Care team chat includes personal attacks', submitted:
+'7691d5', title: 'Care team chat includes personal attacks', submitted:
 'Yesterday, 16:47', source: 'API', duration: '17:32', behavior: 'Harassment',
-tags: ['Agent', 'Manager'], behaviors: [ { name: 'Harassment', score: 74 }, {
-name: 'Personal attacks', score: 70 }, { name: 'Toxicity', score: 66 }, { name:
+tags: ['Agent', 'Manager'], behaviors: [ { name: 'Harassment', score: 74,
+result: 'true' }, { name: 'Personal attacks', score: 70, result: 'false' }, {
+name: 'Toxicity', score: 66 }, { name:
 'Team conflict', score: 58 }, { name: 'Negative sentiment', score: 54 } ],
 score: 74, detections: 5, status: 'In review', href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
@@ -43,24 +44,26 @@ emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full',
 span: 3 }, { emotion: 'neutral', lane: 'bottom', span: 2 }, { emotion: 'angry',
 lane: 'top', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion:
 'calm', lane: 'bottom', span: 1 }, { emotion: 'angry', lane: 'full', span: 2 },
-{ emotion: 'neutral', lane: 'bottom', span: 2 } ] }, { id: 'UCSF-1021', title:
+{ emotion: 'neutral', lane: 'bottom', span: 2 } ] }, { id: '7622f4', title:
 'Patient vents about delayed prescription refill', submitted: 'Yesterday,
 11:08', source: 'Five9', duration: '6:18', behavior: 'Complaints', tags:
-['Customer', 'Agent'], behaviors: [ { name: 'Complaints', score: 68 }, { name:
-'Frustration', score: 63 }, { name: 'Service delay', score: 59 }, { name:
-'Escalation risk', score: 52 } ], score: 68, detections: 4, status: 'Pending',
+['Customer', 'Agent'], behaviors: [ { name: 'Complaints', score: 68, result:
+'true' }, { name: 'Frustration', score: 63, result: 'false' }, { name: 'Service
+delay', score: 59, result: 'true' }, { name: 'Escalation risk', score: 52,
+result: 'false' } ], score: 68, detections: 4, status: 'Reviewed',
 href: '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion:
 'neutral', lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 2 }, {
 emotion: 'amused', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane:
 'full', span: 2 }, { emotion: 'frustrated', lane: 'bottom', span: 1 }, {
 emotion: 'confident', lane: 'top', span: 2 }, { emotion: 'neutral', lane:
 'bottom', span: 2 }, { emotion: 'angry', lane: 'full', span: 1 } ] }, { id:
-'UCSF-1014', title: 'Family member challenges appointment policy', submitted:
+'7554f9', title: 'Family member challenges appointment policy', submitted:
 'Mon, 14:02', source: 'API', duration: '9:42', behavior: 'Social boundary
 setting', tags: ['Customer', 'Agent'], behaviors: [ { name: 'Social boundary
-setting', score: 63 }, { name: 'Policy dispute', score: 60 }, { name:
-'Frustration', score: 55 }, { name: 'Escalation risk', score: 49 } ], score: 63,
-detections: 4, status: 'Pending', href:
+setting', score: 63, result: 'true' }, { name: 'Policy dispute', score: 60,
+result: 'false' }, { name: 'Frustration', score: 55, result: 'false' }, { name:
+'Escalation risk', score: 49, result: 'true' } ], score: 63, detections: 4,
+status: 'Reviewed', href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
 lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 1 }, { emotion:
 'confident', lane: 'bottom', span: 2 }, { emotion: 'neutral', lane: 'bottom',
@@ -69,9 +72,11 @@ lane: 'full', span: 2 }, { emotion: 'happy', lane: 'bottom', span: 1 }, {
 emotion: 'calm', lane: 'top', span: 2 }, { emotion: 'confident', lane: 'bottom',
 span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
 'frustrated', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full', span: 2
-} ] } ] %} {% set tagFilterOptions = [ 'Agent', 'Customer', 'Interviewer',
-'Candidate', 'Manager' ] %} {% set statusListOptions = [ 'Pending', 'In review',
-'Reviewed' ] %}
+} ] } ] %} {% set behaviorFilterOptions = [ 'Harassment', 'Threatening language',
+'Escalation risk', 'Policy dispute', 'Negative sentiment', 'Coercion manipulation',
+'Vishing', 'Pressure tactics', 'Identity probing', 'Personal attacks', 'Toxicity',
+'Team conflict', 'Complaints', 'Frustration', 'Service delay', 'Social boundary
+setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
@@ -148,7 +153,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
             <button
               type="button"
               class="m__select S moderation-table__filter moderation-table__filter--behavior"
-              data-tag-filter-trigger
+              data-behavior-filter-trigger
               aria-haspopup="true"
               aria-expanded="false"
             >
@@ -298,6 +303,66 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
               </div>
             </div>
 
+            <div class="m__menu-button moderation-table__result-filter">
+              <button
+                type="button"
+                class="m__select S moderation-table__filter moderation-table__filter--result m__menu-button-trigger"
+                data-result-filter-trigger
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <span>Verdict</span>
+                <span class="m__select__inline-control">
+                  <span class="m__select__value" data-result-filter-label
+                    >All</span
+                  >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </span>
+              </button>
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__result-list"
+                hidden
+                role="menu"
+              >
+                <div
+                  class="conversation-report__report-items"
+                  role="presentation"
+                  data-result-filter-options
+                >
+                  {% for result in [ { value: '', label: 'All' }, { value:
+                  'true', label: 'True positive' }, { value: 'false', label:
+                  'False positive' } ] %}
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not result.value %} is-active{% endif %}"
+                    role="menuitemradio"
+                    aria-checked="{% if not result.value %}true{% else %}false{% endif %}"
+                    data-result-filter-option="{{ result.value }}"
+                  >
+                    <span
+                      class="conversation-report__report-item-icon moderation-table__status-option-check"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 12 12">
+                        <use href="#checkmark"></use>
+                      </svg>
+                    </span>
+                    <span class="conversation-report__report-item-title"
+                      >{{ result.label }}</span
+                    >
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
             <label
               class="m__select S moderation-table__filter moderation-table__filter--sort"
             >
@@ -331,19 +396,19 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
 
         <div
           class="moderation-table__tag-filters"
-          data-tag-filter-root
+          data-behavior-filter-root
           aria-label="Selected behavior filters"
           hidden
         >
           <div
             class="moderation-table__selected-tags"
-            data-selected-tags
+            data-selected-behaviors
             aria-live="polite"
           ></div>
           <button
             type="button"
             class="moderation-table__tag-filter-reset"
-            data-tag-filter-reset
+            data-behavior-filter-reset
           >
             Reset
           </button>
@@ -351,7 +416,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
 
         <div
           class="m__popover moderation-table__tag-popover"
-          data-tag-filter-popover
+          data-behavior-filter-popover
           hidden
         >
           <label class="m__searchbar" for="moderation-tag-filter-search">
@@ -363,17 +428,17 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
               id="moderation-tag-filter-search"
               placeholder="Search…"
               autocomplete="off"
-              data-tag-filter-search
+              data-behavior-filter-search
             />
           </label>
           <div class="m__popover-list">
-            {% for tag in tagFilterOptions %}
-            <label class="m__popover-item" data-tag-filter-option-row>
+            {% for behavior in behaviorFilterOptions %}
+            <label class="m__popover-item" data-behavior-filter-option-row>
               <span class="m__checkbox-primary">
                 <input
                   type="checkbox"
-                  value="{{ tag }}"
-                  data-tag-filter-option
+                  value="{{ behavior }}"
+                  data-behavior-filter-option
                 />
                 <svg
                   viewBox="0 0 32 32"
@@ -384,7 +449,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                   <use href="#checkmark"></use>
                 </svg>
               </span>
-              <span class="m__popover-item-name">{{ tag }}</span>
+              <span class="m__popover-item-name">{{ behavior }}</span>
             </label>
             {% endfor %}
           </div>
@@ -404,10 +469,11 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
               <tr
                 data-review-row
                 data-index="{{ loop.index0 }}"
-                data-tags="{% for tag in row.tags %}{{ tag }}{% if not loop.last %}|{% endif %}{% endfor %}"
+                data-behaviors="{% for behavior in row.behaviors %}{{ behavior.name }}{% if not loop.last %}|{% endif %}{% endfor %}"
+                data-behavior-results="{% for behavior in row.behaviors %}{% if behavior.result %}{{ behavior.name }}::{{ behavior.result }}|{% endif %}{% endfor %}"
                 data-score="{{ row.score }}"
                 data-status="{{ row.status }}"
-                data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}{{ row.status }}"
+                data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}"
               >
                 <td class="moderation-table__conversation-cell">
                   <a
@@ -415,9 +481,13 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                     class="moderation-table__conversation-link"
                   >
                     <span class="moderation-table__title">{{ row.title }}</span>
-                    <span class="moderation-table__meta"
-                      >{{ row.submitted }} · {{ row.source }}</span
-                    >
+                    <span class="moderation-table__meta">
+                      <span
+                        class="m__tag-flat moderation-table__conversation-id"
+                        >{{ row.id }}</span
+                      >
+                      <span>{{ row.submitted }} · {{ row.source }}</span>
+                    </span>
                   </a>
                 </td>
                 <td class="moderation-pattern-cell">
@@ -485,19 +555,98 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                           >
                         </span>
                       </span>
-                      {% if row.behaviors.length > 3 %}<span
-                        class="moderation-behavior-link__more"
-                        aria-label="{{ row.behaviors.length - 3 }} more detection behaviors"
-                        >+{{ row.behaviors.length - 3 }}</span
-                      ></span
-                    >{% endif %} {% endif %} {% endfor %}
+                      {% if row.behaviors.length > 3 %}
+                      <button
+                        type="button"
+                        class="moderation-behavior-link__more moderation-behavior-overflow__trigger"
+                        aria-label="Show {{ row.behaviors.length - 3 }} more behaviors for {{ row.title }}"
+                        aria-expanded="false"
+                        data-behavior-overflow-trigger
+                      >
+                        +{{ row.behaviors.length - 3 }}
+                      </button>
+                      </span>
+                      {% endif %} {% elif loop.index > 3 %}
+                      <span
+                        class="moderation-behavior-link"
+                        data-behavior-overflow-item
+                        hidden
+                      >
+                        <span class="moderation-behavior-link__content">
+                          <span class="moderation-behavior-link__name"
+                            >{{ behavior.name }}</span
+                          >
+                          <span class="moderation-behavior-link__confidence"
+                            >{{ behavior.score }}%</span
+                          >
+                        </span>
+                      </span>
+                      {% endif %} {% endfor %}
                   </div>
                 </td>
                 <td>
-                  <span
-                    class="m__tag moderation-table__status-tag {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% elif row.status == 'Reviewed' %}moderation-table__status-tag--reviewed{% endif %}"
-                    >{{ row.status }}</span
-                  >
+                  <div class="m__menu-button moderation-table__row-status-menu">
+                    <button
+                      type="button"
+                      class="m__tag m__menu-button-trigger moderation-table__status-tag moderation-table__status-trigger {% if row.status == 'Pending' %}moderation-table__status-tag--pending{% elif row.status == 'In review' %}moderation-table__status-tag--in-review{% elif row.status == 'Reviewed' %}moderation-table__status-tag--reviewed{% endif %}"
+                      aria-label="Change status for {{ row.title }}"
+                      aria-haspopup="menu"
+                      aria-expanded="false"
+                      data-row-status-trigger
+                    >
+                      {{ row.status }}
+                    </button>
+                    <div
+                      class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__row-status-list"
+                      hidden
+                      role="menu"
+                    >
+                      <div
+                        class="conversation-report__report-items"
+                        role="presentation"
+                        data-row-status-options
+                        data-row-index="{{ loop.index0 }}"
+                      >
+                        {% for status in statusListOptions %}
+                        <button
+                          type="button"
+                          class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if status == row.status %} is-active{% endif %}"
+                          role="menuitemradio"
+                          aria-checked="{% if status == row.status %}true{% else %}false{% endif %}"
+                          data-row-status-option="{{ status }}"
+                        >
+                          <span
+                            class="conversation-report__report-item-icon moderation-table__status-option-check"
+                            aria-hidden="true"
+                          >
+                            <svg viewBox="0 0 12 12">
+                              <use href="#checkmark"></use>
+                            </svg>
+                          </span>
+                          <span class="conversation-report__report-item-title"
+                            >{{ status }}</span
+                          >
+                        </button>
+                        {% endfor %}
+                      </div>
+                      <div
+                        class="conversation-report__report-settings-footer"
+                        role="presentation"
+                      >
+                        <button
+                          type="button"
+                          class="m__menu-button-item conversation-report__report-item conversation-report__report-item--settings moderation-table__status-edit"
+                          role="menuitem"
+                          data-menu-button-action="edit-status-list"
+                          data-modal-open="modal-status-list"
+                        >
+                          <span class="conversation-report__report-item-title"
+                            >Edit status list</span
+                          >
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </td>
                 <td class="m__col-actions moderation-table__row-actions">
                   <div class="m__menu-button moderation-table__actions-menu">
@@ -514,9 +663,6 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                       <a href="{{ row.href }}" class="m__menu-button-item"
                         >Review</a
                       >
-                      <button type="button" class="m__menu-button-item">
-                        Mark reviewed
-                      </button>
                       <button
                         type="button"
                         class="m__menu-button-item m__menu-button-item--danger"
@@ -612,7 +758,7 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
                   data-status-add-input
                 />
               </div>
-              <button type="submit" class="m__button-secondary-outline M">
+              <button type="submit" class="m__button-primary M">
                 Add
               </button>
             </form>
@@ -677,32 +823,47 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     var rows = Array.from(root.querySelectorAll("[data-review-row]"));
     var tbody = root.querySelector("[data-moderation-tbody]");
     var searchInput = root.querySelector("[data-moderation-search]");
-    var tagFilterRoot = root.querySelector("[data-tag-filter-root]");
-    var tagFilterTriggers = Array.from(
-      root.querySelectorAll("[data-tag-filter-trigger]"),
+    var behaviorFilterRoot = root.querySelector("[data-behavior-filter-root]");
+    var behaviorFilterTriggers = Array.from(
+      root.querySelectorAll("[data-behavior-filter-trigger]"),
     );
-    var tagFilterPopover = root.querySelector("[data-tag-filter-popover]");
-    var tagFilterSearch = root.querySelector("[data-tag-filter-search]");
-    var selectedTagsContainer = root.querySelector("[data-selected-tags]");
-    var tagFilterReset = root.querySelector("[data-tag-filter-reset]");
+    var behaviorFilterPopover = root.querySelector(
+      "[data-behavior-filter-popover]",
+    );
+    var behaviorFilterSearch = root.querySelector(
+      "[data-behavior-filter-search]",
+    );
+    var selectedBehaviorsContainer = root.querySelector(
+      "[data-selected-behaviors]",
+    );
+    var behaviorFilterReset = root.querySelector(
+      "[data-behavior-filter-reset]",
+    );
     var behaviorFilterLabel = root.querySelector(
       "[data-behavior-filter-label]",
     );
-    var tagOptions = Array.from(
-      root.querySelectorAll("[data-tag-filter-option]"),
+    var behaviorOptions = Array.from(
+      root.querySelectorAll("[data-behavior-filter-option]"),
     );
-    var selectedTags = new Set();
-    var selectedTagRemoveIcon =
+    var behaviorOverflowTriggers = Array.from(
+      root.querySelectorAll("[data-behavior-overflow-trigger]"),
+    );
+    var selectedBehaviors = new Set();
+    var selectedBehaviorRemoveIcon =
       '<svg viewBox="0 0 12 12" width="8" height="8" fill="none" aria-hidden="true">' +
       '<line x1="2" y1="2" x2="10" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
       '<line x1="10" y1="2" x2="2" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
       "</svg>";
-    var activeTagFilterTrigger = null;
+    var activeBehaviorFilterTrigger = null;
     var sortFilter = root.querySelector("[data-sort-filter]");
     var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
     var statusFilterLabel = root.querySelector("[data-status-filter-label]");
     var statusFilterOptionsRoot = root.querySelector(
       "[data-status-filter-options]",
+    );
+    var resultFilterLabel = root.querySelector("[data-result-filter-label]");
+    var resultFilterOptionsRoot = root.querySelector(
+      "[data-result-filter-options]",
     );
     var statusModalList = root.querySelector("[data-status-modal-list]");
     var statusAddForm = root.querySelector("[data-status-add-form]");
@@ -717,77 +878,109 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       "modal-status-remove-confirm-btn",
     );
     var selectedStatus = "";
+    var selectedResult = "";
     var pendingStatusRemove = "";
 
-    function positionTagFilter(anchor) {
+    function positionBehaviorFilter(anchor) {
       var rect = anchor.getBoundingClientRect();
-      var width = tagFilterPopover.offsetWidth || 240;
+      var width = behaviorFilterPopover.offsetWidth || 240;
       var left = rect.left;
       if (left + width > window.innerWidth - 8)
         left = window.innerWidth - width - 8;
-      tagFilterPopover.style.left = Math.max(8, left) + "px";
-      tagFilterPopover.style.top = rect.bottom + 6 + "px";
+      behaviorFilterPopover.style.left = Math.max(8, left) + "px";
+      behaviorFilterPopover.style.top = rect.bottom + 6 + "px";
     }
 
-    function closeTagFilter() {
-      tagFilterPopover.hidden = true;
-      activeTagFilterTrigger = null;
-      tagFilterTriggers.forEach(function (trigger) {
+    function closeBehaviorFilter() {
+      behaviorFilterPopover.hidden = true;
+      activeBehaviorFilterTrigger = null;
+      behaviorFilterTriggers.forEach(function (trigger) {
         trigger.setAttribute("aria-expanded", "false");
       });
     }
 
-    function openTagFilter(anchor) {
-      activeTagFilterTrigger = anchor;
-      tagFilterPopover.hidden = false;
-      tagFilterTriggers.forEach(function (trigger) {
+    function openBehaviorFilter(anchor) {
+      activeBehaviorFilterTrigger = anchor;
+      behaviorFilterPopover.hidden = false;
+      behaviorFilterTriggers.forEach(function (trigger) {
         trigger.setAttribute("aria-expanded", String(trigger === anchor));
       });
-      positionTagFilter(anchor);
-      tagFilterSearch.focus();
+      positionBehaviorFilter(anchor);
+      behaviorFilterSearch.focus();
     }
 
-    function renderSelectedTags() {
-      selectedTagsContainer.innerHTML = "";
-      tagFilterRoot.hidden = selectedTags.size === 0;
+    function renderSelectedBehaviors() {
+      selectedBehaviorsContainer.innerHTML = "";
+      behaviorFilterRoot.hidden = selectedBehaviors.size === 0;
       behaviorFilterLabel.textContent =
-        selectedTags.size === 0 ? "All" : selectedTags.size + " selected";
-      Array.from(selectedTags).forEach(function (tag) {
+        selectedBehaviors.size === 0
+          ? "All"
+          : selectedBehaviors.size + " selected";
+      Array.from(selectedBehaviors).forEach(function (behavior) {
         var chip = document.createElement("span");
         chip.className = "m__tag bw-tag-item moderation-table__selected-tag";
-        chip.dataset.selectedTag = tag;
+        chip.dataset.selectedBehavior = behavior;
         chip.innerHTML =
           '<span class="bw-tag-item-name">' +
-          tag +
+          behavior +
           '</span><button type="button" class="bw-tag-x" aria-label="Remove ' +
-          tag +
+          behavior +
           ' filter">' +
-          selectedTagRemoveIcon +
+          selectedBehaviorRemoveIcon +
           "</button>";
-        selectedTagsContainer.appendChild(chip);
+        selectedBehaviorsContainer.appendChild(chip);
       });
     }
 
     function applyQueueState() {
       var query = searchInput.value.trim().toLowerCase();
-      var activeTags = Array.from(selectedTags);
+      var activeBehaviors = Array.from(selectedBehaviors);
       var sort = sortFilter.value;
       sortFilterLabel.textContent =
         sortFilter.options[sortFilter.selectedIndex].text;
       statusFilterLabel.textContent = selectedStatus || "All";
+      resultFilterLabel.textContent =
+        selectedResult === "true"
+          ? "True positive"
+          : selectedResult === "false"
+            ? "False positive"
+            : "All";
       rows.forEach(function (row) {
-        var rowTags = (row.dataset.tags || "").split("|");
-        var matchesTags =
-          activeTags.length === 0 ||
-          activeTags.some(function (tag) {
-            return rowTags.includes(tag);
+        var rowBehaviors = (row.dataset.behaviors || "").split("|");
+        var behaviorResults = (row.dataset.behaviorResults || "")
+          .split("|")
+          .filter(Boolean)
+          .map(function (entry) {
+            var separatorIndex = entry.lastIndexOf("::");
+            return {
+              behavior: entry.slice(0, separatorIndex),
+              result: entry.slice(separatorIndex + 2),
+            };
+          });
+        var matchesBehaviors =
+          activeBehaviors.length === 0 ||
+          activeBehaviors.some(function (behavior) {
+            return rowBehaviors.includes(behavior);
           });
         var matchesStatus =
           !selectedStatus || row.dataset.status === selectedStatus;
+        var matchesResult =
+          !selectedResult ||
+          behaviorResults.some(function (review) {
+            return (
+              review.result === selectedResult &&
+              (activeBehaviors.length === 0 ||
+                activeBehaviors.includes(review.behavior))
+            );
+          });
         var show =
-          matchesTags &&
+          matchesBehaviors &&
           matchesStatus &&
-          (!query || row.dataset.search.toLowerCase().includes(query));
+          matchesResult &&
+          (!query ||
+            (row.dataset.search + " " + row.dataset.status)
+              .toLowerCase()
+              .includes(query));
         row.hidden = !show;
       });
       rows
@@ -805,52 +998,68 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     }
 
     searchInput.addEventListener("input", applyQueueState);
-    tagFilterTriggers.forEach(function (trigger) {
+    behaviorOverflowTriggers.forEach(function (trigger) {
+      trigger.addEventListener("click", function () {
+        var summary = trigger.closest(".moderation-behavior-summary");
+        summary
+          .querySelectorAll("[data-behavior-overflow-item]")
+          .forEach(function (item) {
+            item.hidden = false;
+          });
+        trigger.setAttribute("aria-expanded", "true");
+        trigger.hidden = true;
+      });
+    });
+    behaviorFilterTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function (event) {
         event.stopPropagation();
-        if (tagFilterPopover.hidden || activeTagFilterTrigger !== trigger) {
-          openTagFilter(trigger);
+        if (
+          behaviorFilterPopover.hidden ||
+          activeBehaviorFilterTrigger !== trigger
+        ) {
+          openBehaviorFilter(trigger);
         } else {
-          closeTagFilter();
+          closeBehaviorFilter();
         }
       });
     });
-    tagOptions.forEach(function (option) {
+    behaviorOptions.forEach(function (option) {
       option.addEventListener("change", function () {
         if (option.checked) {
-          selectedTags.add(option.value);
+          selectedBehaviors.add(option.value);
         } else {
-          selectedTags.delete(option.value);
+          selectedBehaviors.delete(option.value);
         }
-        renderSelectedTags();
+        renderSelectedBehaviors();
         applyQueueState();
       });
     });
-    selectedTagsContainer.addEventListener("click", function (event) {
+    selectedBehaviorsContainer.addEventListener("click", function (event) {
       var removeButton = event.target.closest(".bw-tag-x");
       if (!removeButton) return;
-      var chip = removeButton.closest("[data-selected-tag]");
+      var chip = removeButton.closest("[data-selected-behavior]");
       if (!chip) return;
-      selectedTags.delete(chip.dataset.selectedTag);
-      tagOptions.forEach(function (option) {
-        if (option.value === chip.dataset.selectedTag) option.checked = false;
+      selectedBehaviors.delete(chip.dataset.selectedBehavior);
+      behaviorOptions.forEach(function (option) {
+        if (option.value === chip.dataset.selectedBehavior)
+          option.checked = false;
       });
-      renderSelectedTags();
+      renderSelectedBehaviors();
       applyQueueState();
     });
-    tagFilterReset.addEventListener("click", function () {
-      selectedTags.clear();
-      tagOptions.forEach(function (option) {
+    behaviorFilterReset.addEventListener("click", function () {
+      selectedBehaviors.clear();
+      behaviorOptions.forEach(function (option) {
         option.checked = false;
       });
-      closeTagFilter();
-      renderSelectedTags();
+      closeBehaviorFilter();
+      renderSelectedBehaviors();
       applyQueueState();
     });
-    tagFilterSearch.addEventListener("input", function () {
-      var query = tagFilterSearch.value.trim().toLowerCase();
-      tagOptions.forEach(function (option) {
-        option.closest("[data-tag-filter-option-row]").hidden =
+    behaviorFilterSearch.addEventListener("input", function () {
+      var query = behaviorFilterSearch.value.trim().toLowerCase();
+      behaviorOptions.forEach(function (option) {
+        option.closest("[data-behavior-filter-option-row]").hidden =
           query && !option.value.toLowerCase().includes(query);
       });
     });
@@ -868,7 +1077,43 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       applyQueueState();
     }
 
-    function createStatusOption(status) {
+    function setResultFilter(result) {
+      selectedResult = result || "";
+      resultFilterOptionsRoot
+        .querySelectorAll("[data-result-filter-option]")
+        .forEach(function (option) {
+          var isSelected =
+            option.dataset.resultFilterOption === selectedResult;
+          option.classList.toggle("is-active", isSelected);
+          option.setAttribute("aria-checked", String(isSelected));
+        });
+      applyQueueState();
+    }
+
+    function updateRowStatus(row, status) {
+      var trigger = row.querySelector("[data-row-status-trigger]");
+      row.dataset.status = status;
+      trigger.textContent = status;
+      trigger.classList.remove(
+        "moderation-table__status-tag--pending",
+        "moderation-table__status-tag--in-review",
+        "moderation-table__status-tag--reviewed",
+      );
+      if (status === "Pending") {
+        trigger.classList.add("moderation-table__status-tag--pending");
+      } else if (status === "In review") {
+        trigger.classList.add("moderation-table__status-tag--in-review");
+      } else if (status === "Reviewed") {
+        trigger.classList.add("moderation-table__status-tag--reviewed");
+      }
+      row.querySelectorAll("[data-row-status-option]").forEach(function (option) {
+        var isSelected = option.dataset.rowStatusOption === status;
+        option.classList.toggle("is-active", isSelected);
+        option.setAttribute("aria-checked", String(isSelected));
+      });
+    }
+
+    function createStatusOption(status, optionType) {
       var option = document.createElement("button");
       var check = document.createElement("span");
       var checkIcon = document.createElementNS(
@@ -885,7 +1130,11 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
         "m__menu-button-item conversation-report__report-item moderation-table__status-option";
       option.setAttribute("role", "menuitemradio");
       option.setAttribute("aria-checked", "false");
-      option.dataset.statusFilterOption = status;
+      if (optionType === "row") {
+        option.dataset.rowStatusOption = status;
+      } else {
+        option.dataset.statusFilterOption = status;
+      }
       check.className =
         "conversation-report__report-item-icon moderation-table__status-option-check";
       check.setAttribute("aria-hidden", "true");
@@ -928,6 +1177,11 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       });
       if (exists) return;
       statusFilterOptionsRoot.appendChild(createStatusOption(normalized));
+      root
+        .querySelectorAll("[data-row-status-options]")
+        .forEach(function (options) {
+          options.appendChild(createStatusOption(normalized, "row"));
+        });
       statusModalList.appendChild(createStatusChip(normalized));
     }
 
@@ -938,12 +1192,24 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
         .forEach(function (option) {
           if (option.dataset.statusFilterOption === status) option.remove();
         });
+      root
+        .querySelectorAll("[data-row-status-option]")
+        .forEach(function (option) {
+          if (option.dataset.rowStatusOption === status) option.remove();
+        });
+      rows.forEach(function (row) {
+        if (row.dataset.status === status) updateRowStatus(row, "Pending");
+      });
       statusModalList
         .querySelectorAll("[data-status-modal-item]")
         .forEach(function (item) {
           if (item.dataset.statusModalItem === status) item.remove();
         });
-      if (selectedStatus === status) setStatusFilter("");
+      if (selectedStatus === status) {
+        setStatusFilter("");
+      } else {
+        applyQueueState();
+      }
     }
 
     function requestRemoveStatus(status) {
@@ -960,6 +1226,32 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
       var statusOption = event.target.closest("[data-status-filter-option]");
       if (!statusOption) return;
       setStatusFilter(statusOption.dataset.statusFilterOption || "");
+    });
+
+    document.addEventListener("click", function (event) {
+      var statusOption = event.target.closest("[data-row-status-option]");
+      if (!statusOption) return;
+      var options = statusOption.closest("[data-row-status-options]");
+      var row = rows.find(function (candidate) {
+        return candidate.dataset.index === options.dataset.rowIndex;
+      });
+      if (!row) return;
+      updateRowStatus(row, statusOption.dataset.rowStatusOption);
+      options
+        .querySelectorAll("[data-row-status-option]")
+        .forEach(function (option) {
+          var isSelected =
+            option.dataset.rowStatusOption === row.dataset.status;
+          option.classList.toggle("is-active", isSelected);
+          option.setAttribute("aria-checked", String(isSelected));
+        });
+      applyQueueState();
+    });
+
+    document.addEventListener("click", function (event) {
+      var resultOption = event.target.closest("[data-result-filter-option]");
+      if (!resultOption) return;
+      setResultFilter(resultOption.dataset.resultFilterOption || "");
     });
 
     statusAddForm.addEventListener("submit", function (event) {
@@ -981,30 +1273,30 @@ span: 1 }, { emotion: 'neutral', lane: 'full', span: 2 }, { emotion:
     });
 
     document.addEventListener("click", function (event) {
-      if (tagFilterPopover.hidden) return;
-      if (tagFilterPopover.contains(event.target)) return;
-      if (event.target.closest("[data-tag-filter-trigger]")) return;
-      closeTagFilter();
+      if (behaviorFilterPopover.hidden) return;
+      if (behaviorFilterPopover.contains(event.target)) return;
+      if (event.target.closest("[data-behavior-filter-trigger]")) return;
+      closeBehaviorFilter();
     });
     document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") closeTagFilter();
+      if (event.key === "Escape") closeBehaviorFilter();
     });
     window.addEventListener("resize", function () {
-      if (!tagFilterPopover.hidden && activeTagFilterTrigger) {
-        positionTagFilter(activeTagFilterTrigger);
+      if (!behaviorFilterPopover.hidden && activeBehaviorFilterTrigger) {
+        positionBehaviorFilter(activeBehaviorFilterTrigger);
       }
     });
     document.addEventListener(
       "scroll",
       function () {
-        if (!tagFilterPopover.hidden && activeTagFilterTrigger) {
-          positionTagFilter(activeTagFilterTrigger);
+        if (!behaviorFilterPopover.hidden && activeBehaviorFilterTrigger) {
+          positionBehaviorFilter(activeBehaviorFilterTrigger);
         }
       },
       true,
     );
     sortFilter.addEventListener("change", applyQueueState);
-    renderSelectedTags();
+    renderSelectedBehaviors();
     applyQueueState();
   })();
 </script>

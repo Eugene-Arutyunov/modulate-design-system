@@ -273,7 +273,7 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
                   data-status-add-input
                 />
               </div>
-              <button type="submit" class="m__button-secondary-outline M">
+              <button type="submit" class="m__button-primary M">
                 Add
               </button>
             </form>
@@ -326,6 +326,140 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
           </div>
         </div>
       </div>
+      <div
+        class="m__modal-backdrop"
+        id="modal-verdict-comment"
+        hidden
+        aria-modal="true"
+        role="dialog"
+        aria-labelledby="modal-verdict-comment-title"
+      >
+        <div class="m__modal moderation-verdict-comment-modal">
+          <form data-review-comment-form>
+            <div class="m__modal__header">
+              <div class="moderation-verdict-comment-modal__title">
+                <h2
+                  class="m__modal__title moderation-verdict-comment-modal__behavior"
+                  id="modal-verdict-comment-title"
+                  data-review-comment-behavior
+                >
+                  Behavior
+                </h2>
+              </div>
+              <button
+                type="button"
+                class="m__modal__close"
+                aria-label="Close"
+                data-review-comment-cancel
+              >
+                <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+                  <use href="#close"></use>
+                </svg>
+              </button>
+            </div>
+            <div class="m__modal__body">
+              <div class="moderation-verdict-comment-modal__context">
+                <dl class="moderation-verdict-comment-modal__details">
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Speaker</dt>
+                    <dd data-review-comment-speaker></dd>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Model reasoning</dt>
+                    <dd data-review-comment-reasoning></dd>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Confidence</dt>
+                    <dd
+                      class="pg-num"
+                      data-review-comment-confidence
+                    ></dd>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Evidence</dt>
+                    <dd
+                      class="moderation-verdict-comment-modal__evidence"
+                      data-review-comment-evidence
+                    ></dd>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Verdict</dt>
+                    <dd>
+                      <div
+                        class="moderation-verdict-comment-modal__choices"
+                        data-review-comment-choices
+                      >
+                        <button
+                          type="button"
+                          class="m__button-success-outline S moderation-review-behaviors__action"
+                          data-review-comment-choice="true"
+                          aria-pressed="false"
+                        >
+                          True
+                        </button>
+                        <button
+                          type="button"
+                          class="m__button-danger-outline S moderation-review-behaviors__action"
+                          data-review-comment-choice="false"
+                          aria-pressed="false"
+                        >
+                          False positive
+                        </button>
+                      </div>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+              <div
+                class="moderation-verdict-comment-modal__thread"
+                data-review-comment-list
+                aria-live="polite"
+                hidden
+              ></div>
+              <div
+                class="m__textfield M moderation-verdict-comment-modal__composer-field"
+              >
+                <div
+                  class="moderation-verdict-comment-modal__editing-state"
+                  data-review-comment-editing-state
+                  hidden
+                >
+                  <div
+                    class="moderation-verdict-comment-modal__editing-header"
+                  >
+                    <span>Edit comment</span>
+                    <button
+                      type="button"
+                      class="moderation-review-behaviors__comment-link"
+                      data-review-comment-edit-cancel
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+                <div class="moderation-verdict-comment-modal__composer">
+                  <textarea
+                    id="verdict-comment"
+                    class="m__textarea--autogrow"
+                    rows="1"
+                    maxlength="500"
+                    aria-label="Write a comment"
+                    placeholder="Write a comment..."
+                    data-review-comment-input
+                  ></textarea>
+                  <button
+                    type="submit"
+                    class="m__button-primary M"
+                    data-review-comment-submit
+                  >
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </main>
   </div>
   <div class="m__space XL"></div>
@@ -349,6 +483,362 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
   (function () {
     var root = document.querySelector("[data-moderation-review]");
     if (!root) return;
+    var reviewerNameElement = document.querySelector(
+      ".prototype-header__user-name",
+    );
+    var reviewerName = reviewerNameElement
+      ? reviewerNameElement.textContent.trim()
+      : "Current reviewer";
+    var activeEvidenceTarget = null;
+    var activeCommentReview = null;
+    var editingCommentIndex = -1;
+    var reviewComments = new WeakMap();
+
+    var commentModal = document.getElementById("modal-verdict-comment");
+    var commentForm = commentModal.querySelector("[data-review-comment-form]");
+    var commentInput = commentModal.querySelector("[data-review-comment-input]");
+    var commentBehavior = commentModal.querySelector(
+      "[data-review-comment-behavior]",
+    );
+    var commentSpeaker = commentModal.querySelector(
+      "[data-review-comment-speaker]",
+    );
+    var commentReasoning = commentModal.querySelector(
+      "[data-review-comment-reasoning]",
+    );
+    var commentConfidence = commentModal.querySelector(
+      "[data-review-comment-confidence]",
+    );
+    var commentEvidence = commentModal.querySelector(
+      "[data-review-comment-evidence]",
+    );
+    var commentChoices = commentModal.querySelector(
+      "[data-review-comment-choices]",
+    );
+    var commentList = commentModal.querySelector("[data-review-comment-list]");
+    var commentEditingState = commentModal.querySelector(
+      "[data-review-comment-editing-state]",
+    );
+    var commentSubmit = commentModal.querySelector(
+      "[data-review-comment-submit]",
+    );
+    var behaviorFilterTrigger = root.querySelector(
+      "[data-review-behavior-filter-trigger]",
+    );
+    var behaviorFilterLabel = root.querySelector(
+      "[data-review-behavior-filter-label]",
+    );
+    var behaviorFilterRoot = root.querySelector(
+      "[data-review-behavior-filter-root]",
+    );
+    var behaviorFilterPopover = root.querySelector(
+      "[data-review-behavior-filter-popover]",
+    );
+    var behaviorFilterSearch = root.querySelector(
+      "[data-review-behavior-filter-search]",
+    );
+    var behaviorFilterOptions = Array.from(
+      root.querySelectorAll("[data-review-behavior-filter-option]"),
+    );
+    var selectedBehaviorsContainer = root.querySelector(
+      "[data-review-selected-behaviors]",
+    );
+    var behaviorFilterReset = root.querySelector(
+      "[data-review-behavior-filter-reset]",
+    );
+    var behaviorFilterEmptyState = root.querySelector(
+      "[data-review-behavior-filter-empty]",
+    );
+    var behaviorFilterEmptyReset = root.querySelector(
+      "[data-review-behavior-filter-empty-reset]",
+    );
+    var verdictFilterLabel = root.querySelector(
+      "[data-review-verdict-filter-label]",
+    );
+    var verdictFilterOptionsRoot = root.querySelector(
+      "[data-review-verdict-filter-options]",
+    );
+    var selectedBehaviorFilters = new Set();
+    var selectedVerdictFilter = "";
+    var reviewBehaviorRows = [];
+    var reviewSpeakerGroups = [];
+
+    function setReviewResult(review, value) {
+      var state = review.querySelector("[data-review-state]");
+      var meta = review.querySelector("[data-review-meta]");
+      var nextValue = review.dataset.reviewResult === value ? "" : value;
+      review.querySelectorAll("[data-review-choice]").forEach(function (button) {
+        var isSelected = button.dataset.reviewChoice === nextValue;
+        button.classList.toggle("is-selected", isSelected);
+        button.setAttribute("aria-pressed", String(isSelected));
+      });
+      if (nextValue) {
+        review.dataset.reviewResult = nextValue;
+      } else {
+        delete review.dataset.reviewResult;
+      }
+      if (state) state.textContent = nextValue ? reviewerName : "";
+      if (meta) meta.hidden = false;
+      applyReviewBehaviorFilters();
+    }
+
+    function getReviewComments(review) {
+      if (!reviewComments.has(review)) reviewComments.set(review, []);
+      return reviewComments.get(review);
+    }
+
+    function formatCommentTimestamp(value) {
+      var date = new Date(value);
+      var now = new Date();
+      var targetDay = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+      );
+      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var dayDifference = Math.round((today - targetDay) / 86400000);
+      var dayLabel =
+        dayDifference === 0
+          ? "Today"
+          : dayDifference === 1
+            ? "Yesterday"
+            : date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              });
+      var timeLabel = date.toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      return dayLabel + ", " + timeLabel;
+    }
+
+    function updateCommentSummary(review) {
+      var comments = getReviewComments(review);
+      var trigger = review.querySelector("[data-review-comment-trigger]");
+      if (comments.length) {
+        review.dataset.reviewCommentCount = String(comments.length);
+      } else {
+        delete review.dataset.reviewCommentCount;
+      }
+      trigger.textContent = comments.length
+        ? comments.length + " comment" + (comments.length === 1 ? "" : "s")
+        : "Add comment";
+    }
+
+    function resetCommentEditor() {
+      editingCommentIndex = -1;
+      commentInput.value = "";
+      commentInput.setAttribute("aria-label", "Write a comment");
+      commentSubmit.textContent = "Send";
+      commentEditingState.hidden = true;
+    }
+
+    function getReviewSpeaker(review) {
+      var row = review;
+      while (row) {
+        var speaker = row.querySelector(".pg-behavior-speaker-cell");
+        if (speaker) return speaker.textContent.trim();
+        row = row.previousElementSibling;
+      }
+      return "";
+    }
+
+    function renderCommentDetails(review) {
+      var reasoning = review.querySelector(".pg-model-reasoning");
+      var confidence = review.querySelector("td.pg-num");
+      var evidence = review.querySelectorAll(".pg-evidence-link");
+      commentSpeaker.textContent = getReviewSpeaker(review);
+      commentReasoning.textContent = reasoning
+        ? reasoning.textContent.trim()
+        : "";
+      commentConfidence.textContent = confidence
+        ? confidence.textContent.trim()
+        : "";
+      commentEvidence.replaceChildren();
+      evidence.forEach(function (item) {
+        var excerpt = document.createElement("a");
+        excerpt.className = "pg-evidence-link";
+        excerpt.href = item.getAttribute("href");
+        excerpt.textContent = item.textContent.trim();
+        commentEvidence.appendChild(excerpt);
+      });
+    }
+
+    function renderCommentVerdict(review) {
+      var selectedResult = review.dataset.reviewResult || "";
+      if (selectedResult) {
+        commentChoices.dataset.reviewResult = selectedResult;
+      } else {
+        delete commentChoices.dataset.reviewResult;
+      }
+      commentChoices
+        .querySelectorAll("[data-review-comment-choice]")
+        .forEach(function (button) {
+          var isSelected = button.dataset.reviewCommentChoice === selectedResult;
+          button.classList.toggle("is-selected", isSelected);
+          button.setAttribute("aria-pressed", String(isSelected));
+        });
+    }
+
+    function renderCommentList() {
+      var comments = activeCommentReview
+        ? getReviewComments(activeCommentReview)
+        : [];
+      commentList.replaceChildren();
+      if (!comments.length) {
+        var emptyState = document.createElement("p");
+        emptyState.className =
+          "moderation-verdict-comment-modal__empty-state";
+        emptyState.textContent = "No comments yet";
+        commentList.appendChild(emptyState);
+      }
+      comments.forEach(function (comment, index) {
+        var item = document.createElement("article");
+        var header = document.createElement("div");
+        var identity = document.createElement("div");
+        var author = document.createElement("strong");
+        var timestamp = document.createElement("time");
+        var text = document.createElement("p");
+        item.className = "moderation-verdict-comment-modal__comment";
+        header.className = "moderation-verdict-comment-modal__comment-header";
+        identity.className =
+          "moderation-verdict-comment-modal__comment-identity";
+        author.textContent = comment.author;
+        if (!comment.createdAt) comment.createdAt = new Date().toISOString();
+        timestamp.className =
+          "moderation-verdict-comment-modal__comment-timestamp";
+        timestamp.dateTime = comment.createdAt;
+        timestamp.textContent = formatCommentTimestamp(comment.createdAt);
+        text.textContent = comment.text;
+        identity.append(author, timestamp);
+        header.appendChild(identity);
+        if (comment.author === reviewerName) {
+          var actions = document.createElement("span");
+          var edit = document.createElement("button");
+          var remove = document.createElement("button");
+          actions.className =
+            "moderation-verdict-comment-modal__comment-actions";
+          edit.type = "button";
+          edit.className = "moderation-review-behaviors__comment-link";
+          edit.dataset.modalCommentEdit = String(index);
+          edit.textContent = "Edit";
+          remove.type = "button";
+          remove.className = "moderation-review-behaviors__comment-link";
+          remove.dataset.modalCommentDelete = String(index);
+          remove.textContent = "Delete";
+          actions.append(edit, remove);
+          header.appendChild(actions);
+        }
+        item.append(header, text);
+        commentList.appendChild(item);
+      });
+      commentList.hidden = false;
+    }
+
+    function positionReviewBehaviorFilter() {
+      var rect = behaviorFilterTrigger.getBoundingClientRect();
+      var width = behaviorFilterPopover.offsetWidth || 288;
+      var left = Math.min(rect.left, window.innerWidth - width - 8);
+      behaviorFilterPopover.style.left = Math.max(8, left) + "px";
+      behaviorFilterPopover.style.top = rect.bottom + 6 + "px";
+    }
+
+    function closeReviewBehaviorFilter() {
+      behaviorFilterPopover.hidden = true;
+      behaviorFilterTrigger.setAttribute("aria-expanded", "false");
+    }
+
+    function openReviewBehaviorFilter() {
+      behaviorFilterPopover.hidden = false;
+      behaviorFilterTrigger.setAttribute("aria-expanded", "true");
+      positionReviewBehaviorFilter();
+      behaviorFilterSearch.focus();
+    }
+
+    function renderReviewBehaviorFilters() {
+      selectedBehaviorsContainer.replaceChildren();
+      behaviorFilterRoot.hidden = selectedBehaviorFilters.size === 0;
+      behaviorFilterLabel.textContent = selectedBehaviorFilters.size
+        ? selectedBehaviorFilters.size + " selected"
+        : "All";
+      Array.from(selectedBehaviorFilters).forEach(function (behavior) {
+        var chip = document.createElement("span");
+        var name = document.createElement("span");
+        var remove = document.createElement("button");
+        chip.className =
+          "m__tag bw-tag-item moderation-review-behaviors__selected-tag";
+        chip.dataset.reviewSelectedBehavior = behavior;
+        name.className = "bw-tag-item-name";
+        name.textContent = behavior;
+        remove.type = "button";
+        remove.className = "bw-tag-x";
+        remove.setAttribute("aria-label", "Remove " + behavior + " filter");
+        remove.innerHTML = selectedTagRemoveIcon;
+        chip.append(name, remove);
+        selectedBehaviorsContainer.appendChild(chip);
+      });
+    }
+
+    function updateReviewSpeakerGroups() {
+      reviewSpeakerGroups.forEach(function (group) {
+        var visibleRows = group.rows.filter(function (row) {
+          return !row.hidden;
+        });
+        var targetRow = visibleRows[0] || group.rows[0];
+        if (group.cell.parentElement !== targetRow) {
+          targetRow.insertBefore(group.cell, targetRow.firstElementChild);
+        }
+        group.cell.rowSpan = Math.max(1, visibleRows.length);
+      });
+    }
+
+    function applyReviewBehaviorFilters() {
+      var visibleRowCount = 0;
+      reviewBehaviorRows.forEach(function (row) {
+        var matchesBehavior =
+          selectedBehaviorFilters.size === 0 ||
+          selectedBehaviorFilters.has(row.dataset.reviewBehavior);
+        var matchesVerdict =
+          !selectedVerdictFilter ||
+          row.dataset.reviewResult === selectedVerdictFilter;
+        row.hidden = !(matchesBehavior && matchesVerdict);
+        if (!row.hidden) visibleRowCount += 1;
+      });
+      behaviorFilterEmptyState.hidden = visibleRowCount > 0;
+      updateReviewSpeakerGroups();
+    }
+
+    function resetReviewBehaviorFilters() {
+      selectedBehaviorFilters.clear();
+      behaviorFilterOptions.forEach(function (option) {
+        option.checked = false;
+      });
+      behaviorFilterSearch.value = "";
+      closeReviewBehaviorFilter();
+      renderReviewBehaviorFilters();
+      setReviewVerdictFilter("");
+    }
+
+    function setReviewVerdictFilter(value) {
+      selectedVerdictFilter = value || "";
+      verdictFilterLabel.textContent =
+        selectedVerdictFilter === "true"
+          ? "True positive"
+          : selectedVerdictFilter === "false"
+            ? "False positive"
+            : "All";
+      verdictFilterOptionsRoot
+        .querySelectorAll("[data-review-verdict-filter-option]")
+        .forEach(function (option) {
+          var isSelected =
+            option.dataset.reviewVerdictFilterOption ===
+            selectedVerdictFilter;
+          option.classList.toggle("is-active", isSelected);
+          option.setAttribute("aria-checked", String(isSelected));
+        });
+      applyReviewBehaviorFilters();
+    }
 
     var statusControl = root.querySelector("[data-review-status-control]");
     var statusLabel = root.querySelector("[data-review-status-label]");
@@ -518,6 +1008,76 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       window.M.closeModal(statusRemoveConfirmModal);
     });
 
+    behaviorFilterTrigger.addEventListener("click", function (event) {
+      event.stopPropagation();
+      if (behaviorFilterPopover.hidden) {
+        openReviewBehaviorFilter();
+      } else {
+        closeReviewBehaviorFilter();
+      }
+    });
+    behaviorFilterOptions.forEach(function (option) {
+      option.addEventListener("change", function () {
+        if (option.checked) {
+          selectedBehaviorFilters.add(option.value);
+        } else {
+          selectedBehaviorFilters.delete(option.value);
+        }
+        renderReviewBehaviorFilters();
+        applyReviewBehaviorFilters();
+      });
+    });
+    selectedBehaviorsContainer.addEventListener("click", function (event) {
+      var removeButton = event.target.closest(".bw-tag-x");
+      if (!removeButton) return;
+      var chip = removeButton.closest("[data-review-selected-behavior]");
+      if (!chip) return;
+      selectedBehaviorFilters.delete(chip.dataset.reviewSelectedBehavior);
+      behaviorFilterOptions.forEach(function (option) {
+        if (option.value === chip.dataset.reviewSelectedBehavior) {
+          option.checked = false;
+        }
+      });
+      renderReviewBehaviorFilters();
+      applyReviewBehaviorFilters();
+    });
+    behaviorFilterReset.addEventListener("click", resetReviewBehaviorFilters);
+    behaviorFilterEmptyReset.addEventListener(
+      "click",
+      resetReviewBehaviorFilters,
+    );
+    behaviorFilterSearch.addEventListener("input", function () {
+      var query = behaviorFilterSearch.value.trim().toLowerCase();
+      behaviorFilterOptions.forEach(function (option) {
+        option.closest("[data-review-behavior-filter-option-row]").hidden =
+          query && !option.value.toLowerCase().includes(query);
+      });
+    });
+    verdictFilterOptionsRoot.addEventListener("click", function (event) {
+      var option = event.target.closest("[data-review-verdict-filter-option]");
+      if (!option) return;
+      setReviewVerdictFilter(option.dataset.reviewVerdictFilterOption);
+    });
+    document.addEventListener("click", function (event) {
+      if (behaviorFilterPopover.hidden) return;
+      if (behaviorFilterPopover.contains(event.target)) return;
+      if (event.target.closest("[data-review-behavior-filter-trigger]")) return;
+      closeReviewBehaviorFilter();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeReviewBehaviorFilter();
+    });
+    window.addEventListener("resize", function () {
+      if (!behaviorFilterPopover.hidden) positionReviewBehaviorFilter();
+    });
+    document.addEventListener(
+      "scroll",
+      function () {
+        if (!behaviorFilterPopover.hidden) positionReviewBehaviorFilter();
+      },
+      true,
+    );
+
     var behaviorTable = root.querySelector(".pg-velma-output .pg-behaviors-table");
     if (behaviorTable) {
       behaviorTable.classList.add("moderation-review-behaviors__table");
@@ -544,30 +1104,164 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         actions.className = "moderation-review-behaviors__actions";
 
         if (row.classList.contains("pg-behavior-row--detected")) {
+          var behaviorLink = row.querySelector(".pg-behavior-link");
           row.setAttribute("data-detection-review", "");
-          actions.innerHTML = '<button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false">False positive</button>';
+          row.dataset.reviewBehavior = behaviorLink
+            ? behaviorLink.textContent.trim()
+            : "";
+          reviewBehaviorRows.push(row);
+          actions.innerHTML = '<div class="moderation-review-behaviors__controls"><div class="moderation-review-behaviors__choices"><button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true" aria-pressed="false">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false" aria-pressed="false">False positive</button></div><div class="moderation-review-behaviors__review-meta" data-review-meta><button type="button" class="moderation-review-behaviors__comment-link" data-review-comment-trigger>Add comment</button></div></div>';
         }
 
         row.appendChild(actions);
       });
+
+      var currentSpeakerGroup = null;
+      reviewBehaviorRows.forEach(function (row) {
+        var speakerCell = row.querySelector(".pg-behavior-speaker-cell");
+        if (speakerCell) {
+          currentSpeakerGroup = { cell: speakerCell, rows: [] };
+          reviewSpeakerGroups.push(currentSpeakerGroup);
+        }
+        if (currentSpeakerGroup) currentSpeakerGroup.rows.push(row);
+      });
+      renderReviewBehaviorFilters();
+      setReviewVerdictFilter("");
     }
 
     root.addEventListener("click", function (event) {
-      var reviewChoice = event.target.closest("[data-review-choice]");
-      if (!reviewChoice) return;
-      var review = reviewChoice.closest("[data-detection-review]");
-      if (!review) return;
-      var state = review.querySelector("[data-review-state]");
-      review.querySelectorAll("[data-review-choice]").forEach(function (button) {
-        button.classList.remove("is-selected");
-      });
-      reviewChoice.classList.add("is-selected");
-      review.dataset.reviewResult = reviewChoice.dataset.reviewChoice;
-      if (state) {
-        state.textContent = reviewChoice.dataset.reviewChoice === "true"
-          ? "Validated true"
-          : "False positive · ready to unflag";
+      var evidenceLink = event.target.closest(".pg-evidence-link[href^='#']");
+      if (evidenceLink) {
+        var target = root.querySelector(evidenceLink.getAttribute("href"));
+        if (!target) return;
+        event.preventDefault();
+        if (commentModal.contains(evidenceLink)) {
+          activeCommentReview = null;
+          window.M.closeModal(commentModal);
+        }
+        if (activeEvidenceTarget) {
+          activeEvidenceTarget.classList.remove("is-evidence-highlighted");
+        }
+        activeEvidenceTarget = target;
+        target.classList.add("is-evidence-highlighted");
+        evidenceLink.blur();
+        target.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "auto"
+            : "smooth",
+          block: "center",
+        });
+        return;
       }
+
+      var reviewChoice = event.target.closest("[data-review-choice]");
+      if (reviewChoice) {
+        var review = reviewChoice.closest("[data-detection-review]");
+        if (!review) return;
+        setReviewResult(review, reviewChoice.dataset.reviewChoice);
+        return;
+      }
+
+      var commentTrigger = event.target.closest("[data-review-comment-trigger]");
+      if (commentTrigger) {
+        activeCommentReview = commentTrigger.closest("[data-detection-review]");
+        var behaviorLabel = activeCommentReview.querySelector(
+          ".pg-behavior-link",
+        );
+        commentBehavior.innerHTML = behaviorLabel
+          ? behaviorLabel.innerHTML
+          : "Behavior";
+        renderCommentVerdict(activeCommentReview);
+        renderCommentDetails(activeCommentReview);
+        resetCommentEditor();
+        renderCommentList();
+        window.M.openModal(commentModal);
+        return;
+      }
+
+      var commentChoice = event.target.closest("[data-review-comment-choice]");
+      if (commentChoice && activeCommentReview) {
+        setReviewResult(
+          activeCommentReview,
+          commentChoice.dataset.reviewCommentChoice,
+        );
+        renderCommentVerdict(activeCommentReview);
+        return;
+      }
+
+      var modalCommentEdit = event.target.closest("[data-modal-comment-edit]");
+      if (modalCommentEdit && activeCommentReview) {
+        editingCommentIndex = Number(modalCommentEdit.dataset.modalCommentEdit);
+        var editingComment = getReviewComments(activeCommentReview)[
+          editingCommentIndex
+        ];
+        if (!editingComment) return;
+        commentInput.value = editingComment.text;
+        commentInput.setAttribute("aria-label", "Edit comment");
+        commentSubmit.textContent = "Save";
+        commentEditingState.hidden = false;
+        commentInput.focus();
+        commentInput.setSelectionRange(
+          commentInput.value.length,
+          commentInput.value.length,
+        );
+        return;
+      }
+
+      var commentEditCancel = event.target.closest(
+        "[data-review-comment-edit-cancel]",
+      );
+      if (commentEditCancel) {
+        resetCommentEditor();
+        commentInput.focus();
+        return;
+      }
+
+      var modalCommentDelete = event.target.closest(
+        "[data-modal-comment-delete]",
+      );
+      if (modalCommentDelete && activeCommentReview) {
+        var deletingCommentIndex = Number(
+          modalCommentDelete.dataset.modalCommentDelete,
+        );
+        getReviewComments(activeCommentReview).splice(deletingCommentIndex, 1);
+        resetCommentEditor();
+        renderCommentList();
+        updateCommentSummary(activeCommentReview);
+        return;
+      }
+
+      var commentCancel = event.target.closest("[data-review-comment-cancel]");
+      if (commentCancel) {
+        activeCommentReview = null;
+        window.M.closeModal(commentModal);
+        return;
+      }
+    });
+
+    commentForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (!activeCommentReview) return;
+      var value = commentInput.value.trim();
+      if (!value) {
+        commentInput.focus();
+        return;
+      }
+      var comments = getReviewComments(activeCommentReview);
+      if (editingCommentIndex >= 0 && comments[editingCommentIndex]) {
+        comments[editingCommentIndex].text = value;
+      } else {
+        comments.push({
+          author: reviewerName,
+          text: value,
+          createdAt: new Date().toISOString(),
+        });
+      }
+      updateCommentSummary(activeCommentReview);
+      resetCommentEditor();
+      renderCommentList();
+      commentInput.focus();
     });
   })();
 </script>
