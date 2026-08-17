@@ -3864,12 +3864,12 @@ table.config-details {
 
 .moderation-verdict-comment-modal__thread {
   display: flex;
+  box-sizing: border-box;
   min-height: 0;
   flex: 1 1 auto;
   flex-direction: column;
   gap: var(--m__gap-m);
-  margin-top: var(--m__spacer-m);
-  margin-bottom: var(--m__spacer-m);
+  padding-block: var(--m__spacer-m);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -3917,8 +3917,23 @@ table.config-details {
 }
 
 .moderation-verdict-comment-modal__composer-field {
+  position: relative;
+  z-index: 1;
   margin-top: auto;
   flex: 0 0 auto;
+  background-color: var(--m__bg);
+}
+
+.moderation-verdict-comment-modal__composer-field::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: var(--m__spacer-l);
+  background: linear-gradient(to bottom, transparent, var(--m__bg));
+  pointer-events: none;
 }
 
 .moderation-verdict-comment-modal__composer textarea.m__textarea--autogrow {
