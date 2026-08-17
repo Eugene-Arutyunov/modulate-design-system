@@ -3714,13 +3714,13 @@ table.config-details {
   transition-duration: var(--m__duration-instant);
 }
 
-.moderation-verdict-comment-modal {
-  max-width: 34rem;
+.m__modal.moderation-verdict-comment-modal {
+  max-width: 40rem;
 }
 
 .moderation-verdict-comment-modal form {
   display: flex;
-  height: min(34rem, calc(100dvh - 6rem));
+  height: min(40rem, calc(100dvh - 6rem));
   max-height: calc(100dvh - 6rem);
   flex-direction: column;
 }
@@ -3762,22 +3762,104 @@ table.config-details {
   vertical-align: -0.15em;
 }
 
-.moderation-verdict-comment-modal__verdict {
+.moderation-verdict-comment-modal__context {
+  flex: 0 0 auto;
+  margin-inline: calc(-1 * var(--m__modal-padding));
+  padding: 0 var(--m__modal-padding) var(--m__spacer-m);
+  border-bottom: var(--m__border-width-s) solid
+    color-mix(in srgb, var(--m__text) 12%, transparent);
+}
+
+.moderation-verdict-comment-modal__details {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+}
+
+.moderation-verdict-comment-modal__detail {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: var(--m__gap-s);
+  align-items: baseline;
   font-size: var(--m__font-size-s);
-  font-weight: var(--m__font-weight-medium);
+  line-height: 1.4;
+}
+
+.moderation-verdict-comment-modal__detail dt {
+  color: var(--m__text-caption);
+  font-weight: var(--m__font-weight-regular);
+}
+
+.moderation-verdict-comment-modal__detail dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--m__text);
+}
+
+.moderation-verdict-comment-modal__evidence {
+  display: grid;
+  min-width: 0;
+  gap: var(--m__gap-nav-menu-item);
+}
+
+.moderation-verdict-comment-modal__evidence a {
+  --moderation-comment-evidence-bg: var(--m__bg-surface);
+  --moderation-comment-evidence-bg-hover: color-mix(
+    in srgb,
+    var(--m__bg-accent-hover) 12%,
+    var(--m__bg-surface)
+  );
+  --moderation-comment-evidence-pad-right: 0.5rem;
+  position: relative;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.3rem var(--moderation-comment-evidence-pad-right) 0.3rem
+    0.35rem;
+  border-radius: var(--m__rounded-radius);
+  corner-shape: squircle;
+  background-color: var(--moderation-comment-evidence-bg);
+  color: var(--m__text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  text-decoration: none;
   white-space: nowrap;
+  transition:
+    background-color var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 }
 
-.moderation-verdict-comment-modal__verdict[hidden] {
-  display: none;
+.moderation-verdict-comment-modal__evidence a::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: var(--moderation-comment-evidence-pad-right);
+  bottom: 0;
+  width: 1.2rem;
+  background: linear-gradient(90deg, transparent, currentColor 100%);
+  color: var(--moderation-comment-evidence-bg);
+  pointer-events: none;
+  transform: translateX(var(--moderation-comment-evidence-pad-right));
+  transition: color var(--m__duration-base) var(--m__easing-base);
 }
 
-.moderation-verdict-comment-modal__verdict[data-review-verdict="true"] {
-  color: var(--m__success);
+.moderation-verdict-comment-modal__evidence a:hover,
+.moderation-verdict-comment-modal__evidence a:focus {
+  background-color: var(--moderation-comment-evidence-bg-hover);
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
 }
 
-.moderation-verdict-comment-modal__verdict[data-review-verdict="false"] {
-  color: var(--m__error);
+.moderation-verdict-comment-modal__evidence a:hover::after,
+.moderation-verdict-comment-modal__evidence a:focus::after {
+  color: var(--moderation-comment-evidence-bg-hover);
+  transition-duration: var(--m__duration-instant);
+}
+
+.moderation-verdict-comment-modal__choices {
+  display: flex;
+  align-items: center;
 }
 
 .moderation-verdict-comment-modal__thread {
@@ -3786,6 +3868,7 @@ table.config-details {
   flex: 1 1 auto;
   flex-direction: column;
   gap: var(--m__gap-m);
+  margin-top: var(--m__spacer-m);
   margin-bottom: var(--m__spacer-m);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -3908,6 +3991,13 @@ table.config-details {
   line-height: 1.45;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+@media (width < 600px) {
+  .moderation-verdict-comment-modal__detail {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
 }
 
 .moderation-review-nav {

@@ -345,11 +345,6 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
                 >
                   Behavior
                 </h2>
-                <span
-                  class="moderation-verdict-comment-modal__verdict"
-                  data-review-comment-verdict
-                  hidden
-                ></span>
               </div>
               <button
                 type="button"
@@ -363,6 +358,58 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
               </button>
             </div>
             <div class="m__modal__body">
+              <div class="moderation-verdict-comment-modal__context">
+                <dl class="moderation-verdict-comment-modal__details">
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Speaker</dt>
+                    <dd data-review-comment-speaker></dd>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Model reasoning</dt>
+                    <dd data-review-comment-reasoning></dd>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Confidence</dt>
+                    <dd
+                      class="pg-num"
+                      data-review-comment-confidence
+                    ></dd>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Evidence</dt>
+                    <dd
+                      class="moderation-verdict-comment-modal__evidence"
+                      data-review-comment-evidence
+                    ></dd>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__detail">
+                    <dt>Verdict</dt>
+                    <dd>
+                      <div
+                        class="moderation-verdict-comment-modal__choices"
+                        data-review-comment-choices
+                      >
+                        <button
+                          type="button"
+                          class="m__button-success-outline S moderation-review-behaviors__action"
+                          data-review-comment-choice="true"
+                          aria-pressed="false"
+                        >
+                          True
+                        </button>
+                        <button
+                          type="button"
+                          class="m__button-danger-outline S moderation-review-behaviors__action"
+                          data-review-comment-choice="false"
+                          aria-pressed="false"
+                        >
+                          False positive
+                        </button>
+                      </div>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
               <div
                 class="moderation-verdict-comment-modal__thread"
                 data-review-comment-list
@@ -453,8 +500,20 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
     var commentBehavior = commentModal.querySelector(
       "[data-review-comment-behavior]",
     );
-    var commentVerdict = commentModal.querySelector(
-      "[data-review-comment-verdict]",
+    var commentSpeaker = commentModal.querySelector(
+      "[data-review-comment-speaker]",
+    );
+    var commentReasoning = commentModal.querySelector(
+      "[data-review-comment-reasoning]",
+    );
+    var commentConfidence = commentModal.querySelector(
+      "[data-review-comment-confidence]",
+    );
+    var commentEvidence = commentModal.querySelector(
+      "[data-review-comment-evidence]",
+    );
+    var commentChoices = commentModal.querySelector(
+      "[data-review-comment-choices]",
     );
     var commentList = commentModal.querySelector("[data-review-comment-list]");
     var commentEditingState = commentModal.querySelector(
@@ -532,6 +591,53 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       commentInput.setAttribute("aria-label", "Write a comment");
       commentSubmit.textContent = "Send";
       commentEditingState.hidden = true;
+    }
+
+    function getReviewSpeaker(review) {
+      var row = review;
+      while (row) {
+        var speaker = row.querySelector(".pg-behavior-speaker-cell");
+        if (speaker) return speaker.textContent.trim();
+        row = row.previousElementSibling;
+      }
+      return "";
+    }
+
+    function renderCommentDetails(review) {
+      var reasoning = review.querySelector(".pg-model-reasoning");
+      var confidence = review.querySelector("td.pg-num");
+      var evidence = review.querySelectorAll(".pg-evidence-link");
+      commentSpeaker.textContent = getReviewSpeaker(review);
+      commentReasoning.textContent = reasoning
+        ? reasoning.textContent.trim()
+        : "";
+      commentConfidence.textContent = confidence
+        ? confidence.textContent.trim()
+        : "";
+      commentEvidence.replaceChildren();
+      evidence.forEach(function (item) {
+        var excerpt = document.createElement("a");
+        excerpt.className = "pg-evidence-link";
+        excerpt.href = item.getAttribute("href");
+        excerpt.textContent = item.textContent.trim();
+        commentEvidence.appendChild(excerpt);
+      });
+    }
+
+    function renderCommentVerdict(review) {
+      var selectedResult = review.dataset.reviewResult || "";
+      if (selectedResult) {
+        commentChoices.dataset.reviewResult = selectedResult;
+      } else {
+        delete commentChoices.dataset.reviewResult;
+      }
+      commentChoices
+        .querySelectorAll("[data-review-comment-choice]")
+        .forEach(function (button) {
+          var isSelected = button.dataset.reviewCommentChoice === selectedResult;
+          button.classList.toggle("is-selected", isSelected);
+          button.setAttribute("aria-pressed", String(isSelected));
+        });
     }
 
     function renderCommentList() {
@@ -797,6 +903,10 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         var target = root.querySelector(evidenceLink.getAttribute("href"));
         if (!target) return;
         event.preventDefault();
+        if (commentModal.contains(evidenceLink)) {
+          activeCommentReview = null;
+          window.M.closeModal(commentModal);
+        }
         if (activeEvidenceTarget) {
           activeEvidenceTarget.classList.remove("is-evidence-highlighted");
         }
@@ -827,26 +937,24 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         var behaviorLabel = activeCommentReview.querySelector(
           ".pg-behavior-link",
         );
-        var selectedChoice = activeCommentReview.querySelector(
-          "[data-review-choice].is-selected",
-        );
         commentBehavior.innerHTML = behaviorLabel
           ? behaviorLabel.innerHTML
           : "Behavior";
-        var selectedResult = selectedChoice
-          ? selectedChoice.dataset.reviewChoice
-          : "";
-        commentVerdict.textContent =
-          selectedResult === "true"
-            ? "True"
-            : selectedResult === "false"
-              ? "False positive"
-              : "";
-        commentVerdict.dataset.reviewVerdict = selectedResult;
-        commentVerdict.hidden = !selectedResult;
+        renderCommentVerdict(activeCommentReview);
+        renderCommentDetails(activeCommentReview);
         resetCommentEditor();
         renderCommentList();
         window.M.openModal(commentModal);
+        return;
+      }
+
+      var commentChoice = event.target.closest("[data-review-comment-choice]");
+      if (commentChoice && activeCommentReview) {
+        setReviewResult(
+          activeCommentReview,
+          commentChoice.dataset.reviewCommentChoice,
+        );
+        renderCommentVerdict(activeCommentReview);
         return;
       }
 
