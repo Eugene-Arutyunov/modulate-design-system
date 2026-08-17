@@ -228,7 +228,149 @@
   {% if not velmaReportOutputReview %}
   <div class="m__space L"></div>
   {% endif %}
+  {% if velmaReportOutputReview %}
+  <div class="moderation-review-behaviors__heading">
+    <h2>Behaviors</h2>
+    <div
+      class="moderation-review-behaviors__filters"
+      aria-label="Behavior table filters"
+    >
+      <button
+        type="button"
+        class="m__select S moderation-review-behaviors__filter"
+        data-review-behavior-filter-trigger
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <span>Behaviors</span>
+        <span class="m__select__inline-control">
+          <span class="m__select__value" data-review-behavior-filter-label
+            >All</span
+          >
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+            <use href="#chevron-down"></use>
+          </svg>
+        </span>
+      </button>
+      <div
+        class="m__menu-button moderation-review-behaviors__verdict-filter"
+      >
+        <button
+          type="button"
+          class="m__select S m__menu-button-trigger moderation-review-behaviors__filter"
+          aria-haspopup="menu"
+          aria-expanded="false"
+        >
+          <span>Verdict</span>
+          <span class="m__select__inline-control">
+            <span class="m__select__value" data-review-verdict-filter-label
+              >All</span
+            >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              aria-hidden="true"
+            >
+              <use href="#chevron-down"></use>
+            </svg>
+          </span>
+        </button>
+        <div
+          class="m__menu-button-list conversation-report__report-list moderation-review-behaviors__verdict-list"
+          hidden
+          role="menu"
+          data-review-verdict-filter-options
+        >
+          {% for verdict in [ { value: '', label: 'All' }, { value: 'true',
+          label: 'True positive' }, { value: 'false', label: 'False positive' }
+          ] %}
+          <button
+            type="button"
+            class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not verdict.value %} is-active{% endif %}"
+            role="menuitemradio"
+            aria-checked="{% if not verdict.value %}true{% else %}false{% endif %}"
+            data-review-verdict-filter-option="{{ verdict.value }}"
+          >
+            <span
+              class="conversation-report__report-item-icon moderation-table__status-option-check"
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 12 12">
+                <use href="#checkmark"></use>
+              </svg>
+            </span>
+            <span class="conversation-report__report-item-title"
+              >{{ verdict.label }}</span
+            >
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="moderation-review-behaviors__tag-filters"
+    data-review-behavior-filter-root
+    aria-label="Selected behavior filters"
+    hidden
+  >
+    <div
+      class="moderation-review-behaviors__selected-tags"
+      data-review-selected-behaviors
+      aria-live="polite"
+    ></div>
+    <button
+      type="button"
+      class="moderation-review-behaviors__filter-reset"
+      data-review-behavior-filter-reset
+    >
+      Reset
+    </button>
+  </div>
+  <div
+    class="m__popover moderation-review-behaviors__filter-popover"
+    data-review-behavior-filter-popover
+    hidden
+  >
+    <label class="m__searchbar" for="review-behavior-filter-search">
+      <svg viewBox="0 0 32 32" aria-hidden="true" width="14" height="14">
+        <use href="#search"></use>
+      </svg>
+      <input
+        type="text"
+        id="review-behavior-filter-search"
+        placeholder="Search…"
+        autocomplete="off"
+        data-review-behavior-filter-search
+      />
+    </label>
+    <div class="m__popover-list">
+      {% for behavior in [ 'Issue Not Resolved', 'Complaints', 'Coercion Manipulation' ] %}
+      <label class="m__popover-item" data-review-behavior-filter-option-row>
+        <span class="m__checkbox-primary">
+          <input
+            type="checkbox"
+            value="{{ behavior }}"
+            data-review-behavior-filter-option
+          />
+          <svg
+            viewBox="0 0 32 32"
+            aria-hidden="true"
+            width="10"
+            height="10"
+          >
+            <use href="#checkmark"></use>
+          </svg>
+        </span>
+        <span class="m__popover-item-name">{{ behavior }}</span>
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
   <h2>Behaviors</h2>
+  {% endif %}
   <div class="pg-results-table-section">
     <table class="pg-behaviors-table">
       <thead>
@@ -489,6 +631,26 @@
             </div>
           </td>
           <td class="pg-num">98%</td>
+        </tr>
+        {% endif %}
+        {% if velmaReportOutputReview %}
+        <tr
+          class="moderation-review-behaviors__empty-row"
+          data-review-behavior-filter-empty
+          hidden
+        >
+          <td colspan="5">
+            <div class="moderation-review-behaviors__empty-state">
+              <p>No behaviors match these filters.</p>
+              <button
+                type="button"
+                class="m__button-secondary-outline S"
+                data-review-behavior-filter-empty-reset
+              >
+                Reset filters
+              </button>
+            </div>
+          </td>
         </tr>
         {% endif %}
       </tbody>

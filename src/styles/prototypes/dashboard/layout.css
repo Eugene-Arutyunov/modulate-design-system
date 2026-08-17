@@ -3472,6 +3472,177 @@ table.config-details {
   overflow-x: clip;
 }
 
+.moderation-review-behaviors__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m__gap-s);
+  margin-bottom: var(--m__spacer-s);
+}
+
+.moderation-review-behaviors__heading h2 {
+  margin-bottom: 0;
+}
+
+.moderation-review-behaviors__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--m__gap-xxs);
+  margin-left: auto;
+}
+
+.m__select.S.moderation-review-behaviors__filter {
+  width: 14rem;
+  min-width: 14rem;
+  padding: var(--m__padding-input-m);
+  font: inherit;
+}
+
+.moderation-review-behaviors__verdict-filter {
+  position: relative;
+}
+
+.moderation-review-behaviors__verdict-list {
+  right: 0;
+  left: auto;
+  min-width: 11rem;
+}
+
+.moderation-review-behaviors__filter-popover {
+  width: 18rem;
+}
+
+.moderation-review-behaviors__tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--m__gap-xxs);
+  margin-top: 0;
+  margin-bottom: var(--m__spacer-m);
+}
+
+.moderation-review-behaviors__tag-filters[hidden] {
+  display: none;
+}
+
+.moderation-review-behaviors__empty-row td {
+  padding: 0;
+}
+
+.moderation-review-behaviors__empty-state {
+  display: flex;
+  min-height: 10rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--m__gap-xs);
+  color: var(--m__text-caption);
+  text-align: center;
+}
+
+.moderation-review-behaviors__empty-state p {
+  margin: 0;
+  font-size: var(--m__font-size-s);
+}
+
+.moderation-review-behaviors__selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--m__gap-xxs);
+}
+
+.moderation-review-behaviors__selected-tag,
+.moderation-review-behaviors__filter-reset {
+  padding: 0.12rem 0.36rem;
+  border-radius: var(--m__radius-s);
+  background-color: transparent;
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-bold);
+  line-height: 1.15;
+}
+
+.pg-output-panel .m__tag.moderation-review-behaviors__selected-tag {
+  gap: 0.25rem;
+  border: var(--m__border-width-s) solid
+    color-mix(in srgb, currentColor 25%, transparent);
+  font-family: var(--m__font-family-sans);
+}
+
+.moderation-review-behaviors__selected-tag .bw-tag-item-name {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.moderation-review-behaviors__selected-tag .bw-tag-x {
+  position: relative;
+  padding: 0 0 0 0.05rem;
+  margin: 0;
+  cursor: pointer;
+}
+
+.moderation-review-behaviors__selected-tag .bw-tag-x::before {
+  content: "";
+  position: absolute;
+  inset: -0.35rem -0.42rem -0.35rem -0.2rem;
+}
+
+.moderation-review-behaviors__selected-tag:has(.bw-tag-x:hover) {
+  color: var(--m__text-link-hover);
+}
+
+.moderation-review-behaviors__filter-reset {
+  appearance: none;
+  border: 0;
+  color: var(--m__text-caption);
+  font-family: inherit;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    color var(--m__duration-base) var(--m__easing-base),
+    opacity var(--m__duration-base) var(--m__easing-base);
+}
+
+.moderation-review-behaviors__tag-filters:is(:hover, :focus-within)
+  .moderation-review-behaviors__filter-reset {
+  opacity: 1;
+  pointer-events: auto;
+  transition:
+    color var(--m__duration-base) var(--m__easing-base),
+    opacity var(--m__duration-instant) var(--m__easing-base);
+}
+
+.moderation-review-behaviors__filter-reset:is(:hover, :focus-visible),
+.moderation-review-behaviors__tag-filters:is(:hover, :focus-within)
+  .moderation-review-behaviors__filter-reset:is(:hover, :focus-visible) {
+  color: var(--m__text-link-hover);
+  transition:
+    color var(--m__duration-instant) var(--m__easing-base),
+    opacity var(--m__duration-instant) var(--m__easing-base);
+}
+
+@media (width < 720px) {
+  .moderation-review-behaviors__heading {
+    align-items: stretch;
+  }
+
+  .moderation-review-behaviors__filters {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .moderation-review-behaviors__filters > * {
+    flex: 1 1 0;
+  }
+
+  .m__select.S.moderation-review-behaviors__filter {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 .moderation-review-behaviors__table {
   width: 100%;
   min-width: 0;
