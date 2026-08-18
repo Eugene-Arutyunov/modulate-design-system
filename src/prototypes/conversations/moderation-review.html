@@ -332,9 +332,21 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         hidden
         aria-modal="true"
         role="dialog"
-        aria-labelledby="modal-verdict-comment-title"
+        aria-label="Behavior comments"
       >
-        <div class="m__modal moderation-verdict-comment-modal">
+        <div class="moderation-verdict-comment-modal__stage">
+          <button
+            type="button"
+            class="moderation-verdict-comment-modal__nav-button moderation-verdict-comment-modal__nav-button--previous"
+            aria-label="Previous behavior"
+            title="Previous behavior"
+            data-review-comment-nav="previous"
+          >
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <use href="#chevron-left"></use>
+            </svg>
+          </button>
+          <div class="m__modal moderation-verdict-comment-modal">
           <form data-review-comment-form>
             <button
               type="button"
@@ -348,23 +360,19 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
             </button>
             <div class="m__modal__body">
               <aside class="moderation-verdict-comment-modal__metadata">
-                <div class="m__modal__header">
-                  <div class="moderation-verdict-comment-modal__title">
-                    <h2
-                      class="m__modal__title moderation-verdict-comment-modal__behavior"
-                      id="modal-verdict-comment-title"
-                      data-review-comment-behavior
-                    >
-                      Behavior
-                    </h2>
-                  </div>
-                </div>
                 <div class="moderation-verdict-comment-modal__context-shell">
                   <div class="moderation-verdict-comment-modal__context">
                     <dl class="moderation-verdict-comment-modal__details">
                     <div class="moderation-verdict-comment-modal__detail">
                       <dt>Speaker</dt>
                       <dd data-review-comment-speaker></dd>
+                    </div>
+                    <div class="moderation-verdict-comment-modal__detail">
+                      <dt>Behavior</dt>
+                      <dd
+                        class="moderation-verdict-comment-modal__behavior"
+                        data-review-comment-behavior
+                      ></dd>
                     </div>
                     <div class="moderation-verdict-comment-modal__detail">
                       <dt>Model reasoning</dt>
@@ -413,25 +421,6 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
                     </dl>
                   </div>
                 </div>
-                <nav
-                  class="moderation-verdict-comment-modal__navigation"
-                  aria-label="Adjacent behaviors"
-                >
-                  <button
-                    type="button"
-                    class="m__button-secondary-outline M"
-                    data-review-comment-nav="previous"
-                  >
-                    ← Previous
-                  </button>
-                  <button
-                    type="button"
-                    class="m__button-secondary-outline M"
-                    data-review-comment-nav="next"
-                  >
-                    Next →
-                  </button>
-                </nav>
               </aside>
               <section
                 class="moderation-verdict-comment-modal__comments"
@@ -488,6 +477,18 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
               </section>
             </div>
           </form>
+          </div>
+          <button
+            type="button"
+            class="moderation-verdict-comment-modal__nav-button moderation-verdict-comment-modal__nav-button--next"
+            aria-label="Next behavior"
+            title="Next behavior"
+            data-review-comment-nav="next"
+          >
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <use href="#chevron-left"></use>
+            </svg>
+          </button>
         </div>
       </div>
     </main>

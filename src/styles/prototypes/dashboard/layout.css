@@ -3919,6 +3919,73 @@ table.config-details {
 
 .m__modal.moderation-verdict-comment-modal {
   max-width: 60rem;
+  margin: 0;
+}
+
+.moderation-verdict-comment-modal__stage {
+  position: relative;
+  width: 100%;
+  max-width: 60rem;
+  margin: 3rem auto 0;
+}
+
+.moderation-verdict-comment-modal__nav-button {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 16px color-mix(in srgb, #000 18%, transparent);
+  color: #181729;
+  cursor: pointer;
+  place-items: center;
+  transform: translateY(-50%);
+  transition:
+    background-color var(--m__duration-base) var(--m__easing-base),
+    box-shadow var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
+}
+
+.moderation-verdict-comment-modal__nav-button:hover,
+.moderation-verdict-comment-modal__nav-button:focus-visible {
+  background: color-mix(in srgb, #fff 88%, var(--m__bg-accent-hover));
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
+}
+
+.moderation-verdict-comment-modal__nav-button:focus-visible {
+  outline: var(--m__border-width-m) solid var(--m__border-focus);
+  outline-offset: 2px;
+}
+
+.moderation-verdict-comment-modal__nav-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.moderation-verdict-comment-modal__nav-button svg {
+  width: 1rem;
+  height: 1rem;
+  stroke: currentColor;
+  stroke-linejoin: round;
+  stroke-width: 0.75;
+}
+
+.moderation-verdict-comment-modal__nav-button--previous {
+  left: -3.75rem;
+}
+
+.moderation-verdict-comment-modal__nav-button--next {
+  right: -3.75rem;
+}
+
+.moderation-verdict-comment-modal__nav-button--next svg {
+  transform: rotate(180deg);
 }
 
 .moderation-verdict-comment-modal form {
@@ -3931,7 +3998,7 @@ table.config-details {
 
 .moderation-verdict-comment-modal .m__modal__body {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   min-height: 0;
   flex: 1 1 auto;
   padding: 0;
@@ -3959,20 +4026,9 @@ table.config-details {
   background: transparent;
 }
 
-.moderation-verdict-comment-modal__metadata .m__modal__header {
-  padding: 0.75rem 0.75rem 0;
-}
-
-.moderation-verdict-comment-modal__title {
-  display: flex;
-  min-width: 0;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--m__gap-s);
-}
-
 .moderation-verdict-comment-modal__behavior {
-  display: inline;
+  display: block;
+  width: fit-content;
   padding-bottom: 0.22em;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
@@ -4031,14 +4087,6 @@ table.config-details {
   padding: 0.75rem;
   overflow-y: auto;
   overscroll-behavior: contain;
-}
-
-.moderation-verdict-comment-modal__navigation {
-  display: flex;
-  flex: 0 0 auto;
-  justify-content: space-between;
-  gap: var(--m__gap-xs);
-  padding: 0.75rem var(--m__modal-padding) var(--m__modal-padding);
 }
 
 .moderation-verdict-comment-modal__details {
@@ -4312,6 +4360,10 @@ table.config-details {
 }
 
 @media (width < 860px) {
+  .moderation-verdict-comment-modal__stage {
+    max-width: 40rem;
+  }
+
   .m__modal.moderation-verdict-comment-modal {
     max-width: 40rem;
   }
@@ -4332,12 +4384,18 @@ table.config-details {
       color-mix(in srgb, var(--m__text) 12%, transparent);
   }
 
-  .moderation-verdict-comment-modal__metadata .m__modal__header {
-    padding-right: calc(var(--m__modal-padding) + 2rem);
-  }
-
   .moderation-verdict-comment-modal__comments {
     padding-top: var(--m__modal-padding);
+  }
+}
+
+@media (width < 70rem) {
+  .moderation-verdict-comment-modal__nav-button--previous {
+    left: 0.5rem;
+  }
+
+  .moderation-verdict-comment-modal__nav-button--next {
+    right: 0.5rem;
   }
 }
 
