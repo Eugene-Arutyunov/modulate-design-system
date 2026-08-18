@@ -173,6 +173,66 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               </span>
             </button>
 
+            <div class="m__menu-button moderation-table__result-filter">
+              <button
+                type="button"
+                class="m__select S moderation-table__filter moderation-table__filter--result m__menu-button-trigger"
+                data-result-filter-trigger
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <span>Verdict</span>
+                <span class="m__select__inline-control">
+                  <span class="m__select__value" data-result-filter-label
+                    >All</span
+                  >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </span>
+              </button>
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__result-list"
+                hidden
+                role="menu"
+              >
+                <div
+                  class="conversation-report__report-items"
+                  role="presentation"
+                  data-result-filter-options
+                >
+                  {% for result in [ { value: '', label: 'All' }, { value:
+                  'true', label: 'True positive' }, { value: 'false', label:
+                  'False positive' } ] %}
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not result.value %} is-active{% endif %}"
+                    role="menuitemradio"
+                    aria-checked="{% if not result.value %}true{% else %}false{% endif %}"
+                    data-result-filter-option="{{ result.value }}"
+                  >
+                    <span
+                      class="conversation-report__report-item-icon moderation-table__status-option-check"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 12 12">
+                        <use href="#checkmark"></use>
+                      </svg>
+                    </span>
+                    <span class="conversation-report__report-item-title"
+                      >{{ result.label }}</span
+                    >
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
             <div class="m__menu-button moderation-table__status-filter">
               <button
                 type="button"
@@ -299,66 +359,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       >Edit status list</span
                     >
                   </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="m__menu-button moderation-table__result-filter">
-              <button
-                type="button"
-                class="m__select S moderation-table__filter moderation-table__filter--result m__menu-button-trigger"
-                data-result-filter-trigger
-                aria-haspopup="menu"
-                aria-expanded="false"
-              >
-                <span>Verdict</span>
-                <span class="m__select__inline-control">
-                  <span class="m__select__value" data-result-filter-label
-                    >All</span
-                  >
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    aria-hidden="true"
-                  >
-                    <use href="#chevron-down"></use>
-                  </svg>
-                </span>
-              </button>
-              <div
-                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__result-list"
-                hidden
-                role="menu"
-              >
-                <div
-                  class="conversation-report__report-items"
-                  role="presentation"
-                  data-result-filter-options
-                >
-                  {% for result in [ { value: '', label: 'All' }, { value:
-                  'true', label: 'True positive' }, { value: 'false', label:
-                  'False positive' } ] %}
-                  <button
-                    type="button"
-                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not result.value %} is-active{% endif %}"
-                    role="menuitemradio"
-                    aria-checked="{% if not result.value %}true{% else %}false{% endif %}"
-                    data-result-filter-option="{{ result.value }}"
-                  >
-                    <span
-                      class="conversation-report__report-item-icon moderation-table__status-option-check"
-                      aria-hidden="true"
-                    >
-                      <svg viewBox="0 0 12 12">
-                        <use href="#checkmark"></use>
-                      </svg>
-                    </span>
-                    <span class="conversation-report__report-item-title"
-                      >{{ result.label }}</span
-                    >
-                  </button>
-                  {% endfor %}
                 </div>
               </div>
             </div>
@@ -594,7 +594,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       aria-expanded="false"
                       data-row-status-trigger
                     >
-                      {{ row.status }}
+                      <span data-row-status-label>{{ row.status }}</span>
+                      <svg viewBox="0 0 12 12" aria-hidden="true">
+                        <use href="#chevron-down"></use>
+                      </svg>
                     </button>
                     <div
                       class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__row-status-list"
@@ -674,6 +677,24 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 </td>
               </tr>
               {% endfor %}
+              <tr
+                class="moderation-table__empty-row"
+                data-moderation-empty
+                hidden
+              >
+                <td colspan="5">
+                  <div class="moderation-table__empty-state">
+                    <p>No conversations match these filters.</p>
+                    <button
+                      type="button"
+                      class="m__button-secondary-outline S"
+                      data-moderation-empty-reset
+                    >
+                      Reset filters
+                    </button>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -823,6 +844,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var rows = Array.from(root.querySelectorAll("[data-review-row]"));
     var tbody = root.querySelector("[data-moderation-tbody]");
     var searchInput = root.querySelector("[data-moderation-search]");
+    var emptyState = root.querySelector("[data-moderation-empty]");
+    var emptyStateReset = root.querySelector(
+      "[data-moderation-empty-reset]",
+    );
     var behaviorFilterRoot = root.querySelector("[data-behavior-filter-root]");
     var behaviorFilterTriggers = Array.from(
       root.querySelectorAll("[data-behavior-filter-trigger]"),
@@ -880,6 +905,41 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var selectedStatus = "";
     var selectedResult = "";
     var pendingStatusRemove = "";
+    var initialFilterParams = new URLSearchParams(window.location.search);
+
+    initialFilterParams.getAll("behavior").forEach(function (behavior) {
+      selectedBehaviors.add(behavior);
+    });
+    behaviorOptions.forEach(function (option) {
+      option.checked = selectedBehaviors.has(option.value);
+    });
+    if (["true", "false"].includes(initialFilterParams.get("verdict"))) {
+      selectedResult = initialFilterParams.get("verdict");
+    }
+
+    function applySharedFilterParams(url) {
+      url.searchParams.delete("behavior");
+      selectedBehaviors.forEach(function (behavior) {
+        url.searchParams.append("behavior", behavior);
+      });
+      if (selectedResult) {
+        url.searchParams.set("verdict", selectedResult);
+      } else {
+        url.searchParams.delete("verdict");
+      }
+      return url;
+    }
+
+    function syncSharedFilterParams() {
+      var pageUrl = applySharedFilterParams(new URL(window.location.href));
+      window.history.replaceState(window.history.state, "", pageUrl);
+      rows.forEach(function (row) {
+        row.querySelectorAll("a[href]").forEach(function (link) {
+          var linkUrl = applySharedFilterParams(new URL(link.href));
+          link.href = linkUrl.pathname + linkUrl.search + linkUrl.hash;
+        });
+      });
+    }
 
     function positionBehaviorFilter(anchor) {
       var rect = anchor.getBoundingClientRect();
@@ -945,7 +1005,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           : selectedResult === "false"
             ? "False positive"
             : "All";
+      syncSharedFilterParams();
       rows.forEach(function (row) {
+        row.classList.remove("moderation-table__row--last-visible");
         var rowBehaviors = (row.dataset.behaviors || "").split("|");
         var behaviorResults = (row.dataset.behaviorResults || "")
           .split("|")
@@ -983,6 +1045,15 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               .includes(query));
         row.hidden = !show;
       });
+      var visibleRows = rows.filter(function (row) {
+        return !row.hidden;
+      });
+      emptyState.hidden = visibleRows.length > 0;
+      if (visibleRows.length) {
+        visibleRows[visibleRows.length - 1].classList.add(
+          "moderation-table__row--last-visible",
+        );
+      }
       rows
         .slice()
         .sort(function (a, b) {
@@ -1012,7 +1083,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     });
     behaviorFilterTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function (event) {
-        event.stopPropagation();
         if (
           behaviorFilterPopover.hidden ||
           activeBehaviorFilterTrigger !== trigger
@@ -1056,6 +1126,17 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       renderSelectedBehaviors();
       applyQueueState();
     });
+    emptyStateReset.addEventListener("click", function () {
+      searchInput.value = "";
+      selectedBehaviors.clear();
+      behaviorOptions.forEach(function (option) {
+        option.checked = false;
+      });
+      closeBehaviorFilter();
+      renderSelectedBehaviors();
+      setStatusFilter("");
+      setResultFilter("");
+    });
     behaviorFilterSearch.addEventListener("input", function () {
       var query = behaviorFilterSearch.value.trim().toLowerCase();
       behaviorOptions.forEach(function (option) {
@@ -1093,7 +1174,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     function updateRowStatus(row, status) {
       var trigger = row.querySelector("[data-row-status-trigger]");
       row.dataset.status = status;
-      trigger.textContent = status;
+      trigger.querySelector("[data-row-status-label]").textContent = status;
       trigger.classList.remove(
         "moderation-table__status-tag--pending",
         "moderation-table__status-tag--in-review",
@@ -1297,7 +1378,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     );
     sortFilter.addEventListener("change", applyQueueState);
     renderSelectedBehaviors();
-    applyQueueState();
+    setResultFilter(selectedResult);
   })();
 </script>
 
