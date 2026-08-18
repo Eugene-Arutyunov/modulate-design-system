@@ -3571,11 +3571,14 @@ table.config-details {
   display: none;
 }
 
-.moderation-review-behaviors__empty-row td {
+.moderation-review-behaviors__empty-row td,
+.moderation-table__empty-row td {
   padding: 0;
+  border-bottom: none;
 }
 
-.moderation-review-behaviors__empty-state {
+.moderation-review-behaviors__empty-state,
+.moderation-table__empty-state {
   display: flex;
   min-height: 10rem;
   flex-direction: column;
@@ -3586,9 +3589,14 @@ table.config-details {
   text-align: center;
 }
 
-.moderation-review-behaviors__empty-state p {
+.moderation-review-behaviors__empty-state p,
+.moderation-table__empty-state p {
   margin: 0;
   font-size: var(--m__font-size-s);
+}
+
+.moderation-table__empty-state {
+  padding-bottom: var(--m__spacer-l);
 }
 
 .moderation-review-behaviors__selected-tags {

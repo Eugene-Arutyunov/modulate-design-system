@@ -677,6 +677,24 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 </td>
               </tr>
               {% endfor %}
+              <tr
+                class="moderation-table__empty-row"
+                data-moderation-empty
+                hidden
+              >
+                <td colspan="5">
+                  <div class="moderation-table__empty-state">
+                    <p>No conversations match these filters.</p>
+                    <button
+                      type="button"
+                      class="m__button-secondary-outline S"
+                      data-moderation-empty-reset
+                    >
+                      Reset filters
+                    </button>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -826,6 +844,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var rows = Array.from(root.querySelectorAll("[data-review-row]"));
     var tbody = root.querySelector("[data-moderation-tbody]");
     var searchInput = root.querySelector("[data-moderation-search]");
+    var emptyState = root.querySelector("[data-moderation-empty]");
+    var emptyStateReset = root.querySelector(
+      "[data-moderation-empty-reset]",
+    );
     var behaviorFilterRoot = root.querySelector("[data-behavior-filter-root]");
     var behaviorFilterTriggers = Array.from(
       root.querySelectorAll("[data-behavior-filter-trigger]"),
@@ -986,6 +1008,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               .includes(query));
         row.hidden = !show;
       });
+      emptyState.hidden = rows.some(function (row) {
+        return !row.hidden;
+      });
       rows
         .slice()
         .sort(function (a, b) {
@@ -1015,7 +1040,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     });
     behaviorFilterTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function (event) {
-        event.stopPropagation();
         if (
           behaviorFilterPopover.hidden ||
           activeBehaviorFilterTrigger !== trigger
@@ -1058,6 +1082,17 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       closeBehaviorFilter();
       renderSelectedBehaviors();
       applyQueueState();
+    });
+    emptyStateReset.addEventListener("click", function () {
+      searchInput.value = "";
+      selectedBehaviors.clear();
+      behaviorOptions.forEach(function (option) {
+        option.checked = false;
+      });
+      closeBehaviorFilter();
+      renderSelectedBehaviors();
+      setStatusFilter("");
+      setResultFilter("");
     });
     behaviorFilterSearch.addEventListener("input", function () {
       var query = behaviorFilterSearch.value.trim().toLowerCase();
