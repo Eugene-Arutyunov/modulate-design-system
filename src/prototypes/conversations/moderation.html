@@ -173,6 +173,66 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               </span>
             </button>
 
+            <div class="m__menu-button moderation-table__result-filter">
+              <button
+                type="button"
+                class="m__select S moderation-table__filter moderation-table__filter--result m__menu-button-trigger"
+                data-result-filter-trigger
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <span>Verdict</span>
+                <span class="m__select__inline-control">
+                  <span class="m__select__value" data-result-filter-label
+                    >All</span
+                  >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    aria-hidden="true"
+                  >
+                    <use href="#chevron-down"></use>
+                  </svg>
+                </span>
+              </button>
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__result-list"
+                hidden
+                role="menu"
+              >
+                <div
+                  class="conversation-report__report-items"
+                  role="presentation"
+                  data-result-filter-options
+                >
+                  {% for result in [ { value: '', label: 'All' }, { value:
+                  'true', label: 'True positive' }, { value: 'false', label:
+                  'False positive' } ] %}
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not result.value %} is-active{% endif %}"
+                    role="menuitemradio"
+                    aria-checked="{% if not result.value %}true{% else %}false{% endif %}"
+                    data-result-filter-option="{{ result.value }}"
+                  >
+                    <span
+                      class="conversation-report__report-item-icon moderation-table__status-option-check"
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 12 12">
+                        <use href="#checkmark"></use>
+                      </svg>
+                    </span>
+                    <span class="conversation-report__report-item-title"
+                      >{{ result.label }}</span
+                    >
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
             <div class="m__menu-button moderation-table__status-filter">
               <button
                 type="button"
@@ -299,66 +359,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       >Edit status list</span
                     >
                   </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="m__menu-button moderation-table__result-filter">
-              <button
-                type="button"
-                class="m__select S moderation-table__filter moderation-table__filter--result m__menu-button-trigger"
-                data-result-filter-trigger
-                aria-haspopup="menu"
-                aria-expanded="false"
-              >
-                <span>Verdict</span>
-                <span class="m__select__inline-control">
-                  <span class="m__select__value" data-result-filter-label
-                    >All</span
-                  >
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    aria-hidden="true"
-                  >
-                    <use href="#chevron-down"></use>
-                  </svg>
-                </span>
-              </button>
-              <div
-                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__result-list"
-                hidden
-                role="menu"
-              >
-                <div
-                  class="conversation-report__report-items"
-                  role="presentation"
-                  data-result-filter-options
-                >
-                  {% for result in [ { value: '', label: 'All' }, { value:
-                  'true', label: 'True positive' }, { value: 'false', label:
-                  'False positive' } ] %}
-                  <button
-                    type="button"
-                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not result.value %} is-active{% endif %}"
-                    role="menuitemradio"
-                    aria-checked="{% if not result.value %}true{% else %}false{% endif %}"
-                    data-result-filter-option="{{ result.value }}"
-                  >
-                    <span
-                      class="conversation-report__report-item-icon moderation-table__status-option-check"
-                      aria-hidden="true"
-                    >
-                      <svg viewBox="0 0 12 12">
-                        <use href="#checkmark"></use>
-                      </svg>
-                    </span>
-                    <span class="conversation-report__report-item-title"
-                      >{{ result.label }}</span
-                    >
-                  </button>
-                  {% endfor %}
                 </div>
               </div>
             </div>
