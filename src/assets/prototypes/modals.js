@@ -7,12 +7,19 @@
     openCount++;
     if (openCount === 1) {
       var scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      var hasStableScrollbarGutter = window
+        .getComputedStyle(document.documentElement)
+        .scrollbarGutter.includes("stable");
       document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = scrollbarWidth + "px";
+      if (!hasStableScrollbarGutter) {
+        document.body.style.paddingRight = scrollbarWidth + "px";
+      }
       document.documentElement.style.overflow = "hidden";
     }
-    var firstInput = backdrop.querySelector("input, select, textarea");
-    if (firstInput) firstInput.focus();
+    if (backdrop.dataset.modalAutofocus !== "false") {
+      var firstInput = backdrop.querySelector("input, select, textarea");
+      if (firstInput) firstInput.focus();
+    }
   }
 
   function closeModal(backdrop) {
