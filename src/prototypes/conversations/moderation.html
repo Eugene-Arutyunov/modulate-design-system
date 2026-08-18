@@ -594,7 +594,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       aria-expanded="false"
                       data-row-status-trigger
                     >
-                      {{ row.status }}
+                      <span data-row-status-label>{{ row.status }}</span>
+                      <svg viewBox="0 0 12 12" aria-hidden="true">
+                        <use href="#chevron-down"></use>
+                      </svg>
                     </button>
                     <div
                       class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start moderation-table__row-status-list"
@@ -1093,7 +1096,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     function updateRowStatus(row, status) {
       var trigger = row.querySelector("[data-row-status-trigger]");
       row.dataset.status = status;
-      trigger.textContent = status;
+      trigger.querySelector("[data-row-status-label]").textContent = status;
       trigger.classList.remove(
         "moderation-table__status-tag--pending",
         "moderation-table__status-tag--in-review",
