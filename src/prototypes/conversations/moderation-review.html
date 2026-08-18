@@ -336,126 +336,133 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       >
         <div class="m__modal moderation-verdict-comment-modal">
           <form data-review-comment-form>
-            <div class="m__modal__header">
-              <div class="moderation-verdict-comment-modal__title">
-                <h2
-                  class="m__modal__title moderation-verdict-comment-modal__behavior"
-                  id="modal-verdict-comment-title"
-                  data-review-comment-behavior
-                >
-                  Behavior
-                </h2>
-              </div>
-              <button
-                type="button"
-                class="m__modal__close"
-                aria-label="Close"
-                data-review-comment-cancel
-              >
-                <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
-                  <use href="#close"></use>
-                </svg>
-              </button>
-            </div>
+            <button
+              type="button"
+              class="m__modal__close moderation-verdict-comment-modal__close"
+              aria-label="Close"
+              data-review-comment-cancel
+            >
+              <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+                <use href="#close"></use>
+              </svg>
+            </button>
             <div class="m__modal__body">
-              <div class="moderation-verdict-comment-modal__context">
-                <dl class="moderation-verdict-comment-modal__details">
-                  <div class="moderation-verdict-comment-modal__detail">
-                    <dt>Speaker</dt>
-                    <dd data-review-comment-speaker></dd>
+              <aside class="moderation-verdict-comment-modal__metadata">
+                <div class="m__modal__header">
+                  <div class="moderation-verdict-comment-modal__title">
+                    <h2
+                      class="m__modal__title moderation-verdict-comment-modal__behavior"
+                      id="modal-verdict-comment-title"
+                      data-review-comment-behavior
+                    >
+                      Behavior
+                    </h2>
                   </div>
-                  <div class="moderation-verdict-comment-modal__detail">
-                    <dt>Model reasoning</dt>
-                    <dd data-review-comment-reasoning></dd>
-                  </div>
-                  <div class="moderation-verdict-comment-modal__detail">
-                    <dt>Confidence</dt>
-                    <dd
-                      class="pg-num"
-                      data-review-comment-confidence
-                    ></dd>
-                  </div>
-                  <div class="moderation-verdict-comment-modal__detail">
-                    <dt>Evidence</dt>
-                    <dd
-                      class="moderation-verdict-comment-modal__evidence"
-                      data-review-comment-evidence
-                    ></dd>
-                  </div>
-                  <div class="moderation-verdict-comment-modal__detail">
-                    <dt>Verdict</dt>
-                    <dd>
-                      <div
-                        class="moderation-verdict-comment-modal__choices"
-                        data-review-comment-choices
-                      >
-                        <button
-                          type="button"
-                          class="m__button-success-outline S moderation-review-behaviors__action"
-                          data-review-comment-choice="true"
-                          aria-pressed="false"
+                </div>
+                <div class="moderation-verdict-comment-modal__context">
+                  <dl class="moderation-verdict-comment-modal__details">
+                    <div class="moderation-verdict-comment-modal__detail">
+                      <dt>Speaker</dt>
+                      <dd data-review-comment-speaker></dd>
+                    </div>
+                    <div class="moderation-verdict-comment-modal__detail">
+                      <dt>Model reasoning</dt>
+                      <dd data-review-comment-reasoning></dd>
+                    </div>
+                    <div class="moderation-verdict-comment-modal__detail">
+                      <dt>Confidence</dt>
+                      <dd
+                        class="pg-num"
+                        data-review-comment-confidence
+                      ></dd>
+                    </div>
+                    <div class="moderation-verdict-comment-modal__detail">
+                      <dt>Evidence</dt>
+                      <dd
+                        class="moderation-verdict-comment-modal__evidence"
+                        data-review-comment-evidence
+                      ></dd>
+                    </div>
+                    <div class="moderation-verdict-comment-modal__detail">
+                      <dt>Verdict</dt>
+                      <dd>
+                        <div
+                          class="moderation-verdict-comment-modal__choices"
+                          data-review-comment-choices
                         >
-                          True
-                        </button>
-                        <button
-                          type="button"
-                          class="m__button-danger-outline S moderation-review-behaviors__action"
-                          data-review-comment-choice="false"
-                          aria-pressed="false"
-                        >
-                          False positive
-                        </button>
-                      </div>
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-              <div
-                class="moderation-verdict-comment-modal__thread"
-                data-review-comment-list
-                aria-live="polite"
-                hidden
-              ></div>
-              <div
-                class="m__textfield M moderation-verdict-comment-modal__composer-field"
+                          <button
+                            type="button"
+                            class="m__button-success-outline S moderation-review-behaviors__action"
+                            data-review-comment-choice="true"
+                            aria-pressed="false"
+                          >
+                            True
+                          </button>
+                          <button
+                            type="button"
+                            class="m__button-danger-outline S moderation-review-behaviors__action"
+                            data-review-comment-choice="false"
+                            aria-pressed="false"
+                          >
+                            False positive
+                          </button>
+                        </div>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </aside>
+              <section
+                class="moderation-verdict-comment-modal__comments"
+                aria-label="Comments"
               >
                 <div
-                  class="moderation-verdict-comment-modal__editing-state"
-                  data-review-comment-editing-state
+                  class="moderation-verdict-comment-modal__thread"
+                  data-review-comment-list
+                  aria-live="polite"
                   hidden
+                ></div>
+                <div
+                  class="m__textfield M moderation-verdict-comment-modal__composer-field"
                 >
                   <div
-                    class="moderation-verdict-comment-modal__editing-header"
+                    class="moderation-verdict-comment-modal__editing-state"
+                    data-review-comment-editing-state
+                    hidden
                   >
-                    <span>Edit comment</span>
-                    <button
-                      type="button"
-                      class="moderation-review-behaviors__comment-link"
-                      data-review-comment-edit-cancel
+                    <div
+                      class="moderation-verdict-comment-modal__editing-header"
                     >
-                      Cancel
+                      <span>Edit comment</span>
+                      <button
+                        type="button"
+                        class="moderation-review-behaviors__comment-link"
+                        data-review-comment-edit-cancel
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                  <div class="moderation-verdict-comment-modal__composer">
+                    <textarea
+                      id="verdict-comment"
+                      class="m__textarea--autogrow"
+                      rows="1"
+                      maxlength="500"
+                      aria-label="Write a comment"
+                      placeholder="Write a comment..."
+                      data-review-comment-input
+                    ></textarea>
+                    <button
+                      type="submit"
+                      class="m__button-primary M"
+                      data-review-comment-submit
+                    >
+                      Send
                     </button>
                   </div>
                 </div>
-                <div class="moderation-verdict-comment-modal__composer">
-                  <textarea
-                    id="verdict-comment"
-                    class="m__textarea--autogrow"
-                    rows="1"
-                    maxlength="500"
-                    aria-label="Write a comment"
-                    placeholder="Write a comment..."
-                    data-review-comment-input
-                  ></textarea>
-                  <button
-                    type="submit"
-                    class="m__button-primary M"
-                    data-review-comment-submit
-                  >
-                    Send
-                  </button>
-                </div>
-              </div>
+              </section>
             </div>
           </form>
         </div>

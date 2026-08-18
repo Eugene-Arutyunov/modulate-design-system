@@ -3918,10 +3918,11 @@ table.config-details {
 }
 
 .m__modal.moderation-verdict-comment-modal {
-  max-width: 40rem;
+  max-width: 60rem;
 }
 
 .moderation-verdict-comment-modal form {
+  position: relative;
   display: flex;
   height: min(40rem, calc(100dvh - 6rem));
   max-height: calc(100dvh - 6rem);
@@ -3929,11 +3930,35 @@ table.config-details {
 }
 
 .moderation-verdict-comment-modal .m__modal__body {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   min-height: 0;
   flex: 1 1 auto;
-  flex-direction: column;
+  padding: 0;
   overflow: hidden;
+}
+
+.moderation-verdict-comment-modal__close {
+  position: absolute;
+  z-index: 3;
+  top: var(--m__modal-padding);
+  right: var(--m__modal-padding);
+}
+
+.moderation-verdict-comment-modal__metadata {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  border-right: var(--m__border-width-s) solid
+    color-mix(in srgb, var(--m__text) 12%, transparent);
+  border-radius: 0;
+  background: transparent;
+  overscroll-behavior: contain;
+}
+
+.moderation-verdict-comment-modal__metadata .m__modal__header {
+  padding: 0.75rem 0.75rem 0;
 }
 
 .moderation-verdict-comment-modal__title {
@@ -3966,16 +3991,12 @@ table.config-details {
 }
 
 .moderation-verdict-comment-modal__context {
-  flex: 0 0 auto;
-  margin-inline: calc(-1 * var(--m__modal-padding));
-  padding: 0 var(--m__modal-padding) var(--m__spacer-m);
-  border-bottom: var(--m__border-width-s) solid
-    color-mix(in srgb, var(--m__text) 12%, transparent);
+  padding: 0.75rem;
 }
 
 .moderation-verdict-comment-modal__details {
   display: grid;
-  gap: 0.45rem;
+  gap: var(--m__gap-s);
   margin: 0;
 }
 
@@ -4016,35 +4037,23 @@ table.config-details {
   position: relative;
   display: block;
   min-width: 0;
-  overflow: hidden;
-  padding: 0.3rem var(--moderation-comment-evidence-pad-right) 0.3rem
-    0.35rem;
+  padding: 0.45rem 0.55rem;
   border-radius: var(--m__rounded-radius);
   corner-shape: squircle;
   background-color: var(--moderation-comment-evidence-bg);
   color: var(--m__text);
   font-variant-numeric: tabular-nums;
-  line-height: 1.15;
+  line-height: 1.35;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   transition:
     background-color var(--m__duration-base) var(--m__easing-base),
     color var(--m__duration-base) var(--m__easing-base);
 }
 
 .moderation-verdict-comment-modal__evidence a::after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  right: var(--moderation-comment-evidence-pad-right);
-  bottom: 0;
-  width: 1.2rem;
-  background: linear-gradient(90deg, transparent, currentColor 100%);
-  color: var(--moderation-comment-evidence-bg);
-  pointer-events: none;
-  transform: translateX(var(--moderation-comment-evidence-pad-right));
-  transition: color var(--m__duration-base) var(--m__easing-base);
+  display: none;
 }
 
 .moderation-verdict-comment-modal__evidence a:hover,
@@ -4065,6 +4074,16 @@ table.config-details {
   align-items: center;
 }
 
+.moderation-verdict-comment-modal__comments {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  padding: calc(var(--m__modal-padding) + 2rem) var(--m__modal-padding)
+    var(--m__modal-padding);
+}
+
 .moderation-verdict-comment-modal__thread {
   display: flex;
   box-sizing: border-box;
@@ -4072,7 +4091,7 @@ table.config-details {
   flex: 1 1 auto;
   flex-direction: column;
   gap: var(--m__gap-m);
-  padding-block: var(--m__spacer-m);
+  padding-bottom: var(--m__spacer-m);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -4082,10 +4101,15 @@ table.config-details {
 }
 
 .moderation-verdict-comment-modal__empty-state {
-  margin: auto !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0 !important;
   color: var(--m__text-caption);
   font-size: var(--m__font-size-xs);
+  pointer-events: none;
   text-align: center;
+  transform: translate(-50%, -50%);
 }
 
 .moderation-verdict-comment-modal__composer {
@@ -4215,6 +4239,36 @@ table.config-details {
   .moderation-verdict-comment-modal__detail {
     grid-template-columns: 1fr;
     gap: 0.1rem;
+  }
+}
+
+@media (width < 860px) {
+  .m__modal.moderation-verdict-comment-modal {
+    max-width: 40rem;
+  }
+
+  .moderation-verdict-comment-modal form {
+    height: min(48rem, calc(100dvh - 2rem));
+    max-height: calc(100dvh - 2rem);
+  }
+
+  .moderation-verdict-comment-modal .m__modal__body {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 44%) minmax(0, 56%);
+  }
+
+  .moderation-verdict-comment-modal__metadata {
+    border-right: 0;
+    border-bottom: var(--m__border-width-s) solid
+      color-mix(in srgb, var(--m__text) 12%, transparent);
+  }
+
+  .moderation-verdict-comment-modal__metadata .m__modal__header {
+    padding-right: calc(var(--m__modal-padding) + 2rem);
+  }
+
+  .moderation-verdict-comment-modal__comments {
+    padding-top: var(--m__modal-padding);
   }
 }
 
