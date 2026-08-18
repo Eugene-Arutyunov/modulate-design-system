@@ -490,6 +490,9 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       ? reviewerNameElement.textContent.trim()
       : "Current reviewer";
     var activeEvidenceTarget = null;
+    var pendingEvidenceTarget = null;
+    var evidenceHighlightTimer = 0;
+    var evidenceVisibilityObserver = null;
     var activeCommentReview = null;
     var editingCommentIndex = -1;
     var reviewComments = new WeakMap();
@@ -820,6 +823,58 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       setReviewVerdictFilter("");
     }
 
+    function clearPendingEvidenceHighlight() {
+      window.clearTimeout(evidenceHighlightTimer);
+      evidenceHighlightTimer = 0;
+      if (evidenceVisibilityObserver) {
+        evidenceVisibilityObserver.disconnect();
+        evidenceVisibilityObserver = null;
+      }
+      pendingEvidenceTarget = null;
+    }
+
+    function scrollToEvidenceTarget(target) {
+      clearPendingEvidenceHighlight();
+      pendingEvidenceTarget = target;
+      var reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      function revealTarget() {
+        if (pendingEvidenceTarget !== target) return;
+        clearPendingEvidenceHighlight();
+        activeEvidenceTarget = target;
+        target.classList.add("is-evidence-highlighted");
+      }
+
+      if (!reduceMotion) {
+        evidenceVisibilityObserver = new IntersectionObserver(
+          function (entries) {
+            if (
+              entries.some(function (entry) {
+                return entry.isIntersecting && entry.intersectionRatio >= 0.35;
+              })
+            ) {
+              revealTarget();
+            }
+          },
+          {
+            rootMargin: "-10% 0px -10% 0px",
+            threshold: 0.35,
+          },
+        );
+        evidenceVisibilityObserver.observe(target);
+        evidenceHighlightTimer = window.setTimeout(revealTarget, 900);
+      }
+
+      target.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "center",
+      });
+
+      if (reduceMotion) window.requestAnimationFrame(revealTarget);
+    }
+
     function setReviewVerdictFilter(value) {
       selectedVerdictFilter = value || "";
       verdictFilterLabel.textContent =
@@ -1141,17 +1196,10 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         }
         if (activeEvidenceTarget) {
           activeEvidenceTarget.classList.remove("is-evidence-highlighted");
+          activeEvidenceTarget = null;
         }
-        activeEvidenceTarget = target;
-        target.classList.add("is-evidence-highlighted");
         evidenceLink.blur();
-        target.scrollIntoView({
-          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
-            .matches
-            ? "auto"
-            : "smooth",
-          block: "center",
-        });
+        scrollToEvidenceTarget(target);
         return;
       }
 
