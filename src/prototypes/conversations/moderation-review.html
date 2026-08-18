@@ -359,8 +359,9 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
                     </h2>
                   </div>
                 </div>
-                <div class="moderation-verdict-comment-modal__context">
-                  <dl class="moderation-verdict-comment-modal__details">
+                <div class="moderation-verdict-comment-modal__context-shell">
+                  <div class="moderation-verdict-comment-modal__context">
+                    <dl class="moderation-verdict-comment-modal__details">
                     <div class="moderation-verdict-comment-modal__detail">
                       <dt>Speaker</dt>
                       <dd data-review-comment-speaker></dd>
@@ -409,19 +410,41 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
                         </div>
                       </dd>
                     </div>
-                  </dl>
+                    </dl>
+                  </div>
                 </div>
+                <nav
+                  class="moderation-verdict-comment-modal__navigation"
+                  aria-label="Adjacent behaviors"
+                >
+                  <button
+                    type="button"
+                    class="m__button-secondary-outline M"
+                    data-review-comment-nav="previous"
+                  >
+                    ← Previous
+                  </button>
+                  <button
+                    type="button"
+                    class="m__button-secondary-outline M"
+                    data-review-comment-nav="next"
+                  >
+                    Next →
+                  </button>
+                </nav>
               </aside>
               <section
                 class="moderation-verdict-comment-modal__comments"
                 aria-label="Comments"
               >
-                <div
-                  class="moderation-verdict-comment-modal__thread"
-                  data-review-comment-list
-                  aria-live="polite"
-                  hidden
-                ></div>
+                <div class="moderation-verdict-comment-modal__thread-shell">
+                  <div
+                    class="moderation-verdict-comment-modal__thread"
+                    data-review-comment-list
+                    aria-live="polite"
+                    hidden
+                  ></div>
+                </div>
                 <div
                   class="m__textfield M moderation-verdict-comment-modal__composer-field"
                 >
@@ -522,10 +545,25 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
     var commentEvidence = commentModal.querySelector(
       "[data-review-comment-evidence]",
     );
+    var commentContext = commentModal.querySelector(
+      ".moderation-verdict-comment-modal__context",
+    );
+    var commentContextShell = commentModal.querySelector(
+      ".moderation-verdict-comment-modal__context-shell",
+    );
     var commentChoices = commentModal.querySelector(
       "[data-review-comment-choices]",
     );
     var commentList = commentModal.querySelector("[data-review-comment-list]");
+    var commentThreadShell = commentModal.querySelector(
+      ".moderation-verdict-comment-modal__thread-shell",
+    );
+    var commentPrevious = commentModal.querySelector(
+      "[data-review-comment-nav='previous']",
+    );
+    var commentNext = commentModal.querySelector(
+      "[data-review-comment-nav='next']",
+    );
     var commentEditingState = commentModal.querySelector(
       "[data-review-comment-editing-state]",
     );
@@ -673,6 +711,24 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         excerpt.textContent = item.textContent.trim();
         commentEvidence.appendChild(excerpt);
       });
+      window.requestAnimationFrame(updateCommentContextFades);
+    }
+
+    function updateCommentContextFades() {
+      var hasOverflow =
+        commentContext.scrollHeight > commentContext.clientHeight + 1;
+      var isAtTop = commentContext.scrollTop <= 1;
+      var isAtBottom =
+        commentContext.scrollTop + commentContext.clientHeight >=
+        commentContext.scrollHeight - 1;
+      commentContextShell.classList.toggle(
+        "has-fade-top",
+        hasOverflow && !isAtTop,
+      );
+      commentContextShell.classList.toggle(
+        "has-fade-bottom",
+        hasOverflow && !isAtBottom,
+      );
     }
 
     function renderCommentVerdict(review) {
@@ -689,6 +745,43 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
           button.classList.toggle("is-selected", isSelected);
           button.setAttribute("aria-pressed", String(isSelected));
         });
+    }
+
+    function getNavigableReviewRows() {
+      return reviewBehaviorRows.filter(function (row) {
+        return !row.hidden;
+      });
+    }
+
+    function renderCommentNavigation() {
+      var rows = getNavigableReviewRows();
+      var isUnavailable = rows.length < 2;
+      commentPrevious.disabled = isUnavailable;
+      commentNext.disabled = isUnavailable;
+    }
+
+    function showCommentReview(review) {
+      if (!review) return;
+      activeCommentReview = review;
+      var behaviorLabel = review.querySelector(".pg-behavior-link");
+      commentBehavior.innerHTML = behaviorLabel
+        ? behaviorLabel.innerHTML
+        : "Behavior";
+      renderCommentVerdict(review);
+      renderCommentDetails(review);
+      resetCommentEditor();
+      renderCommentList();
+      renderCommentNavigation();
+    }
+
+    function navigateCommentReview(direction) {
+      var rows = getNavigableReviewRows();
+      if (rows.length < 2) return;
+      var activeIndex = rows.indexOf(activeCommentReview);
+      var offset = direction === "previous" ? -1 : 1;
+      var nextIndex = (activeIndex + offset + rows.length) % rows.length;
+      var nextReview = rows[nextIndex];
+      if (nextReview) showCommentReview(nextReview);
     }
 
     function renderCommentList() {
@@ -744,6 +837,23 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         commentList.appendChild(item);
       });
       commentList.hidden = false;
+      window.requestAnimationFrame(updateCommentThreadFades);
+    }
+
+    function updateCommentThreadFades() {
+      var hasOverflow = commentList.scrollHeight > commentList.clientHeight + 1;
+      var isAtTop = commentList.scrollTop <= 1;
+      var isAtBottom =
+        commentList.scrollTop + commentList.clientHeight >=
+        commentList.scrollHeight - 1;
+      commentThreadShell.classList.toggle(
+        "has-fade-top",
+        hasOverflow && !isAtTop,
+      );
+      commentThreadShell.classList.toggle(
+        "has-fade-bottom",
+        hasOverflow && !isAtBottom,
+      );
     }
 
     function positionReviewBehaviorFilter() {
@@ -1191,6 +1301,20 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       setReviewVerdictFilter("");
     }
 
+    commentContext.addEventListener("scroll", updateCommentContextFades, {
+      passive: true,
+    });
+    commentList.addEventListener("scroll", updateCommentThreadFades, {
+      passive: true,
+    });
+    commentInput.addEventListener("input", function () {
+      window.requestAnimationFrame(updateCommentThreadFades);
+    });
+    window.addEventListener("resize", function () {
+      updateCommentContextFades();
+      updateCommentThreadFades();
+    });
+
     root.addEventListener("click", function (event) {
       var evidenceLink = event.target.closest(".pg-evidence-link[href^='#']");
       if (evidenceLink) {
@@ -1220,18 +1344,18 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
 
       var commentTrigger = event.target.closest("[data-review-comment-trigger]");
       if (commentTrigger) {
-        activeCommentReview = commentTrigger.closest("[data-detection-review]");
-        var behaviorLabel = activeCommentReview.querySelector(
-          ".pg-behavior-link",
+        showCommentReview(
+          commentTrigger.closest("[data-detection-review]"),
         );
-        commentBehavior.innerHTML = behaviorLabel
-          ? behaviorLabel.innerHTML
-          : "Behavior";
-        renderCommentVerdict(activeCommentReview);
-        renderCommentDetails(activeCommentReview);
-        resetCommentEditor();
-        renderCommentList();
         window.M.openModal(commentModal);
+        return;
+      }
+
+      var commentNavigation = event.target.closest(
+        "[data-review-comment-nav]",
+      );
+      if (commentNavigation && activeCommentReview) {
+        navigateCommentReview(commentNavigation.dataset.reviewCommentNav);
         return;
       }
 

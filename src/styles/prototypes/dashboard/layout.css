@@ -3946,15 +3946,17 @@ table.config-details {
 }
 
 .moderation-verdict-comment-modal__metadata {
+  display: flex;
   min-width: 0;
+  min-height: 0;
+  flex-direction: column;
   margin: 0;
   padding: 0;
-  overflow-y: auto;
+  overflow: hidden;
   border-right: var(--m__border-width-s) solid
     color-mix(in srgb, var(--m__text) 12%, transparent);
   border-radius: 0;
   background: transparent;
-  overscroll-behavior: contain;
 }
 
 .moderation-verdict-comment-modal__metadata .m__modal__header {
@@ -3990,8 +3992,53 @@ table.config-details {
   vertical-align: -0.15em;
 }
 
+.moderation-verdict-comment-modal__context-shell {
+  position: relative;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.moderation-verdict-comment-modal__context-shell::before,
+.moderation-verdict-comment-modal__context-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  left: 0;
+  height: var(--m__spacer-l);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.moderation-verdict-comment-modal__context-shell::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--m__bg), transparent);
+}
+
+.moderation-verdict-comment-modal__context-shell::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, var(--m__bg));
+}
+
+.moderation-verdict-comment-modal__context-shell.has-fade-top::before,
+.moderation-verdict-comment-modal__context-shell.has-fade-bottom::after {
+  opacity: 1;
+}
+
 .moderation-verdict-comment-modal__context {
+  height: 100%;
   padding: 0.75rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.moderation-verdict-comment-modal__navigation {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: space-between;
+  gap: var(--m__gap-xs);
+  padding: 0.75rem var(--m__modal-padding) var(--m__modal-padding);
 }
 
 .moderation-verdict-comment-modal__details {
@@ -4084,14 +4131,48 @@ table.config-details {
     var(--m__modal-padding);
 }
 
+.moderation-verdict-comment-modal__thread-shell {
+  position: relative;
+  min-height: 0;
+  flex: 1 1 auto;
+  margin-bottom: var(--m__gap-s);
+  overflow: hidden;
+}
+
+.moderation-verdict-comment-modal__thread-shell::before,
+.moderation-verdict-comment-modal__thread-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  left: 0;
+  height: var(--m__spacer-l);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.moderation-verdict-comment-modal__thread-shell::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--m__bg), transparent);
+}
+
+.moderation-verdict-comment-modal__thread-shell::after {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, var(--m__bg));
+}
+
+.moderation-verdict-comment-modal__thread-shell.has-fade-top::before,
+.moderation-verdict-comment-modal__thread-shell.has-fade-bottom::after {
+  opacity: 1;
+}
+
 .moderation-verdict-comment-modal__thread {
   display: flex;
   box-sizing: border-box;
+  height: 100%;
   min-height: 0;
-  flex: 1 1 auto;
   flex-direction: column;
   gap: var(--m__gap-m);
-  padding-bottom: var(--m__spacer-m);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -4149,18 +4230,6 @@ table.config-details {
   margin-top: auto;
   flex: 0 0 auto;
   background-color: var(--m__bg);
-}
-
-.moderation-verdict-comment-modal__composer-field::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  right: 0;
-  bottom: 100%;
-  left: 0;
-  height: var(--m__spacer-l);
-  background: linear-gradient(to bottom, transparent, var(--m__bg));
-  pointer-events: none;
 }
 
 .moderation-verdict-comment-modal__composer textarea.m__textarea--autogrow {
