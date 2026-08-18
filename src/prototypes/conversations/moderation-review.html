@@ -611,6 +611,41 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
     var selectedVerdictFilter = "";
     var reviewBehaviorRows = [];
     var reviewSpeakerGroups = [];
+    var initialFilterParams = new URLSearchParams(window.location.search);
+
+    initialFilterParams.getAll("behavior").forEach(function (behavior) {
+      selectedBehaviorFilters.add(behavior);
+    });
+    behaviorFilterOptions.forEach(function (option) {
+      option.checked = selectedBehaviorFilters.has(option.value);
+    });
+    if (["true", "false"].includes(initialFilterParams.get("verdict"))) {
+      selectedVerdictFilter = initialFilterParams.get("verdict");
+    }
+
+    function applyIncomingFilterParams(url) {
+      url.searchParams.delete("behavior");
+      initialFilterParams.getAll("behavior").forEach(function (behavior) {
+        url.searchParams.append("behavior", behavior);
+      });
+      if (["true", "false"].includes(initialFilterParams.get("verdict"))) {
+        url.searchParams.set("verdict", initialFilterParams.get("verdict"));
+      } else {
+        url.searchParams.delete("verdict");
+      }
+      return url;
+    }
+
+    function propagateIncomingFilterParams() {
+      root
+        .querySelectorAll("a[href^='/dashboard/conversations/review/']")
+        .forEach(function (link) {
+          var linkUrl = applyIncomingFilterParams(new URL(link.href));
+          link.href = linkUrl.pathname + linkUrl.search + linkUrl.hash;
+        });
+    }
+
+    propagateIncomingFilterParams();
 
     function setReviewResult(review, value) {
       var state = review.querySelector("[data-review-state]");
@@ -917,6 +952,9 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
     function applyReviewBehaviorFilters() {
       var visibleRowCount = 0;
       reviewBehaviorRows.forEach(function (row) {
+        row.classList.remove(
+          "moderation-review-behaviors__row--last-visible",
+        );
         var matchesBehavior =
           selectedBehaviorFilters.size === 0 ||
           selectedBehaviorFilters.has(row.dataset.reviewBehavior);
@@ -926,6 +964,14 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         row.hidden = !(matchesBehavior && matchesVerdict);
         if (!row.hidden) visibleRowCount += 1;
       });
+      var visibleRows = reviewBehaviorRows.filter(function (row) {
+        return !row.hidden;
+      });
+      if (visibleRows.length) {
+        visibleRows[visibleRows.length - 1].classList.add(
+          "moderation-review-behaviors__row--last-visible",
+        );
+      }
       behaviorFilterEmptyState.hidden = visibleRowCount > 0;
       updateReviewSpeakerGroups();
     }
@@ -1298,7 +1344,7 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         if (currentSpeakerGroup) currentSpeakerGroup.rows.push(row);
       });
       renderReviewBehaviorFilters();
-      setReviewVerdictFilter("");
+      setReviewVerdictFilter(selectedVerdictFilter);
     }
 
     commentContext.addEventListener("scroll", updateCommentContextFades, {

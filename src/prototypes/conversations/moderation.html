@@ -905,6 +905,41 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var selectedStatus = "";
     var selectedResult = "";
     var pendingStatusRemove = "";
+    var initialFilterParams = new URLSearchParams(window.location.search);
+
+    initialFilterParams.getAll("behavior").forEach(function (behavior) {
+      selectedBehaviors.add(behavior);
+    });
+    behaviorOptions.forEach(function (option) {
+      option.checked = selectedBehaviors.has(option.value);
+    });
+    if (["true", "false"].includes(initialFilterParams.get("verdict"))) {
+      selectedResult = initialFilterParams.get("verdict");
+    }
+
+    function applySharedFilterParams(url) {
+      url.searchParams.delete("behavior");
+      selectedBehaviors.forEach(function (behavior) {
+        url.searchParams.append("behavior", behavior);
+      });
+      if (selectedResult) {
+        url.searchParams.set("verdict", selectedResult);
+      } else {
+        url.searchParams.delete("verdict");
+      }
+      return url;
+    }
+
+    function syncSharedFilterParams() {
+      var pageUrl = applySharedFilterParams(new URL(window.location.href));
+      window.history.replaceState(window.history.state, "", pageUrl);
+      rows.forEach(function (row) {
+        row.querySelectorAll("a[href]").forEach(function (link) {
+          var linkUrl = applySharedFilterParams(new URL(link.href));
+          link.href = linkUrl.pathname + linkUrl.search + linkUrl.hash;
+        });
+      });
+    }
 
     function positionBehaviorFilter(anchor) {
       var rect = anchor.getBoundingClientRect();
@@ -970,7 +1005,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           : selectedResult === "false"
             ? "False positive"
             : "All";
+      syncSharedFilterParams();
       rows.forEach(function (row) {
+        row.classList.remove("moderation-table__row--last-visible");
         var rowBehaviors = (row.dataset.behaviors || "").split("|");
         var behaviorResults = (row.dataset.behaviorResults || "")
           .split("|")
@@ -1008,9 +1045,15 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               .includes(query));
         row.hidden = !show;
       });
-      emptyState.hidden = rows.some(function (row) {
+      var visibleRows = rows.filter(function (row) {
         return !row.hidden;
       });
+      emptyState.hidden = visibleRows.length > 0;
+      if (visibleRows.length) {
+        visibleRows[visibleRows.length - 1].classList.add(
+          "moderation-table__row--last-visible",
+        );
+      }
       rows
         .slice()
         .sort(function (a, b) {
@@ -1335,7 +1378,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     );
     sortFilter.addEventListener("change", applyQueueState);
     renderSelectedBehaviors();
-    applyQueueState();
+    setResultFilter(selectedResult);
   })();
 </script>
 

@@ -3599,6 +3599,17 @@ table.config-details {
   padding-bottom: var(--m__spacer-l);
 }
 
+.moderation-table__table
+  tbody
+  tr.moderation-table__row--last-visible
+  > td,
+.moderation-review-behaviors__table
+  tbody
+  tr.moderation-review-behaviors__row--last-visible
+  > td {
+  border-bottom: none;
+}
+
 .moderation-review-behaviors__selected-tags {
   display: flex;
   flex-wrap: wrap;
@@ -3766,6 +3777,8 @@ table.config-details {
   tbody
   tr:not(:last-child):not(.pg-behavior-row--detected-last):not(
     .pg-behavior-subhead-row
+  ):not(
+    .moderation-review-behaviors__row--last-visible
   )
   > td:not(.pg-behavior-speaker-cell) {
   border-bottom: var(--m__border-width-s) solid
