@@ -78,7 +78,7 @@
 }
 
 /* Canonical eyebrow — semi-mono, regular, uppercase. */
-.velma-fraud-widget :is(.vf-panel-head, .vf-meter__label) {
+.velma-fraud-widget .vf-panel-head {
   font-family: var(--m__font-family-semi-mono);
   font-weight: var(--m__font-weight-regular);
   text-transform: uppercase;
@@ -89,45 +89,25 @@
 /* ── Top bar ──────────────────────────────────────────────────────────── */
 
 .velma-fraud-widget .vf-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1em;
   padding: 0.8em 1.1em;
   border-bottom: 1px solid var(--m__border);
 }
 
-.velma-fraud-widget .vf-top__left {
-  min-width: 0;
-}
-
+/* The widget's own headline — the DS h2 style in em. */
 .velma-fraud-widget .vf-top__title {
-  display: block;
-  font-size: 0.8em;
+  margin: 0;
+  font-size: 1.4em;
   font-weight: var(--m__font-weight-bold);
+  line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .velma-fraud-widget .vf-top__subtitle {
+  font-size: 0.571em; /* 0.8em base ÷ the 1.4em headline */
   font-weight: var(--m__font-weight-regular);
   color: var(--m__text-caption);
-}
-
-/* `m__tag` geometry in em, semi-mono like the playground's tags. */
-.velma-fraud-widget .vf-top__mode {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-  font-family: var(--m__font-family-semi-mono);
-  font-size: 0.8em;
-  font-weight: var(--m__font-weight-medium);
-  color: var(--m__text-caption);
-  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
-  border-radius: 0.19em; /* radius-xs ÷ 0.8 */
-  padding: 0.19em 0.56em; /* padding-control-xs ÷ 0.8 */
 }
 
 /* ── Fingerprint player ───────────────────────────────────────────────── */
@@ -138,6 +118,25 @@
 
   & .pg-player-dataviz {
     cursor: pointer;
+  }
+
+  /* Speaker labels flush with the bottom of their lanes. The base player
+     pins the container height to strip-height × count, but the 3em var
+     resolves against this box's own smaller font-size and the labels
+     drift up — let the playground `inset: 0` govern instead. */
+  & .speaker-labels {
+    height: auto;
+    font-size: 0.8em; /* one step up from the playground xs */
+  }
+
+  /* Base player chrome one step up: times, transcript fragment, emotion. */
+  & .start-time,
+  & .total-time {
+    font-size: 1em;
+  }
+
+  & .clip-text-caption span {
+    font-size: 1em;
   }
 
   /* Progressive reveal: clips and behaviour glyphs enter on the clock. */
@@ -194,7 +193,7 @@
   }
 
   & .vf-emotion-caption {
-    font-size: 0.8em;
+    font-size: 1em;
     opacity: 0;
     transition: opacity var(--m__duration-xslow) var(--m__easing-base);
 
@@ -212,98 +211,21 @@
   border-bottom: 1px solid var(--m__border);
 }
 
-.velma-fraud-widget .vf-meter__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 0.5em;
-}
-
-.velma-fraud-widget .vf-meter__label {
-  font-size: 0.8em;
-}
-
-.velma-fraud-widget .vf-meter__value {
-  font-size: 0.8em;
-  font-variant-numeric: tabular-nums;
-  color: var(--m__text-caption);
-  transition: color var(--m__duration-medium) var(--m__easing-base);
-
-  &.vf-warn {
-    color: rgba(var(--vf-behavior-RGB), 1);
-  }
-
-  &.vf-crit {
-    color: var(--m__error);
-  }
-}
-
-.velma-fraud-widget .vf-meter__bar {
-  position: relative;
-  height: 0.5em;
-  border-radius: 0.3em;
-  background-color: var(--m__bg-surface);
-  overflow: visible;
-}
-
-.velma-fraud-widget .vf-meter__fill {
-  position: relative;
-  height: 100%;
-  width: 0;
-  border-radius: 0.3em;
-  overflow: hidden;
-  transition: width var(--m__duration-base) linear;
-
-  /* Gradient anchored to the full bar: the fill is a clipping window,
-     `--vf-fill` (0..1, set from JS) stretches the gradient back out. */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: calc(100% / var(--vf-fill, 1));
-    background-image: linear-gradient(
-      90deg,
-      rgba(var(--emotion-calm-grounded-group-RGB), 1),
-      rgba(var(--emotion-threat-uncertainty-group-RGB), 1),
-      rgba(var(--emotion-excited-engaged-group-RGB), 1),
-      rgba(var(--emotion-attack-rejection-group-RGB), 1)
-    );
-  }
-}
-
 .velma-fraud-widget .vf-meter__threshold {
   position: absolute;
-  top: -0.3em;
-  bottom: -0.3em;
+  top: -0.25em;
+  bottom: -0.25em;
   width: 2px;
   margin-left: -1px;
   background-color: var(--m__error);
-
-  &::after {
-    content: attr(data-label);
-    position: absolute;
-    right: 0.5em;
-    top: -1.4em;
-    font-family: var(--m__font-family-semi-mono);
-    font-weight: var(--m__font-weight-regular);
-    font-size: 0.65em;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    white-space: nowrap;
-    color: var(--m__error);
-  }
 }
 
-/* TEMPORARY: second meter variant below the gradient one — the owner
-   picks one, the other gets deleted. Big tabular value + plain
-   single-color confidence bar (pg-confidence-cell geometry). */
+/* Big tabular value + plain single-color confidence bar; the state color
+   (caption → warn orange → error) carries the risk level. */
 .velma-fraud-widget .vf-meter2 {
   display: flex;
   align-items: center;
   gap: 0.7em;
-  margin-top: 1.1em;
   color: var(--m__text-caption);
   transition: color var(--m__duration-medium) var(--m__easing-base);
 
@@ -341,19 +263,12 @@
   transition: width var(--m__duration-base) linear;
 }
 
-/* In V2 the threshold keeps only the tick — no second label on screen. */
-.velma-fraud-widget .vf-meter2 .vf-meter__threshold {
-  top: -0.25em;
-  bottom: -0.25em;
-
-  &::after {
-    display: none;
-  }
-}
-
 /* Verdict — the playground "This is …" statement, left-aligned on the
-   plate; type sizes restated in em (the canon is rem-based). */
+   plate; type sizes restated in em (the canon is rem-based). Hidden it
+   takes no space (`display: none`), so the meter block stays compact;
+   `@starting-style` keeps the fade-in on reveal. */
 .velma-fraud-widget .vf-verdict {
+  display: none;
   margin-top: 1em;
   text-align: left;
   opacity: 0;
@@ -362,8 +277,14 @@
     transform var(--m__duration-slow) var(--m__easing-base);
 
   &.vf-visible {
+    display: block;
     opacity: 1;
     transform: none;
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(0.3em);
+    }
   }
 
   & .pg-verdict-statement-title {
@@ -384,13 +305,17 @@
   gap: 0.5em;
   margin-top: 0.9em;
 
-  &:empty {
+  /* No reserved space while every action is still hidden. */
+  &:empty,
+  &:not(:has(.vf-visible)) {
     display: none;
   }
 }
 
-/* `m__tag` sizes restated in em (the component tokens are rem-based). */
+/* `m__tag` sizes restated in em (the component tokens are rem-based).
+   Hidden actions take no space; `@starting-style` keeps the fade-in. */
 .velma-fraud-widget .vf-action {
+  display: none;
   font-size: 0.8em;
   border-radius: 0.19em; /* radius-xs ÷ 0.8 */
   padding: 0.19em 0.56em; /* padding-control-xs ÷ 0.8 */
@@ -400,8 +325,14 @@
     transform var(--m__duration-slow) var(--m__easing-base);
 
   &.vf-visible {
+    display: inline-flex;
     opacity: 1;
     transform: none;
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(0.4em);
+    }
   }
 }
 
@@ -492,6 +423,17 @@
 
 .velma-fraud-widget .pg-transcript-utterance-header a.pg-behavior-link {
   font-size: 1em; /* canon pins font-size-s in rem — header is already 0.8em */
+  font-weight: var(--m__font-weight-bold); /* the DS behaviors sample is bold */
+}
+
+/* Active bubble — a neutral highlight, not the emotion color (the canon
+   `.active` tint is `!important`, so this overrides at both states). */
+.velma-fraud-widget .vf-utt.active {
+  background: var(--m__border) !important;
+}
+
+.velma-fraud-widget .vf-utt.active:hover {
+  background: var(--m__color-slate-700) !important;
 }
 
 .velma-fraud-widget .pg-transcript-behavior-confidence {

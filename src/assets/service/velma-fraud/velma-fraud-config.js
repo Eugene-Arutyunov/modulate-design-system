@@ -9,7 +9,7 @@
 export const velmaFraudData = {
   meta: {
     title: "Velma Triage",
-    subtitle: "live analysis · Harborview Bank sample call",
+    subtitle: "live analysis preconfigured demo · Harborview Bank sample call",
     scenario:
       "Account takeover attempt, Harborview Bank — opens mid-call in the social-manipulation phase",
     durationMs: 68440,
@@ -26,7 +26,7 @@ export const velmaFraudData = {
     {
       id: "u1",
       speaker: 1,
-      startMs: 300,
+      startMs: 0,
       endMs: 8738,
       emotion: "frustrated",
       text: "Come on! We've been at this for five minutes. I've answered everything. Just change the email on the account so I can get my code.",

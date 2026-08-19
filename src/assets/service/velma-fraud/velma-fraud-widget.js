@@ -52,13 +52,10 @@
 
   function buildTopBar(meta) {
     const top = el("div", "vf-top");
-    const left = el("div", "vf-top__left");
-    const title = el("span", "vf-top__title", meta.title || "Velma Triage");
+    const title = el("h2", "vf-top__title", meta.title || "Velma Triage");
 
-    left.appendChild(title);
     if (meta.subtitle) title.appendChild(el("span", "vf-top__subtitle", ` · ${meta.subtitle}`));
-    top.appendChild(left);
-    top.appendChild(el("span", "vf-top__mode", "Demo clock"));
+    top.appendChild(title);
     return top;
   }
 
@@ -172,20 +169,8 @@
   function buildMeter(data, ui) {
     const section = el("div", "vf-meter");
 
-    // TEMPORARY: two meter variants stacked — the owner picks one, the
-    // other gets deleted (both are driven by the same keyframes).
-
-    // V1 — gradient bar over the emotion-group palette.
-    const head = el("div", "vf-meter__head");
-    const bar = el("div", "vf-meter__bar");
-    const fill = el("div", "vf-meter__fill");
-
-    head.appendChild(el("span", "vf-meter__label", "Fraud risk confidence"));
-    head.appendChild(el("output", "vf-meter__value", "0%"));
-    bar.appendChild(fill);
-    bar.appendChild(buildThreshold(data.meta));
-
-    // V2 — big tabular value + plain single-color confidence bar.
+    // Big tabular value + plain single-color confidence bar with the
+    // threshold tick (the state color carries the risk level).
     const alt = el("div", "vf-meter2");
     const altValue = el("output", "vf-meter2__value", "0%");
     const altBar = el("div", "vf-meter2__bar");
@@ -233,14 +218,10 @@
       ui.actions.push({ el: tag, tMs: action.tMs });
     });
 
-    section.appendChild(head);
-    section.appendChild(bar);
     section.appendChild(alt);
     section.appendChild(verdict);
     section.appendChild(actions);
 
-    ui.meterFill = fill;
-    ui.meterValue = head.querySelector(".vf-meter__value");
     ui.meter2 = alt;
     ui.meter2Fill = altFill;
     ui.meter2Value = altValue;
@@ -407,6 +388,41 @@
     if (delta > 1) panel.scrollTo({ top: panel.scrollTop + delta, behavior: "smooth" });
   }
 
+  // Feed panels don't wheel-scroll. Instead the cursor's Y position over a
+  // panel maps to its scroll position — top of the panel shows the start of
+  // the feed, bottom the end — eased towards the target every frame. While
+  // a panel is hovered the playback autoscroll yields to the cursor.
+  function bindHoverScroll(panel, hovered) {
+    let target = 0;
+    let rafId = null;
+
+    function step() {
+      const delta = target - panel.scrollTop;
+
+      if (Math.abs(delta) < 0.5) {
+        panel.scrollTop = target;
+        rafId = null;
+        return;
+      }
+      panel.scrollTop += delta * 0.16;
+      rafId = requestAnimationFrame(step);
+    }
+
+    panel.addEventListener("wheel", (event) => event.preventDefault(), { passive: false });
+    panel.addEventListener("mouseenter", () => hovered.add(panel));
+    panel.addEventListener("mousemove", (event) => {
+      const rect = panel.getBoundingClientRect();
+      const ratio = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
+
+      target = ratio * (panel.scrollHeight - panel.clientHeight);
+      if (rafId === null) rafId = requestAnimationFrame(step);
+    });
+    panel.addEventListener("mouseleave", () => {
+      hovered.delete(panel);
+    });
+    return () => cancelAnimationFrame(rafId);
+  }
+
   /* Mount ─────────────────────────────────────────────────────────────── */
 
   function mount(root, data) {
@@ -432,7 +448,11 @@
     main.appendChild(buildSignals(data, ui));
     root.appendChild(main);
 
-    const modeTag = root.querySelector(".vf-top__mode");
+    const hoveredPanels = new Set();
+    const unbindHoverScroll = [
+      bindHoverScroll(ui.transcriptPanel, hoveredPanels),
+      bindHoverScroll(ui.signalsPanel, hoveredPanels),
+    ];
 
     /* Clock — audio-backed when the mp3 loads, simulated otherwise. */
     let audio = null;
@@ -451,7 +471,6 @@
         if (destroyed || audioOK) return;
         audio = candidate;
         audioOK = true;
-        if (modeTag) modeTag.textContent = "Audio synced";
       });
       candidate.load();
     }
@@ -527,12 +546,12 @@
         const visible = t >= utt.startMs;
 
         node.classList.toggle("vf-visible", visible);
-        // `active` is the canonical playground class — the bubble tints
-        // with the utterance's own emotion color (`--ec`).
         node.classList.toggle("active", t >= utt.startMs && t <= utt.endMs);
         if (visible) lastUtt = node;
       });
-      if (playing && lastUtt) scrollPanelTo(ui.transcriptPanel, lastUtt);
+      if (playing && lastUtt && !hoveredPanels.has(ui.transcriptPanel)) {
+        scrollPanelTo(ui.transcriptPanel, lastUtt);
+      }
 
       let lastSignal = null;
 
@@ -543,17 +562,14 @@
         if (visible) lastSignal = node;
       });
       ui.signalsEmpty.style.display = lastSignal ? "none" : "";
-      if (playing && lastSignal) scrollPanelTo(ui.signalsPanel, lastSignal);
+      if (playing && lastSignal && !hoveredPanels.has(ui.signalsPanel)) {
+        scrollPanelTo(ui.signalsPanel, lastSignal);
+      }
 
       const value = meterAt(data.meterKeyframes, t);
       const crit = value >= data.meta.fraudThreshold;
       const warn = value >= 55 && !crit;
 
-      ui.meterFill.style.width = `${value}%`;
-      ui.meterFill.style.setProperty("--vf-fill", `${Math.max(value, 1) / 100}`);
-      ui.meterValue.textContent = `${Math.round(value)}%`;
-      ui.meterValue.classList.toggle("vf-crit", crit);
-      ui.meterValue.classList.toggle("vf-warn", warn);
       ui.meter2Fill.style.width = `${value}%`;
       ui.meter2Value.textContent = `${Math.round(value)}%`;
       ui.meter2.classList.toggle("vf-crit", crit);
@@ -719,6 +735,7 @@
         destroyed = true;
         pause();
         clearTimeout(evidenceTimer);
+        unbindHoverScroll.forEach((stop) => stop());
         window.removeEventListener("mousemove", onMove);
         window.removeEventListener("mouseup", onUp);
         window.removeEventListener("touchmove", onMove);
