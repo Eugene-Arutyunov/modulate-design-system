@@ -158,75 +158,50 @@
     return container;
   }
 
-  function buildThreshold(meta) {
-    const threshold = el("div", "vf-meter__threshold");
+  // Fraud risk — the third feed column: a vertical meter filling bottom-up,
+  // the threshold as a translucent dashed line. The head stays on top, the
+  // live percent sits mid-column, the verdict line and action tags reveal
+  // at the bottom. Past the threshold the whole plate turns red
+  // (`vf-critical` on the root).
+  function buildRisk(data, ui) {
+    const panel = el("div", "vf-risk");
+    const fill = el("div", "vf-risk__fill");
+    const threshold = el("div", "vf-risk__threshold");
+    const head = el("div", "vf-panel-head", "Fraud risk");
+    const value = el("output", "vf-risk__value", "0%");
+    const tags = el("div", "vf-risk__tags");
+    const [, detailText] = splitVerdict(data.verdict.label);
 
-    threshold.style.left = `${meta.fraudThreshold}%`;
-    threshold.dataset.label = `Threshold ${meta.fraudThreshold}%`;
-    return threshold;
-  }
+    threshold.style.bottom = `${data.meta.fraudThreshold}%`;
 
-  function buildMeter(data, ui) {
-    const section = el("div", "vf-meter");
-
-    // Big tabular value + plain single-color confidence bar with the
-    // threshold tick (the state color carries the risk level).
-    const alt = el("div", "vf-meter2");
-    const altValue = el("output", "vf-meter2__value", "0%");
-    const altBar = el("div", "vf-meter2__bar");
-    const altFill = el("div", "vf-meter2__fill");
-
-    altBar.appendChild(altFill);
-    altBar.appendChild(buildThreshold(data.meta));
-    alt.appendChild(altValue);
-    alt.appendChild(altBar);
-
-    // Verdict — the playground "This is …" statement anchored to the player.
-    const [statementText, detailText] = splitVerdict(data.verdict.label);
-    const verdict = el("div", "vf-verdict pg-verdict-statement danger");
-    const title = el("h2", "pg-verdict-statement-title");
-    const link = el("a", "pg-verdict-statement-link", statementText);
-    const details = el("div", "pg-verdict-statement-details");
-
-    link.href = "#audio-player";
-    title.appendChild(link);
-    if (detailText) details.appendChild(el("span", "pg-verdict-statement-stat", detailText));
-
-    const confidenceStat = el("span", "pg-verdict-statement-stat");
-
-    confidenceStat.appendChild(
-      el("span", "pg-verdict-statement-stat-value", `${data.verdict.confidence}%`)
+    const verdict = el(
+      "div",
+      "vf-risk__verdict",
+      `${capitalize(detailText || data.verdict.label)} · ${data.verdict.confidence}%`
     );
-    confidenceStat.appendChild(document.createTextNode(" confidence"));
-    details.appendChild(confidenceStat);
 
-    const timeStat = el("span", "pg-verdict-statement-stat");
+    tags.appendChild(verdict);
 
-    timeStat.appendChild(el("span", "pg-verdict-statement-stat-value", fmt(data.verdict.tMs)));
-    details.appendChild(timeStat);
-    verdict.appendChild(title);
-    verdict.appendChild(details);
-
-    // Actions as canonical tags; tone follows the action's meaning.
-    const actions = el("div", "vf-actions");
     const tones = ["m__tag--error", "m__tag--muted", "m__tag--error"];
 
     data.actions.forEach((action, index) => {
       const tag = el("span", `m__tag ${tones[index] || "m__tag--muted"} vf-action`, action.label);
 
-      actions.appendChild(tag);
+      tags.appendChild(tag);
       ui.actions.push({ el: tag, tMs: action.tMs });
     });
 
-    section.appendChild(alt);
-    section.appendChild(verdict);
-    section.appendChild(actions);
+    panel.appendChild(fill);
+    panel.appendChild(threshold);
+    panel.appendChild(head);
+    panel.appendChild(value);
+    panel.appendChild(tags);
 
-    ui.meter2 = alt;
-    ui.meter2Fill = altFill;
-    ui.meter2Value = altValue;
+    ui.risk = panel;
+    ui.riskFill = fill;
+    ui.riskValue = value;
     ui.verdict = verdict;
-    return section;
+    return panel;
   }
 
   function splitVerdict(label) {
@@ -415,11 +390,10 @@
     };
   }
 
-  // Keep the newest visible feed entry pinned to the panel bottom.
-  function scrollPanelTo(scroller, panel, node) {
-    const delta = node.getBoundingClientRect().bottom - panel.getBoundingClientRect().bottom;
-
-    if (delta > 1) scroller.by(delta);
+  // Keep a feed pinned to its very end — the newest entry sits above the
+  // list's bottom padding (the `to` clamp resolves the actual maximum).
+  function scrollPanelEnd(scroller, panel) {
+    scroller.to(panel.scrollHeight);
   }
 
   /* Mount ─────────────────────────────────────────────────────────────── */
@@ -439,12 +413,12 @@
     root.textContent = "";
     root.appendChild(buildTopBar(data.meta));
     root.appendChild(buildPlayer(data, ui));
-    root.appendChild(buildMeter(data, ui));
 
     const main = el("div", "vf-main");
 
     main.appendChild(buildTranscript(data, ui));
     main.appendChild(buildSignals(data, ui));
+    main.appendChild(buildRisk(data, ui));
     root.appendChild(main);
 
     const transcriptScroller = createPanelScroller(ui.transcriptPanel);
@@ -454,6 +428,9 @@
     // The utterance whose bubble is hovered — keeps the linked clip lit
     // through the render loop.
     let hoverUtt = null;
+    // The cursor's clientX while it hovers the fingerprint — render
+    // re-applies the transcript mapping when a new clip reveals.
+    let playerHoverX = null;
 
     function bindHoverScroll(panel, scroller) {
       panel.addEventListener("mouseenter", () => scrollHeld.add(panel));
@@ -462,7 +439,11 @@
 
         scroller.toRatio((event.clientY - rect.top) / rect.height);
       });
-      panel.addEventListener("mouseleave", () => scrollHeld.delete(panel));
+      panel.addEventListener("mouseleave", () => {
+        scrollHeld.delete(panel);
+        // The resting state shows the end of the feed.
+        scrollPanelEnd(scroller, panel);
+      });
     }
 
     bindHoverScroll(ui.transcriptPanel, transcriptScroller);
@@ -563,8 +544,10 @@
         node.classList.toggle("active", t >= utt.startMs && t <= utt.endMs);
         if (visible) lastUtt = node;
       });
-      if (playing && lastUtt && !scrollHeld.has(ui.transcriptPanel)) {
-        scrollPanelTo(transcriptScroller, ui.transcriptPanel, lastUtt);
+      if (playerHoverX !== null) {
+        scrollTranscriptFromPlayerX(playerHoverX);
+      } else if (playing && lastUtt && !scrollHeld.has(ui.transcriptPanel)) {
+        scrollPanelEnd(transcriptScroller, ui.transcriptPanel);
       }
 
       let lastSignal = null;
@@ -577,17 +560,18 @@
       });
       ui.signalsEmpty.style.display = lastSignal ? "none" : "";
       if (playing && lastSignal && !scrollHeld.has(ui.signalsPanel)) {
-        scrollPanelTo(signalsScroller, ui.signalsPanel, lastSignal);
+        scrollPanelEnd(signalsScroller, ui.signalsPanel);
       }
 
       const value = meterAt(data.meterKeyframes, t);
       const crit = value >= data.meta.fraudThreshold;
       const warn = value >= 55 && !crit;
 
-      ui.meter2Fill.style.width = `${value}%`;
-      ui.meter2Value.textContent = `${Math.round(value)}%`;
-      ui.meter2.classList.toggle("vf-crit", crit);
-      ui.meter2.classList.toggle("vf-warn", warn);
+      ui.riskFill.style.height = `${value}%`;
+      ui.riskValue.textContent = `${Math.round(value)}%`;
+      ui.risk.classList.toggle("vf-crit", crit);
+      ui.risk.classList.toggle("vf-warn", warn);
+      root.classList.toggle("vf-critical", crit);
 
       ui.verdict.classList.toggle("vf-visible", t >= data.verdict.tMs);
       ui.actions.forEach(({ el: node, tMs }) => {
@@ -639,19 +623,39 @@
 
     // Same hover line the playground binds on its media containers; the
     // cursor's X over the fingerprint also drives the transcript scroll —
-    // the same data rotated 90°.
+    // the same data rotated 90°. The mapping counts only the revealed part
+    // of the timeline (up to the end of the last revealed clip), matching
+    // the partially revealed transcript; `render` re-applies the stored X,
+    // so a newly revealed clip recomputes the scroll position.
+    function scrollTranscriptFromPlayerX(clientX) {
+      const rect = ui.player.getBoundingClientRect();
+      const t = nowMs();
+      let revealedEndMs = 0;
+
+      data.transcript.forEach((utt) => {
+        if (utt.startMs <= t) revealedEndMs = Math.max(revealedEndMs, utt.endMs);
+      });
+      if (!revealedEndMs) return;
+
+      const xMs = ((clientX - rect.left) / rect.width) * duration;
+
+      transcriptScroller.toRatio(xMs / revealedEndMs);
+    }
+
     ui.player.addEventListener("mousemove", (event) => {
       const rect = ui.player.getBoundingClientRect();
-      const x = event.clientX - rect.left;
 
-      ui.player.style.setProperty("--pg-hover-x", `${x}px`);
+      ui.player.style.setProperty("--pg-hover-x", `${event.clientX - rect.left}px`);
       ui.player.dataset.hover = "true";
       scrollHeld.add(ui.transcriptPanel);
-      transcriptScroller.toRatio(x / rect.width);
+      playerHoverX = event.clientX;
+      scrollTranscriptFromPlayerX(playerHoverX);
     });
     ui.player.addEventListener("mouseleave", () => {
       ui.player.dataset.hover = "false";
       scrollHeld.delete(ui.transcriptPanel);
+      playerHoverX = null;
+      scrollPanelEnd(transcriptScroller, ui.transcriptPanel);
     });
 
     /* Player ↔ transcript hover link. */
@@ -786,7 +790,7 @@
         window.removeEventListener("touchend", onUp);
         window.removeEventListener("keydown", onKeydown);
         root.textContent = "";
-        root.classList.remove("velma-fraud-widget", "dark-mode");
+        root.classList.remove("velma-fraud-widget", "dark-mode", "vf-critical");
       },
     };
 

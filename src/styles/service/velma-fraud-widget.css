@@ -75,6 +75,12 @@
   /* Borderless plate, `.m__widget` canon; widget-radius. */
   border-radius: 0.75em;
   overflow: hidden;
+  transition: background-color var(--m__duration-xslow) var(--m__easing-base);
+}
+
+/* Past the fraud threshold the whole plate turns red. */
+.velma-fraud-widget.vf-critical {
+  background-color: color-mix(in srgb, var(--m__error) 20%, var(--m__bg));
 }
 
 /* Canonical eyebrow — semi-mono, regular, uppercase. */
@@ -204,28 +210,19 @@
   }
 }
 
-/* ── Fraud risk meter, verdict, actions ───────────────────────────────── */
+/* ── Fraud risk column ────────────────────────────────────────────────── */
 
-.velma-fraud-widget .vf-meter {
-  padding: 1em 1.1em;
-  border-bottom: 1px solid var(--m__border);
-}
-
-.velma-fraud-widget .vf-meter__threshold {
-  position: absolute;
-  top: -0.25em;
-  bottom: -0.25em;
-  width: 2px;
-  margin-left: -1px;
-  background-color: var(--m__error);
-}
-
-/* Big tabular value + plain single-color confidence bar; the state color
-   (caption → warn orange → error) carries the risk level. */
-.velma-fraud-widget .vf-meter2 {
+/* The third, narrowest feed column: a vertical meter filling bottom-up,
+   the threshold as a translucent dashed line. Head on top, live percent
+   mid-column, verdict line + action tags at the bottom. */
+.velma-fraud-widget .vf-risk {
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.7em;
+  height: 21em;
+  overflow: hidden;
+  border-left: 1px solid var(--m__border);
   color: var(--m__text-caption);
   transition: color var(--m__duration-medium) var(--m__easing-base);
 
@@ -236,41 +233,58 @@
   &.vf-crit {
     color: var(--m__error);
   }
+
+  & .vf-panel-head {
+    align-self: stretch;
+    position: relative;
+    z-index: 1;
+  }
 }
 
-.velma-fraud-widget .vf-meter2__value {
-  flex: none;
-  min-width: 2.4em;
+.velma-fraud-widget .vf-risk__fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0;
+  background-color: color-mix(in srgb, currentColor 22%, transparent);
+  transition: height var(--m__duration-base) linear,
+    background-color var(--m__duration-medium) var(--m__easing-base);
+}
+
+.velma-fraud-widget .vf-risk__threshold {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--m__error) 55%, transparent);
+}
+
+.velma-fraud-widget .vf-risk__value {
+  position: relative;
+  z-index: 1;
+  margin: auto 0;
   font-size: 1.4em;
   font-weight: var(--m__font-weight-bold);
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
-.velma-fraud-widget .vf-meter2__bar {
+.velma-fraud-widget .vf-risk__tags {
   position: relative;
-  flex: 1;
-  height: 0.25em;
-  border-radius: 0.15em;
-  background-color: var(--m__border);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0 0.8em 1em;
+  text-align: center;
 }
 
-.velma-fraud-widget .vf-meter2__fill {
-  height: 100%;
-  width: 0;
-  border-radius: 0.15em;
-  background-color: currentColor;
-  transition: width var(--m__duration-base) linear;
-}
-
-/* Verdict — the playground "This is …" statement, left-aligned on the
-   plate; type sizes restated in em (the canon is rem-based). Hidden it
-   takes no space (`display: none`), so the meter block stays compact;
-   `@starting-style` keeps the fade-in on reveal. */
-.velma-fraud-widget .vf-verdict {
+/* "Account takeover pattern · 94%" — reveals with the verdict. */
+.velma-fraud-widget .vf-risk__verdict {
   display: none;
-  margin-top: 1em;
-  text-align: left;
+  font-size: 0.8em;
+  line-height: 1.3;
   opacity: 0;
   transform: translateY(0.3em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
@@ -285,30 +299,6 @@
       opacity: 0;
       transform: translateY(0.3em);
     }
-  }
-
-  & .pg-verdict-statement-title {
-    margin: 0;
-    font-size: 1.4em;
-    line-height: 1.3;
-  }
-
-  & .pg-verdict-statement-details {
-    margin-top: 0.45em;
-    font-size: 0.8em;
-  }
-}
-
-.velma-fraud-widget .vf-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5em;
-  margin-top: 0.9em;
-
-  /* No reserved space while every action is still hidden. */
-  &:empty,
-  &:not(:has(.vf-visible)) {
-    display: none;
   }
 }
 
@@ -338,9 +328,10 @@
 
 /* ── Transcript + signal feed ─────────────────────────────────────────── */
 
+/* Transcript / signals / risk — 1/2 + 1/3 + 1/6. */
 .velma-fraud-widget .vf-main {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 1fr);
 }
 
 @media (max-width: 768px) {
@@ -376,6 +367,12 @@
   .velma-fraud-widget .vf-signals {
     height: 15em;
     border-left: 0;
+  }
+
+  .velma-fraud-widget .vf-risk {
+    height: 12em;
+    border-left: 0;
+    border-top: 1px solid var(--m__border);
   }
 }
 

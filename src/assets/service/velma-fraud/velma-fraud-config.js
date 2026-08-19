@@ -156,9 +156,8 @@ export const velmaFraudData = {
   ],
   verdict: { tMs: 56000, label: "High fraud risk — account takeover pattern", confidence: 94 },
   actions: [
-    { tMs: 58500, label: "Labeled as suspected fraud" },
-    { tMs: 61000, label: "Sent for manual review" },
-    { tMs: 63500, label: "Account changes frozen" },
+    { tMs: 58500, label: "Suspected fraud" },
+    { tMs: 61000, label: "Manual review" },
   ],
   meterKeyframes: [
     { tMs: 0, value: 0 },
