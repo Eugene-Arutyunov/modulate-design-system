@@ -397,11 +397,14 @@
   }
 
   // Scroll a feed panel to keep its newest visible entry in view without
-  // ever scrolling the page itself.
+  // ever scrolling the page itself. Positions come from client rects —
+  // `offsetTop` here would be page-relative (the panels have no positioned
+  // ancestor) and would pin the panel to the bottom of the list, past the
+  // still-transparent future entries.
   function scrollPanelTo(panel, node) {
-    const target = node.offsetTop + node.offsetHeight - panel.clientHeight;
+    const delta = node.getBoundingClientRect().bottom - panel.getBoundingClientRect().bottom;
 
-    if (target > panel.scrollTop) panel.scrollTo({ top: target, behavior: "smooth" });
+    if (delta > 1) panel.scrollTo({ top: panel.scrollTop + delta, behavior: "smooth" });
   }
 
   /* Mount ─────────────────────────────────────────────────────────────── */
