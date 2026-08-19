@@ -1,8 +1,20 @@
 /* Velma Fraud Demo — standalone embed styles for the Webflow export.
    Not linked on the design-system site: the studio inlines this file into
    the exported HTML. Mirrors velma-fraud-widget.css + the fingerprint
-   player subset, with the design-system dark-theme token values baked in
-   as widget-local custom properties. Flat selectors, no CSS nesting. */
+   player subset + the canonical playground patterns the widget borrows
+   (pg-transcript-utterance, pg-verdict-statement), with the design-system
+   dark-theme token values baked in as widget-local custom properties.
+   Flat selectors, no CSS nesting.
+
+   Sync checklist against velma-fraud-widget.css (live file):
+   - widget root (tokens/plate) ..... "Widget root" section
+   - top bar ........................ "Top bar"
+   - fingerprint player ............. "Fingerprint player" (stable subset)
+   - meter v1 + v2, verdict, actions  "Fraud risk meter, verdict, actions"
+   - transcript bubbles ............. "Transcript utterances"
+   - signal feed .................... "Signal feed"
+   The semi-mono @font-face is NOT here — the studio export inlines the
+   woff2 as a data: URL at export time (see velma-fraud-studio.js). */
 
 /* ── Responsive frame (target-site geometry) ─────────────────────────── */
 
@@ -23,18 +35,22 @@
   /* Design-system tokens, dark theme values */
   --m__text: rgb(176, 176, 190);
   --m__text-caption: rgb(126, 126, 144);
+  --m__text-link-hover: rgb(255, 255, 255);
   --m__bg: rgb(20, 20, 25);
   --m__bg-surface: rgb(30, 30, 40);
   --m__border: rgb(68, 68, 86);
   --m__error: rgb(238, 64, 86);
   --m__success: rgb(74, 185, 108);
+  --m__color-blue-500: rgb(40, 95, 235);
+  --m__color-slate-700: rgb(62, 63, 97);
   --m__font-family-sans: "Inter", system-ui, sans-serif;
-  --m__font-family-mono: "CoFo Sans Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --m__font-family-semi-mono: "CoFo Sans Semi Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --m__font-weight-regular: 400;
   --m__font-weight-medium: 500;
   --m__font-weight-bold: 600;
   --m__duration-instant: 0s;
   --m__duration-medium: 0.2s;
+  --m__duration-base: 0.3s;
   --m__duration-slow: 0.35s;
   --m__duration-xslow: 0.5s;
   --m__easing-base: ease;
@@ -97,8 +113,8 @@
   line-height: 1.45;
   color: var(--m__text);
   background-color: var(--m__bg);
-  border: 1px solid var(--m__border);
-  border-radius: 1em;
+  /* Borderless plate, `.m__widget` canon; widget-radius. */
+  border-radius: 0.75em;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -127,30 +143,12 @@
 }
 
 .velma-fraud-widget .vf-top__left {
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
   min-width: 0;
 }
 
-.velma-fraud-widget .vf-top__dot {
-  flex: none;
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  background-color: var(--m__success);
-  box-shadow: 0 0 0.5em var(--m__success);
-  animation: vf-pulse 2s infinite;
-}
-
-@keyframes vf-pulse {
-  50% {
-    opacity: 0.4;
-  }
-}
-
 .velma-fraud-widget .vf-top__title {
-  font-size: 0.875em;
+  display: block;
+  font-size: 0.8em;
   font-weight: var(--m__font-weight-bold);
   white-space: nowrap;
   overflow: hidden;
@@ -162,16 +160,19 @@
   color: var(--m__text-caption);
 }
 
+/* `m__tag` geometry in em, semi-mono like the playground's tags. */
 .velma-fraud-widget .vf-top__mode {
   flex: none;
-  font-family: var(--m__font-family-mono);
-  font-size: 0.6875em;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  font-family: var(--m__font-family-semi-mono);
+  font-size: 0.8em;
+  font-weight: var(--m__font-weight-medium);
   color: var(--m__text-caption);
-  border: 1px solid var(--m__border);
-  border-radius: 1em;
-  padding: 0.3em 0.8em;
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 0.19em;
+  padding: 0.19em 0.56em;
 }
 
 /* ── Fingerprint player ──────────────────────────────────────────────── */
@@ -570,17 +571,19 @@
   margin-bottom: 0.5em;
 }
 
+/* Canonical eyebrow — semi-mono, regular, uppercase. */
 .velma-fraud-widget .vf-meter__label {
-  font-size: 0.6875em;
-  font-weight: var(--m__font-weight-bold);
+  font-family: var(--m__font-family-semi-mono);
+  font-size: 0.8em;
+  font-weight: var(--m__font-weight-regular);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--m__text-caption);
 }
 
 .velma-fraud-widget .vf-meter__value {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.875em;
+  font-size: 0.8em;
+  font-variant-numeric: tabular-nums;
   color: var(--m__text-caption);
   transition: color var(--m__duration-medium) var(--m__easing-base);
 }
@@ -596,7 +599,7 @@
 .velma-fraud-widget .vf-meter__bar {
   position: relative;
   height: 0.5em;
-  border-radius: 0.25em;
+  border-radius: 0.3em;
   background-color: var(--m__bg-surface);
   overflow: visible;
 }
@@ -605,9 +608,9 @@
   position: relative;
   height: 100%;
   width: 0;
-  border-radius: 0.25em;
+  border-radius: 0.3em;
   overflow: hidden;
-  transition: width 0.3s linear;
+  transition: width var(--m__duration-base) linear;
 }
 
 .velma-fraud-widget .vf-meter__fill::before {
@@ -640,19 +643,74 @@
   position: absolute;
   right: 0.5em;
   top: -1.4em;
-  font-family: var(--m__font-family-mono);
-  font-size: 0.625em;
+  font-family: var(--m__font-family-semi-mono);
+  font-weight: var(--m__font-weight-regular);
+  font-size: 0.65em;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   white-space: nowrap;
   color: var(--m__error);
 }
 
-.velma-fraud-widget .vf-verdict {
+/* TEMPORARY: second meter variant below the gradient one — the owner
+   picks one, the other gets deleted. */
+.velma-fraud-widget .vf-meter2 {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.7em;
+  margin-top: 1.1em;
+  color: var(--m__text-caption);
+  transition: color var(--m__duration-medium) var(--m__easing-base);
+}
+
+.velma-fraud-widget .vf-meter2.vf-warn {
+  color: rgba(var(--vf-behavior-RGB), 1);
+}
+
+.velma-fraud-widget .vf-meter2.vf-crit {
+  color: var(--m__error);
+}
+
+.velma-fraud-widget .vf-meter2__value {
+  flex: none;
+  min-width: 2.4em;
+  font-size: 1.4em;
+  font-weight: var(--m__font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.velma-fraud-widget .vf-meter2__bar {
+  position: relative;
+  flex: 1;
+  height: 0.25em;
+  border-radius: 0.15em;
+  background-color: var(--m__border);
+}
+
+.velma-fraud-widget .vf-meter2__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 0.15em;
+  background-color: currentColor;
+  transition: width var(--m__duration-base) linear;
+}
+
+.velma-fraud-widget .vf-meter2 .vf-meter__threshold {
+  top: -0.25em;
+  bottom: -0.25em;
+}
+
+.velma-fraud-widget .vf-meter2 .vf-meter__threshold::after {
+  display: none;
+}
+
+/* Verdict — the playground "This is …" statement anchored to the player. */
+.velma-fraud-widget .vf-verdict {
   margin-top: 1em;
+  text-align: left;
+  --pg-verdict-statement-color: var(--m__error);
+  color: var(--pg-verdict-statement-color);
   opacity: 0;
   transform: translateY(0.3em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
@@ -664,78 +722,122 @@
   transform: none;
 }
 
-.velma-fraud-widget .vf-verdict__badge {
-  flex: none;
-  font-size: 0.6875em;
+.velma-fraud-widget .pg-verdict-statement-title {
+  margin: 0;
+  font-size: 1.4em;
   font-weight: var(--m__font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--m__error);
-  border: 1px solid var(--m__error);
-  border-radius: 1em;
-  padding: 0.25em 0.8em;
+  line-height: 1.3;
 }
 
-.velma-fraud-widget .vf-verdict__text {
-  font-size: 0.8125em;
-  color: var(--m__text);
+.velma-fraud-widget a.pg-verdict-statement-link,
+.velma-fraud-widget a.pg-verdict-statement-link:link,
+.velma-fraud-widget a.pg-verdict-statement-link:visited {
+  color: var(--pg-verdict-statement-color);
+  text-decoration-line: underline;
+  text-decoration-color: var(--pg-verdict-statement-color);
+  text-decoration-thickness: 4px;
+  text-underline-offset: 0.22em;
+  text-decoration-skip-ink: none;
+  transition:
+    color var(--m__duration-base) var(--m__easing-base),
+    text-decoration-color var(--m__duration-base) var(--m__easing-base);
+}
+
+.velma-fraud-widget a.pg-verdict-statement-link:hover,
+.velma-fraud-widget a.pg-verdict-statement-link:focus,
+.velma-fraud-widget a.pg-verdict-statement-link:active {
+  color: var(--m__text-link-hover);
+  text-decoration-color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
+}
+
+.velma-fraud-widget .pg-verdict-statement-details {
+  margin-top: 0.45em;
+  font-size: 0.8em;
+  font-weight: var(--m__font-weight-medium);
+}
+
+.velma-fraud-widget .pg-verdict-statement-stat {
+  white-space: nowrap;
+}
+
+.velma-fraud-widget .pg-verdict-statement-stat + .pg-verdict-statement-stat::before {
+  content: " · ";
+  white-space: pre;
+  opacity: 0.6;
+}
+
+.velma-fraud-widget .pg-verdict-statement-stat-value {
+  font-variant-numeric: tabular-nums;
 }
 
 .velma-fraud-widget .vf-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5em;
-  margin-top: 0.8em;
+  margin-top: 0.9em;
 }
 
 .velma-fraud-widget .vf-actions:empty {
   display: none;
 }
 
-.velma-fraud-widget .vf-chip {
-  font-size: 0.75em;
-  color: var(--m__text);
-  background-color: var(--m__bg-surface);
-  border: 1px solid var(--m__border);
-  border-radius: 1.2em;
-  padding: 0.35em 1em;
+/* Actions — canonical `m__tag` (outline, near-rectangular), sized in em. */
+.velma-fraud-widget .vf-action {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  font-size: 0.8em;
+  font-weight: var(--m__font-weight-medium);
+  color: currentColor;
+  background-color: transparent;
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 0.19em;
+  padding: 0.19em 0.56em;
   opacity: 0;
   transform: translateY(0.4em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
     transform var(--m__duration-slow) var(--m__easing-base);
 }
 
-.velma-fraud-widget .vf-chip.vf-visible {
+.velma-fraud-widget .vf-action.vf-visible {
   opacity: 1;
   transform: none;
+}
+
+.velma-fraud-widget .m__tag--error {
+  color: var(--m__error);
+}
+
+.velma-fraud-widget .m__tag--muted {
+  color: var(--m__text-caption);
+}
+
+.velma-fraud-widget .m__tag--success {
+  color: var(--m__success);
 }
 
 /* ── Transcript + signal feed ────────────────────────────────────────── */
 
 .velma-fraud-widget .vf-main {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 }
 
+/* Canonical eyebrow — semi-mono, regular, uppercase. */
 .velma-fraud-widget .vf-panel-head {
   position: sticky;
   top: 0;
   z-index: 1;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 0.8em 1.1em 0.6em;
-  font-size: 0.6875em;
-  font-weight: var(--m__font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--m__text-caption);
-  background-color: var(--m__bg);
-}
-
-.velma-fraud-widget .vf-panel-head__live {
-  color: var(--m__success);
+  font-family: var(--m__font-family-semi-mono);
+  font-size: 0.8em;
   font-weight: var(--m__font-weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m__text-caption);
+  padding: 1em 1.375em 0.75em; /* 0.8 / 1.1 / 0.6em ÷ 0.8 */
+  background-color: var(--m__bg);
 }
 
 .velma-fraud-widget .vf-transcript,
@@ -765,18 +867,29 @@
   }
 }
 
-/* Transcript utterances */
+/* Transcript utterances — the canonical playground bubbles
+   (`pg-transcript-utterance`), alternating shoulders by role. */
 
 .velma-fraud-widget .vf-utterances {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
   padding: 0 1.1em 1em;
 }
 
 .velma-fraud-widget .vf-utt {
-  margin-bottom: 0.9em;
+  background: var(--m__bg-surface);
+  padding: 0.7em 0.9em;
+  border-radius: 2em;
+  corner-shape: squircle;
+  max-width: min(92%, 40em);
+  cursor: pointer;
   opacity: 0;
   transform: translateY(0.4em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
-    transform var(--m__duration-slow) var(--m__easing-base);
+    transform var(--m__duration-slow) var(--m__easing-base),
+    background var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 }
 
 .velma-fraud-widget .vf-utt.vf-visible {
@@ -784,49 +897,114 @@
   transform: none;
 }
 
-.velma-fraud-widget .vf-utt__meta {
+.velma-fraud-widget .vf-utt.speaker-left {
+  align-self: flex-start;
+}
+
+.velma-fraud-widget .vf-utt.speaker-right {
+  align-self: flex-end;
+}
+
+.velma-fraud-widget .vf-utt:hover {
+  background: var(--m__color-slate-700);
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
+}
+
+/* Active bubble tints with the utterance's own emotion color (`--ec`,
+   set inline from JS). */
+.velma-fraud-widget .vf-utt.active {
+  background: color-mix(in srgb, var(--ec, var(--m__text-caption)) 20%, var(--m__bg-surface)) !important;
+}
+
+.velma-fraud-widget .vf-utt.active:hover {
+  background: color-mix(in srgb, var(--ec, var(--m__text-caption)) 20%, transparent) !important;
+}
+
+/* Review-report evidence flash (from a signal click). */
+.velma-fraud-widget .vf-utt.is-evidence-highlighted {
+  background: color-mix(in srgb, var(--m__color-blue-500) 14%, var(--m__bg-surface)) !important;
+  color: var(--m__color-blue-500);
+}
+
+/* Header: semi-mono meta line. */
+.velma-fraud-widget .pg-transcript-utterance-header {
   display: flex;
   align-items: baseline;
-  gap: 0.6em;
-  margin-bottom: 0.3em;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  margin-bottom: 0.45em;
+  font-family: var(--m__font-family-semi-mono);
+  font-size: 0.8em;
 }
 
-.velma-fraud-widget .vf-utt__time {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.6875em;
-  color: var(--m__text-caption);
+.velma-fraud-widget .pg-transcript-time {
+  font-variant-numeric: tabular-nums;
 }
 
-.velma-fraud-widget .vf-utt__speaker {
-  font-size: 0.6875em;
-  font-weight: var(--m__font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border-radius: 1em;
-  padding: 0.15em 0.7em;
+.velma-fraud-widget .pg-transcript-emotion {
+  color: var(--ec, var(--m__text-caption));
 }
 
-.velma-fraud-widget .vf-utt[data-speaker="1"] .vf-utt__speaker {
-  color: rgba(var(--vf-behavior-RGB), 1);
-  background-color: rgba(var(--vf-behavior-RGB), 0.14);
+.velma-fraud-widget .pg-transcript-behavior {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+  min-width: 0;
 }
 
-.velma-fraud-widget .vf-utt[data-speaker="2"] .vf-utt__speaker {
-  color: rgba(var(--vf-language-RGB), 1);
-  background-color: rgba(var(--vf-language-RGB), 0.14);
+.velma-fraud-widget a.pg-behavior-link,
+.velma-fraud-widget a.pg-behavior-link:link,
+.velma-fraud-widget a.pg-behavior-link:visited,
+.velma-fraud-widget a.pg-behavior-link:hover,
+.velma-fraud-widget a.pg-behavior-link:focus,
+.velma-fraud-widget a.pg-behavior-link:active {
+  color: inherit;
+  font-family: var(--m__font-family-sans);
+  font-size: 1em;
+  font-weight: var(--m__font-weight-medium);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 100% 2px;
+  background-position: 0 100%;
+  padding-bottom: 0.1em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
-.velma-fraud-widget .vf-utt__bubble {
-  font-size: 0.8125em;
-  color: var(--m__text);
-  background-color: var(--m__bg-surface);
-  border-radius: 0.6em;
-  padding: 0.6em 0.9em;
-  transition: background-color var(--m__duration-medium) var(--m__easing-base);
+.velma-fraud-widget .pg-behavior-link svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  margin-right: 0.15em;
 }
 
-.velma-fraud-widget .vf-utt.vf-active .vf-utt__bubble {
-  background-color: var(--m__border);
+/* The kiki glyph doubles as the behavior icon: solid currentColor form,
+   no white outline halo in text context. */
+.velma-fraud-widget .vf-utt .pg-behavior-link svg .behaviour-icon__outline {
+  fill: none;
+}
+
+.velma-fraud-widget .vf-utt .pg-behavior-link svg polygon {
+  fill: currentColor;
+}
+
+.velma-fraud-widget .pg-transcript-behavior-confidence {
+  flex: 0 0 auto;
+  color: inherit;
+  font-family: var(--m__font-family-sans);
+  font-size: 0.9375em; /* 0.75rem ÷ 0.8 */
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--m__font-weight-medium);
+}
+
+.velma-fraud-widget .pg-transcript-text {
+  font-size: 0.8em;
+}
+
+.velma-fraud-widget .pg-transcript-text p {
+  margin: 0;
 }
 
 /* Signal feed */
@@ -836,17 +1014,16 @@
 }
 
 .velma-fraud-widget .vf-signals__empty {
-  font-size: 0.75em;
+  font-size: 0.8em;
   color: var(--m__text-caption);
   padding: 0.4em 0;
 }
 
 .velma-fraud-widget .vf-sig {
-  --vf-sig-RGB: 128, 128, 128;
+  --vf-sig-RGB: var(--emotion-neutral-group-RGB);
 
-  border-left: 2px solid rgba(var(--vf-sig-RGB), 1);
-  padding: 0.1em 0 0.1em 0.8em;
   margin-bottom: 0.9em;
+  cursor: pointer;
   opacity: 0;
   transform: translateY(0.4em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
@@ -856,6 +1033,11 @@
 .velma-fraud-widget .vf-sig.vf-visible {
   opacity: 1;
   transform: none;
+}
+
+.velma-fraud-widget .vf-sig:hover .vf-sig__label {
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
 }
 
 .velma-fraud-widget .vf-sig[data-kind="language"] {
@@ -885,27 +1067,36 @@
   gap: 0.6em;
 }
 
+/* Signal kind — `m__tag-flat` geometry in the kind's accent color. */
 .velma-fraud-widget .vf-sig__type {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.625em;
-  font-weight: var(--m__font-weight-bold);
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  font-family: var(--m__font-family-semi-mono);
+  font-size: 0.65em;
+  font-weight: var(--m__font-weight-medium);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: rgba(var(--vf-sig-RGB), 1);
+  background-color: color-mix(in srgb, currentColor 15%, transparent);
+  padding: 0.2em 0.45em;
+  border-radius: 0.46em; /* radius-s ÷ 0.65 */
 }
 
 .velma-fraud-widget .vf-sig__time {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.625em;
+  font-size: 0.65em;
+  font-variant-numeric: tabular-nums;
   color: var(--m__text-caption);
 }
 
 .velma-fraud-widget .vf-sig__label {
-  font-size: 0.75em;
+  font-size: 0.8em;
   color: var(--m__text);
-  margin: 0.15em 0 0.3em;
+  margin: 0.3em 0;
+  transition: color var(--m__duration-base) var(--m__easing-base);
 }
 
+/* Confidence — `pg-confidence-cell` geometry in em. */
 .velma-fraud-widget .vf-sig__conf {
   display: flex;
   align-items: center;
@@ -914,20 +1105,21 @@
 
 .velma-fraud-widget .vf-sig__bar {
   flex: 1;
-  height: 0.2em;
-  border-radius: 0.1em;
-  background-color: var(--m__bg-surface);
+  max-width: 5em; /* 80px */
+  height: 0.25em;
+  border-radius: 0.15em;
+  background-color: var(--m__border);
   overflow: hidden;
 }
 
 .velma-fraud-widget .vf-sig__fill {
   height: 100%;
-  border-radius: 0.1em;
-  background-color: rgba(var(--vf-sig-RGB), 0.8);
+  border-radius: 0.15em;
+  background-color: rgba(var(--vf-sig-RGB), 1);
 }
 
 .velma-fraud-widget .vf-sig__val {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.625em;
+  font-size: 0.65em;
+  font-variant-numeric: tabular-nums;
   color: var(--m__text-caption);
 }

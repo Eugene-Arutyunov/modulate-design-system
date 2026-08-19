@@ -55,7 +55,6 @@
     const left = el("div", "vf-top__left");
     const title = el("span", "vf-top__title", meta.title || "Velma Triage");
 
-    left.appendChild(el("span", "vf-top__dot"));
     left.appendChild(title);
     if (meta.subtitle) title.appendChild(el("span", "vf-top__subtitle", ` · ${meta.subtitle}`));
     top.appendChild(left);
@@ -162,47 +161,89 @@
     return container;
   }
 
+  function buildThreshold(meta) {
+    const threshold = el("div", "vf-meter__threshold");
+
+    threshold.style.left = `${meta.fraudThreshold}%`;
+    threshold.dataset.label = `Threshold ${meta.fraudThreshold}%`;
+    return threshold;
+  }
+
   function buildMeter(data, ui) {
     const section = el("div", "vf-meter");
+
+    // TEMPORARY: two meter variants stacked — the owner picks one, the
+    // other gets deleted (both are driven by the same keyframes).
+
+    // V1 — gradient bar over the emotion-group palette.
     const head = el("div", "vf-meter__head");
     const bar = el("div", "vf-meter__bar");
     const fill = el("div", "vf-meter__fill");
-    const threshold = el("div", "vf-meter__threshold");
-    const verdict = el("div", "vf-verdict");
-    const actions = el("div", "vf-actions");
 
     head.appendChild(el("span", "vf-meter__label", "Fraud risk confidence"));
     head.appendChild(el("output", "vf-meter__value", "0%"));
-    threshold.style.left = `${data.meta.fraudThreshold}%`;
-    threshold.dataset.label = `Threshold ${data.meta.fraudThreshold}%`;
     bar.appendChild(fill);
-    bar.appendChild(threshold);
+    bar.appendChild(buildThreshold(data.meta));
 
-    const [badgeText, restText] = splitVerdict(data.verdict.label);
+    // V2 — big tabular value + plain single-color confidence bar.
+    const alt = el("div", "vf-meter2");
+    const altValue = el("output", "vf-meter2__value", "0%");
+    const altBar = el("div", "vf-meter2__bar");
+    const altFill = el("div", "vf-meter2__fill");
 
-    verdict.appendChild(el("span", "vf-verdict__badge", badgeText));
-    verdict.appendChild(
-      el(
-        "span",
-        "vf-verdict__text",
-        `${restText} · ${data.verdict.confidence}% · ${fmt(data.verdict.tMs)}`
-      )
+    altBar.appendChild(altFill);
+    altBar.appendChild(buildThreshold(data.meta));
+    alt.appendChild(altValue);
+    alt.appendChild(altBar);
+
+    // Verdict — the playground "This is …" statement anchored to the player.
+    const [statementText, detailText] = splitVerdict(data.verdict.label);
+    const verdict = el("div", "vf-verdict pg-verdict-statement danger");
+    const title = el("h2", "pg-verdict-statement-title");
+    const link = el("a", "pg-verdict-statement-link", statementText);
+    const details = el("div", "pg-verdict-statement-details");
+
+    link.href = "#audio-player";
+    title.appendChild(link);
+    if (detailText) details.appendChild(el("span", "pg-verdict-statement-stat", detailText));
+
+    const confidenceStat = el("span", "pg-verdict-statement-stat");
+
+    confidenceStat.appendChild(
+      el("span", "pg-verdict-statement-stat-value", `${data.verdict.confidence}%`)
     );
+    confidenceStat.appendChild(document.createTextNode(" confidence"));
+    details.appendChild(confidenceStat);
 
-    data.actions.forEach((action) => {
-      const chip = el("span", "vf-chip", action.label);
+    const timeStat = el("span", "pg-verdict-statement-stat");
 
-      actions.appendChild(chip);
-      ui.actions.push({ el: chip, tMs: action.tMs });
+    timeStat.appendChild(el("span", "pg-verdict-statement-stat-value", fmt(data.verdict.tMs)));
+    details.appendChild(timeStat);
+    verdict.appendChild(title);
+    verdict.appendChild(details);
+
+    // Actions as canonical tags; tone follows the action's meaning.
+    const actions = el("div", "vf-actions");
+    const tones = ["m__tag--error", "m__tag--muted", "m__tag--error"];
+
+    data.actions.forEach((action, index) => {
+      const tag = el("span", `m__tag ${tones[index] || "m__tag--muted"} vf-action`, action.label);
+
+      actions.appendChild(tag);
+      ui.actions.push({ el: tag, tMs: action.tMs });
     });
 
     section.appendChild(head);
     section.appendChild(bar);
+    section.appendChild(alt);
     section.appendChild(verdict);
     section.appendChild(actions);
 
     ui.meterFill = fill;
     ui.meterValue = head.querySelector(".vf-meter__value");
+    ui.meter2 = alt;
+    ui.meter2Fill = altFill;
+    ui.meter2Value = altValue;
     ui.verdict = verdict;
     return section;
   }
@@ -211,27 +252,72 @@
     const parts = String(label).split(" — ");
 
     if (parts.length < 2) return [label, ""];
-    return [parts[0], capitalize(parts.slice(1).join(" — "))];
+    return [parts[0], parts.slice(1).join(" — ")];
+  }
+
+  // Each behavior signal is pinned to the last utterance of its speaker
+  // that started before the signal fired (same rule `emotionAt` uses for
+  // the glyph outline — the behavior may register during the reply).
+  function behaviorsByUtterance(data) {
+    const map = {};
+
+    data.signals
+      .filter((signal) => signal.type === "behavior")
+      .forEach((signal) => {
+        let target = null;
+
+        data.transcript.forEach((utt) => {
+          if (utt.speaker === (signal.speaker || 1) && utt.startMs <= signal.tMs) target = utt;
+        });
+        if (!target) return;
+        if (!map[target.id]) map[target.id] = [];
+        map[target.id].push(signal);
+      });
+    return map;
   }
 
   function buildTranscript(data, ui) {
     const panel = el("div", "vf-transcript");
-    const head = el("div", "vf-panel-head");
+    const head = el("div", "vf-panel-head", "Diarized transcript");
     const list = el("div", "vf-utterances");
-
-    head.appendChild(el("span", "", "Diarized transcript"));
-    head.appendChild(el("span", "vf-panel-head__live", "● streaming"));
+    const behaviors = behaviorsByUtterance(data);
 
     data.transcript.forEach((utt) => {
-      const item = el("div", "vf-utt");
-      const meta = el("div", "vf-utt__meta");
+      // Caller keeps the left shoulder, Agent the right — the playground's
+      // alternating-transcript pattern pinned to roles.
+      const side = utt.speaker === 2 ? "speaker-right" : "speaker-left";
+      const item = el("div", `pg-transcript-utterance vf-utt ${side}`);
+      const header = el("div", "pg-transcript-utterance-header");
+      const text = el("div", "pg-transcript-text");
       const speaker = data.meta.speakers?.[utt.speaker];
+      const emotion = utt.emotion || "neutral";
 
       item.dataset.speaker = utt.speaker;
-      meta.appendChild(el("span", "vf-utt__time", fmt(utt.startMs)));
-      meta.appendChild(el("span", "vf-utt__speaker", speaker?.label || `Speaker ${utt.speaker}`));
-      item.appendChild(meta);
-      item.appendChild(el("div", "vf-utt__bubble", utt.text));
+      item.style.setProperty("--ec", `rgba(var(--emotion-${emotion}-RGB), 1)`);
+      header.appendChild(el("span", "pg-transcript-time", fmt(utt.startMs)));
+      header.appendChild(
+        el("span", "pg-transcript-speaker", speaker?.label || `Speaker ${utt.speaker}`)
+      );
+
+      (behaviors[utt.id] || []).forEach((signal) => {
+        const wrap = el("span", "pg-transcript-behavior");
+        const link = el("a", "pg-behavior-link");
+
+        link.href = "#audio-player";
+        link.innerHTML = KIKI_SVG;
+        link.appendChild(document.createTextNode(signal.label));
+        wrap.appendChild(link);
+        wrap.appendChild(
+          el("span", "pg-transcript-behavior-confidence", `${signal.confidence}%`)
+        );
+        header.appendChild(wrap);
+        ui.behaviorLinks.push({ el: link, tMs: signal.tMs });
+      });
+
+      header.appendChild(el("span", "pg-transcript-emotion", capitalize(emotion)));
+      text.appendChild(el("p", "", utt.text));
+      item.appendChild(header);
+      item.appendChild(text);
       list.appendChild(item);
       ui.utterances.push({ el: item, utt });
     });
@@ -244,11 +330,10 @@
 
   function buildSignals(data, ui) {
     const panel = el("div", "vf-signals");
-    const head = el("div", "vf-panel-head");
+    const head = el("div", "vf-panel-head", "Live signal stream");
     const list = el("div", "vf-signal-list");
     const empty = el("div", "vf-signals__empty", "Press play — signals appear as Velma hears them");
 
-    head.appendChild(el("span", "", "Live signal stream"));
     list.appendChild(empty);
 
     data.signals.forEach((signal) => {
@@ -274,7 +359,7 @@
       item.appendChild(el("div", "vf-sig__label", signal.label));
       item.appendChild(conf);
       list.appendChild(item);
-      ui.signals.push({ el: item, tMs: signal.tMs });
+      ui.signals.push({ el: item, tMs: signal.tMs, signal });
     });
 
     panel.appendChild(head);
@@ -329,6 +414,7 @@
       utterances: [],
       signals: [],
       actions: [],
+      behaviorLinks: [],
     };
 
     root.classList.add("velma-fraud-widget", "dark-mode");
@@ -438,7 +524,9 @@
         const visible = t >= utt.startMs;
 
         node.classList.toggle("vf-visible", visible);
-        node.classList.toggle("vf-active", t >= utt.startMs && t <= utt.endMs);
+        // `active` is the canonical playground class — the bubble tints
+        // with the utterance's own emotion color (`--ec`).
+        node.classList.toggle("active", t >= utt.startMs && t <= utt.endMs);
         if (visible) lastUtt = node;
       });
       if (playing && lastUtt) scrollPanelTo(ui.transcriptPanel, lastUtt);
@@ -455,15 +543,18 @@
       if (playing && lastSignal) scrollPanelTo(ui.signalsPanel, lastSignal);
 
       const value = meterAt(data.meterKeyframes, t);
+      const crit = value >= data.meta.fraudThreshold;
+      const warn = value >= 55 && !crit;
 
       ui.meterFill.style.width = `${value}%`;
       ui.meterFill.style.setProperty("--vf-fill", `${Math.max(value, 1) / 100}`);
       ui.meterValue.textContent = `${Math.round(value)}%`;
-      ui.meterValue.classList.toggle("vf-crit", value >= data.meta.fraudThreshold);
-      ui.meterValue.classList.toggle(
-        "vf-warn",
-        value >= 55 && value < data.meta.fraudThreshold
-      );
+      ui.meterValue.classList.toggle("vf-crit", crit);
+      ui.meterValue.classList.toggle("vf-warn", warn);
+      ui.meter2Fill.style.width = `${value}%`;
+      ui.meter2Value.textContent = `${Math.round(value)}%`;
+      ui.meter2.classList.toggle("vf-crit", crit);
+      ui.meter2.classList.toggle("vf-warn", warn);
 
       ui.verdict.classList.toggle("vf-visible", t >= data.verdict.tMs);
       ui.actions.forEach(({ el: node, tMs }) => {
@@ -542,6 +633,62 @@
       });
     });
 
+    /* Signal ↔ utterance ↔ timeline links ───────────────────────────── */
+
+    // Behavior tags in utterance headers seek to the signal moment.
+    ui.behaviorLinks.forEach(({ el: node, tMs }) => {
+      node.addEventListener("click", (event) => {
+        event.preventDefault();
+        seekMs(tMs);
+      });
+    });
+
+    // Clicking a bubble seeks to its start (the canonical transcript
+    // bubble is interactive — honor the affordance).
+    ui.utterances.forEach(({ el: node, utt }) => {
+      node.addEventListener("click", (event) => {
+        if (event.target.closest(".pg-behavior-link")) return;
+        seekMs(utt.startMs);
+      });
+    });
+
+    // Clicking a signal scrolls the transcript to its evidence utterance
+    // and flashes it — the review-report highlight.
+    let evidenceTimer = null;
+
+    function utteranceNodeAt(tMs, speaker) {
+      let found = null;
+
+      ui.utterances.forEach(({ el: node, utt }) => {
+        if ((speaker == null || utt.speaker === speaker) && utt.startMs <= tMs) found = node;
+      });
+      return found;
+    }
+
+    ui.signals.forEach(({ el: node, signal }) => {
+      node.addEventListener("click", () => {
+        const target = utteranceNodeAt(signal.tMs, signal.speaker);
+
+        if (!target) return;
+        ui.utterances.forEach(({ el: item }) => item.classList.remove("is-evidence-highlighted"));
+        target.classList.add("is-evidence-highlighted");
+
+        const panelRect = ui.transcriptPanel.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+
+        ui.transcriptPanel.scrollTo({
+          top:
+            ui.transcriptPanel.scrollTop +
+            targetRect.top -
+            panelRect.top -
+            (panelRect.height - targetRect.height) / 2,
+          behavior: "smooth",
+        });
+        clearTimeout(evidenceTimer);
+        evidenceTimer = setTimeout(() => target.classList.remove("is-evidence-highlighted"), 2000);
+      });
+    });
+
     function onKeydown(event) {
       const tag = event.target.tagName;
 
@@ -568,6 +715,7 @@
       destroy() {
         destroyed = true;
         pause();
+        clearTimeout(evidenceTimer);
         window.removeEventListener("mousemove", onMove);
         window.removeEventListener("mouseup", onUp);
         window.removeEventListener("touchmove", onMove);

@@ -5,7 +5,14 @@
    class on the root resolves the `--m__*` / `--ids__*` tokens, so these
    rules stay theme-agnostic. Fingerprint player internals come from
    player.css / playground.css in the bundle; velma-fraud-embed.css bakes
-   the same rules with literal values for the Webflow export. */
+   the same rules with literal values for the Webflow export.
+
+   Em scale. The widget scales from its own em base (16px → 14px below
+   992px), while the DS tokens are rem-based — so sizes here are the
+   tokens' 1:1 em equivalents: 0.8em = font-size-s, 0.65em = font-size-xs,
+   0.15 / 0.3 / 0.75em = radius-xs / radius-s / widget-radius. On elements
+   with a reduced font-size the paddings/radii are pre-divided by that
+   font-size (noted inline). */
 
 .velma-fraud-studio {
   & .velma-fraud-studio__actions {
@@ -65,9 +72,18 @@
   line-height: 1.45;
   color: var(--m__text);
   background-color: var(--m__bg);
-  border: 1px solid var(--m__border);
-  border-radius: 1em;
+  /* Borderless plate, `.m__widget` canon; widget-radius. */
+  border-radius: 0.75em;
   overflow: hidden;
+}
+
+/* Canonical eyebrow — semi-mono, regular, uppercase. */
+.velma-fraud-widget :is(.vf-panel-head, .vf-meter__label) {
+  font-family: var(--m__font-family-semi-mono);
+  font-weight: var(--m__font-weight-regular);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m__text-caption);
 }
 
 /* ── Top bar ──────────────────────────────────────────────────────────── */
@@ -82,30 +98,12 @@
 }
 
 .velma-fraud-widget .vf-top__left {
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
   min-width: 0;
 }
 
-.velma-fraud-widget .vf-top__dot {
-  flex: none;
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  background-color: var(--m__success);
-  box-shadow: 0 0 0.5em var(--m__success);
-  animation: vf-pulse 2s infinite;
-}
-
-@keyframes vf-pulse {
-  50% {
-    opacity: 0.4;
-  }
-}
-
 .velma-fraud-widget .vf-top__title {
-  font-size: 0.875em;
+  display: block;
+  font-size: 0.8em;
   font-weight: var(--m__font-weight-bold);
   white-space: nowrap;
   overflow: hidden;
@@ -117,16 +115,19 @@
   color: var(--m__text-caption);
 }
 
+/* `m__tag` geometry in em, semi-mono like the playground's tags. */
 .velma-fraud-widget .vf-top__mode {
   flex: none;
-  font-family: var(--m__font-family-mono);
-  font-size: 0.6875em;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  font-family: var(--m__font-family-semi-mono);
+  font-size: 0.8em;
+  font-weight: var(--m__font-weight-medium);
   color: var(--m__text-caption);
-  border: 1px solid var(--m__border);
-  border-radius: 1em;
-  padding: 0.3em 0.8em;
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 0.19em; /* radius-xs ÷ 0.8 */
+  padding: 0.19em 0.56em; /* padding-control-xs ÷ 0.8 */
 }
 
 /* ── Fingerprint player ───────────────────────────────────────────────── */
@@ -219,16 +220,12 @@
 }
 
 .velma-fraud-widget .vf-meter__label {
-  font-size: 0.6875em;
-  font-weight: var(--m__font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--m__text-caption);
+  font-size: 0.8em;
 }
 
 .velma-fraud-widget .vf-meter__value {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.875em;
+  font-size: 0.8em;
+  font-variant-numeric: tabular-nums;
   color: var(--m__text-caption);
   transition: color var(--m__duration-medium) var(--m__easing-base);
 
@@ -244,7 +241,7 @@
 .velma-fraud-widget .vf-meter__bar {
   position: relative;
   height: 0.5em;
-  border-radius: 0.25em;
+  border-radius: 0.3em;
   background-color: var(--m__bg-surface);
   overflow: visible;
 }
@@ -253,9 +250,9 @@
   position: relative;
   height: 100%;
   width: 0;
-  border-radius: 0.25em;
+  border-radius: 0.3em;
   overflow: hidden;
-  transition: width 0.3s linear;
+  transition: width var(--m__duration-base) linear;
 
   /* Gradient anchored to the full bar: the fill is a clipping window,
      `--vf-fill` (0..1, set from JS) stretches the gradient back out. */
@@ -289,8 +286,9 @@
     position: absolute;
     right: 0.5em;
     top: -1.4em;
-    font-family: var(--m__font-family-mono);
-    font-size: 0.625em;
+    font-family: var(--m__font-family-semi-mono);
+    font-weight: var(--m__font-weight-regular);
+    font-size: 0.65em;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     white-space: nowrap;
@@ -298,11 +296,66 @@
   }
 }
 
-.velma-fraud-widget .vf-verdict {
+/* TEMPORARY: second meter variant below the gradient one — the owner
+   picks one, the other gets deleted. Big tabular value + plain
+   single-color confidence bar (pg-confidence-cell geometry). */
+.velma-fraud-widget .vf-meter2 {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.7em;
+  margin-top: 1.1em;
+  color: var(--m__text-caption);
+  transition: color var(--m__duration-medium) var(--m__easing-base);
+
+  &.vf-warn {
+    color: rgba(var(--vf-behavior-RGB), 1);
+  }
+
+  &.vf-crit {
+    color: var(--m__error);
+  }
+}
+
+.velma-fraud-widget .vf-meter2__value {
+  flex: none;
+  min-width: 2.4em;
+  font-size: 1.4em;
+  font-weight: var(--m__font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.velma-fraud-widget .vf-meter2__bar {
+  position: relative;
+  flex: 1;
+  height: 0.25em;
+  border-radius: 0.15em;
+  background-color: var(--m__border);
+}
+
+.velma-fraud-widget .vf-meter2__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 0.15em;
+  background-color: currentColor;
+  transition: width var(--m__duration-base) linear;
+}
+
+/* In V2 the threshold keeps only the tick — no second label on screen. */
+.velma-fraud-widget .vf-meter2 .vf-meter__threshold {
+  top: -0.25em;
+  bottom: -0.25em;
+
+  &::after {
+    display: none;
+  }
+}
+
+/* Verdict — the playground "This is …" statement, left-aligned on the
+   plate; type sizes restated in em (the canon is rem-based). */
+.velma-fraud-widget .vf-verdict {
   margin-top: 1em;
+  text-align: left;
   opacity: 0;
   transform: translateY(0.3em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
@@ -312,43 +365,35 @@
     opacity: 1;
     transform: none;
   }
-}
 
-.velma-fraud-widget .vf-verdict__badge {
-  flex: none;
-  font-size: 0.6875em;
-  font-weight: var(--m__font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--m__error);
-  border: 1px solid var(--m__error);
-  border-radius: 1em;
-  padding: 0.25em 0.8em;
-}
+  & .pg-verdict-statement-title {
+    margin: 0;
+    font-size: 1.4em;
+    line-height: 1.3;
+  }
 
-.velma-fraud-widget .vf-verdict__text {
-  font-size: 0.8125em;
-  color: var(--m__text);
+  & .pg-verdict-statement-details {
+    margin-top: 0.45em;
+    font-size: 0.8em;
+  }
 }
 
 .velma-fraud-widget .vf-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5em;
-  margin-top: 0.8em;
+  margin-top: 0.9em;
 
   &:empty {
     display: none;
   }
 }
 
-.velma-fraud-widget .vf-chip {
-  font-size: 0.75em;
-  color: var(--m__text);
-  background-color: var(--m__bg-surface);
-  border: 1px solid var(--m__border);
-  border-radius: 1.2em;
-  padding: 0.35em 1em;
+/* `m__tag` sizes restated in em (the component tokens are rem-based). */
+.velma-fraud-widget .vf-action {
+  font-size: 0.8em;
+  border-radius: 0.19em; /* radius-xs ÷ 0.8 */
+  padding: 0.19em 0.56em; /* padding-control-xs ÷ 0.8 */
   opacity: 0;
   transform: translateY(0.4em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
@@ -364,7 +409,7 @@
 
 .velma-fraud-widget .vf-main {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 }
 
 @media (max-width: 768px) {
@@ -377,21 +422,9 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: 0.8em 1.1em 0.6em;
-  font-size: 0.6875em;
-  font-weight: var(--m__font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--m__text-caption);
+  font-size: 0.8em;
+  padding: 1em 1.375em 0.75em; /* 0.8 / 1.1 / 0.6em ÷ 0.8 */
   background-color: var(--m__bg);
-}
-
-.velma-fraud-widget .vf-panel-head__live {
-  color: var(--m__success);
-  font-weight: var(--m__font-weight-regular);
 }
 
 .velma-fraud-widget .vf-transcript,
@@ -417,18 +450,27 @@
   }
 }
 
-/* Transcript utterances */
+/* Transcript utterances — the canonical playground bubbles
+   (`pg-transcript-utterance`); geometry restated in em. */
 
 .velma-fraud-widget .vf-utterances {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
   padding: 0 1.1em 1em;
 }
 
 .velma-fraud-widget .vf-utt {
-  margin-bottom: 0.9em;
+  padding: 0.7em 0.9em; /* spacer-xs / spacer-s */
+  border-radius: 2em;
+  corner-shape: squircle;
+  max-width: min(92%, 40em);
   opacity: 0;
   transform: translateY(0.4em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
-    transform var(--m__duration-slow) var(--m__easing-base);
+    transform var(--m__duration-slow) var(--m__easing-base),
+    background var(--m__duration-base) var(--m__easing-base),
+    color var(--m__duration-base) var(--m__easing-base);
 
   &.vf-visible {
     opacity: 1;
@@ -436,49 +478,49 @@
   }
 }
 
-.velma-fraud-widget .vf-utt__meta {
+/* Header: semi-mono meta line (the `pg-output-panel` scoping that does
+   this in the playground doesn't reach the widget). */
+.velma-fraud-widget .pg-transcript-utterance-header {
   display: flex;
   align-items: baseline;
-  gap: 0.6em;
-  margin-bottom: 0.3em;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  margin-bottom: 0.45em;
+  font-family: var(--m__font-family-semi-mono);
+  font-size: 0.8em;
 }
 
-.velma-fraud-widget .vf-utt__time {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.6875em;
-  color: var(--m__text-caption);
+.velma-fraud-widget .pg-transcript-utterance-header a.pg-behavior-link {
+  font-size: 1em; /* canon pins font-size-s in rem — header is already 0.8em */
 }
 
-.velma-fraud-widget .vf-utt__speaker {
-  font-size: 0.6875em;
-  font-weight: var(--m__font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border-radius: 1em;
-  padding: 0.15em 0.7em;
+.velma-fraud-widget .pg-transcript-behavior-confidence {
+  font-size: 0.9375em; /* 0.75rem ÷ 0.8 */
 }
 
-.velma-fraud-widget .vf-utt[data-speaker="1"] .vf-utt__speaker {
-  color: rgba(var(--vf-behavior-RGB), 1);
-  background-color: rgba(var(--vf-behavior-RGB), 0.14);
+/* The kiki glyph doubles as the behavior icon: solid currentColor form,
+   no white outline halo in text context. */
+.velma-fraud-widget .pg-transcript-utterance .pg-behavior-link svg .behaviour-icon__outline {
+  fill: none;
 }
 
-.velma-fraud-widget .vf-utt[data-speaker="2"] .vf-utt__speaker {
-  color: rgba(var(--vf-language-RGB), 1);
-  background-color: rgba(var(--vf-language-RGB), 0.14);
+.velma-fraud-widget .pg-transcript-utterance .pg-behavior-link svg polygon {
+  fill: currentColor;
 }
 
-.velma-fraud-widget .vf-utt__bubble {
-  font-size: 0.8125em;
-  color: var(--m__text);
-  background-color: var(--m__bg-surface);
-  border-radius: 0.6em;
-  padding: 0.6em 0.9em;
-  transition: background-color var(--m__duration-medium) var(--m__easing-base);
+.velma-fraud-widget .pg-transcript-text {
+  font-size: 0.8em;
+
+  & p {
+    margin: 0;
+  }
 }
 
-.velma-fraud-widget .vf-utt.vf-active .vf-utt__bubble {
-  background-color: var(--m__border);
+/* Review-report evidence flash (from a signal click); wins over the
+   canonical `.active` tint, which is `!important` itself. */
+.velma-fraud-widget .pg-transcript-utterance.is-evidence-highlighted {
+  background: color-mix(in srgb, var(--m__color-blue-500) 14%, var(--m__bg-surface)) !important;
+  color: var(--m__color-blue-500);
 }
 
 /* Signal feed */
@@ -488,17 +530,16 @@
 }
 
 .velma-fraud-widget .vf-signals__empty {
-  font-size: 0.75em;
+  font-size: 0.8em;
   color: var(--m__text-caption);
   padding: 0.4em 0;
 }
 
 .velma-fraud-widget .vf-sig {
-  --vf-sig-RGB: 128, 128, 128;
+  --vf-sig-RGB: var(--emotion-neutral-group-RGB);
 
-  border-left: 2px solid rgba(var(--vf-sig-RGB), 1);
-  padding: 0.1em 0 0.1em 0.8em;
   margin-bottom: 0.9em;
+  cursor: pointer;
   opacity: 0;
   transform: translateY(0.4em);
   transition: opacity var(--m__duration-slow) var(--m__easing-base),
@@ -507,6 +548,11 @@
   &.vf-visible {
     opacity: 1;
     transform: none;
+  }
+
+  &:hover .vf-sig__label {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
   }
 
   &[data-kind="language"] {
@@ -537,27 +583,36 @@
   gap: 0.6em;
 }
 
+/* Signal kind — `m__tag-flat` geometry in the kind's accent color. */
 .velma-fraud-widget .vf-sig__type {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.625em;
-  font-weight: var(--m__font-weight-bold);
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  font-family: var(--m__font-family-semi-mono);
+  font-size: 0.65em;
+  font-weight: var(--m__font-weight-medium);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: rgba(var(--vf-sig-RGB), 1);
+  background-color: color-mix(in srgb, currentColor 15%, transparent);
+  padding: 0.2em 0.45em;
+  border-radius: 0.46em; /* radius-s ÷ 0.65 */
 }
 
 .velma-fraud-widget .vf-sig__time {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.625em;
+  font-size: 0.65em;
+  font-variant-numeric: tabular-nums;
   color: var(--m__text-caption);
 }
 
 .velma-fraud-widget .vf-sig__label {
-  font-size: 0.75em;
+  font-size: 0.8em;
   color: var(--m__text);
-  margin: 0.15em 0 0.3em;
+  margin: 0.3em 0;
+  transition: color var(--m__duration-base) var(--m__easing-base);
 }
 
+/* Confidence — `pg-confidence-cell` geometry in em. */
 .velma-fraud-widget .vf-sig__conf {
   display: flex;
   align-items: center;
@@ -566,20 +621,21 @@
 
 .velma-fraud-widget .vf-sig__bar {
   flex: 1;
-  height: 0.2em;
-  border-radius: 0.1em;
-  background-color: var(--m__bg-surface);
+  max-width: 5em; /* 80px */
+  height: 0.25em;
+  border-radius: 0.15em;
+  background-color: var(--m__border);
   overflow: hidden;
 }
 
 .velma-fraud-widget .vf-sig__fill {
   height: 100%;
-  border-radius: 0.1em;
-  background-color: rgba(var(--vf-sig-RGB), 0.8);
+  border-radius: 0.15em;
+  background-color: rgba(var(--vf-sig-RGB), 1);
 }
 
 .velma-fraud-widget .vf-sig__val {
-  font-family: var(--m__font-family-mono);
-  font-size: 0.625em;
+  font-size: 0.65em;
+  font-variant-numeric: tabular-nums;
   color: var(--m__text-caption);
 }

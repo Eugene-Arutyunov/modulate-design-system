@@ -67,6 +67,24 @@ function applyImport(parsed) {
   mountWidget();
 }
 
+// The semi-mono is the widget's brand voice (eyebrows, tags) — inline it
+// into the export as a data: URL so the standalone page keeps it (~58 KB).
+async function fetchFontDataUrl() {
+  const response = await fetch(
+    new URL("/assets/fonts/CoFoSansSemi-Mono-Regular.woff2", window.location.origin)
+  );
+
+  if (!response.ok) throw new Error("Could not load CoFo Sans Semi Mono");
+
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  let binary = "";
+
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return `data:font/woff2;base64,${btoa(binary)}`;
+}
+
 async function exportHtml() {
   const [css, widgetJs] = await Promise.all(
     [
@@ -79,6 +97,7 @@ async function exportHtml() {
       return response.text();
     })
   );
+  const fontDataUrl = await fetchFontDataUrl();
 
   const payload = {
     format: DATA_FORMAT,
@@ -99,6 +118,13 @@ async function exportHtml() {
 body {
   margin: 0;
   font-family: Inter, system-ui, sans-serif;
+}
+@font-face {
+  font-family: "CoFo Sans Semi Mono";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("${fontDataUrl}") format("woff2");
 }
 ${css}
   </style>
