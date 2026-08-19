@@ -349,20 +349,18 @@
   }
 }
 
+/* The head scrolls away with its feed — part of the content, not pinned. */
 .velma-fraud-widget .vf-panel-head {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   font-size: 0.8em;
   padding: 1em 1.375em 0.75em; /* 0.8 / 1.1 / 0.6em ÷ 0.8 */
-  background-color: var(--m__bg);
 }
 
+/* `overflow: hidden` keeps the wheel with the page: the panels are
+   scrolled only programmatically (cursor position + playback autoscroll). */
 .velma-fraud-widget .vf-transcript,
 .velma-fraud-widget .vf-signals {
   height: 21em;
-  overflow-y: auto;
-  scrollbar-width: thin;
+  overflow: hidden;
 }
 
 .velma-fraud-widget .vf-signals {
@@ -391,7 +389,10 @@
   padding: 0 1.1em 1em;
 }
 
+/* Pending entries take no space — the scrollable extent covers only what
+   has been revealed; `@starting-style` keeps the fade-in. */
 .velma-fraud-widget .vf-utt {
+  display: none;
   padding: 0.7em 0.9em; /* spacer-xs / spacer-s */
   border-radius: 2em;
   corner-shape: squircle;
@@ -404,9 +405,22 @@
     color var(--m__duration-base) var(--m__easing-base);
 
   &.vf-visible {
+    display: block;
     opacity: 1;
     transform: none;
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(0.4em);
+    }
   }
+}
+
+/* Hovering the linked clip on the timeline lights the bubble (mirrors
+   the canonical bubble :hover). */
+.velma-fraud-widget .vf-utt.vf-hover {
+  background: var(--m__color-slate-700);
+  color: var(--m__text-link-hover);
 }
 
 /* Header: semi-mono meta line (the `pg-output-panel` scoping that does
@@ -480,6 +494,7 @@
 .velma-fraud-widget .vf-sig {
   --vf-sig-RGB: var(--emotion-neutral-group-RGB);
 
+  display: none;
   margin-bottom: 0.9em;
   cursor: pointer;
   opacity: 0;
@@ -488,8 +503,14 @@
     transform var(--m__duration-slow) var(--m__easing-base);
 
   &.vf-visible {
+    display: block;
     opacity: 1;
     transform: none;
+
+    @starting-style {
+      opacity: 0;
+      transform: translateY(0.4em);
+    }
   }
 
   &:hover .vf-sig__label {

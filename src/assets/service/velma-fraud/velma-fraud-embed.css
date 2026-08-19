@@ -738,11 +738,9 @@
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 }
 
-/* Canonical eyebrow — semi-mono, regular, uppercase. */
+/* Canonical eyebrow — semi-mono, regular, uppercase. The head scrolls
+   away with its feed — part of the content, not pinned. */
 .velma-fraud-widget .vf-panel-head {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   font-family: var(--m__font-family-semi-mono);
   font-size: 0.8em;
   font-weight: var(--m__font-weight-regular);
@@ -750,14 +748,14 @@
   letter-spacing: 0.06em;
   color: var(--m__text-caption);
   padding: 1em 1.375em 0.75em; /* 0.8 / 1.1 / 0.6em ÷ 0.8 */
-  background-color: var(--m__bg);
 }
 
+/* `overflow: hidden` keeps the wheel with the page: the panels are
+   scrolled only programmatically (cursor position + playback autoscroll). */
 .velma-fraud-widget .vf-transcript,
 .velma-fraud-widget .vf-signals {
   height: 21em;
-  overflow-y: auto;
-  scrollbar-width: thin;
+  overflow: hidden;
 }
 
 .velma-fraud-widget .vf-signals {
@@ -790,7 +788,10 @@
   padding: 0 1.1em 1em;
 }
 
+/* Pending entries take no space — the scrollable extent covers only what
+   has been revealed; `@starting-style` keeps the fade-in. */
 .velma-fraud-widget .vf-utt {
+  display: none;
   background: var(--m__bg-surface);
   padding: 0.7em 0.9em;
   border-radius: 2em;
@@ -806,8 +807,22 @@
 }
 
 .velma-fraud-widget .vf-utt.vf-visible {
+  display: block;
   opacity: 1;
   transform: none;
+}
+
+@starting-style {
+  .velma-fraud-widget .vf-utt.vf-visible {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+}
+
+/* Hovering the linked clip on the timeline lights the bubble. */
+.velma-fraud-widget .vf-utt.vf-hover {
+  background: var(--m__color-slate-700);
+  color: var(--m__text-link-hover);
 }
 
 .velma-fraud-widget .vf-utt.speaker-left {
@@ -934,6 +949,7 @@
 .velma-fraud-widget .vf-sig {
   --vf-sig-RGB: var(--emotion-neutral-group-RGB);
 
+  display: none;
   margin-bottom: 0.9em;
   cursor: pointer;
   opacity: 0;
@@ -943,8 +959,16 @@
 }
 
 .velma-fraud-widget .vf-sig.vf-visible {
+  display: block;
   opacity: 1;
   transform: none;
+}
+
+@starting-style {
+  .velma-fraud-widget .vf-sig.vf-visible {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
 }
 
 .velma-fraud-widget .vf-sig:hover .vf-sig__label {

@@ -377,22 +377,11 @@
     return keyframes[keyframes.length - 1].value;
   }
 
-  // Scroll a feed panel to keep its newest visible entry in view without
-  // ever scrolling the page itself. Positions come from client rects —
-  // `offsetTop` here would be page-relative (the panels have no positioned
-  // ancestor) and would pin the panel to the bottom of the list, past the
-  // still-transparent future entries.
-  function scrollPanelTo(panel, node) {
-    const delta = node.getBoundingClientRect().bottom - panel.getBoundingClientRect().bottom;
-
-    if (delta > 1) panel.scrollTo({ top: panel.scrollTop + delta, behavior: "smooth" });
-  }
-
-  // Feed panels don't wheel-scroll. Instead the cursor's Y position over a
-  // panel maps to its scroll position — top of the panel shows the start of
-  // the feed, bottom the end — eased towards the target every frame. While
-  // a panel is hovered the playback autoscroll yields to the cursor.
-  function bindHoverScroll(panel, hovered) {
+  // The feed panels are `overflow: hidden`, so the wheel always stays with
+  // the page — the widget drives scrollTop itself, eased towards the
+  // target every frame: from the cursor position (Y over a panel, X over
+  // the fingerprint) and from the playback autoscroll.
+  function createPanelScroller(panel) {
     let target = 0;
     let rafId = null;
 
@@ -408,19 +397,29 @@
       rafId = requestAnimationFrame(step);
     }
 
-    panel.addEventListener("wheel", (event) => event.preventDefault(), { passive: false });
-    panel.addEventListener("mouseenter", () => hovered.add(panel));
-    panel.addEventListener("mousemove", (event) => {
-      const rect = panel.getBoundingClientRect();
-      const ratio = Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
+    return {
+      to(px) {
+        target = Math.max(0, Math.min(px, panel.scrollHeight - panel.clientHeight));
+        if (rafId === null) rafId = requestAnimationFrame(step);
+      },
+      toRatio(ratio) {
+        this.to(Math.min(1, Math.max(0, ratio)) * (panel.scrollHeight - panel.clientHeight));
+      },
+      by(delta) {
+        this.to(panel.scrollTop + delta);
+      },
+      stop() {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      },
+    };
+  }
 
-      target = ratio * (panel.scrollHeight - panel.clientHeight);
-      if (rafId === null) rafId = requestAnimationFrame(step);
-    });
-    panel.addEventListener("mouseleave", () => {
-      hovered.delete(panel);
-    });
-    return () => cancelAnimationFrame(rafId);
+  // Keep the newest visible feed entry pinned to the panel bottom.
+  function scrollPanelTo(scroller, panel, node) {
+    const delta = node.getBoundingClientRect().bottom - panel.getBoundingClientRect().bottom;
+
+    if (delta > 1) scroller.by(delta);
   }
 
   /* Mount ─────────────────────────────────────────────────────────────── */
@@ -448,11 +447,26 @@
     main.appendChild(buildSignals(data, ui));
     root.appendChild(main);
 
-    const hoveredPanels = new Set();
-    const unbindHoverScroll = [
-      bindHoverScroll(ui.transcriptPanel, hoveredPanels),
-      bindHoverScroll(ui.signalsPanel, hoveredPanels),
-    ];
+    const transcriptScroller = createPanelScroller(ui.transcriptPanel);
+    const signalsScroller = createPanelScroller(ui.signalsPanel);
+    // Panels whose playback autoscroll currently yields to the cursor.
+    const scrollHeld = new Set();
+    // The utterance whose bubble is hovered — keeps the linked clip lit
+    // through the render loop.
+    let hoverUtt = null;
+
+    function bindHoverScroll(panel, scroller) {
+      panel.addEventListener("mouseenter", () => scrollHeld.add(panel));
+      panel.addEventListener("mousemove", (event) => {
+        const rect = panel.getBoundingClientRect();
+
+        scroller.toRatio((event.clientY - rect.top) / rect.height);
+      });
+      panel.addEventListener("mouseleave", () => scrollHeld.delete(panel));
+    }
+
+    bindHoverScroll(ui.transcriptPanel, transcriptScroller);
+    bindHoverScroll(ui.signalsPanel, signalsScroller);
 
     /* Clock — audio-backed when the mp3 loads, simulated otherwise. */
     let audio = null;
@@ -534,7 +548,7 @@
 
       ui.clips.forEach(({ el: node, utt }) => {
         node.classList.toggle("vf-pending", t < utt.startMs);
-        node.classList.toggle("hover", t >= utt.startMs && t <= utt.endMs);
+        node.classList.toggle("hover", (t >= utt.startMs && t <= utt.endMs) || utt === hoverUtt);
       });
       ui.behaviours.forEach(({ el: node, tMs }) => {
         node.classList.toggle("vf-pending", t < tMs);
@@ -549,8 +563,8 @@
         node.classList.toggle("active", t >= utt.startMs && t <= utt.endMs);
         if (visible) lastUtt = node;
       });
-      if (playing && lastUtt && !hoveredPanels.has(ui.transcriptPanel)) {
-        scrollPanelTo(ui.transcriptPanel, lastUtt);
+      if (playing && lastUtt && !scrollHeld.has(ui.transcriptPanel)) {
+        scrollPanelTo(transcriptScroller, ui.transcriptPanel, lastUtt);
       }
 
       let lastSignal = null;
@@ -562,8 +576,8 @@
         if (visible) lastSignal = node;
       });
       ui.signalsEmpty.style.display = lastSignal ? "none" : "";
-      if (playing && lastSignal && !hoveredPanels.has(ui.signalsPanel)) {
-        scrollPanelTo(ui.signalsPanel, lastSignal);
+      if (playing && lastSignal && !scrollHeld.has(ui.signalsPanel)) {
+        scrollPanelTo(signalsScroller, ui.signalsPanel, lastSignal);
       }
 
       const value = meterAt(data.meterKeyframes, t);
@@ -623,19 +637,31 @@
     window.addEventListener("touchmove", onMove, { passive: true });
     window.addEventListener("touchend", onUp);
 
-    // Same hover line the playground binds on its media containers.
+    // Same hover line the playground binds on its media containers; the
+    // cursor's X over the fingerprint also drives the transcript scroll —
+    // the same data rotated 90°.
     ui.player.addEventListener("mousemove", (event) => {
       const rect = ui.player.getBoundingClientRect();
+      const x = event.clientX - rect.left;
 
-      ui.player.style.setProperty("--pg-hover-x", `${event.clientX - rect.left}px`);
+      ui.player.style.setProperty("--pg-hover-x", `${x}px`);
       ui.player.dataset.hover = "true";
+      scrollHeld.add(ui.transcriptPanel);
+      transcriptScroller.toRatio(x / rect.width);
     });
     ui.player.addEventListener("mouseleave", () => {
       ui.player.dataset.hover = "false";
+      scrollHeld.delete(ui.transcriptPanel);
     });
 
+    /* Player ↔ transcript hover link. */
+
+    const uttNodeByUtt = new Map(ui.utterances.map(({ el: node, utt }) => [utt, node]));
+    const clipNodeByUtt = new Map(ui.clips.map(({ el: node, utt }) => [utt, node]));
+
     // Clip hover captions: emotion name left of the total time, transcript
-    // line next to the current time — the fingerprint pattern.
+    // line next to the current time — the fingerprint pattern. The hover
+    // also lights the utterance's bubble in the transcript.
     ui.clips.forEach(({ el: node, utt }) => {
       node.addEventListener("mouseenter", () => {
         if (utt.emotion) {
@@ -645,10 +671,29 @@
         }
         ui.transcriptCaption.querySelector("span").textContent = utt.text;
         ui.transcriptCaption.classList.add("visible");
+        uttNodeByUtt.get(utt)?.classList.add("vf-hover");
       });
       node.addEventListener("mouseleave", () => {
         ui.emotionCaption.classList.remove("visible");
         ui.transcriptCaption.classList.remove("visible");
+        uttNodeByUtt.get(utt)?.classList.remove("vf-hover");
+      });
+    });
+
+    // And the reverse: hovering a bubble lights its clip on the timeline
+    // (`hoverUtt` keeps it lit through the render loop while playing).
+    ui.utterances.forEach(({ el: node, utt }) => {
+      node.addEventListener("mouseenter", () => {
+        hoverUtt = utt;
+        clipNodeByUtt.get(utt)?.classList.add("hover");
+      });
+      node.addEventListener("mouseleave", () => {
+        hoverUtt = null;
+        const now = nowMs();
+
+        if (!(now >= utt.startMs && now <= utt.endMs)) {
+          clipNodeByUtt.get(utt)?.classList.remove("hover");
+        }
       });
     });
 
@@ -695,14 +740,12 @@
         const panelRect = ui.transcriptPanel.getBoundingClientRect();
         const targetRect = target.getBoundingClientRect();
 
-        ui.transcriptPanel.scrollTo({
-          top:
-            ui.transcriptPanel.scrollTop +
+        transcriptScroller.to(
+          ui.transcriptPanel.scrollTop +
             targetRect.top -
             panelRect.top -
-            (panelRect.height - targetRect.height) / 2,
-          behavior: "smooth",
-        });
+            (panelRect.height - targetRect.height) / 2
+        );
         clearTimeout(evidenceTimer);
         evidenceTimer = setTimeout(() => target.classList.remove("is-evidence-highlighted"), 2000);
       });
@@ -735,7 +778,8 @@
         destroyed = true;
         pause();
         clearTimeout(evidenceTimer);
-        unbindHoverScroll.forEach((stop) => stop());
+        transcriptScroller.stop();
+        signalsScroller.stop();
         window.removeEventListener("mousemove", onMove);
         window.removeEventListener("mouseup", onUp);
         window.removeEventListener("touchmove", onMove);
