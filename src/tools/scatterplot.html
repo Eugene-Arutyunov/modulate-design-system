@@ -1,17 +1,181 @@
 {% extends 'service/layout.html' %} {% set pageTitle = 'Scatterplot' %}
 {% block content %}
 
-<div class="m__wrapper">
-  <div class="m__space XL"></div>
-  <h1 class="loud">Scatterplot</h1>
-  <div class="m__space M"></div>
-  <div class="m__text-width">
-    <p>
-      A builder for scatterplots styled after the design system. The
-      constructor is not here yet — it is coming soon.
-    </p>
+<!-- Outer `scatterplot-studio` owns chart tokens + stage bleed; inner
+     `m__wrapper.icon-studio` keeps the panel at the DS content width. -->
+<main class="scatterplot-studio">
+  <div class="m__wrapper icon-studio">
+    <div class="m__space XL"></div>
+
+    <h1>Scatterplot</h1>
+
+    <div class="m__space M"></div>
+
+    <div class="m__text-width">
+      <p>
+        Builder for the conversation-understanding scatterplot. Responsive
+        preview matches the target embed geometry (1140px); switch to Screenshot
+        for a fixed frame and size controls. Export JSON to swap data, or
+        static HTML for Webflow.
+      </p>
+    </div>
+
+    <div class="m__space M"></div>
+
+    <section class="icon-studio__panel" aria-label="Studio controls">
+      <div class="icon-studio__grid">
+        <fieldset aria-label="Preview mode">
+          <div
+            class="m__segmented-control-secondary S scatterplot-studio__segmented">
+            <label>
+              <input
+                type="radio"
+                name="scatter-mode"
+                value="responsive"
+                data-scatter-mode
+                checked />
+              Responsive
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="scatter-mode"
+                value="screenshot"
+                data-scatter-mode />
+              Screenshot
+            </label>
+          </div>
+          <div
+            class="scatterplot-studio__screenshot-controls"
+            data-scatter-screenshot-only
+            hidden>
+            <label>
+              Width
+              <input
+                data-scatter-width
+                type="range"
+                min="400"
+                max="1600"
+                step="10"
+                value="1140" />
+              <output></output>
+            </label>
+            <label>
+              Height
+              <input
+                data-scatter-height
+                type="range"
+                min="200"
+                max="800"
+                step="10"
+                value="400" />
+              <output></output>
+            </label>
+            <label>
+              Label size
+              <input
+                data-scatter-label-font
+                type="range"
+                min="0.5"
+                max="1.5"
+                step="0.025"
+                value="0.875" />
+              <output></output>
+            </label>
+            <label>
+              Point size
+              <input
+                data-scatter-point-size
+                type="range"
+                min="0.25"
+                max="2"
+                step="0.025"
+                value="0.875" />
+              <output></output>
+            </label>
+            <label>
+              Axis size
+              <input
+                data-scatter-axis-font
+                type="range"
+                min="0.5"
+                max="1.5"
+                step="0.025"
+                value="0.8125" />
+              <output></output>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset aria-label="Export and import">
+          <div class="scatterplot-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-scatter-export>
+              Export JSON
+            </button>
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-scatter-import>
+              Import
+            </button>
+            <input type="file" accept=".json" data-scatter-import-input hidden />
+          </div>
+          <div class="m__space S"></div>
+          <div class="scatterplot-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-scatter-export-html>
+              Export HTML
+            </button>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <div class="m__space M"></div>
   </div>
-  <div class="m__space XL"></div>
-</div>
+
+  <div
+    class="scatterplot-studio__stage"
+    data-scatter-stage
+    data-mode="responsive">
+    <div class="scatterplot-studio__frame" data-scatter-frame>
+      <div class="scatterplot-wrapper" id="scatterplot-1">
+        <div class="scatterplot-title">
+          Conversation Understanding Benchmark —
+          <nobr>Accuracy vs. Cost</nobr>
+        </div>
+        <div class="scatterplot-subtitle">
+          Evaluates a model's ability to identify conversation types, topics,
+          speaker roles and key behaviors.
+          <a
+            href="https://www.modulate.ai/benchmark-methodology"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Methodology&nbsp;↗</a
+          >
+        </div>
+        <div class="scatterplot-container">
+          <div class="scatterplot-aria">
+            <div class="scatterplot-background-highlight">
+              <div class="scatterplot-background-highlight-ellipse"></div>
+              <div class="scatterplot-background-highlight-label"></div>
+            </div>
+            <div class="scatterplot-axis-label-x">Inference cost</div>
+            <div class="scatterplot-axis-label-y">Accuracy score</div>
+          </div>
+        </div>
+        <div class="padding-spacer"></div>
+        <div class="vendors"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="/assets/service/scatterplot/scatterplot-studio.js"></script>
 
 {% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Velma Fraud Demo Widget' %}
+{% block content %}
+
+<!-- Outer `velma-fraud-studio` owns the stage bleed; inner
+     `m__wrapper.icon-studio` keeps the panel at the DS content width. -->
+<main class="velma-fraud-studio">
+  <div class="m__wrapper icon-studio">
+    <div class="m__space XL"></div>
+
+    <h1>Velma Fraud Demo Widget</h1>
+
+    <div class="m__space M"></div>
+
+    <section class="icon-studio__panel" aria-label="Studio controls">
+      <div class="icon-studio__grid">
+        <fieldset aria-label="Playback">
+          <div class="velma-fraud-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-vf-replay>
+              Replay
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset aria-label="Data">
+          <div class="velma-fraud-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-vf-export>
+              Export JSON
+            </button>
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-vf-import>
+              Import
+            </button>
+            <input type="file" accept=".json" data-vf-import-input hidden />
+          </div>
+        </fieldset>
+
+        <fieldset aria-label="Export">
+          <div class="velma-fraud-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-vf-export-html>
+              Export HTML
+            </button>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <div class="m__space M"></div>
+  </div>
+
+  <div class="velma-fraud-studio__stage" data-vf-stage>
+    <div class="velma-fraud-studio__frame">
+      <div data-vf-widget></div>
+    </div>
+  </div>
+</main>
+
+<script src="/assets/service/velma-fraud/velma-fraud-widget.js" defer></script>
+<script
+  type="module"
+  src="/assets/service/velma-fraud/velma-fraud-studio.js"></script>
+
+{% endblock %}
