@@ -1,12 +1,33 @@
 /* Blog section — /blog/ index and individual post pages */
 
-/* Post meta line above the title: back link, author with photo, date */
+/* Post meta line above the title: back link, author with photo, date.
+   Back link echoes .m__nav-menu-item (surface + heavy); photo matches its
+   height. Corners via .m__rounded on both. */
 .post-meta {
+  --post-meta-control-height: calc(1lh + 0.3rem);
+
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--m__gap-m);
   margin-bottom: var(--m__spacer-s);
+
+  & .post-meta__back {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--m__padding-control-xs);
+    background-color: var(--m__bg-surface);
+    color: var(--m__text);
+    font-weight: var(--m__font-weight-heavy);
+    text-decoration: none;
+    text-decoration-thickness: 0;
+    transition: color var(--m__duration-base) var(--m__easing-base);
+
+    &:hover {
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
+    }
+  }
 
   & .post-meta__author {
     display: inline-flex;
@@ -15,9 +36,8 @@
   }
 
   & .post-meta__photo {
-    width: 1.6em;
-    height: 1.6em;
-    border-radius: var(--m__radius-pill);
+    width: var(--post-meta-control-height);
+    height: var(--post-meta-control-height);
     object-fit: cover;
   }
 
@@ -69,9 +89,11 @@
 
 /* Post pages: annotation card between the title and the body — a widget-like
    surface panel (base aside styles) with a small-caps heading. Authored via
-   the post-abstract skill. */
+   the post-abstract skill. Padding one step tighter than .m__widget — blog /
+   narrative only, not a design-system size. */
 .post-abstract {
   margin-block: var(--m__spacer-s);
+  padding: var(--m__spacer-xs);
   font-size: var(--m__font-size-s);
 
   & .posts-list-col-title {
@@ -81,6 +103,24 @@
   & p:last-child {
     margin-bottom: 0;
   }
+}
+
+/* Narrative column: body one step above base; paragraph rhythm one step
+   looser than the global default. Abstract, meta, captions stay on their own. */
+.narrative-text-width > p:not(.post-meta):not(.caption),
+.narrative-text-width > ul,
+.narrative-text-width > ol,
+.narrative-text-width > blockquote,
+.narrative-text-width .post-primitives-row p,
+.narrative-text-width .post-primitives-row ul,
+.narrative-text-width .post-primitives-row ol {
+  font-size: var(--m__font-size-l);
+  line-height: calc(var(--m__line-height-base) + 0.1);
+}
+
+.narrative-text-width > p:not(.post-meta):not(.caption),
+.narrative-text-width .post-primitives-row p {
+  margin-bottom: var(--m__spacer-s);
 }
 
 /* Layers post: table of system layers with live token and component examples */
@@ -175,34 +215,38 @@
   }
 }
 
-/* Not-a-designer post: proximity figure — two product grids drawn as an
-   inline SVG. The cards keep fixed light colors in both themes (they read as
-   product screenshots); the annotation layer around them — panel titles,
-   dimension marks, explainer captions — follows the theme tokens. */
+/* Proximity figure: outer grid is .m__sequence; titles and captions are HTML.
+   Surface + rounding live on .proximity-grid-figure__frame; SVG holds only
+   product shots, labels, and dimension marks. */
 .proximity-grid-figure {
-  margin: 0 0 var(--m__spacer-l);
+  margin: 0;
+  padding: 0;
 
-  & .proximity-grid-figure__panels {
-    display: flex;
-    gap: var(--m__gap-l);
+  & .m__sequence {
+    --gap: 3em;
+    gap: var(--gap);
+    margin-bottom: 0;
+  }
 
-    @media (width < 767px) {
-      flex-direction: column;
-    }
+  & .proximity-grid-figure__title {
+    margin: 0 0 var(--m__gap-xs);
+    font-weight: var(--m__font-weight-bold);
+  }
+
+  & .proximity-grid-figure__frame {
+    background-color: var(--m__bg-surface);
+    padding-inline-end: var(--m__spacer-l);
+    margin-bottom: var(--m__gap-xs);
   }
 
   & svg {
     display: block;
-    flex: 1;
-    min-width: 0;
+    width: 100%;
     height: auto;
   }
 
-  & .pxg-title {
-    font-family: var(--m__font-family-sans);
-    font-size: 15px;
-    font-weight: var(--m__font-weight-bold);
-    fill: var(--m__text);
+  & .caption {
+    margin-bottom: 0;
   }
 
   & .pxg-name {
@@ -225,12 +269,6 @@
     fill: #14161a;
   }
 
-  & .pxg-cap {
-    font-family: var(--m__font-family-sans);
-    font-size: 13.5px;
-    fill: var(--m__text-caption);
-  }
-
   & .pxg-num {
     font-family: var(--m__font-family-semi-mono);
     font-size: 11.5px;
@@ -238,13 +276,8 @@
     fill: #b45309;
   }
 
-  & .pxg-card {
-    fill: #fcfcfd;
-    stroke: #e6e8ec;
-  }
-
   & .pxg-shot {
-    fill: #f1f2f5;
+    fill: #dde0e5;
   }
 
   & .pxg-mark {

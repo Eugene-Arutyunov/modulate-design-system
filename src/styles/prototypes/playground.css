@@ -1676,45 +1676,17 @@ a.pg-verdict-statement-link:active {
   margin-right: 0.1rem;
 }
 
-a.pg-behavior-link,
-a.pg-behavior-link:link,
-a.pg-behavior-link:visited {
-  color: var(--m__bg-accent);
-  font-weight: var(--m__font-weight-bold);
-  text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-size: 100% var(--m__border-width-l);
-  background-position: 0 100%;
-  padding-bottom: 0.22em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  transition: color var(--m__duration-base) var(--m__easing-base);
-}
-a.pg-behavior-link:hover,
-a.pg-behavior-link:focus,
-a.pg-behavior-link:active {
-  color: var(--m__text-link-hover);
-  transition-duration: var(--m__duration-instant);
-}
-.pg-behavior-link svg {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  margin-right: 0.15em;
-}
-.pg-transcript-utterance-header a.pg-behavior-link,
-.pg-transcript-utterance-header a.pg-behavior-link:link,
-.pg-transcript-utterance-header a.pg-behavior-link:visited,
-.pg-transcript-utterance-header a.pg-behavior-link:hover,
-.pg-transcript-utterance-header a.pg-behavior-link:focus,
-.pg-transcript-utterance-header a.pg-behavior-link:active {
+/* Playground transcript: keep the behavior link on the local type scale and
+   mute the accent — size S still supplies the underline thickness. */
+.pg-transcript-utterance-header a.m__behavior-link,
+.pg-transcript-utterance-header a.m__behavior-link:link,
+.pg-transcript-utterance-header a.m__behavior-link:visited,
+.pg-transcript-utterance-header a.m__behavior-link:hover,
+.pg-transcript-utterance-header a.m__behavior-link:focus,
+.pg-transcript-utterance-header a.m__behavior-link:active {
   color: inherit;
   font-family: var(--m__font-family-sans);
-  font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-medium);
-  background-size: 100% var(--m__border-width-m);
-  padding-bottom: 0.1em;
   transition: none;
 }
 
@@ -1901,13 +1873,9 @@ a.pg-behavior-link:active {
 .pg-behaviors-table .pg-behavior-speaker-cell--last {
   border-bottom: none;
 }
-.pg-behaviors-table .pg-behavior-link,
 .pg-behaviors-table .pg-behavior-name {
   font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-bold);
-}
-.pg-behaviors-table .pg-behavior-link {
-  background-position: 0 calc(100% - 0.24em);
 }
 .pg-behavior-row--inactive td {
   color: var(--m__text-caption);

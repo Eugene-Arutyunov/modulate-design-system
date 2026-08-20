@@ -1,11 +1,13 @@
 <p class="post-meta">
-  <a href="{{ backHref if backHref else '/blog/' }}"
+  <a
+    href="{{ backHref if backHref else '/blog/' }}"
+    class="post-meta__back m__rounded"
     >← {{ backLabel if backLabel else 'Blog' }}</a
   >
   {% if postDate or postAuthor %}
   <span class="post-meta__author">
     <img
-      class="post-meta__photo"
+      class="post-meta__photo m__rounded"
       src="{{ postAuthorPhoto if postAuthorPhoto else
         '/assets/images/authors/eugene-arutyunov.jpg' }}"
       alt=""
@@ -14,7 +16,11 @@
   </span>
   {% if postCoAuthor %}
   <span class="post-meta__author">
-    <img class="post-meta__photo" src="{{ postCoAuthorPhoto }}" alt="" />
+    <img
+      class="post-meta__photo m__rounded"
+      src="{{ postCoAuthorPhoto }}"
+      alt=""
+    />
     {{ postCoAuthor }}
   </span>
   {% endif %} {% if postDate %}

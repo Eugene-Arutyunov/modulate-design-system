@@ -205,31 +205,106 @@
     }
   }
 
-  /* Typography teaser: specimens of the main text styles — the h1.loud
-     display heading, an .m__code-block, and a caption. Styled with the
-     same tokens as the real elements (real heading tags would pollute
-     the outline from inside a link). All specimen text is painted
-     slate-700; only the code-block toolbar keeps its own caption color. */
+  /* Typography teaser: behavior links, an .m__code-block, and a caption.
+     Specimen text is slate-500; hover recolor is instant, unhover uses
+     duration-slow — same timing as .home-promo__card-title. */
   & .home-promo__card--type {
     padding-right: 6.4rem;
-    color: var(--m__color-slate-700);
+
+    &:hover {
+      & .home-promo__type-body,
+      & .home-promo__type-caption,
+      & .m__behavior-link,
+      & .m__code-block {
+        color: var(--m__text-link-hover);
+        transition-duration: var(--m__duration-instant);
+      }
+
+      /* Same specificity as the resting toolbar rule (includes .m__code-block). */
+      & .m__code-block {
+        border-color: color-mix(
+          in srgb,
+          var(--m__text-link-hover) 55%,
+          transparent
+        );
+
+        & .m__code-block__toolbar {
+          color: var(--m__text-link-hover);
+          border-bottom-color: color-mix(
+            in srgb,
+            var(--m__text-link-hover) 28%,
+            transparent
+          );
+          transition-duration: var(--m__duration-instant);
+        }
+      }
+    }
+
+    /* Promo-only: no fill, thin outline with light transparency;
+       toolbar rule is thinner in opacity. */
+    & .m__code-block {
+      margin-bottom: var(--m__gap-s);
+      background-color: transparent;
+      border: var(--m__border-width-s) solid
+        color-mix(in srgb, var(--m__color-slate-500) 55%, transparent);
+      color: var(--m__color-slate-500);
+      transition:
+        color var(--m__duration-slow) var(--m__easing-base),
+        border-color var(--m__duration-slow) var(--m__easing-base);
+
+      & .m__code-block__toolbar {
+        padding-left: 0.5rem;
+        color: var(--m__color-slate-500);
+        border-bottom-color: color-mix(
+          in srgb,
+          var(--m__color-slate-500) 28%,
+          transparent
+        );
+        transition:
+          color var(--m__duration-slow) var(--m__easing-base),
+          border-bottom-color var(--m__duration-slow) var(--m__easing-base);
+      }
+
+      & pre {
+        padding-left: 0.5rem;
+        background-color: transparent;
+      }
+
+      & code {
+        font-family: var(--m__font-family-semi-mono);
+      }
+    }
   }
 
-  & .home-promo__type-display {
+  & .home-promo__type-behaviors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--m__gap-xxxs) var(--m__gap-l);
+    /* Slight optical pull toward the palette grid next door. */
+    margin-top: calc(var(--m__gap-xxxs) * -1);
+    margin-bottom: var(--m__gap-s);
+  }
+
+  & .home-promo__card--type .m__behavior-link {
+    color: var(--m__color-slate-500);
+    transition: color var(--m__duration-slow) var(--m__easing-base);
+  }
+
+  & .home-promo__type-body {
     display: block;
-    margin-bottom: var(--m__gap-xl);
-    font-family: var(--m__font-family-gothic);
-    font-size: var(--m__font-size-display);
-    font-weight: var(--m__font-weight-bold);
-    /* A one-off exception: tighter than the h1.loud line-height of 1. */
-    line-height: 0.8;
+    margin-bottom: var(--m__gap-m);
+    font-size: var(--m__font-size-m);
+    line-height: var(--m__line-height-base);
+    color: var(--m__color-slate-500);
+    transition: color var(--m__duration-slow) var(--m__easing-base);
   }
 
   & .home-promo__type-caption {
     display: block;
     font-size: var(--m__font-size-s);
     line-height: var(--m__line-height-base);
-    color: inherit;
+    color: var(--m__color-slate-500);
+    transition: color var(--m__duration-slow) var(--m__easing-base);
   }
 
   /* UI scheme teaser: reuses the Page composition illustration. */

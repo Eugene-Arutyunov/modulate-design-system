@@ -799,7 +799,7 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
     function showCommentReview(review) {
       if (!review) return;
       activeCommentReview = review;
-      var behaviorLabel = review.querySelector(".pg-behavior-link");
+      var behaviorLabel = review.querySelector(".m__behavior-link");
       commentBehavior.innerHTML = behaviorLabel
         ? behaviorLabel.innerHTML
         : "Behavior";
@@ -1322,7 +1322,7 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
         actions.className = "moderation-review-behaviors__actions";
 
         if (row.classList.contains("pg-behavior-row--detected")) {
-          var behaviorLink = row.querySelector(".pg-behavior-link");
+          var behaviorLink = row.querySelector(".m__behavior-link");
           row.setAttribute("data-detection-review", "");
           row.dataset.reviewBehavior = behaviorLink
             ? behaviorLink.textContent.trim()

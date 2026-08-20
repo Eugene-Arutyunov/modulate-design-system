@@ -21,6 +21,15 @@
     }
   }
 
+  /* Narrower column for long-form narrative (blog posts). */
+  & .narrative-text-width {
+    width: 76%;
+
+    @media (width < 767px) {
+      width: 100%;
+    }
+  }
+
   /* Padding-less variant: content spans the wrapper column edge to edge. */
   &.no-padding {
     padding-inline: 0;
@@ -307,7 +316,12 @@
     }
   }
 
-  & :is(.m__button-primary, .m__button-secondary, .m__button-secondary-outline) {
+  &
+    :is(
+      .m__button-primary,
+      .m__button-secondary,
+      .m__button-secondary-outline
+    ) {
     font-size: var(--m__font-size-s);
   }
 

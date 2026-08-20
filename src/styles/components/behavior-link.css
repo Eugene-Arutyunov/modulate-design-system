@@ -1,0 +1,49 @@
+/* Behavior link — accent label with kiki icon and a thick underline.
+   Underline is a currentColor background gradient (not border / text-decoration)
+   so it can be thick, follow color on hover, and clone under each wrapped line
+   via box-decoration-break. Thickness uses the border-width token scale. */
+
+.m__behavior-link,
+a.m__behavior-link:link,
+a.m__behavior-link:visited {
+  color: var(--m__bg-accent);
+  font-weight: var(--m__font-weight-bold);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: color var(--m__duration-base) var(--m__easing-base);
+
+  /* Default = M */
+  font-size: var(--m__font-size-m);
+  background-size: 100% var(--m__border-width-l);
+  padding-bottom: 0.18em;
+
+  &.S {
+    font-size: var(--m__font-size-s);
+    background-size: 100% var(--m__border-width-m);
+    padding-bottom: 0.15em;
+  }
+
+  &.M {
+    font-size: var(--m__font-size-m);
+    background-size: 100% var(--m__border-width-l);
+    padding-bottom: 0.18em;
+  }
+
+  & svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    margin-inline-end: 0.15em;
+  }
+}
+
+a.m__behavior-link:hover,
+a.m__behavior-link:focus,
+a.m__behavior-link:active {
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
+}

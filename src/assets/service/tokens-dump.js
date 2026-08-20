@@ -278,6 +278,7 @@
 
   var FONT_SIZE_SAMPLE = {
     "font-size-display": "Display heading",
+    "font-size-xxxxl": "Section heading",
     "font-size-xxxl": "Huge heading",
     "font-size-xxl": "Large heading",
     "font-size-xl": "Medium heading",
@@ -290,6 +291,7 @@
 
   var FONT_SIZE_ORDER = [
     "font-size-display",
+    "font-size-xxxxl",
     "font-size-xxxl",
     "font-size-xxl",
     "font-size-xl",

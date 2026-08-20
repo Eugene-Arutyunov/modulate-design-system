@@ -1,0 +1,44 @@
+---
+# Written to the site root rather than /404/index.html so CloudFront can serve it as the
+# custom error response for 403 and 404. This overrides the global permalink rule in
+# eleventy.config.js.
+permalink: /404.html
+---
+
+{% extends 'service/layout.html' %} {% set pageTitle = 'Page not found' %} {% set
+pageDesc = 'That page does not exist on the Modulate design site.' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <h1 class="loud">Page not found</h1>
+  <div class="m__space M"></div>
+  <div class="m__text-width">
+    <p>
+      Nothing lives at this address. The page may have moved, or the link that
+      brought you here may be out of date.
+    </p>
+    <div class="m__space S"></div>
+    <span class="posts-list-col-title">Try instead</span>
+    <div class="m__sequence L gap-M">
+      <div class="m__sequence-item">
+        <nav class="posts-list">
+          <span class="posts-list__item">
+            <a href="/"><strong>Home</strong></a>
+            <span class="posts-list__caption">Start here</span>
+          </span>
+          <span class="posts-list__item">
+            <a href="/design-system/"><strong>Design System</strong></a>
+            <span class="posts-list__caption">Tokens, components, typography</span>
+          </span>
+          <span class="posts-list__item">
+            <a href="/blog/"><strong>By Design</strong></a>
+            <span class="posts-list__caption">Writing about the system</span>
+          </span>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}

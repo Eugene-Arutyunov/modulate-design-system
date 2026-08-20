@@ -57,6 +57,10 @@ h1.loud {
   font-weight: var(--m__font-weight-bold);
   color: var(--m__text);
   line-height: 1;
+
+  @media (width < 767px) {
+    font-size: calc(var(--m__font-size-display) - var(--m__font-size-xl));
+  }
 }
 
 p.loud {
@@ -66,6 +70,19 @@ p.loud {
 
 h2 {
   font-size: var(--m__font-size-xxl);
+}
+
+h2.loud {
+  font-size: var(--m__font-size-xxxxl);
+  font-family: var(--m__font-family-gothic);
+  font-weight: var(--m__font-weight-medium);
+  color: var(--m__text);
+  line-height: 1;
+  margin-bottom: var(--m__spacer-s);
+
+  @media (width < 767px) {
+    font-size: var(--m__font-size-xxxl);
+  }
 }
 
 h3 {

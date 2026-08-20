@@ -7,6 +7,10 @@
   background: var(--m__color-yellow-500);
   color: var(--m__color-slate-900);
 
+  &[hidden] {
+    display: none;
+  }
+
   & .prototype-banner__text {
     flex: 1;
     font-size: var(--m__font-size-s);
@@ -14,6 +18,20 @@
     & a {
       color: inherit;
       font-weight: bold;
+      transition:
+        color var(--m__duration-base) var(--m__easing-base),
+        text-decoration-color var(--m__duration-base) var(--m__easing-base);
+
+      &:hover {
+        color: var(--m__text-link-hover);
+        text-decoration-color: color-mix(
+          in srgb,
+          var(--m__text-link-hover) 20%,
+          transparent
+        );
+        transition-duration:
+          var(--m__duration-instant), var(--m__duration-instant);
+      }
     }
   }
 
@@ -26,5 +44,11 @@
     line-height: 1;
     color: inherit;
     cursor: pointer;
+    transition: color var(--m__duration-base) var(--m__easing-base);
+
+    &:hover {
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
+    }
   }
 }

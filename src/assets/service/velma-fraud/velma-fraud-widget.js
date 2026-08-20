@@ -274,7 +274,7 @@
       // Behavior tags appear in the header when their signal fires.
       (behaviors[utt.id] || []).forEach((signal) => {
         const wrap = el("span", "pg-transcript-behavior");
-        const link = el("a", "pg-behavior-link");
+        const link = el("a", "m__behavior-link S");
 
         link.href = "#";
         link.innerHTML = KIKI_SVG;
@@ -726,7 +726,7 @@
     // bubble is interactive — honor the affordance).
     ui.utterances.forEach(({ el: node, utt }) => {
       node.addEventListener("click", (event) => {
-        if (event.target.closest(".pg-behavior-link")) return;
+        if (event.target.closest(".m__behavior-link")) return;
         seekMs(utt.startMs);
       });
     });
