@@ -197,8 +197,8 @@ The fingerprint studio: title and formal description, an Icon-Studio-like contro
 
 ## Velma Fraud Demo Widget
 
-**Page:** `src/tools/velma-fraud-demo-widget.html` → `/tools/velma-fraud-demo-widget/`
-**Scripts:** `src/assets/service/velma-fraud/velma-fraud-widget.js` (self-contained classic-script widget, `window.VelmaFraudWidget.mount`), `velma-fraud-studio.js` (page wiring: mount, JSON import/export, HTML export), `velma-fraud-config.js` (default conversation data converted from the prototype events JSON, with curated per-utterance emotions)
+**Page:** `src/tools/velma-fraud-demo-widget.html` → `/tools/velma-fraud-demo-widget/`; also mounted as the closing "base format" illustration on `/tools/modulate-fingerprint/` (default data, `{ keyboard: false }` so the docs page keeps Space/arrows)
+**Scripts:** `src/assets/service/velma-fraud/velma-fraud-widget.js` (self-contained classic-script widget, `window.VelmaFraudWidget.mount(root, data, options?)` — the only global; no element ids, so it coexists with the fingerprint studio's `#audio-player`: the strip subset the playground keys on that id is restated class-scoped in the widget styles), `velma-fraud-studio.js` (page wiring: mount, JSON import/export, HTML export), `velma-fraud-config.js` (default conversation data converted from the prototype events JSON, with curated per-utterance emotions and per-signal meter weights)
 **Styles:** `src/styles/service/velma-fraud-widget.css` (bundle: studio stage + widget on DS tokens), `src/assets/service/velma-fraud/velma-fraud-embed.css` (standalone export styles with baked dark-theme values, not linked on the site)
 **Audio:** `src/assets/service/velma-fraud/velma-fraud-demo.mp3` (~1 MB sample call, passthrough copy).
 

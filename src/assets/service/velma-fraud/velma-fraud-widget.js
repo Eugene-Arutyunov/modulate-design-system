@@ -137,9 +137,11 @@
     dataviz.appendChild(indicators);
     container.appendChild(dataviz);
 
+    // No `#audio-player` id: pages like the fingerprint studio already own
+    // it for their canonical player; the strip subset the playground keys
+    // on that id lives class-scoped in the widget styles instead.
     const strip = el("div", "media-box");
 
-    strip.id = "audio-player";
     strip.dataset.speakerCount = "2";
     strip.style.setProperty("--speaker-count", 2);
     strip.innerHTML = `
@@ -274,7 +276,7 @@
         const wrap = el("span", "pg-transcript-behavior");
         const link = el("a", "pg-behavior-link");
 
-        link.href = "#audio-player";
+        link.href = "#";
         link.innerHTML = KIKI_SVG;
         link.appendChild(document.createTextNode(signal.label));
         wrap.appendChild(link);
@@ -401,7 +403,8 @@
 
   /* Mount ─────────────────────────────────────────────────────────────── */
 
-  function mount(root, data) {
+  function mount(root, data, options) {
+    const opts = options || {};
     const duration = data.meta.durationMs;
     const ui = {
       clips: [],
@@ -763,6 +766,8 @@
       });
     });
 
+    // Keyboard control is opt-out (`{ keyboard: false }`): on documentation
+    // pages hijacking Space/arrows from the page would be rude.
     function onKeydown(event) {
       const tag = event.target.tagName;
 
@@ -774,7 +779,7 @@
       if (event.code === "ArrowRight") seekMs(nowMs() + 2000);
       if (event.code === "ArrowLeft") seekMs(nowMs() - 2000);
     }
-    window.addEventListener("keydown", onKeydown);
+    if (opts.keyboard !== false) window.addEventListener("keydown", onKeydown);
 
     render(0);
 

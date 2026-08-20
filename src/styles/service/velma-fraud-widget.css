@@ -46,10 +46,13 @@
     }
   }
 
-  @media (max-width: 992px) {
-    & .velma-fraud-widget {
-      font-size: 14px;
-    }
+}
+
+/* Any embed of the widget shrinks its em base on narrow viewports (the
+   embed CSS bakes the same rule for the Webflow export). */
+@media (max-width: 992px) {
+  .velma-fraud-widget {
+    font-size: 14px;
   }
 }
 
@@ -167,24 +170,71 @@
     background-color: transparent;
   }
 
+  /* The strip used to ride on the playground's `#audio-player` rules;
+     the widget dropped the id (the fingerprint studio page owns it for
+     its canonical player), so the needed subset lives here class-scoped. */
+  --padding: 0.2em;
+
+  & .media-box {
+    background-color: var(--m__bg-surface);
+    color: var(--m__text);
+    overflow: hidden;
+
+    & .player-controls {
+      height: 100%;
+      padding-top: 0;
+    }
+
+    & .player-control-center {
+      padding-top: 0;
+    }
+  }
+
+  & .player-start-time,
+  & .player-total-time {
+    position: absolute;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--m__text-caption);
+    z-index: 3;
+  }
+
+  & .player-start-time {
+    left: calc(var(--padding) + 0.6em);
+  }
+
+  & .player-total-time {
+    right: calc(var(--padding) + 0.6em);
+  }
+
   /* The play button's own hover: white icon, a step up in size —
-     instant in, eased out. (`#audio-player` outweighs the playground's
-     id-scoped icon color.) */
-  & #audio-player .player-icon {
+     instant in, eased out. */
+  & .player-icon {
+    color: var(--m__text);
     transition: color var(--m__duration-base) var(--m__easing-base),
       transform var(--m__duration-base) var(--m__easing-base);
   }
 
-  & #audio-player .player-control-center:hover .player-icon {
+  & .player-icon svg,
+  & .player-icon svg * {
+    fill: currentColor;
+  }
+
+  & .player-control-center:hover .player-icon {
     color: var(--vf-white);
     transform: scale(1.15);
     transition-duration: var(--m__duration-instant);
   }
 
-  /* Base player chrome one step up: times, transcript fragment, emotion. */
+  /* Base player chrome one step up: times, transcript fragment, emotion.
+     (Also restates the id-scoped playground reset: full opacity, inherit.) */
   & .start-time,
   & .total-time {
     font-size: 1em;
+    opacity: 1;
+    color: inherit;
   }
 
   & .clip-text-caption span {

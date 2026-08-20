@@ -337,6 +337,24 @@
   <div class="m__space XL"></div>
 
   <div class="m__text-width">
+    <p>
+      And the format scales past illustrations: the fingerprint can anchor a
+      whole animated demo widget. Below, the same player drives Velma's
+      fraud-call demo — the transcript, the signal feed and the risk meter
+      all run off the timeline. Click anywhere on the plate to play:
+    </p>
+  </div>
+
+  <div class="m__space M"></div>
+
+  <!-- The Velma fraud demo widget (see /tools/velma-fraud-demo-widget/),
+       mounted with its default data; keyboard control stays off so the
+       page keeps Space and the arrows. -->
+  <div data-vf-widget></div>
+
+  <div class="m__space XL"></div>
+
+  <div class="m__text-width">
     <h2>Derived formats</h2>
     <p>Derived formats appear when the rules bend further.</p>
     <p>
@@ -395,5 +413,16 @@
 <script
   type="module"
   src="/assets/service/fingerprint/fingerprint-studio.js"></script>
+
+<script src="/assets/service/velma-fraud/velma-fraud-widget.js" defer></script>
+<script type="module">
+  import { velmaFraudData } from "/assets/service/velma-fraud/velma-fraud-config.js";
+
+  window.VelmaFraudWidget.mount(
+    document.querySelector("[data-vf-widget]"),
+    velmaFraudData,
+    { keyboard: false }
+  );
+</script>
 
 {% endblock %}
