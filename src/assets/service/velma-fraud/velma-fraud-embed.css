@@ -108,10 +108,21 @@
   --player-visualization-height: calc(2 * var(--player-strip-height));
   --padding: 0.2em;
 
+  /* Grades of white. Past the threshold the plate turns bright red, so
+     everything above it (except the emotion colors) paints with white
+     alphas that approximate the dark-theme tokens on the default bg. */
+  --vf-white: rgb(255, 255, 255);
+  --vf-text: rgba(255, 255, 255, 0.66);
+  --vf-text-caption: rgba(255, 255, 255, 0.45);
+  --vf-border: rgba(255, 255, 255, 0.2);
+  --vf-surface: rgba(255, 255, 255, 0.05);
+  --vf-surface-hover: rgba(255, 255, 255, 0.18);
+  --vf-separator: rgba(255, 255, 255, 0.08);
+
   font-family: var(--m__font-family-sans);
   font-size: 16px;
   line-height: 1.45;
-  color: var(--m__text);
+  color: var(--vf-text);
   background-color: var(--m__bg);
   /* Borderless plate, `.m__widget` canon; widget-radius. */
   border-radius: 0.75em;
@@ -120,9 +131,9 @@
   transition: background-color var(--m__duration-xslow) var(--m__easing-base);
 }
 
-/* Past the fraud threshold the whole plate turns red. */
+/* Past the fraud threshold the whole plate turns bright red (red-600). */
 .velma-fraud-widget.vf-critical {
-  background-color: color-mix(in srgb, var(--m__error) 20%, var(--m__bg));
+  background-color: rgb(220, 30, 58);
 }
 
 .velma-fraud-widget *,
@@ -141,7 +152,7 @@
 
 .velma-fraud-widget .vf-top {
   padding: 0.8em 1.1em;
-  border-bottom: 1px solid var(--m__border);
+  border-bottom: 1px solid var(--vf-border);
 }
 
 /* The widget's own headline — the DS h2 style in em. */
@@ -158,7 +169,7 @@
 .velma-fraud-widget .vf-top__subtitle {
   font-size: 0.571em; /* 0.8em base ÷ the 1.4em headline */
   font-weight: var(--m__font-weight-regular);
-  color: var(--m__text-caption);
+  color: var(--vf-text-caption);
 }
 
 /* ── Fingerprint player ──────────────────────────────────────────────── */
@@ -555,8 +566,8 @@
   align-items: center;
   height: 21em;
   overflow: hidden;
-  border-left: 1px solid var(--m__border);
-  color: var(--m__text-caption);
+  border-left: 1px solid var(--vf-border);
+  color: var(--vf-text-caption);
   transition: color var(--m__duration-medium) var(--m__easing-base);
 }
 
@@ -564,8 +575,9 @@
   color: rgba(var(--vf-behavior-RGB), 1);
 }
 
+/* Critical state paints white — the plate below is bright red. */
 .velma-fraud-widget .vf-risk.vf-crit {
-  color: var(--m__error);
+  color: var(--vf-white);
 }
 
 .velma-fraud-widget .vf-risk .vf-panel-head {
@@ -589,7 +601,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  border-top: 1px dashed color-mix(in srgb, var(--m__error) 55%, transparent);
+  border-top: 1px dashed rgba(255, 255, 255, 0.4);
 }
 
 .velma-fraud-widget .vf-risk__value {
@@ -670,18 +682,6 @@
   }
 }
 
-.velma-fraud-widget .m__tag--error {
-  color: var(--m__error);
-}
-
-.velma-fraud-widget .m__tag--muted {
-  color: var(--m__text-caption);
-}
-
-.velma-fraud-widget .m__tag--success {
-  color: var(--m__success);
-}
-
 /* ── Transcript + signal feed ────────────────────────────────────────── */
 
 /* Transcript / signals / risk — 1/2 + 1/3 + 1/6. */
@@ -698,7 +698,7 @@
   font-weight: var(--m__font-weight-regular);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--m__text-caption);
+  color: var(--vf-text-caption);
   padding: 1em 1.375em 0.75em; /* 0.8 / 1.1 / 0.6em ÷ 0.8 */
 }
 
@@ -711,7 +711,7 @@
 }
 
 .velma-fraud-widget .vf-signals {
-  border-left: 1px solid var(--m__border);
+  border-left: 1px solid var(--vf-border);
 }
 
 @media (max-width: 768px) {
@@ -721,7 +721,7 @@
 
   .velma-fraud-widget .vf-transcript {
     height: 17em;
-    border-bottom: 1px solid var(--m__border);
+    border-bottom: 1px solid var(--vf-border);
   }
 
   .velma-fraud-widget .vf-signals {
@@ -732,7 +732,7 @@
   .velma-fraud-widget .vf-risk {
     height: 12em;
     border-left: 0;
-    border-top: 1px solid var(--m__border);
+    border-top: 1px solid var(--vf-border);
   }
 }
 
@@ -750,7 +750,7 @@
    has been revealed; `@starting-style` keeps the fade-in. */
 .velma-fraud-widget .vf-utt {
   display: none;
-  background: var(--m__bg-surface);
+  background: var(--vf-surface);
   padding: 0.7em 0.9em;
   border-radius: 2em;
   corner-shape: squircle;
@@ -779,8 +779,8 @@
 
 /* Hovering the linked clip on the timeline lights the bubble. */
 .velma-fraud-widget .vf-utt.vf-hover {
-  background: var(--m__color-slate-700);
-  color: var(--m__text-link-hover);
+  background: var(--vf-surface-hover);
+  color: var(--vf-white);
 }
 
 .velma-fraud-widget .vf-utt.speaker-left {
@@ -792,24 +792,25 @@
 }
 
 .velma-fraud-widget .vf-utt:hover {
-  background: var(--m__color-slate-700);
-  color: var(--m__text-link-hover);
+  background: var(--vf-surface-hover);
+  color: var(--vf-white);
   transition-duration: var(--m__duration-instant);
 }
 
 /* Active bubble — a neutral highlight, not the emotion color. */
 .velma-fraud-widget .vf-utt.active {
-  background: var(--m__border);
+  background: var(--vf-border);
 }
 
 .velma-fraud-widget .vf-utt.active:hover {
-  background: var(--m__color-slate-700);
+  background: var(--vf-surface-hover);
 }
 
-/* Review-report evidence flash (from a signal click). */
+/* Review-report evidence flash (from a signal click). Translucent blue
+   over any ground, white text — survives the red plate. */
 .velma-fraud-widget .vf-utt.is-evidence-highlighted {
-  background: color-mix(in srgb, var(--m__color-blue-500) 14%, var(--m__bg-surface)) !important;
-  color: var(--m__color-blue-500);
+  background: color-mix(in srgb, var(--m__color-blue-500) 25%, transparent) !important;
+  color: var(--vf-white);
 }
 
 /* Header: semi-mono meta line. */
@@ -828,7 +829,7 @@
 }
 
 .velma-fraud-widget .pg-transcript-emotion {
-  color: var(--ec, var(--m__text-caption));
+  color: var(--ec, var(--vf-text-caption));
 }
 
 .velma-fraud-widget .pg-transcript-behavior {
@@ -892,7 +893,8 @@
   margin: 0;
 }
 
-/* Signal feed */
+/* Signal feed — a table row: time · kind · label · confidence. Thin
+   horizontal separators only, no verticals, no confidence bar. */
 
 .velma-fraud-widget .vf-signal-list {
   padding: 0 1.1em 1em;
@@ -900,7 +902,7 @@
 
 .velma-fraud-widget .vf-signals__empty {
   font-size: 0.8em;
-  color: var(--m__text-caption);
+  color: var(--vf-text-caption);
   padding: 0.4em 0;
 }
 
@@ -908,7 +910,11 @@
   --vf-sig-RGB: var(--emotion-neutral-group-RGB);
 
   display: none;
-  margin-bottom: 0.9em;
+  grid-template-columns: 2.2em 4.6em minmax(0, 1fr) auto;
+  gap: 0 0.6em;
+  align-items: baseline;
+  padding: 0.5em 0;
+  border-bottom: 1px solid var(--vf-separator);
   cursor: pointer;
   opacity: 0;
   transform: translateY(0.4em);
@@ -916,8 +922,12 @@
     transform var(--m__duration-slow) var(--m__easing-base);
 }
 
+.velma-fraud-widget .vf-sig:last-child {
+  border-bottom: 0;
+}
+
 .velma-fraud-widget .vf-sig.vf-visible {
-  display: block;
+  display: grid;
   opacity: 1;
   transform: none;
 }
@@ -930,7 +940,7 @@
 }
 
 .velma-fraud-widget .vf-sig:hover .vf-sig__label {
-  color: var(--m__text-link-hover);
+  color: var(--vf-white);
   transition-duration: var(--m__duration-instant);
 }
 
@@ -961,10 +971,12 @@
   gap: 0.6em;
 }
 
-/* Signal kind — `m__tag-flat` geometry in the kind's accent color. */
+/* Signal kind — `m__tag-flat` geometry in the kind's accent color (the
+   emotion palette is the one thing that keeps its hue on the red plate). */
 .velma-fraud-widget .vf-sig__type {
   display: inline-flex;
   align-items: center;
+  justify-self: start;
   line-height: 1;
   font-family: var(--m__font-family-semi-mono);
   font-size: 0.65em;
@@ -980,40 +992,18 @@
 .velma-fraud-widget .vf-sig__time {
   font-size: 0.65em;
   font-variant-numeric: tabular-nums;
-  color: var(--m__text-caption);
+  color: var(--vf-text-caption);
 }
 
 .velma-fraud-widget .vf-sig__label {
   font-size: 0.8em;
-  color: var(--m__text);
-  margin: 0.3em 0;
+  color: var(--vf-text);
   transition: color var(--m__duration-base) var(--m__easing-base);
 }
 
-/* Confidence — `pg-confidence-cell` geometry in em. */
-.velma-fraud-widget .vf-sig__conf {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-.velma-fraud-widget .vf-sig__bar {
-  flex: 1;
-  max-width: 5em; /* 80px */
-  height: 0.25em;
-  border-radius: 0.15em;
-  background-color: var(--m__border);
-  overflow: hidden;
-}
-
-.velma-fraud-widget .vf-sig__fill {
-  height: 100%;
-  border-radius: 0.15em;
-  background-color: rgba(var(--vf-sig-RGB), 1);
-}
-
 .velma-fraud-widget .vf-sig__val {
+  justify-self: end;
   font-size: 0.65em;
   font-variant-numeric: tabular-nums;
-  color: var(--m__text-caption);
+  color: var(--vf-text-caption);
 }

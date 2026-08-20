@@ -182,10 +182,10 @@
 
     tags.appendChild(verdict);
 
-    const tones = ["m__tag--error", "m__tag--muted", "m__tag--error"];
-
-    data.actions.forEach((action, index) => {
-      const tag = el("span", `m__tag ${tones[index] || "m__tag--muted"} vf-action`, action.label);
+    // Action tags inherit the column state color — grades of white by the
+    // time they reveal (the plate is red past the threshold).
+    data.actions.forEach((action) => {
+      const tag = el("span", "m__tag vf-action", action.label);
 
       tags.appendChild(tag);
       ui.actions.push({ el: tag, tMs: action.tMs });
@@ -292,12 +292,9 @@
 
     list.appendChild(empty);
 
+    // A table row: time · kind · label · confidence.
     data.signals.forEach((signal) => {
       const item = el("div", "vf-sig");
-      const row = el("div", "vf-sig__row");
-      const conf = el("div", "vf-sig__conf");
-      const bar = el("div", "vf-sig__bar");
-      const fill = el("div", "vf-sig__fill");
 
       item.dataset.kind = signal.type;
       // Emotion signals carry the emotion's own color; other kinds get
@@ -305,15 +302,10 @@
       if (signal.type === "emotion" && signal.emotion) {
         item.style.setProperty("--vf-sig-RGB", `var(--emotion-${signal.emotion}-RGB)`);
       }
-      row.appendChild(el("span", "vf-sig__type", signal.type));
-      row.appendChild(el("span", "vf-sig__time", fmt(signal.tMs)));
-      fill.style.width = `${signal.confidence}%`;
-      bar.appendChild(fill);
-      conf.appendChild(bar);
-      conf.appendChild(el("span", "vf-sig__val", `${signal.confidence}%`));
-      item.appendChild(row);
-      item.appendChild(el("div", "vf-sig__label", signal.label));
-      item.appendChild(conf);
+      item.appendChild(el("span", "vf-sig__time", fmt(signal.tMs)));
+      item.appendChild(el("span", "vf-sig__type", signal.type));
+      item.appendChild(el("span", "vf-sig__label", signal.label));
+      item.appendChild(el("span", "vf-sig__val", `${signal.confidence}%`));
       list.appendChild(item);
       ui.signals.push({ el: item, tMs: signal.tMs, signal });
     });
