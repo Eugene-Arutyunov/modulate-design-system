@@ -1,0 +1,422 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Velma LLM Battle' %}
+{% block content %}
+
+<!-- Design mock, not a working thing: the markup is hand-authored to one
+     fixed scenario (the Harborview Bank call from velma-fraud-config.js,
+     68 440 ms → percentages), the only JS is decorative (dropdowns, hover
+     line, plate states). Player lanes are agents, not speakers: lane 1 is
+     Velma, lane 2 the alternative orchestrator (STT+LLM). -->
+
+{% set kikiSvg %}
+<svg viewBox="0 0 241.8 241.8" aria-hidden="true">
+  <path class="behaviour-icon__outline" d="M159,239.9c-6.3,0-12.3-3.3-15.6-9l-29.3-50.7-87.2,44.2c-2.6,1.3-5.4,1.9-8.1,1.9-4.9,0-9.8-2-13.3-5.8-5.5-5.9-6.3-14.8-2.1-21.6l43.4-70.3-36.4-19.3c-6.9-3.7-10.7-11.4-9.3-19.2,1.4-7.7,7.7-13.6,15.5-14.6l40.5-5-19.8-41.1c-3.5-7.3-1.7-16,4.3-21.3,3.4-3,7.6-4.5,11.9-4.5s6.9,1,9.9,2.9l70.9,46.5L196.6,5.7c3.2-2.4,7.1-3.7,10.9-3.7s7.3,1.1,10.5,3.4c6.4,4.6,9.1,12.9,6.6,20.4l-29,86.5,35.2,16.4c6.8,3.2,10.9,10.2,10.3,17.7s-5.7,13.8-12.9,15.9l-47.9,14.1-3.3,46.9c-.6,7.9-6.2,14.5-13.9,16.3-1.3.3-2.7.5-4,.5Z"/>
+  <polygon points="18.9 93.5 84.3 85.5 53.6 21.7 135.1 75.2 207.5 20 173.4 121.7 223.1 144.9 163.3 162.5 159 221.9 121.2 156.4 18.8 208.4 72.3 121.7 18.9 93.5"/>
+</svg>
+{% endset %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <div class="vlb-controls">
+        <div class="vlb-controls__group">
+          <span class="vlb-controls__title">Mode</span>
+          <label class="m__checkbox-secondary vlb-controls__check">
+            <input type="checkbox" checked data-vlb-locked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+            STT+LLM comparison
+          </label>
+        </div>
+
+        <div class="vlb-controls__group">
+          <span class="vlb-controls__title">Behaviors</span>
+          <div class="vlb-select" data-open="false">
+            <button
+              type="button"
+              class="vlb-select__button"
+              aria-haspopup="true"
+              aria-expanded="false">
+              <span>3 of 8 selected</span>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+            </button>
+            <div class="vlb-select__menu" hidden>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Complaints
+              </label>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Vishing
+              </label>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Account Impersonation
+              </label>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Coercion Manipulation
+              </label>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Return Fraud Attempt
+              </label>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Service Churn
+              </label>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Off-topic Discussion
+              </label>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Action Plan Created
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="pg-content">
+      <div class="pg-page-header">
+        <h1 class="pg-page-title">Velma LLM Battle</h1>
+      </div>
+
+      <div class="pg-upload-section">
+        {% set uploadPlateId = 'vlb-upload-plate' %}
+        {% set uploadPlateStateInputName = 'vlb-plate-state' %}
+        {% set uploadPlateOptions %}
+        <div class="pg-options-row pg-velma-setup">
+          <a href="#" class="pg-velma-setup-link"
+            ><svg width="18" height="18" aria-hidden="true">
+              <use href="#behaviors" /></svg
+            >Set up behaviors</a
+          >
+          <span class="pg-velma-setup-summary"
+            >1 conversation type · 2 roles · 3 behaviors</span
+          >
+        </div>
+        {% endset %}
+        {% set uploadPlateActions %}
+        <div class="pg-upload-actions">
+          <button type="button" class="m__button-primary-outline M pg-upload-primary">
+            <span class="pg-upload-primary__label">Drop or choose file…</span>
+          </button>
+          <div class="m__split-button pg-upload-stream" data-open="false">
+            <button type="button" class="m__button-primary-outline M pg-upload-stream__main">Try demo audio</button>
+            <button
+              type="button"
+              class="m__menu-button-primary M pg-upload-stream__toggle"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-label="Choose demo recording">
+              <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+            </button>
+            <div class="pg-upload-stream__menu vlb-demo-menu" role="menu" hidden>
+              <button type="button" role="menuitem">
+                Harborview Bank — account takeover
+                <span class="vlb-menu-ref">reference</span>
+              </button>
+              <button type="button" role="menuitem">
+                Elderly caller needs login for surgery payment
+                <span class="vlb-menu-ref">reference</span>
+              </button>
+              <button type="button" role="menuitem">
+                Gender-role argument ends the relationship
+              </button>
+            </div>
+          </div>
+        </div>
+        {% endset %}
+        {% include 'prototypes/upload-plate.html' %}
+      </div>
+
+      <div class="m__space L"></div>
+
+      <!-- Shared player: everything both agents reported, on their own lanes.
+           Velma hears emotions, STT+LLM does not — its lane stays neutral. -->
+      <div class="pg-player-output m__rounded">
+        <div class="media-container">
+          <div class="pg-player-dataviz">
+            <div class="player-visualization">
+              <!-- Lane 1 — Velma: utterances with detected emotions -->
+              <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-calm" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-stressed" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-anxious" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-confident" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-angry" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-calm" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-contemptuous" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+              <!-- Lane 2 — STT+LLM: same utterances, no emotion channel -->
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+            </div>
+            <div class="speaker-labels">
+              <div class="speaker-label" data-speaker-index="1">
+                <span>Velma</span>
+              </div>
+              <div class="speaker-label" data-speaker-index="2">
+                <span>STT+LLM</span>
+              </div>
+            </div>
+            <div class="behaviour-indicators">
+              <!-- Velma detections -->
+              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="frustrated" style="left: 8.48%">
+                <span class="behaviour-icon behaviour-icon--kiki" title="Vishing">{{ kikiSvg | safe }}</span>
+              </div>
+              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="stressed" style="left: 30.25%">
+                <span class="behaviour-icon behaviour-icon--kiki" title="Vishing">{{ kikiSvg | safe }}</span>
+              </div>
+              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="anxious" style="left: 51.14%">
+                <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation">{{ kikiSvg | safe }}</span>
+              </div>
+              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="angry" style="left: 75.54%">
+                <span class="behaviour-icon behaviour-icon--kiki" title="Coercion Manipulation">{{ kikiSvg | safe }}</span>
+              </div>
+              <!-- STT+LLM detections (incl. its false positive at 0:48) -->
+              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 51.14%">
+                <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation">{{ kikiSvg | safe }}</span>
+              </div>
+              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 70.87%">
+                <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation">{{ kikiSvg | safe }}</span>
+              </div>
+              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 75.54%">
+                <span class="behaviour-icon behaviour-icon--kiki" title="Coercion Manipulation">{{ kikiSvg | safe }}</span>
+              </div>
+            </div>
+            <div class="behaviour-labels" style="display: none"></div>
+          </div>
+          <div class="media-box" id="audio-player" data-speaker-count="2">
+            <div class="player-controls">
+              <div class="player-control-spacer"></div>
+              <div class="player-control player-control-center" data-action="play-pause">
+                <a href="#" class="player-icon" data-playing="false">
+                  <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+                    <polygon fill="currentColor" points="40 30 40 190 190 110 40 30" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div class="clip-text-caption"><span></span></div>
+            <div class="player-status-caption">
+              <span class="emotion-caption"></span>
+            </div>
+            <div class="player-start-time">
+              <span class="start-time">0:00</span>
+            </div>
+            <div class="player-total-time">
+              <span class="total-time" data-total-time>1:08</span>
+            </div>
+            <div class="player-position-indicator">
+              <div class="player-position-line"></div>
+              <div class="player-position-caption">
+                <span data-current-time>0:00</span>
+              </div>
+            </div>
+            <div class="player-hover-position-indicator">
+              <div class="player-hover-position-line"></div>
+              <div class="player-hover-position-caption">
+                <span data-hover-time>0:00</span>
+              </div>
+            </div>
+          </div>
+          <div class="pg-media-hover-line" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="m__space L"></div>
+
+      <!-- One strip per selected behavior, same time axis as the player
+           above: correct detections in the utterance's emotion color,
+           false positives in red, misses as dashed ghosts at the
+           reference position. -->
+      <section class="vlb-battles">
+        <h6 class="pg-section-title">Behavior detections</h6>
+
+        <div class="vlb-battle">
+          <div class="vlb-battle__head">
+            <a href="#" class="m__behavior-link S"
+              ><svg viewBox="0 0 32 32" aria-hidden="true">
+                <use href="#behaviors"></use></svg
+              >Vishing</a
+            >
+            <span class="vlb-battle__score">Velma 2 · STT+LLM 0</span>
+          </div>
+          <div class="vlb-strip">
+            <span class="vlb-strip__label" data-lane="1">Velma</span>
+            <span class="vlb-strip__label" data-lane="2">STT+LLM</span>
+            <div class="vlb-mark is-detected" data-lane="1" style="left: 0%; width: 13.28%; --ec: var(--emotion-frustrated)" title="Vishing — detected">{{ kikiSvg | safe }}</div>
+            <div class="vlb-mark is-detected" data-lane="1" style="left: 21.53%; width: 12.2%; --ec: var(--emotion-stressed)" title="Vishing — detected">{{ kikiSvg | safe }}</div>
+            <div class="vlb-mark is-missed" data-lane="2" style="left: 0%; width: 13.28%" title="Vishing — missed">{{ kikiSvg | safe }}</div>
+            <div class="vlb-mark is-missed" data-lane="2" style="left: 21.53%; width: 12.2%" title="Vishing — missed">{{ kikiSvg | safe }}</div>
+          </div>
+        </div>
+
+        <div class="vlb-battle">
+          <div class="vlb-battle__head">
+            <a href="#" class="m__behavior-link S"
+              ><svg viewBox="0 0 32 32" aria-hidden="true">
+                <use href="#behaviors"></use></svg
+              >Account Impersonation</a
+            >
+            <span class="vlb-battle__score">Velma 1 · STT+LLM 2 (1 false)</span>
+          </div>
+          <div class="vlb-strip">
+            <span class="vlb-strip__label" data-lane="1">Velma</span>
+            <span class="vlb-strip__label" data-lane="2">STT+LLM</span>
+            <div class="vlb-mark is-detected" data-lane="1" style="left: 45.29%; width: 14.28%; --ec: var(--emotion-anxious)" title="Account Impersonation — detected">{{ kikiSvg | safe }}</div>
+            <div class="vlb-mark is-detected" data-lane="2" style="left: 45.29%; width: 14.28%; --ec: var(--emotion-neutral)" title="Account Impersonation — detected">{{ kikiSvg | safe }}</div>
+            <div class="vlb-mark is-false" data-lane="2" style="left: 68.96%; width: 13.4%" title="Account Impersonation — false positive">{{ kikiSvg | safe }}</div>
+          </div>
+        </div>
+
+        <div class="vlb-battle">
+          <div class="vlb-battle__head">
+            <a href="#" class="m__behavior-link S"
+              ><svg viewBox="0 0 32 32" aria-hidden="true">
+                <use href="#behaviors"></use></svg
+              >Coercion Manipulation</a
+            >
+            <span class="vlb-battle__score">Velma 1 · STT+LLM 1</span>
+          </div>
+          <div class="vlb-strip">
+            <span class="vlb-strip__label" data-lane="1">Velma</span>
+            <span class="vlb-strip__label" data-lane="2">STT+LLM</span>
+            <div class="vlb-mark is-detected" data-lane="1" style="left: 68.96%; width: 13.4%; --ec: var(--emotion-angry)" title="Coercion Manipulation — detected">{{ kikiSvg | safe }}</div>
+            <div class="vlb-mark is-detected" data-lane="2" style="left: 68.96%; width: 13.4%; --ec: var(--emotion-neutral)" title="Coercion Manipulation — detected">{{ kikiSvg | safe }}</div>
+          </div>
+        </div>
+
+        <p class="vlb-legend caption">
+          <span class="vlb-legend__item"><span class="vlb-swatch is-detected"></span> Detected</span>
+          <span class="vlb-legend__item"><span class="vlb-swatch is-false"></span> False positive</span>
+          <span class="vlb-legend__item"><span class="vlb-swatch is-missed"></span> Missed by agent</span>
+        </p>
+      </section>
+
+      <div class="m__space L"></div>
+
+      <section class="vlb-scoreboard">
+        <h6 class="pg-section-title">Accuracy vs. reference</h6>
+        <p class="caption">
+          Available for reference-labeled demo recordings.
+        </p>
+        <div class="vlb-scoreboard__summary">
+          <span><strong>Velma</strong> — 4 of 4 signals · 0 false</span>
+          <span
+            ><strong>STT+LLM</strong> — 2 of 4 signals ·
+            <span class="vlb-false-text">1 false</span></span
+          >
+        </div>
+        <div class="vlb-score-grid">
+          <div class="vlb-score-card">
+            <span class="vlb-score-card__name">Vishing</span>
+            <div class="vlb-score-cell">
+              <span class="vlb-score-cell__agent">Velma</span>
+              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
+              <span class="vlb-score-cell__value">2 of 2</span>
+            </div>
+            <div class="vlb-score-cell">
+              <span class="vlb-score-cell__agent">STT+LLM</span>
+              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 0%"></span></span>
+              <span class="vlb-score-cell__value">0 of 2</span>
+            </div>
+          </div>
+          <div class="vlb-score-card">
+            <span class="vlb-score-card__name">Account Impersonation</span>
+            <div class="vlb-score-cell">
+              <span class="vlb-score-cell__agent">Velma</span>
+              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
+              <span class="vlb-score-cell__value">1 of 1</span>
+            </div>
+            <div class="vlb-score-cell">
+              <span class="vlb-score-cell__agent">STT+LLM</span>
+              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
+              <span class="vlb-score-cell__value"
+                >1 of 1 · <span class="vlb-false-text">+1 false</span></span
+              >
+            </div>
+          </div>
+          <div class="vlb-score-card">
+            <span class="vlb-score-card__name">Coercion Manipulation</span>
+            <div class="vlb-score-cell">
+              <span class="vlb-score-cell__agent">Velma</span>
+              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
+              <span class="vlb-score-cell__value">1 of 1</span>
+            </div>
+            <div class="vlb-score-cell">
+              <span class="vlb-score-cell__agent">STT+LLM</span>
+              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
+              <span class="vlb-score-cell__value">1 of 1</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script>
+  (function () {
+    // Media-container hover line follows cursor across player + dataviz
+    document.querySelectorAll('.media-container').forEach(function (container) {
+      container.addEventListener('mousemove', function (e) {
+        var rect = container.getBoundingClientRect();
+        container.style.setProperty('--pg-hover-x', e.clientX - rect.left + 'px');
+        container.dataset.hover = 'true';
+      });
+      container.addEventListener('mouseleave', function () {
+        container.dataset.hover = 'false';
+      });
+    });
+
+    // Dropdowns: demo-audio split button + behaviors select. Menu clicks
+    // close only on [role="menuitem"], so the behaviors checkbox list
+    // stays open while picking.
+    document.querySelectorAll('.pg-upload-stream, .vlb-select').forEach(function (group) {
+      var toggle = group.querySelector('[aria-haspopup]');
+      var menu = group.querySelector('.pg-upload-stream__menu, .vlb-select__menu');
+      if (!toggle || !menu) return;
+      function close() {
+        group.dataset.open = 'false';
+        toggle.setAttribute('aria-expanded', 'false');
+        menu.hidden = true;
+      }
+      function open() {
+        group.dataset.open = 'true';
+        toggle.setAttribute('aria-expanded', 'true');
+        menu.hidden = false;
+      }
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (group.dataset.open === 'true') close();
+        else open();
+      });
+      document.addEventListener('click', function (e) {
+        if (!group.contains(e.target)) close();
+      });
+      menu.addEventListener('click', function (e) {
+        if (e.target.closest('[role="menuitem"]')) close();
+      });
+    });
+
+    // Comparison mode is hard-enabled in this mock
+    document.querySelectorAll('[data-vlb-locked]').forEach(function (checkbox) {
+      checkbox.addEventListener('change', function () {
+        checkbox.checked = true;
+      });
+    });
+  })();
+</script>
+
+{% endblock %}

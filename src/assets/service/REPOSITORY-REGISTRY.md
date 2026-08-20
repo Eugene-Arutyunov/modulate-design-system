@@ -206,6 +206,15 @@ Interactive fraud-call demo for the Webflow site: the prototype widget rebuilt o
 
 ---
 
+## Velma LLM Battle page
+
+**Page:** `src/tools/velma-llm-battle.html` → `/tools/velma-llm-battle/`  
+**Styles:** `src/styles/prototypes/llm-battle.css` (bundle, after playground.css; `vlb-` prefix).
+
+Design mock (not a working thing) of a playground-like page that pits Velma against an alternative orchestrator (STT+LLM) on one call. Reuses the playground plumbing as is — `dashboard-layout`, the upload plate include (velma-setup header + a "Try demo audio" split button whose menu lists preloaded recordings, reference-labeled ones tagged), the canonical player markup — but the player lanes are agents, not speakers: lane 1 Velma (utterances in emotion colors, kiki glyphs at its detections), lane 2 STT+LLM (same utterances all `emotion-neutral` — no emotion channel — with its own kikis, including a false positive). The left sidebar is a control panel instead of the models nav: a hard-enabled "STT+LLM comparison" checkbox and a "Behaviors" multi-select (textfield-shaped trigger, checkbox-list dropdown; 3 of the 8 dashboard-library behaviors selected). Below the player, one `vlb-strip` per selected behavior on the same time axis: correct detections in the utterance's emotion color, false positives in red-600, misses as dashed ghosts mixed from `--m__bg` (the strip's `--m__bg-accent` sits opposite the page bg in both themes). The accuracy scoreboard (shown for reference-labeled demo audio) is pure-CSS recall bars per behavior per agent plus a two-agent summary line. All positions are hand-computed percentages from the Harborview call in `velma-fraud-config.js` (68 440 ms); the only JS is decorative (dropdown open/close, hover line, plate states). The sidebar panel is rounded by hand, not via `.m__rounded`, whose overflow clip would cut the dropdown.
+
+---
+
 ## Prosocial standalone export
 
 **Script:** `scripts/export-prosocial-single-html.js`  
