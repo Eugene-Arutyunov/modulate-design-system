@@ -9,7 +9,13 @@ permalink: /dashboard/conversations/review/
 tags: ['Customer', 'Agent'], behaviors: [ { name: 'Harassment', score: 87 }, {
 name: 'Threatening language', score: 82 }, { name: 'Escalation risk', score: 76
 }, { name: 'Policy dispute', score: 69 }, { name: 'Negative sentiment', score:
-64 } ], score: 87, detections: 5, status: 'Pending', href:
+64 } ], score: 87, detections: 5, status: 'Pending', participants: [ { name:
+'Eugene Arutyunov', initials: 'EA', activity: 'Viewing' }, { name: 'Maya Chen',
+initials: 'MC', activity: 'Editing' }, { name: 'Jordan Lee', initials: 'JL',
+activity: 'Writing a comment' }, { name: 'Sofia Martinez', initials: 'SM',
+activity: 'Viewing' }, { name: 'Daniel Kim', initials: 'DK', activity: 'Viewing'
+}, { name: 'Priya Shah', initials: 'PS', activity: 'Editing' }, { name: 'Lena
+Ortiz', initials: 'LO', activity: 'Viewing' } ], href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
 lane: 'full', span: 4 }, { emotion: 'calm', lane: 'top', span: 2 }, { emotion:
 'neutral', lane: 'bottom', span: 1 }, { emotion: 'confident', lane: 'bottom',
@@ -23,7 +29,8 @@ override', submitted: 'Today, 09:12', source: 'API', duration: '8:36', behavior:
 'Coercion manipulation', tags: ['Customer', 'Agent'], behaviors: [ { name:
 'Coercion manipulation', score: 79 }, { name: 'Vishing', score: 72 }, { name:
 'Pressure tactics', score: 68 }, { name: 'Identity probing', score: 61 } ],
-score: 79, detections: 4, status: 'Pending', href:
+score: 79, detections: 4, status: 'Pending', participants: [ { name: 'Lena
+Ortiz', initials: 'LO', activity: 'Editing' } ], href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
 lane: 'full', span: 2 }, { emotion: 'frustrated', lane: 'top', span: 1 }, {
 emotion: 'angry', lane: 'full', span: 2 }, { emotion: 'neutral', lane: 'bottom',
@@ -37,7 +44,9 @@ tags: ['Agent', 'Manager'], behaviors: [ { name: 'Harassment', score: 74,
 result: 'true' }, { name: 'Personal attacks', score: 70, result: 'false' }, {
 name: 'Toxicity', score: 66 }, { name:
 'Team conflict', score: 58 }, { name: 'Negative sentiment', score: 54 } ],
-score: 74, detections: 5, status: 'In review', href:
+score: 74, detections: 5, status: 'In review', participants: [ { name: 'Eugene
+Arutyunov', initials: 'EA', activity: 'Viewing' }, { name: 'Jordan Lee', initials:
+'JL', activity: 'Writing a comment' } ], href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
 lane: 'full', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, {
 emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full',
@@ -63,7 +72,8 @@ setting', tags: ['Customer', 'Agent'], behaviors: [ { name: 'Social boundary
 setting', score: 63, result: 'true' }, { name: 'Policy dispute', score: 60,
 result: 'false' }, { name: 'Frustration', score: 55, result: 'false' }, { name:
 'Escalation risk', score: 49, result: 'true' } ], score: 63, detections: 4,
-status: 'Reviewed', href:
+status: 'Reviewed', participants: [ { name: 'Priya Shah', initials: 'PS',
+activity: 'Viewing' } ], href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
 lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 1 }, { emotion:
 'confident', lane: 'bottom', span: 2 }, { emotion: 'neutral', lane: 'bottom',
@@ -469,10 +479,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               <tr
                 data-review-row
                 data-index="{{ loop.index0 }}"
+                data-row-id="{{ row.id }}"
                 data-behaviors="{% for behavior in row.behaviors %}{{ behavior.name }}{% if not loop.last %}|{% endif %}{% endfor %}"
                 data-behavior-results="{% for behavior in row.behaviors %}{% if behavior.result %}{{ behavior.name }}::{{ behavior.result }}|{% endif %}{% endfor %}"
                 data-score="{{ row.score }}"
                 data-status="{{ row.status }}"
+                data-auto-status="{% if row.behaviors | selectattr('result') | list | length == 0 %}Pending{% elif row.behaviors | selectattr('result') | list | length < row.behaviors.length %}In review{% else %}Reviewed{% endif %}"
                 data-search="{{ row.id }} {{ row.title }} {{ row.source }} {{ row.behavior }} {% for tag in row.tags %}{{ tag }} {% endfor %}{% for behavior in row.behaviors %}{{ behavior.name }} {% endfor %}"
               >
                 <td class="moderation-table__conversation-cell">
@@ -585,6 +597,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                   </div>
                 </td>
                 <td>
+                  <div class="moderation-table__status-cell-content">
                   <div class="m__menu-button moderation-table__row-status-menu">
                     <button
                       type="button"
@@ -626,9 +639,16 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                               <use href="#checkmark"></use>
                             </svg>
                           </span>
-                          <span class="conversation-report__report-item-title"
-                            >{{ status }}</span
-                          >
+                          <span class="moderation-table__status-option-copy">
+                            <span class="conversation-report__report-item-title"
+                              >{{ status }}</span
+                            >
+                            <span
+                              class="moderation-table__status-option-meta"
+                              data-row-status-option-meta
+                              hidden
+                            ></span>
+                          </span>
                         </button>
                         {% endfor %}
                       </div>
@@ -636,6 +656,18 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                         class="conversation-report__report-settings-footer"
                         role="presentation"
                       >
+                        <button
+                          type="button"
+                          class="m__menu-button-item conversation-report__report-item moderation-table__status-auto"
+                          role="menuitem"
+                          data-menu-button-action="use-automatic-status"
+                          data-row-status-auto
+                          hidden
+                        >
+                          <span class="conversation-report__report-item-title"
+                            >Use automatic status</span
+                          >
+                        </button>
                         <button
                           type="button"
                           class="m__menu-button-item conversation-report__report-item conversation-report__report-item--settings moderation-table__status-edit"
@@ -649,6 +681,58 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                         </button>
                       </div>
                     </div>
+                  </div>
+                  {% if row.participants %}
+                  <div class="m__menu-button moderation-participants">
+                    <button
+                      type="button"
+                      class="m__menu-button-trigger moderation-participants__trigger"
+                      aria-label="{{ row.participants.length }} participant{% if row.participants.length != 1 %}s{% endif %} working on {{ row.title }}"
+                      aria-haspopup="menu"
+                      aria-expanded="false"
+                    >
+                      {% for participant in row.participants %}
+                      {% if loop.index < 5 %}
+                      <span
+                        class="moderation-participants__avatar"
+                        aria-hidden="true"
+                      >{{ participant.initials }}</span>
+                      {% elif loop.index == 5 %}
+                      <span
+                        class="moderation-participants__avatar moderation-participants__avatar--more"
+                        aria-hidden="true"
+                      >+{{ row.participants.length - 4 }}</span>
+                      {% endif %}
+                      {% endfor %}
+                    </button>
+                    <div
+                      class="m__menu-button-list moderation-participants__list"
+                      hidden
+                      role="menu"
+                      aria-label="Participants"
+                    >
+                      {% for participant in row.participants %}
+                      <div
+                        class="moderation-participants__item"
+                        role="menuitem"
+                      >
+                        <span
+                          class="moderation-participants__avatar"
+                          aria-hidden="true"
+                        >{{ participant.initials }}</span>
+                        <span class="moderation-participants__details">
+                          <span class="moderation-participants__name"
+                            >{{ participant.name }}</span
+                          >
+                          <span class="moderation-participants__activity"
+                            >{{ participant.activity }}</span
+                          >
+                        </span>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  {% endif %}
                   </div>
                 </td>
                 <td class="m__col-actions moderation-table__row-actions">
@@ -890,6 +974,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var resultFilterOptionsRoot = root.querySelector(
       "[data-result-filter-options]",
     );
+    var reviewerNameElement = document.querySelector(
+      ".prototype-header__user-name",
+    );
+    var reviewerName = reviewerNameElement
+      ? reviewerNameElement.textContent.trim()
+      : "Current reviewer";
     var statusModalList = root.querySelector("[data-status-modal-list]");
     var statusAddForm = root.querySelector("[data-status-add-form]");
     var statusAddInput = root.querySelector("[data-status-add-input]");
@@ -906,6 +996,56 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var selectedResult = "";
     var pendingStatusRemove = "";
     var initialFilterParams = new URLSearchParams(window.location.search);
+    var statusStorageKey = "modulate-review-status-overrides";
+    var reviewResultsStorageKey = "modulate-review-results";
+
+    function readStatusOverrides() {
+      try {
+        return JSON.parse(window.localStorage.getItem(statusStorageKey) || "{}");
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function writeStatusOverrides(overrides) {
+      try {
+        window.localStorage.setItem(statusStorageKey, JSON.stringify(overrides));
+      } catch (error) {
+        // The prototype still works when storage is unavailable.
+      }
+    }
+
+    function getRowStatusOverride(row) {
+      return readStatusOverrides()[row.dataset.rowId] || null;
+    }
+
+    function setRowStatusOverride(row, status) {
+      var overrides = readStatusOverrides();
+      overrides[row.dataset.rowId] = { status: status, author: reviewerName };
+      writeStatusOverrides(overrides);
+      return overrides[row.dataset.rowId];
+    }
+
+    function clearRowStatusOverride(row) {
+      var overrides = readStatusOverrides();
+      delete overrides[row.dataset.rowId];
+      writeStatusOverrides(overrides);
+    }
+
+    function getStoredReviewedCount(row) {
+      try {
+        var results = JSON.parse(
+          window.localStorage.getItem(reviewResultsStorageKey) || "{}",
+        )[row.dataset.rowId];
+        return results
+          ? Object.values(results).filter(function (result) {
+              return result === "true" || result === "false";
+            }).length
+          : 0;
+      } catch (error) {
+        return 0;
+      }
+    }
 
     initialFilterParams.getAll("behavior").forEach(function (behavior) {
       selectedBehaviors.add(behavior);
@@ -1171,10 +1311,38 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       applyQueueState();
     }
 
+    function getRowStatusLabel(status) {
+      return {
+        pending: "Pending",
+        "in-review": "In review",
+        reviewed: "Reviewed",
+      }[status] || status;
+    }
+
     function updateRowStatus(row, status) {
+      status = getRowStatusLabel(status);
       var trigger = row.querySelector("[data-row-status-trigger]");
+      var autoAction = row.querySelector("[data-row-status-auto]");
+      var statusContext = arguments[3] || null;
+      var statusOptions = statusContext && statusContext.matches(
+        "[data-row-status-options]",
+      )
+        ? statusContext
+        : statusContext && statusContext.closest(".m__menu-button-list")
+          ? statusContext
+              .closest(".m__menu-button-list")
+              .querySelector("[data-row-status-options]")
+          : null;
+      if (!autoAction && statusContext) {
+        autoAction = statusContext
+          .closest(".m__menu-button-list")
+          .querySelector("[data-row-status-auto]");
+      }
+      var override = arguments[2] || null;
       row.dataset.status = status;
       trigger.querySelector("[data-row-status-label]").textContent = status;
+      row.dataset.statusSource = override ? "manual" : "automatic";
+      if (autoAction) autoAction.hidden = !override;
       trigger.classList.remove(
         "moderation-table__status-tag--pending",
         "moderation-table__status-tag--in-review",
@@ -1187,11 +1355,43 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       } else if (status === "Reviewed") {
         trigger.classList.add("moderation-table__status-tag--reviewed");
       }
-      row.querySelectorAll("[data-row-status-option]").forEach(function (option) {
-        var isSelected = option.dataset.rowStatusOption === status;
-        option.classList.toggle("is-active", isSelected);
-        option.setAttribute("aria-checked", String(isSelected));
-      });
+      (statusOptions || row)
+        .querySelectorAll("[data-row-status-option]")
+        .forEach(function (option) {
+          var isSelected = option.dataset.rowStatusOption === status;
+          var optionMeta = option.querySelector(
+            "[data-row-status-option-meta]",
+          );
+          option.classList.toggle("is-active", isSelected);
+          option.setAttribute("aria-checked", String(isSelected));
+          if (optionMeta) {
+            optionMeta.hidden = !(override && isSelected);
+            optionMeta.textContent = override && isSelected
+              ? "Changed by " + (override.author || "Current reviewer")
+              : "";
+          }
+        });
+    }
+
+    function getAutomaticStatus(row) {
+      var behaviors = (row.dataset.behaviors || "").split("|").filter(Boolean);
+      var reviewedCount = (row.dataset.behaviorResults || "")
+        .split("|")
+        .filter(Boolean)
+        .filter(function (entry) {
+          return entry.endsWith("::true") || entry.endsWith("::false");
+        }).length;
+      reviewedCount = Math.max(reviewedCount, getStoredReviewedCount(row));
+      if (!reviewedCount) return "Pending";
+      if (reviewedCount < behaviors.length) return "In review";
+      return "Reviewed";
+    }
+
+    function updateRowToAutomaticStatus(row, statusOptions) {
+      clearRowStatusOverride(row);
+      var automaticStatus = getAutomaticStatus(row);
+      row.dataset.autoStatus = automaticStatus;
+      updateRowStatus(row, automaticStatus, null, statusOptions);
     }
 
     function createStatusOption(status, optionType) {
@@ -1206,6 +1406,8 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         "use",
       );
       var title = document.createElement("span");
+      var copy = document.createElement("span");
+      var meta = document.createElement("span");
       option.type = "button";
       option.className =
         "m__menu-button-item conversation-report__report-item moderation-table__status-option";
@@ -1225,8 +1427,14 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       check.appendChild(checkIcon);
       title.className = "conversation-report__report-item-title";
       title.textContent = status;
+      copy.className = "moderation-table__status-option-copy";
+      meta.className = "moderation-table__status-option-meta";
+      meta.dataset.rowStatusOptionMeta = "";
+      meta.hidden = true;
       option.appendChild(check);
-      option.appendChild(title);
+      copy.appendChild(title);
+      copy.appendChild(meta);
+      option.appendChild(copy);
       return option;
     }
 
@@ -1304,6 +1512,22 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     }
 
     document.addEventListener("click", function (event) {
+      var automaticStatusAction = event.target.closest("[data-row-status-auto]");
+      if (automaticStatusAction) {
+        var automaticStatusList = automaticStatusAction.closest(
+          ".m__menu-button-list",
+        );
+        var automaticMenu = automaticStatusList
+          ? automaticStatusList._menuButtonOriginalParent
+          : null;
+        var automaticRow =
+          automaticStatusAction.closest("[data-review-row]") ||
+          (automaticMenu && automaticMenu.closest("[data-review-row]"));
+        if (!automaticRow) return;
+        updateRowToAutomaticStatus(automaticRow, automaticStatusAction);
+        applyQueueState();
+        return;
+      }
       var statusOption = event.target.closest("[data-status-filter-option]");
       if (!statusOption) return;
       setStatusFilter(statusOption.dataset.statusFilterOption || "");
@@ -1317,7 +1541,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         return candidate.dataset.index === options.dataset.rowIndex;
       });
       if (!row) return;
-      updateRowStatus(row, statusOption.dataset.rowStatusOption);
+      var nextStatus = statusOption.dataset.rowStatusOption;
+      var override = setRowStatusOverride(row, nextStatus);
+      updateRowStatus(row, nextStatus, override, options);
       options
         .querySelectorAll("[data-row-status-option]")
         .forEach(function (option) {
@@ -1377,6 +1603,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       true,
     );
     sortFilter.addEventListener("change", applyQueueState);
+    rows.forEach(function (row) {
+      var override = getRowStatusOverride(row);
+      var automaticStatus = getAutomaticStatus(row);
+      row.dataset.autoStatus = automaticStatus;
+      updateRowStatus(row, override ? override.status : automaticStatus, override);
+    });
     renderSelectedBehaviors();
     setResultFilter(selectedResult);
   })();

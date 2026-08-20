@@ -114,6 +114,13 @@
     if (e.key === "Escape") closeMenu();
   });
 
-  window.addEventListener("scroll", closeMenu, true);
+  window.addEventListener(
+    "scroll",
+    function (e) {
+      if (activeList && activeList.contains(e.target)) return;
+      closeMenu();
+    },
+    true
+  );
   window.addEventListener("resize", closeMenu);
 })();
