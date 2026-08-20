@@ -19,7 +19,11 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
     </div>
 
-    <main class="dashboard-content conversation-report moderation-review-page" data-moderation-review>
+    <main
+      class="dashboard-content conversation-report moderation-review-page"
+      data-moderation-review
+      data-conversation-id="7839f2"
+    >
       <a href="/dashboard/conversations/review/" class="conversation-report__back">
         <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
         Review Queue
@@ -36,7 +40,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           <div
             class="m__menu-button conversation-report__report-menu moderation-review-status"
             data-review-status-control
-            data-status="in-review"
+            data-status="pending"
+            data-status-source="automatic"
           >
             <button
               type="button"
@@ -47,7 +52,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
               <span
                 class="conversation-report__report-trigger-text"
                 data-review-status-label
-                >In review</span
+                >Pending</span
               >
               <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true">
                 <use href="#chevron-down"></use>
@@ -67,9 +72,10 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
               >
                 <button
                   type="button"
-                  class="m__menu-button-item conversation-report__report-item moderation-table__status-option"
+                  class="m__menu-button-item conversation-report__report-item moderation-table__status-option is-active"
                   role="menuitemradio"
-                  aria-checked="false"
+                  aria-checked="true"
+                  aria-current="true"
                   data-review-status-option="pending"
                 >
                   <span
@@ -80,16 +86,22 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                       <use href="#checkmark"></use>
                     </svg>
                   </span>
-                  <span class="conversation-report__report-item-title"
-                    >Pending</span
-                  >
+                  <span class="moderation-table__status-option-copy">
+                    <span class="conversation-report__report-item-title"
+                      >Pending</span
+                    >
+                    <span
+                      class="moderation-table__status-option-meta"
+                      data-review-status-option-meta
+                      hidden
+                    ></span>
+                  </span>
                 </button>
                 <button
                   type="button"
-                  class="m__menu-button-item conversation-report__report-item moderation-table__status-option is-active"
+                  class="m__menu-button-item conversation-report__report-item moderation-table__status-option"
                   role="menuitemradio"
-                  aria-checked="true"
-                  aria-current="true"
+                  aria-checked="false"
                   data-review-status-option="in-review"
                 >
                   <span
@@ -100,9 +112,16 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                       <use href="#checkmark"></use>
                     </svg>
                   </span>
-                  <span class="conversation-report__report-item-title"
-                    >In review</span
-                  >
+                  <span class="moderation-table__status-option-copy">
+                    <span class="conversation-report__report-item-title"
+                      >In review</span
+                    >
+                    <span
+                      class="moderation-table__status-option-meta"
+                      data-review-status-option-meta
+                      hidden
+                    ></span>
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -119,15 +138,34 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                       <use href="#checkmark"></use>
                     </svg>
                   </span>
-                  <span class="conversation-report__report-item-title"
-                    >Reviewed</span
-                  >
+                  <span class="moderation-table__status-option-copy">
+                    <span class="conversation-report__report-item-title"
+                      >Reviewed</span
+                    >
+                    <span
+                      class="moderation-table__status-option-meta"
+                      data-review-status-option-meta
+                      hidden
+                    ></span>
+                  </span>
                 </button>
               </div>
               <div
                 class="conversation-report__report-settings-footer"
                 role="presentation"
               >
+                <button
+                  type="button"
+                  class="m__menu-button-item conversation-report__report-item moderation-table__status-auto"
+                  role="menuitem"
+                  data-menu-button-action="use-automatic-status"
+                  data-review-status-auto
+                  hidden
+                >
+                  <span class="conversation-report__report-item-title"
+                    >Use automatic status</span
+                  >
+                </button>
                 <button
                   type="button"
                   class="m__menu-button-item conversation-report__report-item conversation-report__report-item--settings moderation-table__status-edit"
@@ -572,6 +610,9 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     var reviewerName = reviewerNameElement
       ? reviewerNameElement.textContent.trim()
       : "Current reviewer";
+    var conversationId = root.dataset.conversationId || "conversation";
+    var statusStorageKey = "modulate-review-status-overrides";
+    var reviewResultsStorageKey = "modulate-review-results";
     var activeEvidenceTarget = null;
     var pendingEvidenceTarget = null;
     var evidenceHighlightTimer = 0;
@@ -665,6 +706,61 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     var reviewSpeakerGroups = [];
     var initialFilterParams = new URLSearchParams(window.location.search);
 
+    function readStorage(key) {
+      try {
+        return JSON.parse(window.localStorage.getItem(key) || "{}");
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function writeStorage(key, value) {
+      try {
+        window.localStorage.setItem(key, JSON.stringify(value));
+      } catch (error) {
+        // The prototype still works when storage is unavailable.
+      }
+    }
+
+    function getStatusOverride() {
+      return readStorage(statusStorageKey)[conversationId] || null;
+    }
+
+    function saveStatusOverride(status) {
+      var overrides = readStorage(statusStorageKey);
+      overrides[conversationId] = { status: status, author: reviewerName };
+      writeStorage(statusStorageKey, overrides);
+      return overrides[conversationId];
+    }
+
+    function clearStatusOverride() {
+      var overrides = readStorage(statusStorageKey);
+      delete overrides[conversationId];
+      writeStorage(statusStorageKey, overrides);
+    }
+
+    function saveReviewResults() {
+      var results = readStorage(reviewResultsStorageKey);
+      results[conversationId] = {};
+      reviewBehaviorRows.forEach(function (row) {
+        if (row.dataset.reviewResult) {
+          results[conversationId][row.dataset.reviewIndex] =
+            row.dataset.reviewResult;
+        }
+      });
+      writeStorage(reviewResultsStorageKey, results);
+    }
+
+    function restoreReviewResults() {
+      var savedResults = readStorage(reviewResultsStorageKey)[conversationId] || {};
+      reviewBehaviorRows.forEach(function (row) {
+        var result = savedResults[row.dataset.reviewIndex];
+        if (result === "true" || result === "false") {
+          setReviewResult(row, result);
+        }
+      });
+    }
+
     initialFilterParams.getAll("behavior").forEach(function (behavior) {
       selectedBehaviorFilters.add(behavior);
     });
@@ -715,6 +811,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       }
       if (state) state.textContent = nextValue ? reviewerName : "";
       if (meta) meta.hidden = false;
+      saveReviewResults();
+      refreshReviewStatus();
       applyReviewBehaviorFilters();
     }
 
@@ -1130,6 +1228,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     var statusControl = root.querySelector("[data-review-status-control]");
     var statusLabel = root.querySelector("[data-review-status-label]");
     var statusOptionsRoot = root.querySelector("[data-review-status-options]");
+    var statusAutoAction = root.querySelector("[data-review-status-auto]");
     var statusModalList = root.querySelector("[data-status-modal-list]");
     var statusAddForm = root.querySelector("[data-status-add-form]");
     var statusAddInput = root.querySelector("[data-status-add-input]");
@@ -1149,24 +1248,72 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       "</svg>";
     var pendingStatusRemove = "";
 
-    function updateReviewStatus(option) {
-      if (!statusControl || !option) return;
-      statusControl.dataset.status = option.dataset.reviewStatusOption;
+    function normalizeReviewStatus(status) {
+      return {
+        Pending: "pending",
+        "In review": "in-review",
+        Reviewed: "reviewed",
+      }[status] || status;
+    }
+
+    function renderReviewStatus(status, override) {
+      if (!statusControl) return;
+      status = normalizeReviewStatus(status);
+      statusControl.dataset.status = status;
+      statusControl.dataset.statusSource = override ? "manual" : "automatic";
+      var option = statusOptionsRoot.querySelector(
+        '[data-review-status-option="' + status + '"]',
+      );
+      var label = option ? getStatusOptionLabel(option) : status;
       if (statusLabel) {
-        statusLabel.textContent = option.textContent.trim();
+        statusLabel.textContent = label;
       }
-      root
+      if (statusAutoAction) statusAutoAction.hidden = !override;
+      statusOptionsRoot
         .querySelectorAll("[data-review-status-option]")
         .forEach(function (item) {
-          var isSelected = item === option;
+          var isSelected = item.dataset.reviewStatusOption === status;
+          var optionMeta = item.querySelector(
+            "[data-review-status-option-meta]",
+          );
           item.classList.toggle("is-active", isSelected);
           item.setAttribute("aria-checked", String(isSelected));
+          if (optionMeta) {
+            optionMeta.hidden = !(override && isSelected);
+            optionMeta.textContent = override && isSelected
+              ? "Changed by " + (override.author || "Current reviewer")
+              : "";
+          }
           if (isSelected) {
             item.setAttribute("aria-current", "true");
           } else {
             item.removeAttribute("aria-current");
           }
         });
+    }
+
+    function updateReviewStatus(option) {
+      if (!option) return;
+      var status = option.dataset.reviewStatusOption;
+      renderReviewStatus(status, saveStatusOverride(status));
+    }
+
+    function getAutomaticReviewStatus() {
+      var reviewedCount = reviewBehaviorRows.filter(function (row) {
+        return row.dataset.reviewResult === "true" ||
+          row.dataset.reviewResult === "false";
+      }).length;
+      if (!reviewedCount) return "pending";
+      if (reviewedCount < reviewBehaviorRows.length) return "in-review";
+      return "reviewed";
+    }
+
+    function refreshReviewStatus() {
+      var override = getStatusOverride();
+      renderReviewStatus(
+        override ? override.status : getAutomaticReviewStatus(),
+        override,
+      );
     }
 
     function getStatusOptionLabel(option) {
@@ -1190,6 +1337,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         "use",
       );
       var title = document.createElement("span");
+      var copy = document.createElement("span");
+      var meta = document.createElement("span");
       option.type = "button";
       option.className =
         "m__menu-button-item conversation-report__report-item moderation-table__status-option";
@@ -1205,8 +1354,14 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       check.appendChild(checkIcon);
       title.className = "conversation-report__report-item-title";
       title.textContent = status;
+      copy.className = "moderation-table__status-option-copy";
+      meta.className = "moderation-table__status-option-meta";
+      meta.dataset.reviewStatusOptionMeta = "";
+      meta.hidden = true;
       option.appendChild(check);
-      option.appendChild(title);
+      copy.appendChild(title);
+      copy.appendChild(meta);
+      option.appendChild(copy);
       return option;
     }
 
@@ -1273,6 +1428,14 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     }
 
     document.addEventListener("click", function (event) {
+      var automaticStatusAction = event.target.closest(
+        "[data-review-status-auto]",
+      );
+      if (automaticStatusAction) {
+        clearStatusOverride();
+        refreshReviewStatus();
+        return;
+      }
       var statusOption = event.target.closest("[data-review-status-option]");
       if (!statusOption) return;
       updateReviewStatus(statusOption);
@@ -1395,6 +1558,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           row.dataset.reviewBehavior = behaviorLink
             ? behaviorLink.textContent.trim()
             : "";
+          row.dataset.reviewIndex = String(reviewBehaviorRows.length);
           reviewBehaviorRows.push(row);
           actions.innerHTML = '<div class="moderation-review-behaviors__controls"><div class="moderation-review-behaviors__choices"><button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true" aria-pressed="false">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false" aria-pressed="false">False positive</button></div><div class="moderation-review-behaviors__review-meta" data-review-meta><button type="button" class="moderation-review-behaviors__comment-link" data-review-comment-trigger>Add comment</button></div></div>';
         }
@@ -1411,6 +1575,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         }
         if (currentSpeakerGroup) currentSpeakerGroup.rows.push(row);
       });
+      restoreReviewResults();
+      refreshReviewStatus();
       renderReviewBehaviorFilters();
       setReviewVerdictFilter(selectedVerdictFilter);
     }
