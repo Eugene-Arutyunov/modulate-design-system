@@ -4,7 +4,13 @@ permalink: /dashboard/conversations/review/7839f2/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %} {% set
-statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
+statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %} {% set
+reviewParticipants = [ { name: 'Eugene Arutyunov', initials: 'EA', activity:
+'Viewing' }, { name: 'Maya Chen', initials: 'MC', activity: 'Editing' }, { name:
+'Jordan Lee', initials: 'JL', activity: 'Writing a comment' }, { name: 'Sofia
+Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials:
+'DK', activity: 'Viewing' }, { name: 'Priya Shah', initials: 'PS', activity:
+'Editing' }, { name: 'Lena Ortiz', initials: 'LO', activity: 'Viewing' } ] %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
@@ -134,6 +140,52 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
                   >
                 </button>
               </div>
+            </div>
+          </div>
+          <div class="m__menu-button moderation-participants">
+            <button
+              type="button"
+              class="m__menu-button-trigger moderation-participants__trigger"
+              aria-label="{{ reviewParticipants.length }} participants working on this conversation"
+              aria-haspopup="menu"
+              aria-expanded="false"
+            >
+              {% for participant in reviewParticipants %}
+              {% if loop.index < 5 %}
+              <span
+                class="moderation-participants__avatar"
+                aria-hidden="true"
+              >{{ participant.initials }}</span>
+              {% elif loop.index == 5 %}
+              <span
+                class="moderation-participants__avatar moderation-participants__avatar--more"
+                aria-hidden="true"
+              >+{{ reviewParticipants.length - 4 }}</span>
+              {% endif %}
+              {% endfor %}
+            </button>
+            <div
+              class="m__menu-button-list moderation-participants__list"
+              hidden
+              role="menu"
+              aria-label="Participants"
+            >
+              {% for participant in reviewParticipants %}
+              <div class="moderation-participants__item" role="menuitem">
+                <span
+                  class="moderation-participants__avatar"
+                  aria-hidden="true"
+                >{{ participant.initials }}</span>
+                <span class="moderation-participants__details">
+                  <span class="moderation-participants__name"
+                    >{{ participant.name }}</span
+                  >
+                  <span class="moderation-participants__activity"
+                    >{{ participant.activity }}</span
+                  >
+                </span>
+              </div>
+              {% endfor %}
             </div>
           </div>
         </div>
@@ -834,12 +886,27 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
       }
       comments.forEach(function (comment, index) {
         var item = document.createElement("article");
+        var avatar = document.createElement("span");
+        var body = document.createElement("div");
         var header = document.createElement("div");
         var identity = document.createElement("div");
         var author = document.createElement("strong");
         var timestamp = document.createElement("time");
         var text = document.createElement("p");
         item.className = "moderation-verdict-comment-modal__comment";
+        avatar.className =
+          "moderation-participants__avatar moderation-verdict-comment-modal__comment-avatar";
+        avatar.setAttribute("aria-hidden", "true");
+        avatar.textContent = comment.author
+          .trim()
+          .split(/\s+/)
+          .slice(0, 2)
+          .map(function (name) {
+            return name.charAt(0);
+          })
+          .join("")
+          .toUpperCase();
+        body.className = "moderation-verdict-comment-modal__comment-body";
         header.className = "moderation-verdict-comment-modal__comment-header";
         identity.className =
           "moderation-verdict-comment-modal__comment-identity";
@@ -869,7 +936,8 @@ statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] %}
           actions.append(edit, remove);
           header.appendChild(actions);
         }
-        item.append(header, text);
+        body.append(header, text);
+        item.append(avatar, body);
         commentList.appendChild(item);
       });
       commentList.hidden = false;
