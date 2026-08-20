@@ -56,16 +56,13 @@
 /* ── Widget plate ─────────────────────────────────────────────────────── */
 
 .velma-fraud-widget {
-  /* Signal-kind accents from the emotion group palette. */
-  --vf-language-RGB: var(--emotion-calm-grounded-group-RGB);
-  --vf-speaker-RGB: var(--emotion-low-energy-negative-group-RGB);
-  --vf-deepfake-RGB: var(--emotion-attack-rejection-group-RGB);
-  --vf-emotion-RGB: var(--emotion-threat-uncertainty-group-RGB);
+  /* The warn accent from the emotion group palette. */
   --vf-behavior-RGB: var(--emotion-excited-engaged-group-RGB);
 
-  /* No delayed emotion-color fade-in — clips reveal on our own clock. */
+  /* Emotion color fades in when it resolves (the class lands from
+     `render` — no extra delay on top). */
   --emotion-color-delay: 0s;
-  --emotion-color-duration: 0s;
+  --emotion-color-duration: var(--m__duration-slow);
 
   /* Grades of white. Past the threshold the plate turns bright red, so
      everything above it (except the emotion colors) paints with white
@@ -89,6 +86,8 @@
   /* Borderless plate, `.m__widget` canon; widget-radius. */
   border-radius: 0.75em;
   overflow: hidden;
+  /* The whole plate is one play/pause control. */
+  cursor: pointer;
   transition: background-color var(--m__duration-xslow) var(--m__easing-base);
 }
 
@@ -124,8 +123,9 @@
   text-overflow: ellipsis;
 }
 
+/* Same size as the bold lead — one big line, weight does the work. */
 .velma-fraud-widget .vf-top__subtitle {
-  font-size: 0.571em; /* 0.8em base ÷ the 1.4em headline */
+  font-size: 1em;
   font-weight: var(--m__font-weight-regular);
   color: var(--vf-text-caption);
 }
@@ -136,9 +136,9 @@
   /* Strips scale with the widget's em base (playground default is rem). */
   --player-strip-height: 3em;
 
-  & .pg-player-dataviz {
-    cursor: pointer;
-  }
+  /* Inset from the plate edges — the red critical ground reads around
+     the fingerprint. */
+  margin: 0 1.1em;
 
   /* Speaker labels flush with the bottom of their lanes. The base player
      pins the container height to strip-height × count, but the 3em var
@@ -147,6 +147,38 @@
   & .speaker-labels {
     height: auto;
     font-size: 0.8em; /* one step up from the playground xs */
+  }
+
+  /* Text-only labels at the top-left of their lanes (the bottom-left
+     corner belongs to the behaviour glyphs), revealed when the speaker
+     gets identified. */
+  & .speaker-label {
+    align-items: flex-start;
+    padding-top: 0.35em;
+    transition: opacity var(--m__duration-slow) var(--m__easing-base);
+
+    &.vf-pending {
+      opacity: 0;
+    }
+  }
+
+  /* (The extra `.speaker-labels` outweighs the playground's plate bg.) */
+  & .speaker-labels .speaker-label span {
+    background-color: transparent;
+  }
+
+  /* The play button's own hover: white icon, a step up in size —
+     instant in, eased out. (`#audio-player` outweighs the playground's
+     id-scoped icon color.) */
+  & #audio-player .player-icon {
+    transition: color var(--m__duration-base) var(--m__easing-base),
+      transform var(--m__duration-base) var(--m__easing-base);
+  }
+
+  & #audio-player .player-control-center:hover .player-icon {
+    color: var(--vf-white);
+    transform: scale(1.15);
+    transition-duration: var(--m__duration-instant);
   }
 
   /* Base player chrome one step up: times, transcript fragment, emotion. */
@@ -169,11 +201,22 @@
     }
   }
 
+  /* Kiki glyphs a step bigger, sitting in the bottom-left corner of
+     their clip with a small inset (left comes inline from JS). */
   & .behaviour-indicator {
+    font-size: 1.3em;
     transition: opacity var(--m__duration-slow) var(--m__easing-base);
 
     &.vf-pending {
       opacity: 0;
+    }
+
+    &[data-speaker-index="1"] {
+      bottom: calc(50% + 0.2em);
+    }
+
+    &[data-speaker-index="2"] {
+      bottom: 0.2em;
     }
   }
 
@@ -248,12 +291,18 @@
   &.vf-crit {
     color: var(--vf-white);
   }
+}
 
-  & .vf-panel-head {
-    align-self: stretch;
-    position: relative;
-    z-index: 1;
-  }
+/* The column headline — same voice as "Velma Triage", centered. */
+.velma-fraud-widget .vf-risk__head {
+  position: relative;
+  z-index: 1;
+  padding: 0.5em 0.4em 0;
+  font-size: 1.4em;
+  font-weight: var(--m__font-weight-bold);
+  line-height: 1.3;
+  text-align: center;
+  color: var(--vf-text);
 }
 
 .velma-fraud-widget .vf-risk__fill {
@@ -274,6 +323,7 @@
   border-top: 1px dashed rgba(255, 255, 255, 0.4);
 }
 
+/* The live percent — always white; it grows past the threshold. */
 .velma-fraud-widget .vf-risk__value {
   position: relative;
   z-index: 1;
@@ -282,6 +332,12 @@
   font-weight: var(--m__font-weight-bold);
   font-variant-numeric: tabular-nums;
   line-height: 1;
+  color: var(--vf-white);
+  transition: font-size var(--m__duration-base) var(--m__easing-base);
+}
+
+.velma-fraud-widget .vf-risk.vf-crit .vf-risk__value {
+  font-size: 2.2em;
 }
 
 .velma-fraud-widget .vf-risk__tags {
@@ -486,6 +542,17 @@
   }
 }
 
+/* Emotion names and behavior tags fade in when their signals resolve. */
+.velma-fraud-widget .pg-transcript-emotion,
+.velma-fraud-widget .pg-transcript-behavior {
+  opacity: 0;
+  transition: opacity var(--m__duration-slow) var(--m__easing-base);
+
+  &.vf-visible {
+    opacity: 1;
+  }
+}
+
 /* Review-report evidence flash (from a signal click); wins over the
    canonical `.active` tint, which is `!important` itself. Translucent
    blue over any ground, white text — survives the red plate. */
@@ -509,8 +576,6 @@
 /* A table row: time · kind · label · confidence. Thin horizontal
    separators only — no verticals, no confidence bar. */
 .velma-fraud-widget .vf-sig {
-  --vf-sig-RGB: var(--emotion-neutral-group-RGB);
-
   display: none;
   grid-template-columns: 2.2em 4.6em minmax(0, 1fr) auto;
   gap: 0 0.6em;
@@ -542,26 +607,6 @@
     color: var(--vf-white);
     transition-duration: var(--m__duration-instant);
   }
-
-  &[data-kind="language"] {
-    --vf-sig-RGB: var(--vf-language-RGB);
-  }
-
-  &[data-kind="speaker"] {
-    --vf-sig-RGB: var(--vf-speaker-RGB);
-  }
-
-  &[data-kind="deepfake"] {
-    --vf-sig-RGB: var(--vf-deepfake-RGB);
-  }
-
-  &[data-kind="emotion"] {
-    --vf-sig-RGB: var(--vf-emotion-RGB);
-  }
-
-  &[data-kind="behavior"] {
-    --vf-sig-RGB: var(--vf-behavior-RGB);
-  }
 }
 
 .velma-fraud-widget .vf-sig__time {
@@ -570,8 +615,8 @@
   color: var(--vf-text-caption);
 }
 
-/* Signal kind — `m__tag-flat` geometry in the kind's accent color (the
-   emotion palette is the one thing that keeps its hue on the red plate). */
+/* Signal kind — two looks: neutral (white text, thin white border) and
+   suspicious (plus the red fill; blends in once the plate goes red). */
 .velma-fraud-widget .vf-sig__type {
   display: inline-flex;
   align-items: center;
@@ -582,10 +627,15 @@
   font-weight: var(--m__font-weight-medium);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(var(--vf-sig-RGB), 1);
-  background-color: color-mix(in srgb, currentColor 15%, transparent);
+  color: var(--vf-white);
+  border: 1px solid var(--vf-border);
   padding: 0.2em 0.45em;
   border-radius: 0.46em; /* radius-s ÷ 0.65 */
+}
+
+.velma-fraud-widget .vf-sig[data-kind="deepfake"] .vf-sig__type,
+.velma-fraud-widget .vf-sig[data-kind="behavior"] .vf-sig__type {
+  background-color: var(--m__color-red-600);
 }
 
 .velma-fraud-widget .vf-sig__label {

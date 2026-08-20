@@ -70,8 +70,11 @@
     container.style.setProperty("--speaker-count", 2);
     dataviz.style.setProperty("--speaker-count", 2);
 
+    // Clips start emotion-less: at 0:00 nothing is known yet — the resting
+    // player is an empty fingerprint, the first clip lands as neutral on
+    // play, and each clip takes its emotion color once it resolves.
     data.transcript.forEach((utt) => {
-      const clip = el("div", `transcript-clip emotion-${utt.emotion || "neutral"} vf-pending`);
+      const clip = el("div", "transcript-clip vf-pending");
       const clipViz = el("div", "clip-visualization");
 
       clip.dataset.speakerIndex = utt.speaker;
@@ -80,42 +83,57 @@
       clip.appendChild(clipViz);
       clip._vfUtt = utt;
       viz.appendChild(clip);
-      ui.clips.push({ el: clip, utt });
+      ui.clips.push({
+        el: clip,
+        utt,
+        emotionClass: utt.emotion && utt.emotion !== "neutral" ? `emotion-${utt.emotion}` : null,
+        revealMs: emotionRevealMs(data, utt),
+      });
     });
     dataviz.appendChild(viz);
 
+    // Speaker labels appear when the speaker gets identified.
     const labels = el("div", "speaker-labels");
 
     [1, 2].forEach((index) => {
-      const label = el("div", "speaker-label");
+      const label = el("div", "speaker-label vf-pending");
+      const idSignal = data.signals.find(
+        (signal) => signal.type === "speaker" && signal.speaker === index
+      );
 
       label.dataset.speakerIndex = index;
-      label.style.bottom = `${((2 - index) * 100) / 2}%`;
+      // Top-left of the lane — the bottom-left corner belongs to the
+      // behaviour glyphs.
+      label.style.top = `${((index - 1) * 100) / 2}%`;
+      label.style.bottom = "auto";
       label.appendChild(el("span", "", data.meta.speakers?.[index]?.label || `Speaker ${index}`));
       labels.appendChild(label);
+      ui.speakerLabels.push({ el: label, tMs: idSignal ? idSignal.tMs : 0 });
     });
     dataviz.appendChild(labels);
 
-    // Behaviour glyphs fire exactly at their signal times, on the speaker's
-    // lane; the outline takes the emotion of the clip active at that moment.
+    // Behaviour glyphs sit in the bottom-left corner of their clip — the
+    // same clip the transcript pins the behavior to — and appear when the
+    // signal fires; the outline takes the clip's emotion.
     const indicators = el("div", "behaviour-indicators");
+    const behaviors = behaviorsByUtterance(data);
 
-    data.signals
-      .filter((signal) => signal.type === "behavior")
-      .forEach((signal) => {
+    data.transcript.forEach((utt) => {
+      (behaviors[utt.id] || []).forEach((signal, index) => {
         const indicator = el("div", "behaviour-indicator vf-pending");
         const icon = el("span", "behaviour-icon behaviour-icon--kiki");
 
-        indicator.dataset.speakerIndex = signal.speaker || 1;
-        indicator.dataset.behaviourIndex = "1";
-        indicator.dataset.emotion = emotionAt(data, signal.speaker || 1, signal.tMs);
-        indicator.style.left = `${pct(signal.tMs, duration)}%`;
+        indicator.dataset.speakerIndex = utt.speaker;
+        indicator.dataset.behaviourIndex = String(index + 1);
+        indicator.dataset.emotion = utt.emotion || "neutral";
+        indicator.style.left = `calc(${pct(utt.startMs, duration)}% + 0.3em)`;
         icon.title = signal.label;
         icon.innerHTML = KIKI_SVG;
         indicator.appendChild(icon);
         indicators.appendChild(indicator);
         ui.behaviours.push({ el: indicator, tMs: signal.tMs });
       });
+    });
     dataviz.appendChild(indicators);
     container.appendChild(dataviz);
 
@@ -167,18 +185,14 @@
     const panel = el("div", "vf-risk");
     const fill = el("div", "vf-risk__fill");
     const threshold = el("div", "vf-risk__threshold");
-    const head = el("div", "vf-panel-head", "Fraud risk");
+    const head = el("div", "vf-risk__head", "Fraud risk");
     const value = el("output", "vf-risk__value", "0%");
     const tags = el("div", "vf-risk__tags");
     const [, detailText] = splitVerdict(data.verdict.label);
 
     threshold.style.bottom = `${data.meta.fraudThreshold}%`;
 
-    const verdict = el(
-      "div",
-      "vf-risk__verdict",
-      `${capitalize(detailText || data.verdict.label)} · ${data.verdict.confidence}%`
-    );
+    const verdict = el("div", "vf-risk__verdict", capitalize(detailText || data.verdict.label));
 
     tags.appendChild(verdict);
 
@@ -255,6 +269,7 @@
         el("span", "pg-transcript-speaker", speaker?.label || `Speaker ${utt.speaker}`)
       );
 
+      // Behavior tags appear in the header when their signal fires.
       (behaviors[utt.id] || []).forEach((signal) => {
         const wrap = el("span", "pg-transcript-behavior");
         const link = el("a", "pg-behavior-link");
@@ -268,9 +283,14 @@
         );
         header.appendChild(wrap);
         ui.behaviorLinks.push({ el: link, tMs: signal.tMs });
+        ui.behaviorTags.push({ el: wrap, tMs: signal.tMs });
       });
 
-      header.appendChild(el("span", "pg-transcript-emotion", capitalize(emotion)));
+      // The emotion name fades in when the emotion resolves.
+      const emotionSpan = el("span", "pg-transcript-emotion", capitalize(emotion));
+
+      header.appendChild(emotionSpan);
+      ui.emotionSpans.push({ el: emotionSpan, tMs: emotionRevealMs(data, utt) });
       text.appendChild(el("p", "", utt.text));
       item.appendChild(header);
       item.appendChild(text);
@@ -297,11 +317,6 @@
       const item = el("div", "vf-sig");
 
       item.dataset.kind = signal.type;
-      // Emotion signals carry the emotion's own color; other kinds get
-      // their accent from the stylesheet.
-      if (signal.type === "emotion" && signal.emotion) {
-        item.style.setProperty("--vf-sig-RGB", `var(--emotion-${signal.emotion}-RGB)`);
-      }
       item.appendChild(el("span", "vf-sig__time", fmt(signal.tMs)));
       item.appendChild(el("span", "vf-sig__type", signal.type));
       item.appendChild(el("span", "vf-sig__label", signal.label));
@@ -317,31 +332,27 @@
     return panel;
   }
 
-  // The last clip of the speaker that started before t — its emotion colors
-  // the behaviour glyph outline.
-  function emotionAt(data, speaker, tMs) {
-    let emotion = "neutral";
+  // The confidence rises only when suspicious signals land — each carries
+  // a `weight` in percent points; the sum by time t is the meter value.
+  function meterAt(signals, t) {
+    let value = 0;
 
-    data.transcript.forEach((utt) => {
-      if (utt.speaker === speaker && utt.startMs <= tMs && utt.emotion) emotion = utt.emotion;
+    signals.forEach((signal) => {
+      if (signal.weight && signal.tMs <= t) value += signal.weight;
     });
-    return emotion;
+    return Math.min(value, 100);
   }
 
-  function meterAt(keyframes, t) {
-    if (!keyframes.length) return 0;
-    if (t <= keyframes[0].tMs) return keyframes[0].value;
-    for (let i = 0; i < keyframes.length - 1; i += 1) {
-      if (t >= keyframes[i].tMs && t < keyframes[i + 1].tMs) {
-        const span = keyframes[i + 1].tMs - keyframes[i].tMs;
-        const progress = span > 0 ? (t - keyframes[i].tMs) / span : 1;
-        // Ease into each step rather than a linear crawl.
-        const eased = Math.min(1, progress * 3);
+  // Emotions resolve with a small lag: with an emotion signal inside the
+  // utterance the emotion lands at the signal moment, otherwise ~2.5s in.
+  // Until then the clip reads neutral.
+  function emotionRevealMs(data, utt) {
+    const signal = data.signals.find(
+      (s) =>
+        s.type === "emotion" && s.speaker === utt.speaker && s.tMs >= utt.startMs && s.tMs <= utt.endMs
+    );
 
-        return keyframes[i].value + (keyframes[i + 1].value - keyframes[i].value) * eased;
-      }
-    }
-    return keyframes[keyframes.length - 1].value;
+    return signal ? signal.tMs : Math.min(utt.startMs + 2500, utt.endMs);
   }
 
   // The feed panels are `overflow: hidden`, so the wheel always stays with
@@ -399,6 +410,9 @@
       signals: [],
       actions: [],
       behaviorLinks: [],
+      behaviorTags: [],
+      speakerLabels: [],
+      emotionSpans: [],
     };
 
     root.classList.add("velma-fraud-widget", "dark-mode");
@@ -514,14 +528,28 @@
       ui.playIcon.querySelector("svg").innerHTML = isPlaying ? PAUSE_ICON : PLAY_ICON;
     }
 
-    /* Render — pure function of t. */
+    /* Render — pure function of t (plus the started flag: the resting
+       widget shows an empty fingerprint — nothing is known at 0:00). */
     function render(t) {
+      const started = playing || t > 0;
+
       ui.positionLine.style.left = `${pct(t, duration)}%`;
       ui.currentTime.textContent = fmt(t);
 
-      ui.clips.forEach(({ el: node, utt }) => {
-        node.classList.toggle("vf-pending", t < utt.startMs);
+      ui.clips.forEach(({ el: node, utt, emotionClass, revealMs }) => {
+        node.classList.toggle("vf-pending", !started || t < utt.startMs);
         node.classList.toggle("hover", (t >= utt.startMs && t <= utt.endMs) || utt === hoverUtt);
+        // Neutral until the emotion resolves.
+        if (emotionClass) node.classList.toggle(emotionClass, t >= revealMs);
+      });
+      ui.speakerLabels.forEach(({ el: node, tMs }) => {
+        node.classList.toggle("vf-pending", !started || t < tMs);
+      });
+      ui.emotionSpans.forEach(({ el: node, tMs }) => {
+        node.classList.toggle("vf-visible", t >= tMs);
+      });
+      ui.behaviorTags.forEach(({ el: node, tMs }) => {
+        node.classList.toggle("vf-visible", t >= tMs);
       });
       ui.behaviours.forEach(({ el: node, tMs }) => {
         node.classList.toggle("vf-pending", t < tMs);
@@ -530,14 +558,14 @@
       let lastUtt = null;
 
       ui.utterances.forEach(({ el: node, utt }) => {
-        const visible = t >= utt.startMs;
+        const visible = started && t >= utt.startMs;
 
         node.classList.toggle("vf-visible", visible);
         node.classList.toggle("active", t >= utt.startMs && t <= utt.endMs);
         if (visible) lastUtt = node;
       });
       if (playerHoverX !== null) {
-        scrollTranscriptFromPlayerX(playerHoverX);
+        scrollFeedsFromPlayerX(playerHoverX);
       } else if (playing && lastUtt && !scrollHeld.has(ui.transcriptPanel)) {
         scrollPanelEnd(transcriptScroller, ui.transcriptPanel);
       }
@@ -555,7 +583,7 @@
         scrollPanelEnd(signalsScroller, ui.signalsPanel);
       }
 
-      const value = meterAt(data.meterKeyframes, t);
+      const value = meterAt(data.signals, t);
       const crit = value >= data.meta.fraudThreshold;
       const warn = value >= 55 && !crit;
 
@@ -573,14 +601,10 @@
 
     /* Controls ──────────────────────────────────────────────────────── */
 
-    ui.strip.querySelector("[data-action='play-pause']").addEventListener("click", (event) => {
-      event.preventDefault();
-      playing ? pause() : play();
-    });
-
-    // Scrub on the visualization; the strip itself is the play button.
-    let scrubbing = false;
-
+    // The whole plate is one play/pause control. A starting click on the
+    // fingerprint begins playback from that spot; a pausing click never
+    // moves the position. Interactive entries (bubbles, signal rows) carry
+    // their own actions and don't toggle.
     function seekFromEvent(event) {
       const rect = ui.dataviz.getBoundingClientRect();
       const x = (event.touches ? event.touches[0].clientX : event.clientX) - rect.left;
@@ -588,38 +612,26 @@
       seekMs((x / rect.width) * duration);
     }
 
-    ui.dataviz.addEventListener("mousedown", (event) => {
-      scrubbing = true;
-      seekFromEvent(event);
-    });
-    ui.dataviz.addEventListener(
-      "touchstart",
-      (event) => {
-        scrubbing = true;
-        seekFromEvent(event);
-      },
-      { passive: true }
-    );
-
-    function onMove(event) {
-      if (scrubbing) seekFromEvent(event);
-    }
-    function onUp() {
-      scrubbing = false;
+    function onRootClick(event) {
+      if (event.target.closest(".vf-utt, .vf-sig")) return;
+      event.preventDefault();
+      if (playing) {
+        pause();
+      } else {
+        if (event.target.closest(".pg-player-dataviz")) seekFromEvent(event);
+        play();
+      }
     }
 
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    window.addEventListener("touchmove", onMove, { passive: true });
-    window.addEventListener("touchend", onUp);
+    root.addEventListener("click", onRootClick);
 
     // Same hover line the playground binds on its media containers; the
-    // cursor's X over the fingerprint also drives the transcript scroll —
-    // the same data rotated 90°. The mapping counts only the revealed part
-    // of the timeline (up to the end of the last revealed clip), matching
-    // the partially revealed transcript; `render` re-applies the stored X,
-    // so a newly revealed clip recomputes the scroll position.
-    function scrollTranscriptFromPlayerX(clientX) {
+    // cursor's X over the fingerprint also drives the transcript and the
+    // signal feed — the same data rotated 90°. The mapping counts only the
+    // revealed part of the timeline (up to the end of the last revealed
+    // clip), matching the partially revealed feeds; `render` re-applies
+    // the stored X, so a newly revealed clip recomputes the positions.
+    function scrollFeedsFromPlayerX(clientX) {
       const rect = ui.player.getBoundingClientRect();
       const t = nowMs();
       let revealedEndMs = 0;
@@ -629,9 +641,10 @@
       });
       if (!revealedEndMs) return;
 
-      const xMs = ((clientX - rect.left) / rect.width) * duration;
+      const ratio = (((clientX - rect.left) / rect.width) * duration) / revealedEndMs;
 
-      transcriptScroller.toRatio(xMs / revealedEndMs);
+      transcriptScroller.toRatio(ratio);
+      signalsScroller.toRatio(ratio);
     }
 
     ui.player.addEventListener("mousemove", (event) => {
@@ -640,14 +653,17 @@
       ui.player.style.setProperty("--pg-hover-x", `${event.clientX - rect.left}px`);
       ui.player.dataset.hover = "true";
       scrollHeld.add(ui.transcriptPanel);
+      scrollHeld.add(ui.signalsPanel);
       playerHoverX = event.clientX;
-      scrollTranscriptFromPlayerX(playerHoverX);
+      scrollFeedsFromPlayerX(playerHoverX);
     });
     ui.player.addEventListener("mouseleave", () => {
       ui.player.dataset.hover = "false";
       scrollHeld.delete(ui.transcriptPanel);
+      scrollHeld.delete(ui.signalsPanel);
       playerHoverX = null;
       scrollPanelEnd(transcriptScroller, ui.transcriptPanel);
+      scrollPanelEnd(signalsScroller, ui.signalsPanel);
     });
 
     /* Player ↔ transcript hover link. */
@@ -776,10 +792,7 @@
         clearTimeout(evidenceTimer);
         transcriptScroller.stop();
         signalsScroller.stop();
-        window.removeEventListener("mousemove", onMove);
-        window.removeEventListener("mouseup", onUp);
-        window.removeEventListener("touchmove", onMove);
-        window.removeEventListener("touchend", onUp);
+        root.removeEventListener("click", onRootClick);
         window.removeEventListener("keydown", onKeydown);
         root.textContent = "";
         root.classList.remove("velma-fraud-widget", "dark-mode", "vf-critical");
