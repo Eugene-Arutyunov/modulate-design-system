@@ -385,6 +385,9 @@ const VERDICT_COLORS = {
 //   names      array — custom speaker names for the lane labels
 //   className  string — extra classes on the container (e.g. `fp-cmp` for
 //              the technology-comparison variant)
+//   laneHover  boolean — clip nodes are confined to their own lane, so
+//              every lane hovers independently (the comparison variant;
+//              the default treats the full column as one hover zone)
 //
 // Per-clip hooks (all optional, used by the comparison variant):
 //   clip.classes           extra classes on the clip node (`clip-mute`,
@@ -406,6 +409,7 @@ export function renderFingerprint(root, data, options = {}) {
     labels: true,
     names: [],
     className: "",
+    laneHover: false,
     ...options,
   };
   const lanes = opts.mode === "transcript" ? data.speakers : 1;
@@ -467,8 +471,16 @@ function renderTranscriptClips(viz, data, opts, lanes) {
     node.style.left = `${pct(clip.startSec, data.durationSec)}%`;
     node.style.width = `${pct(clip.durationSec, data.durationSec)}%`;
     // The stylesheet only enumerates lane offsets for up to 5 speakers;
-    // inline top works for any lane count.
-    clipViz.style.top = `${((clip.speaker - 1) * 100) / lanes}%`;
+    // inline top works for any lane count. With laneHover the clip node
+    // itself is confined to its lane (each lane hovers on its own).
+    if (opts.laneHover) {
+      node.style.top = `${((clip.speaker - 1) * 100) / lanes}%`;
+      node.style.height = `${100 / lanes}%`;
+      clipViz.style.top = "0";
+      clipViz.style.height = "100%";
+    } else {
+      clipViz.style.top = `${((clip.speaker - 1) * 100) / lanes}%`;
+    }
     node.appendChild(clipViz);
     viz.appendChild(node);
   });

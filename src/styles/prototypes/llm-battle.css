@@ -226,15 +226,52 @@
     overflow: hidden;
   }
 
-  /* the efficient corner — high recall, high precision */
-  & .vlb-scatter__corner {
+  /* the efficient corner — high recall, high precision: a blurred
+     gradient blob, same recipe as the scatterplot tool's highlight zone */
+  & .vlb-scatter__zone {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 42%;
-    height: 42%;
-    background: color-mix(in srgb, var(--m__success) 9%, transparent);
-    border-bottom-left-radius: var(--m__radius-s);
+    top: -28%;
+    right: -30%;
+    width: 85%;
+    height: 75%;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--m__success) 28%, transparent);
+    filter: blur(46px);
+    pointer-events: none;
+  }
+
+  /* quadrant captions, set like the sidebar group subtitles */
+  & .vlb-scatter__quadrant {
+    position: absolute;
+    max-width: 10.5rem;
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    line-height: 1.55;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+
+    &.is-tl {
+      top: 0.55rem;
+      left: 2.1rem;
+    }
+
+    &.is-tr {
+      top: 0.55rem;
+      right: 0.75rem;
+      text-align: right;
+    }
+
+    &.is-bl {
+      bottom: 0.55rem;
+      left: 2.1rem;
+    }
+
+    &.is-br {
+      bottom: 0.55rem;
+      right: 0.75rem;
+      text-align: right;
+    }
   }
 
   & .vlb-scatter__ylab {
@@ -446,7 +483,41 @@
   }
 }
 
-/* Transcript modal is wider than the modal default */
+/* Transcript modal: two variants side by side (Velma's diarized
+   utterances, the stack's finer undiarized STT chunks), so it is much
+   wider than the modal default */
 #vlb-transcript-modal .m__modal {
-  max-width: 46rem;
+  max-width: 64rem;
+}
+
+.vlb-transcript-duo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--m__gap-xl);
+  align-items: start;
+
+  @media (width < 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vlb-transcript-col__title {
+  display: block;
+  margin-bottom: var(--m__gap-s);
+  font-family: var(--m__font-family-semi-mono);
+  font-size: var(--m__font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m__text-caption);
+}
+
+/* The stack's transcript is undiarized — one flat left-aligned column,
+   no alternating shoulders (outweighs the canon's nth-of-type zigzag) */
+.vlb-transcript-duo .pg-transcript-list.vlb-transcript--stt > .pg-transcript-utterance {
+  align-self: flex-start;
+  cursor: default;
+}
+
+.vlb-transcript--stt .pg-transcript-utterance .vlb-false-text {
+  font-size: var(--m__font-size-xs);
 }

@@ -770,25 +770,15 @@
    example on /tools/modulate-fingerprint/. Two modes share these styles:
    the full player (all signals) and the selected-signal player. */
 
-/* Stack lane without an emotion channel: two alternating grays — color
-   means nothing, the clip pattern survives. Deliberately not the neutral
-   emotion color, so a genuinely neutral clip stays unique. */
-.media-container .transcript-clip.clip-mute .clip-visualization {
-  background-color: color-mix(in srgb, var(--m__text) 14%, transparent);
-}
-
-.media-container .transcript-clip.clip-mute-b .clip-visualization {
-  background-color: color-mix(in srgb, var(--m__text) 7%, transparent);
-}
-
 /* Emotions guessed from text: the emotion palette pushed way down —
    translucent, meaning "assumed, not heard" */
 .media-container .transcript-clip.clip-guess .clip-visualization {
   opacity: 0.45;
 }
 
-/* Selected-signal mode: clips without the signal render as neutral (the
-   heard lane) or as the player-bottom gray (the stack lane) */
+/* Clips that carry nothing: neutral on the heard lane, the player-bottom
+   gray on the stack lane (also the stack's whole no-emotions default —
+   color means nothing there, the clip pattern survives via hairlines) */
 .media-container .transcript-clip.clip-quiet .clip-visualization {
   background-color: rgba(var(--emotion-neutral-RGB), 1);
 }
@@ -797,13 +787,11 @@
   background-color: var(--m__bg-surface);
 }
 
-/* Stack detections: light gray highlight; false positives: red */
+/* A stack clip that carries a glyph — a catch, a false positive (red kiki)
+   or a missed reference (ghost kiki) — gets the same light-gray highlight;
+   the glyph itself tells which case it is */
 .media-container .transcript-clip.clip-hit .clip-visualization {
-  background-color: var(--m__color-gray-300);
-}
-
-.media-container .transcript-clip.clip-false .clip-visualization {
-  background-color: var(--m__color-red-600);
+  background-color: var(--m__color-gray-200);
 }
 
 /* Hairline separators, only where two same-color clips touch and the
@@ -825,6 +813,14 @@
 }
 
 .media-container
+  .transcript-clip.clip-hit
+  + .transcript-clip.clip-hit
+  .clip-visualization {
+  border-left: 1px solid
+    color-mix(in srgb, var(--m__color-gray-200) 88%, var(--m__text));
+}
+
+.media-container
   .transcript-clip.clip-guess
   + .transcript-clip.clip-guess
   .clip-visualization {
@@ -841,9 +837,12 @@
   fill: rgba(var(--emotion-neutral-RGB), 1);
 }
 
+/* Ghost and false-positive glyphs keep their identity even when the clip
+   carries a guessed emotion (the doubled class outweighs the canon's
+   [data-emotion] outline coloring) */
 .media-container
   .behaviour-indicators
-  .behaviour-indicator--ghost
+  .behaviour-indicator.behaviour-indicator--ghost
   .behaviour-icon
   svg {
   fill: color-mix(in srgb, var(--m__text) 45%, transparent);
@@ -851,7 +850,7 @@
 
 .media-container
   .behaviour-indicators
-  .behaviour-indicator--ghost
+  .behaviour-indicator.behaviour-indicator--ghost
   .behaviour-icon
   .behaviour-icon__outline {
   fill: transparent;
@@ -859,28 +858,32 @@
 
 .media-container
   .behaviour-indicators
-  .behaviour-indicator--false
+  .behaviour-indicator.behaviour-indicator--false
   .behaviour-icon
   .behaviour-icon__outline {
   fill: var(--m__color-red-600);
 }
 
-/* Comparison lane labels: no plate behind the text; the heard lane in
-   white, the stack lane in dark gray (lifted in the dark theme, where the
-   stack lane itself is near that gray) */
-.fp-cmp .speaker-labels .speaker-label span {
+/* Comparison lane labels: no plate behind the text — a comparison-mode
+   trait (the playground canon carries a plate and sits later in the
+   bundle, hence the .pg-player-dataviz anchor to outweigh it); the heard
+   lane in white, the stack lane in dark gray (lifted in the dark theme,
+   where the stack lane itself is near that gray) */
+.fp-cmp .pg-player-dataviz .speaker-labels .speaker-label span {
   background: none;
+  padding: 0.1rem 0.35em 0.1rem 0.25em;
+  font-weight: var(--m__font-weight-regular);
 }
 
-.fp-cmp .speaker-labels .speaker-label[data-speaker-index='1'] span {
+.fp-cmp .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index='1'] span {
   color: var(--m__color-white);
 }
 
-.fp-cmp .speaker-labels .speaker-label[data-speaker-index='2'] span {
+.fp-cmp .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index='2'] span {
   color: var(--m__color-gray-700);
 }
 
-.dark-mode .fp-cmp .speaker-labels .speaker-label[data-speaker-index='2'] span {
+.dark-mode .fp-cmp .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index='2'] span {
   color: var(--m__color-gray-400);
 }
 

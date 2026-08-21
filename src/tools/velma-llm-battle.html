@@ -244,9 +244,13 @@
         <div class="vlb-dashboard__grid">
           <div class="vlb-scatter">
             <div class="vlb-scatter__plot">
-              <span class="vlb-scatter__corner" aria-hidden="true"></span>
+              <span class="vlb-scatter__zone" aria-hidden="true"></span>
               <span class="vlb-scatter__ylab">Flag accuracy (precision) →</span>
-              <span class="vlb-scatter__dot is-velma" style="left: 90%; bottom: 88%">
+              <span class="vlb-scatter__quadrant is-tl">Trustworthy flags, missed threats</span>
+              <span class="vlb-scatter__quadrant is-tr">Every threat caught, every flag true</span>
+              <span class="vlb-scatter__quadrant is-bl">Missed threats and false alarms</span>
+              <span class="vlb-scatter__quadrant is-br">Every threat caught, drowned in false alarms</span>
+              <span class="vlb-scatter__dot is-velma" style="left: 86%; bottom: 78%">
                 <span class="vlb-scatter__dot-label"><strong>Velma by Modulate</strong><br />100% caught · 100% accurate</span>
               </span>
               <span class="vlb-scatter__dot" style="left: 50%; bottom: 64%">
@@ -502,6 +506,12 @@
 
 {% call modal("vlb-transcript-modal", "Transcript — Harborview Bank sample call") %}
 <div class="m__modal__body">
+  <!-- Two transcript variants side by side: each lane of the comparison
+       player has its own — Velma's utterance-level diarized transcript on
+       the left, the stack's finer undiarized STT chunks on the right. -->
+  <div class="vlb-transcript-duo">
+  <div class="vlb-transcript-col">
+  <span class="vlb-transcript-col__title">Velma</span>
   <div class="pg-transcript-list vlb-transcript">
     <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
@@ -622,6 +632,126 @@
       <div class="pg-transcript-text">This is ridiculous. Just forget it.</div>
     </div>
   </div>
+  </div>
+
+  <div class="vlb-transcript-col">
+  <span class="vlb-transcript-col__title">STT + LLM</span>
+  <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:00</span>
+      </div>
+      <div class="pg-transcript-text">come on we've been at this for five minutes</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:03</span>
+      </div>
+      <div class="pg-transcript-text">i've answered everything</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:06</span>
+      </div>
+      <div class="pg-transcript-text">just change the email on the account so i can get my code i do</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:10</span>
+      </div>
+      <div class="pg-transcript-text">apologize sir but the answers you gave didn't match what we have on file</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:14</span>
+      </div>
+      <div class="pg-transcript-text">because i moved last month look</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:18</span>
+      </div>
+      <div class="pg-transcript-text">i have a 12,000 dollar transfer waiting every minute this takes is costing me</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:23</span>
+      </div>
+      <div class="pg-transcript-text">yes i understand your frustration here however the fastest secure option is verifying your identity at a branch</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:31</span>
+      </div>
+      <div class="pg-transcript-text">i'm overseas that's the whole point</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:34</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Account Impersonation</a
+        >
+      </div>
+      <div class="pg-transcript-text">just update the email and phone you can hear it's me</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:37</span>
+      </div>
+      <div class="pg-transcript-text">who else would know the account number</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:41</span>
+      </div>
+      <div class="pg-transcript-text">knowing the account number isn't identity verification sir it's for your protection</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:47</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Account Impersonation</a
+        >
+        <span class="vlb-false-text">false alarm</span>
+      </div>
+      <div class="pg-transcript-text">this is unbelievable what's your name alex you said</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:51</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Coercion Manipulation</a
+        >
+      </div>
+      <div class="pg-transcript-text">i'll make sure your supervisor knows you cost me this transfer</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:56</span>
+      </div>
+      <div class="pg-transcript-text">yes that's correct and again i understand that you're frustrated sir</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">1:00</span>
+      </div>
+      <div class="pg-transcript-text">but unfortunately i'm not going to be able to make that change today for you</div>
+    </div>
+    <div class="pg-transcript-utterance">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">1:05</span>
+      </div>
+      <div class="pg-transcript-text">this is ridiculous just forget it</div>
+    </div>
+  </div>
+  </div>
+  </div>
 </div>
 {% endcall %}
 
@@ -629,7 +759,7 @@
 <script type="module">
   import { renderFingerprint } from '/assets/service/fingerprint/fingerprint.js';
 
-  const DURATION = 68.44;
+  const DURATION = 67.697;
 
   // Velma's transcript variant: utterance-level clips, heard emotions,
   // detections pinned to their utterances (each kiki opens its receipt).
@@ -645,35 +775,39 @@
     { s: 65.248, e: 67.697, emotion: 'contemptuous', text: 'This is ridiculous. Just forget it.' },
   ];
 
-  // The stack's own transcript variant: finer VAD segmentation with its
-  // own timings and recognition details. `guess` is the emotion the LLM
-  // derives from text — used only when the sidebar toggle is on; note the
-  // divergences at 15s, 47s and 65s, where the emotion lived in the voice.
+  // The stack's own transcript variant: finer VAD segmentation, gapless
+  // (chunks butt against each other and span the full duration), with its
+  // own timings and recognition details — some utterances split in three,
+  // some stay whole with shifted bounds, one chunk swallows the head of
+  // the next utterance. `guess` is the emotion the LLM derives from text —
+  // used only when the sidebar toggle is on; note the divergences at 15s,
+  // 47s and 65s, where the emotion lived in the voice.
   const STT_CHUNKS = [
-    { s: 0.15, e: 4.7, guess: 'frustrated', text: "come on we've been at this for five minutes i've answered everything" },
-    { s: 4.7, e: 9.3, guess: 'frustrated', text: 'just change the email on the account so i can get my code' },
-    { s: 9.45, e: 14.8, guess: 'calm', text: "i do apologize sir but the answers you gave didn't match what we have on file" },
-    { s: 15.0, e: 19.5, guess: 'neutral', text: 'because i moved last month look i have a 12,000 dollar transfer waiting' },
-    { s: 19.5, e: 23.3, guess: 'neutral', text: 'every minute this takes is costing me' },
-    { s: 23.5, e: 27.2, guess: 'neutral', text: 'yes i understand your frustration here' },
-    { s: 27.2, e: 31.1, guess: 'neutral', text: 'however the fastest secure option is verifying your identity at a branch' },
-    { s: 31.3, e: 36.0, guess: 'anxious', text: "i'm overseas that's the whole point just update the email and phone" },
-    { s: 36.0, e: 40.9, guess: 'anxious', behaviour: 'Account Impersonation', modal: 'vlb-receipt-impersonation', text: "you can hear it's me who else would know the account number" },
-    { s: 41.05, e: 47.3, guess: 'confident', text: "knowing the account number isn't identity verification sir it's for your protection" },
-    { s: 47.45, e: 52.0, guess: 'frustrated', behaviour: 'Account Impersonation', modal: 'vlb-receipt-impersonation-false', text: "this is unbelievable what's your name alex you said" },
-    { s: 52.0, e: 56.5, guess: 'frustrated', behaviour: 'Coercion Manipulation', modal: 'vlb-receipt-coercion', text: "i'll make sure your supervisor knows you cost me this transfer" },
-    { s: 56.65, e: 61.4, guess: 'calm', text: "yes that's correct and again i understand that you're frustrated sir" },
-    { s: 61.4, e: 65.4, guess: 'calm', text: "but unfortunately i'm not going to be able to make that change today for you" },
-    { s: 65.55, e: 67.8, guess: 'neutral', text: 'this is ridiculous just forget it' },
+    { s: 0, e: 3.85, guess: 'frustrated', text: "come on we've been at this for five minutes" },
+    { s: 3.85, e: 6.4, guess: 'frustrated', text: "i've answered everything" },
+    { s: 6.4, e: 10.3, guess: 'frustrated', text: 'just change the email on the account so i can get my code i do' },
+    { s: 10.3, e: 14.9, guess: 'calm', text: "apologize sir but the answers you gave didn't match what we have on file" },
+    { s: 14.9, e: 18.2, guess: 'neutral', text: 'because i moved last month look' },
+    { s: 18.2, e: 23.4, guess: 'neutral', text: 'i have a 12,000 dollar transfer waiting every minute this takes is costing me' },
+    { s: 23.4, e: 31.2, guess: 'neutral', text: 'yes i understand your frustration here however the fastest secure option is verifying your identity at a branch' },
+    { s: 31.2, e: 34.6, guess: 'anxious', text: "i'm overseas that's the whole point" },
+    { s: 34.6, e: 37.9, guess: 'anxious', behaviour: 'Account Impersonation', modal: 'vlb-receipt-impersonation', text: "just update the email and phone you can hear it's me" },
+    { s: 37.9, e: 41.2, guess: 'anxious', text: 'who else would know the account number' },
+    { s: 41.2, e: 47.4, guess: 'confident', text: "knowing the account number isn't identity verification sir it's for your protection" },
+    { s: 47.4, e: 51.9, guess: 'frustrated', behaviour: 'Account Impersonation', modal: 'vlb-receipt-impersonation-false', text: "this is unbelievable what's your name alex you said" },
+    { s: 51.9, e: 56.6, guess: 'frustrated', behaviour: 'Coercion Manipulation', modal: 'vlb-receipt-coercion', text: "i'll make sure your supervisor knows you cost me this transfer" },
+    { s: 56.6, e: 60.9, guess: 'calm', text: "yes that's correct and again i understand that you're frustrated sir" },
+    { s: 60.9, e: 65.6, guess: 'calm', text: "but unfortunately i'm not going to be able to make that change today for you" },
+    { s: 65.6, e: 67.697, guess: 'neutral', text: 'this is ridiculous just forget it' },
   ];
 
   // The selected-signal players: which clips carry the signal on each
   // lane, plus the stack's misses (ghost glyph at the reference clip)
   // and false positives.
   const SIGNALS = {
-    vishing: { name: 'Vishing', velma: [0, 2], hits: [], falses: [], ghosts: [{ idx: 1, at: 5.8 }, { idx: 4, at: 20.7 }] },
-    impersonation: { name: 'Account Impersonation', velma: [4], hits: [8], falses: [10], ghosts: [] },
-    coercion: { name: 'Coercion Manipulation', velma: [6], hits: [11], falses: [], ghosts: [] },
+    vishing: { name: 'Vishing', velma: [0, 2], hits: [], falses: [], ghosts: [{ idx: 1, at: 5.8 }, { idx: 5, at: 20.7 }] },
+    impersonation: { name: 'Account Impersonation', velma: [4], hits: [8], falses: [11], ghosts: [] },
+    coercion: { name: 'Coercion Manipulation', velma: [6], hits: [12], falses: [], ghosts: [] },
   };
 
   const NAMES = ['Velma', 'STT+LLM'];
@@ -688,21 +822,23 @@
     VELMA_CLIPS.forEach((c) => {
       clips.push({ ...baseClip(1, c), emotion: c.emotion, behaviour: c.behaviour, behaviourAtSec: c.at, behaviourModal: c.modal });
     });
-    STT_CHUNKS.forEach((c, i) => {
+    STT_CHUNKS.forEach((c) => {
       const clip = { ...baseClip(2, c), behaviour: c.behaviour, behaviourClasses: 'behaviour-indicator--tech', behaviourModal: c.modal };
 
       if (emotionsOn) {
         clip.emotion = c.guess;
         clip.classes = 'clip-guess';
       } else {
-        clip.classes = i % 2 ? 'clip-mute clip-mute-b' : 'clip-mute';
+        // Same treatment as the selected-signal players: the uniform
+        // player-bottom gray, detections highlighted in light gray.
+        clip.classes = c.behaviour ? 'clip-hit' : 'clip-quiet-tech';
       }
       clips.push(clip);
     });
     return { speakers: 2, durationSec: DURATION, clips };
   }
 
-  function signalData(key) {
+  function signalData(key, emotionsOn) {
     const spec = SIGNALS[key];
     const clips = [];
 
@@ -715,24 +851,28 @@
     });
     STT_CHUNKS.forEach((c, i) => {
       const clip = { ...baseClip(2, c), classes: 'clip-quiet-tech' };
+      const ghost = spec.ghosts.find((g) => g.idx === i);
+      const flagged = spec.hits.includes(i) || spec.falses.includes(i);
 
-      if (spec.hits.includes(i)) {
-        clip.classes = 'clip-hit';
+      // Any glyph-carrying clip is highlighted — light gray by default,
+      // the translucent guessed-emotion color when the toggle is on; the
+      // glyph itself tells the case (catch / red false alarm / ghost).
+      if (flagged || ghost) {
+        if (emotionsOn) {
+          clip.emotion = c.guess;
+          clip.classes = 'clip-guess';
+        } else {
+          clip.classes = 'clip-hit';
+        }
         clip.behaviour = spec.name;
-        clip.behaviourClasses = 'behaviour-indicator--tech';
-        clip.behaviourModal = c.modal;
-      } else if (spec.falses.includes(i)) {
-        clip.classes = 'clip-false';
-        clip.behaviour = spec.name;
-        clip.behaviourClasses = 'behaviour-indicator--tech behaviour-indicator--false';
-        clip.behaviourModal = c.modal;
-      } else {
-        const ghost = spec.ghosts.find((g) => g.idx === i);
-
         if (ghost) {
-          clip.behaviour = spec.name;
           clip.behaviourClasses = 'behaviour-indicator--ghost';
           clip.behaviourAtSec = ghost.at;
+        } else {
+          clip.behaviourClasses = spec.falses.includes(i)
+            ? 'behaviour-indicator--tech behaviour-indicator--false'
+            : 'behaviour-indicator--tech';
+          clip.behaviourModal = c.modal;
         }
       }
       clips.push(clip);
@@ -750,20 +890,32 @@
       labels: true,
       names: NAMES,
       className: 'fp-cmp',
+      laneHover: true,
+    });
+  }
+
+  function renderSignals() {
+    const emotionsOn = emotionsToggle && emotionsToggle.checked;
+
+    document.querySelectorAll('[data-vlb-signal]').forEach((node) => {
+      renderFingerprint(node, signalData(node.dataset.vlbSignal, emotionsOn), {
+        behaviours: true,
+        labels: true,
+        names: NAMES,
+        className: 'fp-cmp',
+        laneHover: true,
+      });
     });
   }
 
   renderMain();
-  if (emotionsToggle) emotionsToggle.addEventListener('change', renderMain);
-
-  document.querySelectorAll('[data-vlb-signal]').forEach((node) => {
-    renderFingerprint(node, signalData(node.dataset.vlbSignal), {
-      behaviours: true,
-      labels: true,
-      names: NAMES,
-      className: 'fp-cmp',
+  renderSignals();
+  if (emotionsToggle) {
+    emotionsToggle.addEventListener('change', () => {
+      renderMain();
+      renderSignals();
     });
-  });
+  }
 
   // Dropdowns that stay open while picking: the demo-audio split button
   // closes on menu items, the behaviors multi-select closes on an outside

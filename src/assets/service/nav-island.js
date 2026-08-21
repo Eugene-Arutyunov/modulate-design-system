@@ -26,10 +26,12 @@
     if (!event.altKey || event.metaKey || event.ctrlKey) return;
     // event.code: on macOS Option-N types "ñ", so event.key is unreliable.
     if (event.code !== 'KeyN') return;
+    // Only typing fields swallow the shortcut: a focused <select> (e.g.
+    // a sidebar picker after choosing an option) must not block it.
     var target = event.target;
     if (
       target &&
-      ((target.matches && target.matches('input, textarea, select')) ||
+      ((target.matches && target.matches('input, textarea')) ||
         target.isContentEditable)
     ) {
       return;
