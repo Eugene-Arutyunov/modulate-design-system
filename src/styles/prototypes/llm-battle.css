@@ -38,10 +38,17 @@
     white-space: nowrap;
   }
 
-  & .vlb-controls__setup {
-    align-self: flex-start;
-    margin-block: 0.15rem 0.5rem;
-    font-size: var(--m__font-size-s);
+  /* group title with the behavior kiki glyph */
+  & .vlb-controls__title--icon {
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
+
+    & svg {
+      width: 0.95em;
+      height: 0.95em;
+      flex-shrink: 0;
+    }
   }
 }
 
@@ -105,11 +112,7 @@
   }
 }
 
-/* Stack dialog: STT / LLM radio lists with a checkmark, like a menu */
-.vlb-stack-menu .vlb-controls__title {
-  padding-top: 0.35rem;
-}
-
+/* STT / LLM dropdowns: radio rows with a checkmark, like a menu */
 .vlb-radio {
   display: flex;
   align-items: center;
@@ -148,26 +151,19 @@
 }
 
 /* Demo-audio menu: wide enough to keep titles on one line inside the
-   overflow-clipped upload plate; reference-labeled recordings carry a tag */
+   overflow-clipped upload plate */
 .vlb-demo-menu {
   min-width: 26rem;
 
   & [role='menuitem'] {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--m__gap-m);
     white-space: nowrap;
   }
 }
 
-.vlb-menu-ref {
-  margin-left: var(--m__gap-xxs);
-  font-family: var(--m__font-family-semi-mono);
-  font-size: var(--m__font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--m__text-caption);
+/* The battle's input zone is 40% shorter than the playground default —
+   this page only */
+.pg-upload-plate.vlb-plate:not([data-state='uploaded']) {
+  min-height: 10.8rem;
 }
 
 /* Caption row under the player: recording name + transcript modal link */
@@ -219,6 +215,32 @@
   background-color: rgba(var(--gec), 0.45);
 }
 
+/* Strip lanes: flat quiet colors instead of the alternation. Velma's
+   no-signal clips read as neutral emotion; the stack's read as the plain
+   gray of the player's bottom bar. Where two same-color clips touch, a
+   thin border restores the boundary — the adjacent-sibling selector
+   skips boundaries a colored clip already makes visible. */
+.media-container .transcript-clip.vlb-quiet-v .clip-visualization {
+  background-color: rgba(var(--emotion-neutral-RGB), 1);
+  border-color: transparent;
+}
+
+.media-container .transcript-clip.vlb-quiet-v + .transcript-clip.vlb-quiet-v .clip-visualization {
+  border-left: 1px solid
+    color-mix(in srgb, rgba(var(--emotion-neutral-RGB), 1) 78%, white);
+}
+
+.media-container .transcript-clip.vlb-quiet-s .clip-visualization {
+  /* the player's bottom bar color (#audio-player.media-box) */
+  background-color: var(--m__bg-surface);
+  border-color: transparent;
+}
+
+.media-container .transcript-clip.vlb-quiet-s + .transcript-clip.vlb-quiet-s .clip-visualization {
+  border-left: 1px solid
+    color-mix(in srgb, var(--m__bg-surface) 85%, var(--m__text));
+}
+
 /* Mini-player specifics: a stack detection clip (brighter than the mute
    grays) and a false-positive clip */
 .media-container .transcript-clip.vlb-hit .clip-visualization {
@@ -245,13 +267,6 @@
     justify-content: space-between;
     gap: var(--m__gap-m);
     margin-bottom: var(--m__gap-xxs);
-  }
-
-  & .vlb-battle__score {
-    font-size: var(--m__font-size-s);
-    font-variant-numeric: tabular-nums;
-    color: var(--m__text-caption);
-    white-space: nowrap;
   }
 }
 
@@ -300,50 +315,37 @@
   }
 }
 
-.vlb-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--m__gap-m);
-  margin-top: var(--m__gap-s);
-
-  & .vlb-legend__item {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--m__gap-xxs);
-    white-space: nowrap;
-  }
+/* Speaker labels on this page: no plate behind the text, Velma in white,
+   the stack in dark gray */
+.vlb-page .pg-player-dataviz .speaker-labels .speaker-label span {
+  background: none;
 }
 
-.vlb-swatch {
-  display: inline-block;
-  width: 0.9em;
-  height: 0.9em;
-  border-radius: 2px;
+.vlb-page
+  .pg-player-dataviz
+  .speaker-labels
+  .speaker-label[data-speaker-index='1']
+  span {
+  color: var(--m__color-white);
+}
 
-  &.is-detected {
-    background-color: var(--emotion-frustrated);
-  }
+.vlb-page
+  .pg-player-dataviz
+  .speaker-labels
+  .speaker-label[data-speaker-index='2']
+  span {
+  color: var(--m__color-gray-700);
+}
 
-  &.is-false {
-    background-color: var(--m__color-red-600);
-  }
-
-  /* legend ghost: the kiki glyph itself, in caption gray on the page bg */
-  &.is-ghost {
-    background: none;
-    border-radius: 0;
-
-    & svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-      fill: color-mix(in srgb, var(--m__text) 45%, transparent);
-    }
-
-    & .behaviour-icon__outline {
-      fill: transparent;
-    }
-  }
+/* dark theme: the stack lane itself is near gray-700 — lift the label a
+   couple of steps so it stays the "gray one" without vanishing */
+.dark-mode
+  .vlb-page
+  .pg-player-dataviz
+  .speaker-labels
+  .speaker-label[data-speaker-index='2']
+  span {
+  color: var(--m__color-gray-400);
 }
 
 .vlb-false-text {

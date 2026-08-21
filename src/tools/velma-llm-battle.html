@@ -19,72 +19,14 @@
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
-  <div class="dashboard-layout">
+  <div class="dashboard-layout vlb-page">
     <div class="nav-sidebar">
       <div class="vlb-controls">
         <div class="vlb-controls__group">
-          <span class="vlb-controls__title">Comparison</span>
-          <label class="m__checkbox-secondary vlb-controls__check">
-            <input type="checkbox" checked data-vlb-locked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-            STT+LLM comparison
-          </label>
-          <div class="vlb-select" data-open="false">
-            <button
-              type="button"
-              class="vlb-select__button"
-              aria-haspopup="true"
-              aria-expanded="false">
-              <span data-vlb-stack-label>Whisper v4 + GPT-5.5</span>
-              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-            </button>
-            <div class="vlb-select__menu vlb-stack-menu" hidden>
-              <span class="vlb-controls__title">STT</span>
-              <label class="vlb-radio">
-                <input type="radio" name="vlb-stt" value="Whisper v4" checked />
-                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Whisper v4
-              </label>
-              <label class="vlb-radio">
-                <input type="radio" name="vlb-stt" value="Deepgram Nova-3" />
-                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Deepgram Nova-3
-              </label>
-              <label class="vlb-radio">
-                <input type="radio" name="vlb-stt" value="AssemblyAI Universal" />
-                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                AssemblyAI Universal
-              </label>
-              <span class="vlb-controls__title">LLM</span>
-              <label class="vlb-radio">
-                <input type="radio" name="vlb-llm" value="GPT-5.5" checked />
-                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                GPT-5.5
-              </label>
-              <label class="vlb-radio">
-                <input type="radio" name="vlb-llm" value="Claude Opus 4.8" />
-                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Claude Opus 4.8
-              </label>
-              <label class="vlb-radio">
-                <input type="radio" name="vlb-llm" value="Grok 4.3" />
-                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Grok 4.3
-              </label>
-              <div class="vlb-stack-menu__sep" aria-hidden="true"></div>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" data-vlb-emotions /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Guess emotions from text
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="vlb-controls__group">
-          <span class="vlb-controls__title">Behaviors</span>
-          <a href="#" class="pg-velma-setup-link vlb-controls__setup"
-            ><svg width="18" height="18" aria-hidden="true">
-              <use href="#behaviors" /></svg
-            >Set up behaviors</a
+          <span class="vlb-controls__title vlb-controls__title--icon"
+            ><svg viewBox="0 0 32 32" aria-hidden="true">
+              <use href="#behaviors"></use></svg
+            >Behaviors</span
           >
           <div class="vlb-select" data-open="false">
             <button
@@ -131,26 +73,114 @@
             </div>
           </div>
         </div>
+
+        <div class="vlb-controls__group">
+          <span class="vlb-controls__title">STT + LLM</span>
+          <div class="vlb-select" data-open="false">
+            <button
+              type="button"
+              class="vlb-select__button"
+              aria-haspopup="true"
+              aria-expanded="false">
+              <span data-vlb-select-label="vlb-stt">Whisper v4</span>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+            </button>
+            <div class="vlb-select__menu" hidden>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-stt" value="Whisper v4" checked />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Whisper v4
+              </label>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-stt" value="Deepgram Nova-3" />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Deepgram Nova-3
+              </label>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-stt" value="AssemblyAI Universal" />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                AssemblyAI Universal
+              </label>
+            </div>
+          </div>
+          <div class="vlb-select" data-open="false">
+            <button
+              type="button"
+              class="vlb-select__button"
+              aria-haspopup="true"
+              aria-expanded="false">
+              <span data-vlb-select-label="vlb-llm">GPT-5.5</span>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+            </button>
+            <div class="vlb-select__menu" hidden>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-llm" value="GPT-5.5" checked />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                GPT-5.5
+              </label>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-llm" value="Claude Opus 4.8" />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Claude Opus 4.8
+              </label>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-llm" value="Grok 4.3" />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Grok 4.3
+              </label>
+              <div class="vlb-stack-menu__sep" aria-hidden="true"></div>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" data-vlb-emotions /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Guess emotions
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <main class="pg-content">
-      <div class="pg-page-header">
-        <h1 class="pg-page-title">Velma LLM Battle</h1>
-      </div>
-
       <div class="pg-upload-section">
         {% set uploadPlateId = 'vlb-upload-plate' %}
+        {% set uploadPlateClass = 'vlb-plate' %}
         {% set uploadPlateState = 'uploaded' %}
         {% set uploadPlateCollapsedLabel = 'New analysis' %}
         {% set uploadPlateStateInputName = 'vlb-plate-state' %}
+        {% set uploadPlateAnalyzingContent %}
+        <div class="pg-processing-stages">
+          <span class="pg-processing-stage">
+            <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
+            </svg>
+            Transcript
+          </span>
+          <span class="pg-processing-stage">
+            <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
+            </svg>
+            Speakers
+          </span>
+          <span class="pg-processing-stage">
+            <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
+            </svg>
+            Emotions
+          </span>
+          <span class="pg-processing-stage">
+            <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
+            </svg>
+            Behaviors
+          </span>
+        </div>
+        {% endset %}
         {% set uploadPlateActions %}
         <div class="pg-upload-actions">
           <button type="button" class="m__button-primary-outline M pg-upload-primary">
             <span class="pg-upload-primary__label">Drop or choose file…</span>
           </button>
           <div class="m__split-button pg-upload-stream" data-open="false">
-            <button type="button" class="m__button-primary-outline M pg-upload-stream__main">Try demo audio</button>
+            <button type="button" class="m__button-primary-outline M pg-upload-stream__main">Stream demo</button>
             <button
               type="button"
               class="m__menu-button-primary M pg-upload-stream__toggle"
@@ -162,11 +192,15 @@
             <div class="pg-upload-stream__menu vlb-demo-menu" role="menu" hidden>
               <button type="button" role="menuitem">
                 Harborview Bank — account takeover
-                <span class="vlb-menu-ref">reference</span>
               </button>
               <button type="button" role="menuitem">
                 Elderly caller needs login for surgery payment
-                <span class="vlb-menu-ref">reference</span>
+              </button>
+              <button type="button" role="menuitem">
+                Insurance claim denied after a clinic mix-up
+              </button>
+              <button type="button" role="menuitem">
+                Furious subscriber cancels over double billing
               </button>
               <button type="button" role="menuitem">
                 Gender-role argument ends the relationship
@@ -310,29 +344,28 @@
                 <use href="#behaviors"></use></svg
               >Vishing</a
             >
-            <span class="vlb-battle__score">Velma 2 · STT+LLM 0</span>
           </div>
           <div class="vlb-mini media-container">
             <div class="pg-player-dataviz">
               <div class="player-visualization">
                 <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
                 <div class="transcript-clip emotion-stressed" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
               </div>
               <div class="speaker-labels">
                 <div class="speaker-label" data-speaker-index="1"><span>Velma</span></div>
@@ -363,29 +396,28 @@
                 <use href="#behaviors"></use></svg
               >Account Impersonation</a
             >
-            <span class="vlb-battle__score">Velma 1 · STT+LLM 2 (1 false)</span>
           </div>
           <div class="vlb-mini media-container">
             <div class="pg-player-dataviz">
               <div class="player-visualization">
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
                 <div class="transcript-clip emotion-anxious" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
                 <div class="transcript-clip vlb-hit vlb-guess" data-speaker-index="2" style="left: 45.29%; width: 14.28%; --gec: var(--emotion-anxious-RGB)"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
                 <div class="transcript-clip vlb-false-clip" data-speaker-index="2" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
               </div>
               <div class="speaker-labels">
                 <div class="speaker-label" data-speaker-index="1"><span>Velma</span></div>
@@ -413,29 +445,28 @@
                 <use href="#behaviors"></use></svg
               >Coercion Manipulation</a
             >
-            <span class="vlb-battle__score">Velma 1 · STT+LLM 1</span>
           </div>
           <div class="vlb-mini media-container">
             <div class="pg-player-dataviz">
               <div class="player-visualization">
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
                 <div class="transcript-clip emotion-angry" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-v" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
                 <div class="transcript-clip vlb-hit vlb-guess" data-speaker-index="2" style="left: 68.96%; width: 13.4%; --gec: var(--emotion-frustrated-RGB)"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
-                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-quiet-s" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
               </div>
               <div class="speaker-labels">
                 <div class="speaker-label" data-speaker-index="1"><span>Velma</span></div>
@@ -453,11 +484,6 @@
           </div>
         </div>
 
-        <p class="vlb-legend caption">
-          <span class="vlb-legend__item"><span class="vlb-swatch is-detected"></span> Detected (kiki opens the evidence)</span>
-          <span class="vlb-legend__item"><span class="vlb-swatch is-false"></span> False positive</span>
-          <span class="vlb-legend__item"><span class="vlb-swatch is-ghost">{{ kikiSvg | safe }}</span> Missed by agent</span>
-        </p>
       </section>
 
       <div class="m__space L"></div>
@@ -896,23 +922,14 @@
       });
     });
 
-    // Comparison mode is hard-enabled in this mock
-    document.querySelectorAll('[data-vlb-locked]').forEach(function (checkbox) {
-      checkbox.addEventListener('change', function () {
-        checkbox.checked = true;
+    // Each select button mirrors its radio group's pick
+    document.querySelectorAll('[data-vlb-select-label]').forEach(function (label) {
+      var name = label.dataset.vlbSelectLabel;
+      document.querySelectorAll('input[name="' + name + '"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+          if (radio.checked) label.textContent = radio.value;
+        });
       });
-    });
-
-    // Stack label mirrors the STT + LLM radio picks
-    var stackLabel = document.querySelector('[data-vlb-stack-label]');
-    function syncStackLabel() {
-      if (!stackLabel) return;
-      var stt = document.querySelector('input[name="vlb-stt"]:checked');
-      var llm = document.querySelector('input[name="vlb-llm"]:checked');
-      if (stt && llm) stackLabel.textContent = stt.value + ' + ' + llm.value;
-    }
-    document.querySelectorAll('input[name="vlb-stt"], input[name="vlb-llm"]').forEach(function (radio) {
-      radio.addEventListener('change', syncStackLabel);
     });
 
     // "Guess emotions from text" switches the stack lane between the gray
