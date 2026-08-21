@@ -237,8 +237,8 @@ function renderUIStructure(data) {
   const tbody = document.createElement('tbody');
 
   const routeKeys = new Set([
-    ...current.map((r) => r.id),
     ...target.map((r) => r.id),
+    ...current.map((r) => r.id),
   ]);
   const currentById = new Map(current.map((r) => [r.id, r]));
   const targetById = new Map(target.map((r) => [r.id, r]));
