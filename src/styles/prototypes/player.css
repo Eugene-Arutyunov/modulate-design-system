@@ -762,3 +762,164 @@
     }
   }
 }
+
+/* Technology comparison ─────────────────────────────────────────────────
+   A fingerprint variety where lanes are technologies (Velma vs an STT+LLM
+   stack), not speakers. Rendered by fingerprint.js via the per-clip hooks
+   (`clip.classes`, `clip.behaviourClasses`); documented with a live
+   example on /tools/modulate-fingerprint/. Two modes share these styles:
+   the full player (all signals) and the selected-signal player. */
+
+/* Stack lane without an emotion channel: two alternating grays — color
+   means nothing, the clip pattern survives. Deliberately not the neutral
+   emotion color, so a genuinely neutral clip stays unique. */
+.media-container .transcript-clip.clip-mute .clip-visualization {
+  background-color: color-mix(in srgb, var(--m__text) 14%, transparent);
+}
+
+.media-container .transcript-clip.clip-mute-b .clip-visualization {
+  background-color: color-mix(in srgb, var(--m__text) 7%, transparent);
+}
+
+/* Emotions guessed from text: the emotion palette pushed way down —
+   translucent, meaning "assumed, not heard" */
+.media-container .transcript-clip.clip-guess .clip-visualization {
+  opacity: 0.45;
+}
+
+/* Selected-signal mode: clips without the signal render as neutral (the
+   heard lane) or as the player-bottom gray (the stack lane) */
+.media-container .transcript-clip.clip-quiet .clip-visualization {
+  background-color: rgba(var(--emotion-neutral-RGB), 1);
+}
+
+.media-container .transcript-clip.clip-quiet-tech .clip-visualization {
+  background-color: var(--m__bg-surface);
+}
+
+/* Stack detections: light gray highlight; false positives: red */
+.media-container .transcript-clip.clip-hit .clip-visualization {
+  background-color: var(--m__color-gray-300);
+}
+
+.media-container .transcript-clip.clip-false .clip-visualization {
+  background-color: var(--m__color-red-600);
+}
+
+/* Hairline separators, only where two same-color clips touch and the
+   boundary would vanish — nuanced, close to the clip background */
+.media-container
+  .transcript-clip.clip-quiet
+  + .transcript-clip.clip-quiet
+  .clip-visualization {
+  border-left: 1px solid
+    color-mix(in srgb, rgba(var(--emotion-neutral-RGB), 1) 90%, white);
+}
+
+.media-container
+  .transcript-clip.clip-quiet-tech
+  + .transcript-clip.clip-quiet-tech
+  .clip-visualization {
+  border-left: 1px solid
+    color-mix(in srgb, var(--m__bg-surface) 92%, var(--m__text));
+}
+
+.media-container
+  .transcript-clip.clip-guess
+  + .transcript-clip.clip-guess
+  .clip-visualization {
+  border-left: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Comparison behaviour glyphs: the stack's neutral-gray blob, the ghost
+   of a missed reference signal, and the false positive */
+.media-container
+  .behaviour-indicators
+  .behaviour-indicator--tech
+  .behaviour-icon
+  .behaviour-icon__outline {
+  fill: rgba(var(--emotion-neutral-RGB), 1);
+}
+
+.media-container
+  .behaviour-indicators
+  .behaviour-indicator--ghost
+  .behaviour-icon
+  svg {
+  fill: color-mix(in srgb, var(--m__text) 45%, transparent);
+}
+
+.media-container
+  .behaviour-indicators
+  .behaviour-indicator--ghost
+  .behaviour-icon
+  .behaviour-icon__outline {
+  fill: transparent;
+}
+
+.media-container
+  .behaviour-indicators
+  .behaviour-indicator--false
+  .behaviour-icon
+  .behaviour-icon__outline {
+  fill: var(--m__color-red-600);
+}
+
+/* Comparison lane labels: no plate behind the text; the heard lane in
+   white, the stack lane in dark gray (lifted in the dark theme, where the
+   stack lane itself is near that gray) */
+.fp-cmp .speaker-labels .speaker-label span {
+  background: none;
+}
+
+.fp-cmp .speaker-labels .speaker-label[data-speaker-index='1'] span {
+  color: var(--m__color-white);
+}
+
+.fp-cmp .speaker-labels .speaker-label[data-speaker-index='2'] span {
+  color: var(--m__color-gray-700);
+}
+
+.dark-mode .fp-cmp .speaker-labels .speaker-label[data-speaker-index='2'] span {
+  color: var(--m__color-gray-400);
+}
+
+/* Hover captions, shared by player chrome and the player-less strip:
+   emotion name to the left of the total time (chrome) or on the right of
+   the caption strip; the transcript line on the left. */
+.fp-media .player-total-time {
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+}
+
+.fp-emotion-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+  height: 1.1rem;
+  margin-top: 0.35rem;
+  line-height: 1.1rem;
+}
+
+.fp-emotion-caption,
+.fp-transcript-caption {
+  font-size: 0.8em;
+  opacity: 0;
+  transition: opacity var(--m__duration-xslow) var(--m__easing-base);
+}
+
+.fp-emotion-caption.visible,
+.fp-transcript-caption.visible {
+  opacity: 1;
+  transition: opacity var(--m__duration-instant) var(--m__easing-base);
+}
+
+.fp-transcript-caption {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--m__text-caption);
+}

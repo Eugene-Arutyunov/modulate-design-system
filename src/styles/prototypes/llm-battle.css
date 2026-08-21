@@ -112,44 +112,6 @@
   }
 }
 
-/* STT / LLM dropdowns: radio rows with a checkmark, like a menu */
-.vlb-radio {
-  display: flex;
-  align-items: center;
-  gap: 0.45em;
-  padding-block: 0.2rem;
-  font-size: var(--m__font-size-s);
-  white-space: nowrap;
-  cursor: pointer;
-
-  & input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  & svg {
-    width: 0.7em;
-    height: 0.7em;
-    flex-shrink: 0;
-    opacity: 0;
-    transition: opacity var(--m__duration-base) var(--m__easing-base);
-  }
-
-  &:has(input:checked) svg {
-    opacity: 1;
-  }
-
-  &:hover {
-    color: var(--m__text-link-hover);
-  }
-}
-
-.vlb-stack-menu__sep {
-  margin-block: 0.45rem 0.2rem;
-  border-top: var(--m__border-width-s) solid var(--m__border);
-}
-
 /* Demo-audio menu: wide enough to keep titles on one line inside the
    overflow-clipped upload plate */
 .vlb-demo-menu {
@@ -166,28 +128,20 @@
   min-height: 10.8rem;
 }
 
-/* Caption row under the player: recording name + transcript modal link */
-.vlb-player-caption {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--m__gap-m);
-  margin-top: var(--m__gap-xs);
-
-  & .caption {
-    margin: 0;
-  }
+/* STT / LLM pickers: the DS native select, stacked under the group title */
+.vlb-controls .vlb-controls__select {
+  margin-top: 0.25rem;
+  font-size: var(--m__font-size-s);
 }
 
-.vlb-linklike {
+/* The transcript entry point: the most unassuming button possible */
+.vlb-transcript-btn {
   padding: 0;
   border: none;
   background: none;
   font: inherit;
   font-size: var(--m__font-size-s);
-  color: var(--m__text);
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  color: var(--m__text-caption);
   cursor: pointer;
   transition: color var(--m__duration-base) var(--m__easing-base);
 
@@ -197,65 +151,9 @@
   }
 }
 
-/* Stack-lane clips: two alternating light grays — deliberately not the
-   neutral emotion color, so a genuinely neutral Velma clip stays unique.
-   The clip pattern survives, the color just stops meaning anything. */
-.media-container .transcript-clip.vlb-mute .clip-visualization {
-  background-color: color-mix(in srgb, var(--m__text) 14%, transparent);
-  border-color: transparent;
-}
-
-.media-container .transcript-clip.vlb-mute.vlb-alt-b .clip-visualization {
-  background-color: color-mix(in srgb, var(--m__text) 7%, transparent);
-}
-
-/* "Guess emotions from text" on: the guessed palette is the emotion
-   palette pushed way down — translucent, meaning "assumed, not heard" */
-.vlb-emotions-on .media-container .transcript-clip.vlb-guess .clip-visualization {
-  background-color: rgba(var(--gec), 0.45);
-}
-
-/* Strip lanes: flat quiet colors instead of the alternation. Velma's
-   no-signal clips read as neutral emotion; the stack's read as the plain
-   gray of the player's bottom bar. Where two same-color clips touch, a
-   thin border restores the boundary — the adjacent-sibling selector
-   skips boundaries a colored clip already makes visible. */
-.media-container .transcript-clip.vlb-quiet-v .clip-visualization {
-  background-color: rgba(var(--emotion-neutral-RGB), 1);
-  border-color: transparent;
-}
-
-.media-container .transcript-clip.vlb-quiet-v + .transcript-clip.vlb-quiet-v .clip-visualization {
-  border-left: 1px solid
-    color-mix(in srgb, rgba(var(--emotion-neutral-RGB), 1) 78%, white);
-}
-
-.media-container .transcript-clip.vlb-quiet-s .clip-visualization {
-  /* the player's bottom bar color (#audio-player.media-box) */
-  background-color: var(--m__bg-surface);
-  border-color: transparent;
-}
-
-.media-container .transcript-clip.vlb-quiet-s + .transcript-clip.vlb-quiet-s .clip-visualization {
-  border-left: 1px solid
-    color-mix(in srgb, var(--m__bg-surface) 85%, var(--m__text));
-}
-
-/* Mini-player specifics: a stack detection clip (brighter than the mute
-   grays) and a false-positive clip */
-.media-container .transcript-clip.vlb-hit .clip-visualization {
-  background-color: color-mix(in srgb, var(--m__text) 42%, transparent);
-  border-color: transparent;
-}
-
-.media-container .transcript-clip.vlb-false-clip .clip-visualization {
-  background-color: var(--m__color-red-600);
-  border-color: transparent;
-}
-
-/* Per-behavior mini players: the same fingerprint design as the shared
-   player, no media-box chrome. Explicit height; the visualization fills
-   it via the --player-visualization-height override. */
+/* Per-behavior signal players: rendered by fingerprint.js (technology-
+   comparison variant, styles in player.css); here only the block rhythm
+   and the kiki-titled heads */
 .vlb-battle {
   & + .vlb-battle {
     margin-top: var(--m__gap-l);
@@ -267,15 +165,6 @@
     justify-content: space-between;
     gap: var(--m__gap-m);
     margin-bottom: var(--m__gap-xxs);
-  }
-}
-
-.vlb-mini {
-  & .pg-player-dataviz {
-    --player-visualization-height: 100%;
-    height: 4.6rem;
-    border-radius: 3px;
-    overflow: hidden;
   }
 }
 
@@ -293,59 +182,6 @@
     transform: scale(1.25);
     transition-duration: var(--m__duration-instant);
   }
-}
-
-/* False-positive kiki: red star blob */
-.media-container
-  .behaviour-indicators
-  .behaviour-indicator.vlb-kiki-false
-  .behaviour-icon
-  .behaviour-icon__outline {
-  fill: var(--m__color-red-600);
-}
-
-/* Ghost kiki: a reference signal the agent missed — outline only */
-.media-container .behaviour-indicators .behaviour-indicator.vlb-ghost {
-  & .behaviour-icon svg {
-    fill: color-mix(in srgb, var(--m__text) 45%, transparent);
-  }
-
-  & .behaviour-icon .behaviour-icon__outline {
-    fill: transparent;
-  }
-}
-
-/* Speaker labels on this page: no plate behind the text, Velma in white,
-   the stack in dark gray */
-.vlb-page .pg-player-dataviz .speaker-labels .speaker-label span {
-  background: none;
-}
-
-.vlb-page
-  .pg-player-dataviz
-  .speaker-labels
-  .speaker-label[data-speaker-index='1']
-  span {
-  color: var(--m__color-white);
-}
-
-.vlb-page
-  .pg-player-dataviz
-  .speaker-labels
-  .speaker-label[data-speaker-index='2']
-  span {
-  color: var(--m__color-gray-700);
-}
-
-/* dark theme: the stack lane itself is near gray-700 — lift the label a
-   couple of steps so it stays the "gray one" without vanishing */
-.dark-mode
-  .vlb-page
-  .pg-player-dataviz
-  .speaker-labels
-  .speaker-label[data-speaker-index='2']
-  span {
-  color: var(--m__color-gray-400);
 }
 
 .vlb-false-text {

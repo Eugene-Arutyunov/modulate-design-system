@@ -28,8 +28,8 @@
       })();
     </script>
     {% set islandThemeToggle = true %} {% include 'service/nav-island.html' %}
-    {% include 'service/header.html' %} {% block content %}{% endblock %} {%
-    include 'service/footer.html' %}
+    {% if not hideSiteHeader %}{% include 'service/header.html' %}{% endif %}
+    {% block content %}{% endblock %} {% include 'service/footer.html' %}
 
     <script src="/assets/service/theme-toggle.js"></script>
     <script src="/assets/service/nav-island.js"></script>

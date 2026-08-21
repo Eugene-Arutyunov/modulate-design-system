@@ -420,7 +420,84 @@ const DEMOS = {
     data: { speakers: 2, durationSec: 300, seed: 48 },
     opts: { amplitude: true },
   },
+  comparison: {
+    raw: () => buildComparisonDemo(false),
+    opts: { behaviours: true, className: "fp-cmp", names: ["Velma", "STT+LLM"] },
+  },
+  "comparison-signal": {
+    raw: () => buildComparisonDemo(true),
+    opts: { behaviours: true, className: "fp-cmp", names: ["Velma", "STT+LLM"] },
+  },
 };
+
+// Technology comparison: lanes are engines, not speakers — the same call
+// analyzed twice. Each lane carries its own transcript variant (its own
+// segmentation, timings and recognition details: STT slices much finer),
+// which is why the clip structures never match. The hand-authored dataset
+// below feeds both flavors: the full comparison and the selected-signal
+// player (`signalOnly`), where clips without the signal go neutral and the
+// stack's misses / false positives surface as ghost / red glyphs.
+function buildComparisonDemo(signalOnly) {
+  const durationSec = 47.5;
+  const velma = [
+    { s: 0, e: 6, emotion: "calm", text: "Thanks for calling — how can I help?" },
+    { s: 6.4, e: 13, emotion: "neutral", text: "I ordered the standing desk two weeks ago and it still shows processing." },
+    { s: 13.4, e: 21, emotion: "frustrated", behaviour: "Urgency pressure", text: "I need this resolved today, not eventually — today." },
+    { s: 21.4, e: 29, emotion: "neutral", text: "Let me check what the warehouse says about that order." },
+    { s: 29.4, e: 38, emotion: "angry", behaviour: "Coercion manipulation", text: "If you can't fix it, I'll make sure your manager hears about this call." },
+    { s: 38.4, e: 47, emotion: "calm", text: "I understand. I'm escalating it right now." },
+  ];
+  const stack = [
+    { s: 0.2, e: 3.4, text: "thanks for calling" },
+    { s: 3.4, e: 6.2, text: "how can i help" },
+    { s: 6.6, e: 9.9, text: "i ordered the standing desk two weeks ago" },
+    { s: 9.9, e: 13.1, text: "and it still shows processing" },
+    { s: 13.6, e: 17.2, text: "i need this resolved today", ghost: true },
+    { s: 17.2, e: 21.1, text: "not eventually today" },
+    { s: 21.6, e: 25.3, text: "let me check what the warehouse says" },
+    { s: 25.3, e: 29.1, text: "about that order", falsePositive: true },
+    { s: 29.6, e: 33.8, text: "if you can't fix it" },
+    { s: 33.8, e: 38.1, text: "i'll make sure your manager hears about this call", hit: true },
+    { s: 38.6, e: 42.9, text: "i understand" },
+    { s: 42.9, e: 47.2, text: "i'm escalating it right now" },
+  ];
+  const clips = [];
+
+  velma.forEach((c) => {
+    const clip = { speaker: 1, startSec: c.s, durationSec: c.e - c.s, text: c.text };
+
+    if (!signalOnly || c.behaviour === "Urgency pressure") {
+      clip.emotion = c.emotion;
+      clip.behaviour = c.behaviour;
+    } else {
+      clip.classes = "clip-quiet";
+    }
+    clips.push(clip);
+  });
+  stack.forEach((c, i) => {
+    const clip = { speaker: 2, startSec: c.s, durationSec: c.e - c.s, text: c.text };
+
+    if (signalOnly) {
+      clip.classes = "clip-quiet-tech";
+      if (c.ghost) {
+        clip.behaviour = "Urgency pressure";
+        clip.behaviourClasses = "behaviour-indicator--ghost";
+      } else if (c.falsePositive) {
+        clip.classes = "clip-false";
+        clip.behaviour = "Urgency pressure";
+        clip.behaviourClasses = "behaviour-indicator--tech behaviour-indicator--false";
+      }
+    } else {
+      clip.classes = i % 2 ? "clip-mute clip-mute-b" : "clip-mute";
+      if (c.hit) {
+        clip.behaviour = "Coercion manipulation";
+        clip.behaviourClasses = "behaviour-indicator--tech";
+      }
+    }
+    clips.push(clip);
+  });
+  return { speakers: 2, durationSec, clips };
+}
 
 // Brick-wall sample: miniatures at exactly the table scale (same height,
 // same seconds-per-rem), without time labels, flowing like inline blocks.
@@ -452,7 +529,7 @@ function renderExamples() {
     const demo = DEMOS[node.dataset.fpDemo];
 
     if (!demo) return;
-    renderFingerprint(node, generateConversation(demo.data), {
+    renderFingerprint(node, demo.raw ? demo.raw() : generateConversation(demo.data), {
       names: DEFAULT_NAMES,
       ...demo.opts,
     });

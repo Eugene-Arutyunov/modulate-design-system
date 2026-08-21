@@ -383,6 +383,19 @@ const VERDICT_COLORS = {
 //   player     boolean — attach the (non-functional) playground player
 //   labels     boolean — show speaker labels on the lanes
 //   names      array — custom speaker names for the lane labels
+//   className  string — extra classes on the container (e.g. `fp-cmp` for
+//              the technology-comparison variant)
+//
+// Per-clip hooks (all optional, used by the comparison variant):
+//   clip.classes           extra classes on the clip node (`clip-mute`,
+//                          `clip-quiet`, `clip-hit`, …)
+//   clip.emotion           may be absent — the clip renders uncolored and
+//                          the hover caption skips the emotion name
+//   clip.behaviourClasses  extra classes on the behaviour indicator
+//                          (`behaviour-indicator--tech/--ghost/--false`)
+//   clip.behaviourModal    id of a modal the glyph opens (data-modal-open)
+//   clip.behaviourAtSec    glyph position on the timeline (defaults to the
+//                          clip start)
 export function renderFingerprint(root, data, options = {}) {
   const opts = {
     mode: "transcript",
@@ -392,13 +405,17 @@ export function renderFingerprint(root, data, options = {}) {
     player: false,
     labels: true,
     names: [],
+    className: "",
     ...options,
   };
   const lanes = opts.mode === "transcript" ? data.speakers : 1;
 
   root.textContent = "";
 
-  const container = el("div", "media-container fp-media m__rounded");
+  const container = el(
+    "div",
+    `media-container fp-media m__rounded${opts.className ? ` ${opts.className}` : ""}`
+  );
   const dataviz = el("div", "pg-player-dataviz");
   const viz = el("div", "player-visualization");
 
@@ -439,8 +456,10 @@ export function renderFingerprint(root, data, options = {}) {
 
 function renderTranscriptClips(viz, data, opts, lanes) {
   data.clips.forEach((clip) => {
-    const emotionClass = opts.emotions ? ` emotion-${clip.emotion}` : "";
-    const node = el("div", `transcript-clip${emotionClass}`);
+    const emotionClass =
+      opts.emotions && clip.emotion ? ` emotion-${clip.emotion}` : "";
+    const extraClass = clip.classes ? ` ${clip.classes}` : "";
+    const node = el("div", `transcript-clip${emotionClass}${extraClass}`);
     const clipViz = el("div", "clip-visualization");
 
     node.dataset.speakerIndex = clip.speaker;
@@ -471,19 +490,24 @@ function bindClipCaptions(root, container, opts) {
   if (!clipNodes.length) return;
 
   const transcript = opts.player ? container.querySelector(".clip-text-caption") : null;
-  const transcriptSpan = transcript ? transcript.querySelector("span") : null;
+  let transcriptSpan = transcript ? transcript.querySelector("span") : null;
   let emotionSpan = null;
 
-  if (opts.emotions) {
-    if (opts.player) {
-      emotionSpan = container.querySelector(".fp-emotion-caption");
-    } else {
-      const strip = el("div", "fp-emotion-strip");
+  if (opts.player) {
+    if (opts.emotions) emotionSpan = container.querySelector(".fp-emotion-caption");
+  } else {
+    // Player-less fingerprints get a caption strip below the plate: the
+    // start of the transcript line on the left, the emotion name on the
+    // right — the same pair the player chrome shows.
+    const strip = el("div", "fp-emotion-strip");
 
+    transcriptSpan = el("span", "fp-transcript-caption");
+    strip.appendChild(transcriptSpan);
+    if (opts.emotions) {
       emotionSpan = el("span", "fp-emotion-caption");
       strip.appendChild(emotionSpan);
-      root.appendChild(strip);
     }
+    root.appendChild(strip);
   }
 
   clipNodes.forEach((node) => {
@@ -492,20 +516,20 @@ function bindClipCaptions(root, container, opts) {
     if (!clip) return;
 
     node.addEventListener("mouseenter", () => {
-      if (emotionSpan) {
+      if (emotionSpan && clip.emotion) {
         emotionSpan.textContent =
           clip.emotion.charAt(0).toUpperCase() + clip.emotion.slice(1);
         emotionSpan.style.color = emotionColor(clip.emotion);
         emotionSpan.classList.add("visible");
       }
-      if (transcript && clip.text) {
+      if (transcriptSpan && clip.text) {
         transcriptSpan.textContent = clip.text;
-        transcript.classList.add("visible");
+        (transcript || transcriptSpan).classList.add("visible");
       }
     });
     node.addEventListener("mouseleave", () => {
       if (emotionSpan) emotionSpan.classList.remove("visible");
-      if (transcript) transcript.classList.remove("visible");
+      if (transcriptSpan) (transcript || transcriptSpan).classList.remove("visible");
     });
   });
 }
@@ -611,12 +635,19 @@ function buildBehaviourIndicators(data, lanes) {
   data.clips
     .filter((clip) => clip.behaviour)
     .forEach((clip) => {
-      const indicator = el("div", "behaviour-indicator");
+      const indicator = el(
+        "div",
+        `behaviour-indicator${clip.behaviourClasses ? ` ${clip.behaviourClasses}` : ""}`
+      );
 
       indicator.dataset.speakerIndex = clip.speaker;
       indicator.dataset.behaviourIndex = "1";
-      indicator.dataset.emotion = clip.emotion;
-      indicator.style.left = `${pct(clip.startSec, data.durationSec)}%`;
+      if (clip.emotion) indicator.dataset.emotion = clip.emotion;
+      if (clip.behaviourModal) indicator.dataset.modalOpen = clip.behaviourModal;
+      indicator.style.left = `${pct(
+        clip.behaviourAtSec === undefined ? clip.startSec : clip.behaviourAtSec,
+        data.durationSec
+      )}%`;
       indicator.style.bottom = `${((lanes - clip.speaker) * 100) / lanes}%`;
 
       const icon = el("span", "behaviour-icon behaviour-icon--kiki");
