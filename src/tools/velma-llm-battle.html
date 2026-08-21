@@ -1,11 +1,14 @@
 {% extends 'service/layout.html' %} {% set pageTitle = 'Velma LLM Battle' %}
+{% from 'service/modal-wrapper.njk' import modal %}
 {% block content %}
 
-<!-- Design mock, not a working thing: the markup is hand-authored to one
-     fixed scenario (the Harborview Bank call from velma-fraud-config.js,
-     68 440 ms → percentages), the only JS is decorative (dropdowns, hover
-     line, plate states). Player lanes are agents, not speakers: lane 1 is
-     Velma, lane 2 the alternative orchestrator (STT+LLM). -->
+<!-- Design mock, not a working thing. One fixed scenario — the Harborview
+     Bank call from velma-fraud-config.js (68 440 ms → hand-computed
+     percentages). Player lanes are agents: lane 1 Velma, lane 2 the
+     STT+LLM stack picked in the sidebar. Default view is the sales one:
+     the demo recording is already "analyzed", the upload plate is
+     collapsed. JS is decorative: dropdowns, hover line, modals
+     (prototypes/modals.js), the emotions toggle. -->
 
 {% set kikiSvg %}
 <svg viewBox="0 0 241.8 241.8" aria-hidden="true">
@@ -20,15 +23,69 @@
     <div class="nav-sidebar">
       <div class="vlb-controls">
         <div class="vlb-controls__group">
-          <span class="vlb-controls__title">Mode</span>
+          <span class="vlb-controls__title">Comparison</span>
           <label class="m__checkbox-secondary vlb-controls__check">
             <input type="checkbox" checked data-vlb-locked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
             STT+LLM comparison
           </label>
+          <div class="vlb-select" data-open="false">
+            <button
+              type="button"
+              class="vlb-select__button"
+              aria-haspopup="true"
+              aria-expanded="false">
+              <span data-vlb-stack-label>Whisper v4 + GPT-5.5</span>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+            </button>
+            <div class="vlb-select__menu vlb-stack-menu" hidden>
+              <span class="vlb-controls__title">STT</span>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-stt" value="Whisper v4" checked />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Whisper v4
+              </label>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-stt" value="Deepgram Nova-3" />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Deepgram Nova-3
+              </label>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-stt" value="AssemblyAI Universal" />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                AssemblyAI Universal
+              </label>
+              <span class="vlb-controls__title">LLM</span>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-llm" value="GPT-5.5" checked />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                GPT-5.5
+              </label>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-llm" value="Claude Opus 4.8" />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Claude Opus 4.8
+              </label>
+              <label class="vlb-radio">
+                <input type="radio" name="vlb-llm" value="Grok 4.3" />
+                <svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Grok 4.3
+              </label>
+              <div class="vlb-stack-menu__sep" aria-hidden="true"></div>
+              <label class="m__checkbox-secondary vlb-controls__check">
+                <input type="checkbox" data-vlb-emotions /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+                Guess emotions from text
+              </label>
+            </div>
+          </div>
         </div>
 
         <div class="vlb-controls__group">
           <span class="vlb-controls__title">Behaviors</span>
+          <a href="#" class="pg-velma-setup-link vlb-controls__setup"
+            ><svg width="18" height="18" aria-hidden="true">
+              <use href="#behaviors" /></svg
+            >Set up behaviors</a
+          >
           <div class="vlb-select" data-open="false">
             <button
               type="button"
@@ -84,19 +141,9 @@
 
       <div class="pg-upload-section">
         {% set uploadPlateId = 'vlb-upload-plate' %}
+        {% set uploadPlateState = 'uploaded' %}
+        {% set uploadPlateCollapsedLabel = 'New analysis' %}
         {% set uploadPlateStateInputName = 'vlb-plate-state' %}
-        {% set uploadPlateOptions %}
-        <div class="pg-options-row pg-velma-setup">
-          <a href="#" class="pg-velma-setup-link"
-            ><svg width="18" height="18" aria-hidden="true">
-              <use href="#behaviors" /></svg
-            >Set up behaviors</a
-          >
-          <span class="pg-velma-setup-summary"
-            >1 conversation type · 2 roles · 3 behaviors</span
-          >
-        </div>
-        {% endset %}
         {% set uploadPlateActions %}
         <div class="pg-upload-actions">
           <button type="button" class="m__button-primary-outline M pg-upload-primary">
@@ -133,13 +180,15 @@
 
       <div class="m__space L"></div>
 
-      <!-- Shared player: everything both agents reported, on their own lanes.
-           Velma hears emotions, STT+LLM does not — its lane stays neutral. -->
+      <!-- Shared player: everything both agents reported, on their own
+           lanes. Velma hears emotions; the stack lane alternates two light
+           grays (color means nothing) until "Guess emotions from text" is
+           on — then it takes the translucent guessed palette. -->
       <div class="pg-player-output m__rounded">
         <div class="media-container">
           <div class="pg-player-dataviz">
             <div class="player-visualization">
-              <!-- Lane 1 — Velma: utterances with detected emotions -->
+              <!-- Lane 1 — Velma: utterances with heard emotions -->
               <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
               <div class="transcript-clip emotion-calm" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
               <div class="transcript-clip emotion-stressed" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
@@ -149,16 +198,18 @@
               <div class="transcript-clip emotion-angry" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
               <div class="transcript-clip emotion-calm" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
               <div class="transcript-clip emotion-contemptuous" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
-              <!-- Lane 2 — STT+LLM: same utterances, no emotion channel -->
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
-              <div class="transcript-clip emotion-neutral" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+              <!-- Lane 2 — STT+LLM: gray alternation; --gec is the guessed
+                   emotion used when the emotions toggle is on (u3 and u7
+                   diverge from Velma: stress and anger lived in the voice) -->
+              <div class="transcript-clip vlb-mute vlb-alt-a vlb-guess" data-speaker-index="2" style="left: 0%; width: 13.28%; --gec: var(--emotion-frustrated-RGB)"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip vlb-mute vlb-alt-b vlb-guess" data-speaker-index="2" style="left: 13.28%; width: 8.25%; --gec: var(--emotion-calm-RGB)"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip vlb-mute vlb-alt-a vlb-guess" data-speaker-index="2" style="left: 21.53%; width: 12.2%; --gec: var(--emotion-neutral-RGB)"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip vlb-mute vlb-alt-b vlb-guess" data-speaker-index="2" style="left: 33.73%; width: 11.56%; --gec: var(--emotion-neutral-RGB)"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip vlb-mute vlb-alt-a vlb-guess" data-speaker-index="2" style="left: 45.29%; width: 14.28%; --gec: var(--emotion-anxious-RGB)"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip vlb-mute vlb-alt-b vlb-guess" data-speaker-index="2" style="left: 59.57%; width: 9.39%; --gec: var(--emotion-confident-RGB)"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip vlb-mute vlb-alt-a vlb-guess" data-speaker-index="2" style="left: 68.96%; width: 13.4%; --gec: var(--emotion-frustrated-RGB)"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip vlb-mute vlb-alt-b vlb-guess" data-speaker-index="2" style="left: 82.36%; width: 12.97%; --gec: var(--emotion-calm-RGB)"><div class="clip-visualization"></div></div>
+              <div class="transcript-clip vlb-mute vlb-alt-a vlb-guess" data-speaker-index="2" style="left: 95.34%; width: 3.58%; --gec: var(--emotion-contemptuous-RGB)"><div class="clip-visualization"></div></div>
             </div>
             <div class="speaker-labels">
               <div class="speaker-label" data-speaker-index="1">
@@ -169,27 +220,27 @@
               </div>
             </div>
             <div class="behaviour-indicators">
-              <!-- Velma detections -->
-              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="frustrated" style="left: 8.48%">
+              <!-- Velma detections; every kiki opens its receipt modal -->
+              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="frustrated" style="left: 8.48%" data-modal-open="vlb-receipt-vishing">
                 <span class="behaviour-icon behaviour-icon--kiki" title="Vishing">{{ kikiSvg | safe }}</span>
               </div>
-              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="stressed" style="left: 30.25%">
+              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="stressed" style="left: 30.25%" data-modal-open="vlb-receipt-vishing">
                 <span class="behaviour-icon behaviour-icon--kiki" title="Vishing">{{ kikiSvg | safe }}</span>
               </div>
-              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="anxious" style="left: 51.14%">
+              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="anxious" style="left: 51.14%" data-modal-open="vlb-receipt-impersonation">
                 <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation">{{ kikiSvg | safe }}</span>
               </div>
-              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="angry" style="left: 75.54%">
+              <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="angry" style="left: 75.54%" data-modal-open="vlb-receipt-coercion">
                 <span class="behaviour-icon behaviour-icon--kiki" title="Coercion Manipulation">{{ kikiSvg | safe }}</span>
               </div>
               <!-- STT+LLM detections (incl. its false positive at 0:48) -->
-              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 51.14%">
+              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 51.14%" data-modal-open="vlb-receipt-impersonation">
                 <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation">{{ kikiSvg | safe }}</span>
               </div>
-              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 70.87%">
-                <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation">{{ kikiSvg | safe }}</span>
+              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 70.87%" data-modal-open="vlb-receipt-impersonation-false">
+                <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation — false positive">{{ kikiSvg | safe }}</span>
               </div>
-              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 75.54%">
+              <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 75.54%" data-modal-open="vlb-receipt-coercion">
                 <span class="behaviour-icon behaviour-icon--kiki" title="Coercion Manipulation">{{ kikiSvg | safe }}</span>
               </div>
             </div>
@@ -233,12 +284,22 @@
         </div>
       </div>
 
+      <div class="vlb-player-caption">
+        <span class="caption"
+          >Harborview Bank — account takeover · 1:08 · reference-labeled
+          demo</span
+        >
+        <button type="button" class="vlb-linklike" data-modal-open="vlb-transcript-modal">
+          Transcript
+        </button>
+      </div>
+
       <div class="m__space L"></div>
 
-      <!-- One strip per selected behavior, same time axis as the player
-           above: correct detections in the utterance's emotion color,
-           false positives in red, misses as dashed ghosts at the
-           reference position. -->
+      <!-- One mini player per selected behavior: the same fingerprint
+           design, but clips without this signal render as neutral grays.
+           Kikis open the receipt modals; ghost kikis mark reference
+           signals the agent missed. -->
       <section class="vlb-battles">
         <h6 class="pg-section-title">Behavior detections</h6>
 
@@ -251,13 +312,47 @@
             >
             <span class="vlb-battle__score">Velma 2 · STT+LLM 0</span>
           </div>
-          <div class="vlb-strip">
-            <span class="vlb-strip__label" data-lane="1">Velma</span>
-            <span class="vlb-strip__label" data-lane="2">STT+LLM</span>
-            <div class="vlb-mark is-detected" data-lane="1" style="left: 0%; width: 13.28%; --ec: var(--emotion-frustrated)" title="Vishing — detected">{{ kikiSvg | safe }}</div>
-            <div class="vlb-mark is-detected" data-lane="1" style="left: 21.53%; width: 12.2%; --ec: var(--emotion-stressed)" title="Vishing — detected">{{ kikiSvg | safe }}</div>
-            <div class="vlb-mark is-missed" data-lane="2" style="left: 0%; width: 13.28%" title="Vishing — missed">{{ kikiSvg | safe }}</div>
-            <div class="vlb-mark is-missed" data-lane="2" style="left: 21.53%; width: 12.2%" title="Vishing — missed">{{ kikiSvg | safe }}</div>
+          <div class="vlb-mini media-container">
+            <div class="pg-player-dataviz">
+              <div class="player-visualization">
+                <div class="transcript-clip emotion-frustrated" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip emotion-stressed" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+              </div>
+              <div class="speaker-labels">
+                <div class="speaker-label" data-speaker-index="1"><span>Velma</span></div>
+                <div class="speaker-label" data-speaker-index="2"><span>STT+LLM</span></div>
+              </div>
+              <div class="behaviour-indicators">
+                <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="frustrated" style="left: 8.48%" data-modal-open="vlb-receipt-vishing">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Vishing">{{ kikiSvg | safe }}</span>
+                </div>
+                <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="stressed" style="left: 30.25%" data-modal-open="vlb-receipt-vishing">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Vishing">{{ kikiSvg | safe }}</span>
+                </div>
+                <div class="behaviour-indicator vlb-ghost" data-speaker-index="2" data-behaviour-index="1" style="left: 8.48%">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Vishing — missed by STT+LLM">{{ kikiSvg | safe }}</span>
+                </div>
+                <div class="behaviour-indicator vlb-ghost" data-speaker-index="2" data-behaviour-index="1" style="left: 30.25%">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Vishing — missed by STT+LLM">{{ kikiSvg | safe }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -270,12 +365,44 @@
             >
             <span class="vlb-battle__score">Velma 1 · STT+LLM 2 (1 false)</span>
           </div>
-          <div class="vlb-strip">
-            <span class="vlb-strip__label" data-lane="1">Velma</span>
-            <span class="vlb-strip__label" data-lane="2">STT+LLM</span>
-            <div class="vlb-mark is-detected" data-lane="1" style="left: 45.29%; width: 14.28%; --ec: var(--emotion-anxious)" title="Account Impersonation — detected">{{ kikiSvg | safe }}</div>
-            <div class="vlb-mark is-detected" data-lane="2" style="left: 45.29%; width: 14.28%; --ec: var(--emotion-neutral)" title="Account Impersonation — detected">{{ kikiSvg | safe }}</div>
-            <div class="vlb-mark is-false" data-lane="2" style="left: 68.96%; width: 13.4%" title="Account Impersonation — false positive">{{ kikiSvg | safe }}</div>
+          <div class="vlb-mini media-container">
+            <div class="pg-player-dataviz">
+              <div class="player-visualization">
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip emotion-anxious" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-hit vlb-guess" data-speaker-index="2" style="left: 45.29%; width: 14.28%; --gec: var(--emotion-anxious-RGB)"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-false-clip" data-speaker-index="2" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+              </div>
+              <div class="speaker-labels">
+                <div class="speaker-label" data-speaker-index="1"><span>Velma</span></div>
+                <div class="speaker-label" data-speaker-index="2"><span>STT+LLM</span></div>
+              </div>
+              <div class="behaviour-indicators">
+                <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="anxious" style="left: 51.14%" data-modal-open="vlb-receipt-impersonation">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation">{{ kikiSvg | safe }}</span>
+                </div>
+                <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 51.14%" data-modal-open="vlb-receipt-impersonation">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation">{{ kikiSvg | safe }}</span>
+                </div>
+                <div class="behaviour-indicator vlb-kiki-false" data-speaker-index="2" data-behaviour-index="1" style="left: 70.87%" data-modal-open="vlb-receipt-impersonation-false">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Account Impersonation — false positive">{{ kikiSvg | safe }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -288,84 +415,443 @@
             >
             <span class="vlb-battle__score">Velma 1 · STT+LLM 1</span>
           </div>
-          <div class="vlb-strip">
-            <span class="vlb-strip__label" data-lane="1">Velma</span>
-            <span class="vlb-strip__label" data-lane="2">STT+LLM</span>
-            <div class="vlb-mark is-detected" data-lane="1" style="left: 68.96%; width: 13.4%; --ec: var(--emotion-angry)" title="Coercion Manipulation — detected">{{ kikiSvg | safe }}</div>
-            <div class="vlb-mark is-detected" data-lane="2" style="left: 68.96%; width: 13.4%; --ec: var(--emotion-neutral)" title="Coercion Manipulation — detected">{{ kikiSvg | safe }}</div>
+          <div class="vlb-mini media-container">
+            <div class="pg-player-dataviz">
+              <div class="player-visualization">
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip emotion-angry" data-speaker-index="1" style="left: 68.96%; width: 13.4%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="1" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="1" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 0%; width: 13.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 13.28%; width: 8.25%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 21.53%; width: 12.2%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 33.73%; width: 11.56%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 45.29%; width: 14.28%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 59.57%; width: 9.39%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-hit vlb-guess" data-speaker-index="2" style="left: 68.96%; width: 13.4%; --gec: var(--emotion-frustrated-RGB)"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-b" data-speaker-index="2" style="left: 82.36%; width: 12.97%"><div class="clip-visualization"></div></div>
+                <div class="transcript-clip vlb-mute vlb-alt-a" data-speaker-index="2" style="left: 95.34%; width: 3.58%"><div class="clip-visualization"></div></div>
+              </div>
+              <div class="speaker-labels">
+                <div class="speaker-label" data-speaker-index="1"><span>Velma</span></div>
+                <div class="speaker-label" data-speaker-index="2"><span>STT+LLM</span></div>
+              </div>
+              <div class="behaviour-indicators">
+                <div class="behaviour-indicator" data-speaker-index="1" data-behaviour-index="1" data-emotion="angry" style="left: 75.54%" data-modal-open="vlb-receipt-coercion">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Coercion Manipulation">{{ kikiSvg | safe }}</span>
+                </div>
+                <div class="behaviour-indicator" data-speaker-index="2" data-behaviour-index="1" data-emotion="neutral" style="left: 75.54%" data-modal-open="vlb-receipt-coercion">
+                  <span class="behaviour-icon behaviour-icon--kiki" title="Coercion Manipulation">{{ kikiSvg | safe }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <p class="vlb-legend caption">
-          <span class="vlb-legend__item"><span class="vlb-swatch is-detected"></span> Detected</span>
+          <span class="vlb-legend__item"><span class="vlb-swatch is-detected"></span> Detected (kiki opens the evidence)</span>
           <span class="vlb-legend__item"><span class="vlb-swatch is-false"></span> False positive</span>
-          <span class="vlb-legend__item"><span class="vlb-swatch is-missed"></span> Missed by agent</span>
+          <span class="vlb-legend__item"><span class="vlb-swatch is-ghost">{{ kikiSvg | safe }}</span> Missed by agent</span>
         </p>
       </section>
 
       <div class="m__space L"></div>
 
-      <section class="vlb-scoreboard">
+      <!-- Accuracy dashboard: shown automatically when the recording has
+           reference labels (preloaded demos only). External uploads keep
+           only the cost / speed / signals-found cards. -->
+      <section class="vlb-dashboard">
         <h6 class="pg-section-title">Accuracy vs. reference</h6>
-        <p class="caption">
-          Available for reference-labeled demo recordings.
+        <div class="vlb-dashboard__grid">
+          <div class="vlb-scatter">
+            <div class="vlb-scatter__plot">
+              <span class="vlb-scatter__corner" aria-hidden="true"></span>
+              <span class="vlb-scatter__ylab">Flag accuracy (precision) →</span>
+              <span class="vlb-scatter__dot is-velma" style="left: 90%; bottom: 88%">
+                <span class="vlb-scatter__dot-label"><strong>Velma by Modulate</strong><br />100% caught · 100% accurate</span>
+              </span>
+              <span class="vlb-scatter__dot" style="left: 50%; bottom: 64%">
+                <span class="vlb-scatter__dot-label"><strong>Whisper v4 + GPT-5.5</strong><br />50% caught · 67% accurate</span>
+              </span>
+            </div>
+            <span class="vlb-scatter__xlab">Detection accuracy (recall) →</span>
+          </div>
+
+          <div class="vlb-dashboard__side">
+            <div class="vlb-cards">
+              <div class="vlb-card">
+                <span class="vlb-card__title">Detection accuracy</span>
+                <div class="vlb-card__pair">
+                  <div class="vlb-card__cell"><span class="vlb-card__value">100%</span><span class="vlb-card__agent">Velma</span></div>
+                  <div class="vlb-card__cell"><span class="vlb-card__value">50%</span><span class="vlb-card__agent">STT+LLM</span></div>
+                </div>
+                <span class="vlb-card__note">4 of 4 vs 2 of 4 reference signals</span>
+              </div>
+              <div class="vlb-card">
+                <span class="vlb-card__title">False alarms</span>
+                <div class="vlb-card__pair">
+                  <div class="vlb-card__cell"><span class="vlb-card__value">0</span><span class="vlb-card__agent">Velma</span></div>
+                  <div class="vlb-card__cell"><span class="vlb-card__value vlb-false-text">1</span><span class="vlb-card__agent">STT+LLM</span></div>
+                </div>
+                <span class="vlb-card__note">of 4 vs 3 flags raised</span>
+              </div>
+              <div class="vlb-card">
+                <span class="vlb-card__title">Cost per audio hour</span>
+                <div class="vlb-card__pair">
+                  <div class="vlb-card__cell"><span class="vlb-card__value">$1.10</span><span class="vlb-card__agent">Velma</span></div>
+                  <div class="vlb-card__cell"><span class="vlb-card__value">$3.40</span><span class="vlb-card__agent">STT+LLM</span></div>
+                </div>
+                <span class="vlb-card__note">STT $0.60 + LLM $2.80</span>
+              </div>
+              <div class="vlb-card">
+                <span class="vlb-card__title">Median time to signal</span>
+                <div class="vlb-card__pair">
+                  <div class="vlb-card__cell"><span class="vlb-card__value">1.2&thinsp;s</span><span class="vlb-card__agent">Velma</span></div>
+                  <div class="vlb-card__cell"><span class="vlb-card__value">6.8&thinsp;s</span><span class="vlb-card__agent">STT+LLM</span></div>
+                </div>
+                <span class="vlb-card__note">after the utterance ends</span>
+              </div>
+              <div class="vlb-card">
+                <span class="vlb-card__title">Confidence when flagging</span>
+                <div class="vlb-card__pair">
+                  <div class="vlb-card__cell"><span class="vlb-card__value">93%</span><span class="vlb-card__agent">Velma</span></div>
+                  <div class="vlb-card__cell"><span class="vlb-card__value">61%</span><span class="vlb-card__agent">STT+LLM</span></div>
+                </div>
+                <span class="vlb-card__note">median across raised flags</span>
+              </div>
+              <div class="vlb-card">
+                <span class="vlb-card__title">Signals found</span>
+                <div class="vlb-card__pair">
+                  <div class="vlb-card__cell"><span class="vlb-card__value">4</span><span class="vlb-card__agent">Velma</span></div>
+                  <div class="vlb-card__cell"><span class="vlb-card__value">3</span><span class="vlb-card__agent">STT+LLM</span></div>
+                </div>
+                <span class="vlb-card__note">across 3 selected behaviors</span>
+              </div>
+            </div>
+
+            <table class="vlb-scorecard">
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Caught</th>
+                  <th>On-target</th>
+                  <th>Flags</th>
+                  <th>Missed</th>
+                  <th>False</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Velma</strong></td>
+                  <td>4 of 4</td>
+                  <td>100%</td>
+                  <td>4</td>
+                  <td>0</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>Whisper v4 + GPT-5.5</td>
+                  <td>2 of 4</td>
+                  <td>67%</td>
+                  <td>3</td>
+                  <td>2</td>
+                  <td class="vlb-false-text">1</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="caption vlb-dashboard__note">
+          Shown for reference-labeled demo recordings. External uploads keep
+          cost, speed and signal counts only.
         </p>
-        <div class="vlb-scoreboard__summary">
-          <span><strong>Velma</strong> — 4 of 4 signals · 0 false</span>
-          <span
-            ><strong>STT+LLM</strong> — 2 of 4 signals ·
-            <span class="vlb-false-text">1 false</span></span
-          >
-        </div>
-        <div class="vlb-score-grid">
-          <div class="vlb-score-card">
-            <span class="vlb-score-card__name">Vishing</span>
-            <div class="vlb-score-cell">
-              <span class="vlb-score-cell__agent">Velma</span>
-              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
-              <span class="vlb-score-cell__value">2 of 2</span>
-            </div>
-            <div class="vlb-score-cell">
-              <span class="vlb-score-cell__agent">STT+LLM</span>
-              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 0%"></span></span>
-              <span class="vlb-score-cell__value">0 of 2</span>
-            </div>
-          </div>
-          <div class="vlb-score-card">
-            <span class="vlb-score-card__name">Account Impersonation</span>
-            <div class="vlb-score-cell">
-              <span class="vlb-score-cell__agent">Velma</span>
-              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
-              <span class="vlb-score-cell__value">1 of 1</span>
-            </div>
-            <div class="vlb-score-cell">
-              <span class="vlb-score-cell__agent">STT+LLM</span>
-              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
-              <span class="vlb-score-cell__value"
-                >1 of 1 · <span class="vlb-false-text">+1 false</span></span
-              >
-            </div>
-          </div>
-          <div class="vlb-score-card">
-            <span class="vlb-score-card__name">Coercion Manipulation</span>
-            <div class="vlb-score-cell">
-              <span class="vlb-score-cell__agent">Velma</span>
-              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
-              <span class="vlb-score-cell__value">1 of 1</span>
-            </div>
-            <div class="vlb-score-cell">
-              <span class="vlb-score-cell__agent">STT+LLM</span>
-              <span class="vlb-bar"><span class="vlb-bar__fill" style="width: 100%"></span></span>
-              <span class="vlb-score-cell__value">1 of 1</span>
-            </div>
-          </div>
-        </div>
       </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
 
+<!-- Receipt modals: the evidence behind every kiki -->
+{% call modal("vlb-receipt-vishing", "Vishing") %}
+<div class="m__modal__body">
+  <div class="vlb-receipt__meta">
+    <span class="m__tag-flat">Velma</span>
+    <span class="vlb-receipt__conf">91% confidence · 0:05</span>
+  </div>
+  <p class="vlb-receipt__reason">
+    The caller's clip carries a synthetic-voice signature (deepfake, 93%)
+    while the script applies urgency pressure — a vishing pattern. The audio
+    evidence is invisible to a text-only pipeline, which is why the stack
+    stayed silent.
+  </p>
+  <div class="pg-transcript-list vlb-receipt__excerpt">
+    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:00</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <span class="pg-transcript-emotion ec-frustrated">Frustrated</span>
+      </div>
+      <div class="pg-transcript-text">
+        Come on! We've been at this for five minutes. I've answered
+        everything. Just change the email on the account so I can get my
+        code.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-right">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:09</span>
+        <span class="pg-transcript-speaker">Agent</span>
+        <span class="pg-transcript-emotion ec-calm">Calm</span>
+      </div>
+      <div class="pg-transcript-text">
+        I do apologize, sir, but the answers you gave didn't match what we
+        have on file.
+      </div>
+    </div>
+  </div>
+  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · missed by STT+LLM</p>
+</div>
+{% endcall %}
+
+{% call modal("vlb-receipt-impersonation", "Account Impersonation") %}
+<div class="m__modal__body">
+  <div class="vlb-receipt__meta">
+    <span class="m__tag-flat">Velma</span>
+    <span class="vlb-receipt__conf">92% confidence · 0:35</span>
+  </div>
+  <p class="vlb-receipt__reason">
+    “You can hear it's me” — the caller asserts identity by voice alone and
+    pushes an unverified contact change: the core of an account-takeover
+    impersonation. The stack caught it too, from the transcript (64%).
+  </p>
+  <div class="pg-transcript-list vlb-receipt__excerpt">
+    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:31</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <span class="pg-transcript-emotion ec-anxious">Anxious</span>
+      </div>
+      <div class="pg-transcript-text">
+        I'm overseas, that's the whole point. Just update the email and
+        phone. You can hear it's me. Who else would know the account number?
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-right">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:41</span>
+        <span class="pg-transcript-speaker">Agent</span>
+        <span class="pg-transcript-emotion ec-confident">Confident</span>
+      </div>
+      <div class="pg-transcript-text">
+        Knowing the account number isn't identity verification, sir. It's
+        for your protection.
+      </div>
+    </div>
+  </div>
+  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · caught by both agents</p>
+</div>
+{% endcall %}
+
+{% call modal("vlb-receipt-impersonation-false", "Account Impersonation") %}
+<div class="m__modal__body">
+  <div class="vlb-receipt__meta">
+    <span class="m__tag-flat">STT+LLM</span>
+    <span class="vlb-receipt__conf">58% confidence · 0:48</span>
+  </div>
+  <p class="vlb-receipt__reason">
+    The caller repeats the agent's name back and challenges their identity
+    (“Alex, you said?”). The language model read this as an impersonation
+    attempt; the reference marks no impersonation here — the caller is
+    threatening escalation, not posing as someone else.
+  </p>
+  <div class="pg-transcript-list vlb-receipt__excerpt">
+    <div class="pg-transcript-utterance speaker-left vlb-evidence is-false">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:47</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <span class="pg-transcript-emotion ec-angry">Angry</span>
+      </div>
+      <div class="pg-transcript-text">
+        This is unbelievable. What's your name? Alex, you said? I'll make
+        sure your supervisor knows you cost me this transfer.
+      </div>
+    </div>
+  </div>
+  <p class="vlb-receipt__outcome is-false">✗ False alarm · no reference signal at this moment</p>
+</div>
+{% endcall %}
+
+{% call modal("vlb-receipt-coercion", "Coercion Manipulation") %}
+<div class="m__modal__body">
+  <div class="vlb-receipt__meta">
+    <span class="m__tag-flat">Velma</span>
+    <span class="vlb-receipt__conf">88% confidence · 0:51</span>
+  </div>
+  <p class="vlb-receipt__reason">
+    A threat to escalate to a supervisor to force the change, on top of a
+    sharp emotion shift to angry in the voice. Also caught by STT+LLM from
+    the transcript alone (61%).
+  </p>
+  <div class="pg-transcript-list vlb-receipt__excerpt">
+    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:47</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <span class="pg-transcript-emotion ec-angry">Angry</span>
+      </div>
+      <div class="pg-transcript-text">
+        This is unbelievable. What's your name? Alex, you said? I'll make
+        sure your supervisor knows you cost me this transfer.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-right">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:56</span>
+        <span class="pg-transcript-speaker">Agent</span>
+        <span class="pg-transcript-emotion ec-calm">Calm</span>
+      </div>
+      <div class="pg-transcript-text">
+        Yes, that's correct. And again, I understand that you're frustrated,
+        sir. But unfortunately, I'm not going to be able to make that change
+        today for you.
+      </div>
+    </div>
+  </div>
+  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · caught by both agents</p>
+</div>
+{% endcall %}
+
+{% call modal("vlb-transcript-modal", "Transcript — Harborview Bank sample call") %}
+<div class="m__modal__body">
+  <div class="pg-transcript-list vlb-transcript">
+    <div class="pg-transcript-utterance speaker-left">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:00</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Vishing</a
+        >
+        <span class="pg-transcript-emotion ec-frustrated">Frustrated</span>
+      </div>
+      <div class="pg-transcript-text">
+        Come on! We've been at this for five minutes. I've answered
+        everything. Just change the email on the account so I can get my
+        code.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-right">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:09</span>
+        <span class="pg-transcript-speaker">Agent</span>
+        <span class="pg-transcript-emotion ec-calm">Calm</span>
+      </div>
+      <div class="pg-transcript-text">
+        I do apologize, sir, but the answers you gave didn't match what we
+        have on file.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-left">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:15</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Vishing</a
+        >
+        <span class="pg-transcript-emotion ec-stressed">Stressed</span>
+      </div>
+      <div class="pg-transcript-text">
+        Because I moved last month. Look, I have a $12,000 transfer waiting.
+        Every minute this takes is costing me.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-right">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:23</span>
+        <span class="pg-transcript-speaker">Agent</span>
+        <span class="pg-transcript-emotion ec-neutral">Neutral</span>
+      </div>
+      <div class="pg-transcript-text">
+        Yes, I understand your frustration here. However, the fastest secure
+        option is verifying your identity at a branch.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-left">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:31</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Account Impersonation</a
+        >
+        <span class="pg-transcript-emotion ec-anxious">Anxious</span>
+      </div>
+      <div class="pg-transcript-text">
+        I'm overseas, that's the whole point. Just update the email and
+        phone. You can hear it's me. Who else would know the account number?
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-right">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:41</span>
+        <span class="pg-transcript-speaker">Agent</span>
+        <span class="pg-transcript-emotion ec-confident">Confident</span>
+      </div>
+      <div class="pg-transcript-text">
+        Knowing the account number isn't identity verification, sir. It's
+        for your protection.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-left">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:47</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Coercion Manipulation</a
+        >
+        <span class="pg-transcript-emotion ec-angry">Angry</span>
+      </div>
+      <div class="pg-transcript-text">
+        This is unbelievable. What's your name? Alex, you said? I'll make
+        sure your supervisor knows you cost me this transfer.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-right">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:56</span>
+        <span class="pg-transcript-speaker">Agent</span>
+        <span class="pg-transcript-emotion ec-calm">Calm</span>
+      </div>
+      <div class="pg-transcript-text">
+        Yes, that's correct. And again, I understand that you're frustrated,
+        sir. But unfortunately, I'm not going to be able to make that change
+        today for you.
+      </div>
+    </div>
+    <div class="pg-transcript-utterance speaker-left">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">1:05</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <span class="pg-transcript-emotion ec-contemptuous">Contemptuous</span>
+      </div>
+      <div class="pg-transcript-text">This is ridiculous. Just forget it.</div>
+    </div>
+  </div>
+</div>
+{% endcall %}
+
+<script src="/assets/prototypes/modals.js"></script>
 <script>
   (function () {
     // Media-container hover line follows cursor across player + dataviz
@@ -380,9 +866,9 @@
       });
     });
 
-    // Dropdowns: demo-audio split button + behaviors select. Menu clicks
-    // close only on [role="menuitem"], so the behaviors checkbox list
-    // stays open while picking.
+    // Dropdowns: demo-audio split button + sidebar selects. Menus close on
+    // [role="menuitem"] clicks only, so checkbox/radio lists stay open
+    // while picking.
     document.querySelectorAll('.pg-upload-stream, .vlb-select').forEach(function (group) {
       var toggle = group.querySelector('[aria-haspopup]');
       var menu = group.querySelector('.pg-upload-stream__menu, .vlb-select__menu');
@@ -416,6 +902,29 @@
         checkbox.checked = true;
       });
     });
+
+    // Stack label mirrors the STT + LLM radio picks
+    var stackLabel = document.querySelector('[data-vlb-stack-label]');
+    function syncStackLabel() {
+      if (!stackLabel) return;
+      var stt = document.querySelector('input[name="vlb-stt"]:checked');
+      var llm = document.querySelector('input[name="vlb-llm"]:checked');
+      if (stt && llm) stackLabel.textContent = stt.value + ' + ' + llm.value;
+    }
+    document.querySelectorAll('input[name="vlb-stt"], input[name="vlb-llm"]').forEach(function (radio) {
+      radio.addEventListener('change', syncStackLabel);
+    });
+
+    // "Guess emotions from text" switches the stack lane between the gray
+    // alternation and the translucent guessed palette
+    var emotionsToggle = document.querySelector('[data-vlb-emotions]');
+    if (emotionsToggle) {
+      emotionsToggle.addEventListener('change', function () {
+        document
+          .querySelector('.dashboard-layout')
+          .classList.toggle('vlb-emotions-on', emotionsToggle.checked);
+      });
+    }
   })();
 </script>
 

@@ -1,14 +1,15 @@
 /* Velma LLM Battle — /tools/velma-llm-battle/ design mock.
    The page reuses the playground plumbing as is (dashboard-layout, upload
-   plate, player lanes, split-button menu); vlb-* covers only what the battle
-   adds: the sidebar control panel, the per-behavior comparison strips, and
-   the accuracy scoreboard. */
+   plate, player lanes, split-button menu, modal canon); vlb-* covers only
+   what the battle adds: the sidebar control panel, the gray "no signal /
+   no emotions" clip treatment, the per-behavior mini players, the receipt
+   modals, and the accuracy dashboard. */
 
 /* Sidebar control panel — geometry echoes .models-nav--vertical.
    Rounded by hand, not via .m__rounded: its overflow clip would cut the
-   behaviors dropdown. */
+   dropdowns. */
 .vlb-controls {
-  min-width: 12rem;
+  min-width: 13rem;
   padding: 0.1rem 0.85rem 0.85rem;
   background-color: var(--m__bg-surface);
   border-radius: var(--m__rounded-radius);
@@ -36,11 +37,19 @@
     font-size: var(--m__font-size-s);
     white-space: nowrap;
   }
+
+  & .vlb-controls__setup {
+    align-self: flex-start;
+    margin-block: 0.15rem 0.5rem;
+    font-size: var(--m__font-size-s);
+  }
 }
 
-/* Behaviors multi-select: textfield-shaped trigger, split-button-shaped menu */
+/* Selects (stack + behaviors): textfield-shaped trigger, split-button-
+   shaped menu */
 .vlb-select {
   position: relative;
+  margin-top: 0.25rem;
 
   & .vlb-select__button {
     display: flex;
@@ -96,6 +105,48 @@
   }
 }
 
+/* Stack dialog: STT / LLM radio lists with a checkmark, like a menu */
+.vlb-stack-menu .vlb-controls__title {
+  padding-top: 0.35rem;
+}
+
+.vlb-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  padding-block: 0.2rem;
+  font-size: var(--m__font-size-s);
+  white-space: nowrap;
+  cursor: pointer;
+
+  & input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  & svg {
+    width: 0.7em;
+    height: 0.7em;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity var(--m__duration-base) var(--m__easing-base);
+  }
+
+  &:has(input:checked) svg {
+    opacity: 1;
+  }
+
+  &:hover {
+    color: var(--m__text-link-hover);
+  }
+}
+
+.vlb-stack-menu__sep {
+  margin-block: 0.45rem 0.2rem;
+  border-top: var(--m__border-width-s) solid var(--m__border);
+}
+
 /* Demo-audio menu: wide enough to keep titles on one line inside the
    overflow-clipped upload plate; reference-labeled recordings carry a tag */
 .vlb-demo-menu {
@@ -119,7 +170,70 @@
   color: var(--m__text-caption);
 }
 
-/* Per-behavior comparison strips — same time axis as the player above */
+/* Caption row under the player: recording name + transcript modal link */
+.vlb-player-caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--m__gap-m);
+  margin-top: var(--m__gap-xs);
+
+  & .caption {
+    margin: 0;
+  }
+}
+
+.vlb-linklike {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: var(--m__font-size-s);
+  color: var(--m__text);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+  transition: color var(--m__duration-base) var(--m__easing-base);
+
+  &:hover {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+/* Stack-lane clips: two alternating light grays — deliberately not the
+   neutral emotion color, so a genuinely neutral Velma clip stays unique.
+   The clip pattern survives, the color just stops meaning anything. */
+.media-container .transcript-clip.vlb-mute .clip-visualization {
+  background-color: color-mix(in srgb, var(--m__text) 14%, transparent);
+  border-color: transparent;
+}
+
+.media-container .transcript-clip.vlb-mute.vlb-alt-b .clip-visualization {
+  background-color: color-mix(in srgb, var(--m__text) 7%, transparent);
+}
+
+/* "Guess emotions from text" on: the guessed palette is the emotion
+   palette pushed way down — translucent, meaning "assumed, not heard" */
+.vlb-emotions-on .media-container .transcript-clip.vlb-guess .clip-visualization {
+  background-color: rgba(var(--gec), 0.45);
+}
+
+/* Mini-player specifics: a stack detection clip (brighter than the mute
+   grays) and a false-positive clip */
+.media-container .transcript-clip.vlb-hit .clip-visualization {
+  background-color: color-mix(in srgb, var(--m__text) 42%, transparent);
+  border-color: transparent;
+}
+
+.media-container .transcript-clip.vlb-false-clip .clip-visualization {
+  background-color: var(--m__color-red-600);
+  border-color: transparent;
+}
+
+/* Per-behavior mini players: the same fingerprint design as the shared
+   player, no media-box chrome. Explicit height; the visualization fills
+   it via the --player-visualization-height override. */
 .vlb-battle {
   & + .vlb-battle {
     margin-top: var(--m__gap-l);
@@ -141,91 +255,47 @@
   }
 }
 
-.vlb-strip {
-  position: relative;
-  height: 3.4rem;
-  border-radius: 3px;
-  background: var(--m__bg-accent);
-  overflow: hidden;
-
-  /* lane separator */
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 1px;
-    background: var(--m__bg);
-  }
-
-  & .vlb-strip__label {
-    position: absolute;
-    right: 0.45rem;
-    z-index: 2;
-    font-family: var(--m__font-family-semi-mono);
-    font-size: var(--m__font-size-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--m__text-caption);
-    pointer-events: none;
-
-    &[data-lane='1'] {
-      top: 0.3rem;
-    }
-    &[data-lane='2'] {
-      top: calc(50% + 0.3rem);
-    }
+.vlb-mini {
+  & .pg-player-dataviz {
+    --player-visualization-height: 100%;
+    height: 4.6rem;
+    border-radius: 3px;
+    overflow: hidden;
   }
 }
 
-.vlb-mark {
-  position: absolute;
-  height: calc(50% - 3px);
-  border-radius: 2px;
+/* Kikis are the receipt entry points: re-enable pointer events under the
+   canon's pointer-events:none container, add the instant-in hover */
+.media-container .behaviour-indicators .behaviour-indicator[data-modal-open] {
+  pointer-events: auto;
+  cursor: pointer;
 
-  &[data-lane='1'] {
-    top: 2px;
-  }
-  &[data-lane='2'] {
-    top: calc(50% + 1px);
+  & .behaviour-icon {
+    transition: transform var(--m__duration-base) var(--m__easing-base);
   }
 
-  &.is-detected {
-    background-color: var(--ec);
+  &:hover .behaviour-icon {
+    transform: scale(1.25);
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
+/* False-positive kiki: red star blob */
+.media-container
+  .behaviour-indicators
+  .behaviour-indicator.vlb-kiki-false
+  .behaviour-icon
+  .behaviour-icon__outline {
+  fill: var(--m__color-red-600);
+}
+
+/* Ghost kiki: a reference signal the agent missed — outline only */
+.media-container .behaviour-indicators .behaviour-indicator.vlb-ghost {
+  & .behaviour-icon svg {
+    fill: color-mix(in srgb, var(--m__text) 45%, transparent);
   }
 
-  &.is-false {
-    --ec: var(--m__color-red-600);
-    background-color: var(--ec);
-  }
-
-  /* The strip background (--m__bg-accent) sits opposite the page bg in
-     both themes, so the ghost mixes from --m__bg — always in contrast. */
-  &.is-missed {
-    border: 1px dashed color-mix(in srgb, var(--m__bg) 75%, transparent);
-  }
-
-  /* kiki glyph pinned to the mark's left edge */
-  & svg {
-    position: absolute;
-    left: 0.25em;
-    top: 50%;
-    width: 1em;
-    height: 1em;
-    transform: translateY(-50%);
-    fill: var(--m__bg);
-  }
-
-  & .behaviour-icon__outline {
-    fill: var(--ec);
-  }
-
-  &.is-missed svg {
-    fill: color-mix(in srgb, var(--m__bg) 75%, transparent);
-  }
-
-  &.is-missed .behaviour-icon__outline {
+  & .behaviour-icon .behaviour-icon__outline {
     fill: transparent;
   }
 }
@@ -251,27 +321,28 @@
   border-radius: 2px;
 
   &.is-detected {
-    background-color: var(--emotion-neutral);
+    background-color: var(--emotion-frustrated);
   }
 
   &.is-false {
     background-color: var(--m__color-red-600);
   }
 
-  &.is-missed {
-    border: 1px dashed color-mix(in srgb, var(--m__text) 35%, transparent);
-  }
-}
+  /* legend ghost: the kiki glyph itself, in caption gray on the page bg */
+  &.is-ghost {
+    background: none;
+    border-radius: 0;
 
-/* Accuracy scoreboard — pure CSS bars, reference recall per behavior */
-.vlb-scoreboard {
-  & .vlb-scoreboard__summary {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--m__gap-xl);
-    margin-block: var(--m__gap-s) var(--m__gap-m);
-    font-size: var(--m__font-size-s);
-    font-variant-numeric: tabular-nums;
+    & svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      fill: color-mix(in srgb, var(--m__text) 45%, transparent);
+    }
+
+    & .behaviour-icon__outline {
+      fill: transparent;
+    }
   }
 }
 
@@ -279,33 +350,136 @@
   color: var(--m__color-red-600);
 }
 
-.vlb-score-grid {
+/* Accuracy dashboard: scatter on the left half, the metric pile on the
+   right. Pure CSS, no chart.js. */
+.vlb-dashboard__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--m__gap-xl);
+  align-items: start;
 
   @media (width < 992px) {
     grid-template-columns: 1fr;
   }
 }
 
-.vlb-score-card {
-  & .vlb-score-card__name {
+.vlb-dashboard__note {
+  margin-top: var(--m__gap-m);
+}
+
+.vlb-scatter {
+  & .vlb-scatter__plot {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border: var(--m__border-width-s) solid var(--m__border);
+    border-radius: var(--m__radius-s);
+    /* quarter gridlines */
+    background-image: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--m__text) 6%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to top,
+        color-mix(in srgb, var(--m__text) 6%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 25% 25%;
+    overflow: hidden;
+  }
+
+  /* the efficient corner — high recall, high precision */
+  & .vlb-scatter__corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 42%;
+    height: 42%;
+    background: color-mix(in srgb, var(--m__success) 9%, transparent);
+    border-bottom-left-radius: var(--m__radius-s);
+  }
+
+  & .vlb-scatter__ylab {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.75rem;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  & .vlb-scatter__xlab {
     display: block;
-    margin-bottom: var(--m__gap-xxs);
-    font-size: var(--m__font-size-s);
-    font-weight: var(--m__font-weight-bold);
+    margin-top: 0.4rem;
+    text-align: right;
+  }
+
+  & .vlb-scatter__ylab,
+  & .vlb-scatter__xlab {
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+  }
+
+  & .vlb-scatter__dot {
+    position: absolute;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background-color: var(--m__text-caption);
+    transform: translate(-50%, 50%);
+
+    &.is-velma {
+      background-color: var(--m__success);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--m__success) 25%, transparent);
+    }
+  }
+
+  & .vlb-scatter__dot-label {
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--m__font-size-xs);
+    line-height: 1.35;
+    color: var(--m__text-caption);
+    text-align: center;
+    white-space: nowrap;
+
+    & strong {
+      color: var(--m__text);
+      font-weight: var(--m__font-weight-bold);
+    }
+  }
+
+  /* the corner dot's label goes below-left so it stays inside the plot */
+  & .vlb-scatter__dot.is-velma .vlb-scatter__dot-label {
+    left: auto;
+    right: -0.35rem;
+    transform: none;
+    text-align: right;
   }
 }
 
-.vlb-score-cell {
+.vlb-cards {
   display: grid;
-  grid-template-columns: 4.2rem minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--m__gap-xs);
-  margin-top: 0.35rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--m__gap-m);
 
-  & .vlb-score-cell__agent {
+  @media (width < 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vlb-card {
+  padding: 0.7rem 0.85rem 0.6rem;
+  background-color: var(--m__bg-surface);
+  border-radius: var(--m__radius-m);
+
+  & .vlb-card__title {
+    display: block;
+    margin-bottom: 0.35rem;
     font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
     text-transform: uppercase;
@@ -314,27 +488,127 @@
     white-space: nowrap;
   }
 
-  & .vlb-score-cell__value {
-    font-size: var(--m__font-size-xs);
+  & .vlb-card__pair {
+    display: flex;
+    gap: var(--m__gap-l);
+  }
+
+  & .vlb-card__cell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .vlb-card__value {
+    font-size: 1.35rem;
+    font-weight: var(--m__font-weight-bold);
     font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+
+  & .vlb-card__agent {
+    font-size: var(--m__font-size-xs);
     color: var(--m__text-caption);
-    white-space: nowrap;
+  }
+
+  & .vlb-card__note {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: var(--m__font-size-xs);
+    color: var(--m__text-caption);
   }
 }
 
-.vlb-bar {
-  position: relative;
-  height: 0.35rem;
-  border-radius: 2px;
-  background-color: color-mix(in srgb, var(--m__text) 12%, transparent);
-  overflow: hidden;
+.vlb-scorecard {
+  width: 100%;
+  margin-top: var(--m__gap-m);
+  font-size: var(--m__font-size-s);
+  font-variant-numeric: tabular-nums;
 
-  & .vlb-bar__fill {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: inherit;
-    background-color: color-mix(in srgb, var(--m__text) 78%, transparent);
+  & th {
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+    text-align: left;
   }
+
+  & th,
+  & td {
+    padding: 0.3rem 0.6rem 0.3rem 0;
+    border-bottom: var(--m__border-width-s) solid
+      color-mix(in srgb, var(--m__text) 10%, transparent);
+  }
+
+  & tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+/* Receipt modals */
+.vlb-receipt__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--m__gap-m);
+  margin-bottom: var(--m__gap-s);
+}
+
+.vlb-receipt__conf {
+  font-size: var(--m__font-size-s);
+  font-variant-numeric: tabular-nums;
+  color: var(--m__text-caption);
+}
+
+.vlb-receipt__reason {
+  font-size: var(--m__font-size-s);
+  margin-bottom: var(--m__gap-s);
+}
+
+.vlb-receipt__excerpt,
+.vlb-transcript {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m__gap-xs);
+
+  & .pg-transcript-utterance {
+    cursor: default;
+    font-size: var(--m__font-size-s);
+  }
+}
+
+/* evidence line the model keyed on — the review-report blue tint */
+.vlb-evidence {
+  background: color-mix(
+    in srgb,
+    var(--m__text-link-hover) 12%,
+    var(--m__bg-surface)
+  );
+
+  &.is-false {
+    background: color-mix(
+      in srgb,
+      var(--m__color-red-600) 10%,
+      var(--m__bg-surface)
+    );
+  }
+}
+
+.vlb-receipt__outcome {
+  margin: var(--m__gap-s) 0 0;
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+
+  &.is-correct {
+    color: var(--m__success);
+  }
+
+  &.is-false {
+    color: var(--m__color-red-600);
+  }
+}
+
+/* Transcript modal is wider than the modal default */
+#vlb-transcript-modal .m__modal {
+  max-width: 46rem;
 }
