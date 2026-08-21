@@ -77,26 +77,32 @@
 
         <div class="vlb-controls__group">
           <span class="vlb-controls__title">STT + LLM</span>
+          <!-- Label-less selects follow the canon: no __control wrapper,
+               the select and chevron sit directly in .m__select -->
           <div class="m__select S vlb-controls__select">
-            <div class="m__select__control">
-              <select data-vlb-stt aria-label="STT model">
-                <option selected>Whisper v4</option>
-                <option>Deepgram Nova-3</option>
-                <option>AssemblyAI Universal</option>
-              </select>
-              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-            </div>
+            <select data-vlb-stt aria-label="STT model">
+              <option selected>Whisper v4</option>
+              <option>Deepgram Nova-3</option>
+              <option>AssemblyAI Universal</option>
+            </select>
+            <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
           </div>
           <div class="m__select S vlb-controls__select">
-            <div class="m__select__control">
-              <select data-vlb-llm aria-label="LLM model">
-                <option selected>GPT-5.5</option>
-                <option>Claude Opus 4.8</option>
-                <option>Grok 4.3</option>
-              </select>
-              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-            </div>
+            <select data-vlb-llm aria-label="LLM model">
+              <option selected>GPT-5.5</option>
+              <option>Claude Opus 4.8</option>
+              <option>Grok 4.3</option>
+            </select>
+            <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
           </div>
+          <div class="m__space XXS"></div>
+          <button
+            type="button"
+            class="m__button-secondary-outline S vlb-controls__prompt-btn"
+            data-modal-open="vlb-prompt-modal">
+            System prompt
+          </button>
+          <div class="m__space XXS"></div>
           <label class="m__checkbox-secondary vlb-controls__check">
             <input type="checkbox" data-vlb-emotions /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
             Guess emotions
@@ -110,6 +116,7 @@
         {% set uploadPlateId = 'vlb-upload-plate' %}
         {% set uploadPlateClass = 'vlb-plate' %}
         {% set uploadPlateState = 'uploaded' %}
+        {% set uploadPlateShowMeta = false %}
         {% set uploadPlateCollapsedLabel = 'New analysis' %}
         {% set uploadPlateStateInputName = 'vlb-plate-state' %}
         {% set uploadPlateAnalyzingContent %}
@@ -155,6 +162,9 @@
               aria-label="Choose demo recording">
               <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
             </button>
+            <!-- Three items: the menu opens inside the overflow-clipped
+                 plate, and at the canonical plate height three is what
+                 reliably fits -->
             <div class="pg-upload-stream__menu vlb-demo-menu" role="menu" hidden>
               <button type="button" role="menuitem">
                 Harborview Bank — account takeover
@@ -163,13 +173,7 @@
                 Elderly caller needs login for surgery payment
               </button>
               <button type="button" role="menuitem">
-                Insurance claim denied after a clinic mix-up
-              </button>
-              <button type="button" role="menuitem">
                 Furious subscriber cancels over double billing
-              </button>
-              <button type="button" role="menuitem">
-                Gender-role argument ends the relationship
               </button>
             </div>
           </div>
@@ -187,52 +191,35 @@
            segmentation, timings and recognition details. Data and wiring
            live in the module script at the bottom. -->
       <div data-vlb-player></div>
+      <!-- Lives inside the shared player's chrome (JS moves it there on
+           every render): the spot where the hover transcript line shows;
+           the button fades away while that line is visible -->
+      <button
+        type="button"
+        class="m__button-secondary-outline S vlb-transcript-btn"
+        data-modal-open="vlb-transcript-modal"
+        hidden>
+        Transcript
+      </button>
 
       <div class="m__space L"></div>
 
       <section class="vlb-battles">
         <div class="vlb-battle">
-          <div class="vlb-battle__head">
-            <a href="#" class="m__behavior-link S"
-              ><svg viewBox="0 0 32 32" aria-hidden="true">
-                <use href="#behaviors"></use></svg
-              >Vishing</a
-            >
-          </div>
+          <h3>Vishing</h3>
           <div data-vlb-signal="vishing"></div>
         </div>
 
         <div class="vlb-battle">
-          <div class="vlb-battle__head">
-            <a href="#" class="m__behavior-link S"
-              ><svg viewBox="0 0 32 32" aria-hidden="true">
-                <use href="#behaviors"></use></svg
-              >Account Impersonation</a
-            >
-          </div>
+          <h3>Account Impersonation</h3>
           <div data-vlb-signal="impersonation"></div>
         </div>
 
         <div class="vlb-battle">
-          <div class="vlb-battle__head">
-            <a href="#" class="m__behavior-link S"
-              ><svg viewBox="0 0 32 32" aria-hidden="true">
-                <use href="#behaviors"></use></svg
-              >Coercion Manipulation</a
-            >
-          </div>
+          <h3>Coercion Manipulation</h3>
           <div data-vlb-signal="coercion"></div>
         </div>
       </section>
-
-      <div class="m__space S"></div>
-
-      <button
-        type="button"
-        class="vlb-transcript-btn"
-        data-modal-open="vlb-transcript-modal">
-        Transcript
-      </button>
 
       <div class="m__space L"></div>
 
@@ -353,6 +340,50 @@
   </div>
   <div class="m__space XL"></div>
 </div>
+
+<!-- System prompt: full transparency on how the stack is prompted to find
+     behaviors in the transcript chunks. Markup follows the
+     modal-behaviors-edit canon (textfield M + autogrow textarea). -->
+{% call modal("vlb-prompt-modal", "System prompt") %}
+<div class="m__modal__body">
+  <p class="vlb-prompt-note">
+    Sent to the selected LLM together with the STT transcript of the whole
+    call. The placeholders are filled in per run.
+  </p>
+  <div class="m__textfield M">
+    <textarea id="vlb-prompt-text" class="m__textarea--autogrow" rows="16">
+You are a fraud-behavior analyst for a bank contact center. You receive one customer call as a numbered list of transcript segments with timestamps, produced by the {{ '{{stt_model}}' }} step.
+
+Working from the transcript text alone, flag every segment that shows one of the selected behaviors: {{ '{{selected_behaviors}}' }}.
+
+Rules:
+- Flag a behavior only when the segment's own words carry it. Do not infer it from tone, punctuation, or what you assume about the speaker.
+- Quote the exact words as evidence for every flag.
+- If a signal spans several segments, flag the segment where it is strongest.
+- Report nothing when no behavior is present. Never invent segments.
+
+Return JSON: [{ "segment": n, "behavior": "…", "confidence": 0–1, "evidence": "…" }].
+
+If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "confidence": 0–1 } for every segment. You cannot hear the voice — mark these as text-derived guesses.</textarea>
+  </div>
+  <p class="m__modal__field-hint">
+    Changes apply from the next analysis run. Detections already on the
+    page keep the prompt they were made with.
+  </p>
+</div>
+<div class="m__modal__footer">
+  <button type="button" class="m__button-secondary-outline S vlb-prompt-reset">
+    Restore default
+  </button>
+  <button
+    type="button"
+    class="m__button-secondary-outline S"
+    data-modal-close="vlb-prompt-modal">
+    Cancel
+  </button>
+  <button type="button" class="m__button-primary S" data-modal-close="vlb-prompt-modal">Save</button>
+</div>
+{% endcall %}
 
 <!-- Receipt modals: the evidence behind every kiki -->
 {% call modal("vlb-receipt-vishing", "Vishing") %}
@@ -882,6 +913,7 @@
 
   const playerMount = document.querySelector('[data-vlb-player]');
   const emotionsToggle = document.querySelector('[data-vlb-emotions]');
+  const transcriptBtn = document.querySelector('.vlb-transcript-btn');
 
   function renderMain() {
     renderFingerprint(playerMount, mainData(emotionsToggle && emotionsToggle.checked), {
@@ -892,6 +924,12 @@
       className: 'fp-cmp',
       laneHover: true,
     });
+    // The transcript button lives in the player chrome, on the hover
+    // transcript line's spot — re-adopt it after every render.
+    if (transcriptBtn) {
+      playerMount.querySelector('.media-box').appendChild(transcriptBtn);
+      transcriptBtn.hidden = false;
+    }
   }
 
   function renderSignals() {
@@ -904,6 +942,7 @@
         names: NAMES,
         className: 'fp-cmp',
         laneHover: true,
+        hoverCaptions: false,
       });
     });
   }

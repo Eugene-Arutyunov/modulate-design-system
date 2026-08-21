@@ -435,6 +435,7 @@ const DEMOS = {
       behaviours: true,
       className: "fp-cmp",
       laneHover: true,
+      hoverCaptions: false,
       names: ["Velma", "STT+LLM"],
     },
   },

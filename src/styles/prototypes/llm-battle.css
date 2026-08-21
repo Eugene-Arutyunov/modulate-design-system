@@ -122,49 +122,43 @@
   }
 }
 
-/* The battle's input zone is 40% shorter than the playground default —
-   this page only */
-.pg-upload-plate.vlb-plate:not([data-state='uploaded']) {
-  min-height: 10.8rem;
-}
-
 /* STT / LLM pickers: the DS native select, stacked under the group title */
 .vlb-controls .vlb-controls__select {
   margin-top: 0.25rem;
   font-size: var(--m__font-size-s);
 }
 
-/* The transcript entry point: the most unassuming button possible */
-.vlb-transcript-btn {
-  padding: 0;
-  border: none;
-  background: none;
-  font: inherit;
-  font-size: var(--m__font-size-s);
-  color: var(--m__text-caption);
-  cursor: pointer;
-  transition: color var(--m__duration-base) var(--m__easing-base);
+.vlb-controls .vlb-controls__prompt-btn {
+  align-self: flex-start;
+}
 
-  &:hover {
-    color: var(--m__text-link-hover);
-    transition-duration: var(--m__duration-instant);
-  }
+/* The transcript entry point: an outline button living inside the shared
+   player's chrome, on the spot where the hover transcript line renders —
+   it steps aside (fades) whenever that line is visible */
+.fp-cmp .media-box .vlb-transcript-btn {
+  position: absolute;
+  left: calc(var(--padding) + 0.6em + 2.4em);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  transition: opacity var(--m__duration-base) var(--m__easing-base);
+}
+
+.fp-cmp .media-box:has(.clip-text-caption.visible) .vlb-transcript-btn {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Per-behavior signal players: rendered by fingerprint.js (technology-
    comparison variant, styles in player.css); here only the block rhythm
-   and the kiki-titled heads */
+   and the plain h3 heads */
 .vlb-battle {
   & + .vlb-battle {
     margin-top: var(--m__gap-l);
   }
 
-  & .vlb-battle__head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--m__gap-m);
-    margin-bottom: var(--m__gap-xxs);
+  & h3 {
+    margin: 0 0 var(--m__gap-xs);
   }
 }
 
@@ -419,6 +413,21 @@
   & tbody tr:last-child td {
     border-bottom: none;
   }
+}
+
+/* System prompt modal */
+.vlb-prompt-note {
+  margin: 0 0 var(--m__gap-s);
+  font-size: var(--m__font-size-s);
+  color: var(--m__text-caption);
+}
+
+#vlb-prompt-modal .m__modal {
+  max-width: 38rem;
+}
+
+#vlb-prompt-modal .vlb-prompt-reset {
+  margin-right: auto;
 }
 
 /* Receipt modals */

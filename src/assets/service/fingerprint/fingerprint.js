@@ -388,6 +388,10 @@ const VERDICT_COLORS = {
 //   laneHover  boolean — clip nodes are confined to their own lane, so
 //              every lane hovers independently (the comparison variant;
 //              the default treats the full column as one hover zone)
+//   hoverCaptions  boolean (default true) — hovering a clip shows the
+//              transcript line and emotion name (in the player chrome, or
+//              in a caption strip below a player-less plate); false drops
+//              both, e.g. for the selected-signal comparison players
 //
 // Per-clip hooks (all optional, used by the comparison variant):
 //   clip.classes           extra classes on the clip node (`clip-mute`,
@@ -410,6 +414,7 @@ export function renderFingerprint(root, data, options = {}) {
     names: [],
     className: "",
     laneHover: false,
+    hoverCaptions: true,
     ...options,
   };
   const lanes = opts.mode === "transcript" ? data.speakers : 1;
@@ -453,7 +458,7 @@ export function renderFingerprint(root, data, options = {}) {
 
   root.appendChild(container);
 
-  if (opts.mode === "transcript" && !opts.amplitude) {
+  if (opts.mode === "transcript" && !opts.amplitude && opts.hoverCaptions) {
     bindClipCaptions(root, container, opts);
   }
 }

@@ -776,22 +776,36 @@
   opacity: 0.45;
 }
 
-/* Clips that carry nothing: neutral on the heard lane, the player-bottom
-   gray on the stack lane (also the stack's whole no-emotions default —
-   color means nothing there, the clip pattern survives via hairlines) */
+/* Stack-lane grays, theme-aware: the base sits one step off the player
+   bottom (so the lane never merges with the chrome), highlights sit a
+   step lighter than the base — detections read as pale pops in both
+   themes. Hairline mixes below reuse the same props. */
+.media-container {
+  --fp-cmp-quiet-tech: var(--m__color-gray-100);
+  --fp-cmp-hit: var(--m__color-gray-50);
+}
+
+.dark-mode .media-container {
+  --fp-cmp-quiet-tech: var(--m__color-gray-800);
+  --fp-cmp-hit: var(--m__color-gray-600);
+}
+
+/* Clips that carry nothing: neutral on the heard lane, the base gray on
+   the stack lane (also the stack's whole no-emotions default — color
+   means nothing there, the clip pattern survives via hairlines) */
 .media-container .transcript-clip.clip-quiet .clip-visualization {
   background-color: rgba(var(--emotion-neutral-RGB), 1);
 }
 
 .media-container .transcript-clip.clip-quiet-tech .clip-visualization {
-  background-color: var(--m__bg-surface);
+  background-color: var(--fp-cmp-quiet-tech);
 }
 
 /* A stack clip that carries a glyph — a catch, a false positive (red kiki)
-   or a missed reference (ghost kiki) — gets the same light-gray highlight;
-   the glyph itself tells which case it is */
+   or a missed reference (ghost kiki) — gets the same pale highlight; the
+   glyph itself tells which case it is */
 .media-container .transcript-clip.clip-hit .clip-visualization {
-  background-color: var(--m__color-gray-200);
+  background-color: var(--fp-cmp-hit);
 }
 
 /* Hairline separators, only where two same-color clips touch and the
@@ -809,7 +823,7 @@
   + .transcript-clip.clip-quiet-tech
   .clip-visualization {
   border-left: 1px solid
-    color-mix(in srgb, var(--m__bg-surface) 92%, var(--m__text));
+    color-mix(in srgb, var(--fp-cmp-quiet-tech) 90%, var(--m__text));
 }
 
 .media-container
@@ -817,7 +831,7 @@
   + .transcript-clip.clip-hit
   .clip-visualization {
   border-left: 1px solid
-    color-mix(in srgb, var(--m__color-gray-200) 88%, var(--m__text));
+    color-mix(in srgb, var(--fp-cmp-hit) 88%, var(--m__text));
 }
 
 .media-container
