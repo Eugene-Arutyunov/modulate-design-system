@@ -232,109 +232,121 @@
           <div class="vlb-scatter">
             <div class="vlb-scatter__plot">
               <span class="vlb-scatter__zone" aria-hidden="true"></span>
-              <span class="vlb-scatter__ylab">Flag accuracy (precision) →</span>
-              <span class="vlb-scatter__quadrant is-tl">Trustworthy flags, missed threats</span>
-              <span class="vlb-scatter__quadrant is-tr">Every threat caught, every flag true</span>
-              <span class="vlb-scatter__quadrant is-bl">Missed threats and false alarms</span>
-              <span class="vlb-scatter__quadrant is-br">Every threat caught, drowned in false alarms</span>
+              <span class="vlb-scatter__ylab">Flag accuracy →</span>
+              <span class="vlb-scatter__xlab">Threats caught →</span>
+              <span class="vlb-scatter__quadrant is-tl">Accurate, misses threats</span>
+              <span class="vlb-scatter__quadrant is-tr">Peak efficiency</span>
+              <span class="vlb-scatter__quadrant is-br">Catches all, false alarms</span>
               <span class="vlb-scatter__dot is-velma" style="left: 86%; bottom: 78%">
-                <span class="vlb-scatter__dot-label"><strong>Velma by Modulate</strong><br />100% caught · 100% accurate</span>
+                <span class="vlb-scatter__dot-label"><strong>Velma</strong></span>
               </span>
-              <span class="vlb-scatter__dot" style="left: 50%; bottom: 64%">
-                <span class="vlb-scatter__dot-label"><strong>Whisper v4 + GPT-5.5</strong><br />50% caught · 67% accurate</span>
+              <span class="vlb-scatter__dot" style="left: 68%; bottom: 66%">
+                <span class="vlb-scatter__dot-label"><strong>Whisper v4 + GPT-5.5</strong></span>
               </span>
             </div>
-            <span class="vlb-scatter__xlab">Detection accuracy (recall) →</span>
           </div>
 
           <div class="vlb-dashboard__side">
             <div class="vlb-cards">
               <div class="vlb-card">
                 <span class="vlb-card__title">Detection accuracy</span>
-                <div class="vlb-card__pair">
-                  <div class="vlb-card__cell"><span class="vlb-card__value">100%</span><span class="vlb-card__agent">Velma</span></div>
-                  <div class="vlb-card__cell"><span class="vlb-card__value">50%</span><span class="vlb-card__agent">STT+LLM</span></div>
+                <div class="vlb-card__bars">
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">Velma</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 100%"></span></span>
+                    <span class="vlb-bar__value">100%</span>
+                  </div>
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">STT+LLM</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 75%"></span></span>
+                    <span class="vlb-bar__value">75%</span>
+                  </div>
                 </div>
-                <span class="vlb-card__note">4 of 4 vs 2 of 4 reference signals</span>
+                <span class="vlb-card__note">4 of 4 vs 3 of 4 reference signals</span>
               </div>
               <div class="vlb-card">
                 <span class="vlb-card__title">False alarms</span>
-                <div class="vlb-card__pair">
-                  <div class="vlb-card__cell"><span class="vlb-card__value">0</span><span class="vlb-card__agent">Velma</span></div>
-                  <div class="vlb-card__cell"><span class="vlb-card__value vlb-false-text">1</span><span class="vlb-card__agent">STT+LLM</span></div>
+                <div class="vlb-card__bars">
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">Velma</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 0%"></span></span>
+                    <span class="vlb-bar__value">0</span>
+                  </div>
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">STT+LLM</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-false" style="width: 100%"></span></span>
+                    <span class="vlb-bar__value vlb-false-text">1</span>
+                  </div>
                 </div>
-                <span class="vlb-card__note">of 4 vs 3 flags raised</span>
+                <span class="vlb-card__note">of 4 vs 4 flags raised</span>
               </div>
               <div class="vlb-card">
                 <span class="vlb-card__title">Cost per audio hour</span>
-                <div class="vlb-card__pair">
-                  <div class="vlb-card__cell"><span class="vlb-card__value">$1.10</span><span class="vlb-card__agent">Velma</span></div>
-                  <div class="vlb-card__cell"><span class="vlb-card__value">$3.40</span><span class="vlb-card__agent">STT+LLM</span></div>
+                <div class="vlb-card__bars">
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">Velma</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 32%"></span></span>
+                    <span class="vlb-bar__value">$1.10</span>
+                  </div>
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">STT+LLM</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 100%"></span></span>
+                    <span class="vlb-bar__value">$3.40</span>
+                  </div>
                 </div>
                 <span class="vlb-card__note">STT $0.60 + LLM $2.80</span>
               </div>
               <div class="vlb-card">
                 <span class="vlb-card__title">Median time to signal</span>
-                <div class="vlb-card__pair">
-                  <div class="vlb-card__cell"><span class="vlb-card__value">1.2&thinsp;s</span><span class="vlb-card__agent">Velma</span></div>
-                  <div class="vlb-card__cell"><span class="vlb-card__value">6.8&thinsp;s</span><span class="vlb-card__agent">STT+LLM</span></div>
+                <div class="vlb-card__bars">
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">Velma</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 18%"></span></span>
+                    <span class="vlb-bar__value">1.2&thinsp;s</span>
+                  </div>
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">STT+LLM</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 100%"></span></span>
+                    <span class="vlb-bar__value">6.8&thinsp;s</span>
+                  </div>
                 </div>
                 <span class="vlb-card__note">after the utterance ends</span>
               </div>
               <div class="vlb-card">
                 <span class="vlb-card__title">Confidence when flagging</span>
-                <div class="vlb-card__pair">
-                  <div class="vlb-card__cell"><span class="vlb-card__value">93%</span><span class="vlb-card__agent">Velma</span></div>
-                  <div class="vlb-card__cell"><span class="vlb-card__value">61%</span><span class="vlb-card__agent">STT+LLM</span></div>
+                <div class="vlb-card__bars">
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">Velma</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 93%"></span></span>
+                    <span class="vlb-bar__value">93%</span>
+                  </div>
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">STT+LLM</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 61%"></span></span>
+                    <span class="vlb-bar__value">61%</span>
+                  </div>
                 </div>
                 <span class="vlb-card__note">median across raised flags</span>
               </div>
               <div class="vlb-card">
                 <span class="vlb-card__title">Signals found</span>
-                <div class="vlb-card__pair">
-                  <div class="vlb-card__cell"><span class="vlb-card__value">4</span><span class="vlb-card__agent">Velma</span></div>
-                  <div class="vlb-card__cell"><span class="vlb-card__value">3</span><span class="vlb-card__agent">STT+LLM</span></div>
+                <div class="vlb-card__bars">
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">Velma</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 100%"></span></span>
+                    <span class="vlb-bar__value">4</span>
+                  </div>
+                  <div class="vlb-bar">
+                    <span class="vlb-bar__agent">STT+LLM</span>
+                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 100%"></span></span>
+                    <span class="vlb-bar__value">4</span>
+                  </div>
                 </div>
                 <span class="vlb-card__note">across 3 selected behaviors</span>
               </div>
             </div>
-
-            <table class="vlb-scorecard">
-              <thead>
-                <tr>
-                  <th>Agent</th>
-                  <th>Caught</th>
-                  <th>On-target</th>
-                  <th>Flags</th>
-                  <th>Missed</th>
-                  <th>False</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Velma</strong></td>
-                  <td>4 of 4</td>
-                  <td>100%</td>
-                  <td>4</td>
-                  <td>0</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <td>Whisper v4 + GPT-5.5</td>
-                  <td>2 of 4</td>
-                  <td>67%</td>
-                  <td>3</td>
-                  <td>2</td>
-                  <td class="vlb-false-text">1</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
-        <p class="caption vlb-dashboard__note">
-          Shown for reference-labeled demo recordings. External uploads keep
-          cost, speed and signal counts only.
-        </p>
       </section>
     </main>
   </div>
@@ -394,9 +406,9 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   </div>
   <p class="vlb-receipt__reason">
     The caller's clip carries a synthetic-voice signature (deepfake, 93%)
-    while the script applies urgency pressure — a vishing pattern. The audio
-    evidence is invisible to a text-only pipeline, which is why the stack
-    stayed silent.
+    while the script applies urgency pressure — a vishing pattern. The
+    audio evidence is invisible to a text-only pipeline: the stack missed
+    this moment and only flagged the later, text-visible push.
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
     <div class="pg-transcript-utterance speaker-left vlb-evidence">
@@ -424,6 +436,35 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     </div>
   </div>
   <p class="vlb-receipt__outcome is-correct">✓ Correct catch · missed by STT+LLM</p>
+</div>
+{% endcall %}
+
+{% call modal("vlb-receipt-vishing-stack", "Vishing") %}
+<div class="m__modal__body">
+  <div class="vlb-receipt__meta">
+    <span class="m__tag-flat">STT+LLM</span>
+    <span class="vlb-receipt__conf">57% confidence · 0:18</span>
+  </div>
+  <p class="vlb-receipt__reason">
+    A scripted urgency push in the words themselves — a named five-figure
+    transfer plus time pressure — matches the vishing playbook, so this one
+    is visible to a text-only pipeline. The synthetic-voice probe at 0:05
+    left no trace in the transcript and went unflagged.
+  </p>
+  <div class="pg-transcript-list vlb-receipt__excerpt">
+    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+      <div class="pg-transcript-utterance-header">
+        <span class="pg-transcript-time">0:15</span>
+        <span class="pg-transcript-speaker">Caller</span>
+        <span class="pg-transcript-emotion ec-stressed">Stressed</span>
+      </div>
+      <div class="pg-transcript-text">
+        Because I moved last month. Look, I have a $12,000 transfer waiting.
+        Every minute this takes is costing me.
+      </div>
+    </div>
+  </div>
+  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · also flagged by Velma</p>
 </div>
 {% endcall %}
 
@@ -701,6 +742,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     <div class="pg-transcript-utterance">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:18</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Vishing</a
+        >
       </div>
       <div class="pg-transcript-text">i have a 12,000 dollar transfer waiting every minute this takes is costing me</div>
     </div>
@@ -819,26 +865,27 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     { s: 6.4, e: 10.3, guess: 'frustrated', text: 'just change the email on the account so i can get my code i do' },
     { s: 10.3, e: 14.9, guess: 'calm', text: "apologize sir but the answers you gave didn't match what we have on file" },
     { s: 14.9, e: 18.2, guess: 'neutral', text: 'because i moved last month look' },
-    { s: 18.2, e: 23.4, guess: 'neutral', text: 'i have a 12,000 dollar transfer waiting every minute this takes is costing me' },
+    { s: 18.2, e: 23.4, guess: 'neutral', behaviour: 'Vishing', modal: 'vlb-receipt-vishing-stack', text: 'i have a 12,000 dollar transfer waiting every minute this takes is costing me' },
     { s: 23.4, e: 31.2, guess: 'neutral', text: 'yes i understand your frustration here however the fastest secure option is verifying your identity at a branch' },
     { s: 31.2, e: 34.6, guess: 'anxious', text: "i'm overseas that's the whole point" },
     { s: 34.6, e: 37.9, guess: 'anxious', behaviour: 'Account Impersonation', modal: 'vlb-receipt-impersonation', text: "just update the email and phone you can hear it's me" },
     { s: 37.9, e: 41.2, guess: 'anxious', text: 'who else would know the account number' },
     { s: 41.2, e: 47.4, guess: 'confident', text: "knowing the account number isn't identity verification sir it's for your protection" },
-    { s: 47.4, e: 51.9, guess: 'frustrated', behaviour: 'Account Impersonation', modal: 'vlb-receipt-impersonation-false', text: "this is unbelievable what's your name alex you said" },
+    { s: 47.4, e: 51.9, guess: 'frustrated', behaviour: 'Account Impersonation', false: true, modal: 'vlb-receipt-impersonation-false', text: "this is unbelievable what's your name alex you said" },
     { s: 51.9, e: 56.6, guess: 'frustrated', behaviour: 'Coercion Manipulation', modal: 'vlb-receipt-coercion', text: "i'll make sure your supervisor knows you cost me this transfer" },
     { s: 56.6, e: 60.9, guess: 'calm', text: "yes that's correct and again i understand that you're frustrated sir" },
     { s: 60.9, e: 65.6, guess: 'calm', text: "but unfortunately i'm not going to be able to make that change today for you" },
     { s: 65.6, e: 67.697, guess: 'neutral', text: 'this is ridiculous just forget it' },
   ];
 
-  // The selected-signal players: which clips carry the signal on each
-  // lane, plus the stack's misses (ghost glyph at the reference clip)
-  // and false positives.
+  // The selected-signal players: which Velma clips carry the signal.
+  // The stack side derives straight from STT_CHUNKS — a chunk whose
+  // `behaviour` matches the signal is a detection, `false: true` marks a
+  // false positive (its kiki goes red everywhere the chunk is drawn).
   const SIGNALS = {
-    vishing: { name: 'Vishing', velma: [0, 2], hits: [], falses: [], ghosts: [{ idx: 1, at: 5.8 }, { idx: 5, at: 20.7 }] },
-    impersonation: { name: 'Account Impersonation', velma: [4], hits: [8], falses: [11], ghosts: [] },
-    coercion: { name: 'Coercion Manipulation', velma: [6], hits: [12], falses: [], ghosts: [] },
+    vishing: { name: 'Vishing', velma: [0, 2] },
+    impersonation: { name: 'Account Impersonation', velma: [4] },
+    coercion: { name: 'Coercion Manipulation', velma: [6] },
   };
 
   const NAMES = ['Velma', 'STT+LLM'];
@@ -854,19 +901,28 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       clips.push({ ...baseClip(1, c), emotion: c.emotion, behaviour: c.behaviour, behaviourAtSec: c.at, behaviourModal: c.modal });
     });
     STT_CHUNKS.forEach((c) => {
-      const clip = { ...baseClip(2, c), behaviour: c.behaviour, behaviourClasses: 'behaviour-indicator--tech', behaviourModal: c.modal };
+      const clip = { ...baseClip(2, c), behaviour: c.behaviour, behaviourClasses: kikiClasses(c), behaviourModal: c.modal };
 
       if (emotionsOn) {
         clip.emotion = c.guess;
         clip.classes = 'clip-guess';
       } else {
         // Same treatment as the selected-signal players: the uniform
-        // player-bottom gray, detections highlighted in light gray.
+        // player-bottom gray, detections one step darker (lighter in the
+        // dark theme).
         clip.classes = c.behaviour ? 'clip-hit' : 'clip-quiet-tech';
       }
       clips.push(clip);
     });
     return { speakers: 2, durationSec: DURATION, clips };
+  }
+
+  // The false-positive mark lives in the chunk data, so the kiki reads
+  // the same everywhere the chunk is drawn (shared player and strips).
+  function kikiClasses(c) {
+    return c.false
+      ? 'behaviour-indicator--tech behaviour-indicator--false'
+      : 'behaviour-indicator--tech';
   }
 
   function signalData(key, emotionsOn) {
@@ -880,15 +936,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         clips.push({ ...baseClip(1, c), classes: 'clip-quiet' });
       }
     });
-    STT_CHUNKS.forEach((c, i) => {
+    STT_CHUNKS.forEach((c) => {
       const clip = { ...baseClip(2, c), classes: 'clip-quiet-tech' };
-      const ghost = spec.ghosts.find((g) => g.idx === i);
-      const flagged = spec.hits.includes(i) || spec.falses.includes(i);
 
-      // Any glyph-carrying clip is highlighted — light gray by default,
-      // the translucent guessed-emotion color when the toggle is on; the
-      // glyph itself tells the case (catch / red false alarm / ghost).
-      if (flagged || ghost) {
+      // A chunk the stack flagged with this signal is highlighted — one
+      // gray step off the lane by default, the translucent
+      // guessed-emotion color when the toggle is on; a red kiki marks
+      // the false positive.
+      if (c.behaviour === spec.name) {
         if (emotionsOn) {
           clip.emotion = c.guess;
           clip.classes = 'clip-guess';
@@ -896,15 +951,8 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
           clip.classes = 'clip-hit';
         }
         clip.behaviour = spec.name;
-        if (ghost) {
-          clip.behaviourClasses = 'behaviour-indicator--ghost';
-          clip.behaviourAtSec = ghost.at;
-        } else {
-          clip.behaviourClasses = spec.falses.includes(i)
-            ? 'behaviour-indicator--tech behaviour-indicator--false'
-            : 'behaviour-indicator--tech';
-          clip.behaviourModal = c.modal;
-        }
+        clip.behaviourClasses = kikiClasses(c);
+        clip.behaviourModal = c.modal;
       }
       clips.push(clip);
     });

@@ -195,10 +195,6 @@
   }
 }
 
-.vlb-dashboard__note {
-  margin-top: var(--m__gap-m);
-}
-
 .vlb-scatter {
   & .vlb-scatter__plot {
     position: relative;
@@ -220,8 +216,8 @@
     overflow: hidden;
   }
 
-  /* the efficient corner — high recall, high precision: a blurred
-     gradient blob, same recipe as the scatterplot tool's highlight zone */
+  /* the efficient corner — a blurred gradient blob, the exact recipe of
+     the scatterplot tool's highlight zone (pure green at 0.3 + blur) */
   & .vlb-scatter__zone {
     position: absolute;
     top: -28%;
@@ -229,21 +225,23 @@
     width: 85%;
     height: 75%;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--m__success) 28%, transparent);
-    filter: blur(46px);
+    background: rgba(0, 255, 0, 0.3);
+    filter: blur(50px);
     pointer-events: none;
   }
 
-  /* quadrant captions, set like the sidebar group subtitles */
+  /* quadrant captions, set like the sidebar group subtitles; narrow with
+     balanced line wrapping */
   & .vlb-scatter__quadrant {
     position: absolute;
-    max-width: 10.5rem;
+    max-width: 7.5rem;
     font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
     line-height: 1.55;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--m__text-caption);
+    text-wrap: balance;
 
     &.is-tl {
       top: 0.55rem;
@@ -256,11 +254,6 @@
       text-align: right;
     }
 
-    &.is-bl {
-      bottom: 0.55rem;
-      left: 2.1rem;
-    }
-
     &.is-br {
       bottom: 0.55rem;
       right: 0.75rem;
@@ -268,18 +261,22 @@
     }
   }
 
+  /* axes: both captions middle-aligned along their axis, the X one
+     living inside the plot */
   & .vlb-scatter__ylab {
     position: absolute;
-    top: 0.6rem;
+    top: 50%;
     left: 0.75rem;
     writing-mode: vertical-rl;
-    transform: rotate(180deg);
+    transform: translateY(-50%) rotate(180deg);
   }
 
   & .vlb-scatter__xlab {
-    display: block;
-    margin-top: 0.4rem;
-    text-align: right;
+    position: absolute;
+    bottom: 0.55rem;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
   }
 
   & .vlb-scatter__ylab,
@@ -357,61 +354,61 @@
     white-space: nowrap;
   }
 
-  & .vlb-card__pair {
-    display: flex;
-    gap: var(--m__gap-l);
-  }
-
-  & .vlb-card__cell {
+  /* two horizontal bars per card: agent · track · value */
+  & .vlb-card__bars {
     display: flex;
     flex-direction: column;
+    gap: 0.35rem;
   }
 
-  & .vlb-card__value {
-    font-size: 1.35rem;
-    font-weight: var(--m__font-weight-bold);
-    font-variant-numeric: tabular-nums;
-    line-height: 1.2;
+  & .vlb-bar {
+    display: grid;
+    grid-template-columns: 3.6rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  & .vlb-card__agent {
+  & .vlb-bar__agent {
     font-size: var(--m__font-size-xs);
     color: var(--m__text-caption);
+    white-space: nowrap;
+  }
+
+  & .vlb-bar__track {
+    height: 0.55rem;
+    border-radius: var(--m__radius-xs);
+    background: color-mix(in srgb, var(--m__text) 8%, transparent);
+    overflow: hidden;
+  }
+
+  & .vlb-bar__fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--m__color-gray-400);
+
+    &.is-velma {
+      background: var(--m__success);
+    }
+
+    &.is-false {
+      background: var(--m__color-red-600);
+    }
+  }
+
+  & .vlb-bar__value {
+    min-width: 2.6rem;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
   }
 
   & .vlb-card__note {
     display: block;
-    margin-top: 0.3rem;
+    margin-top: 0.35rem;
     font-size: var(--m__font-size-xs);
     color: var(--m__text-caption);
-  }
-}
-
-.vlb-scorecard {
-  width: 100%;
-  margin-top: var(--m__gap-m);
-  font-size: var(--m__font-size-s);
-  font-variant-numeric: tabular-nums;
-
-  & th {
-    font-family: var(--m__font-family-semi-mono);
-    font-size: var(--m__font-size-xs);
-    font-weight: var(--m__font-weight-regular);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--m__text-caption);
-    text-align: left;
-  }
-
-  & th,
-  & td {
-    padding: 0.3rem 0.6rem 0.3rem 0;
-    border-bottom: var(--m__border-width-s) solid
-      color-mix(in srgb, var(--m__text) 10%, transparent);
-  }
-
-  & tbody tr:last-child td {
-    border-bottom: none;
   }
 }
 

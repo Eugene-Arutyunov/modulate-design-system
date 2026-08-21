@@ -449,8 +449,8 @@ const DEMOS = {
 // match. Both lanes are gapless and span the full duration. The dataset
 // feeds both flavors: the full comparison and the selected-signal player
 // (`signalOnly`). On the stack lane every glyph-carrying clip gets the
-// light-gray highlight; the glyph itself tells the case — a catch, a red
-// false positive, a ghost where a reference signal was missed.
+// one-step-off gray highlight; the glyph itself tells the case — a catch,
+// or a red-marked false positive. Misses simply leave the lane quiet.
 function buildComparisonDemo(signalOnly) {
   const durationSec = 47.5;
   const velma = [
@@ -465,7 +465,7 @@ function buildComparisonDemo(signalOnly) {
     { s: 0, e: 3.3, text: "thanks for calling" },
     { s: 3.3, e: 6.4, text: "how can i help i" },
     { s: 6.4, e: 13.2, text: "ordered the standing desk two weeks ago and it still shows processing" },
-    { s: 13.2, e: 16.9, text: "i need this resolved today", ghost: 13.4 },
+    { s: 13.2, e: 16.9, text: "i need this resolved today" },
     { s: 16.9, e: 21.3, text: "not eventually today" },
     { s: 21.3, e: 25.1, text: "let me check what the warehouse says" },
     { s: 25.1, e: 29.2, text: "about that order", falsePositive: true },
@@ -493,12 +493,7 @@ function buildComparisonDemo(signalOnly) {
 
     clip.classes = "clip-quiet-tech";
     if (signalOnly) {
-      if (c.ghost) {
-        clip.classes = "clip-hit";
-        clip.behaviour = "Urgency pressure";
-        clip.behaviourClasses = "behaviour-indicator--ghost";
-        clip.behaviourAtSec = c.ghost;
-      } else if (c.falsePositive) {
+      if (c.falsePositive) {
         clip.classes = "clip-hit";
         clip.behaviour = "Urgency pressure";
         clip.behaviourClasses = "behaviour-indicator--tech behaviour-indicator--false";

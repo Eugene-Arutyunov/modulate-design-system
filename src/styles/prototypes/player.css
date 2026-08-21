@@ -777,17 +777,17 @@
 }
 
 /* Stack-lane grays, theme-aware: the base sits one step off the player
-   bottom (so the lane never merges with the chrome), highlights sit a
-   step lighter than the base — detections read as pale pops in both
-   themes. Hairline mixes below reuse the same props. */
+   bottom (so the lane never merges with the chrome), highlights sit
+   exactly one palette step towards contrast — darker in the light theme,
+   lighter in the dark one. Hairline mixes below reuse the same props. */
 .media-container {
   --fp-cmp-quiet-tech: var(--m__color-gray-100);
-  --fp-cmp-hit: var(--m__color-gray-50);
+  --fp-cmp-hit: var(--m__color-gray-200);
 }
 
 .dark-mode .media-container {
   --fp-cmp-quiet-tech: var(--m__color-gray-800);
-  --fp-cmp-hit: var(--m__color-gray-600);
+  --fp-cmp-hit: var(--m__color-gray-700);
 }
 
 /* Clips that carry nothing: neutral on the heard lane, the base gray on
@@ -851,25 +851,17 @@
   fill: rgba(var(--emotion-neutral-RGB), 1);
 }
 
-/* Ghost and false-positive glyphs keep their identity even when the clip
+/* Comparison glyphs are half again bigger and pulled further out of the
+   clip's bottom-left corner — the battle's kikis are entry points, not
+   decorations */
+.fp-cmp .pg-player-dataviz .behaviour-indicators .behaviour-indicator {
+  font-size: 1.2em;
+  transform: translate(-30%, 32%);
+}
+
+/* The false-positive glyph keeps its red outline even when the clip
    carries a guessed emotion (the doubled class outweighs the canon's
    [data-emotion] outline coloring) */
-.media-container
-  .behaviour-indicators
-  .behaviour-indicator.behaviour-indicator--ghost
-  .behaviour-icon
-  svg {
-  fill: color-mix(in srgb, var(--m__text) 45%, transparent);
-}
-
-.media-container
-  .behaviour-indicators
-  .behaviour-indicator.behaviour-indicator--ghost
-  .behaviour-icon
-  .behaviour-icon__outline {
-  fill: transparent;
-}
-
 .media-container
   .behaviour-indicators
   .behaviour-indicator.behaviour-indicator--false
