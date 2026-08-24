@@ -27,40 +27,91 @@
     <div class="nav-sidebar">
       <div class="vlb-controls">
         <div class="vlb-controls__group">
-          <span class="vlb-controls__title">STT + LLM</span>
-          <label class="m__select S vlb-controls__select">
-            <span>STT</span>
-            <span class="m__select__inline-control">
-              <span class="m__select__value" data-vlb-stt-value>Whisper v4</span>
-              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-              <select data-vlb-stt aria-label="STT model">
+          <div class="vlb-controls__field">
+            <label class="vlb-controls__title" for="vlb-stt-model-trigger">STT</label>
+            <div class="m__menu-button vlb-model-select">
+              <button
+                id="vlb-stt-model-trigger"
+                type="button"
+                class="m__select m__menu-button-secondary has-value vlb-controls__select m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-label="STT model: Whisper v4">
+                <span class="vlb-model-select__value" data-vlb-model-label>Whisper v4</span>
+                <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+              </button>
+              <select data-vlb-stt hidden>
                 <option selected>Whisper v4</option>
                 <option>Deepgram Nova-3</option>
                 <option>AssemblyAI Universal</option>
               </select>
-            </span>
-          </label>
-          <label class="m__select S vlb-controls__select">
-            <span>LLM</span>
-            <span class="m__select__inline-control">
-              <span class="m__select__value" data-vlb-llm-value>GPT-5.5</span>
-              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-              <select data-vlb-llm aria-label="LLM model">
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start vlb-model-select__menu"
+                hidden
+                role="menu"
+                data-vlb-model-menu>
+                <div class="conversation-report__report-items" role="presentation">
+                  {% for model in ['Whisper v4', 'Deepgram Nova-3', 'AssemblyAI Universal'] %}
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if loop.first %} is-active{% endif %}"
+                    role="menuitemradio"
+                    aria-checked="{% if loop.first %}true{% else %}false{% endif %}"
+                    data-vlb-model-option="{{ model }}">
+                    <span class="conversation-report__report-item-icon moderation-table__status-option-check" aria-hidden="true"></span>
+                    <span class="conversation-report__report-item-title">{{ model }}</span>
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="vlb-controls__field">
+            <label class="vlb-controls__title" for="vlb-llm-model-trigger">LLM</label>
+            <div class="m__menu-button vlb-model-select">
+              <button
+                id="vlb-llm-model-trigger"
+                type="button"
+                class="m__select m__menu-button-secondary has-value vlb-controls__select m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-label="LLM model: GPT-5.5">
+                <span class="vlb-model-select__value" data-vlb-model-label>GPT-5.5</span>
+                <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+              </button>
+              <select data-vlb-llm hidden>
                 <option selected>GPT-5.5</option>
                 <option>Claude Opus 4.8</option>
                 <option>Grok 4.3</option>
               </select>
-            </span>
-          </label>
-          <div class="m__space XXS"></div>
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start vlb-model-select__menu"
+                hidden
+                role="menu"
+                data-vlb-model-menu>
+                <div class="conversation-report__report-items" role="presentation">
+                  {% for model in ['GPT-5.5', 'Claude Opus 4.8', 'Grok 4.3'] %}
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if loop.first %} is-active{% endif %}"
+                    role="menuitemradio"
+                    aria-checked="{% if loop.first %}true{% else %}false{% endif %}"
+                    data-vlb-model-option="{{ model }}">
+                    <span class="conversation-report__report-item-icon moderation-table__status-option-check" aria-hidden="true"></span>
+                    <span class="conversation-report__report-item-title">{{ model }}</span>
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
           <button
             type="button"
             class="m__button-secondary-outline S vlb-controls__prompt-btn"
             data-modal-open="vlb-prompt-modal">
             System prompt
           </button>
-          <div class="m__space XXS"></div>
-          <label class="m__checkbox-secondary vlb-controls__check">
+          <label class="m__checkbox-primary vlb-controls__check">
             <input type="checkbox" data-vlb-emotions /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
             Guess emotions
           </label>
@@ -768,6 +819,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 {% endcall %}
 
 <script src="/assets/prototypes/modals.js"></script>
+<script src="/assets/prototypes/menu-button.js"></script>
 <script type="module">
   import { renderFingerprint } from '/assets/service/fingerprint/fingerprint.js';
 
@@ -1140,8 +1192,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   const transcriptBtn = document.querySelector('.vlb-transcript-btn');
   const sttSelect = document.querySelector('[data-vlb-stt]');
   const llmSelect = document.querySelector('[data-vlb-llm]');
-  const sttValue = document.querySelector('[data-vlb-stt-value]');
-  const llmValue = document.querySelector('[data-vlb-llm-value]');
 
   const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const fmt = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
@@ -1535,11 +1585,30 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       renderStrips();
     });
   }
-  [[sttSelect, sttValue], [llmSelect, llmValue]].forEach(([sel, value]) => {
+  [sttSelect, llmSelect].forEach((sel) => {
     if (!sel) return;
-    sel.addEventListener('change', () => {
-      if (value) value.textContent = sel.value;
-      renderDashboard();
+    sel.addEventListener('change', renderDashboard);
+  });
+  document.querySelectorAll('.vlb-model-select').forEach((modelSelect) => {
+    const select = modelSelect.querySelector('select');
+    const trigger = modelSelect.querySelector('[data-vlb-model-label]');
+    const triggerButton = modelSelect.querySelector('.m__menu-button-trigger');
+    const menu = modelSelect.querySelector('[data-vlb-model-menu]');
+    if (!select || !trigger || !triggerButton || !menu) return;
+
+    menu.addEventListener('click', (event) => {
+      const option = event.target.closest('[data-vlb-model-option]');
+      if (!option) return;
+      const value = option.dataset.vlbModelOption;
+      select.value = value;
+      trigger.textContent = value;
+      triggerButton.setAttribute('aria-label', `${select.hasAttribute('data-vlb-stt') ? 'STT' : 'LLM'} model: ${value}`);
+      menu.querySelectorAll('[data-vlb-model-option]').forEach((item) => {
+        const isSelected = item === option;
+        item.classList.toggle('is-active', isSelected);
+        item.setAttribute('aria-checked', String(isSelected));
+      });
+      select.dispatchEvent(new Event('change', { bubbles: true }));
     });
   });
   const behaviorsMenu = document.querySelector('.vlb-select__menu');
