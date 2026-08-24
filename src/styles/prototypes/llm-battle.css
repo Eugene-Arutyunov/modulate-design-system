@@ -134,19 +134,35 @@
 
 /* The transcript entry point: an outline button living inside the shared
    player's chrome, on the spot where the hover transcript line renders —
-   it steps aside (fades) whenever that line is visible */
+   it steps aside (fades) whenever that line is visible. Compact paddings:
+   the chrome bar is low. */
 .fp-cmp .media-box .vlb-transcript-btn {
   position: absolute;
   left: calc(var(--padding) + 0.6em + 2.4em);
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
+  padding: 0.25em 0.7em;
   transition: opacity var(--m__duration-base) var(--m__easing-base);
 }
 
 .fp-cmp .media-box:has(.clip-text-caption.visible) .vlb-transcript-btn {
   opacity: 0;
   pointer-events: none;
+}
+
+/* The hover transcript line itself: the canon anchors it against an
+   in-box visualization the comparison player does not have (its dataviz
+   is a sibling), which collapses the line to zero height — re-anchor it
+   into the chrome row, on the button's spot */
+.fp-cmp .media-box .clip-text-caption {
+  top: 0;
+  bottom: 0;
+  left: calc(var(--padding) + 0.6em + 2.4em);
+  width: 55%;
+  display: flex;
+  align-items: center;
+  z-index: 2;
 }
 
 /* Per-behavior signal players: rendered by fingerprint.js (technology-
@@ -476,7 +492,7 @@
 }
 
 .vlb-receipt__outcome {
-  margin: var(--m__gap-s) 0 0;
+  margin: var(--m__gap-m) 0 0;
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-medium);
 

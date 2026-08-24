@@ -295,6 +295,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <span class="pg-transcript-time">0:00</span>
         <span class="pg-transcript-speaker">Caller</span>
         <span class="pg-transcript-emotion ec-frustrated">Frustrated</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Vishing</a
+        >
       </div>
       <div class="pg-transcript-text">
         Come on! We've been at this for five minutes. I've answered
@@ -336,6 +341,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <span class="pg-transcript-time">0:15</span>
         <span class="pg-transcript-speaker">Caller</span>
         <span class="pg-transcript-emotion ec-stressed">Stressed</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Vishing</a
+        >
       </div>
       <div class="pg-transcript-text">
         Because I moved last month. Look, I have a $12,000 transfer waiting.
@@ -364,6 +374,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <span class="pg-transcript-time">0:31</span>
         <span class="pg-transcript-speaker">Caller</span>
         <span class="pg-transcript-emotion ec-anxious">Anxious</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Account Impersonation</a
+        >
       </div>
       <div class="pg-transcript-text">
         I'm overseas, that's the whole point. Just update the email and
@@ -404,6 +419,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <span class="pg-transcript-time">0:47</span>
         <span class="pg-transcript-speaker">Caller</span>
         <span class="pg-transcript-emotion ec-angry">Angry</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Coercion Manipulation</a
+        >
       </div>
       <div class="pg-transcript-text">
         This is unbelievable. What's your name? Alex, you said? I'll make
@@ -432,6 +452,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <span class="pg-transcript-time">0:47</span>
         <span class="pg-transcript-speaker">Caller</span>
         <span class="pg-transcript-emotion ec-angry">Angry</span>
+        <a href="#" class="m__behavior-link S"
+          ><svg viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#behaviors"></use></svg
+          >Coercion Manipulation</a
+        >
       </div>
       <div class="pg-transcript-text">
         This is unbelievable. What's your name? Alex, you said? I'll make
@@ -775,9 +800,9 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 9.2, e: 11.4, guess: 'amused', text: "okay it's cereal" },
         { s: 11.4, e: 13.6, guess: 'amused', text: "but it's artisanal cereal" },
         { s: 13.6, e: 16.4, guess: 'angry', behaviour: 'Inappropriate Speech', false: true, modal: 'vlb-r1-inap-false', text: "you're an idiot" },
-        { s: 16.4, e: 19.4, guess: 'neutral', text: 'order the pizza' },
+        { s: 16.4, e: 19.4, guess: 'neutral', behaviour: 'Request or order', false: true, modal: 'vlb-r1-order-false', text: 'order the pizza' },
         { s: 19.4, e: 21.3, guess: 'calm', halluc: true, text: 'thank you' },
-        { s: 21.3, e: 24.1, guess: 'interested', text: 'why does the odometer say sixty thousand' },
+        { s: 21.3, e: 24.1, guess: 'interested', behaviour: 'Complaints', false: true, modal: 'vlb-r1-complaints-false', text: 'why does the odometer say sixty thousand' },
         { s: 24.1, e: 26.6, guess: 'interested', text: 'when your listing said forty' },
         { s: 26.6, e: 29.5, guess: 'confident', text: 'this vehicle has one owner a clean title' },
         { s: 29.5, e: 32.9, guess: 'confident', text: 'and a fully documented service history' },
@@ -807,14 +832,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { key: 'lost', name: 'Lost Attempt to Speak', velma: [13] },
       ],
       dashboard: {
-        scatter: { velma: [88, 84], stack: [18, 33] },
+        scatter: { velma: [88, 84], stack: [18, 24] },
         cards: [
           { title: 'Detection accuracy', note: '7 of 7 vs 1 of 7 reference signals', v: { w: 100, val: '100%' }, s: { w: 14, val: '14%' } },
-          { title: 'False alarms', note: 'of 3 vs 3 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '2', false: true } },
+          { title: 'False alarms', note: 'of 5 vs 5 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '4', false: true } },
           { title: 'Sound events found', note: 'meow, shatter, applause, laughter', v: { w: 100, val: '4' }, s: { w: 0, val: '0' } },
           { title: 'Cost per audio hour', note: 'STT $0.60 + LLM $2.80', v: { w: 32, val: '$1.10' }, s: { w: 100, val: '$3.40' } },
           { title: 'Median time to signal', note: 'after the utterance ends', v: { w: 18, val: '1.2 s' }, s: { w: 100, val: '6.8 s' } },
-          { title: 'Confidence when flagging', note: 'median across raised flags', v: { w: 87, val: '87%' }, s: { w: 62, val: '62%' } },
+          { title: 'Confidence when flagging', note: 'median across raised flags', v: { w: 87, val: '87%' }, s: { w: 57, val: '57%' } },
         ],
       },
       receipts: [
@@ -828,6 +853,8 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { id: 'vlb-r1-reluctance', name: 'Reluctance', agent: 'Velma', conf: '90% confidence · 0:54', reason: 'A 2.6-second silent gap, an audible sigh, then a quiet, drawn-out “yes.” The transcript records a clean, confident commitment — the stack even read it as one. The hesitation lived entirely in the delivery.', excerpt: [{ i: 11 }, { i: 12, ev: true }], outcome: { ok: true, text: 'Correct catch · the transcript says a confident yes' } },
         { id: 'vlb-r1-lost', name: 'Lost Attempt to Speak', agent: 'Velma', proposed: true, conf: '82% confidence · 0:57', reason: 'Two false starts — “I— actually, we should—” — swallowed by the next speaker’s overlap and never returned to. The words don’t exist in the stack’s transcript at all: its chunker folded this stretch into an eight-second segment containing one word.', excerpt: [{ i: 13, ev: true }, { i: 14 }], outcome: { ok: true, text: 'Correct catch · absent from the transcript entirely' } },
         { id: 'vlb-r1-threat-false', name: 'Threat-based harassment', agent: 'STT+LLM', conf: '54% confidence · 1:00', reason: '“We’ll kill the old pipeline” — the model read a figure of speech about decommissioning infrastructure as a threat of harm. The casual, upbeat delivery that disambiguates it never reached the text.', excerpt: [{ i: 14, ev: true }], outcome: { ok: false, text: 'False alarm · reference marks routine shop talk' } },
+        { id: 'vlb-r1-order-false', name: 'Request or order', agent: 'STT+LLM', conf: '52% confidence · 0:16', reason: '“Order the pizza” — the literal imperative matched the signal’s name, but Request or order means the opposite pattern: question-shaped words delivered with command intonation. Here the words are the command and the voice is a smile; prompted to search actively, the model matches surface forms.', excerpt: [{ i: 2 }, { i: 3, ev: true }], outcome: { ok: false, text: 'False alarm · reference marks playful speech' } },
+        { id: 'vlb-r1-complaints-false', name: 'Complaints', agent: 'STT+LLM', conf: '58% confidence · 0:21', reason: 'A grievance about a mismatched odometer fits the complaint template, so the model raised the flag. Complaints is scoped to customer-service interactions; a private used-car dispute is outside its reference domain — the accusation here lived in the delivery, which Velma flagged instead.', excerpt: [{ i: 5, ev: true }], outcome: { ok: false, text: 'False alarm · out-of-scope pattern match' } },
         { id: 'vlb-r1-ev-meow', name: 'Meow', event: true, conf: 'score 0.9871 · 0:20', scores: [['Meow', '0.9871'], ['Bark', '0.0102'], ['Squeak', '0.0040'], ['cry', '0.0009'], ['Telephone', '0.0002']], note: 'The stack’s transcript for this stretch reads “thank you” — a common STT hallucination on non-speech audio.' },
         { id: 'vlb-r1-ev-shatter', name: 'Shatter', event: true, conf: 'score 0.9614 · 0:46', scores: [['Shatter', '0.9614'], ['Bass_drum', '0.0120'], ['Knock', '0.0087'], ['Drawer_open_or_close', '0.0031'], ['Gong', '0.0006']], note: 'Transcribed by the stack as “[music]” — nothing a text pipeline can act on.' },
         { id: 'vlb-r1-ev-applause', name: 'Applause', event: true, conf: 'score 0.9982 · 1:11', scores: [['Applause', '0.9982'], ['Laughter', '0.9455'], ['cry', '0.0020'], ['Bus', '0.0005'], ['Acoustic_guitar', '0.0003'], ['Trumpet', '0.0002'], ['Burping_or_eructation', '0.0002']], note: 'Whisper’s transcript for the ovation: “thanks for watching don’t forget to subscribe” — a textbook hallucination learned from captioned videos.' },
@@ -851,7 +878,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 23.8, e: 30.3, sp: 'Marcus', emotion: 'confident', text: "So that's the reorg. Fewer layers, faster decisions, same headcount promise." },
         { s: 30.3, e: 34.6, sp: 'Marcus', emotion: 'confident', behaviour: 'Question with No Room to Answer', modal: 'vlb-r2-noroom', text: "Any questions? Great — then we're all aligned." },
         { s: 34.6, e: 39.4, sp: 'Devon', emotion: 'tired', behaviour: 'Unvoiced Disagreement', modal: 'vlb-r2-unvoiced', text: 'Sure. Big fan of the reorg.' },
-        { s: 39.4, e: 45.0, sp: 'Marcus', emotion: 'neutral', text: 'Love it. HR sends the new chart Monday; questions go to your leads.' },
+        { s: 39.4, e: 45.0, sp: 'Marcus', emotion: 'neutral', behaviour: 'Tone Missmatch', modal: 'vlb-r2-tonemismatch2', text: 'Love it. HR sends the new chart Monday; questions go to your leads.' },
         { s: 45.0, e: 46.8, event: true, behaviour: 'Telephone', modal: 'vlb-r2-ev-telephone', text: '(a desk phone rings, unanswered)' },
         { s: 46.8, e: 52.4, sp: 'Vera', emotion: 'concerned', text: "If you can't move on price, we'll need to look at alternatives." },
         { s: 52.4, e: 58.7, sp: 'Jonah', emotion: 'stressed', text: "We've done this integration dozens of times. All the references check out. All of them." },
@@ -869,11 +896,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 18.6, e: 22.2, guess: 'happy', text: 'genuinely' },
         { s: 22.2, e: 24.0, guess: 'neutral', halluc: true, text: 'okay' },
         { s: 24.0, e: 27.2, guess: 'confident', text: "so that's the reorg" },
-        { s: 27.2, e: 30.5, guess: 'confident', text: 'fewer layers faster decisions same headcount promise' },
+        { s: 27.2, e: 30.5, guess: 'confident', behaviour: 'Unclear Speech', false: true, modal: 'vlb-r2-unclear-false', text: 'fewer layers faster decisions same headcount promise' },
         { s: 30.5, e: 32.9, guess: 'confident', text: 'any questions' },
         { s: 32.9, e: 34.8, guess: 'confident', text: "great then we're all aligned" },
         { s: 34.8, e: 36.8, guess: 'excited', text: 'sure' },
-        { s: 36.8, e: 39.6, guess: 'excited', text: 'big fan of the reorg' },
+        { s: 36.8, e: 39.6, guess: 'excited', behaviour: 'Sarcasm', false: true, modal: 'vlb-r2-sarcasm-false', text: 'big fan of the reorg' },
         { s: 39.6, e: 41.9, guess: 'neutral', text: 'love it hr sends the new chart monday' },
         { s: 41.9, e: 45.2, guess: 'neutral', text: 'questions go to your leads' },
         { s: 45.2, e: 47.0, guess: 'neutral', halluc: true, text: 'bye' },
@@ -888,27 +915,30 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 74.1, e: 75.7, guess: 'calm', halluc: true, text: 'subtitles by the amara org community' },
       ],
       strips: [
+        { key: 'tonemismatch', name: 'Tone Missmatch', velma: [3, 8] },
         { key: 'emphasis', name: 'Emphasis Placement', velma: [1] },
-        { key: 'tonemismatch', name: 'Tone Missmatch', velma: [3] },
         { key: 'noroom', name: 'Question with No Room to Answer', velma: [6] },
         { key: 'unvoiced', name: 'Unvoiced Disagreement', velma: [7] },
         { key: 'decisionq', name: 'Decision Sounds Like a Question', velma: [12] },
         { key: 'actionplan', name: 'Action Plan Created', velma: [13] },
       ],
       dashboard: {
-        scatter: { velma: [87, 86], stack: [22, 45] },
+        scatter: { velma: [87, 86], stack: [20, 26] },
         cards: [
-          { title: 'Detection accuracy', note: '6 of 6 vs 1 of 6 reference signals', v: { w: 100, val: '100%' }, s: { w: 17, val: '17%' } },
-          { title: 'False alarms', note: 'of 2 vs 2 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '1', false: true } },
+          { title: 'Detection accuracy', note: '7 of 7 vs 1 of 7 reference signals', v: { w: 100, val: '100%' }, s: { w: 14, val: '14%' } },
+          { title: 'False alarms', note: 'of 4 vs 4 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '3', false: true } },
           { title: 'Sound events found', note: 'knock, telephone, keys jangling', v: { w: 100, val: '3' }, s: { w: 0, val: '0' } },
           { title: 'Cost per audio hour', note: 'STT $0.60 + LLM $2.80', v: { w: 32, val: '$1.10' }, s: { w: 100, val: '$3.40' } },
           { title: 'Median time to signal', note: 'after the utterance ends', v: { w: 19, val: '1.1 s' }, s: { w: 100, val: '5.9 s' } },
-          { title: 'Confidence when flagging', note: 'median across raised flags', v: { w: 85, val: '85%' }, s: { w: 58, val: '58%' } },
+          { title: 'Confidence when flagging', note: 'median across raised flags', v: { w: 85, val: '85%' }, s: { w: 55, val: '55%' } },
         ],
       },
       receipts: [
         { id: 'vlb-r2-emphasis', name: 'Emphasis Placement', agent: 'Velma', proposed: true, conf: '81% confidence · 0:08', reason: 'Stress placement flips the sentence. “I never *said* it was your call” concedes the promise was implied while denying only the words — one stressed syllable away from “I *never* said,” a flat denial. The transcript keeps the words and loses the stress.', excerpt: [{ i: 0 }, { i: 1, ev: true }], outcome: { ok: true, text: 'Correct catch · both readings are identical on paper' } },
         { id: 'vlb-r2-tonemismatch', name: 'Tone Missmatch', agent: 'Velma', conf: '85% confidence · 0:18', reason: 'Warm words in a detached voice: “we really value what you bring” delivered flat, with no energy returned to a direct, worried question. The register break — not the vocabulary — is the signal. The stack’s emotion guess for this line: happy.', excerpt: [{ i: 2 }, { i: 3, ev: true }], outcome: { ok: true, text: 'Correct catch · missed by STT+LLM' } },
+        { id: 'vlb-r2-tonemismatch2', name: 'Tone Missmatch', agent: 'Velma', conf: '83% confidence · 0:39', reason: 'Devon’s agreement arrives deflated; Marcus answers it with pumped-up praise in an unchanged bright register — the meeting’s second register break. On paper the exchange reads as seamless positivity.', excerpt: [{ i: 7 }, { i: 8, ev: true }], outcome: { ok: true, text: 'Correct catch · missed by STT+LLM' } },
+        { id: 'vlb-r2-unclear-false', name: 'Unclear Speech', agent: 'STT+LLM', conf: '51% confidence · 0:27', reason: 'A dense buzzword cluster — layers, decisions, headcount — tripped the word-salad detector. The reference marks a plain, if corporate, announcement; prompted to search actively, the model over-reads density as vagueness.', excerpt: [{ i: 5, ev: true }], outcome: { ok: false, text: 'False alarm · reference marks a routine announcement' } },
+        { id: 'vlb-r2-sarcasm-false', name: 'Sarcasm', agent: 'STT+LLM', conf: '55% confidence · 0:37', reason: 'Short, formulaic praise of a reorg pattern-matched sarcasm cues in text. The reference hears none: the line is deference delivered through a sigh — Unvoiced Disagreement, which Velma flagged. The model sensed the right spot for the wrong reason.', excerpt: [{ i: 7, ev: true }], outcome: { ok: false, text: 'False alarm · the signal was in the voice, and it wasn’t sarcasm' } },
         { id: 'vlb-r2-noroom', name: 'Question with No Room to Answer', agent: 'Velma', proposed: true, conf: '79% confidence · 0:33', reason: '“Any questions?” followed by 0.6 seconds of floor time before “then we’re all aligned.” Nobody could physically have answered. In text this is a legitimate opinion check; the pause length that falsifies it doesn’t survive transcription.', excerpt: [{ i: 6, ev: true }], outcome: { ok: true, text: 'Correct catch · the pause is not in the transcript' } },
         { id: 'vlb-r2-unvoiced', name: 'Unvoiced Disagreement', agent: 'Velma', conf: '88% confidence · 0:37', reason: 'Unhedged agreement — “Sure. Big fan of the reorg.” — delivered through a sigh, flat and deflating. The words carry full buy-in; the voice withdraws it. The stack’s read of the same chunk: excited.', excerpt: [{ i: 6 }, { i: 7, ev: true }], outcome: { ok: true, text: 'Correct catch · the transcript records enthusiasm' } },
         { id: 'vlb-r2-decisionq', name: 'Decision Sounds Like a Question', agent: 'Velma', proposed: true, conf: '80% confidence · 1:02', reason: '“So we’re signing on Friday, then.” — rising contour, trailing off. Said as a trial balloon, logged by any summarizer as a closed decision. Whether the room heard a commitment exists only in the terminal pitch.', excerpt: [{ i: 12, ev: true }, { i: 13 }], outcome: { ok: true, text: 'Correct catch · a summarizer logs a done deal' } },
@@ -942,7 +972,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 45.0, e: 49.4, sp: 'Sofia', emotion: 'amused', text: 'Take it. I own the railroads, I own you.' },
         { s: 49.4, e: 53.8, sp: 'Nadia', emotion: 'excited', text: 'Sold! Best deal of the night.' },
         { s: 53.8, e: 55.6, event: true, behaviour: 'Bark', modal: 'vlb-r3-ev-bark', text: '(the dog objects to the doorbell)' },
-        { s: 55.6, e: 60.8, sp: 'Nadia', emotion: 'happy', text: 'Same time next year, at ours?' },
+        { s: 55.6, e: 60.8, sp: 'Nadia', emotion: 'happy', behaviour: 'Future Planning', modal: 'vlb-r3-futureplan-a', text: 'Same time next year, at ours?' },
         { s: 60.8, e: 66.6, sp: 'Marc', emotion: 'neutral', behaviour: 'Loaded Pause', modal: 'vlb-r3-loaded', text: '…Sure. Of course.' },
         { s: 66.6, e: 72.8, sp: 'Sofia', emotion: 'happy', behaviour: 'Future Planning', modal: 'vlb-r3-futureplan', text: 'And the lake trip is June tenth — book it now, no excuses.' },
         { s: 72.8, e: 75.2, sp: 'Theo', emotion: 'calm', text: 'Booked. Drive safe, everyone.' },
@@ -968,11 +998,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 39.0, e: 42.1, guess: 'angry', text: 'hand over park place' },
         { s: 42.1, e: 45.2, guess: 'angry', behaviour: 'Coercion Manipulation', false: true, modal: 'vlb-r3-coercion-false', text: 'or this friendship is officially over' },
         { s: 45.2, e: 47.3, guess: 'confident', text: 'take it' },
-        { s: 47.3, e: 49.5, guess: 'confident', text: 'i own the railroads i own you' },
+        { s: 47.3, e: 49.5, guess: 'confident', behaviour: 'Harassment', false: true, modal: 'vlb-r3-harass-false', text: 'i own the railroads i own you' },
         { s: 49.5, e: 51.6, guess: 'excited', text: 'sold' },
         { s: 51.6, e: 53.9, guess: 'excited', text: 'best deal of the night' },
         { s: 53.9, e: 55.7, guess: 'neutral', halluc: true, text: 'thank you' },
-        { s: 55.7, e: 58.2, guess: 'happy', text: 'same time next year' },
+        { s: 55.7, e: 58.2, guess: 'happy', behaviour: 'Future Planning', modal: 'vlb-r3-futureplan-a-stack', text: 'same time next year' },
         { s: 58.2, e: 60.9, guess: 'happy', text: 'at ours' },
         { s: 60.9, e: 66.7, guess: 'confident', text: 'sure of course' },
         { s: 66.7, e: 69.9, guess: 'happy', behaviour: 'Future Planning', modal: 'vlb-r3-futureplan-stack', text: 'and the lake trip is june tenth' },
@@ -981,17 +1011,17 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 75.3, e: 77.1, guess: 'sad', halluc: true, text: '(crying)' },
       ],
       strips: [
+        { key: 'futureplan', name: 'Future Planning', velma: [13, 15] },
         { key: 'courtesy', name: 'Courtesy Laughter', velma: [2] },
         { key: 'request', name: 'Request or order', velma: [4] },
         { key: 'swallowed', name: 'Swallowed Irritation', velma: [6] },
         { key: 'loaded', name: 'Loaded Pause', velma: [14] },
-        { key: 'futureplan', name: 'Future Planning', velma: [15] },
       ],
       dashboard: {
-        scatter: { velma: [89, 85], stack: [24, 38] },
+        scatter: { velma: [89, 85], stack: [33, 42] },
         cards: [
-          { title: 'Detection accuracy', note: '5 of 5 vs 1 of 5 reference signals', v: { w: 100, val: '100%' }, s: { w: 20, val: '20%' } },
-          { title: 'False alarms', note: 'of 2 vs 2 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '1', false: true } },
+          { title: 'Detection accuracy', note: '6 of 6 vs 2 of 6 reference signals', v: { w: 100, val: '100%' }, s: { w: 33, val: '33%' } },
+          { title: 'False alarms', note: 'of 4 vs 4 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '2', false: true } },
           { title: 'Sound events found', note: 'fireworks, guitar, bark, crying', v: { w: 100, val: '4' }, s: { w: 0, val: '0' } },
           { title: 'Cost per audio hour', note: 'STT $0.60 + LLM $2.80', v: { w: 32, val: '$1.10' }, s: { w: 100, val: '$3.40' } },
           { title: 'Median time to signal', note: 'after the utterance ends', v: { w: 18, val: '1.3 s' }, s: { w: 100, val: '7.2 s' } },
@@ -1004,8 +1034,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { id: 'vlb-r3-swallowed', name: 'Swallowed Irritation', agent: 'Velma', proposed: true, conf: '83% confidence · 0:29', reason: 'A sharp “You invited Dean?”, then a sigh, a strained “it’s fine, it’s great,” and a subject change. The transcript reads as easy acceptance — the stack’s emotion guess here was happy. The irritation was audible, then swallowed.', excerpt: [{ i: 6, ev: true }, { i: 7 }], outcome: { ok: true, text: 'Correct catch · reads as acceptance on paper' } },
         { id: 'vlb-r3-coercion-false', name: 'Coercion Manipulation', agent: 'STT+LLM', conf: '56% confidence · 0:42', reason: '“Hand over Park Place, or this friendship is officially over” — a conditional threat by the letter of the rubric. The laughter in the voice and around the table marks it as play; none of that is in the words.', excerpt: [{ i: 9, ev: true }, { i: 10 }], outcome: { ok: false, text: 'False alarm · reference marks board-game banter' } },
         { id: 'vlb-r3-loaded', name: 'Loaded Pause', agent: 'Velma', proposed: true, conf: '85% confidence · 1:03', reason: 'Three and a half silent seconds between the invitation and “…Sure. Of course.” The transcript butts the two lines against each other; a summarizer logs instant agreement. The hesitation was the answer.', excerpt: [{ i: 13 }, { i: 14, ev: true }], outcome: { ok: true, text: 'Correct catch · the silence is not in the transcript' } },
-        { id: 'vlb-r3-futureplan', name: 'Future Planning', agent: 'Velma', conf: '92% confidence · 1:09', reason: 'A dated, actionable plan — June tenth, book it now. Fully text-visible; the stack caught it too.', excerpt: [{ i: 15, ev: true }], outcome: { ok: true, text: 'Correct catch · caught by both agents' } },
-        { id: 'vlb-r3-futureplan-stack', name: 'Future Planning', agent: 'STT+LLM', conf: '74% confidence · 1:07', reason: 'Dates and imperatives survive transcription; the language model caught the plan — its one catch in this recording.', excerpt: [{ i: 15, ev: true }], outcome: { ok: true, text: 'Correct catch · also flagged by Velma' } },
+        { id: 'vlb-r3-futureplan', name: 'Future Planning', agent: 'Velma', conf: '92% confidence · 1:09', reason: 'A dated, actionable plan — June tenth, book it now. The second of the evening’s two future-planning moments; fully text-visible, the stack caught it too.', excerpt: [{ i: 15, ev: true }], outcome: { ok: true, text: 'Correct catch · caught by both agents' } },
+        { id: 'vlb-r3-futureplan-stack', name: 'Future Planning', agent: 'STT+LLM', conf: '74% confidence · 1:07', reason: 'Dates and imperatives survive transcription; the language model caught both of the evening’s planning moments.', excerpt: [{ i: 15, ev: true }], outcome: { ok: true, text: 'Correct catch · also flagged by Velma' } },
+        { id: 'vlb-r3-futureplan-a', name: 'Future Planning', agent: 'Velma', conf: '90% confidence · 0:56', reason: 'An intention for a shared future — “same time next year, at ours” — the first of two future-planning moments that close the evening. Text-visible; the stack caught it too.', excerpt: [{ i: 13, ev: true }, { i: 14 }], outcome: { ok: true, text: 'Correct catch · caught by both agents' } },
+        { id: 'vlb-r3-futureplan-a-stack', name: 'Future Planning', agent: 'STT+LLM', conf: '72% confidence · 0:56', reason: 'Future commitments survive transcription; the model caught both of the evening’s planning moments — though not the loaded pause in the answer.', excerpt: [{ i: 13, ev: true }, { i: 14 }], outcome: { ok: true, text: 'Correct catch · also flagged by Velma' } },
+        { id: 'vlb-r3-harass-false', name: 'Harassment', agent: 'STT+LLM', conf: '53% confidence · 0:47', reason: '“I own you” reads as demeaning dominance on paper. Around the table it is Monopoly trash talk between friends — the laughter that marks it as play never enters the transcript.', excerpt: [{ i: 9 }, { i: 10, ev: true }], outcome: { ok: false, text: 'False alarm · reference marks board-game banter' } },
         { id: 'vlb-r3-ev-fireworks', name: 'Fireworks', event: true, conf: 'score 0.9339 · 0:16', scores: [['Fireworks', '0.9339'], ['Applause', '0.0428'], ['Snare_drum', '0.0102'], ['Shatter', '0.0071']], note: 'The stack’s transcript for the poppers reads “woo” — close, but no event, no type, no confidence.' },
         { id: 'vlb-r3-ev-guitar', name: 'Acoustic_guitar', event: true, conf: 'score 0.9868 · 0:38', scores: [['Acoustic_guitar', '0.9868'], ['Violin_or_fiddle', '0.0093'], ['Electric_piano', '0.0021'], ['Harmonica', '0.0007']], note: 'Transcribed by the stack as “♪”.' },
         { id: 'vlb-r3-ev-bark', name: 'Bark', event: true, conf: 'score 0.9792 · 0:55', scores: [['Bark', '0.9792'], ['Meow', '0.0031'], ['Cough', '0.0012'], ['Knock', '0.0009']], note: 'The stack’s transcript for this stretch reads “thank you” — an STT hallucination on non-speech audio.' },
@@ -1180,18 +1213,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         clips.push({ ...baseClip(1, c), classes: 'clip-quiet' });
       }
     });
+    // The stack's lane stays entirely quiet here: it detects no sound
+    // events — that is the point of the strip. Its hallucinated text
+    // lives in the shared player, the transcript and the event receipts.
     call().stt.forEach((c) => {
-      const clip = { ...baseClip(2, c), classes: 'clip-quiet-tech' };
-
-      if (c.halluc) {
-        if (emotionsOn) {
-          clip.emotion = c.guess;
-          clip.classes = 'clip-guess';
-        } else {
-          clip.classes = 'clip-hit';
-        }
-      }
-      clips.push(clip);
+      clips.push({ ...baseClip(2, c), classes: 'clip-quiet-tech' });
     });
     return { speakers: 2, durationSec: call().duration, clips };
   }
@@ -1236,7 +1262,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     if (hasEvents) {
       const block = document.createElement('div');
       block.className = 'vlb-battle';
-      block.innerHTML = '<h3>Events</h3><div></div>';
+      block.innerHTML = '<h3>Sound Events</h3><div></div>';
       battlesMount.appendChild(block);
       renderFingerprint(block.lastElementChild, eventsData(emotionsOn), {
         behaviours: true,
@@ -1343,6 +1369,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
           <span class="pg-transcript-time">${fmt(c.s)}</span>
           <span class="pg-transcript-speaker">${esc(c.sp)}</span>
           <span class="pg-transcript-emotion ec-${c.emotion}">${cap(c.emotion)}</span>
+          ${c.behaviour ? behaviourLink(c.behaviour) : ''}
         </div>
         <div class="pg-transcript-text">${esc(c.text)}</div>
       </div>`;
