@@ -388,52 +388,184 @@ target:
       - section:
           text-content: pricing-intro
       - section:
-          widget: pricing-tabs
+          widget: model-selector
     subsections:
-      - title: Velma
+      - title: Velma Triage
         sections:
           - section:
               text-content: velma-intro
           - section:
-              widget: velma-pricing-table
-      - title: Transcription
+              text-content: velma-pricing-table
+      - title: English Fast Transcription
         sections:
           - section:
-              widget: transcription-pricing-table
+              text-content: english-fast-transcription-intro
+          - section:
+              text-content: english-fast-transcription-pricing-table
+      - title: Multilingual Transcription
+        sections:
+          - section:
+              text-content: multilingual-transcription-intro
+          - section:
+              text-content: multilingual-transcription-pricing-table
       - title: Deepfake Detection
         sections:
           - section:
               text-content: deepfake-detection-intro
           - section:
-              widget: deepfake-detection-pricing-table
+              text-content: deepfake-detection-pricing-table
       - title: PII/PHI Redaction
         sections:
           - section:
               text-content: pii-phi-redaction-intro
           - section:
-              widget: pii-phi-redaction-pricing-table
+              text-content: pii-phi-redaction-pricing-table
       - title: Music & Speech Detection
         sections:
           - section:
               text-content: music-speech-detection-intro
           - section:
-              widget: music-speech-detection-pricing-table
+              text-content: music-speech-detection-pricing-table
       - title: Language Detection
         sections:
           - section:
               text-content: language-detection-intro
           - section:
-              widget: language-detection-pricing-table
+              text-content: language-detection-pricing-table
 
   - id: playground
-    route: /playground
-    title: Playground
-    sections: []
+    route: /playground/velma/
+    title: Playground — Velma Triage
+    sections:
+      - section:
+          widget: analysis-upload
+      - section:
+          widget: audio-player
+      - section:
+          text-content: speech-summary
+      - section:
+          text-content: speakers
+      - section:
+          text-content: topics-and-sentiment
+      - section:
+          text-content: behaviors
+      - section:
+          text-content: transcript
+      - section:
+          text-content: raw-json
+      - section:
+          text-content: statistics
+
+  - id: playground-redaction
+    route: /playground/redaction/
+    title: Playground — PII/PHI Redaction
+    sections:
+      - section:
+          widget: analysis-upload
+      - section:
+          text-content: redaction-verdict
+      - section:
+          widget: audio-player
+      - section:
+          text-content: redacted-transcript
+      - section:
+          text-content: raw-json
+      - section:
+          text-content: statistics
+
+  - id: playground-transcription
+    route: /playground/transcription/
+    title: Playground — Multilingual Transcription
+    sections:
+      - section:
+          widget: analysis-upload
+      - section:
+          widget: audio-player
+      - section:
+          text-content: transcript
+      - section:
+          text-content: raw-json
+      - section:
+          text-content: statistics
+
+  - id: playground-deepfake
+    route: /playground/deepfake/
+    title: Playground — Deepfake Detection
+    sections:
+      - section:
+          widget: analysis-upload
+      - section:
+          text-content: deepfake-verdict
+      - section:
+          widget: audio-player
+      - section:
+          text-content: detection-results-table
+      - section:
+          text-content: raw-json
+      - section:
+          text-content: statistics
+
+  - id: playground-music-speech
+    route: /playground/music/
+    title: Playground — Music & Speech Detection
+    sections:
+      - section:
+          widget: analysis-upload
+      - section:
+          text-content: music-speech-verdict
+      - section:
+          widget: audio-player
+      - section:
+          text-content: detection-results-table
+      - section:
+          text-content: raw-json
+      - section:
+          text-content: statistics
+
+  - id: playground-ai-music
+    route: /playground/ai-music/
+    title: Playground — AI Music Detection
+    sections:
+      - section:
+          widget: analysis-upload
+      - section:
+          text-content: ai-music-verdict
+      - section:
+          widget: audio-player
+      - section:
+          text-content: detection-results-table
+      - section:
+          text-content: raw-json
+      - section:
+          text-content: statistics
+
+  - id: playground-language
+    route: /playground/language/
+    title: Playground — Language Detection
+    sections:
+      - section:
+          widget: analysis-upload
+      - section:
+          text-content: language-verdict
+      - section:
+          widget: audio-player
+      - section:
+          text-content: raw-json
+      - section:
+          text-content: statistics
 
   - id: conversations
     route: /dashboard/conversations/
-    title: Conversations
-    sections: []
+    title: Browse Conversations
+    sections:
+      - section:
+          widget: conversations-tabs
+      - section:
+          text-content: conversations-intro
+      - section:
+          widget: conversation-upload
+      - section:
+          widget: conversations-table
 
   - id: conversations-create
     route: /dashboard/conversations/create/
@@ -447,7 +579,43 @@ target:
     title: Review Queue
     sections:
       - section:
-          text-content: moderation-intro
+          widget: conversations-tabs
+      - section:
+          text-content: review-queue-intro
+      - section:
+          widget: review-queue-table
+
+  - id: conversations-review-detail
+    route: /dashboard/conversations/review/7839f2/
+    title: Conversation Review
+    sections:
+      - section:
+          widget: conversation-player
+      - section:
+          text-content: behaviors
+      - section:
+          text-content: transcript
+
+  - id: conversations-report
+    route: /dashboard/conversations/7839f2/
+    title: Conversation Report
+    sections:
+      - section:
+          widget: conversation-player
+      - section:
+          text-content: speech-summary
+      - section:
+          text-content: speakers
+      - section:
+          text-content: topics-and-sentiment
+      - section:
+          text-content: behaviors
+      - section:
+          text-content: transcript
+      - section:
+          text-content: raw-json
+      - section:
+          text-content: report-statistics
 
   - id: dashboard-insights
     route: /dashboard/insights/
@@ -456,11 +624,13 @@ target:
       - section:
           text-content: insights-intro
       - section:
-          widgets:
-            - pattern-count
-            - behavior-shifts
-            - anomaly-alerts
-            - largest-cohort-gap
+          widget: pattern-count
+      - section:
+          widget: behavior-shifts
+      - section:
+          widget: anomaly-alerts
+      - section:
+          widget: emerging-behavior
       - section:
           widget: anomaly-alerts-table
 
@@ -469,9 +639,9 @@ target:
     title: Home
     sections:
       - section:
-          widgets:
-            - credit-balance-stat
-            - credit-balance-over-time
+          widget: credit-balance-stat
+      - section:
+          widget: credit-balance-over-time
       - section:
           widget: usage-by-model
       - section:
@@ -480,7 +650,7 @@ target:
           widget: recent-usage
 
   - id: dashboard-api-keys
-    route: /dashboard/api-keys
+    route: /dashboard/api-keys/
     title: API Keys
     sections:
       - section:
@@ -489,9 +659,13 @@ target:
           widget: api-keys-table
 
   - id: dashboard-models
-    route: —
+    route: /dashboard/model-settings/
     title: Models
-    sections: []
+    sections:
+      - section:
+          text-content: model-settings-intro
+      - section:
+          widget: model-settings-table
 
   - id: dashboard-usage
     route: /dashboard/usage/
@@ -558,6 +732,20 @@ target:
       - section:
           widget: behaviors-included-table
 
+  - id: dashboard-actions
+    route: /dashboard/actions/
+    title: Actions
+    sections:
+      - section:
+          text-content: actions-intro
+
+  - id: dashboard-jobs
+    route: /dashboard/jobs/
+    title: Jobs
+    sections:
+      - section:
+          text-content: jobs-intro
+
   - id: dashboard-billing
     route: /dashboard/billing/
     title: Billing
@@ -565,11 +753,11 @@ target:
       - section:
           text-content: billing-intro
       - section:
-          widgets:
-            - credit-balance
-            - apply-credit-code
-      - section:
           widget: purchase-credits
+      - section:
+          widget: credit-balance
+      - section:
+          widget: apply-credit-code
       - section:
           widget: billing-history
 
@@ -609,104 +797,79 @@ target:
       - section:
           text-content: monthly-credit-limit
       - section:
-          widget: members
-      - section:
-          widget: pending-invites
-      - section:
           text-content: leave-organization
 
-  - id: internal-users
-    route: /internal/users/
-    title: Users & Organizations
+  - id: dashboard-members
+    route: /dashboard/members/
+    title: Members
     sections:
       - section:
-          text-content: users-orgs-intro
+          text-content: members-intro
       - section:
-          widget: users-table
+          widget: members-table
+      - section:
+          widget: pending-invites-table
+
+  - id: dashboard-activity-logs
+    route: /dashboard/activity-logs/
+    title: Activity Logs
+    sections:
+      - section:
+          text-content: activity-logs-intro
+
+  - id: dashboard-alerts
+    route: /dashboard/alerts/
+    title: Alerts
+    sections:
+      - section:
+          text-content: alerts-intro
+
+  - id: dashboard-notifications
+    route: /dashboard/notifications/
+    title: Notifications
+    sections:
+      - section:
+          text-content: notifications-intro
+
+  - id: internal-users
+    route: —
+    title: Users & Organizations
+    sections: []
 
   - id: internal-data
-    route: /internal/data/
+    route: —
     title: Data Management
-    sections:
-      - section:
-          text-content: data-management-intro
-      - section:
-          widget: data-export
+    sections: []
 
   - id: internal-invites
-    route: /internal/invites/
+    route: —
     title: Invites & Credits
-    sections:
-      - section:
-          text-content: invites-credits-intro
-      - section:
-          widget: invites-table
+    sections: []
 
   - id: internal-usage
-    route: /internal/usage/
+    route: —
     title: Platform Usage
-    sections:
-      - section:
-          text-content: platform-usage-intro
-      - section:
-          widget: usage-filters
-      - section:
-          widgets:
-            - stat-total-requests
-            - stat-credits-consumed
-            - stat-duration
-            - stat-purchased-credits
-            - stat-granted-credits
-      - section:
-          widgets:
-            - usage-by-model
-            - credit-consumption
+    sections: []
 
   - id: internal-overrides
-    route: /internal/overrides/
+    route: —
     title: Org Overrides
-    sections:
-      - section:
-          text-content: overrides-intro
-      - section:
-          widget: org-selector
-      - section:
-          widget: bulk-tag-overrides
+    sections: []
 
   - id: internal-reports
-    route: /internal/reports/
+    route: —
     title: Reports
-    sections:
-      - section:
-          text-content: reports-intro
-      - section:
-          widget: report-generator
+    sections: []
 
   - id: internal-models
-    route: /internal/models/
+    route: —
     title: Model Management
-    sections:
-      - section:
-          text-content: model-management-intro
-      - section:
-          text-content: velma-music-detection
-      - section:
-          text-content: velma-stt-batch
-      - section:
-          text-content: velma-stt-batch-english-fast
-      - section:
-          text-content: velma-stt-streaming
-      - section:
-          text-content: velma-synthetic-voice-detection
+    sections: []
 
   - id: docs-admin-apis
-    route: /internal/admin-apis
+    route: —
     title: Admin APIs
-    sections:
-      - section:
-          widget: api-spec-selector
-      - section:
-          widget: api-spec-viewer
+    sections: []
 
   - id: auth-login
     route: /auth/login/
@@ -762,6 +925,6 @@ target:
     title: Select organization
     sections:
       - section:
-          widget: org-select
-      - section:
-          widget: org-create
+          widgets:
+            - organization-list
+            - organization-create
