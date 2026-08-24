@@ -518,7 +518,10 @@
     line-height: 1.35;
     color: var(--m__text-caption);
     text-align: center;
-    white-space: nowrap;
+    width: max-content;
+    max-width: 9rem;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
 
     & strong {
       color: var(--m__text);
@@ -526,26 +529,6 @@
     }
   }
 
-  & .vlb-scatter__dot.is-label-start .vlb-scatter__dot-label {
-    left: 50%;
-    transform: none;
-    text-align: left;
-  }
-
-  & .vlb-scatter__dot.is-label-end .vlb-scatter__dot-label {
-    right: 50%;
-    left: auto;
-    transform: none;
-    text-align: right;
-  }
-
-  /* the corner dot's label goes below-left so it stays inside the plot */
-  & .vlb-scatter__dot.is-velma .vlb-scatter__dot-label {
-    left: auto;
-    right: -0.35rem;
-    transform: none;
-    text-align: right;
-  }
 }
 
 @media (width >= 992px) {

@@ -298,7 +298,10 @@
            recordings with sound interludes — a closing Events strip for
            the sound-events model. The blocks are generated per selected
            recording by the module script. -->
-      <section class="vlb-battles" data-vlb-battles></section>
+      <section class="vlb-battles">
+        <h2>Behaviors &amp; Sound Events</h2>
+        <div data-vlb-battles></div>
+      </section>
 
       <div class="m__space L"></div>
 
@@ -306,7 +309,7 @@
            reference labels (preloaded demos only). External uploads keep
            only the cost / speed / signals-found cards. -->
       <section class="vlb-dashboard">
-        <h6 class="pg-section-title">Accuracy vs. reference</h6>
+        <h2>Detection Accuracy</h2>
         <div class="vlb-dashboard__grid" data-vlb-dashboard></div>
       </section>
     </main>
@@ -1235,8 +1238,8 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     };
   }
 
-  function emotionGlow(emotion) {
-    return `rgba(var(--emotion-${emotion || 'neutral'}-RGB), 1)`;
+  function emotionGlow(emotion, opacity = 1) {
+    return `rgba(var(--emotion-${emotion || 'neutral'}-RGB), ${opacity})`;
   }
 
   function mainData(emotionsOn) {
@@ -1280,7 +1283,10 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         if (emotionsOn) {
           clip.emotion = c.guess;
           clip.classes = 'clip-guess';
-          clip.glowColor = emotionGlow(c.guess);
+          // Guessed-emotion clips render at 45% opacity. Start the glow
+          // from the same alpha so every outward stop remains lighter
+          // than the source clip instead of becoming a darker halo.
+          clip.glowColor = emotionGlow(c.guess, 0.45);
         } else {
           clip.classes = 'clip-hit';
           clip.glowColor = 'var(--fp-cmp-hit)';
@@ -1385,11 +1391,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   function renderDashboard() {
     const d = call().dashboard;
     const stackLabel = `${sttSelect ? sttSelect.value : 'Whisper v4'} + ${llmSelect ? llmSelect.value : 'GPT-5.5'}`;
-    const stackLabelAnchor = d.scatter.stack[0] <= 25
-      ? ' is-label-start'
-      : d.scatter.stack[0] >= 75
-        ? ' is-label-end'
-        : '';
 
     const bar = (agent, row) => {
       const tone = row.false
@@ -1422,7 +1423,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
           <span class="vlb-scatter__dot is-velma" style="left: ${d.scatter.velma[0]}%; bottom: ${d.scatter.velma[1]}%">
             <span class="vlb-scatter__dot-label"><strong>Velma</strong></span>
           </span>
-          <span class="vlb-scatter__dot${stackLabelAnchor}" style="left: ${d.scatter.stack[0]}%; bottom: ${d.scatter.stack[1]}%">
+          <span class="vlb-scatter__dot" style="left: ${d.scatter.stack[0]}%; bottom: ${d.scatter.stack[1]}%">
             <span class="vlb-scatter__dot-label"><strong>${esc(stackLabel)}</strong></span>
           </span>
         </div>
