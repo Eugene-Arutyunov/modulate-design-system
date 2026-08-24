@@ -561,7 +561,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 </div>
 {% endcall %}
 
-{% call modal("vlb-transcript-modal", "Transcript — Harborview Bank sample call") %}
+{% call modal("vlb-transcript-modal", "Transcript") %}
 <div class="m__modal__body">
   <!-- Two transcript variants side by side: each lane of the comparison
        player has its own — Velma's utterance-level diarized transcript on
@@ -814,6 +814,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   </div>
   </div>
   </div>
+</div>
+<div class="m__modal__footer vlb-transcript-footer">
+  <button
+    type="button"
+    class="m__button-primary S"
+    data-modal-close="vlb-transcript-modal">
+    Done
+  </button>
 </div>
 {% endcall %}
 
@@ -1602,7 +1610,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <div class="pg-transcript-text">${esc(c.text)}</div>
       </div>`).join('');
 
-    return modalShell(id, `Transcript — ${callDef.title}`, `
+    return modalShell(id, 'Transcript', `
       <div class="m__modal__body">
         <div class="vlb-transcript-duo">
           <div class="vlb-transcript-col">
@@ -1614,6 +1622,9 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
             <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">${sttRows}</div>
           </div>
         </div>
+      </div>
+      <div class="m__modal__footer vlb-transcript-footer">
+        <button type="button" class="m__button-primary S" data-modal-close="${id}">Done</button>
       </div>`);
   }
 

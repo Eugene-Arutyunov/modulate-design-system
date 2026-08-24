@@ -796,11 +796,14 @@
     [id^='vlb-transcript-'].m__modal-backdrop,
     #vlb-transcript-modal.m__modal-backdrop
   ) {
+  --vlb-transcript-scrollbar-clearance: 12px;
+
   align-items: center;
   overflow: hidden;
   padding: var(--m__gap-xl);
 
   & .m__modal {
+    position: relative;
     width: 100%;
     max-width: none;
     height: calc(100dvh - var(--m__gap-xl) - var(--m__gap-xl));
@@ -820,21 +823,35 @@
   & .m__modal__header {
     position: relative;
     z-index: 2;
+  }
 
-    &::after {
+  & .vlb-transcript-footer {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    padding: var(--m__gap-xxs) var(--m__modal-padding)
+      var(--m__modal-padding);
+    background: var(--m__bg);
+
+    &::before {
       content: '';
       position: absolute;
-      top: 100%;
-      right: 0;
+      right: var(--vlb-transcript-scrollbar-clearance);
+      bottom: 100%;
       left: 0;
       height: var(--m__spacer-m);
       background: linear-gradient(
-        to bottom,
+        to top,
         var(--m__bg),
         color-mix(in srgb, var(--m__bg) 75%, transparent) 45%,
         transparent
       );
       pointer-events: none;
+    }
+
+    & button {
+      position: relative;
+      z-index: 1;
     }
   }
 }
@@ -843,7 +860,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--m__gap-xl);
-  align-items: start;
+  align-items: stretch;
 
   @media (width < 768px) {
     grid-template-columns: 1fr;
@@ -851,13 +868,37 @@
 }
 
 .vlb-transcript-col__title {
+  position: sticky;
+  z-index: 1;
+  top: calc(-1 * var(--m__modal-padding));
   display: block;
+  margin-top: calc(-1 * var(--m__modal-padding));
   margin-bottom: var(--m__gap-s);
-  font-family: var(--m__font-family-semi-mono);
-  font-size: var(--m__font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--m__text-caption);
+  padding-top: var(--m__modal-padding);
+  padding-bottom: var(--m__gap-s);
+  background: var(--m__bg);
+  font-family: var(--m__font-family-sans);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--m__text);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    height: var(--m__spacer-m);
+    background: linear-gradient(
+      to bottom,
+      var(--m__bg),
+      color-mix(in srgb, var(--m__bg) 75%, transparent) 45%,
+      transparent
+    );
+    pointer-events: none;
+  }
 }
 
 /* The stack's transcript is undiarized — one flat left-aligned column,
@@ -893,15 +934,14 @@
   overflow: visible;
 }
 
-/* The event glyph: text-colored outline — a hue no emotion uses, so an
-   event kiki never reads as a behavior detection (doubled class to
-   outweigh the canon's [data-emotion] outline rules) */
+/* Sound-event clips are neutral, so their kiki outline uses the exact
+   same theme-safe neutral token as the clip beneath it. */
 .media-container
   .behaviour-indicators
   .behaviour-indicator.behaviour-indicator--event
   .behaviour-icon
   .behaviour-icon__outline {
-  fill: var(--m__text);
+  fill: rgba(var(--emotion-neutral-RGB), 1);
 }
 
 /* Event receipt: the score vector of the sound-events model */
