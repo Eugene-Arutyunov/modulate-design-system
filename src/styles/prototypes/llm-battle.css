@@ -309,32 +309,60 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--m__gap-xl);
-  align-items: start;
+  align-items: stretch;
 
   @media (width < 992px) {
     grid-template-columns: 1fr;
   }
 }
 
+@media (width >= 992px) {
+  .vlb-scatter,
+  .vlb-scatter__plot {
+    height: 100%;
+  }
+
+  .vlb-scatter__plot {
+    aspect-ratio: auto;
+  }
+}
+
 .vlb-scatter {
   & .vlb-scatter__plot {
+    --vlb-scatter-grid-line: color-mix(
+      in srgb,
+      var(--m__text) 6%,
+      transparent
+    );
+    --m__rounded-radius: var(--m__radius-xl);
+
     position: relative;
     aspect-ratio: 4 / 3;
     border: var(--m__border-width-s) solid var(--m__border);
-    border-radius: var(--m__radius-s);
-    /* quarter gridlines */
-    background-image: linear-gradient(
-        to right,
-        color-mix(in srgb, var(--m__text) 6%, transparent) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        to top,
-        color-mix(in srgb, var(--m__text) 6%, transparent) 1px,
-        transparent 1px
-      );
-    background-size: 25% 25%;
-    overflow: hidden;
+    /* Draw only the three inner quarter lines. Repeating gradients also
+       painted the outer edge, doubling the plot border. */
+    background-image:
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line));
+    background-position:
+      25% 0,
+      50% 0,
+      75% 0,
+      0 25%,
+      0 50%,
+      0 75%;
+    background-repeat: no-repeat;
+    background-size:
+      1px 100%,
+      1px 100%,
+      1px 100%,
+      100% 1px,
+      100% 1px,
+      100% 1px;
   }
 
   /* the efficient corner — a blurred gradient blob, the exact recipe of
@@ -452,7 +480,7 @@
 .vlb-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--m__gap-m);
+  gap: var(--m__gap-xxs);
 
   @media (width < 560px) {
     grid-template-columns: 1fr;
@@ -460,9 +488,10 @@
 }
 
 .vlb-card {
+  --m__rounded-radius: var(--m__radius-xl);
+
   padding: 0.7rem 0.85rem 0.6rem;
   background-color: var(--m__bg-surface);
-  border-radius: var(--m__radius-m);
 
   & .vlb-card__title {
     display: block;
@@ -491,7 +520,7 @@
 
   & .vlb-bar__agent {
     font-size: var(--m__font-size-xs);
-    color: var(--m__text-caption);
+    color: var(--m__text);
     white-space: nowrap;
   }
 
