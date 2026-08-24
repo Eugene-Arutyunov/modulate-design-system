@@ -27,88 +27,93 @@
     <div class="nav-sidebar">
       <div class="vlb-controls">
         <div class="vlb-controls__group">
-          <span class="vlb-controls__title vlb-controls__title--icon"
-            ><svg viewBox="0 0 32 32" aria-hidden="true">
-              <use href="#behaviors"></use></svg
-            >Behaviors</span
-          >
-          <div class="vlb-select" data-open="false">
-            <button
-              type="button"
-              class="vlb-select__button"
-              aria-haspopup="true"
-              aria-expanded="false">
-              <span>3 of 8 selected</span>
-              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-            </button>
-            <div class="vlb-select__menu" hidden>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Complaints
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Vishing
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Account Impersonation
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Coercion Manipulation
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Return Fraud Attempt
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Service Churn
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Off-topic Discussion
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Action Plan Created
-              </label>
+          <div class="vlb-controls__field">
+            <label class="vlb-controls__title" for="vlb-stt-model-trigger">STT</label>
+            <div class="m__menu-button vlb-model-select">
+              <button
+                id="vlb-stt-model-trigger"
+                type="button"
+                class="m__select m__menu-button-secondary has-value vlb-controls__select m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-label="STT model: Whisper v4">
+                <span class="vlb-model-select__value" data-vlb-model-label>Whisper v4</span>
+                <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+              </button>
+              <select data-vlb-stt hidden>
+                <option selected>Whisper v4</option>
+                <option>Deepgram Nova-3</option>
+                <option>AssemblyAI Universal</option>
+              </select>
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start vlb-model-select__menu"
+                hidden
+                role="menu"
+                data-vlb-model-menu>
+                <div class="conversation-report__report-items" role="presentation">
+                  {% for model in ['Whisper v4', 'Deepgram Nova-3', 'AssemblyAI Universal'] %}
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if loop.first %} is-active{% endif %}"
+                    role="menuitemradio"
+                    aria-checked="{% if loop.first %}true{% else %}false{% endif %}"
+                    data-vlb-model-option="{{ model }}">
+                    <span class="conversation-report__report-item-icon moderation-table__status-option-check" aria-hidden="true"></span>
+                    <span class="conversation-report__report-item-title">{{ model }}</span>
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="vlb-controls__group">
-          <span class="vlb-controls__title">STT + LLM</span>
-          <!-- Label-less selects follow the canon: no __control wrapper,
-               the select and chevron sit directly in .m__select -->
-          <div class="m__select S vlb-controls__select">
-            <select data-vlb-stt aria-label="STT model">
-              <option selected>Whisper v4</option>
-              <option>Deepgram Nova-3</option>
-              <option>AssemblyAI Universal</option>
-            </select>
-            <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+          <div class="vlb-controls__field">
+            <label class="vlb-controls__title" for="vlb-llm-model-trigger">LLM</label>
+            <div class="m__menu-button vlb-model-select">
+              <button
+                id="vlb-llm-model-trigger"
+                type="button"
+                class="m__select m__menu-button-secondary has-value vlb-controls__select m__menu-button-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-label="LLM model: GPT-5.5">
+                <span class="vlb-model-select__value" data-vlb-model-label>GPT-5.5</span>
+                <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+              </button>
+              <select data-vlb-llm hidden>
+                <option selected>GPT-5.5</option>
+                <option>Claude Opus 4.8</option>
+                <option>Grok 4.3</option>
+              </select>
+              <div
+                class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start vlb-model-select__menu"
+                hidden
+                role="menu"
+                data-vlb-model-menu>
+                <div class="conversation-report__report-items" role="presentation">
+                  {% for model in ['GPT-5.5', 'Claude Opus 4.8', 'Grok 4.3'] %}
+                  <button
+                    type="button"
+                    class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if loop.first %} is-active{% endif %}"
+                    role="menuitemradio"
+                    aria-checked="{% if loop.first %}true{% else %}false{% endif %}"
+                    data-vlb-model-option="{{ model }}">
+                    <span class="conversation-report__report-item-icon moderation-table__status-option-check" aria-hidden="true"></span>
+                    <span class="conversation-report__report-item-title">{{ model }}</span>
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="m__select S vlb-controls__select">
-            <select data-vlb-llm aria-label="LLM model">
-              <option selected>GPT-5.5</option>
-              <option>Claude Opus 4.8</option>
-              <option>Grok 4.3</option>
-            </select>
-            <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-          </div>
-          <div class="m__space XXS"></div>
           <button
             type="button"
             class="m__button-secondary-outline S vlb-controls__prompt-btn"
             data-modal-open="vlb-prompt-modal">
             System prompt
           </button>
-          <div class="m__space XXS"></div>
-          <label class="m__checkbox-secondary vlb-controls__check">
+          <label class="m__checkbox-primary vlb-controls__check">
             <input type="checkbox" data-vlb-emotions /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-            Guess emotions
+            Show emotions
           </label>
         </div>
       </div>
@@ -122,6 +127,83 @@
         {% set uploadPlateShowMeta = false %}
         {% set uploadPlateCollapsedLabel = 'New analysis' %}
         {% set uploadPlateStateInputName = 'vlb-plate-state' %}
+        {% set uploadPlateOptions %}
+        <div class="pg-options-row pg-velma-setup vlb-behaviors-header">
+          <div class="vlb-select" data-open="false">
+            <button
+              type="button"
+              class="pg-velma-setup-link vlb-select__button"
+              aria-haspopup="true"
+              aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true">
+                <use href="#behaviors"></use>
+              </svg>
+              Set up behaviors
+            </button>
+            <div class="m__popover vlb-select__menu" hidden>
+              <div class="m__popover-list">
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Complaints</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" checked />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Vishing</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" checked />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Account Impersonation</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" checked />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Coercion Manipulation</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Return Fraud Attempt</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Service Churn</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Off-topic Discussion</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Action Plan Created</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <span class="pg-velma-setup-summary" data-vlb-behaviors-value>3 behaviors</span>
+        </div>
+        {% endset %}
         {% set uploadPlateAnalyzingContent %}
         <div class="pg-processing-stages">
           <span class="pg-processing-stage">
@@ -216,7 +298,10 @@
            recordings with sound interludes — a closing Events strip for
            the sound-events model. The blocks are generated per selected
            recording by the module script. -->
-      <section class="vlb-battles" data-vlb-battles></section>
+      <section class="vlb-battles">
+        <h2>Behaviors &amp; Sound Events</h2>
+        <div data-vlb-battles></div>
+      </section>
 
       <div class="m__space L"></div>
 
@@ -224,7 +309,7 @@
            reference labels (preloaded demos only). External uploads keep
            only the cost / speed / signals-found cards. -->
       <section class="vlb-dashboard">
-        <h6 class="pg-section-title">Accuracy vs. reference</h6>
+        <h2>Detection Accuracy</h2>
         <div class="vlb-dashboard__grid" data-vlb-dashboard></div>
       </section>
     </main>
@@ -241,6 +326,7 @@
     Sent to the selected LLM together with the STT transcript of the whole
     call. The placeholders are filled in per run.
   </p>
+  <div class="m__space M"></div>
   <div class="m__textfield M">
     <textarea id="vlb-prompt-text" class="m__textarea--autogrow" rows="16">
 You are a fraud-behavior analyst for a bank contact center. You receive one customer call as a numbered list of transcript segments with timestamps, produced by the {{ '{{stt_model}}' }} step.
@@ -277,11 +363,11 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 {% endcall %}
 
 <!-- Receipt modals: the evidence behind every kiki -->
-{% call modal("vlb-receipt-vishing", "Vishing") %}
+{% call modal("vlb-receipt-vishing", "Vishing", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">Velma</span>
-    <span class="vlb-receipt__conf">91% confidence · 0:05</span>
+    <span class="m__tag-flat m__tag--success">Correct catch</span>
+    <span class="vlb-receipt__conf">Velma · 91% confidence · 0:05</span>
   </div>
   <p class="vlb-receipt__reason">
     The caller's clip carries a synthetic-voice signature (deepfake, 93%)
@@ -319,15 +405,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · missed by STT+LLM</p>
 </div>
 {% endcall %}
 
-{% call modal("vlb-receipt-vishing-stack", "Vishing") %}
+{% call modal("vlb-receipt-vishing-stack", "Vishing", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">STT+LLM</span>
-    <span class="vlb-receipt__conf">57% confidence · 0:18</span>
+    <span class="m__tag-flat m__tag--success">Correct catch</span>
+    <span class="vlb-receipt__conf">STT+LLM · 57% confidence · 0:18</span>
   </div>
   <p class="vlb-receipt__reason">
     A scripted urgency push in the words themselves — a named five-figure
@@ -353,15 +438,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · also flagged by Velma</p>
 </div>
 {% endcall %}
 
-{% call modal("vlb-receipt-impersonation", "Account Impersonation") %}
+{% call modal("vlb-receipt-impersonation", "Account Impersonation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">Velma</span>
-    <span class="vlb-receipt__conf">92% confidence · 0:35</span>
+    <span class="m__tag-flat m__tag--success">Correct catch</span>
+    <span class="vlb-receipt__conf">Velma · 92% confidence · 0:35</span>
   </div>
   <p class="vlb-receipt__reason">
     “You can hear it's me” — the caller asserts identity by voice alone and
@@ -397,15 +481,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · caught by both agents</p>
 </div>
 {% endcall %}
 
-{% call modal("vlb-receipt-impersonation-false", "Account Impersonation") %}
+{% call modal("vlb-receipt-impersonation-false", "Account Impersonation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">STT+LLM</span>
-    <span class="vlb-receipt__conf">58% confidence · 0:48</span>
+    <span class="m__tag-flat m__tag--error">False alarm</span>
+    <span class="vlb-receipt__conf">STT+LLM · 58% confidence · 0:48</span>
   </div>
   <p class="vlb-receipt__reason">
     The caller repeats the agent's name back and challenges their identity
@@ -431,15 +514,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-false">✗ False alarm · no reference signal at this moment</p>
 </div>
 {% endcall %}
 
-{% call modal("vlb-receipt-coercion", "Coercion Manipulation") %}
+{% call modal("vlb-receipt-coercion", "Coercion Manipulation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">Velma</span>
-    <span class="vlb-receipt__conf">88% confidence · 0:51</span>
+    <span class="m__tag-flat m__tag--success">Correct catch</span>
+    <span class="vlb-receipt__conf">Velma · 88% confidence · 0:51</span>
   </div>
   <p class="vlb-receipt__reason">
     A threat to escalate to a supervisor to force the change, on top of a
@@ -476,11 +558,10 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · caught by both agents</p>
 </div>
 {% endcall %}
 
-{% call modal("vlb-transcript-modal", "Transcript — Harborview Bank sample call") %}
+{% call modal("vlb-transcript-modal", "Transcript") %}
 <div class="m__modal__body">
   <!-- Two transcript variants side by side: each lane of the comparison
        player has its own — Velma's utterance-level diarized transcript on
@@ -734,9 +815,18 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   </div>
   </div>
 </div>
+<div class="m__modal__footer vlb-transcript-footer">
+  <button
+    type="button"
+    class="m__button-primary S"
+    data-modal-close="vlb-transcript-modal">
+    Done
+  </button>
+</div>
 {% endcall %}
 
 <script src="/assets/prototypes/modals.js"></script>
+<script src="/assets/prototypes/menu-button.js"></script>
 <script type="module">
   import { renderFingerprint } from '/assets/service/fingerprint/fingerprint.js';
 
@@ -765,7 +855,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     scenes: {
       title: 'Everyday scenes',
       duration: 73.0,
-      behaviorsLabel: '7 of 14 selected',
       sidebarExtra: ['Complaints', 'Vishing', 'Tone Missmatch', 'Unvoiced Disagreement', 'Harassment', 'Off-topic Discussion', 'Action Plan Created'],
       sceneAt: { 0: 'Scene 1 · Kitchen', 5: 'Scene 2 · Used-car lot', 11: 'Scene 3 · Sprint standup' },
       velma: [
@@ -866,7 +955,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     office: {
       title: 'Office hours',
       duration: 75.7,
-      behaviorsLabel: '6 of 14 selected',
       sidebarExtra: ['Sarcasm', 'Reluctance', 'Complaints', 'Off-topic Discussion', 'Rapport Building', 'Inappropriate Speech', 'Storytelling', 'Feigned Ignorance'],
       sceneAt: { 0: 'Scene 1 · Performance review', 5: 'Scene 2 · All-hands', 10: 'Scene 3 · Client call' },
       velma: [
@@ -955,7 +1043,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     party: {
       title: 'House party',
       duration: 77.1,
-      behaviorsLabel: '5 of 14 selected',
       sidebarExtra: ['Sarcasm', 'Inappropriate Speech', 'Social Etiquette', 'Rapport Building', 'Encouragement', 'Harassment', 'Storytelling', 'Tone Missmatch', 'Teaching/Mentorship'],
       sceneAt: { 0: 'Scene 1 · The toast', 4: 'Scene 2 · Kitchen', 9: 'Scene 3 · Game night', 13: 'Scene 4 · Goodbyes' },
       velma: [
@@ -1050,7 +1137,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     harborview: {
       title: 'Harborview Bank',
       duration: 67.697,
-      behaviorsLabel: '3 of 8 selected',
       sidebarExtra: ['Complaints', 'Return Fraud Attempt', 'Service Churn', 'Off-topic Discussion', 'Action Plan Created'],
       sceneAt: null,
       transcriptModal: 'vlb-transcript-modal',
@@ -1147,6 +1233,18 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     return clip;
   }
 
+  function signalGlow(clip, color) {
+    return {
+      ...clip,
+      classes: [clip.classes, 'clip-signal-glow'].filter(Boolean).join(' '),
+      glowColor: color,
+    };
+  }
+
+  function emotionGlow(emotion, opacity = 1) {
+    return `rgba(var(--emotion-${emotion || 'neutral'}-RGB), ${opacity})`;
+  }
+
   function mainData(emotionsOn) {
     const clips = [];
 
@@ -1172,7 +1270,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
     call().velma.forEach((c, i) => {
       if (strip.velma.includes(i)) {
-        clips.push(velmaClip(c));
+        clips.push(signalGlow(velmaClip(c), emotionGlow(c.emotion)));
       } else {
         clips.push({ ...baseClip(1, c), classes: 'clip-quiet' });
       }
@@ -1188,9 +1286,15 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         if (emotionsOn) {
           clip.emotion = c.guess;
           clip.classes = 'clip-guess';
+          // Guessed-emotion clips render at 45% opacity. Start the glow
+          // from the same alpha so every outward stop remains lighter
+          // than the source clip instead of becoming a darker halo.
+          clip.glowColor = emotionGlow(c.guess, 0.45);
         } else {
           clip.classes = 'clip-hit';
+          clip.glowColor = 'var(--fp-cmp-hit)';
         }
+        clip.classes += ' clip-signal-glow';
         clip.behaviour = strip.name;
         clip.behaviourClasses = kikiClasses(c);
         clip.behaviourModal = c.modal;
@@ -1208,7 +1312,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
     call().velma.forEach((c) => {
       if (c.event) {
-        clips.push(velmaClip(c));
+        clips.push(signalGlow(velmaClip(c), emotionGlow('neutral')));
       } else {
         clips.push({ ...baseClip(1, c), classes: 'clip-quiet' });
       }
@@ -1244,11 +1348,18 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     const emotionsOn = emotionsToggle && emotionsToggle.checked;
     const hasEvents = call().velma.some((c) => c.event);
 
+    const mountTitle = (block, title) => {
+      const heading = document.createElement('h3');
+      heading.className = 'vlb-battle__title';
+      heading.textContent = title;
+      block.querySelector('.pg-player-dataviz').appendChild(heading);
+    };
+
     battlesMount.innerHTML = '';
     call().strips.forEach((strip) => {
       const block = document.createElement('div');
       block.className = 'vlb-battle';
-      block.innerHTML = `<h3>${esc(strip.name)}</h3><div></div>`;
+      block.innerHTML = '<div></div>';
       battlesMount.appendChild(block);
       renderFingerprint(block.lastElementChild, stripData(strip, emotionsOn), {
         behaviours: true,
@@ -1258,11 +1369,12 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         laneHover: true,
         hoverCaptions: false,
       });
+      mountTitle(block, strip.name);
     });
     if (hasEvents) {
       const block = document.createElement('div');
       block.className = 'vlb-battle';
-      block.innerHTML = '<h3>Sound Events</h3><div></div>';
+      block.innerHTML = '<div></div>';
       battlesMount.appendChild(block);
       renderFingerprint(block.lastElementChild, eventsData(emotionsOn), {
         behaviours: true,
@@ -1272,6 +1384,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         laneHover: true,
         hoverCaptions: false,
       });
+      mountTitle(block, 'Sound Events');
     }
   }
 
@@ -1282,16 +1395,28 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     const d = call().dashboard;
     const stackLabel = `${sttSelect ? sttSelect.value : 'Whisper v4'} + ${llmSelect ? llmSelect.value : 'GPT-5.5'}`;
 
-    const bar = (agent, row) => `
-      <div class="vlb-bar">
-        <span class="vlb-bar__agent">${agent}</span>
-        <span class="vlb-bar__track"><span class="vlb-bar__fill${agent === 'Velma' ? ' is-velma' : ''}${row.false ? ' is-false' : ''}" style="width: ${row.w}%"></span></span>
-        <span class="vlb-bar__value${row.false ? ' vlb-false-text' : ''}">${row.val}</span>
-      </div>`;
+    const bar = (agent, row) => {
+      const tone = row.false
+        ? ' is-false'
+        : row.w === 0
+          ? ' is-zero'
+          : agent === 'Velma'
+            ? ' is-velma'
+            : '';
+
+      return `
+        <div class="vlb-bar">
+          <span class="vlb-bar__track" style="--vlb-progress: ${row.w}%">
+            <span class="vlb-bar__fill${tone}"></span>
+            <span class="vlb-bar__value${tone}">${row.val}</span>
+          </span>
+          <span class="vlb-bar__agent${tone}">${agent}</span>
+        </div>`;
+    };
 
     dashboardMount.innerHTML = `
       <div class="vlb-scatter">
-        <div class="vlb-scatter__plot">
+        <div class="vlb-scatter__plot m__rounded">
           <span class="vlb-scatter__zone" aria-hidden="true"></span>
           <span class="vlb-scatter__ylab">Flag accuracy →</span>
           <span class="vlb-scatter__xlab">Threats caught →</span>
@@ -1309,7 +1434,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       <div class="vlb-dashboard__side">
         <div class="vlb-cards">
           ${d.cards.map((card) => `
-          <div class="vlb-card">
+          <div class="vlb-card m__rounded">
             <span class="vlb-card__title">${esc(card.title)}</span>
             <div class="vlb-card__bars">${bar('Velma', card.v)}${bar('STT+LLM', card.s)}</div>
             <span class="vlb-card__note">${esc(card.note)}</span>
@@ -1319,22 +1444,30 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   }
 
   // ---------------------------------------------------------------- //
-  // Sidebar: the behaviors multiselect mirrors the selected recording //
-  // (checked = the strips on the page), purely decorative.            //
+  // Upload header: the behaviors multiselect mirrors the selected     //
+  // recording; its summary always follows the checked item count.    //
   // ---------------------------------------------------------------- //
-  function renderSidebar() {
-    const button = document.querySelector('.vlb-select__button span');
-    const menu = document.querySelector('.vlb-select__menu');
+  function syncBehaviorSummary() {
+    const summary = document.querySelector('[data-vlb-behaviors-value]');
+    const count = document.querySelectorAll('.vlb-select__menu input[type="checkbox"]:checked').length;
+    if (summary) summary.textContent = `${count} ${count === 1 ? 'behavior' : 'behaviors'}`;
+  }
 
-    if (button) button.textContent = call().behaviorsLabel;
+  function renderSidebar() {
+    const menu = document.querySelector('.vlb-select__menu .m__popover-list');
+
     if (!menu) return;
     const item = (name, checked) => `
-      <label class="m__checkbox-secondary vlb-controls__check">
-        <input type="checkbox"${checked ? ' checked' : ''} /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-        ${esc(name)}
+      <label class="m__popover-item">
+        <span class="m__checkbox-primary">
+          <input type="checkbox"${checked ? ' checked' : ''} />
+          <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+        </span>
+        <span class="m__popover-item-name">${esc(name)}</span>
       </label>`;
     const names = call().strips.map((s) => s.name);
     menu.innerHTML = names.map((n) => item(n, true)).join('') + call().sidebarExtra.map((n) => item(n, false)).join('');
+    syncBehaviorSummary();
   }
 
   // ---------------------------------------------------------------- //
@@ -1345,12 +1478,15 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   const modalsHost = document.createElement('div');
   document.body.appendChild(modalsHost);
 
-  function modalShell(id, title, body) {
+  function modalShell(id, title, body, behaviorTitle = false) {
+    const titleMarkup = behaviorTitle
+      ? `<svg viewBox="0 0 32 32" aria-hidden="true"><use href="#behaviors"></use></svg><span>${esc(title)}</span>`
+      : `<span>${esc(title)}</span>`;
     return `
       <div class="m__modal-backdrop" id="${id}" hidden aria-modal="true" role="dialog" aria-labelledby="${id}-title">
         <div class="m__modal">
           <div class="m__modal__header">
-            <h2 class="m__modal__title" id="${id}-title">${esc(title)}</h2>
+            <h2 class="m__modal__title${behaviorTitle ? ' vlb-receipt-title' : ''}" id="${id}-title">${titleMarkup}</h2>
             <button type="button" class="m__modal__close" aria-label="Close" data-modal-close="${id}">
               <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><use href="#close"></use></svg>
             </button>
@@ -1378,43 +1514,56 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   function receiptModal(callDef, r) {
     if (r.event) {
       const rows = r.scores.map(([name, score]) => `
-        <div class="vlb-event-score${name === r.name ? ' is-top' : ''}">
-          <span class="vlb-event-score__name">${esc(name)}</span>
-          <span class="vlb-event-score__value">${score}</span>
-        </div>`).join('');
+        <tr class="vlb-event-score${name === r.name ? ' is-top' : ''}">
+          <td class="vlb-event-score__name">${esc(name)}</td>
+          <td class="vlb-event-score__value">${score}</td>
+        </tr>`).join('');
       return modalShell(r.id, `${r.name} — sound event`, `
         <div class="m__modal__body">
           <div class="vlb-receipt__meta">
-            <span class="m__tag-flat">Velma · sound events</span>
-            <span class="vlb-receipt__conf">${r.conf}</span>
+            <span class="m__tag-flat m__tag--success">Sound event</span>
+            <span class="vlb-receipt__conf">Velma · sound events · ${r.conf}</span>
           </div>
           <p class="vlb-receipt__reason">
             Detected by the sound-events model — a separate head that
             classifies non-speech audio against the FSD event list. Top
             of the frame's score vector:
           </p>
-          <div class="vlb-event-scores">${rows}</div>
+          <div class="m__table-wrapper vlb-event-scores">
+            <table class="m__table-baseline">
+              <thead>
+                <tr>
+                  <th scope="col">Event</th>
+                  <th scope="col">Score</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
           <p class="vlb-receipt__reason">${esc(r.note)}</p>
-          <p class="vlb-receipt__outcome is-correct">✓ Sound event · invisible to a text pipeline</p>
-        </div>`);
+        </div>`, true);
     }
     const firstSp = callDef.velma[r.excerpt[0].i].sp;
     const proposed = r.proposed
-      ? '<span class="m__tag-flat vlb-receipt__proposed">Proposed signal</span>'
+      ? '<span class="vlb-receipt__conf">· Proposed signal</span>'
       : '';
     return modalShell(r.id, r.name, `
       <div class="m__modal__body">
         <div class="vlb-receipt__meta">
-          <span class="m__tag-flat">${esc(r.agent)}</span>
+          ${verdictTag(r.outcome)}
+          <span class="vlb-receipt__conf">${esc(r.agent)} · ${r.conf}</span>
           ${proposed}
-          <span class="vlb-receipt__conf">${r.conf}</span>
         </div>
         <p class="vlb-receipt__reason">${r.reason}</p>
         <div class="pg-transcript-list vlb-receipt__excerpt">
           ${r.excerpt.map((ref) => excerptRow(callDef.velma, ref, firstSp)).join('')}
         </div>
-        <p class="vlb-receipt__outcome ${r.outcome.ok ? 'is-correct' : 'is-false'}">${r.outcome.ok ? '✓' : '✗'} ${esc(r.outcome.text)}</p>
-      </div>`);
+      </div>`, true);
+  }
+
+  function verdictTag(outcome) {
+    const [title] = outcome.text.split(' · ');
+    return `<span class="m__tag-flat ${outcome.ok ? 'm__tag--success' : 'm__tag--error'}">${esc(title)}</span>`;
   }
 
   function behaviourLink(name) {
@@ -1461,7 +1610,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <div class="pg-transcript-text">${esc(c.text)}</div>
       </div>`).join('');
 
-    return modalShell(id, `Transcript — ${callDef.title}`, `
+    return modalShell(id, 'Transcript', `
       <div class="m__modal__body">
         <div class="vlb-transcript-duo">
           <div class="vlb-transcript-col">
@@ -1473,6 +1622,9 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
             <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">${sttRows}</div>
           </div>
         </div>
+      </div>
+      <div class="m__modal__footer vlb-transcript-footer">
+        <button type="button" class="m__button-primary S" data-modal-close="${id}">Done</button>
       </div>`);
   }
 
@@ -1499,8 +1651,37 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     });
   }
   [sttSelect, llmSelect].forEach((sel) => {
-    if (sel) sel.addEventListener('change', renderDashboard);
+    if (!sel) return;
+    sel.addEventListener('change', renderDashboard);
   });
+  document.querySelectorAll('.vlb-model-select').forEach((modelSelect) => {
+    const select = modelSelect.querySelector('select');
+    const trigger = modelSelect.querySelector('[data-vlb-model-label]');
+    const triggerButton = modelSelect.querySelector('.m__menu-button-trigger');
+    const menu = modelSelect.querySelector('[data-vlb-model-menu]');
+    if (!select || !trigger || !triggerButton || !menu) return;
+
+    menu.addEventListener('click', (event) => {
+      const option = event.target.closest('[data-vlb-model-option]');
+      if (!option) return;
+      const value = option.dataset.vlbModelOption;
+      select.value = value;
+      trigger.textContent = value;
+      triggerButton.setAttribute('aria-label', `${select.hasAttribute('data-vlb-stt') ? 'STT' : 'LLM'} model: ${value}`);
+      menu.querySelectorAll('[data-vlb-model-option]').forEach((item) => {
+        const isSelected = item === option;
+        item.classList.toggle('is-active', isSelected);
+        item.setAttribute('aria-checked', String(isSelected));
+      });
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  });
+  const behaviorsMenu = document.querySelector('.vlb-select__menu');
+  if (behaviorsMenu) {
+    behaviorsMenu.addEventListener('change', (event) => {
+      if (event.target.matches('input[type="checkbox"]')) syncBehaviorSummary();
+    });
+  }
 
   // Dropdowns that stay open while picking: the demo-audio split button
   // closes on menu items (and switches the recording), the behaviors

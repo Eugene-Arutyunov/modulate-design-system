@@ -1,16 +1,16 @@
 /* Velma LLM Battle — /tools/velma-llm-battle/ design mock.
    The page reuses the playground plumbing as is (dashboard-layout, upload
    plate, player lanes, split-button menu, modal canon); vlb-* covers only
-   what the battle adds: the sidebar control panel, the gray "no signal /
-   no emotions" clip treatment, the per-behavior mini players, the receipt
-   modals, and the accuracy dashboard. */
+   what the battle adds: the sidebar control panel, upload-header behavior
+   picker, gray "no signal / no emotions" clip treatment, per-behavior mini
+   players, receipt modals, and the accuracy dashboard. */
 
 /* Sidebar control panel — geometry echoes .models-nav--vertical.
    Rounded by hand, not via .m__rounded: its overflow clip would cut the
    dropdowns. */
 .vlb-controls {
   min-width: 13rem;
-  padding: 0.1rem 0.85rem 0.85rem;
+  padding: 0.75rem 0.85rem 0.85rem;
   background-color: var(--m__bg-surface);
   border-radius: var(--m__rounded-radius);
   corner-shape: squircle;
@@ -18,11 +18,11 @@
   & .vlb-controls__group {
     display: flex;
     flex-direction: column;
+    gap: var(--m__gap-s);
   }
 
   & .vlb-controls__title {
     display: block;
-    padding: 0.65rem 0 0.25rem;
     font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
     font-weight: var(--m__font-weight-regular);
@@ -32,64 +32,27 @@
     white-space: nowrap;
   }
 
-  & .vlb-controls__check {
-    padding-block: 0.15rem;
-    font-size: var(--m__font-size-s);
-    white-space: nowrap;
-  }
-
-  /* group title with the behavior kiki glyph */
-  & .vlb-controls__title--icon {
+  & .vlb-controls__field {
     display: flex;
-    align-items: center;
-    gap: 0.35em;
-
-    & svg {
-      width: 0.95em;
-      height: 0.95em;
-      flex-shrink: 0;
-    }
+    flex-direction: column;
+    gap: var(--m__gap-xs);
   }
+
 }
 
-/* Selects (stack + behaviors): textfield-shaped trigger, split-button-
-   shaped menu */
+/* Behaviors follows the Playground setup-link pattern, backed by a custom
+   checkbox menu because the native select cannot express multiple choices. */
 .vlb-select {
   position: relative;
-  margin-top: 0.25rem;
 
   & .vlb-select__button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--m__gap-xs);
-    width: 100%;
-    padding: 0.4rem 0.6rem;
-    border: var(--m__border-width-s) solid var(--m__border);
-    border-radius: var(--m__radius-s);
-    background-color: var(--m__bg);
-    color: var(--m__text);
+    appearance: none;
+    padding: 0 0 0.05rem;
+    border: 0;
+    border-bottom: 1.5px dotted currentColor;
+    background: none;
     font: inherit;
-    font-size: var(--m__font-size-s);
-    text-align: left;
     cursor: pointer;
-    transition: border-color var(--m__duration-base) var(--m__easing-base);
-
-    &:hover {
-      border-color: var(--m__text-caption);
-      transition-duration: var(--m__duration-instant);
-    }
-
-    & svg {
-      width: 0.7em;
-      height: 0.7em;
-      flex-shrink: 0;
-      transition: transform var(--m__duration-base) var(--m__easing-base);
-    }
-  }
-
-  &[data-open='true'] .vlb-select__button svg {
-    transform: rotate(180deg);
   }
 
   & .vlb-select__menu {
@@ -97,17 +60,41 @@
     top: calc(100% + 0.35rem);
     left: 0;
     right: 0;
-    z-index: 30;
-    display: flex;
-    flex-direction: column;
-    padding: 0.4rem 0.6rem;
-    background-color: var(--m__bg);
-    border: var(--m__border-width-s) solid var(--m__border);
-    border-radius: var(--m__widget-radius);
-    box-shadow: 0 4px 20px color-mix(in srgb, #000 22%, transparent);
+    z-index: 1001;
+    width: 20rem;
+
+    & .m__popover-list {
+      max-height: min(24rem, calc(100vh - 8rem));
+    }
 
     &[hidden] {
       display: none;
+    }
+  }
+}
+
+.vlb-controls > .vlb-controls__group .vlb-controls__check {
+  padding-block: 0.15rem;
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  white-space: nowrap;
+  transition: color var(--m__duration-xslow) var(--m__easing-base);
+
+  & input[type='checkbox']:not(:checked) {
+    border-color: color-mix(in srgb, var(--m__text) 25%, transparent);
+    transition: border-color var(--m__duration-xslow) var(--m__easing-base);
+  }
+
+  &:hover:not(:has(input:disabled)) {
+    transition-duration: var(--m__duration-instant);
+
+    & input[type='checkbox']:not(:checked) {
+      border-color: color-mix(
+        in srgb,
+        var(--m__text-link-hover) 25%,
+        transparent
+      );
+      transition-duration: var(--m__duration-instant);
     }
   }
 }
@@ -122,33 +109,97 @@
   }
 }
 
-/* STT / LLM pickers: the DS native select, stacked under the group title */
+/* STT / LLM pickers: dashboard secondary-outline menus under headings. */
+.vlb-controls .vlb-model-select {
+  display: block;
+  width: 100%;
+}
+
 .vlb-controls .vlb-controls__select {
-  margin-top: 0.25rem;
+  display: flex;
+  justify-content: flex-start;
   font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  padding: var(--m__padding-input-s);
+  padding-inline-end: 2.15rem;
+  transition:
+    color var(--m__duration-xslow) var(--m__easing-base),
+    border-color var(--m__duration-xslow) var(--m__easing-base);
+
+  & .vlb-model-select__value {
+    overflow: hidden;
+    min-width: 0;
+    flex: 1 1 auto;
+    color: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & > svg {
+    right: 0.5rem;
+    color: currentColor;
+    transition: color var(--m__duration-xslow) var(--m__easing-base);
+  }
+
+  &:is(:hover, :focus-visible, [aria-expanded='true']) {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+
+    & > svg {
+      color: currentColor;
+      transition-duration: var(--m__duration-instant);
+    }
+  }
 }
 
-.vlb-controls .vlb-controls__prompt-btn {
+.vlb-model-select__menu {
+  z-index: 1001;
+}
+
+.vlb-controls button.vlb-controls__prompt-btn {
   align-self: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: var(--m__radius-m);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  transition:
+    color var(--m__duration-xslow) var(--m__easing-base),
+    border-color var(--m__duration-xslow) var(--m__easing-base);
+
+  &:hover {
+    transition-duration: var(--m__duration-instant);
+  }
 }
 
-/* The transcript entry point: an outline button living inside the shared
-   player's chrome, on the spot where the hover transcript line renders —
-   it steps aside (fades) whenever that line is visible. Compact paddings:
-   the chrome bar is low. */
+/* The transcript entry point: the same compact secondary-outline treatment
+   as System prompt, but content-width inside the shared player's chrome. It
+   disappears instantly for hover captions, then eases back out over 0.5s. */
 .fp-cmp .media-box .vlb-transcript-btn {
   position: absolute;
-  left: calc(var(--padding) + 0.6em + 2.4em);
+  left: 3.14rem;
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
-  padding: 0.25em 0.7em;
-  transition: opacity var(--m__duration-base) var(--m__easing-base);
+  width: auto;
+  padding: var(--m__padding-button-s);
+  border-radius: var(--m__radius-m);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  transition:
+    color var(--m__duration-xslow) var(--m__easing-base),
+    opacity var(--m__duration-xslow) var(--m__easing-base);
+
+  &:hover {
+    transition-duration: var(--m__duration-instant);
+  }
 }
 
 .fp-cmp .media-box:has(.clip-text-caption.visible) .vlb-transcript-btn {
   opacity: 0;
   pointer-events: none;
+  transition-duration: var(--m__duration-instant);
 }
 
 /* The hover transcript line itself: the canon anchors it against an
@@ -156,25 +207,149 @@
    is a sibling), which collapses the line to zero height — re-anchor it
    into the chrome row, on the button's spot */
 .fp-cmp .media-box .clip-text-caption {
-  top: 0;
-  bottom: 0;
-  left: calc(var(--padding) + 0.6em + 2.4em);
-  width: 55%;
-  display: flex;
-  align-items: center;
+  top: 50%;
+  bottom: auto;
+  left: 3.14rem;
+  width: 40%;
+  transform: translateY(calc(-50% - 0.02em));
   z-index: 2;
+
+  &::after {
+    width: 3em;
+    background: linear-gradient(to right, transparent, var(--m__bg-surface));
+  }
+}
+
+/* One chrome line: current time, hover time, transcript, emotion, total
+   time and the Transcript button all share the same vertical center. */
+.fp-cmp .media-box :is(
+  .player-position-caption,
+  .player-hover-position-caption,
+  .player-total-time
+) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.fp-cmp .media-box :is(
+  .player-position-caption,
+  .player-hover-position-caption
+) {
+  left: calc(var(--padding) + 0.6em);
+  transform: translateY(calc(-50% - 0.02em));
+}
+
+/* buildPlayer carries a legacy static 0:00 alongside the live position
+   caption; comparison chrome uses only the live one. */
+.fp-cmp .media-box > .player-start-time {
+  display: none;
+}
+
+/* Transcript and emotion captions switch both ways without motion. The
+   Transcript button still eases back over 0.5s after the captions leave. */
+.fp-cmp .media-box :is(.clip-text-caption, .fp-emotion-caption) {
+  transition: opacity var(--m__duration-instant) var(--m__easing-base);
+}
+
+/* The emotions toggle rebuilds the comparison timelines. Their accent
+   colors must land in the same frame as the checkbox state instead of
+   replaying the canonical player's color-reveal animation. */
+.fp-cmp {
+  --emotion-color-delay: var(--m__duration-instant);
+  --emotion-color-duration: var(--m__duration-instant);
 }
 
 /* Per-behavior signal players: rendered by fingerprint.js (technology-
-   comparison variant, styles in player.css); here only the block rhythm
-   and the plain h3 heads */
+   comparison variant, styles in player.css). The heading is mounted into
+   the dataviz so it shares the strip's top-left corner. */
 .vlb-battle {
-  & + .vlb-battle {
-    margin-top: var(--m__gap-l);
+  & .media-container {
+    --player-strip-height: 2rem;
+    --m__rounded-radius: var(--m__radius-xl);
   }
 
-  & h3 {
-    margin: 0 0 var(--m__gap-xs);
+  & + .vlb-battle {
+    margin-top: var(--m__gap-xs);
+  }
+
+  & .vlb-battle__title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 0.1rem 0.35em 0.1rem 0.25em;
+    margin: 0;
+    overflow: hidden;
+    color: var(--m__color-white);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* Signal clips cast a broad bilateral gradient into their lane. The
+     solid clip stays crisp above it; only the surrounding color blooms. */
+  & .transcript-clip.clip-signal-glow {
+    z-index: 1;
+
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      bottom: 0;
+      left: clamp(-5rem, -6vw, -2.75rem);
+      right: clamp(-5rem, -6vw, -2.75rem);
+      background:
+        linear-gradient(
+          90deg,
+          transparent 0%,
+          color-mix(in srgb, var(--fp-signal-glow-color) 14%, transparent) 28%,
+          color-mix(in srgb, var(--fp-signal-glow-color) 44%, transparent) 68%,
+          color-mix(in srgb, var(--fp-signal-glow-color) 60%, transparent) 100%
+        ) left / clamp(2.75rem, 6vw, 5rem) 100% no-repeat,
+        linear-gradient(
+          90deg,
+          color-mix(in srgb, var(--fp-signal-glow-color) 60%, transparent) 0%,
+          color-mix(in srgb, var(--fp-signal-glow-color) 44%, transparent) 32%,
+          color-mix(in srgb, var(--fp-signal-glow-color) 14%, transparent) 72%,
+          transparent 100%
+        ) right / clamp(2.75rem, 6vw, 5rem) 100% no-repeat;
+      pointer-events: none;
+    }
+
+    & .clip-visualization {
+      z-index: 1;
+    }
+  }
+
+  & .speaker-label span {
+    opacity: 0;
+    transition: opacity var(--m__duration-xslow) var(--m__easing-base);
+  }
+
+  & .pg-player-dataviz:has(
+      .transcript-clip[data-speaker-index='1']:hover,
+      .behaviour-indicator[data-speaker-index='1']:hover
+    )
+    .speaker-label[data-speaker-index='1']
+    span,
+  & .pg-player-dataviz:has(
+      .transcript-clip[data-speaker-index='2']:hover,
+      .behaviour-indicator[data-speaker-index='2']:hover
+    )
+    .speaker-label[data-speaker-index='2']
+    span {
+    opacity: 1;
+    transition: opacity var(--m__duration-instant) var(--m__easing-base);
+  }
+
+  & .pg-player-dataviz .behaviour-indicators .behaviour-indicator {
+    transform: translate(6%, -12%);
   }
 }
 
@@ -200,36 +375,73 @@
 
 /* Accuracy dashboard: scatter on the left half, the metric pile on the
    right. Pure CSS, no chart.js. */
+@keyframes vlb-scatter-dot-pulse {
+  0% {
+    opacity: 0.24;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  75%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.4);
+  }
+}
+
 .vlb-dashboard__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--m__gap-xl);
-  align-items: start;
+  align-items: stretch;
 
   @media (width < 992px) {
     grid-template-columns: 1fr;
   }
 }
 
+@media (width >= 992px) {
+  .vlb-scatter,
+  .vlb-scatter__plot {
+    height: 100%;
+  }
+}
+
 .vlb-scatter {
   & .vlb-scatter__plot {
+    --vlb-scatter-grid-line: color-mix(
+      in srgb,
+      var(--m__text) 6%,
+      transparent
+    );
+    --m__rounded-radius: var(--m__radius-xl);
+
     position: relative;
     aspect-ratio: 4 / 3;
     border: var(--m__border-width-s) solid var(--m__border);
-    border-radius: var(--m__radius-s);
-    /* quarter gridlines */
-    background-image: linear-gradient(
-        to right,
-        color-mix(in srgb, var(--m__text) 6%, transparent) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        to top,
-        color-mix(in srgb, var(--m__text) 6%, transparent) 1px,
-        transparent 1px
-      );
-    background-size: 25% 25%;
-    overflow: hidden;
+    /* Draw only the three inner quarter lines. Repeating gradients also
+       painted the outer edge, doubling the plot border. */
+    background-image:
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line)),
+      linear-gradient(var(--vlb-scatter-grid-line), var(--vlb-scatter-grid-line));
+    background-position:
+      25% 0,
+      50% 0,
+      75% 0,
+      0 25%,
+      0 50%,
+      0 75%;
+    background-repeat: no-repeat;
+    background-size:
+      1px 100%,
+      1px 100%,
+      1px 100%,
+      100% 1px,
+      100% 1px,
+      100% 1px;
   }
 
   /* the efficient corner — a blurred gradient blob, the exact recipe of
@@ -314,20 +526,49 @@
 
     &.is-velma {
       background-color: var(--m__success);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--m__success) 25%, transparent);
+
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        border: 1px solid var(--m__success);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: vlb-scatter-dot-pulse 3.2s ease-out infinite;
+      }
+
+      &::after {
+        animation-delay: 1.6s;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        &::before,
+        &::after {
+          animation: none;
+          opacity: 0;
+        }
+      }
     }
   }
 
   & .vlb-scatter__dot-label {
     position: absolute;
-    top: calc(100% + 0.45rem);
+    top: calc(100% + 0.2rem);
     left: 50%;
     transform: translateX(-50%);
     font-size: var(--m__font-size-xs);
     line-height: 1.35;
     color: var(--m__text-caption);
     text-align: center;
-    white-space: nowrap;
+    width: max-content;
+    max-width: 9rem;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
 
     & strong {
       color: var(--m__text);
@@ -335,19 +576,18 @@
     }
   }
 
-  /* the corner dot's label goes below-left so it stays inside the plot */
-  & .vlb-scatter__dot.is-velma .vlb-scatter__dot-label {
-    left: auto;
-    right: -0.35rem;
-    transform: none;
-    text-align: right;
+}
+
+@media (width >= 992px) {
+  .vlb-scatter .vlb-scatter__plot {
+    aspect-ratio: auto;
   }
 }
 
 .vlb-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--m__gap-m);
+  gap: var(--m__gap-xxs);
 
   @media (width < 560px) {
     grid-template-columns: 1fr;
@@ -355,13 +595,14 @@
 }
 
 .vlb-card {
+  --m__rounded-radius: var(--m__radius-xl);
+
   padding: 0.7rem 0.85rem 0.6rem;
   background-color: var(--m__bg-surface);
-  border-radius: var(--m__radius-m);
 
   & .vlb-card__title {
     display: block;
-    margin-bottom: 0.35rem;
+    margin-bottom: var(--m__gap-l);
     font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
     text-transform: uppercase;
@@ -370,35 +611,46 @@
     white-space: nowrap;
   }
 
-  /* two horizontal bars per card: agent · track · value */
+  /* two metric rows per card: progress · value · agent */
   & .vlb-card__bars {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--m__gap-xxxxs);
   }
 
   & .vlb-bar {
     display: grid;
-    grid-template-columns: 3.6rem minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) 3.6rem;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--m__gap-xxxxs);
   }
 
   & .vlb-bar__agent {
     font-size: var(--m__font-size-xs);
-    color: var(--m__text-caption);
+    font-weight: var(--m__font-weight-bold);
+    color: var(--m__color-gray-400);
+    text-align: right;
     white-space: nowrap;
+
+    &.is-velma {
+      color: var(--m__success);
+    }
+
+    &.is-false {
+      color: var(--m__color-red-600);
+    }
   }
 
   & .vlb-bar__track {
-    height: 0.55rem;
-    border-radius: var(--m__radius-xs);
-    background: color-mix(in srgb, var(--m__text) 8%, transparent);
-    overflow: hidden;
+    position: relative;
+    width: calc(100% - 2.3rem);
+    height: 0.75rem;
+    border-radius: 0.1rem;
   }
 
   & .vlb-bar__fill {
     display: block;
+    width: var(--vlb-progress);
     height: 100%;
     border-radius: inherit;
     background: var(--m__color-gray-400);
@@ -413,11 +665,28 @@
   }
 
   & .vlb-bar__value {
-    min-width: 2.6rem;
-    font-size: var(--m__font-size-s);
-    font-weight: var(--m__font-weight-medium);
+    position: absolute;
+    top: 50%;
+    left: calc(var(--vlb-progress) + 0.4rem);
+    transform: translateY(-50%);
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-bold);
     font-variant-numeric: tabular-nums;
-    text-align: right;
+    color: var(--m__color-gray-400);
+    white-space: nowrap;
+
+    &.is-velma {
+      color: var(--m__success);
+    }
+
+    &.is-false {
+      color: var(--m__color-red-600);
+    }
+
+    &.is-zero {
+      left: 0;
+      color: var(--m__color-gray-400);
+    }
   }
 
   & .vlb-card__note {
@@ -430,9 +699,9 @@
 
 /* System prompt modal */
 .vlb-prompt-note {
-  margin: 0 0 var(--m__gap-s);
-  font-size: var(--m__font-size-s);
-  color: var(--m__text-caption);
+  margin: 0;
+  font-size: var(--m__font-size-l);
+  color: var(--m__text);
 }
 
 #vlb-prompt-modal .m__modal {
@@ -444,11 +713,41 @@
 }
 
 /* Receipt modals */
+.m__modal-backdrop:has(.vlb-receipt-title) .m__modal {
+  max-width: 38rem;
+}
+
+.vlb-receipt-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.15em;
+  padding-bottom: 0.18em;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% var(--m__border-width-l);
+
+  & svg {
+    width: 1em;
+    height: 1em;
+    flex: 0 0 auto;
+    transform: translateY(0.12em);
+  }
+}
+
 .vlb-receipt__meta {
   display: flex;
   align-items: baseline;
-  gap: var(--m__gap-m);
+  gap: var(--m__gap-xxs);
   margin-bottom: var(--m__gap-s);
+
+  & .m__tag-flat {
+    font-size: var(--m__font-size-s);
+  }
+
+  & > .m__tag-flat:first-child {
+    margin-right: var(--m__gap-xs);
+  }
 }
 
 .vlb-receipt__conf {
@@ -458,7 +757,7 @@
 }
 
 .vlb-receipt__reason {
-  font-size: var(--m__font-size-s);
+  font-size: var(--m__font-size-m);
   margin-bottom: var(--m__gap-s);
 }
 
@@ -466,12 +765,20 @@
 .vlb-transcript {
   display: flex;
   flex-direction: column;
-  gap: var(--m__gap-xs);
+  gap: var(--m__gap-xxs);
 
   & .pg-transcript-utterance {
     cursor: default;
-    font-size: var(--m__font-size-s);
   }
+
+  & .pg-transcript-utterance-header {
+    font-family: var(--m__font-family-semi-mono);
+    font-size: 0.8rem;
+  }
+}
+
+.vlb-receipt__excerpt {
+  margin-block: var(--m__spacer-m);
 }
 
 /* evidence line the model keyed on — the review-report blue tint */
@@ -491,34 +798,77 @@
   }
 }
 
-.vlb-receipt__outcome {
-  margin: var(--m__gap-m) 0 0;
-  font-size: var(--m__font-size-s);
-  font-weight: var(--m__font-weight-medium);
+/* Transcript modal: a viewport-sized workspace with a fixed header and
+   independently scrolling transcript body. */
+:is(
+    [id^='vlb-transcript-'].m__modal-backdrop,
+    #vlb-transcript-modal.m__modal-backdrop
+  ) {
+  --vlb-transcript-scrollbar-clearance: 12px;
 
-  &.is-correct {
-    color: var(--m__success);
+  align-items: center;
+  overflow: hidden;
+  padding: var(--m__gap-xl);
+
+  & .m__modal {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    height: calc(100dvh - var(--m__gap-xl) - var(--m__gap-xl));
+    max-height: calc(100dvh - var(--m__gap-xl) - var(--m__gap-xl));
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--m__radius-xl);
   }
 
-  &.is-false {
-    color: var(--m__color-red-600);
+  & .m__modal__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
-}
 
-/* Transcript modal: two variants side by side (Velma's diarized
-   utterances, the stack's finer undiarized STT chunks), so it is much
-   wider than the modal default. One modal per recording — the static
-   Harborview one and the generated vlb-transcript-* reels. */
-[id^='vlb-transcript-'].m__modal-backdrop .m__modal,
-#vlb-transcript-modal .m__modal {
-  max-width: 64rem;
+  & .m__modal__header {
+    position: relative;
+    z-index: 2;
+  }
+
+  & .vlb-transcript-footer {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    padding: var(--m__gap-xxs) var(--m__modal-padding)
+      var(--m__modal-padding);
+    background: var(--m__bg);
+
+    &::before {
+      content: '';
+      position: absolute;
+      right: var(--vlb-transcript-scrollbar-clearance);
+      bottom: 100%;
+      left: 0;
+      height: var(--m__spacer-m);
+      background: linear-gradient(
+        to top,
+        var(--m__bg),
+        color-mix(in srgb, var(--m__bg) 75%, transparent) 45%,
+        transparent
+      );
+      pointer-events: none;
+    }
+
+    & button {
+      position: relative;
+      z-index: 1;
+    }
+  }
 }
 
 .vlb-transcript-duo {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--m__gap-xl);
-  align-items: start;
+  align-items: stretch;
 
   @media (width < 768px) {
     grid-template-columns: 1fr;
@@ -526,13 +876,37 @@
 }
 
 .vlb-transcript-col__title {
+  position: sticky;
+  z-index: 1;
+  top: calc(-1 * var(--m__modal-padding));
   display: block;
+  margin-top: calc(-1 * var(--m__modal-padding));
   margin-bottom: var(--m__gap-s);
-  font-family: var(--m__font-family-semi-mono);
-  font-size: var(--m__font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--m__text-caption);
+  padding-top: var(--m__modal-padding);
+  padding-bottom: var(--m__gap-s);
+  background: var(--m__bg);
+  font-family: var(--m__font-family-sans);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--m__text);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    height: var(--m__spacer-m);
+    background: linear-gradient(
+      to bottom,
+      var(--m__bg),
+      color-mix(in srgb, var(--m__bg) 75%, transparent) 45%,
+      transparent
+    );
+    pointer-events: none;
+  }
 }
 
 /* The stack's transcript is undiarized — one flat left-aligned column,
@@ -551,48 +925,81 @@
 /* Four demo recordings in the menu: while it is open the plate releases
    its overflow clip (the canonical plate height stays; four items would
    not fit inside it) */
-.pg-upload-section:has(.pg-upload-stream[data-open='true']) .pg-upload-plate {
+.pg-upload-section:has(.vlb-select[data-open='true']) {
+  position: relative;
+  z-index: 1000;
+}
+
+.vlb-plate:has(.vlb-select[data-open='true']) > .vlb-behaviors-header {
+  z-index: 1001;
+}
+
+.pg-upload-section:has(
+    .pg-upload-stream[data-open='true'],
+    .vlb-select[data-open='true']
+  )
+  .pg-upload-plate {
   overflow: visible;
 }
 
-/* The event glyph: text-colored outline — a hue no emotion uses, so an
-   event kiki never reads as a behavior detection (doubled class to
-   outweigh the canon's [data-emotion] outline rules) */
+/* Sound-event clips are neutral, so their kiki outline uses the exact
+   same theme-safe neutral token as the clip beneath it. */
 .media-container
   .behaviour-indicators
   .behaviour-indicator.behaviour-indicator--event
   .behaviour-icon
   .behaviour-icon__outline {
-  fill: var(--m__text);
+  fill: rgba(var(--emotion-neutral-RGB), 1);
 }
 
 /* Event receipt: the score vector of the sound-events model */
 .vlb-event-scores {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  margin-bottom: var(--m__gap-s);
+  width: 100%;
+  margin-block: var(--m__gap-m);
   font-variant-numeric: tabular-nums;
-}
 
-.vlb-event-score {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--m__gap-m);
-  max-width: 18rem;
-  font-family: var(--m__font-family-semi-mono);
-  font-size: var(--m__font-size-xs);
-  color: var(--m__text-caption);
+  & table {
+    table-layout: fixed;
+    background: transparent;
+  }
 
-  &.is-top {
+  & th,
+  & td {
+    padding: var(--m__gap-xs) var(--m__gap-s) var(--m__gap-xs) 0;
+  }
+
+  & th {
+    position: static;
+    background: transparent;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  & th:last-child,
+  & td:last-child {
+    width: 50%;
+    padding-right: 0;
+    text-align: left;
+  }
+
+  & td {
+    font-size: var(--m__font-size-s);
     color: var(--m__text);
-    font-weight: var(--m__font-weight-medium);
+  }
+
+  & .vlb-event-score__value {
+    font-family: var(--m__font-family-semi-mono);
+  }
+
+  & .vlb-event-score.is-top {
+    & td {
+      font-weight: var(--m__font-weight-bold);
+    }
   }
 }
 
-/* Proposed-signal badge in receipts: same flat tag, quieter */
-.vlb-receipt__proposed {
-  color: var(--m__text-caption);
+.vlb-event-scores + .vlb-receipt__reason {
+  margin-bottom: var(--m__spacer-m);
 }
 
 /* Reel transcripts: scene markers and sound-event rows sit centered

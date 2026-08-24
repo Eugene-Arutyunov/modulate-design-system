@@ -475,6 +475,9 @@ function renderTranscriptClips(viz, data, opts, lanes) {
     node._fpClip = clip;
     node.style.left = `${pct(clip.startSec, data.durationSec)}%`;
     node.style.width = `${pct(clip.durationSec, data.durationSec)}%`;
+    if (clip.glowColor) {
+      node.style.setProperty("--fp-signal-glow-color", clip.glowColor);
+    }
     // The stylesheet only enumerates lane offsets for up to 5 speakers;
     // inline top works for any lane count. With laneHover the clip node
     // itself is confined to its lane (each lane hovers on its own).

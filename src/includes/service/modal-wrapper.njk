@@ -1,4 +1,4 @@
-{% macro modal(id, title) %}
+{% macro modal(id, title, behaviorTitle = false) %}
 <div
   class="m__modal-backdrop"
   id="{{ id }}"
@@ -9,7 +9,12 @@
 >
   <div class="m__modal">
     <div class="m__modal__header">
-      <h2 class="m__modal__title" id="{{ id }}-title">{{ title }}</h2>
+      <h2 class="m__modal__title{% if behaviorTitle %} vlb-receipt-title{% endif %}" id="{{ id }}-title">
+        {% if behaviorTitle %}
+        <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#behaviors"></use></svg>
+        {% endif %}
+        <span>{{ title }}</span>
+      </h2>
       <button
         type="button"
         class="m__modal__close"
