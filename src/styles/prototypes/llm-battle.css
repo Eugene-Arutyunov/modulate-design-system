@@ -529,6 +529,28 @@
 }
 
 /* Receipt modals */
+.m__modal-backdrop:has(.vlb-receipt-title) .m__modal {
+  max-width: 38rem;
+}
+
+.vlb-receipt-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.15em;
+  padding-bottom: 0.18em;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% var(--m__border-width-l);
+
+  & svg {
+    width: 1em;
+    height: 1em;
+    flex: 0 0 auto;
+    transform: translateY(0.12em);
+  }
+}
+
 .vlb-receipt__meta {
   display: flex;
   align-items: baseline;
@@ -537,13 +559,13 @@
 }
 
 .vlb-receipt__conf {
-  font-size: var(--m__font-size-s);
+  font-size: var(--m__font-size-m);
   font-variant-numeric: tabular-nums;
   color: var(--m__text-caption);
 }
 
 .vlb-receipt__reason {
-  font-size: var(--m__font-size-s);
+  font-size: var(--m__font-size-m);
   margin-bottom: var(--m__gap-s);
 }
 
@@ -555,8 +577,12 @@
 
   & .pg-transcript-utterance {
     cursor: default;
-    font-size: var(--m__font-size-s);
+    font-size: var(--m__font-size-m);
   }
+}
+
+.vlb-receipt__excerpt {
+  margin-block: var(--m__spacer-m);
 }
 
 /* evidence line the model keyed on — the review-report blue tint */
@@ -578,7 +604,7 @@
 
 .vlb-receipt__outcome {
   margin: var(--m__gap-m) 0 0;
-  font-size: var(--m__font-size-s);
+  font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-medium);
 
   &.is-correct {

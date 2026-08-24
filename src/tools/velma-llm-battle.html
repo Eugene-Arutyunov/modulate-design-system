@@ -360,7 +360,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 {% endcall %}
 
 <!-- Receipt modals: the evidence behind every kiki -->
-{% call modal("vlb-receipt-vishing", "Vishing") %}
+{% call modal("vlb-receipt-vishing", "Vishing", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
     <span class="m__tag-flat">Velma</span>
@@ -406,7 +406,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 </div>
 {% endcall %}
 
-{% call modal("vlb-receipt-vishing-stack", "Vishing") %}
+{% call modal("vlb-receipt-vishing-stack", "Vishing", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
     <span class="m__tag-flat">STT+LLM</span>
@@ -440,7 +440,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 </div>
 {% endcall %}
 
-{% call modal("vlb-receipt-impersonation", "Account Impersonation") %}
+{% call modal("vlb-receipt-impersonation", "Account Impersonation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
     <span class="m__tag-flat">Velma</span>
@@ -484,7 +484,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 </div>
 {% endcall %}
 
-{% call modal("vlb-receipt-impersonation-false", "Account Impersonation") %}
+{% call modal("vlb-receipt-impersonation-false", "Account Impersonation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
     <span class="m__tag-flat">STT+LLM</span>
@@ -518,7 +518,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 </div>
 {% endcall %}
 
-{% call modal("vlb-receipt-coercion", "Coercion Manipulation") %}
+{% call modal("vlb-receipt-coercion", "Coercion Manipulation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
     <span class="m__tag-flat">Velma</span>
@@ -1433,12 +1433,15 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   const modalsHost = document.createElement('div');
   document.body.appendChild(modalsHost);
 
-  function modalShell(id, title, body) {
+  function modalShell(id, title, body, behaviorTitle = false) {
+    const titleMarkup = behaviorTitle
+      ? `<svg viewBox="0 0 32 32" aria-hidden="true"><use href="#behaviors"></use></svg><span>${esc(title)}</span>`
+      : `<span>${esc(title)}</span>`;
     return `
       <div class="m__modal-backdrop" id="${id}" hidden aria-modal="true" role="dialog" aria-labelledby="${id}-title">
         <div class="m__modal">
           <div class="m__modal__header">
-            <h2 class="m__modal__title" id="${id}-title">${esc(title)}</h2>
+            <h2 class="m__modal__title${behaviorTitle ? ' vlb-receipt-title' : ''}" id="${id}-title">${titleMarkup}</h2>
             <button type="button" class="m__modal__close" aria-label="Close" data-modal-close="${id}">
               <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><use href="#close"></use></svg>
             </button>
@@ -1484,7 +1487,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
           <div class="vlb-event-scores">${rows}</div>
           <p class="vlb-receipt__reason">${esc(r.note)}</p>
           <p class="vlb-receipt__outcome is-correct">✓ Sound event · invisible to a text pipeline</p>
-        </div>`);
+        </div>`, true);
     }
     const firstSp = callDef.velma[r.excerpt[0].i].sp;
     const proposed = r.proposed
@@ -1502,7 +1505,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
           ${r.excerpt.map((ref) => excerptRow(callDef.velma, ref, firstSp)).join('')}
         </div>
         <p class="vlb-receipt__outcome ${r.outcome.ok ? 'is-correct' : 'is-false'}">${r.outcome.ok ? '✓' : '✗'} ${esc(r.outcome.text)}</p>
-      </div>`);
+      </div>`, true);
   }
 
   function behaviourLink(name) {
