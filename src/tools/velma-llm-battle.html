@@ -27,77 +27,31 @@
     <div class="nav-sidebar">
       <div class="vlb-controls">
         <div class="vlb-controls__group">
-          <span class="vlb-controls__title vlb-controls__title--icon"
-            ><svg viewBox="0 0 32 32" aria-hidden="true">
-              <use href="#behaviors"></use></svg
-            >Behaviors</span
-          >
-          <div class="vlb-select" data-open="false">
-            <button
-              type="button"
-              class="vlb-select__button"
-              aria-haspopup="true"
-              aria-expanded="false">
-              <span>3 of 8 selected</span>
-              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-            </button>
-            <div class="vlb-select__menu" hidden>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Complaints
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Vishing
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Account Impersonation
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" checked /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Coercion Manipulation
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Return Fraud Attempt
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Service Churn
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Off-topic Discussion
-              </label>
-              <label class="m__checkbox-secondary vlb-controls__check">
-                <input type="checkbox" /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-                Action Plan Created
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="vlb-controls__group">
           <span class="vlb-controls__title">STT + LLM</span>
-          <!-- Label-less selects follow the canon: no __control wrapper,
-               the select and chevron sit directly in .m__select -->
-          <div class="m__select S vlb-controls__select">
-            <select data-vlb-stt aria-label="STT model">
-              <option selected>Whisper v4</option>
-              <option>Deepgram Nova-3</option>
-              <option>AssemblyAI Universal</option>
-            </select>
-            <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-          </div>
-          <div class="m__select S vlb-controls__select">
-            <select data-vlb-llm aria-label="LLM model">
-              <option selected>GPT-5.5</option>
-              <option>Claude Opus 4.8</option>
-              <option>Grok 4.3</option>
-            </select>
-            <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-          </div>
+          <label class="m__select S vlb-controls__select">
+            <span>STT</span>
+            <span class="m__select__inline-control">
+              <span class="m__select__value" data-vlb-stt-value>Whisper v4</span>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+              <select data-vlb-stt aria-label="STT model">
+                <option selected>Whisper v4</option>
+                <option>Deepgram Nova-3</option>
+                <option>AssemblyAI Universal</option>
+              </select>
+            </span>
+          </label>
+          <label class="m__select S vlb-controls__select">
+            <span>LLM</span>
+            <span class="m__select__inline-control">
+              <span class="m__select__value" data-vlb-llm-value>GPT-5.5</span>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+              <select data-vlb-llm aria-label="LLM model">
+                <option selected>GPT-5.5</option>
+                <option>Claude Opus 4.8</option>
+                <option>Grok 4.3</option>
+              </select>
+            </span>
+          </label>
           <div class="m__space XXS"></div>
           <button
             type="button"
@@ -122,6 +76,83 @@
         {% set uploadPlateShowMeta = false %}
         {% set uploadPlateCollapsedLabel = 'New analysis' %}
         {% set uploadPlateStateInputName = 'vlb-plate-state' %}
+        {% set uploadPlateOptions %}
+        <div class="pg-options-row pg-velma-setup vlb-behaviors-header">
+          <div class="vlb-select" data-open="false">
+            <button
+              type="button"
+              class="pg-velma-setup-link vlb-select__button"
+              aria-haspopup="true"
+              aria-expanded="false">
+              <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true">
+                <use href="#behaviors"></use>
+              </svg>
+              Set up behaviors
+            </button>
+            <div class="m__popover vlb-select__menu" hidden>
+              <div class="m__popover-list">
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Complaints</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" checked />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Vishing</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" checked />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Account Impersonation</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" checked />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Coercion Manipulation</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Return Fraud Attempt</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Service Churn</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Off-topic Discussion</span>
+                </label>
+                <label class="m__popover-item">
+                  <span class="m__checkbox-primary">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                  </span>
+                  <span class="m__popover-item-name">Action Plan Created</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <span class="pg-velma-setup-summary" data-vlb-behaviors-value>3 behaviors</span>
+        </div>
+        {% endset %}
         {% set uploadPlateAnalyzingContent %}
         <div class="pg-processing-stages">
           <span class="pg-processing-stage">
@@ -765,7 +796,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     scenes: {
       title: 'Everyday scenes',
       duration: 73.0,
-      behaviorsLabel: '7 of 14 selected',
       sidebarExtra: ['Complaints', 'Vishing', 'Tone Missmatch', 'Unvoiced Disagreement', 'Harassment', 'Off-topic Discussion', 'Action Plan Created'],
       sceneAt: { 0: 'Scene 1 · Kitchen', 5: 'Scene 2 · Used-car lot', 11: 'Scene 3 · Sprint standup' },
       velma: [
@@ -866,7 +896,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     office: {
       title: 'Office hours',
       duration: 75.7,
-      behaviorsLabel: '6 of 14 selected',
       sidebarExtra: ['Sarcasm', 'Reluctance', 'Complaints', 'Off-topic Discussion', 'Rapport Building', 'Inappropriate Speech', 'Storytelling', 'Feigned Ignorance'],
       sceneAt: { 0: 'Scene 1 · Performance review', 5: 'Scene 2 · All-hands', 10: 'Scene 3 · Client call' },
       velma: [
@@ -955,7 +984,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     party: {
       title: 'House party',
       duration: 77.1,
-      behaviorsLabel: '5 of 14 selected',
       sidebarExtra: ['Sarcasm', 'Inappropriate Speech', 'Social Etiquette', 'Rapport Building', 'Encouragement', 'Harassment', 'Storytelling', 'Tone Missmatch', 'Teaching/Mentorship'],
       sceneAt: { 0: 'Scene 1 · The toast', 4: 'Scene 2 · Kitchen', 9: 'Scene 3 · Game night', 13: 'Scene 4 · Goodbyes' },
       velma: [
@@ -1050,7 +1078,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     harborview: {
       title: 'Harborview Bank',
       duration: 67.697,
-      behaviorsLabel: '3 of 8 selected',
       sidebarExtra: ['Complaints', 'Return Fraud Attempt', 'Service Churn', 'Off-topic Discussion', 'Action Plan Created'],
       sceneAt: null,
       transcriptModal: 'vlb-transcript-modal',
@@ -1113,6 +1140,8 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   const transcriptBtn = document.querySelector('.vlb-transcript-btn');
   const sttSelect = document.querySelector('[data-vlb-stt]');
   const llmSelect = document.querySelector('[data-vlb-llm]');
+  const sttValue = document.querySelector('[data-vlb-stt-value]');
+  const llmValue = document.querySelector('[data-vlb-llm-value]');
 
   const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const fmt = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
@@ -1319,22 +1348,30 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   }
 
   // ---------------------------------------------------------------- //
-  // Sidebar: the behaviors multiselect mirrors the selected recording //
-  // (checked = the strips on the page), purely decorative.            //
+  // Upload header: the behaviors multiselect mirrors the selected     //
+  // recording; its summary always follows the checked item count.    //
   // ---------------------------------------------------------------- //
-  function renderSidebar() {
-    const button = document.querySelector('.vlb-select__button span');
-    const menu = document.querySelector('.vlb-select__menu');
+  function syncBehaviorSummary() {
+    const summary = document.querySelector('[data-vlb-behaviors-value]');
+    const count = document.querySelectorAll('.vlb-select__menu input[type="checkbox"]:checked').length;
+    if (summary) summary.textContent = `${count} ${count === 1 ? 'behavior' : 'behaviors'}`;
+  }
 
-    if (button) button.textContent = call().behaviorsLabel;
+  function renderSidebar() {
+    const menu = document.querySelector('.vlb-select__menu .m__popover-list');
+
     if (!menu) return;
     const item = (name, checked) => `
-      <label class="m__checkbox-secondary vlb-controls__check">
-        <input type="checkbox"${checked ? ' checked' : ''} /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
-        ${esc(name)}
+      <label class="m__popover-item">
+        <span class="m__checkbox-primary">
+          <input type="checkbox"${checked ? ' checked' : ''} />
+          <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+        </span>
+        <span class="m__popover-item-name">${esc(name)}</span>
       </label>`;
     const names = call().strips.map((s) => s.name);
     menu.innerHTML = names.map((n) => item(n, true)).join('') + call().sidebarExtra.map((n) => item(n, false)).join('');
+    syncBehaviorSummary();
   }
 
   // ---------------------------------------------------------------- //
@@ -1498,9 +1535,19 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       renderStrips();
     });
   }
-  [sttSelect, llmSelect].forEach((sel) => {
-    if (sel) sel.addEventListener('change', renderDashboard);
+  [[sttSelect, sttValue], [llmSelect, llmValue]].forEach(([sel, value]) => {
+    if (!sel) return;
+    sel.addEventListener('change', () => {
+      if (value) value.textContent = sel.value;
+      renderDashboard();
+    });
   });
+  const behaviorsMenu = document.querySelector('.vlb-select__menu');
+  if (behaviorsMenu) {
+    behaviorsMenu.addEventListener('change', (event) => {
+      if (event.target.matches('input[type="checkbox"]')) syncBehaviorSummary();
+    });
+  }
 
   // Dropdowns that stay open while picking: the demo-audio split button
   // closes on menu items (and switches the recording), the behaviors

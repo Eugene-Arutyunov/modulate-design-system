@@ -1,9 +1,9 @@
 /* Velma LLM Battle — /tools/velma-llm-battle/ design mock.
    The page reuses the playground plumbing as is (dashboard-layout, upload
    plate, player lanes, split-button menu, modal canon); vlb-* covers only
-   what the battle adds: the sidebar control panel, the gray "no signal /
-   no emotions" clip treatment, the per-behavior mini players, the receipt
-   modals, and the accuracy dashboard. */
+   what the battle adds: the sidebar control panel, upload-header behavior
+   picker, gray "no signal / no emotions" clip treatment, per-behavior mini
+   players, receipt modals, and the accuracy dashboard. */
 
 /* Sidebar control panel — geometry echoes .models-nav--vertical.
    Rounded by hand, not via .m__rounded: its overflow clip would cut the
@@ -32,64 +32,21 @@
     white-space: nowrap;
   }
 
-  & .vlb-controls__check {
-    padding-block: 0.15rem;
-    font-size: var(--m__font-size-s);
-    white-space: nowrap;
-  }
-
-  /* group title with the behavior kiki glyph */
-  & .vlb-controls__title--icon {
-    display: flex;
-    align-items: center;
-    gap: 0.35em;
-
-    & svg {
-      width: 0.95em;
-      height: 0.95em;
-      flex-shrink: 0;
-    }
-  }
 }
 
-/* Selects (stack + behaviors): textfield-shaped trigger, split-button-
-   shaped menu */
+/* Behaviors follows the Playground setup-link pattern, backed by a custom
+   checkbox menu because the native select cannot express multiple choices. */
 .vlb-select {
   position: relative;
-  margin-top: 0.25rem;
 
   & .vlb-select__button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--m__gap-xs);
-    width: 100%;
-    padding: 0.4rem 0.6rem;
-    border: var(--m__border-width-s) solid var(--m__border);
-    border-radius: var(--m__radius-s);
-    background-color: var(--m__bg);
-    color: var(--m__text);
+    appearance: none;
+    padding: 0 0 0.05rem;
+    border: 0;
+    border-bottom: 1.5px dotted currentColor;
+    background: none;
     font: inherit;
-    font-size: var(--m__font-size-s);
-    text-align: left;
     cursor: pointer;
-    transition: border-color var(--m__duration-base) var(--m__easing-base);
-
-    &:hover {
-      border-color: var(--m__text-caption);
-      transition-duration: var(--m__duration-instant);
-    }
-
-    & svg {
-      width: 0.7em;
-      height: 0.7em;
-      flex-shrink: 0;
-      transition: transform var(--m__duration-base) var(--m__easing-base);
-    }
-  }
-
-  &[data-open='true'] .vlb-select__button svg {
-    transform: rotate(180deg);
   }
 
   & .vlb-select__menu {
@@ -97,19 +54,23 @@
     top: calc(100% + 0.35rem);
     left: 0;
     right: 0;
-    z-index: 30;
-    display: flex;
-    flex-direction: column;
-    padding: 0.4rem 0.6rem;
-    background-color: var(--m__bg);
-    border: var(--m__border-width-s) solid var(--m__border);
-    border-radius: var(--m__widget-radius);
-    box-shadow: 0 4px 20px color-mix(in srgb, #000 22%, transparent);
+    z-index: 1001;
+    width: 20rem;
+
+    & .m__popover-list {
+      max-height: min(24rem, calc(100vh - 8rem));
+    }
 
     &[hidden] {
       display: none;
     }
   }
+}
+
+.vlb-controls > .vlb-controls__group .vlb-controls__check {
+  padding-block: 0.15rem;
+  font-size: var(--m__font-size-s);
+  white-space: nowrap;
 }
 
 /* Demo-audio menu: wide enough to keep titles on one line inside the
@@ -122,7 +83,7 @@
   }
 }
 
-/* STT / LLM pickers: the DS native select, stacked under the group title */
+/* STT / LLM pickers: canonical DS compact selects. */
 .vlb-controls .vlb-controls__select {
   margin-top: 0.25rem;
   font-size: var(--m__font-size-s);
@@ -551,7 +512,20 @@
 /* Four demo recordings in the menu: while it is open the plate releases
    its overflow clip (the canonical plate height stays; four items would
    not fit inside it) */
-.pg-upload-section:has(.pg-upload-stream[data-open='true']) .pg-upload-plate {
+.pg-upload-section:has(.vlb-select[data-open='true']) {
+  position: relative;
+  z-index: 1000;
+}
+
+.vlb-plate:has(.vlb-select[data-open='true']) > .vlb-behaviors-header {
+  z-index: 1001;
+}
+
+.pg-upload-section:has(
+    .pg-upload-stream[data-open='true'],
+    .vlb-select[data-open='true']
+  )
+  .pg-upload-plate {
   overflow: visible;
 }
 
