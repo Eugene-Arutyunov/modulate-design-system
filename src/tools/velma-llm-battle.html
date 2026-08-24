@@ -1635,6 +1635,31 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   });
   modalsHost.innerHTML = generated;
 
+  // Fade only where more transcript exists beyond the current viewport:
+  // no top fade at scroll start, no footer fade at scroll end.
+  document.querySelectorAll(`
+    :is(
+      [id^='vlb-transcript-'].m__modal-backdrop,
+      #vlb-transcript-modal.m__modal-backdrop
+    )
+  `).forEach((modal) => {
+    const body = modal.querySelector('.m__modal__body');
+    if (!body) return;
+
+    const syncScrollEdges = () => {
+      const maxScroll = Math.max(0, body.scrollHeight - body.clientHeight);
+      body.classList.toggle('is-scroll-start', body.scrollTop <= 1);
+      body.classList.toggle('is-scroll-end', body.scrollTop >= maxScroll - 1);
+    };
+
+    body.addEventListener('scroll', syncScrollEdges, { passive: true });
+    new ResizeObserver(syncScrollEdges).observe(body);
+    new MutationObserver(() => {
+      if (!modal.hidden) requestAnimationFrame(syncScrollEdges);
+    }).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
+    syncScrollEdges();
+  });
+
   // ---------------------------------------------------------------- //
   function renderAll() {
     renderMain();
