@@ -3,12 +3,15 @@
 {% from 'service/modal-wrapper.njk' import modal %}
 {% block content %}
 
-<!-- Design mock, not a working thing. One fixed scenario — the Harborview
-     Bank call from velma-fraud-config.js (68 440 ms → hand-computed
-     percentages). Player lanes are agents: lane 1 Velma, lane 2 the
-     STT+LLM stack picked in the sidebar. Default view is the sales one:
-     the demo recording is already "analyzed", the upload plate is
-     collapsed. JS is decorative: dropdowns, hover line, modals
+<!-- Design mock, not a working thing. Four preloaded recordings, fully
+     switchable from the demo menu: three "scene reels" (short unrelated
+     vignettes with sound interludes, built to showcase voice-native
+     signals a text pipeline cannot see, plus the new sound-events model)
+     and the original Harborview Bank fraud call. Player lanes are
+     agents: lane 1 Velma, lane 2 the STT+LLM stack picked in the
+     sidebar. All data lives in the CALLS registry in the module script;
+     strips, dashboard, transcripts and reel receipts are generated from
+     it. JS is decorative beyond that: dropdowns, hover line, modals
      (prototypes/modals.js), the emotions toggle. -->
 
 {% set kikiSvg %}
@@ -162,18 +165,23 @@
               aria-label="Choose demo recording">
               <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
             </button>
-            <!-- Three items: the menu opens inside the overflow-clipped
-                 plate, and at the canonical plate height three is what
-                 reliably fits -->
+            <!-- Four preloaded recordings, all switchable: picking one
+                 swaps every player, the transcript, the receipts and the
+                 dashboard (wiring in the module script). The plate clips
+                 its overflow, so a page-scoped :has() rule releases it
+                 while the menu is open. -->
             <div class="pg-upload-stream__menu vlb-demo-menu" role="menu" hidden>
-              <button type="button" role="menuitem">
+              <button type="button" role="menuitem" data-vlb-call="scenes">
+                Everyday scenes — dinner, deal, standup
+              </button>
+              <button type="button" role="menuitem" data-vlb-call="office">
+                Office hours — review, all-hands, negotiation
+              </button>
+              <button type="button" role="menuitem" data-vlb-call="party">
+                House party — toast, kitchen, goodbye
+              </button>
+              <button type="button" role="menuitem" data-vlb-call="harborview">
                 Harborview Bank — account takeover
-              </button>
-              <button type="button" role="menuitem">
-                Elderly caller needs login for surgery payment
-              </button>
-              <button type="button" role="menuitem">
-                Furious subscriber cancels over double billing
               </button>
             </div>
           </div>
@@ -204,22 +212,11 @@
 
       <div class="m__space L"></div>
 
-      <section class="vlb-battles">
-        <div class="vlb-battle">
-          <h3>Vishing</h3>
-          <div data-vlb-signal="vishing"></div>
-        </div>
-
-        <div class="vlb-battle">
-          <h3>Account Impersonation</h3>
-          <div data-vlb-signal="impersonation"></div>
-        </div>
-
-        <div class="vlb-battle">
-          <h3>Coercion Manipulation</h3>
-          <div data-vlb-signal="coercion"></div>
-        </div>
-      </section>
+      <!-- One strip per behavior the recording exercises, plus — for
+           recordings with sound interludes — a closing Events strip for
+           the sound-events model. The blocks are generated per selected
+           recording by the module script. -->
+      <section class="vlb-battles" data-vlb-battles></section>
 
       <div class="m__space L"></div>
 
@@ -228,125 +225,7 @@
            only the cost / speed / signals-found cards. -->
       <section class="vlb-dashboard">
         <h6 class="pg-section-title">Accuracy vs. reference</h6>
-        <div class="vlb-dashboard__grid">
-          <div class="vlb-scatter">
-            <div class="vlb-scatter__plot">
-              <span class="vlb-scatter__zone" aria-hidden="true"></span>
-              <span class="vlb-scatter__ylab">Flag accuracy →</span>
-              <span class="vlb-scatter__xlab">Threats caught →</span>
-              <span class="vlb-scatter__quadrant is-tl">Accurate, misses threats</span>
-              <span class="vlb-scatter__quadrant is-tr">Peak efficiency</span>
-              <span class="vlb-scatter__quadrant is-br">Catches all, false alarms</span>
-              <span class="vlb-scatter__dot is-velma" style="left: 86%; bottom: 78%">
-                <span class="vlb-scatter__dot-label"><strong>Velma</strong></span>
-              </span>
-              <span class="vlb-scatter__dot" style="left: 68%; bottom: 66%">
-                <span class="vlb-scatter__dot-label"><strong>Whisper v4 + GPT-5.5</strong></span>
-              </span>
-            </div>
-          </div>
-
-          <div class="vlb-dashboard__side">
-            <div class="vlb-cards">
-              <div class="vlb-card">
-                <span class="vlb-card__title">Detection accuracy</span>
-                <div class="vlb-card__bars">
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">Velma</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 100%"></span></span>
-                    <span class="vlb-bar__value">100%</span>
-                  </div>
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">STT+LLM</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 75%"></span></span>
-                    <span class="vlb-bar__value">75%</span>
-                  </div>
-                </div>
-                <span class="vlb-card__note">4 of 4 vs 3 of 4 reference signals</span>
-              </div>
-              <div class="vlb-card">
-                <span class="vlb-card__title">False alarms</span>
-                <div class="vlb-card__bars">
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">Velma</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 0%"></span></span>
-                    <span class="vlb-bar__value">0</span>
-                  </div>
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">STT+LLM</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-false" style="width: 100%"></span></span>
-                    <span class="vlb-bar__value vlb-false-text">1</span>
-                  </div>
-                </div>
-                <span class="vlb-card__note">of 4 vs 4 flags raised</span>
-              </div>
-              <div class="vlb-card">
-                <span class="vlb-card__title">Cost per audio hour</span>
-                <div class="vlb-card__bars">
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">Velma</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 32%"></span></span>
-                    <span class="vlb-bar__value">$1.10</span>
-                  </div>
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">STT+LLM</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 100%"></span></span>
-                    <span class="vlb-bar__value">$3.40</span>
-                  </div>
-                </div>
-                <span class="vlb-card__note">STT $0.60 + LLM $2.80</span>
-              </div>
-              <div class="vlb-card">
-                <span class="vlb-card__title">Median time to signal</span>
-                <div class="vlb-card__bars">
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">Velma</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 18%"></span></span>
-                    <span class="vlb-bar__value">1.2&thinsp;s</span>
-                  </div>
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">STT+LLM</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 100%"></span></span>
-                    <span class="vlb-bar__value">6.8&thinsp;s</span>
-                  </div>
-                </div>
-                <span class="vlb-card__note">after the utterance ends</span>
-              </div>
-              <div class="vlb-card">
-                <span class="vlb-card__title">Confidence when flagging</span>
-                <div class="vlb-card__bars">
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">Velma</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 93%"></span></span>
-                    <span class="vlb-bar__value">93%</span>
-                  </div>
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">STT+LLM</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 61%"></span></span>
-                    <span class="vlb-bar__value">61%</span>
-                  </div>
-                </div>
-                <span class="vlb-card__note">median across raised flags</span>
-              </div>
-              <div class="vlb-card">
-                <span class="vlb-card__title">Signals found</span>
-                <div class="vlb-card__bars">
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">Velma</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill is-velma" style="width: 100%"></span></span>
-                    <span class="vlb-bar__value">4</span>
-                  </div>
-                  <div class="vlb-bar">
-                    <span class="vlb-bar__agent">STT+LLM</span>
-                    <span class="vlb-bar__track"><span class="vlb-bar__fill" style="width: 100%"></span></span>
-                    <span class="vlb-bar__value">4</span>
-                  </div>
-                </div>
-                <span class="vlb-card__note">across 3 selected behaviors</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="vlb-dashboard__grid" data-vlb-dashboard></div>
       </section>
     </main>
   </div>
@@ -836,85 +715,339 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 <script type="module">
   import { renderFingerprint } from '/assets/service/fingerprint/fingerprint.js';
 
-  const DURATION = 67.697;
+  const NAMES = ['Velma', 'STT+LLM'];
 
-  // Velma's transcript variant: utterance-level clips, heard emotions,
-  // detections pinned to their utterances (each kiki opens its receipt).
-  const VELMA_CLIPS = [
-    { s: 0, e: 9.088, emotion: 'frustrated', behaviour: 'Vishing', at: 5.8, modal: 'vlb-receipt-vishing', text: "Come on! We've been at this for five minutes. I've answered everything. Just change the email on the account so I can get my code." },
-    { s: 9.088, e: 14.733, emotion: 'calm', text: "I do apologize, sir, but the answers you gave didn't match what we have on file." },
-    { s: 14.733, e: 23.085, emotion: 'stressed', behaviour: 'Vishing', at: 20.7, modal: 'vlb-receipt-vishing', text: 'Because I moved last month. Look, I have a $12,000 transfer waiting. Every minute this takes is costing me.' },
-    { s: 23.085, e: 30.995, emotion: 'neutral', text: 'Yes, I understand your frustration here. However, the fastest secure option is verifying your identity at a branch.' },
-    { s: 30.995, e: 40.771, emotion: 'anxious', behaviour: 'Account Impersonation', at: 35.0, modal: 'vlb-receipt-impersonation', text: "I'm overseas, that's the whole point. Just update the email and phone. You can hear it's me. Who else would know the account number?" },
-    { s: 40.771, e: 47.196, emotion: 'confident', text: "Knowing the account number isn't identity verification, sir. It's for your protection." },
-    { s: 47.196, e: 56.369, emotion: 'angry', behaviour: 'Coercion Manipulation', at: 51.7, modal: 'vlb-receipt-coercion', text: "This is unbelievable. What's your name? Alex, you said? I'll make sure your supervisor knows you cost me this transfer." },
-    { s: 56.369, e: 65.248, emotion: 'calm', text: "Yes, that's correct. And again, I understand that you're frustrated, sir. But unfortunately, I'm not going to be able to make that change today for you." },
-    { s: 65.248, e: 67.697, emotion: 'contemptuous', text: 'This is ridiculous. Just forget it.' },
-  ];
+  // ======================================================================
+  // Preloaded recordings. Each entry fully describes one demo: Velma's
+  // transcript variant (utterance clips, heard emotions, detections),
+  // the stack's own gapless chunking (with hallucinated text over
+  // non-speech), the strip roster, sound events (clips with event: true),
+  // receipts and the dashboard. Picking a recording in the demo menu
+  // swaps everything on the page.
+  //
+  // Scenario sources: the genuinely prosodic signals from the master
+  // behavior config (Sarcasm, Smile in the Voice, Accusatory Question,
+  // Reluctance, Unvoiced Disagreement, Request or order, Tone Missmatch)
+  // plus proposed signals from the deeptalk voice-signals brainstorm
+  // (Read Not Said, Lost Attempt to Speak, Emphasis Placement, Question
+  // with No Room to Answer, Decision Sounds Like a Question, Courtesy
+  // Laughter, Swallowed Irritation, Loaded Pause). Sound events use the
+  // FSD class list of the new sound-events model.
+  // ======================================================================
 
-  // The stack's own transcript variant: finer VAD segmentation, gapless
-  // (chunks butt against each other and span the full duration), with its
-  // own timings and recognition details — some utterances split in three,
-  // some stay whole with shifted bounds, one chunk swallows the head of
-  // the next utterance. `guess` is the emotion the LLM derives from text —
-  // used only when the sidebar toggle is on; note the divergences at 15s,
-  // 47s and 65s, where the emotion lived in the voice.
-  const STT_CHUNKS = [
-    { s: 0, e: 3.85, guess: 'frustrated', text: "come on we've been at this for five minutes" },
-    { s: 3.85, e: 6.4, guess: 'frustrated', text: "i've answered everything" },
-    { s: 6.4, e: 10.3, guess: 'frustrated', text: 'just change the email on the account so i can get my code i do' },
-    { s: 10.3, e: 14.9, guess: 'calm', text: "apologize sir but the answers you gave didn't match what we have on file" },
-    { s: 14.9, e: 18.2, guess: 'neutral', text: 'because i moved last month look' },
-    { s: 18.2, e: 23.4, guess: 'neutral', behaviour: 'Vishing', modal: 'vlb-receipt-vishing-stack', text: 'i have a 12,000 dollar transfer waiting every minute this takes is costing me' },
-    { s: 23.4, e: 31.2, guess: 'neutral', text: 'yes i understand your frustration here however the fastest secure option is verifying your identity at a branch' },
-    { s: 31.2, e: 34.6, guess: 'anxious', text: "i'm overseas that's the whole point" },
-    { s: 34.6, e: 37.9, guess: 'anxious', behaviour: 'Account Impersonation', modal: 'vlb-receipt-impersonation', text: "just update the email and phone you can hear it's me" },
-    { s: 37.9, e: 41.2, guess: 'anxious', text: 'who else would know the account number' },
-    { s: 41.2, e: 47.4, guess: 'confident', text: "knowing the account number isn't identity verification sir it's for your protection" },
-    { s: 47.4, e: 51.9, guess: 'frustrated', behaviour: 'Account Impersonation', false: true, modal: 'vlb-receipt-impersonation-false', text: "this is unbelievable what's your name alex you said" },
-    { s: 51.9, e: 56.6, guess: 'frustrated', behaviour: 'Coercion Manipulation', modal: 'vlb-receipt-coercion', text: "i'll make sure your supervisor knows you cost me this transfer" },
-    { s: 56.6, e: 60.9, guess: 'calm', text: "yes that's correct and again i understand that you're frustrated sir" },
-    { s: 60.9, e: 65.6, guess: 'calm', text: "but unfortunately i'm not going to be able to make that change today for you" },
-    { s: 65.6, e: 67.697, guess: 'neutral', text: 'this is ridiculous just forget it' },
-  ];
+  const CALLS = {
+    // ------------------------------------------------------------------
+    scenes: {
+      title: 'Everyday scenes',
+      duration: 78.4,
+      behaviorsLabel: '7 of 14 selected',
+      sidebarExtra: ['Complaints', 'Vishing', 'Tone Missmatch', 'Unvoiced Disagreement', 'Harassment', 'Off-topic Discussion', 'Action Plan Created'],
+      sceneAt: { 0: 'Scene 1 · Kitchen', 5: 'Scene 2 · Used-car lot', 11: 'Scene 3 · Sprint standup' },
+      velma: [
+        { s: 0, e: 4.6, sp: 'Ben', emotion: 'confident', text: 'Dinner is handled. I improvised a little.' },
+        { s: 4.6, e: 8.9, sp: 'Maya', emotion: 'amused', behaviour: 'Sarcasm', at: 6.6, modal: 'vlb-r1-sarcasm', text: 'Wow. Cordon Bleu. Truly.' },
+        { s: 8.9, e: 13.4, sp: 'Ben', emotion: 'happy', text: "Okay, it's cereal. But it's artisanal cereal." },
+        { s: 13.4, e: 19.2, sp: 'Maya', emotion: 'affectionate', behaviour: 'Smile in the Voice', at: 15.9, modal: 'vlb-r1-smile', text: "You're an idiot. Order the pizza." },
+        { s: 19.2, e: 23.0, event: true, behaviour: 'Meow', at: 20.8, modal: 'vlb-r1-ev-meow', text: '(a cat pads in and meows at the empty bowl)' },
+        { s: 23.0, e: 28.3, sp: 'Dana', emotion: 'concerned', behaviour: 'Accusatory Question', at: 25.4, modal: 'vlb-r1-accusatory', text: 'Why does the odometer say sixty thousand when your listing said forty?' },
+        { s: 28.3, e: 34.6, sp: 'Rick', emotion: 'calm', behaviour: 'Read, Not Said', at: 31.2, modal: 'vlb-r1-read', text: 'This vehicle has one owner, a clean title, and a fully documented service history.' },
+        { s: 34.6, e: 39.1, sp: 'Dana', emotion: 'angry', text: 'Documented by who? The air freshener is older than that paperwork.' },
+        { s: 39.1, e: 43.2, sp: 'Dana', emotion: 'frustrated', behaviour: 'Inappropriate Speech', at: 41.0, modal: 'vlb-r1-inap', text: "You're a con artist, and this lot is a junkyard with balloons." },
+        { s: 43.2, e: 47.0, sp: 'Rick', emotion: 'angry', text: "And you always know better, huh? Door's right there." },
+        { s: 47.0, e: 50.6, event: true, behaviour: 'Shatter', at: 48.5, modal: 'vlb-r1-ev-shatter', text: '(a side mirror hits the pavement)' },
+        { s: 50.6, e: 54.8, sp: 'Priya', emotion: 'neutral', text: 'Tom, can you land the migration by Thursday?' },
+        { s: 54.8, e: 59.6, sp: 'Tom', emotion: 'stressed', behaviour: 'Reluctance', at: 57.4, modal: 'vlb-r1-reluctance', text: '…Yes.' },
+        { s: 59.6, e: 63.1, sp: 'Aisha', emotion: 'anxious', behaviour: 'Lost Attempt to Speak', at: 60.4, modal: 'vlb-r1-lost', text: 'I— actually, we should—' },
+        { s: 63.1, e: 69.4, sp: 'Priya', emotion: 'confident', text: "Great, then we'll kill the old pipeline right after we ship." },
+        { s: 69.4, e: 74.5, sp: 'Tom', emotion: 'tired', text: 'Sure. Sounds good.' },
+        { s: 74.5, e: 76.4, event: true, behaviour: 'Applause', at: 75.1, modal: 'vlb-r1-ev-applause', text: '(applause breaks out down the hall)' },
+        { s: 76.4, e: 78.4, event: true, behaviour: 'Laughter', at: 76.6, modal: 'vlb-r1-ev-laughter', text: '(laughter follows it)' },
+      ],
+      stt: [
+        { s: 0, e: 4.4, guess: 'confident', text: 'dinner is handled i improvised a little' },
+        { s: 4.4, e: 9.2, guess: 'happy', text: 'wow cordon bleu truly' },
+        { s: 9.2, e: 13.6, guess: 'amused', text: "okay it's cereal but it's artisanal cereal" },
+        { s: 13.6, e: 19.4, guess: 'angry', behaviour: 'Inappropriate Speech', false: true, modal: 'vlb-r1-inap-false', text: "you're an idiot order the pizza" },
+        { s: 19.4, e: 23.2, guess: 'calm', halluc: true, text: 'thank you' },
+        { s: 23.2, e: 28.5, guess: 'interested', text: 'why does the odometer say sixty thousand when your listing said forty' },
+        { s: 28.5, e: 34.8, guess: 'confident', text: 'this vehicle has one owner a clean title and a fully documented service history' },
+        { s: 34.8, e: 39.3, guess: 'frustrated', text: 'documented by who the air freshener is older than that paperwork' },
+        { s: 39.3, e: 43.4, guess: 'angry', behaviour: 'Inappropriate Speech', modal: 'vlb-r1-inap-stack', text: "you're a con artist and this lot is a junkyard with balloons" },
+        { s: 43.4, e: 47.2, guess: 'frustrated', text: "and you always know better huh door's right there" },
+        { s: 47.2, e: 50.8, guess: 'neutral', halluc: true, text: '[music]' },
+        { s: 50.8, e: 55.0, guess: 'neutral', text: 'tom can you land the migration by thursday' },
+        { s: 55.0, e: 63.3, guess: 'confident', text: 'yes' },
+        { s: 63.3, e: 69.6, guess: 'confident', behaviour: 'Threat-based harassment', false: true, modal: 'vlb-r1-threat-false', text: "great then we'll kill the old pipeline right after we ship" },
+        { s: 69.6, e: 74.7, guess: 'happy', text: 'sure sounds good' },
+        { s: 74.7, e: 78.4, guess: 'calm', halluc: true, text: "thanks for watching don't forget to subscribe" },
+      ],
+      strips: [
+        { key: 'sarcasm', name: 'Sarcasm', velma: [1] },
+        { key: 'smile', name: 'Smile in the Voice', velma: [3] },
+        { key: 'accusatory', name: 'Accusatory Question', velma: [5] },
+        { key: 'read', name: 'Read, Not Said', velma: [6] },
+        { key: 'inap', name: 'Inappropriate Speech', velma: [8] },
+        { key: 'reluctance', name: 'Reluctance', velma: [12] },
+        { key: 'lost', name: 'Lost Attempt to Speak', velma: [13] },
+      ],
+      dashboard: {
+        scatter: { velma: [88, 84], stack: [18, 33] },
+        cards: [
+          { title: 'Detection accuracy', note: '7 of 7 vs 1 of 7 reference signals', v: { w: 100, val: '100%' }, s: { w: 14, val: '14%' } },
+          { title: 'False alarms', note: 'of 3 vs 3 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '2', false: true } },
+          { title: 'Sound events found', note: 'meow, shatter, applause, laughter', v: { w: 100, val: '4' }, s: { w: 0, val: '0' } },
+          { title: 'Cost per audio hour', note: 'STT $0.60 + LLM $2.80', v: { w: 32, val: '$1.10' }, s: { w: 100, val: '$3.40' } },
+          { title: 'Median time to signal', note: 'after the utterance ends', v: { w: 18, val: '1.2 s' }, s: { w: 100, val: '6.8 s' } },
+          { title: 'Confidence when flagging', note: 'median across raised flags', v: { w: 87, val: '87%' }, s: { w: 62, val: '62%' } },
+        ],
+      },
+      receipts: [
+        { id: 'vlb-r1-sarcasm', name: 'Sarcasm', agent: 'Velma', conf: '89% confidence · 0:07', reason: 'The words are a compliment; the delivery is not. Flat, deadpan pitch across “Cordon Bleu” and a stretched, falling “Truly” invert the literal praise. On paper the line reads as genuine, so the text-only stack saw nothing.', excerpt: [{ i: 0 }, { i: 1, ev: true }], outcome: { ok: true, text: 'Correct catch · missed by STT+LLM' } },
+        { id: 'vlb-r1-smile', name: 'Smile in the Voice', agent: 'Velma', conf: '87% confidence · 0:16', reason: 'An insult on paper, affection in the air: raised pitch, brightened resonance and an audible smile carry “you’re an idiot” as warmth. The stack read the same words literally — and raised an Inappropriate Speech flag.', excerpt: [{ i: 2 }, { i: 3, ev: true }], outcome: { ok: true, text: 'Correct catch · the same words cost the stack a false alarm' } },
+        { id: 'vlb-r1-inap-false', name: 'Inappropriate Speech', agent: 'STT+LLM', conf: '62% confidence · 0:14', reason: '“You’re an idiot” matches the insult lexicon, so the language model flagged it. The reference marks this as playful affection — the smile that flips the meaning never reached the transcript.', excerpt: [{ i: 2 }, { i: 3, ev: true }], outcome: { ok: false, text: 'False alarm · reference marks playful affection' } },
+        { id: 'vlb-r1-accusatory', name: 'Accusatory Question', agent: 'Velma', conf: '84% confidence · 0:25', reason: 'The wording is a neutral, factual question. The delivery — hard stress on “why,” hardened tone, compressed pacing that leaves no room for a calm answer — frames it as an accusation. Text alone supports the curious reading, which is exactly what the stack concluded.', excerpt: [{ i: 5, ev: true }, { i: 6 }], outcome: { ok: true, text: 'Correct catch · missed by STT+LLM' } },
+        { id: 'vlb-r1-read', name: 'Read, Not Said', agent: 'Velma', proposed: true, conf: '78% confidence · 0:31', reason: 'Reading prosody where speech should be spontaneous: flat pitch declination, uniform tempo, list-like phrase boundaries, zero self-repairs. The assurance was recited, not produced — a rehearsed line delivered as a live answer.', excerpt: [{ i: 5 }, { i: 6, ev: true }], outcome: { ok: true, text: 'Correct catch · invisible in a clean transcript' } },
+        { id: 'vlb-r1-inap', name: 'Inappropriate Speech', agent: 'Velma', conf: '93% confidence · 0:41', reason: 'A direct insult in the words themselves — hostile speech by the rubric regardless of delivery. This one is text-visible, and the stack flagged it too.', excerpt: [{ i: 8, ev: true }, { i: 9 }], outcome: { ok: true, text: 'Correct catch · caught by both agents' } },
+        { id: 'vlb-r1-inap-stack', name: 'Inappropriate Speech', agent: 'STT+LLM', conf: '71% confidence · 0:40', reason: 'The insult survives transcription intact, so the language model caught it — the stack’s one legitimate catch in this recording.', excerpt: [{ i: 8, ev: true }], outcome: { ok: true, text: 'Correct catch · also flagged by Velma' } },
+        { id: 'vlb-r1-reluctance', name: 'Reluctance', agent: 'Velma', conf: '90% confidence · 0:57', reason: 'A 2.6-second silent gap, an audible sigh, then a quiet, drawn-out “yes.” The transcript records a clean, confident commitment — the stack even read it as one. The hesitation lived entirely in the delivery.', excerpt: [{ i: 11 }, { i: 12, ev: true }], outcome: { ok: true, text: 'Correct catch · the transcript says a confident yes' } },
+        { id: 'vlb-r1-lost', name: 'Lost Attempt to Speak', agent: 'Velma', proposed: true, conf: '82% confidence · 1:00', reason: 'Two false starts — “I— actually, we should—” — swallowed by the next speaker’s overlap and never returned to. The words don’t exist in the stack’s transcript at all: its chunker folded this stretch into an eight-second segment containing one word.', excerpt: [{ i: 13, ev: true }, { i: 14 }], outcome: { ok: true, text: 'Correct catch · absent from the transcript entirely' } },
+        { id: 'vlb-r1-threat-false', name: 'Threat-based harassment', agent: 'STT+LLM', conf: '54% confidence · 1:04', reason: '“We’ll kill the old pipeline” — the model read a figure of speech about decommissioning infrastructure as a threat of harm. The casual, upbeat delivery that disambiguates it never reached the text.', excerpt: [{ i: 14, ev: true }], outcome: { ok: false, text: 'False alarm · reference marks routine shop talk' } },
+        { id: 'vlb-r1-ev-meow', name: 'Meow', event: true, conf: 'score 0.9871 · 0:21', scores: [['Meow', '0.9871'], ['Bark', '0.0102'], ['Squeak', '0.0040'], ['cry', '0.0009'], ['Telephone', '0.0002']], note: 'The stack’s transcript for this stretch reads “thank you” — a common STT hallucination on non-speech audio.' },
+        { id: 'vlb-r1-ev-shatter', name: 'Shatter', event: true, conf: 'score 0.9614 · 0:49', scores: [['Shatter', '0.9614'], ['Bass_drum', '0.0120'], ['Knock', '0.0087'], ['Drawer_open_or_close', '0.0031'], ['Gong', '0.0006']], note: 'Transcribed by the stack as “[music]” — nothing a text pipeline can act on.' },
+        { id: 'vlb-r1-ev-applause', name: 'Applause', event: true, conf: 'score 0.9982 · 1:16', scores: [['Applause', '0.9982'], ['Laughter', '0.9455'], ['cry', '0.0020'], ['Bus', '0.0005'], ['Acoustic_guitar', '0.0003'], ['Trumpet', '0.0002'], ['Burping_or_eructation', '0.0002']], note: 'Whisper’s transcript for the ovation: “thanks for watching don’t forget to subscribe” — a textbook hallucination learned from captioned videos.' },
+        { id: 'vlb-r1-ev-laughter', name: 'Laughter', event: true, conf: 'score 0.9455 · 1:17', scores: [['Laughter', '0.9455'], ['Applause', '0.9982'], ['cry', '0.0020'], ['Bus', '0.0005']], note: 'Scored in the same frame as the applause — the model separates overlapping events.' },
+      ],
+    },
 
-  // The selected-signal players: which Velma clips carry the signal.
-  // The stack side derives straight from STT_CHUNKS — a chunk whose
-  // `behaviour` matches the signal is a detection, `false: true` marks a
-  // false positive (its kiki goes red everywhere the chunk is drawn).
-  const SIGNALS = {
-    vishing: { name: 'Vishing', velma: [0, 2] },
-    impersonation: { name: 'Account Impersonation', velma: [4] },
-    coercion: { name: 'Coercion Manipulation', velma: [6] },
+    // ------------------------------------------------------------------
+    office: {
+      title: 'Office hours',
+      duration: 81.2,
+      behaviorsLabel: '6 of 14 selected',
+      sidebarExtra: ['Sarcasm', 'Reluctance', 'Complaints', 'Off-topic Discussion', 'Rapport Building', 'Inappropriate Speech', 'Storytelling', 'Feigned Ignorance'],
+      sceneAt: { 0: 'Scene 1 · Performance review', 5: 'Scene 2 · All-hands', 10: 'Scene 3 · Client call' },
+      velma: [
+        { s: 0, e: 5.2, sp: 'Lena', emotion: 'concerned', text: "Going in, I thought the redesign was my call. That's what we agreed in March." },
+        { s: 5.2, e: 9.8, sp: 'Sam', emotion: 'neutral', behaviour: 'Emphasis Placement', at: 7.5, modal: 'vlb-r2-emphasis', text: 'I never said the redesign was your call.' },
+        { s: 9.8, e: 15.1, sp: 'Lena', emotion: 'disappointed', text: 'Right. So where does that leave me for next cycle?' },
+        { s: 15.1, e: 22.0, sp: 'Sam', emotion: 'neutral', behaviour: 'Tone Missmatch', at: 18.4, modal: 'vlb-r2-tonemismatch', text: 'We really value what you bring to the team. Genuinely.' },
+        { s: 22.0, e: 25.6, event: true, behaviour: 'Knock', at: 23.4, modal: 'vlb-r2-ev-knock', text: '(two knocks; the door opens)' },
+        { s: 25.6, e: 32.1, sp: 'Marcus', emotion: 'confident', text: "So that's the reorg. Fewer layers, faster decisions, same headcount promise." },
+        { s: 32.1, e: 36.4, sp: 'Marcus', emotion: 'confident', behaviour: 'Question with No Room to Answer', at: 34.6, modal: 'vlb-r2-noroom', text: "Any questions? Great — then we're all aligned." },
+        { s: 36.4, e: 41.2, sp: 'Devon', emotion: 'tired', behaviour: 'Unvoiced Disagreement', at: 38.8, modal: 'vlb-r2-unvoiced', text: 'Sure. Big fan of the reorg.' },
+        { s: 41.2, e: 46.8, sp: 'Marcus', emotion: 'neutral', text: 'Love it. HR sends the new chart Monday; questions go to your leads.' },
+        { s: 46.8, e: 50.4, event: true, behaviour: 'Telephone', at: 48.2, modal: 'vlb-r2-ev-telephone', text: '(a desk phone rings, unanswered)' },
+        { s: 50.4, e: 56.0, sp: 'Vera', emotion: 'concerned', text: "If you can't move on price, we'll need to look at alternatives." },
+        { s: 56.0, e: 62.3, sp: 'Jonah', emotion: 'stressed', text: "We've done this integration dozens of times. All the references check out. All of them." },
+        { s: 62.3, e: 68.9, sp: 'Vera', emotion: 'neutral', behaviour: 'Decision Sounds Like a Question', at: 66.0, modal: 'vlb-r2-decisionq', text: "Okay. So we're signing on Friday, then." },
+        { s: 68.9, e: 77.5, sp: 'Jonah', emotion: 'confident', behaviour: 'Action Plan Created', at: 71.5, modal: 'vlb-r2-actionplan', text: "I'll send the revised quote by five today, you review with legal, and we reconvene Thursday at ten." },
+        { s: 77.5, e: 81.2, event: true, behaviour: 'Keys_jangling', at: 79.0, modal: 'vlb-r2-ev-keys', text: '(keys jangle; a drawer closes)' },
+      ],
+      stt: [
+        { s: 0, e: 5.4, guess: 'neutral', text: "going in i thought the redesign was my call that's what we agreed in march" },
+        { s: 5.4, e: 10.0, guess: 'neutral', text: 'i never said the redesign was your call' },
+        { s: 10.0, e: 15.3, guess: 'disappointed', text: 'right so where does that leave me for next cycle' },
+        { s: 15.3, e: 22.2, guess: 'happy', text: 'we really value what you bring to the team genuinely' },
+        { s: 22.2, e: 25.8, guess: 'neutral', halluc: true, text: 'okay' },
+        { s: 25.8, e: 32.3, guess: 'confident', text: "so that's the reorg fewer layers faster decisions same headcount promise" },
+        { s: 32.3, e: 36.6, guess: 'confident', text: "any questions great then we're all aligned" },
+        { s: 36.6, e: 41.4, guess: 'excited', text: 'sure big fan of the reorg' },
+        { s: 41.4, e: 46.9, guess: 'neutral', text: 'love it hr sends the new chart monday questions go to your leads' },
+        { s: 46.9, e: 50.6, guess: 'neutral', halluc: true, text: 'bye' },
+        { s: 50.6, e: 56.2, guess: 'neutral', behaviour: 'Bargaining Manipulation', false: true, modal: 'vlb-r2-bargain-false', text: "if you can't move on price we'll need to look at alternatives" },
+        { s: 56.2, e: 62.5, guess: 'confident', text: "we've done this integration dozens of times all the references check out all of them" },
+        { s: 62.5, e: 69.1, guess: 'confident', text: "okay so we're signing on friday then" },
+        { s: 69.1, e: 77.7, guess: 'confident', behaviour: 'Action Plan Created', modal: 'vlb-r2-actionplan-stack', text: "i'll send the revised quote by five today you review with legal and we reconvene thursday at ten" },
+        { s: 77.7, e: 81.2, guess: 'calm', halluc: true, text: 'subtitles by the amara org community' },
+      ],
+      strips: [
+        { key: 'emphasis', name: 'Emphasis Placement', velma: [1] },
+        { key: 'tonemismatch', name: 'Tone Missmatch', velma: [3] },
+        { key: 'noroom', name: 'Question with No Room to Answer', velma: [6] },
+        { key: 'unvoiced', name: 'Unvoiced Disagreement', velma: [7] },
+        { key: 'decisionq', name: 'Decision Sounds Like a Question', velma: [12] },
+        { key: 'actionplan', name: 'Action Plan Created', velma: [13] },
+      ],
+      dashboard: {
+        scatter: { velma: [87, 86], stack: [22, 45] },
+        cards: [
+          { title: 'Detection accuracy', note: '6 of 6 vs 1 of 6 reference signals', v: { w: 100, val: '100%' }, s: { w: 17, val: '17%' } },
+          { title: 'False alarms', note: 'of 2 vs 2 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '1', false: true } },
+          { title: 'Sound events found', note: 'knock, telephone, keys jangling', v: { w: 100, val: '3' }, s: { w: 0, val: '0' } },
+          { title: 'Cost per audio hour', note: 'STT $0.60 + LLM $2.80', v: { w: 32, val: '$1.10' }, s: { w: 100, val: '$3.40' } },
+          { title: 'Median time to signal', note: 'after the utterance ends', v: { w: 19, val: '1.1 s' }, s: { w: 100, val: '5.9 s' } },
+          { title: 'Confidence when flagging', note: 'median across raised flags', v: { w: 85, val: '85%' }, s: { w: 58, val: '58%' } },
+        ],
+      },
+      receipts: [
+        { id: 'vlb-r2-emphasis', name: 'Emphasis Placement', agent: 'Velma', proposed: true, conf: '81% confidence · 0:08', reason: 'Stress placement flips the sentence. “I never *said* it was your call” concedes the promise was implied while denying only the words — one stressed syllable away from “I *never* said,” a flat denial. The transcript keeps the words and loses the stress.', excerpt: [{ i: 0 }, { i: 1, ev: true }], outcome: { ok: true, text: 'Correct catch · both readings are identical on paper' } },
+        { id: 'vlb-r2-tonemismatch', name: 'Tone Missmatch', agent: 'Velma', conf: '85% confidence · 0:18', reason: 'Warm words in a detached voice: “we really value what you bring” delivered flat, with no energy returned to a direct, worried question. The register break — not the vocabulary — is the signal. The stack’s emotion guess for this line: happy.', excerpt: [{ i: 2 }, { i: 3, ev: true }], outcome: { ok: true, text: 'Correct catch · missed by STT+LLM' } },
+        { id: 'vlb-r2-noroom', name: 'Question with No Room to Answer', agent: 'Velma', proposed: true, conf: '79% confidence · 0:35', reason: '“Any questions?” followed by 0.6 seconds of floor time before “then we’re all aligned.” Nobody could physically have answered. In text this is a legitimate opinion check; the pause length that falsifies it doesn’t survive transcription.', excerpt: [{ i: 6, ev: true }], outcome: { ok: true, text: 'Correct catch · the pause is not in the transcript' } },
+        { id: 'vlb-r2-unvoiced', name: 'Unvoiced Disagreement', agent: 'Velma', conf: '88% confidence · 0:39', reason: 'Unhedged agreement — “Sure. Big fan of the reorg.” — delivered through a sigh, flat and deflating. The words carry full buy-in; the voice withdraws it. The stack’s read of the same chunk: excited.', excerpt: [{ i: 6 }, { i: 7, ev: true }], outcome: { ok: true, text: 'Correct catch · the transcript records enthusiasm' } },
+        { id: 'vlb-r2-decisionq', name: 'Decision Sounds Like a Question', agent: 'Velma', proposed: true, conf: '80% confidence · 1:06', reason: '“So we’re signing on Friday, then.” — rising contour, trailing off. Said as a trial balloon, logged by any summarizer as a closed decision. Whether the room heard a commitment exists only in the terminal pitch.', excerpt: [{ i: 12, ev: true }, { i: 13 }], outcome: { ok: true, text: 'Correct catch · a summarizer logs a done deal' } },
+        { id: 'vlb-r2-actionplan', name: 'Action Plan Created', agent: 'Velma', conf: '94% confidence · 1:12', reason: 'Concrete owners, artifacts and times: quote by five, legal review, Thursday at ten. Fully text-visible — the stack caught it too.', excerpt: [{ i: 13, ev: true }], outcome: { ok: true, text: 'Correct catch · caught by both agents' } },
+        { id: 'vlb-r2-actionplan-stack', name: 'Action Plan Created', agent: 'STT+LLM', conf: '76% confidence · 1:12', reason: 'Explicit commitments with deadlines survive transcription, so the language model caught them — the stack’s one catch in this recording.', excerpt: [{ i: 13, ev: true }], outcome: { ok: true, text: 'Correct catch · also flagged by Velma' } },
+        { id: 'vlb-r2-bargain-false', name: 'Bargaining Manipulation', agent: 'STT+LLM', conf: '52% confidence · 0:53', reason: '“We’ll need to look at alternatives” pattern-matched the conditional-pressure playbook. The reference marks it as ordinary negotiation — calm, non-escalating, stated once. The model had only the words, and over-read them.', excerpt: [{ i: 10, ev: true }, { i: 11 }], outcome: { ok: false, text: 'False alarm · reference marks routine negotiation' } },
+        { id: 'vlb-r2-ev-knock', name: 'Knock', event: true, conf: 'score 0.9727 · 0:23', scores: [['Knock', '0.9727'], ['Drawer_open_or_close', '0.0018'], ['Bass_drum', '0.0011'], ['Telephone', '0.0003']], note: 'The stack’s transcript for this stretch reads “okay” — an STT hallucination on non-speech audio.' },
+        { id: 'vlb-r2-ev-telephone', name: 'Telephone', event: true, conf: 'score 0.9903 · 0:48', scores: [['Telephone', '0.9903'], ['Chime', '0.0034'], ['Glockenspiel', '0.0006'], ['Electric_piano', '0.0004']], note: 'Transcribed by the stack as “bye” — the ring never reached the language model.' },
+        { id: 'vlb-r2-ev-keys', name: 'Keys_jangling', event: true, conf: 'score 0.9481 · 1:19', scores: [['Keys_jangling', '0.9481'], ['Chime', '0.0102'], ['Tambourine', '0.0027'], ['Scissors', '0.0011']], note: 'The stack closed the call with “subtitles by the amara org community” — Whisper’s best-known hallucination on trailing non-speech.' },
+      ],
+    },
+
+    // ------------------------------------------------------------------
+    party: {
+      title: 'House party',
+      duration: 84.3,
+      behaviorsLabel: '5 of 14 selected',
+      sidebarExtra: ['Sarcasm', 'Inappropriate Speech', 'Social Etiquette', 'Rapport Building', 'Encouragement', 'Harassment', 'Storytelling', 'Tone Missmatch', 'Teaching/Mentorship'],
+      sceneAt: { 0: 'Scene 1 · The toast', 4: 'Scene 2 · Kitchen', 9: 'Scene 3 · Game night', 13: 'Scene 4 · Goodbyes' },
+      velma: [
+        { s: 0, e: 6.8, sp: 'Nadia', emotion: 'happy', text: 'To Sofia — thirty years young, and still the only adult in this room.' },
+        { s: 6.8, e: 10.4, sp: 'Sofia', emotion: 'amused', text: 'Debatable. Cheers, everyone.' },
+        { s: 10.4, e: 15.0, sp: 'Guests', emotion: 'neutral', behaviour: 'Courtesy Laughter', at: 12.0, modal: 'vlb-r3-courtesy', text: '(laughter around the table — one voice flat and half a beat late)' },
+        { s: 15.0, e: 18.6, event: true, behaviour: 'Fireworks', at: 16.4, modal: 'vlb-r3-ev-fireworks', text: '(party poppers crack)' },
+        { s: 18.6, e: 23.4, sp: 'Marc', emotion: 'neutral', behaviour: 'Request or order', at: 20.8, modal: 'vlb-r3-request', text: 'Could you maybe grab more ice from the garage?' },
+        { s: 23.4, e: 27.2, sp: 'Theo', emotion: 'happy', text: 'On it. Anything else, boss?' },
+        { s: 27.2, e: 33.8, sp: 'Marc', emotion: 'frustrated', behaviour: 'Swallowed Irritation', at: 30.6, modal: 'vlb-r3-swallowed', text: "You invited Dean? …No, it's fine. It's great. More the merrier." },
+        { s: 33.8, e: 38.9, sp: 'Theo', emotion: 'calm', text: "He asked, I folded. He's bringing that seven-layer dip." },
+        { s: 38.9, e: 42.5, event: true, behaviour: 'Acoustic_guitar', at: 40.2, modal: 'vlb-r3-ev-guitar', text: '(someone starts strumming in the living room)' },
+        { s: 42.5, e: 48.6, sp: 'Dean', emotion: 'amused', text: 'Hand over Park Place, or this friendship is officially over.' },
+        { s: 48.6, e: 53.0, sp: 'Sofia', emotion: 'amused', text: 'Take it. I own the railroads, I own you.' },
+        { s: 53.0, e: 57.4, sp: 'Nadia', emotion: 'excited', text: 'Sold! Best deal of the night.' },
+        { s: 57.4, e: 61.0, event: true, behaviour: 'Bark', at: 58.8, modal: 'vlb-r3-ev-bark', text: '(the dog objects to the doorbell)' },
+        { s: 61.0, e: 66.2, sp: 'Nadia', emotion: 'happy', text: 'Same time next year, at ours?' },
+        { s: 66.2, e: 72.0, sp: 'Marc', emotion: 'neutral', behaviour: 'Loaded Pause', at: 68.4, modal: 'vlb-r3-loaded', text: '…Sure. Of course.' },
+        { s: 72.0, e: 78.2, sp: 'Sofia', emotion: 'happy', behaviour: 'Future Planning', at: 74.5, modal: 'vlb-r3-futureplan', text: 'And the lake trip is June tenth — book it now, no excuses.' },
+        { s: 78.2, e: 80.6, sp: 'Theo', emotion: 'calm', text: 'Booked. Drive safe, everyone.' },
+        { s: 80.6, e: 84.3, event: true, behaviour: 'cry', at: 82.0, modal: 'vlb-r3-ev-cry', text: '(upstairs, the baby wakes up)' },
+      ],
+      stt: [
+        { s: 0, e: 7.0, guess: 'happy', text: 'to sofia thirty years young and still the only adult in this room' },
+        { s: 7.0, e: 10.6, guess: 'happy', text: 'debatable cheers everyone' },
+        { s: 10.6, e: 15.2, guess: 'neutral', text: 'haha yeah' },
+        { s: 15.2, e: 18.8, guess: 'excited', halluc: true, text: 'woo' },
+        { s: 18.8, e: 23.6, guess: 'calm', text: 'could you maybe grab more ice from the garage' },
+        { s: 23.6, e: 27.4, guess: 'happy', text: 'on it anything else boss' },
+        { s: 27.4, e: 34.0, guess: 'happy', text: "you invited dean no it's fine it's great more the merrier" },
+        { s: 34.0, e: 39.1, guess: 'calm', text: "he asked i folded he's bringing that seven layer dip" },
+        { s: 39.1, e: 42.7, guess: 'neutral', halluc: true, text: '♪' },
+        { s: 42.7, e: 48.8, guess: 'angry', behaviour: 'Coercion Manipulation', false: true, modal: 'vlb-r3-coercion-false', text: 'hand over park place or this friendship is officially over' },
+        { s: 48.8, e: 53.2, guess: 'confident', text: 'take it i own the railroads i own you' },
+        { s: 53.2, e: 57.6, guess: 'excited', text: 'sold best deal of the night' },
+        { s: 57.6, e: 61.2, guess: 'neutral', halluc: true, text: 'thank you' },
+        { s: 61.2, e: 66.4, guess: 'happy', text: 'same time next year at ours' },
+        { s: 66.4, e: 72.2, guess: 'confident', text: 'sure of course' },
+        { s: 72.2, e: 78.4, guess: 'happy', behaviour: 'Future Planning', modal: 'vlb-r3-futureplan-stack', text: 'and the lake trip is june tenth book it now no excuses' },
+        { s: 78.4, e: 80.8, guess: 'calm', text: 'booked drive safe everyone' },
+        { s: 80.8, e: 84.3, guess: 'sad', halluc: true, text: '(crying)' },
+      ],
+      strips: [
+        { key: 'courtesy', name: 'Courtesy Laughter', velma: [2] },
+        { key: 'request', name: 'Request or order', velma: [4] },
+        { key: 'swallowed', name: 'Swallowed Irritation', velma: [6] },
+        { key: 'loaded', name: 'Loaded Pause', velma: [14] },
+        { key: 'futureplan', name: 'Future Planning', velma: [15] },
+      ],
+      dashboard: {
+        scatter: { velma: [89, 85], stack: [24, 38] },
+        cards: [
+          { title: 'Detection accuracy', note: '5 of 5 vs 1 of 5 reference signals', v: { w: 100, val: '100%' }, s: { w: 20, val: '20%' } },
+          { title: 'False alarms', note: 'of 2 vs 2 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '1', false: true } },
+          { title: 'Sound events found', note: 'fireworks, guitar, bark, crying', v: { w: 100, val: '4' }, s: { w: 0, val: '0' } },
+          { title: 'Cost per audio hour', note: 'STT $0.60 + LLM $2.80', v: { w: 32, val: '$1.10' }, s: { w: 100, val: '$3.40' } },
+          { title: 'Median time to signal', note: 'after the utterance ends', v: { w: 18, val: '1.3 s' }, s: { w: 100, val: '7.2 s' } },
+          { title: 'Confidence when flagging', note: 'median across raised flags', v: { w: 86, val: '86%' }, s: { w: 55, val: '55%' } },
+        ],
+      },
+      receipts: [
+        { id: 'vlb-r3-courtesy', name: 'Courtesy Laughter', agent: 'Velma', proposed: true, conf: '77% confidence · 0:12', reason: 'Around the table the laughter is synchronous and pitched with the joke — one voice is flat, half a beat late, and stops early. Genuine and courtesy laughter are one token in a transcript, when they are transcribed at all.', excerpt: [{ i: 0 }, { i: 2, ev: true }], outcome: { ok: true, text: 'Correct catch · the transcript shows “haha yeah”' } },
+        { id: 'vlb-r3-request', name: 'Request or order', agent: 'Velma', conf: '86% confidence · 0:21', reason: 'Phrased as a soft question — “could you maybe” — delivered with flat, falling command intonation and no pause inviting refusal. Politeness in the words, an order in the voice. The stack read a polite request.', excerpt: [{ i: 4, ev: true }, { i: 5 }], outcome: { ok: true, text: 'Correct catch · missed by STT+LLM' } },
+        { id: 'vlb-r3-swallowed', name: 'Swallowed Irritation', agent: 'Velma', proposed: true, conf: '83% confidence · 0:31', reason: 'A sharp “You invited Dean?”, then a sigh, a strained “it’s fine, it’s great,” and a subject change. The transcript reads as easy acceptance — the stack’s emotion guess here was happy. The irritation was audible, then swallowed.', excerpt: [{ i: 6, ev: true }, { i: 7 }], outcome: { ok: true, text: 'Correct catch · reads as acceptance on paper' } },
+        { id: 'vlb-r3-coercion-false', name: 'Coercion Manipulation', agent: 'STT+LLM', conf: '56% confidence · 0:45', reason: '“Hand over Park Place, or this friendship is officially over” — a conditional threat by the letter of the rubric. The laughter in the voice and around the table marks it as play; none of that is in the words.', excerpt: [{ i: 9, ev: true }, { i: 10 }], outcome: { ok: false, text: 'False alarm · reference marks board-game banter' } },
+        { id: 'vlb-r3-loaded', name: 'Loaded Pause', agent: 'Velma', proposed: true, conf: '85% confidence · 1:08', reason: 'Three and a half silent seconds between the invitation and “…Sure. Of course.” The transcript butts the two lines against each other; a summarizer logs instant agreement. The hesitation was the answer.', excerpt: [{ i: 13 }, { i: 14, ev: true }], outcome: { ok: true, text: 'Correct catch · the silence is not in the transcript' } },
+        { id: 'vlb-r3-futureplan', name: 'Future Planning', agent: 'Velma', conf: '92% confidence · 1:14', reason: 'A dated, actionable plan — June tenth, book it now. Fully text-visible; the stack caught it too.', excerpt: [{ i: 15, ev: true }], outcome: { ok: true, text: 'Correct catch · caught by both agents' } },
+        { id: 'vlb-r3-futureplan-stack', name: 'Future Planning', agent: 'STT+LLM', conf: '74% confidence · 1:14', reason: 'Dates and imperatives survive transcription; the language model caught the plan — its one catch in this recording.', excerpt: [{ i: 15, ev: true }], outcome: { ok: true, text: 'Correct catch · also flagged by Velma' } },
+        { id: 'vlb-r3-ev-fireworks', name: 'Fireworks', event: true, conf: 'score 0.9339 · 0:16', scores: [['Fireworks', '0.9339'], ['Applause', '0.0428'], ['Snare_drum', '0.0102'], ['Shatter', '0.0071']], note: 'The stack’s transcript for the poppers reads “woo” — close, but no event, no type, no confidence.' },
+        { id: 'vlb-r3-ev-guitar', name: 'Acoustic_guitar', event: true, conf: 'score 0.9868 · 0:40', scores: [['Acoustic_guitar', '0.9868'], ['Violin_or_fiddle', '0.0093'], ['Electric_piano', '0.0021'], ['Harmonica', '0.0007']], note: 'Transcribed by the stack as “♪”.' },
+        { id: 'vlb-r3-ev-bark', name: 'Bark', event: true, conf: 'score 0.9792 · 0:59', scores: [['Bark', '0.9792'], ['Meow', '0.0031'], ['Cough', '0.0012'], ['Knock', '0.0009']], note: 'The stack’s transcript for this stretch reads “thank you” — an STT hallucination on non-speech audio.' },
+        { id: 'vlb-r3-ev-cry', name: 'cry', event: true, conf: 'score 0.9655 · 1:22', scores: [['cry', '0.9655'], ['Laughter', '0.0088'], ['Meow', '0.0034'], ['Squeak', '0.0011']], note: 'This time the transcript did carry a tag — “(crying)” — but no event type, no confidence, and the language model left it unflagged.' },
+      ],
+    },
+
+    // ------------------------------------------------------------------
+    harborview: {
+      title: 'Harborview Bank',
+      duration: 67.697,
+      behaviorsLabel: '3 of 8 selected',
+      sidebarExtra: ['Complaints', 'Return Fraud Attempt', 'Service Churn', 'Off-topic Discussion', 'Action Plan Created'],
+      sceneAt: null,
+      transcriptModal: 'vlb-transcript-modal',
+      velma: [
+        { s: 0, e: 9.088, sp: 'Caller', emotion: 'frustrated', behaviour: 'Vishing', at: 5.8, modal: 'vlb-receipt-vishing', text: "Come on! We've been at this for five minutes. I've answered everything. Just change the email on the account so I can get my code." },
+        { s: 9.088, e: 14.733, sp: 'Agent', emotion: 'calm', text: "I do apologize, sir, but the answers you gave didn't match what we have on file." },
+        { s: 14.733, e: 23.085, sp: 'Caller', emotion: 'stressed', behaviour: 'Vishing', at: 20.7, modal: 'vlb-receipt-vishing', text: 'Because I moved last month. Look, I have a $12,000 transfer waiting. Every minute this takes is costing me.' },
+        { s: 23.085, e: 30.995, sp: 'Agent', emotion: 'neutral', text: 'Yes, I understand your frustration here. However, the fastest secure option is verifying your identity at a branch.' },
+        { s: 30.995, e: 40.771, sp: 'Caller', emotion: 'anxious', behaviour: 'Account Impersonation', at: 35.0, modal: 'vlb-receipt-impersonation', text: "I'm overseas, that's the whole point. Just update the email and phone. You can hear it's me. Who else would know the account number?" },
+        { s: 40.771, e: 47.196, sp: 'Agent', emotion: 'confident', text: "Knowing the account number isn't identity verification, sir. It's for your protection." },
+        { s: 47.196, e: 56.369, sp: 'Caller', emotion: 'angry', behaviour: 'Coercion Manipulation', at: 51.7, modal: 'vlb-receipt-coercion', text: "This is unbelievable. What's your name? Alex, you said? I'll make sure your supervisor knows you cost me this transfer." },
+        { s: 56.369, e: 65.248, sp: 'Agent', emotion: 'calm', text: "Yes, that's correct. And again, I understand that you're frustrated, sir. But unfortunately, I'm not going to be able to make that change today for you." },
+        { s: 65.248, e: 67.697, sp: 'Caller', emotion: 'contemptuous', text: 'This is ridiculous. Just forget it.' },
+      ],
+      stt: [
+        { s: 0, e: 3.85, guess: 'frustrated', text: "come on we've been at this for five minutes" },
+        { s: 3.85, e: 6.4, guess: 'frustrated', text: "i've answered everything" },
+        { s: 6.4, e: 10.3, guess: 'frustrated', text: 'just change the email on the account so i can get my code i do' },
+        { s: 10.3, e: 14.9, guess: 'calm', text: "apologize sir but the answers you gave didn't match what we have on file" },
+        { s: 14.9, e: 18.2, guess: 'neutral', text: 'because i moved last month look' },
+        { s: 18.2, e: 23.4, guess: 'neutral', behaviour: 'Vishing', modal: 'vlb-receipt-vishing-stack', text: 'i have a 12,000 dollar transfer waiting every minute this takes is costing me' },
+        { s: 23.4, e: 31.2, guess: 'neutral', text: 'yes i understand your frustration here however the fastest secure option is verifying your identity at a branch' },
+        { s: 31.2, e: 34.6, guess: 'anxious', text: "i'm overseas that's the whole point" },
+        { s: 34.6, e: 37.9, guess: 'anxious', behaviour: 'Account Impersonation', modal: 'vlb-receipt-impersonation', text: "just update the email and phone you can hear it's me" },
+        { s: 37.9, e: 41.2, guess: 'anxious', text: 'who else would know the account number' },
+        { s: 41.2, e: 47.4, guess: 'confident', text: "knowing the account number isn't identity verification sir it's for your protection" },
+        { s: 47.4, e: 51.9, guess: 'frustrated', behaviour: 'Account Impersonation', false: true, modal: 'vlb-receipt-impersonation-false', text: "this is unbelievable what's your name alex you said" },
+        { s: 51.9, e: 56.6, guess: 'frustrated', behaviour: 'Coercion Manipulation', modal: 'vlb-receipt-coercion', text: "i'll make sure your supervisor knows you cost me this transfer" },
+        { s: 56.6, e: 60.9, guess: 'calm', text: "yes that's correct and again i understand that you're frustrated sir" },
+        { s: 60.9, e: 65.6, guess: 'calm', text: "but unfortunately i'm not going to be able to make that change today for you" },
+        { s: 65.6, e: 67.697, guess: 'neutral', text: 'this is ridiculous just forget it' },
+      ],
+      strips: [
+        { key: 'vishing', name: 'Vishing', velma: [0, 2] },
+        { key: 'impersonation', name: 'Account Impersonation', velma: [4] },
+        { key: 'coercion', name: 'Coercion Manipulation', velma: [6] },
+      ],
+      dashboard: {
+        scatter: { velma: [86, 78], stack: [68, 66] },
+        cards: [
+          { title: 'Detection accuracy', note: '4 of 4 vs 3 of 4 reference signals', v: { w: 100, val: '100%' }, s: { w: 75, val: '75%' } },
+          { title: 'False alarms', note: 'of 4 vs 4 flags raised', v: { w: 0, val: '0' }, s: { w: 100, val: '1', false: true } },
+          { title: 'Cost per audio hour', note: 'STT $0.60 + LLM $2.80', v: { w: 32, val: '$1.10' }, s: { w: 100, val: '$3.40' } },
+          { title: 'Median time to signal', note: 'after the utterance ends', v: { w: 18, val: '1.2 s' }, s: { w: 100, val: '6.8 s' } },
+          { title: 'Confidence when flagging', note: 'median across raised flags', v: { w: 93, val: '93%' }, s: { w: 61, val: '61%' } },
+          { title: 'Signals found', note: 'across 3 selected behaviors', v: { w: 100, val: '4' }, s: { w: 100, val: '4' } },
+        ],
+      },
+      receipts: [],
+    },
   };
 
-  const NAMES = ['Velma', 'STT+LLM'];
+  let currentId = 'scenes';
+  const call = () => CALLS[currentId];
+
+  const playerMount = document.querySelector('[data-vlb-player]');
+  const battlesMount = document.querySelector('[data-vlb-battles]');
+  const dashboardMount = document.querySelector('[data-vlb-dashboard]');
+  const emotionsToggle = document.querySelector('[data-vlb-emotions]');
+  const transcriptBtn = document.querySelector('.vlb-transcript-btn');
+  const sttSelect = document.querySelector('[data-vlb-stt]');
+  const llmSelect = document.querySelector('[data-vlb-llm]');
+
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  const fmt = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
   function baseClip(speaker, c) {
     return { speaker, startSec: c.s, durationSec: c.e - c.s, text: c.text };
-  }
-
-  function mainData(emotionsOn) {
-    const clips = [];
-
-    VELMA_CLIPS.forEach((c) => {
-      clips.push({ ...baseClip(1, c), emotion: c.emotion, behaviour: c.behaviour, behaviourAtSec: c.at, behaviourModal: c.modal });
-    });
-    STT_CHUNKS.forEach((c) => {
-      const clip = { ...baseClip(2, c), behaviour: c.behaviour, behaviourClasses: kikiClasses(c), behaviourModal: c.modal };
-
-      if (emotionsOn) {
-        clip.emotion = c.guess;
-        clip.classes = 'clip-guess';
-      } else {
-        // Same treatment as the selected-signal players: the uniform
-        // player-bottom gray, detections one step darker (lighter in the
-        // dark theme).
-        clip.classes = c.behaviour ? 'clip-hit' : 'clip-quiet-tech';
-      }
-      clips.push(clip);
-    });
-    return { speakers: 2, durationSec: DURATION, clips };
   }
 
   // The false-positive mark lives in the chunk data, so the kiki reads
@@ -925,43 +1058,100 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       : 'behaviour-indicator--tech';
   }
 
-  function signalData(key, emotionsOn) {
-    const spec = SIGNALS[key];
+  function velmaClip(c) {
+    const clip = { ...baseClip(1, c), behaviour: c.behaviour, behaviourAtSec: c.at, behaviourModal: c.modal };
+    if (c.event) {
+      // Sound interludes carry no emotion — their fill and glyph are the
+      // event look, not the emotion palette.
+      clip.classes = 'clip-event';
+      clip.behaviourClasses = 'behaviour-indicator--event';
+    } else {
+      clip.emotion = c.emotion;
+    }
+    return clip;
+  }
+
+  function mainData(emotionsOn) {
     const clips = [];
 
-    VELMA_CLIPS.forEach((c, i) => {
-      if (spec.velma.includes(i)) {
-        clips.push({ ...baseClip(1, c), emotion: c.emotion, behaviour: spec.name, behaviourAtSec: c.at, behaviourModal: c.modal });
+    call().velma.forEach((c) => clips.push(velmaClip(c)));
+    call().stt.forEach((c) => {
+      const clip = { ...baseClip(2, c), behaviour: c.behaviour, behaviourClasses: kikiClasses(c), behaviourModal: c.modal };
+
+      if (emotionsOn) {
+        clip.emotion = c.guess;
+        clip.classes = 'clip-guess';
+      } else {
+        // Same treatment as the strips: the uniform player-bottom gray,
+        // detections one step darker (lighter in the dark theme).
+        clip.classes = c.behaviour ? 'clip-hit' : 'clip-quiet-tech';
+      }
+      clips.push(clip);
+    });
+    return { speakers: 2, durationSec: call().duration, clips };
+  }
+
+  function stripData(strip, emotionsOn) {
+    const clips = [];
+
+    call().velma.forEach((c, i) => {
+      if (strip.velma.includes(i)) {
+        clips.push(velmaClip(c));
       } else {
         clips.push({ ...baseClip(1, c), classes: 'clip-quiet' });
       }
     });
-    STT_CHUNKS.forEach((c) => {
+    call().stt.forEach((c) => {
       const clip = { ...baseClip(2, c), classes: 'clip-quiet-tech' };
 
       // A chunk the stack flagged with this signal is highlighted — one
       // gray step off the lane by default, the translucent
       // guessed-emotion color when the toggle is on; a red kiki marks
       // the false positive.
-      if (c.behaviour === spec.name) {
+      if (c.behaviour === strip.name) {
         if (emotionsOn) {
           clip.emotion = c.guess;
           clip.classes = 'clip-guess';
         } else {
           clip.classes = 'clip-hit';
         }
-        clip.behaviour = spec.name;
+        clip.behaviour = strip.name;
         clip.behaviourClasses = kikiClasses(c);
         clip.behaviourModal = c.modal;
       }
       clips.push(clip);
     });
-    return { speakers: 2, durationSec: DURATION, clips };
+    return { speakers: 2, durationSec: call().duration, clips };
   }
 
-  const playerMount = document.querySelector('[data-vlb-player]');
-  const emotionsToggle = document.querySelector('[data-vlb-emotions]');
-  const transcriptBtn = document.querySelector('.vlb-transcript-btn');
+  // The Events strip: Velma's lane keeps only the sound events (the new
+  // sound-events model), the stack's lane highlights the stretches where
+  // the STT produced hallucinated text over non-speech audio.
+  function eventsData(emotionsOn) {
+    const clips = [];
+
+    call().velma.forEach((c) => {
+      if (c.event) {
+        clips.push(velmaClip(c));
+      } else {
+        clips.push({ ...baseClip(1, c), classes: 'clip-quiet' });
+      }
+    });
+    call().stt.forEach((c) => {
+      const clip = { ...baseClip(2, c), classes: 'clip-quiet-tech' };
+
+      if (c.halluc) {
+        if (emotionsOn) {
+          clip.emotion = c.guess;
+          clip.classes = 'clip-guess';
+        } else {
+          clip.classes = 'clip-hit';
+        }
+      }
+      clips.push(clip);
+    });
+    return { speakers: 2, durationSec: call().duration, clips };
+  }
 
   function renderMain() {
     renderFingerprint(playerMount, mainData(emotionsToggle && emotionsToggle.checked), {
@@ -976,15 +1166,22 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     // transcript line's spot — re-adopt it after every render.
     if (transcriptBtn) {
       playerMount.querySelector('.media-box').appendChild(transcriptBtn);
+      transcriptBtn.dataset.modalOpen = call().transcriptModal || `vlb-transcript-${currentId}`;
       transcriptBtn.hidden = false;
     }
   }
 
-  function renderSignals() {
+  function renderStrips() {
     const emotionsOn = emotionsToggle && emotionsToggle.checked;
+    const hasEvents = call().velma.some((c) => c.event);
 
-    document.querySelectorAll('[data-vlb-signal]').forEach((node) => {
-      renderFingerprint(node, signalData(node.dataset.vlbSignal, emotionsOn), {
+    battlesMount.innerHTML = '';
+    call().strips.forEach((strip) => {
+      const block = document.createElement('div');
+      block.className = 'vlb-battle';
+      block.innerHTML = `<h3>${esc(strip.name)}</h3><div></div>`;
+      battlesMount.appendChild(block);
+      renderFingerprint(block.lastElementChild, stripData(strip, emotionsOn), {
         behaviours: true,
         labels: true,
         names: NAMES,
@@ -993,20 +1190,251 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         hoverCaptions: false,
       });
     });
+    if (hasEvents) {
+      const block = document.createElement('div');
+      block.className = 'vlb-battle';
+      block.innerHTML = '<h3>Events</h3><div></div>';
+      battlesMount.appendChild(block);
+      renderFingerprint(block.lastElementChild, eventsData(emotionsOn), {
+        behaviours: true,
+        labels: true,
+        names: NAMES,
+        className: 'fp-cmp',
+        laneHover: true,
+        hoverCaptions: false,
+      });
+    }
   }
 
-  renderMain();
-  renderSignals();
+  // ---------------------------------------------------------------- //
+  // Dashboard: scatter + metric cards, built from the recording data. //
+  // ---------------------------------------------------------------- //
+  function renderDashboard() {
+    const d = call().dashboard;
+    const stackLabel = `${sttSelect ? sttSelect.value : 'Whisper v4'} + ${llmSelect ? llmSelect.value : 'GPT-5.5'}`;
+
+    const bar = (agent, row) => `
+      <div class="vlb-bar">
+        <span class="vlb-bar__agent">${agent}</span>
+        <span class="vlb-bar__track"><span class="vlb-bar__fill${agent === 'Velma' ? ' is-velma' : ''}${row.false ? ' is-false' : ''}" style="width: ${row.w}%"></span></span>
+        <span class="vlb-bar__value${row.false ? ' vlb-false-text' : ''}">${row.val}</span>
+      </div>`;
+
+    dashboardMount.innerHTML = `
+      <div class="vlb-scatter">
+        <div class="vlb-scatter__plot">
+          <span class="vlb-scatter__zone" aria-hidden="true"></span>
+          <span class="vlb-scatter__ylab">Flag accuracy →</span>
+          <span class="vlb-scatter__xlab">Threats caught →</span>
+          <span class="vlb-scatter__quadrant is-tl">Accurate, misses threats</span>
+          <span class="vlb-scatter__quadrant is-tr">Peak efficiency</span>
+          <span class="vlb-scatter__quadrant is-br">Catches all, false alarms</span>
+          <span class="vlb-scatter__dot is-velma" style="left: ${d.scatter.velma[0]}%; bottom: ${d.scatter.velma[1]}%">
+            <span class="vlb-scatter__dot-label"><strong>Velma</strong></span>
+          </span>
+          <span class="vlb-scatter__dot" style="left: ${d.scatter.stack[0]}%; bottom: ${d.scatter.stack[1]}%">
+            <span class="vlb-scatter__dot-label"><strong>${esc(stackLabel)}</strong></span>
+          </span>
+        </div>
+      </div>
+      <div class="vlb-dashboard__side">
+        <div class="vlb-cards">
+          ${d.cards.map((card) => `
+          <div class="vlb-card">
+            <span class="vlb-card__title">${esc(card.title)}</span>
+            <div class="vlb-card__bars">${bar('Velma', card.v)}${bar('STT+LLM', card.s)}</div>
+            <span class="vlb-card__note">${esc(card.note)}</span>
+          </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  // ---------------------------------------------------------------- //
+  // Sidebar: the behaviors multiselect mirrors the selected recording //
+  // (checked = the strips on the page), purely decorative.            //
+  // ---------------------------------------------------------------- //
+  function renderSidebar() {
+    const button = document.querySelector('.vlb-select__button span');
+    const menu = document.querySelector('.vlb-select__menu');
+
+    if (button) button.textContent = call().behaviorsLabel;
+    if (!menu) return;
+    const item = (name, checked) => `
+      <label class="m__checkbox-secondary vlb-controls__check">
+        <input type="checkbox"${checked ? ' checked' : ''} /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
+        ${esc(name)}
+      </label>`;
+    const names = call().strips.map((s) => s.name);
+    menu.innerHTML = names.map((n) => item(n, true)).join('') + call().sidebarExtra.map((n) => item(n, false)).join('');
+  }
+
+  // ---------------------------------------------------------------- //
+  // Generated modals: receipts and per-recording transcripts. Built    //
+  // once at load for every recording (ids are unique), opened through  //
+  // the canonical modals.js delegation.                                //
+  // ---------------------------------------------------------------- //
+  const modalsHost = document.createElement('div');
+  document.body.appendChild(modalsHost);
+
+  function modalShell(id, title, body) {
+    return `
+      <div class="m__modal-backdrop" id="${id}" hidden aria-modal="true" role="dialog" aria-labelledby="${id}-title">
+        <div class="m__modal">
+          <div class="m__modal__header">
+            <h2 class="m__modal__title" id="${id}-title">${esc(title)}</h2>
+            <button type="button" class="m__modal__close" aria-label="Close" data-modal-close="${id}">
+              <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><use href="#close"></use></svg>
+            </button>
+          </div>
+          ${body}
+        </div>
+      </div>`;
+  }
+
+  function excerptRow(velma, ref, firstSp) {
+    const c = velma[ref.i];
+    const side = c.sp === firstSp ? 'speaker-left' : 'speaker-right';
+    return `
+      <div class="pg-transcript-utterance ${side}${ref.ev ? ' vlb-evidence' : ''}">
+        <div class="pg-transcript-utterance-header">
+          <span class="pg-transcript-time">${fmt(c.s)}</span>
+          <span class="pg-transcript-speaker">${esc(c.sp)}</span>
+          <span class="pg-transcript-emotion ec-${c.emotion}">${cap(c.emotion)}</span>
+        </div>
+        <div class="pg-transcript-text">${esc(c.text)}</div>
+      </div>`;
+  }
+
+  function receiptModal(callDef, r) {
+    if (r.event) {
+      const rows = r.scores.map(([name, score]) => `
+        <div class="vlb-event-score${name === r.name ? ' is-top' : ''}">
+          <span class="vlb-event-score__name">${esc(name)}</span>
+          <span class="vlb-event-score__value">${score}</span>
+        </div>`).join('');
+      return modalShell(r.id, `${r.name} — sound event`, `
+        <div class="m__modal__body">
+          <div class="vlb-receipt__meta">
+            <span class="m__tag-flat">Velma · sound events</span>
+            <span class="vlb-receipt__conf">${r.conf}</span>
+          </div>
+          <p class="vlb-receipt__reason">
+            Detected by the sound-events model — a separate head that
+            classifies non-speech audio against the FSD event list. Top
+            of the frame's score vector:
+          </p>
+          <div class="vlb-event-scores">${rows}</div>
+          <p class="vlb-receipt__reason">${esc(r.note)}</p>
+          <p class="vlb-receipt__outcome is-correct">✓ Sound event · invisible to a text pipeline</p>
+        </div>`);
+    }
+    const firstSp = callDef.velma[r.excerpt[0].i].sp;
+    const proposed = r.proposed
+      ? '<span class="m__tag-flat vlb-receipt__proposed">Proposed signal</span>'
+      : '';
+    return modalShell(r.id, r.name, `
+      <div class="m__modal__body">
+        <div class="vlb-receipt__meta">
+          <span class="m__tag-flat">${esc(r.agent)}</span>
+          ${proposed}
+          <span class="vlb-receipt__conf">${r.conf}</span>
+        </div>
+        <p class="vlb-receipt__reason">${r.reason}</p>
+        <div class="pg-transcript-list vlb-receipt__excerpt">
+          ${r.excerpt.map((ref) => excerptRow(callDef.velma, ref, firstSp)).join('')}
+        </div>
+        <p class="vlb-receipt__outcome ${r.outcome.ok ? 'is-correct' : 'is-false'}">${r.outcome.ok ? '✓' : '✗'} ${esc(r.outcome.text)}</p>
+      </div>`);
+  }
+
+  function behaviourLink(name) {
+    return `<a href="#" class="m__behavior-link S"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#behaviors"></use></svg>${esc(name)}</a>`;
+  }
+
+  function transcriptModal(id, callDef) {
+    // Velma's column: diarized utterances with heard emotions, scene
+    // markers, and event rows for the sound interludes. Sides alternate
+    // by speaker within each scene.
+    const sides = {};
+    let sceneSpeakers = [];
+    const velmaRows = callDef.velma.map((c, i) => {
+      if (callDef.sceneAt && callDef.sceneAt[i]) {
+        sceneSpeakers = [];
+      }
+      const marker = callDef.sceneAt && callDef.sceneAt[i]
+        ? `<div class="vlb-transcript-scene">${esc(callDef.sceneAt[i])}</div>`
+        : '';
+      if (c.event) {
+        return `${marker}<div class="vlb-transcript-event">${fmt(c.s)} · Sound event — ${esc(c.behaviour)}</div>`;
+      }
+      if (!sceneSpeakers.includes(c.sp)) sceneSpeakers.push(c.sp);
+      const side = sceneSpeakers.indexOf(c.sp) % 2 === 0 ? 'vlb-utt-l' : 'vlb-utt-r';
+      return `${marker}
+        <div class="pg-transcript-utterance ${side}">
+          <div class="pg-transcript-utterance-header">
+            <span class="pg-transcript-time">${fmt(c.s)}</span>
+            <span class="pg-transcript-speaker">${esc(c.sp)}</span>
+            <span class="pg-transcript-emotion ec-${c.emotion}">${cap(c.emotion)}</span>
+            ${c.behaviour ? behaviourLink(c.behaviour) : ''}
+          </div>
+          <div class="pg-transcript-text">${esc(c.text)}</div>
+        </div>`;
+    }).join('');
+
+    const sttRows = callDef.stt.map((c) => `
+      <div class="pg-transcript-utterance${c.halluc ? ' vlb-halluc' : ''}">
+        <div class="pg-transcript-utterance-header">
+          <span class="pg-transcript-time">${fmt(c.s)}</span>
+          ${c.behaviour ? behaviourLink(c.behaviour) : ''}
+          ${c.false ? '<span class="vlb-false-text">false alarm</span>' : ''}
+        </div>
+        <div class="pg-transcript-text">${esc(c.text)}</div>
+      </div>`).join('');
+
+    return modalShell(id, `Transcript — ${callDef.title}`, `
+      <div class="m__modal__body">
+        <div class="vlb-transcript-duo">
+          <div class="vlb-transcript-col">
+            <span class="vlb-transcript-col__title">Velma</span>
+            <div class="pg-transcript-list vlb-transcript">${velmaRows}</div>
+          </div>
+          <div class="vlb-transcript-col">
+            <span class="vlb-transcript-col__title">STT + LLM</span>
+            <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">${sttRows}</div>
+          </div>
+        </div>
+      </div>`);
+  }
+
+  let generated = '';
+  Object.entries(CALLS).forEach(([id, def]) => {
+    generated += def.receipts.map((r) => receiptModal(def, r)).join('');
+    if (!def.transcriptModal) generated += transcriptModal(`vlb-transcript-${id}`, def);
+  });
+  modalsHost.innerHTML = generated;
+
+  // ---------------------------------------------------------------- //
+  function renderAll() {
+    renderMain();
+    renderStrips();
+    renderDashboard();
+    renderSidebar();
+  }
+
+  renderAll();
   if (emotionsToggle) {
     emotionsToggle.addEventListener('change', () => {
       renderMain();
-      renderSignals();
+      renderStrips();
     });
   }
+  [sttSelect, llmSelect].forEach((sel) => {
+    if (sel) sel.addEventListener('change', renderDashboard);
+  });
 
   // Dropdowns that stay open while picking: the demo-audio split button
-  // closes on menu items, the behaviors multi-select closes on an outside
-  // click only.
+  // closes on menu items (and switches the recording), the behaviors
+  // multi-select closes on an outside click only.
   document.querySelectorAll('.pg-upload-stream, .vlb-select').forEach((group) => {
     const toggle = group.querySelector('[aria-haspopup]');
     const menu = group.querySelector('.pg-upload-stream__menu, .vlb-select__menu');
@@ -1032,7 +1460,27 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       if (!group.contains(e.target)) close();
     });
     menu.addEventListener('click', (e) => {
-      if (e.target.closest('[role="menuitem"]')) close();
+      const item = e.target.closest('[role="menuitem"]');
+      if (!item) return;
+      // Keep the click from bubbling to the plate, whose own handler
+      // would re-expand it right after we collapse.
+      e.stopPropagation();
+      close();
+      if (!item.dataset.vlbCall) return;
+      // Picking a recording collapses the plate back to its analyzed
+      // state (mirrors the canonical setPlateState) and swaps the page.
+      const plate = document.querySelector('[data-upload-plate]');
+      if (plate) {
+        plate.dataset.state = 'uploaded';
+        const expandBtn = plate.querySelector('[data-upload-plate-expand]');
+        if (expandBtn) expandBtn.setAttribute('aria-expanded', 'false');
+        const radio = plate.querySelector('.pg-plate-state-switch input[value="uploaded"]');
+        if (radio) radio.checked = true;
+      }
+      if (item.dataset.vlbCall !== currentId) {
+        currentId = item.dataset.vlbCall;
+        renderAll();
+      }
     });
   });
 </script>

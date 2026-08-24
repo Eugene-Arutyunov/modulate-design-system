@@ -491,7 +491,9 @@
 
 /* Transcript modal: two variants side by side (Velma's diarized
    utterances, the stack's finer undiarized STT chunks), so it is much
-   wider than the modal default */
+   wider than the modal default. One modal per recording — the static
+   Harborview one and the generated vlb-transcript-* reels. */
+[id^='vlb-transcript-'].m__modal-backdrop .m__modal,
 #vlb-transcript-modal .m__modal {
   max-width: 64rem;
 }
@@ -526,4 +528,93 @@
 
 .vlb-transcript--stt .pg-transcript-utterance .vlb-false-text {
   font-size: var(--m__font-size-xs);
+}
+
+/* ==================  Scene reels & sound events  ================== */
+
+/* Four demo recordings in the menu: while it is open the plate releases
+   its overflow clip (the canonical plate height stays; four items would
+   not fit inside it) */
+.pg-upload-section:has(.pg-upload-stream[data-open='true']) .pg-upload-plate {
+  overflow: visible;
+}
+
+/* Sound-interlude clips on Velma's lane: no emotion — a pale technical
+   blue tint says "non-speech audio, classified by the events model" */
+.fp-cmp .pg-player-dataviz .transcript-clip.clip-event .clip-visualization {
+  background-color: color-mix(in srgb, var(--m__text-link) 30%, var(--m__bg-surface));
+}
+
+/* The event glyph: text-colored outline — a hue no emotion uses, so an
+   event kiki never reads as a behavior detection (doubled class to
+   outweigh the canon's [data-emotion] outline rules) */
+.media-container
+  .behaviour-indicators
+  .behaviour-indicator.behaviour-indicator--event
+  .behaviour-icon
+  .behaviour-icon__outline {
+  fill: var(--m__text);
+}
+
+/* Event receipt: the score vector of the sound-events model */
+.vlb-event-scores {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: var(--m__gap-s);
+  font-variant-numeric: tabular-nums;
+}
+
+.vlb-event-score {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--m__gap-m);
+  max-width: 18rem;
+  font-family: var(--m__font-family-semi-mono);
+  font-size: var(--m__font-size-xs);
+  color: var(--m__text-caption);
+
+  &.is-top {
+    color: var(--m__text);
+    font-weight: var(--m__font-weight-medium);
+  }
+}
+
+/* Proposed-signal badge in receipts: same flat tag, quieter */
+.vlb-receipt__proposed {
+  color: var(--m__text-caption);
+}
+
+/* Reel transcripts: scene markers and sound-event rows sit centered
+   between the utterances, in the sidebar-subtitle voice */
+.vlb-transcript-scene,
+.vlb-transcript-event {
+  align-self: center;
+  margin-top: var(--m__gap-s);
+  font-family: var(--m__font-family-semi-mono);
+  font-size: var(--m__font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m__text-caption);
+}
+
+.vlb-transcript-event {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* Reel Velma columns alternate shoulders by speaker (computed in JS),
+   not by the canon's nth-of-type — scene markers would break its parity */
+.vlb-transcript-duo .pg-transcript-list > .pg-transcript-utterance.vlb-utt-l {
+  align-self: flex-start;
+}
+
+.vlb-transcript-duo .pg-transcript-list > .pg-transcript-utterance.vlb-utt-r {
+  align-self: flex-end;
+}
+
+/* STT hallucinations over non-speech: visibly not speech — muted italics */
+.vlb-transcript--stt .pg-transcript-utterance.vlb-halluc .pg-transcript-text {
+  font-style: italic;
+  color: var(--m__text-caption);
 }
