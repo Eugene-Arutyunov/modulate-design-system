@@ -172,23 +172,33 @@
   }
 }
 
-/* The transcript entry point: an outline button living inside the shared
-   player's chrome, on the spot where the hover transcript line renders —
-   it steps aside (fades) whenever that line is visible. Compact paddings:
-   the chrome bar is low. */
+/* The transcript entry point: the same compact secondary-outline treatment
+   as System prompt, but content-width inside the shared player's chrome. It
+   disappears instantly for hover captions, then eases back out over 0.5s. */
 .fp-cmp .media-box .vlb-transcript-btn {
   position: absolute;
-  left: calc(var(--padding) + 0.6em + 2.4em);
+  left: 3.14rem;
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
-  padding: 0.25em 0.7em;
-  transition: opacity var(--m__duration-base) var(--m__easing-base);
+  width: auto;
+  padding: var(--m__padding-button-s);
+  border-radius: var(--m__radius-m);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  transition:
+    color var(--m__duration-xslow) var(--m__easing-base),
+    opacity var(--m__duration-xslow) var(--m__easing-base);
+
+  &:hover {
+    transition-duration: var(--m__duration-instant);
+  }
 }
 
 .fp-cmp .media-box:has(.clip-text-caption.visible) .vlb-transcript-btn {
   opacity: 0;
   pointer-events: none;
+  transition-duration: var(--m__duration-instant);
 }
 
 /* The hover transcript line itself: the canon anchors it against an
@@ -196,13 +206,48 @@
    is a sibling), which collapses the line to zero height — re-anchor it
    into the chrome row, on the button's spot */
 .fp-cmp .media-box .clip-text-caption {
-  top: 0;
-  bottom: 0;
-  left: calc(var(--padding) + 0.6em + 2.4em);
-  width: 55%;
-  display: flex;
-  align-items: center;
+  top: 50%;
+  bottom: auto;
+  left: 3.14rem;
+  width: 40%;
+  transform: translateY(calc(-50% - 0.02em));
   z-index: 2;
+
+  &::after {
+    width: 3em;
+    background: linear-gradient(to right, transparent, var(--m__bg-surface));
+  }
+}
+
+/* One chrome line: current time, hover time, transcript, emotion, total
+   time and the Transcript button all share the same vertical center. */
+.fp-cmp .media-box :is(
+  .player-position-caption,
+  .player-hover-position-caption,
+  .player-total-time
+) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.fp-cmp .media-box :is(
+  .player-position-caption,
+  .player-hover-position-caption
+) {
+  left: calc(var(--padding) + 0.6em);
+  transform: translateY(calc(-50% - 0.02em));
+}
+
+/* buildPlayer carries a legacy static 0:00 alongside the live position
+   caption; comparison chrome uses only the live one. */
+.fp-cmp .media-box > .player-start-time {
+  display: none;
+}
+
+/* Transcript and emotion captions switch both ways without motion. The
+   Transcript button still eases back over 0.5s after the captions leave. */
+.fp-cmp .media-box :is(.clip-text-caption, .fp-emotion-caption) {
+  transition: opacity var(--m__duration-instant) var(--m__easing-base);
 }
 
 /* Per-behavior signal players: rendered by fingerprint.js (technology-
