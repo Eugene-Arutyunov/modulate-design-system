@@ -281,6 +281,31 @@
     white-space: nowrap;
     pointer-events: none;
   }
+
+  & .speaker-label span {
+    opacity: 0;
+    transition: opacity var(--m__duration-xslow) var(--m__easing-base);
+  }
+
+  & .pg-player-dataviz:has(
+      .transcript-clip[data-speaker-index='1']:hover,
+      .behaviour-indicator[data-speaker-index='1']:hover
+    )
+    .speaker-label[data-speaker-index='1']
+    span,
+  & .pg-player-dataviz:has(
+      .transcript-clip[data-speaker-index='2']:hover,
+      .behaviour-indicator[data-speaker-index='2']:hover
+    )
+    .speaker-label[data-speaker-index='2']
+    span {
+    opacity: 1;
+    transition: opacity var(--m__duration-instant) var(--m__easing-base);
+  }
+
+  & .pg-player-dataviz .behaviour-indicators .behaviour-indicator {
+    transform: translate(-50%, -12%);
+  }
 }
 
 /* Kikis are the receipt entry points: re-enable pointer events under the
@@ -320,10 +345,6 @@
   .vlb-scatter,
   .vlb-scatter__plot {
     height: 100%;
-  }
-
-  .vlb-scatter__plot {
-    aspect-ratio: auto;
   }
 }
 
@@ -468,12 +489,31 @@
     }
   }
 
+  & .vlb-scatter__dot.is-label-start .vlb-scatter__dot-label {
+    left: 50%;
+    transform: none;
+    text-align: left;
+  }
+
+  & .vlb-scatter__dot.is-label-end .vlb-scatter__dot-label {
+    right: 50%;
+    left: auto;
+    transform: none;
+    text-align: right;
+  }
+
   /* the corner dot's label goes below-left so it stays inside the plot */
   & .vlb-scatter__dot.is-velma .vlb-scatter__dot-label {
     left: auto;
     right: -0.35rem;
     transform: none;
     text-align: right;
+  }
+}
+
+@media (width >= 992px) {
+  .vlb-scatter .vlb-scatter__plot {
+    aspect-ratio: auto;
   }
 }
 
@@ -495,7 +535,7 @@
 
   & .vlb-card__title {
     display: block;
-    margin-bottom: 0.35rem;
+    margin-bottom: var(--m__gap-l);
     font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
     text-transform: uppercase;
@@ -504,35 +544,46 @@
     white-space: nowrap;
   }
 
-  /* two horizontal bars per card: agent · track · value */
+  /* two metric rows per card: progress · value · agent */
   & .vlb-card__bars {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--m__gap-xxxxs);
   }
 
   & .vlb-bar {
     display: grid;
-    grid-template-columns: 3.6rem minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) 3.6rem;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--m__gap-xxxxs);
   }
 
   & .vlb-bar__agent {
     font-size: var(--m__font-size-xs);
-    color: var(--m__text);
+    font-weight: var(--m__font-weight-bold);
+    color: var(--m__color-gray-400);
+    text-align: right;
     white-space: nowrap;
+
+    &.is-velma {
+      color: var(--m__success);
+    }
+
+    &.is-false {
+      color: var(--m__color-red-600);
+    }
   }
 
   & .vlb-bar__track {
-    height: 0.55rem;
-    border-radius: var(--m__radius-xs);
-    background: color-mix(in srgb, var(--m__text) 8%, transparent);
-    overflow: hidden;
+    position: relative;
+    width: calc(100% - 2.3rem);
+    height: 0.75rem;
+    border-radius: 0.1rem;
   }
 
   & .vlb-bar__fill {
     display: block;
+    width: var(--vlb-progress);
     height: 100%;
     border-radius: inherit;
     background: var(--m__color-gray-400);
@@ -547,11 +598,28 @@
   }
 
   & .vlb-bar__value {
-    min-width: 2.6rem;
-    font-size: var(--m__font-size-s);
-    font-weight: var(--m__font-weight-medium);
+    position: absolute;
+    top: 50%;
+    left: calc(var(--vlb-progress) + 0.4rem);
+    transform: translateY(-50%);
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-bold);
     font-variant-numeric: tabular-nums;
-    text-align: right;
+    color: var(--m__color-gray-400);
+    white-space: nowrap;
+
+    &.is-velma {
+      color: var(--m__success);
+    }
+
+    &.is-false {
+      color: var(--m__color-red-600);
+    }
+
+    &.is-zero {
+      left: 0;
+      color: var(--m__color-gray-400);
+    }
   }
 
   & .vlb-card__note {

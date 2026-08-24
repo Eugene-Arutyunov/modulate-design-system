@@ -1370,13 +1370,30 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   function renderDashboard() {
     const d = call().dashboard;
     const stackLabel = `${sttSelect ? sttSelect.value : 'Whisper v4'} + ${llmSelect ? llmSelect.value : 'GPT-5.5'}`;
+    const stackLabelAnchor = d.scatter.stack[0] <= 25
+      ? ' is-label-start'
+      : d.scatter.stack[0] >= 75
+        ? ' is-label-end'
+        : '';
 
-    const bar = (agent, row) => `
-      <div class="vlb-bar">
-        <span class="vlb-bar__agent">${agent}</span>
-        <span class="vlb-bar__track"><span class="vlb-bar__fill${agent === 'Velma' ? ' is-velma' : ''}${row.false ? ' is-false' : ''}" style="width: ${row.w}%"></span></span>
-        <span class="vlb-bar__value${row.false ? ' vlb-false-text' : ''}">${row.val}</span>
-      </div>`;
+    const bar = (agent, row) => {
+      const tone = row.false
+        ? ' is-false'
+        : row.w === 0
+          ? ' is-zero'
+          : agent === 'Velma'
+            ? ' is-velma'
+            : '';
+
+      return `
+        <div class="vlb-bar">
+          <span class="vlb-bar__track" style="--vlb-progress: ${row.w}%">
+            <span class="vlb-bar__fill${tone}"></span>
+            <span class="vlb-bar__value${tone}">${row.val}</span>
+          </span>
+          <span class="vlb-bar__agent${tone}">${agent}</span>
+        </div>`;
+    };
 
     dashboardMount.innerHTML = `
       <div class="vlb-scatter">
@@ -1390,7 +1407,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
           <span class="vlb-scatter__dot is-velma" style="left: ${d.scatter.velma[0]}%; bottom: ${d.scatter.velma[1]}%">
             <span class="vlb-scatter__dot-label"><strong>Velma</strong></span>
           </span>
-          <span class="vlb-scatter__dot" style="left: ${d.scatter.stack[0]}%; bottom: ${d.scatter.stack[1]}%">
+          <span class="vlb-scatter__dot${stackLabelAnchor}" style="left: ${d.scatter.stack[0]}%; bottom: ${d.scatter.stack[1]}%">
             <span class="vlb-scatter__dot-label"><strong>${esc(stackLabel)}</strong></span>
           </span>
         </div>
