@@ -730,12 +730,20 @@
 .vlb-receipt__meta {
   display: flex;
   align-items: baseline;
-  gap: var(--m__gap-m);
+  gap: var(--m__gap-xxs);
   margin-bottom: var(--m__gap-s);
+
+  & .m__tag-flat {
+    font-size: var(--m__font-size-s);
+  }
+
+  & > .m__tag-flat:first-child {
+    margin-right: var(--m__gap-xs);
+  }
 }
 
 .vlb-receipt__conf {
-  font-size: var(--m__font-size-m);
+  font-size: var(--m__font-size-s);
   font-variant-numeric: tabular-nums;
   color: var(--m__text-caption);
 }
@@ -749,11 +757,15 @@
 .vlb-transcript {
   display: flex;
   flex-direction: column;
-  gap: var(--m__gap-xs);
+  gap: var(--m__gap-xxs);
 
   & .pg-transcript-utterance {
     cursor: default;
-    font-size: var(--m__font-size-m);
+  }
+
+  & .pg-transcript-utterance-header {
+    font-family: var(--m__font-family-semi-mono);
+    font-size: 0.8rem;
   }
 }
 
@@ -775,20 +787,6 @@
       var(--m__color-red-600) 10%,
       var(--m__bg-surface)
     );
-  }
-}
-
-.vlb-receipt__outcome {
-  margin: var(--m__gap-m) 0 0;
-  font-size: var(--m__font-size-m);
-  font-weight: var(--m__font-weight-medium);
-
-  &.is-correct {
-    color: var(--m__success);
-  }
-
-  &.is-false {
-    color: var(--m__color-red-600);
   }
 }
 
@@ -868,31 +866,52 @@
 
 /* Event receipt: the score vector of the sound-events model */
 .vlb-event-scores {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  margin-bottom: var(--m__gap-s);
+  width: 100%;
+  margin-block: var(--m__gap-m);
   font-variant-numeric: tabular-nums;
-}
 
-.vlb-event-score {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--m__gap-m);
-  max-width: 18rem;
-  font-family: var(--m__font-family-semi-mono);
-  font-size: var(--m__font-size-xs);
-  color: var(--m__text-caption);
+  & table {
+    table-layout: fixed;
+    background: transparent;
+  }
 
-  &.is-top {
+  & th,
+  & td {
+    padding: var(--m__gap-xs) var(--m__gap-s) var(--m__gap-xs) 0;
+  }
+
+  & th {
+    position: static;
+    background: transparent;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  & th:last-child,
+  & td:last-child {
+    width: 50%;
+    padding-right: 0;
+    text-align: left;
+  }
+
+  & td {
+    font-size: var(--m__font-size-s);
     color: var(--m__text);
-    font-weight: var(--m__font-weight-medium);
+  }
+
+  & .vlb-event-score__value {
+    font-family: var(--m__font-family-semi-mono);
+  }
+
+  & .vlb-event-score.is-top {
+    & td {
+      font-weight: var(--m__font-weight-bold);
+    }
   }
 }
 
-/* Proposed-signal badge in receipts: same flat tag, quieter */
-.vlb-receipt__proposed {
-  color: var(--m__text-caption);
+.vlb-event-scores + .vlb-receipt__reason {
+  margin-bottom: var(--m__spacer-m);
 }
 
 /* Reel transcripts: scene markers and sound-event rows sit centered

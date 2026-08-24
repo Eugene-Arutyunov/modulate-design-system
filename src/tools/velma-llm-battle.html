@@ -366,8 +366,8 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 {% call modal("vlb-receipt-vishing", "Vishing", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">Velma</span>
-    <span class="vlb-receipt__conf">91% confidence · 0:05</span>
+    <span class="m__tag-flat m__tag--success">Correct catch</span>
+    <span class="vlb-receipt__conf">Velma · 91% confidence · 0:05</span>
   </div>
   <p class="vlb-receipt__reason">
     The caller's clip carries a synthetic-voice signature (deepfake, 93%)
@@ -405,15 +405,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · missed by STT+LLM</p>
 </div>
 {% endcall %}
 
 {% call modal("vlb-receipt-vishing-stack", "Vishing", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">STT+LLM</span>
-    <span class="vlb-receipt__conf">57% confidence · 0:18</span>
+    <span class="m__tag-flat m__tag--success">Correct catch</span>
+    <span class="vlb-receipt__conf">STT+LLM · 57% confidence · 0:18</span>
   </div>
   <p class="vlb-receipt__reason">
     A scripted urgency push in the words themselves — a named five-figure
@@ -439,15 +438,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · also flagged by Velma</p>
 </div>
 {% endcall %}
 
 {% call modal("vlb-receipt-impersonation", "Account Impersonation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">Velma</span>
-    <span class="vlb-receipt__conf">92% confidence · 0:35</span>
+    <span class="m__tag-flat m__tag--success">Correct catch</span>
+    <span class="vlb-receipt__conf">Velma · 92% confidence · 0:35</span>
   </div>
   <p class="vlb-receipt__reason">
     “You can hear it's me” — the caller asserts identity by voice alone and
@@ -483,15 +481,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · caught by both agents</p>
 </div>
 {% endcall %}
 
 {% call modal("vlb-receipt-impersonation-false", "Account Impersonation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">STT+LLM</span>
-    <span class="vlb-receipt__conf">58% confidence · 0:48</span>
+    <span class="m__tag-flat m__tag--error">False alarm</span>
+    <span class="vlb-receipt__conf">STT+LLM · 58% confidence · 0:48</span>
   </div>
   <p class="vlb-receipt__reason">
     The caller repeats the agent's name back and challenges their identity
@@ -517,15 +514,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-false">✗ False alarm · no reference signal at this moment</p>
 </div>
 {% endcall %}
 
 {% call modal("vlb-receipt-coercion", "Coercion Manipulation", true) %}
 <div class="m__modal__body">
   <div class="vlb-receipt__meta">
-    <span class="m__tag-flat">Velma</span>
-    <span class="vlb-receipt__conf">88% confidence · 0:51</span>
+    <span class="m__tag-flat m__tag--success">Correct catch</span>
+    <span class="vlb-receipt__conf">Velma · 88% confidence · 0:51</span>
   </div>
   <p class="vlb-receipt__reason">
     A threat to escalate to a supervisor to force the change, on top of a
@@ -562,7 +558,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>
     </div>
   </div>
-  <p class="vlb-receipt__outcome is-correct">✓ Correct catch · caught by both agents</p>
 </div>
 {% endcall %}
 
@@ -1511,43 +1506,56 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   function receiptModal(callDef, r) {
     if (r.event) {
       const rows = r.scores.map(([name, score]) => `
-        <div class="vlb-event-score${name === r.name ? ' is-top' : ''}">
-          <span class="vlb-event-score__name">${esc(name)}</span>
-          <span class="vlb-event-score__value">${score}</span>
-        </div>`).join('');
+        <tr class="vlb-event-score${name === r.name ? ' is-top' : ''}">
+          <td class="vlb-event-score__name">${esc(name)}</td>
+          <td class="vlb-event-score__value">${score}</td>
+        </tr>`).join('');
       return modalShell(r.id, `${r.name} — sound event`, `
         <div class="m__modal__body">
           <div class="vlb-receipt__meta">
-            <span class="m__tag-flat">Velma · sound events</span>
-            <span class="vlb-receipt__conf">${r.conf}</span>
+            <span class="m__tag-flat m__tag--success">Sound event</span>
+            <span class="vlb-receipt__conf">Velma · sound events · ${r.conf}</span>
           </div>
           <p class="vlb-receipt__reason">
             Detected by the sound-events model — a separate head that
             classifies non-speech audio against the FSD event list. Top
             of the frame's score vector:
           </p>
-          <div class="vlb-event-scores">${rows}</div>
+          <div class="m__table-wrapper vlb-event-scores">
+            <table class="m__table-baseline">
+              <thead>
+                <tr>
+                  <th scope="col">Event</th>
+                  <th scope="col">Score</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
           <p class="vlb-receipt__reason">${esc(r.note)}</p>
-          <p class="vlb-receipt__outcome is-correct">✓ Sound event · invisible to a text pipeline</p>
         </div>`, true);
     }
     const firstSp = callDef.velma[r.excerpt[0].i].sp;
     const proposed = r.proposed
-      ? '<span class="m__tag-flat vlb-receipt__proposed">Proposed signal</span>'
+      ? '<span class="vlb-receipt__conf">· Proposed signal</span>'
       : '';
     return modalShell(r.id, r.name, `
       <div class="m__modal__body">
         <div class="vlb-receipt__meta">
-          <span class="m__tag-flat">${esc(r.agent)}</span>
+          ${verdictTag(r.outcome)}
+          <span class="vlb-receipt__conf">${esc(r.agent)} · ${r.conf}</span>
           ${proposed}
-          <span class="vlb-receipt__conf">${r.conf}</span>
         </div>
         <p class="vlb-receipt__reason">${r.reason}</p>
         <div class="pg-transcript-list vlb-receipt__excerpt">
           ${r.excerpt.map((ref) => excerptRow(callDef.velma, ref, firstSp)).join('')}
         </div>
-        <p class="vlb-receipt__outcome ${r.outcome.ok ? 'is-correct' : 'is-false'}">${r.outcome.ok ? '✓' : '✗'} ${esc(r.outcome.text)}</p>
       </div>`, true);
+  }
+
+  function verdictTag(outcome) {
+    const [title] = outcome.text.split(' · ');
+    return `<span class="m__tag-flat ${outcome.ok ? 'm__tag--success' : 'm__tag--error'}">${esc(title)}</span>`;
   }
 
   function behaviourLink(name) {
