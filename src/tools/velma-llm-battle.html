@@ -1227,6 +1227,18 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     return clip;
   }
 
+  function signalGlow(clip, color) {
+    return {
+      ...clip,
+      classes: [clip.classes, 'clip-signal-glow'].filter(Boolean).join(' '),
+      glowColor: color,
+    };
+  }
+
+  function emotionGlow(emotion) {
+    return `rgba(var(--emotion-${emotion || 'neutral'}-RGB), 1)`;
+  }
+
   function mainData(emotionsOn) {
     const clips = [];
 
@@ -1252,7 +1264,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
     call().velma.forEach((c, i) => {
       if (strip.velma.includes(i)) {
-        clips.push(velmaClip(c));
+        clips.push(signalGlow(velmaClip(c), emotionGlow(c.emotion)));
       } else {
         clips.push({ ...baseClip(1, c), classes: 'clip-quiet' });
       }
@@ -1268,9 +1280,12 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         if (emotionsOn) {
           clip.emotion = c.guess;
           clip.classes = 'clip-guess';
+          clip.glowColor = emotionGlow(c.guess);
         } else {
           clip.classes = 'clip-hit';
+          clip.glowColor = 'var(--fp-cmp-hit)';
         }
+        clip.classes += ' clip-signal-glow';
         clip.behaviour = strip.name;
         clip.behaviourClasses = kikiClasses(c);
         clip.behaviourModal = c.modal;
@@ -1288,7 +1303,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
     call().velma.forEach((c) => {
       if (c.event) {
-        clips.push(velmaClip(c));
+        clips.push(signalGlow(velmaClip(c), emotionGlow('neutral')));
       } else {
         clips.push({ ...baseClip(1, c), classes: 'clip-quiet' });
       }
