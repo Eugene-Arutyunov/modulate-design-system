@@ -251,6 +251,14 @@
   transition: opacity var(--m__duration-instant) var(--m__easing-base);
 }
 
+/* The emotions toggle rebuilds the comparison timelines. Their accent
+   colors must land in the same frame as the checkbox state instead of
+   replaying the canonical player's color-reveal animation. */
+.fp-cmp {
+  --emotion-color-delay: var(--m__duration-instant);
+  --emotion-color-duration: var(--m__duration-instant);
+}
+
 /* Per-behavior signal players: rendered by fingerprint.js (technology-
    comparison variant, styles in player.css). The heading is mounted into
    the dataviz so it shares the strip's top-left corner. */
