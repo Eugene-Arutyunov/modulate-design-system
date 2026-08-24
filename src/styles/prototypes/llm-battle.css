@@ -790,13 +790,53 @@
   }
 }
 
-/* Transcript modal: two variants side by side (Velma's diarized
-   utterances, the stack's finer undiarized STT chunks), so it is much
-   wider than the modal default. One modal per recording — the static
-   Harborview one and the generated vlb-transcript-* reels. */
-[id^='vlb-transcript-'].m__modal-backdrop .m__modal,
-#vlb-transcript-modal .m__modal {
-  max-width: 64rem;
+/* Transcript modal: a viewport-sized workspace with a fixed header and
+   independently scrolling transcript body. */
+:is(
+    [id^='vlb-transcript-'].m__modal-backdrop,
+    #vlb-transcript-modal.m__modal-backdrop
+  ) {
+  align-items: center;
+  overflow: hidden;
+  padding: var(--m__gap-xl);
+
+  & .m__modal {
+    width: 100%;
+    max-width: none;
+    height: calc(100dvh - var(--m__gap-xl) - var(--m__gap-xl));
+    max-height: calc(100dvh - var(--m__gap-xl) - var(--m__gap-xl));
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--m__radius-xl);
+  }
+
+  & .m__modal__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  & .m__modal__header {
+    position: relative;
+    z-index: 2;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      height: var(--m__spacer-m);
+      background: linear-gradient(
+        to bottom,
+        var(--m__bg),
+        color-mix(in srgb, var(--m__bg) 75%, transparent) 45%,
+        transparent
+      );
+      pointer-events: none;
+    }
+  }
 }
 
 .vlb-transcript-duo {
