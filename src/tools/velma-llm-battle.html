@@ -1324,11 +1324,18 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     const emotionsOn = emotionsToggle && emotionsToggle.checked;
     const hasEvents = call().velma.some((c) => c.event);
 
+    const mountTitle = (block, title) => {
+      const heading = document.createElement('h3');
+      heading.className = 'vlb-battle__title';
+      heading.textContent = title;
+      block.querySelector('.pg-player-dataviz').appendChild(heading);
+    };
+
     battlesMount.innerHTML = '';
     call().strips.forEach((strip) => {
       const block = document.createElement('div');
       block.className = 'vlb-battle';
-      block.innerHTML = `<h3>${esc(strip.name)}</h3><div></div>`;
+      block.innerHTML = '<div></div>';
       battlesMount.appendChild(block);
       renderFingerprint(block.lastElementChild, stripData(strip, emotionsOn), {
         behaviours: true,
@@ -1338,11 +1345,12 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         laneHover: true,
         hoverCaptions: false,
       });
+      mountTitle(block, strip.name);
     });
     if (hasEvents) {
       const block = document.createElement('div');
       block.className = 'vlb-battle';
-      block.innerHTML = '<h3>Sound Events</h3><div></div>';
+      block.innerHTML = '<div></div>';
       battlesMount.appendChild(block);
       renderFingerprint(block.lastElementChild, eventsData(emotionsOn), {
         behaviours: true,
@@ -1352,6 +1360,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         laneHover: true,
         hoverCaptions: false,
       });
+      mountTitle(block, 'Sound Events');
     }
   }
 

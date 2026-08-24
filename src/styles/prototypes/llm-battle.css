@@ -251,15 +251,35 @@
 }
 
 /* Per-behavior signal players: rendered by fingerprint.js (technology-
-   comparison variant, styles in player.css); here only the block rhythm
-   and the plain h3 heads */
+   comparison variant, styles in player.css). The heading is mounted into
+   the dataviz so it shares the strip's top-left corner. */
 .vlb-battle {
-  & + .vlb-battle {
-    margin-top: var(--m__gap-l);
+  & .media-container {
+    --player-strip-height: 2rem;
+    --m__rounded-radius: var(--m__radius-xl);
   }
 
-  & h3 {
-    margin: 0 0 var(--m__gap-xs);
+  & + .vlb-battle {
+    margin-top: var(--m__gap-xs);
+  }
+
+  & .vlb-battle__title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 0.1rem 0.35em 0.1rem 0.25em;
+    margin: 0;
+    overflow: hidden;
+    color: var(--m__color-white);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
   }
 }
 
