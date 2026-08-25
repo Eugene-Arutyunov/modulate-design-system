@@ -28,10 +28,10 @@ Working tools around the design system, grouped on the index into three lists: *
 **Individual posts:**
 
 - `src/blog/layers.html` → `/blog/layers/` — April 6, 2026 — What the System Is Made Of (table of the five layers with live token and component examples, `.layers-table` in `blog.css`)
-- `src/blog/page-composition.html` → `/blog/page-composition/` — April 7, 2026 — The Page Composition Rule
-- `src/blog/layouts.html` → `/blog/layouts/` — April 13, 2026 — Time as the Main Axis (includes “Part 2. Mobile Responsiveness Out of the Box” and “Part 3. Adjusting the Type Scale”, formerly separate posts at `/blog/mobile/` and `/blog/type-scale/`, merged with no redirects)
-- `src/blog/graphic-style.html` → `/blog/graphic-style/` — June 8, 2026 — Why Have Your Own Graphic Style
-- `src/blog/color.html` → `/blog/color/` — June 18, 2026 — Color Under a Purple Lightbulb (embeds the palette-lamp figure)
+- `src/blog/page-composition.html` → `/blog/page-composition/` — April 7, 2026 — The Page Composition Rule (includes “Part 2. Mobile Responsiveness Out of the Box” and “Part 3. Adjusting the Type Scale”, formerly separate posts at `/blog/mobile/` and `/blog/type-scale/` and until August 2026 parts of the layouts post; merged with no redirects)
+- `src/blog/layouts.html` → `/blog/layouts/` — April 13, 2026 — Time as the Main Axis
+- `src/blog/why-have-your-own-graphic-style.html` → `/blog/why-have-your-own-graphic-style/` — August 8, 2026 — Why Have Your Own Graphic Style (renamed from `/blog/graphic-style/` on the site side, no redirect)
+- `src/blog/color-under-a-purple-lightbulb.html` → `/blog/color-under-a-purple-lightbulb/` — August 25, 2026 — Color Under a Purple Lightbulb (embeds the palette-lamp figure; renamed from `/blog/color/` on the site side, no redirect)
 - `src/blog/icons.html` → `/blog/icons/` — July 7, 2026 — Five Requirements for Icons
 - `src/blog/fingerprints.html` → `/blog/fingerprints/` — placeholder page, no date or text yet
 - `src/blog/not-a-designer.html` → `/blog/not-a-designer/` — 30 Jul 2026 — Why You Can’t Seriously Say “I’m Not a Designer” (standalone, by Ilya Sinelnikov)
