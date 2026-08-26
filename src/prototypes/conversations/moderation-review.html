@@ -586,6 +586,17 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
   <div class="m__space XL"></div>
 </div>
 
+<button
+  type="button"
+  class="m__button-primary M moderation-review-back-to-top"
+  aria-label="Back to top"
+  aria-hidden="true"
+  tabindex="-1"
+  data-review-back-to-top
+>
+  ↑ Top
+</button>
+
 <script>
   document.querySelectorAll(".media-container").forEach(function (container) {
     container.addEventListener("mousemove", function (event) {
@@ -600,6 +611,31 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       container.dataset.hover = "false";
     });
   });
+
+  (function () {
+    var backToTopButton = document.querySelector("[data-review-back-to-top]");
+    if (!backToTopButton) return;
+
+    function updateBackToTopButton() {
+      var isBackToTopVisible = window.scrollY > 320;
+
+      backToTopButton.classList.toggle("is-visible", isBackToTopVisible);
+      backToTopButton.setAttribute(
+        "aria-hidden",
+        String(!isBackToTopVisible),
+      );
+      backToTopButton.tabIndex = isBackToTopVisible ? 0 : -1;
+    }
+
+    backToTopButton.addEventListener("click", function () {
+      var reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    });
+    window.addEventListener("scroll", updateBackToTopButton, { passive: true });
+    updateBackToTopButton();
+  })();
 
   (function () {
     var root = document.querySelector("[data-moderation-review]");

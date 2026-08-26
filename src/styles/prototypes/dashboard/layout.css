@@ -3667,6 +3667,35 @@ table.config-details {
 
 }
 
+button.moderation-review-back-to-top {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: -5rem;
+  z-index: 100;
+  min-width: 3.5rem;
+  padding-left: 0.4rem;
+  box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, #000 18%, transparent);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    bottom var(--m__duration-medium) var(--m__easing-base),
+    visibility 0s linear var(--m__duration-medium),
+    background-color var(--m__duration-base) var(--m__easing-base);
+}
+
+button.moderation-review-back-to-top.is-visible {
+  visibility: visible;
+  pointer-events: auto;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.moderation-review-back-to-top {
+    transition: none;
+  }
+}
+
 .moderation-review-behaviors .pg-results-table-section {
   overflow-x: clip;
 }
