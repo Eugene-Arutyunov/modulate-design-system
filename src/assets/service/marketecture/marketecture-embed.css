@@ -265,22 +265,28 @@
     color: var(--m__text-caption);
   }
 
-  /* Plate lead labels (Audio in / Results out). The 0.35rem bottom margin
-     is tuned so the first row of side lists and center models share one
-     baseline — see the rhythm note below. */
+  /* Plate lead labels (Audio in / Results out): the DS's regular h2
+     voice, not the semi-mono caption of the base label. */
   & .marketecture__label--big {
     margin: 0 0 0.35rem;
-    font-size: var(--m__font-size-m);
+    font-family: var(--m__font-family-sans);
+    font-size: var(--m__font-size-xxl);
+    font-weight: var(--m__font-weight-bold);
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: nowrap;
+    color: var(--m__text);
   }
 
   /* Vertical rhythm, all in the s-size (0.8rem, lh 1.3 → 1.04rem):
      every content row spans exactly 1.6rem —
        model row: 1.1rem icon-driven line + 2 × 0.25rem padding;
        list row: 1.04rem line + 2 × 0.28rem padding.
-     First-baseline alignment from the plate top (col-titles are M-size,
-     same as the big labels: 1rem × 1.3 = 1.3rem):
-       big label 1.3rem + 0.35 + 0.28 list padding        = 1.93rem
-       col-title 1.3rem + 0.35 + 0.25 + 0.03 icon offset  = 1.93rem */
+     First-baseline alignment from the plate top (col-titles share the
+     big labels' h2 size, 1.4rem × 1.3 = 1.82rem — equal heading heights
+     and equal 0.35 margins keep the two chains in step):
+       big label 1.82rem + 0.35 + 0.28 list padding        = 2.45rem
+       col-title 1.82rem + 0.35 + 0.25 + 0.03 icon offset  = 2.45rem */
 
   /* No left indent: the global ul markers (text.css) go inline so item
      text starts flush with the labels. */
@@ -300,6 +306,22 @@
         content: "⋅ ";
         color: var(--m__text-caption);
       }
+    }
+  }
+
+  /* Integrations / Distribution: one running line under a hairline.
+     Commas render from `::before` on the items so they disappear
+     together with a timeline-hidden item; the markup keeps the item
+     spans glued (no whitespace) for the same reason. */
+  & .marketecture__note {
+    margin: 0.28rem 0 0;
+    padding: 0.28rem 0 0;
+    border-top: var(--m__border-width-s) solid var(--m__border);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+
+    & span + span::before {
+      content: ", ";
     }
   }
 
@@ -345,7 +367,7 @@
      the rest. */
   & .models-nav .models-nav__cols {
     justify-content: space-between;
-    gap: var(--m__gap-xxxs);
+    gap: var(--m__gap-s);
   }
 
   & .models-nav .models-nav__col {
@@ -356,7 +378,12 @@
     margin: 0 0 0.35rem;
     padding: 0;
     border-bottom: none;
-    font-size: var(--m__font-size-m);
+    font-family: var(--m__font-family-sans);
+    font-size: var(--m__font-size-xxl);
+    font-weight: var(--m__font-weight-bold);
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--m__text);
   }
 
   & .models-nav .models-nav__models {
@@ -369,11 +396,14 @@
     padding: 0.25rem 0;
   }
 
-  /* Audio in — Analysis — Results out on their own plates; the side
-     plates hug their content. */
+  /* Audio in — Analysis — Results out on their own plates. All three
+     tracks share the slack 1 : 2.2 : 1, floored by their content (the
+     nowrap model columns keep the engine from shrinking below its
+     content) — so when the timeline hides the Analysis column the
+     engine narrows and the side plates widen. */
   & .marketecture__flow {
     display: grid;
-    grid-template-columns: max-content minmax(0, 1fr) max-content;
+    grid-template-columns: 1fr 2.2fr 1fr;
     column-gap: calc(var(--m__gap-xxxl) / 4);
     row-gap: calc(var(--m__gap-xl) / 2);
   }
@@ -382,6 +412,20 @@
   & .marketecture__engine {
     background-color: var(--marketecture-plate);
     padding: 0.8rem 1rem 0.7rem;
+  }
+
+  /* Same overflow:hidden caveat for the sides, with a gentler floor:
+     min-content keeps the nowrap lead labels on one line whatever font
+     actually renders, while long notes stay free to wrap. */
+  & .marketecture__io {
+    min-width: min-content;
+  }
+
+  /* .m__rounded's overflow:hidden zeroes the grid item's automatic
+     minimum, so the content floor is restated by hand: the engine never
+     shrinks below its nowrap columns, whatever the fr split says. */
+  & .marketecture__engine {
+    min-width: max-content;
   }
 
   /* baseline alignment: the wordmark svg has no text baseline, so flex
@@ -414,6 +458,11 @@
 
     & .marketecture__flow {
       grid-template-columns: 1fr;
+    }
+
+    & .marketecture__engine,
+    & .marketecture__io {
+      min-width: 0;
     }
   }
 }
