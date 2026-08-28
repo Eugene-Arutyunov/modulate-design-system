@@ -4,7 +4,9 @@
 <!-- Outer `marketecture-studio` owns the stage bleed; inner
      `m__wrapper.icon-studio` keeps the panel at the DS content width.
      The poster (`article.marketecture`) is fully static — the export
-     clones it as-is, so keep all interactivity outside of it. -->
+     clones it as-is, so keep all interactivity outside of it. The
+     timeline slider drives `data-month` on the poster root; items
+     marked `data-coming="<month>"` stay hidden until that month. -->
 <main class="marketecture-studio">
   <div class="m__wrapper icon-studio">
     <div class="m__space XL"></div>
@@ -15,6 +17,28 @@
 
     <section class="icon-studio__panel" aria-label="Studio controls">
       <div class="icon-studio__grid">
+        <fieldset aria-label="Timeline">
+          <div class="marketecture-studio__timeline">
+            <input
+              type="range"
+              min="0"
+              max="4"
+              step="1"
+              value="0"
+              data-mk-month
+              aria-label="Roadmap month" />
+            <div
+              class="marketecture-studio__timeline-labels"
+              aria-hidden="true">
+              <span>Aug</span>
+              <span>Sep</span>
+              <span>Oct</span>
+              <span>Nov</span>
+              <span>Dec</span>
+            </div>
+          </div>
+        </fieldset>
+
         <fieldset aria-label="Export">
           <div class="marketecture-studio__actions">
             <button
@@ -33,13 +57,15 @@
 
   <div class="marketecture-studio__stage">
     <div class="marketecture-studio__frame">
-      <article class="marketecture m__rounded" data-mk-poster>
+      <article class="marketecture m__rounded" data-mk-poster data-month="aug">
         <header class="marketecture__header">
-          {% include 'service/modulate-logo-notag-black.html' %}
+          <svg class="marketecture__mark" viewBox="0 0 32 32" aria-hidden="true">
+            <use href="#modulate"></use>
+          </svg>
+          <h2 class="marketecture__title">Modulate Ecosystem</h2>
         </header>
 
         <section class="marketecture__section">
-          <h2 class="marketecture__section-title">How it works</h2>
           <div class="marketecture__flow">
             <div class="marketecture__io">
               <h3 class="marketecture__part-title">Audio in</h3>
@@ -54,76 +80,58 @@
               <ul class="marketecture__list">
                 <li>Genesys</li>
                 <li>Five9</li>
-                <li>ServiceNow <span class="m__tag-flat m__tag--muted">coming</span></li>
-                <li>Teams <span class="m__tag-flat m__tag--muted">coming</span></li>
+                <li data-coming="oct">
+                  ServiceNow <span class="m__tag-flat m__tag--muted">oct</span>
+                </li>
+                <li data-coming="dec">
+                  Teams <span class="m__tag-flat m__tag--muted">dec</span>
+                </li>
               </ul>
-              <p class="marketecture__footnote">
-                Batch and real-time on every family.
-              </p>
             </div>
 
             <div class="marketecture__engine">
-              <h3 class="marketecture__part-title">
-                Velma
-                <span class="marketecture__part-note"
-                  >— one engine, four model families</span
-                >
-              </h3>
+              <h3 class="marketecture__part-title">Analysis</h3>
               <div
-                class="models-nav m__rounded"
+                class="models-nav"
                 role="group"
                 aria-label="Model families">
                 <div class="models-nav__cols">
                   <div class="models-nav__col">
                     <span class="models-nav__col-title">Triage</span>
                     <div class="models-nav__models">
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
                           aria-hidden="true">
                           <use href="#velma"></use>
                         </svg>
-                        <span>Velma Triage</span>
+                        <span>Velma</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link" data-coming="sep">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
                           aria-hidden="true">
                           <use href="#velma"></use>
                         </svg>
-                        <span>Velma Triage Mini <span class="m__tag-flat m__tag--muted">coming</span></span>
+                        <span>Velma Mini <span class="m__tag-flat m__tag--muted">sep</span></span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link" data-coming="nov">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
                           aria-hidden="true">
                           <use href="#overview"></use>
                         </svg>
-                        <span>ToxMod Triage <span class="m__tag-flat m__tag--muted">coming</span></span>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="models-nav__col">
-                    <span class="models-nav__col-title">Redaction</span>
-                    <div class="models-nav__models">
-                      <span class="models-nav__link m__rounded">
-                        <svg
-                          class="models-nav__link-icon"
-                          viewBox="0 0 32 32"
-                          aria-hidden="true">
-                          <use href="#redaction"></use>
-                        </svg>
-                        <span>PII / PHI</span>
+                        <span>ToxMod <span class="m__tag-flat m__tag--muted">nov</span></span>
                       </span>
                     </div>
                   </div>
                   <div class="models-nav__col">
                     <span class="models-nav__col-title">Transcription</span>
                     <div class="models-nav__models">
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -132,7 +140,7 @@
                         </svg>
                         <span>Multilingual</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -141,7 +149,7 @@
                         </svg>
                         <span>Multilingual Fast</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -150,7 +158,7 @@
                         </svg>
                         <span>English Fast</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -159,12 +167,21 @@
                         </svg>
                         <span>Medical <span class="m__tag-flat m__tag--muted">preview</span></span>
                       </span>
+                      <span class="models-nav__link">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#redaction"></use>
+                        </svg>
+                        <span>PII / PHI Redaction</span>
+                      </span>
                     </div>
                   </div>
                   <div class="models-nav__col">
                     <span class="models-nav__col-title">Detection</span>
                     <div class="models-nav__models">
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -173,7 +190,7 @@
                         </svg>
                         <span>Deepfake</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -182,7 +199,7 @@
                         </svg>
                         <span>Emotions</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -191,7 +208,7 @@
                         </svg>
                         <span>Language</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -200,7 +217,7 @@
                         </svg>
                         <span>Accent</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -209,7 +226,7 @@
                         </svg>
                         <span>AI Music and Singing</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
@@ -218,14 +235,14 @@
                         </svg>
                         <span>Music and Speech</span>
                       </span>
-                      <span class="models-nav__link m__rounded">
+                      <span class="models-nav__link" data-coming="oct">
                         <svg
                           class="models-nav__link-icon"
                           viewBox="0 0 32 32"
                           aria-hidden="true">
                           <use href="#overview"></use>
                         </svg>
-                        <span>Event Classifier <span class="m__tag-flat m__tag--muted">coming</span></span>
+                        <span>Event Classifier <span class="m__tag-flat m__tag--muted">oct</span></span>
                       </span>
                     </div>
                   </div>
@@ -244,17 +261,15 @@
               <p class="marketecture__label">Distribution:</p>
               <ul class="marketecture__list">
                 <li>Zendesk</li>
-                <li>ServiceNow <span class="m__tag-flat m__tag--muted">coming</span></li>
+                <li data-coming="nov">
+                  ServiceNow <span class="m__tag-flat m__tag--muted">nov</span>
+                </li>
               </ul>
-              <p class="marketecture__footnote">
-                Every verdict traces back to the clip.
-              </p>
             </div>
           </div>
         </section>
 
         <section class="marketecture__section">
-          <h2 class="marketecture__section-title">How you get in</h2>
           <div class="marketecture__pair">
             <div>
               <p class="marketecture__label">APIs (main entrance):</p>
@@ -273,30 +288,34 @@
                 <li>Behaviors and actions</li>
                 <li>Admin controls</li>
                 <li>Integrations</li>
-                <li>Storage <span class="m__tag-flat m__tag--muted">coming</span></li>
+                <li data-coming="sep">
+                  Storage <span class="m__tag-flat m__tag--muted">sep</span>
+                </li>
               </ul>
             </div>
           </div>
         </section>
 
         <section class="marketecture__section">
-          <h2 class="marketecture__section-title">Where it runs</h2>
           <ul class="marketecture__list">
             <li>Cloud</li>
-            <li>
+            <li data-coming="oct">
               VPC and marketplaces
-              <span class="m__tag-flat m__tag--muted">coming</span>
+              <span class="m__tag-flat m__tag--muted">oct</span>
             </li>
-            <li>On-prem <span class="m__tag-flat m__tag--muted">coming</span></li>
-            <li>On-device <span class="m__tag-flat m__tag--muted">coming</span></li>
+            <li data-coming="nov">
+              On-prem <span class="m__tag-flat m__tag--muted">nov</span>
+            </li>
+            <li data-coming="dec">
+              On-device <span class="m__tag-flat m__tag--muted">dec</span>
+            </li>
           </ul>
-          <p class="marketecture__footnote">
+          <p class="marketecture__footnote" data-coming="dec">
             On-device covers individual models only, not the platform.
           </p>
         </section>
 
         <section class="marketecture__section">
-          <h2 class="marketecture__section-title">Why trust it</h2>
           <div class="marketecture__pair">
             <div>
               <p class="marketecture__label">Why Modulate:</p>
@@ -324,8 +343,13 @@
         </section>
 
         <footer class="marketecture__footer">
-          Industries: CX and contact centers · Financial services · Gaming and
-          social · IT and helpdesk
+          <span>
+            Industries: CX and contact centers · Financial services · Gaming and
+            social · IT and helpdesk
+          </span>
+          <span class="marketecture__footer-logo">
+            {% include 'service/modulate-logo-notag-black.html' %}
+          </span>
         </footer>
       </article>
     </div>

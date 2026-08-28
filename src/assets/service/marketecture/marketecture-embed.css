@@ -4,8 +4,9 @@
    Self-contained: the token subset the poster consumes (light on :root,
    dark on .dark-mode — the export bakes the active theme as a body class),
    minimal copies of .m__rounded / .m__tag-flat / .models-nav (no hover,
-   no active, no vertical variant), and the `.marketecture` poster rules —
-   keep those byte-identical to src/styles/service/marketecture.css. */
+   no active, no vertical variant), the `.marketecture` poster rules and
+   the data-month roadmap rules — keep those byte-identical to
+   src/styles/service/marketecture.css. */
 
 /* ── Tokens ───────────────────────────────────────────────────────────── */
 
@@ -30,11 +31,13 @@
   --m__font-size-s: 0.8rem;
   --m__font-size-m: 1rem;
   --m__font-size-l: 1.15rem;
+  --m__font-size-xxl: 1.4rem;
   --m__font-weight-regular: 400;
   --m__font-weight-medium: 500;
   --m__font-weight-bold: 600;
   --m__line-height-base: 1.3;
   --m__font-family-sans: "Inter", sans-serif;
+  --m__font-family-gothic: "CoFo Gothic", sans-serif;
   --m__font-family-semi-mono: "CoFo Sans Semi Mono", monospace;
 
   /* Layout + gaps (tokens/layout.css, tokens/gap.css). */
@@ -42,6 +45,7 @@
   --m__radius-s: 0.3rem;
   --m__rounded-radius: 1.5em;
   --m__gap-xxs: 0.4rem;
+  --m__gap-xs: 0.5rem;
   --m__gap-l: 0.9rem;
   --m__gap-xl: 1rem;
   --m__gap-xxxl: 2.4rem;
@@ -56,6 +60,7 @@
 @media (width < 767px) {
   :root {
     --m__gap-xxs: 0.3rem;
+    --m__gap-xs: 0.35rem;
     --m__gap-l: 0.6rem;
     --m__gap-xl: 0.7rem;
     --m__gap-xxxl: 1.6rem;
@@ -205,38 +210,36 @@
 
 .marketecture {
   box-sizing: border-box;
-  padding: 2.5rem 3rem 2rem;
-  border: var(--m__border-width-s) solid var(--m__border);
-  background-color: var(--m__bg);
+  padding: 0.8rem 1rem 0.7rem;
+  background-color: var(--m__bg-surface);
   color: var(--m__text);
   font-family: var(--m__font-family-sans);
   line-height: var(--m__line-height-base);
 
   & .marketecture__header {
-    margin-bottom: 2.2rem;
-
-    & svg {
-      display: block;
-      width: 7.2rem;
-      height: auto;
-    }
+    display: flex;
+    align-items: center;
+    gap: var(--m__gap-xs);
+    margin-bottom: 1.6rem;
   }
 
-  /* Section rubrics (the former left rail), house eyebrow voice. */
-  & .marketecture__section-title {
-    margin: 0 0 1.1rem;
-    padding-bottom: 0.4rem;
-    border-bottom: var(--m__border-width-s) solid var(--m__border);
-    font-family: var(--m__font-family-semi-mono);
-    font-size: var(--m__font-size-s);
-    font-weight: var(--m__font-weight-regular);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--m__text-caption);
+  & .marketecture__mark {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: currentColor;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  & .marketecture__title {
+    margin: 0;
+    font-family: var(--m__font-family-gothic);
+    font-size: var(--m__font-size-xxl);
+    font-weight: var(--m__font-weight-bold);
   }
 
   & .marketecture__section + .marketecture__section {
-    margin-top: 2.4rem;
+    margin-top: 2rem;
   }
 
   & .marketecture__part-title {
@@ -245,15 +248,13 @@
     font-weight: var(--m__font-weight-bold);
   }
 
-  & .marketecture__part-note {
-    font-weight: var(--m__font-weight-regular);
-    color: var(--m__text-caption);
-  }
-
+  /* Same voice as the plaque's family titles. */
   & .marketecture__label {
-    margin: 1rem 0 0.3rem;
+    margin: 1rem 0 0.4rem;
+    padding: 0 0 0.4rem;
+    border-bottom: var(--m__border-width-s) solid var(--m__border);
     font-family: var(--m__font-family-semi-mono);
-    font-size: var(--m__font-size-xs);
+    font-size: var(--m__font-size-s);
     font-weight: var(--m__font-weight-regular);
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -296,32 +297,47 @@
     vertical-align: baseline;
   }
 
-  /* How it works: io — engine — io. */
+  /* The poster itself is the surface — the plaque goes unpainted, its
+     text flush with the neighbor columns. */
+  & .models-nav {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  & .models-nav .models-nav__col-title,
+  & .models-nav .models-nav__link {
+    padding-left: 0;
+    white-space: normal;
+  }
+
+  /* Audio in — Analysis — Results out, thin dividers between. */
   & .marketecture__flow {
     display: grid;
     grid-template-columns: 1fr minmax(0, 3.2fr) 1fr;
-    column-gap: var(--m__gap-xxxl);
-    row-gap: var(--m__gap-xl);
+    column-gap: calc(var(--m__gap-xxxl) / 4);
+    row-gap: calc(var(--m__gap-xl) / 2);
     align-items: start;
-  }
 
-  /* The plaque columns are narrower than on the pricing page — let
-     family titles and model names wrap instead of clipping. */
-  & .models-nav .models-nav__col-title,
-  & .models-nav .models-nav__link {
-    white-space: normal;
+    & > * + * {
+      border-left: var(--m__border-width-s) solid var(--m__border);
+      padding-left: calc(var(--m__gap-xxxl) / 4);
+    }
   }
 
   & .marketecture__pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: var(--m__gap-xxxl);
-    row-gap: var(--m__gap-xl);
+    column-gap: calc(var(--m__gap-xxxl) / 2);
+    row-gap: calc(var(--m__gap-xl) / 2);
     align-items: start;
   }
 
   & .marketecture__footer {
-    margin-top: 2.4rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--m__gap-xl);
+    margin-top: 2rem;
     padding-top: 0.5rem;
     border-top: var(--m__border-width-s) solid var(--m__border);
     font-family: var(--m__font-family-semi-mono);
@@ -330,12 +346,38 @@
     color: var(--m__text-caption);
   }
 
+  & .marketecture__footer-logo svg {
+    display: block;
+    width: 4rem;
+    height: auto;
+  }
+
   @media (width < 767px) {
-    padding: 1.5rem 1.2rem 1.2rem;
+    padding: 0.8rem 0.8rem 0.7rem;
 
     & .marketecture__flow,
     & .marketecture__pair {
       grid-template-columns: 1fr;
     }
+
+    & .marketecture__flow > * + * {
+      border-left: none;
+      padding-left: 0;
+    }
   }
+}
+
+/* Roadmap timeline: an item marked `data-coming` is hidden until the
+   poster's `data-month` reaches it. */
+.marketecture[data-month="aug"] [data-coming="sep"],
+.marketecture[data-month="aug"] [data-coming="oct"],
+.marketecture[data-month="aug"] [data-coming="nov"],
+.marketecture[data-month="aug"] [data-coming="dec"],
+.marketecture[data-month="sep"] [data-coming="oct"],
+.marketecture[data-month="sep"] [data-coming="nov"],
+.marketecture[data-month="sep"] [data-coming="dec"],
+.marketecture[data-month="oct"] [data-coming="nov"],
+.marketecture[data-month="oct"] [data-coming="dec"],
+.marketecture[data-month="nov"] [data-coming="dec"] {
+  display: none;
 }

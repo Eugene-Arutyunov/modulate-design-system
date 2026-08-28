@@ -14,14 +14,13 @@ function downloadBlob(blob, filename) {
   URL.revokeObjectURL(url);
 }
 
-// The semi-mono is the poster's label voice (rubrics, eyebrows) — inline it
-// into the export as a data: URL so the standalone page keeps it (~58 KB).
-async function fetchFontDataUrl() {
-  const response = await fetch(
-    new URL("/assets/fonts/CoFoSansSemi-Mono-Regular.woff2", window.location.origin)
-  );
+// The semi-mono (labels) and the gothic (title) are the poster's brand
+// voices — inline both into the export as data: URLs so the standalone
+// page keeps them (~60 KB each).
+async function fetchFontDataUrl(path, label) {
+  const response = await fetch(new URL(path, window.location.origin));
 
-  if (!response.ok) throw new Error("Could not load CoFo Sans Semi Mono");
+  if (!response.ok) throw new Error(`Could not load ${label}`);
 
   const bytes = new Uint8Array(await response.arrayBuffer());
   let binary = "";
@@ -67,7 +66,13 @@ async function exportHtml() {
   if (!cssResponse.ok) throw new Error("Could not load marketecture-embed.css");
 
   const css = await cssResponse.text();
-  const fontDataUrl = await fetchFontDataUrl();
+  const [semiMonoDataUrl, gothicDataUrl] = await Promise.all([
+    fetchFontDataUrl(
+      "/assets/fonts/CoFoSansSemi-Mono-Regular.woff2",
+      "CoFo Sans Semi Mono"
+    ),
+    fetchFontDataUrl("/assets/fonts/CoFoGothic-Bold.woff2", "CoFo Gothic"),
+  ]);
   const sprite = collectSpriteSymbols(poster);
   const clone = poster.cloneNode(true);
   const dark = document.body.classList.contains("dark-mode");
@@ -100,7 +105,14 @@ body {
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src: url("${fontDataUrl}") format("woff2");
+  src: url("${semiMonoDataUrl}") format("woff2");
+}
+@font-face {
+  font-family: "CoFo Gothic";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("${gothicDataUrl}") format("woff2");
 }
 ${css}
   </style>
@@ -122,4 +134,15 @@ document.querySelector("[data-mk-export-html]")?.addEventListener("click", () =>
   exportHtml().catch((error) => {
     window.alert(error.message || "HTML export failed");
   });
+});
+
+// Roadmap timeline: the slider steps through months; the poster's
+// data-month attribute drives visibility of data-coming items via CSS,
+// so an export clone bakes the chosen month.
+const MONTHS = ["aug", "sep", "oct", "nov", "dec"];
+
+document.querySelector("[data-mk-month]")?.addEventListener("input", (event) => {
+  const month = MONTHS[Number(event.target.value)] || "aug";
+
+  document.querySelector("[data-mk-poster]")?.setAttribute("data-month", month);
 });
