@@ -462,6 +462,17 @@
     height: auto;
   }
 
+  /* Three-column months (the Analysis column lands in oct): the poster
+     itself narrows instead of stretching the plates into the freed
+     width, so the proportions stay close to the four-column layout.
+     margin-inline keeps it centered both in the studio frame and in
+     the export's grid body. */
+  &[data-month="aug"],
+  &[data-month="sep"] {
+    max-width: 1000px;
+    margin-inline: auto;
+  }
+
   @media (width < 767px) {
     padding: 1.2rem 1.2rem 1.05rem;
 
