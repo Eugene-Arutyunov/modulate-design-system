@@ -245,8 +245,10 @@
     font-weight: var(--m__font-weight-bold);
   }
 
-  & .marketecture__section + .marketecture__section {
-    margin-top: 2rem;
+  /* Month chips inside uppercase labels keep their own case. */
+  & .marketecture__label .m__tag-flat {
+    text-transform: none;
+    letter-spacing: normal;
   }
 
   /* Same voice as the plaque's family titles. */
@@ -302,10 +304,23 @@
     }
   }
 
-  & .marketecture__footnote {
-    margin: 1rem 0 0;
-    font-size: var(--m__font-size-s);
-    color: var(--m__text-caption);
+  /* Full-width strip under the three plates, same padding and gap. */
+  & .marketecture__strip {
+    margin-top: calc(var(--m__gap-xxxl) / 4);
+    padding: 0.8rem 1rem 0.7rem;
+    background-color: var(--marketecture-plate);
+
+    & .marketecture__label {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      margin: 0;
+
+      & > span + span::before {
+        content: "·";
+        padding: 0 0.75em;
+      }
+    }
   }
 
   /* Coming/preview chips sit inline after the item name. */
@@ -371,26 +386,20 @@
     padding: 0.8rem 1rem 0.7rem;
   }
 
-  & .marketecture__pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: calc(var(--m__gap-xxxl) / 2);
-    row-gap: calc(var(--m__gap-xl) / 2);
-    align-items: start;
-  }
-
   & .marketecture__footer {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--m__gap-xl);
-    margin-top: 2rem;
-    padding-top: 0.5rem;
-    border-top: var(--m__border-width-s) solid var(--m__border);
+    align-items: center;
+    justify-content: center;
+    margin-top: calc(var(--m__gap-xxxl) / 4);
     font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-xs);
     letter-spacing: 0.02em;
     color: var(--m__text-caption);
+
+    & > span + span::before {
+      content: "·";
+      padding: 0 0.75em;
+    }
   }
 
   & .marketecture__footer-logo svg {
@@ -402,8 +411,7 @@
   @media (width < 767px) {
     padding: 1.2rem 1.2rem 1.05rem;
 
-    & .marketecture__flow,
-    & .marketecture__pair {
+    & .marketecture__flow {
       grid-template-columns: 1fr;
     }
   }
