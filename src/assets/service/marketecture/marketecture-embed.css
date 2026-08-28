@@ -1,0 +1,508 @@
+/* Marketecture poster — standalone export stylesheet. Not linked on the
+   site; marketecture-studio.js inlines it into the exported HTML file.
+
+   Self-contained: the token subset the poster consumes (light on :root,
+   dark on .dark-mode — the export bakes the active theme as a body class),
+   minimal copies of .m__rounded / .m__tag-flat / .models-nav (no hover,
+   no active, no vertical variant), the `.marketecture` poster rules and
+   the data-month roadmap rules — keep those byte-identical to
+   src/styles/service/marketecture.css. */
+
+/* ── Tokens ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Site rem base (base.css). */
+  font-size: 118%;
+
+  /* Palette subset (tokens/palette.css). */
+  --m__color-white: rgb(255, 255, 255);
+  --m__color-gray-50: rgb(242, 242, 246);
+  --m__color-gray-75: rgb(231, 231, 238);
+  --m__color-gray-100: rgb(220, 220, 230);
+  --m__color-gray-300: rgb(176, 176, 190);
+  --m__color-gray-400: rgb(153, 153, 170);
+  --m__color-gray-500: rgb(126, 126, 144);
+  --m__color-gray-700: rgb(68, 68, 86);
+  --m__color-gray-800: rgb(45, 45, 60);
+  --m__color-gray-900: rgb(30, 30, 40);
+  --m__color-gray-950: rgb(20, 20, 25);
+
+  /* Typography (tokens/typography.css). */
+  --m__font-size-xs: 0.65rem;
+  --m__font-size-s: 0.8rem;
+  --m__font-size-m: 1rem;
+  --m__font-size-l: 1.15rem;
+  --m__font-size-xl: 1.25rem;
+  --m__font-size-xxl: 1.4rem;
+  --m__font-size-xxxl: 2rem;
+  --m__font-size-xxxxl: 2.6rem;
+  --m__font-weight-regular: 400;
+  --m__font-weight-medium: 500;
+  --m__font-weight-bold: 600;
+  --m__line-height-base: 1.3;
+  --m__font-family-sans: "Inter", sans-serif;
+  --m__font-family-gothic: "CoFo Gothic", sans-serif;
+  --m__font-family-semi-mono: "CoFo Sans Semi Mono", monospace;
+
+  /* Layout + gaps (tokens/layout.css, tokens/gap.css). */
+  --m__border-width-s: 1px;
+  --m__radius-s: 0.3rem;
+  --m__rounded-radius: 1.5em;
+  --m__gap-xxs: 0.4rem;
+  --m__gap-xs: 0.5rem;
+  --m__gap-s: 0.7rem;
+  --m__gap-l: 0.9rem;
+  --m__gap-xl: 1rem;
+  --m__gap-xxxl: 2.4rem;
+}
+
+@media (width < 768px) {
+  :root {
+    font-size: 100%;
+  }
+}
+
+@media (width < 767px) {
+  :root {
+    --m__gap-xxs: 0.3rem;
+    --m__gap-xs: 0.35rem;
+    --m__gap-s: 0.5rem;
+    --m__gap-l: 0.6rem;
+    --m__gap-xl: 0.7rem;
+    --m__gap-xxxl: 1.6rem;
+  }
+}
+
+/* Semantic colors (tokens/colors.css), poster subset. */
+:root {
+  --m__text: var(--m__color-gray-800);
+  --m__text-caption: var(--m__color-gray-400);
+  --m__bg: var(--m__color-white);
+  --m__bg-surface: var(--m__color-gray-50);
+  --m__border: var(--m__color-gray-100);
+}
+
+.dark-mode {
+  --m__text: var(--m__color-gray-300);
+  --m__text-caption: var(--m__color-gray-500);
+  --m__bg: var(--m__color-gray-950);
+  --m__bg-surface: var(--m__color-gray-900);
+  --m__border: var(--m__color-gray-700);
+}
+
+/* ── Component copies ─────────────────────────────────────────────────── */
+
+/* components/rounded.css */
+.m__rounded {
+  border-radius: var(--m__rounded-radius);
+  corner-shape: squircle;
+  overflow: hidden;
+}
+
+@supports not (corner-shape: squircle) {
+  .m__rounded {
+    border-radius: 0;
+    border-radius: initial;
+    mask:
+      url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,1 c0,-1 0,-1 1,-1 l99,0 l0,100 l-100,0 Z"/></svg>')
+        top left / calc(var(--m__rounded-radius) * 100) no-repeat intersect,
+      url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l99,0 c1,0 1,0 1,1 l0,99 l-100,0 l0,-100 Z"/></svg>')
+        top right / calc(var(--m__rounded-radius) * 100) no-repeat intersect,
+      url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,99 c0,1 -0,1 -1,1 l-99,0 Z"/></svg>')
+        bottom right / calc(var(--m__rounded-radius) * 100) no-repeat intersect,
+      url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,100 l-99,0 c-1,0 -1,-0 -1,-1 Z"/></svg>')
+        bottom left / calc(var(--m__rounded-radius) * 100) no-repeat intersect;
+  }
+}
+
+/* components/tag.css, flat + muted only */
+.m__tag-flat {
+  display: inline-flex;
+  align-items: center;
+  font-weight: var(--m__font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  font-size: var(--m__font-size-xs);
+  padding: 0.2em 0.45em;
+  border-radius: var(--m__radius-s);
+  background-color: color-mix(in srgb, currentColor 15%, transparent);
+  color: var(--m__text-caption);
+}
+
+.m__tag--muted {
+  color: var(--m__text-caption);
+}
+
+/* prototypes/models-nav.css, static subset: no hover, no active,
+   no vertical variant, no transition. */
+.models-nav {
+  width: 100%;
+  padding: 0.2rem 0.5rem;
+  background-color: var(--m__bg-surface);
+
+  & .models-nav__cols {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+
+  & .models-nav__col {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  & .models-nav__col-title {
+    display: block;
+    padding: 0.4rem 0.5rem 0.4rem 0.35rem;
+    border-bottom: var(--m__border-width-s) solid var(--m__border);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+    white-space: nowrap;
+  }
+
+  & .models-nav__models {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    padding-top: 0.15em;
+    padding-bottom: 0.5em;
+  }
+
+  & .models-nav__link {
+    display: flex;
+    align-items: center;
+    gap: var(--m__gap-xxs);
+    padding: 0.3rem 0.5rem 0.3rem 0.35rem;
+    color: var(--m__text);
+    text-decoration: none;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    white-space: nowrap;
+  }
+
+  & .models-nav__link-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: currentColor;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  @media (width < 767px) {
+    & .models-nav__cols {
+      flex-wrap: wrap;
+      gap: var(--m__gap-l);
+    }
+
+    & .models-nav__col {
+      flex: 1 1 calc(50% - var(--m__gap-l) / 2);
+    }
+
+    & .models-nav__col-title {
+      white-space: normal;
+    }
+
+    & .models-nav__link {
+      white-space: normal;
+    }
+  }
+}
+
+/* ── Poster ───────────────────────────────────────────────────────────── */
+
+.marketecture {
+  /* The three named blocks sit on plates one step darker than the
+     poster surface (gray-75 on gray-50; gray-800 on gray-900 in dark). */
+  --marketecture-plate: var(--m__color-gray-75);
+
+  box-sizing: border-box;
+  padding: 1.2rem 1.5rem 1.05rem;
+  background-color: var(--m__bg-surface);
+  color: var(--m__text);
+  font-family: var(--m__font-family-sans);
+  line-height: var(--m__line-height-base);
+
+  & .marketecture__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--m__gap-xs);
+    margin-bottom: 0.8rem;
+  }
+
+  & .marketecture__mark {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: currentColor;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  & .marketecture__title {
+    margin: 0;
+    font-family: var(--m__font-family-gothic);
+    font-size: var(--m__font-size-xxxxl);
+    font-weight: var(--m__font-weight-bold);
+  }
+
+  /* Month chips inside uppercase labels keep their own case. */
+  & .marketecture__label .m__tag-flat {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  /* Same voice as the plaque's family titles. */
+  & .marketecture__label {
+    margin: 1rem 0 0.4rem;
+    padding: 0;
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+  }
+
+  /* Plate lead labels (Audio in / Results out): the DS's regular h2
+     voice, not the semi-mono caption of the base label. */
+  & .marketecture__label--big {
+    margin: 0 0 0.75rem;
+    font-family: var(--m__font-family-sans);
+    font-size: var(--m__font-size-xl);
+    font-weight: var(--m__font-weight-bold);
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: nowrap;
+    color: var(--m__text);
+  }
+
+  /* Vertical rhythm, all in the s-size (0.8rem, lh 1.3 → 1.04rem):
+     every content row spans exactly 1.6rem —
+       model row: 1.1rem icon-driven line + 2 × 0.25rem padding;
+       list row: 1.04rem line + 2 × 0.28rem padding.
+     First-baseline alignment from the plate top (col-titles share the
+     big labels' h2 size, 1.25rem × 1.3 = 1.625rem — equal heading
+     heights and equal 0.75 margins keep the two chains in step):
+       big label 1.625rem + 0.75 + 0.28 list padding        = 2.655rem
+       col-title 1.625rem + 0.75 + 0.25 + 0.03 icon offset  = 2.655rem */
+
+  /* Plain text lines: no markers at all (the global ul dot from
+     text.css is switched off), no indent. */
+  & .marketecture__list {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+
+    & li {
+      margin: 0;
+      padding: 0.28rem 0;
+
+      &:before {
+        content: none;
+      }
+    }
+  }
+
+  /* Integrations / Distribution: one running caption line pinned to
+     the plate bottom (the io plates are flex columns; margin-top auto
+     eats the slack). Commas render from `::before` on the items so
+     they disappear together with a timeline-hidden item; the markup
+     keeps the item spans glued (no whitespace) for the same reason. */
+  & .marketecture__note {
+    margin: auto 0 0;
+    padding: 0.28rem 0 0;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    color: var(--m__text-caption);
+
+    & span + span::before {
+      content: ", ";
+    }
+  }
+
+  /* Full-width strip under the three plates, same padding and gap. */
+  & .marketecture__strip {
+    margin-top: calc(var(--m__gap-xxxl) / 4);
+    padding: 0.8rem 1rem 0.7rem;
+    background-color: var(--marketecture-plate);
+
+    & .marketecture__label {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      margin: 0;
+
+      & > span + span::before {
+        content: "·";
+        padding: 0 0.75em;
+      }
+    }
+  }
+
+  /* Coming/preview chips sit inline after the item name. */
+  & .m__tag-flat {
+    margin-left: 0.35em;
+    vertical-align: 0.1em;
+  }
+
+  & .models-nav .m__tag-flat {
+    margin-left: 0;
+    vertical-align: baseline;
+  }
+
+  /* The io/engine plates are the painted layer — the plaque inside goes
+     unpainted, its text flush with the plate padding. */
+  & .models-nav {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  /* Columns size to their content (model names never wrap) and spread
+     across the plate; the gap is a minimum — space-between distributes
+     the rest. */
+  & .models-nav .models-nav__cols {
+    justify-content: space-between;
+    gap: var(--m__gap-xl);
+  }
+
+  & .models-nav .models-nav__col {
+    flex: 0 0 auto;
+  }
+
+  & .models-nav .models-nav__col-title {
+    margin: 0 0 0.75rem;
+    padding: 0;
+    border-bottom: none;
+    font-family: var(--m__font-family-sans);
+    font-size: var(--m__font-size-xl);
+    font-weight: var(--m__font-weight-bold);
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--m__text);
+  }
+
+  & .models-nav .models-nav__models {
+    gap: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  & .models-nav .models-nav__link {
+    padding: 0.25rem 0;
+  }
+
+  /* Audio in — Analysis — Results out on their own plates. The three
+     tracks share the slack 0.85 : 2.5 : 0.95 (the left list runs a bit
+     narrower than the right's icon rows), floored by their content (the
+     nowrap model columns keep the engine from shrinking below its
+     content) — so when the timeline hides the Analysis column the
+     engine narrows and the side plates widen. */
+  & .marketecture__flow {
+    display: grid;
+    grid-template-columns: 0.85fr 2.5fr 0.95fr;
+    column-gap: calc(var(--m__gap-xxxl) / 4);
+    row-gap: calc(var(--m__gap-xl) / 2);
+  }
+
+  & .marketecture__io,
+  & .marketecture__engine {
+    background-color: var(--marketecture-plate);
+    padding: 0.8rem 1rem 0.7rem;
+  }
+
+  & .marketecture__engine {
+    padding-right: 2rem;
+    padding-bottom: 1.4rem;
+  }
+
+  /* Same overflow:hidden caveat for the sides, with a gentler floor:
+     min-content keeps the nowrap lead labels on one line whatever font
+     actually renders, while long notes stay free to wrap. The flex
+     column lets the note pin itself to the plate bottom. */
+  & .marketecture__io {
+    display: flex;
+    flex-direction: column;
+    min-width: min-content;
+  }
+
+  /* .m__rounded's overflow:hidden zeroes the grid item's automatic
+     minimum, so the content floor is restated by hand: the engine never
+     shrinks below its nowrap columns, whatever the fr split says. */
+  & .marketecture__engine {
+    min-width: max-content;
+  }
+
+  /* baseline alignment: the wordmark svg has no text baseline, so flex
+     uses its bottom edge — which is the wordmark's own baseline (the
+     lowercase letters have no descenders). */
+  & .marketecture__footer {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-top: calc(var(--m__gap-l) * 1.5);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    letter-spacing: 0.02em;
+    color: var(--m__text-caption);
+
+    & > span + span::before {
+      content: "·";
+      padding: 0 0.75em;
+    }
+  }
+
+  & .marketecture__footer-logo svg {
+    display: block;
+    width: 4rem;
+    height: auto;
+  }
+
+  /* Three-column months (the Analysis column lands in oct): the poster
+     itself narrows instead of stretching the plates into the freed
+     width, so the proportions stay close to the four-column layout.
+     margin-inline keeps it centered both in the studio frame and in
+     the export's grid body. */
+  &[data-month="aug"],
+  &[data-month="sep"] {
+    max-width: 1000px;
+    margin-inline: auto;
+  }
+
+  @media (width < 767px) {
+    padding: 1.2rem 1.2rem 1.05rem;
+
+    & .marketecture__flow {
+      grid-template-columns: 1fr;
+    }
+
+    & .marketecture__engine,
+    & .marketecture__io {
+      min-width: 0;
+    }
+  }
+}
+
+.dark-mode .marketecture {
+  --marketecture-plate: var(--m__color-gray-800);
+}
+
+/* Roadmap timeline: an item marked `data-coming` is hidden until the
+   poster's `data-month` reaches it. */
+.marketecture[data-month="aug"] [data-coming="sep"],
+.marketecture[data-month="aug"] [data-coming="oct"],
+.marketecture[data-month="aug"] [data-coming="nov"],
+.marketecture[data-month="aug"] [data-coming="dec"],
+.marketecture[data-month="sep"] [data-coming="oct"],
+.marketecture[data-month="sep"] [data-coming="nov"],
+.marketecture[data-month="sep"] [data-coming="dec"],
+.marketecture[data-month="oct"] [data-coming="nov"],
+.marketecture[data-month="oct"] [data-coming="dec"],
+.marketecture[data-month="nov"] [data-coming="dec"] {
+  display: none;
+}
