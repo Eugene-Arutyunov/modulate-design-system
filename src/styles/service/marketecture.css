@@ -96,8 +96,8 @@
   }
 
   & .marketecture__mark {
-    width: 1.9rem;
-    height: 1.9rem;
+    width: 2.4rem;
+    height: 2.4rem;
     color: currentColor;
     fill: currentColor;
     flex-shrink: 0;
@@ -151,8 +151,8 @@
        big label 1.625rem + 0.75 + 0.28 list padding        = 2.655rem
        col-title 1.625rem + 0.75 + 0.25 + 0.03 icon offset  = 2.655rem */
 
-  /* No left indent: the global ul markers (text.css) go inline so item
-     text starts flush with the labels. */
+  /* Plain text lines: no markers at all (the global ul dot from
+     text.css is switched off), no indent. */
   & .marketecture__list {
     margin: 0;
     padding-left: 0;
@@ -165,9 +165,7 @@
       padding: 0.28rem 0;
 
       &:before {
-        position: static;
-        content: "⋅ ";
-        color: var(--m__text-caption);
+        content: none;
       }
     }
   }
@@ -231,7 +229,7 @@
      the rest. */
   & .models-nav .models-nav__cols {
     justify-content: space-between;
-    gap: var(--m__gap-s);
+    gap: var(--m__gap-xl);
   }
 
   & .models-nav .models-nav__col {
@@ -260,14 +258,15 @@
     padding: 0.25rem 0;
   }
 
-  /* Audio in — Analysis — Results out on their own plates. All three
-     tracks share the slack 1 : 2.2 : 1, floored by their content (the
+  /* Audio in — Analysis — Results out on their own plates. The three
+     tracks share the slack 0.85 : 2.5 : 0.95 (the left list runs a bit
+     narrower than the right's icon rows), floored by their content (the
      nowrap model columns keep the engine from shrinking below its
      content) — so when the timeline hides the Analysis column the
      engine narrows and the side plates widen. */
   & .marketecture__flow {
     display: grid;
-    grid-template-columns: 1fr 2.2fr 1fr;
+    grid-template-columns: 0.85fr 2.5fr 0.95fr;
     column-gap: calc(var(--m__gap-xxxl) / 4);
     row-gap: calc(var(--m__gap-xl) / 2);
   }
