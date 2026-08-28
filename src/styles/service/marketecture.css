@@ -76,8 +76,12 @@
 /* ── Poster ───────────────────────────────────────────────────────────── */
 
 .marketecture {
+  /* The three named blocks sit on plates one step darker than the
+     poster surface (gray-100 on gray-50; gray-800 on gray-900 in dark). */
+  --marketecture-plate: var(--m__color-gray-100);
+
   box-sizing: border-box;
-  padding: 0.8rem 1rem 0.7rem;
+  padding: 1.2rem 1.5rem 1.05rem;
   background-color: var(--m__bg-surface);
   color: var(--m__text);
   font-family: var(--m__font-family-sans);
@@ -86,13 +90,14 @@
   & .marketecture__header {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--m__gap-xs);
     margin-bottom: 1.6rem;
   }
 
   & .marketecture__mark {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.9rem;
+    height: 1.9rem;
     color: currentColor;
     fill: currentColor;
     flex-shrink: 0;
@@ -101,7 +106,7 @@
   & .marketecture__title {
     margin: 0;
     font-family: var(--m__font-family-gothic);
-    font-size: var(--m__font-size-xxl);
+    font-size: var(--m__font-size-xxxl);
     font-weight: var(--m__font-weight-bold);
   }
 
@@ -118,8 +123,7 @@
   /* Same voice as the plaque's family titles. */
   & .marketecture__label {
     margin: 1rem 0 0.4rem;
-    padding: 0 0 0.4rem;
-    border-bottom: var(--m__border-width-s) solid var(--m__border);
+    padding: 0;
     font-family: var(--m__font-family-semi-mono);
     font-size: var(--m__font-size-s);
     font-weight: var(--m__font-weight-regular);
@@ -132,16 +136,22 @@
     margin-top: 0;
   }
 
+  /* No left indent: the global ul markers (text.css) go inline so item
+     text starts flush with the labels. */
   & .marketecture__list {
     margin: 0;
-    padding-left: 1.1em;
+    padding-left: 0;
+    list-style: none;
     font-size: var(--m__font-size-s);
     font-weight: var(--m__font-weight-medium);
 
     & li {
       margin: 0.2em 0;
+      padding-left: 0;
 
-      &::marker {
+      &:before {
+        position: static;
+        content: "⋅ ";
         color: var(--m__text-caption);
       }
     }
@@ -164,8 +174,8 @@
     vertical-align: baseline;
   }
 
-  /* The poster itself is the surface — the plaque goes unpainted, its
-     text flush with the neighbor columns. */
+  /* The io/engine plates are the painted layer — the plaque inside goes
+     unpainted, its text flush with the plate padding. */
   & .models-nav {
     background-color: transparent;
     padding: 0;
@@ -177,18 +187,25 @@
     white-space: normal;
   }
 
-  /* Audio in — Analysis — Results out, thin dividers between. */
+  /* Family titles sit on the same row as the neighbor plates' labels. */
+  & .models-nav .models-nav__col-title {
+    margin: 0 0 0.4rem;
+    padding: 0;
+    border-bottom: none;
+  }
+
+  /* Audio in — Analysis — Results out on their own plates. */
   & .marketecture__flow {
     display: grid;
     grid-template-columns: 1fr minmax(0, 3.2fr) 1fr;
     column-gap: calc(var(--m__gap-xxxl) / 4);
     row-gap: calc(var(--m__gap-xl) / 2);
-    align-items: start;
+  }
 
-    & > * + * {
-      border-left: var(--m__border-width-s) solid var(--m__border);
-      padding-left: calc(var(--m__gap-xxxl) / 4);
-    }
+  & .marketecture__io,
+  & .marketecture__engine {
+    background-color: var(--marketecture-plate);
+    padding: 0.8rem 1rem 0.7rem;
   }
 
   & .marketecture__pair {
@@ -220,18 +237,17 @@
   }
 
   @media (width < 767px) {
-    padding: 0.8rem 0.8rem 0.7rem;
+    padding: 1.2rem 1.2rem 1.05rem;
 
     & .marketecture__flow,
     & .marketecture__pair {
       grid-template-columns: 1fr;
     }
-
-    & .marketecture__flow > * + * {
-      border-left: none;
-      padding-left: 0;
-    }
   }
+}
+
+.dark-mode .marketecture {
+  --marketecture-plate: var(--m__color-gray-800);
 }
 
 /* Roadmap timeline: an item marked `data-coming` is hidden until the
