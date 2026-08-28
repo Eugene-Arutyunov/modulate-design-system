@@ -77,8 +77,8 @@
 
 .marketecture {
   /* The three named blocks sit on plates one step darker than the
-     poster surface (gray-100 on gray-50; gray-800 on gray-900 in dark). */
-  --marketecture-plate: var(--m__color-gray-100);
+     poster surface (gray-75 on gray-50; gray-800 on gray-900 in dark). */
+  --marketecture-plate: var(--m__color-gray-75);
 
   box-sizing: border-box;
   padding: 1.2rem 1.5rem 1.05rem;
@@ -92,7 +92,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--m__gap-xs);
-    margin-bottom: 1.6rem;
+    margin-bottom: 0.8rem;
   }
 
   & .marketecture__mark {
@@ -114,12 +114,6 @@
     margin-top: 2rem;
   }
 
-  & .marketecture__part-title {
-    margin: 0 0 0.7rem;
-    font-size: var(--m__font-size-l);
-    font-weight: var(--m__font-weight-bold);
-  }
-
   /* Same voice as the plaque's family titles. */
   & .marketecture__label {
     margin: 1rem 0 0.4rem;
@@ -132,8 +126,24 @@
     color: var(--m__text-caption);
   }
 
-  & .marketecture__part-title + .marketecture__label {
-    margin-top: 0;
+  /* Plate lead labels (Audio in / Results out). The 0.35rem bottom margin
+     is tuned so the first row of side lists and center models share one
+     baseline — see the rhythm note below. */
+  & .marketecture__label--big {
+    margin: 0 0 0.35rem;
+    font-size: var(--m__font-size-l);
+  }
+
+  /* Vertical rhythm, all in the s-size (0.8rem, lh 1.3 → 1.04rem):
+     every content row spans exactly 1.6rem —
+       model row: 1.1rem icon-driven line + 2 × 0.25rem padding;
+       list row: 1.04rem line + 2 × 0.28rem padding.
+     First-baseline alignment from the plate top:
+       big label 1.495rem + 0.35 + 0.28 list padding      = 2.125rem
+       col-title 1.04rem + 0.8 + 0.25 + 0.03 icon offset  = 2.12rem
+     Follow-up small labels inside plates span two rows (3.2rem). */
+  & .marketecture__io .marketecture__label:not(.marketecture__label--big) {
+    margin: 1.66rem 0 0.5rem;
   }
 
   /* No left indent: the global ul markers (text.css) go inline so item
@@ -146,8 +156,8 @@
     font-weight: var(--m__font-weight-medium);
 
     & li {
-      margin: 0.2em 0;
-      padding-left: 0;
+      margin: 0;
+      padding: 0.28rem 0;
 
       &:before {
         position: static;
@@ -181,23 +191,41 @@
     padding: 0;
   }
 
-  & .models-nav .models-nav__col-title,
-  & .models-nav .models-nav__link {
-    padding-left: 0;
-    white-space: normal;
+  /* Columns size to their content, model names never wrap. */
+  & .models-nav .models-nav__cols {
+    gap: 1.6rem;
   }
 
-  /* Family titles sit on the same row as the neighbor plates' labels. */
+  & .models-nav .models-nav__col {
+    flex: 0 1 auto;
+  }
+
   & .models-nav .models-nav__col-title {
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.8rem;
     padding: 0;
     border-bottom: none;
+
+    & .m__tag-flat {
+      text-transform: none;
+      letter-spacing: normal;
+    }
   }
 
-  /* Audio in — Analysis — Results out on their own plates. */
+  & .models-nav .models-nav__models {
+    gap: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  & .models-nav .models-nav__link {
+    padding: 0.25rem 0;
+  }
+
+  /* Audio in — Analysis — Results out on their own plates; the side
+     plates hug their content. */
   & .marketecture__flow {
     display: grid;
-    grid-template-columns: 1fr minmax(0, 3.2fr) 1fr;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
     column-gap: calc(var(--m__gap-xxxl) / 4);
     row-gap: calc(var(--m__gap-xl) / 2);
   }
