@@ -1,0 +1,339 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Marketecture draft' %}
+{% block content %}
+
+<!-- Outer `marketecture-studio` owns the stage bleed; inner
+     `m__wrapper.icon-studio` keeps the panel at the DS content width.
+     The poster (`article.marketecture`) is fully static — the export
+     clones it as-is, so keep all interactivity outside of it. -->
+<main class="marketecture-studio">
+  <div class="m__wrapper icon-studio">
+    <div class="m__space XL"></div>
+
+    <h1>Marketecture draft</h1>
+
+    <div class="m__space M"></div>
+
+    <section class="icon-studio__panel" aria-label="Studio controls">
+      <div class="icon-studio__grid">
+        <fieldset aria-label="Export">
+          <div class="marketecture-studio__actions">
+            <button
+              class="m__button-secondary-outline S"
+              type="button"
+              data-mk-export-html>
+              Export HTML
+            </button>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <div class="m__space M"></div>
+  </div>
+
+  <div class="marketecture-studio__stage">
+    <div class="marketecture-studio__frame">
+      <article class="marketecture m__rounded" data-mk-poster>
+        <header class="marketecture__header">
+          {% include 'service/modulate-logo-notag-black.html' %}
+        </header>
+
+        <section class="marketecture__section">
+          <h2 class="marketecture__section-title">How it works</h2>
+          <div class="marketecture__flow">
+            <div class="marketecture__io">
+              <h3 class="marketecture__part-title">Audio in</h3>
+              <p class="marketecture__label">Sources:</p>
+              <ul class="marketecture__list">
+                <li>Telephony / SIP</li>
+                <li>Voice agents</li>
+                <li>Recordings</li>
+                <li>Browser and mobile</li>
+              </ul>
+              <p class="marketecture__label">Integrations:</p>
+              <ul class="marketecture__list">
+                <li>Genesys</li>
+                <li>Five9</li>
+                <li>ServiceNow <span class="m__tag-flat m__tag--muted">coming</span></li>
+                <li>Teams <span class="m__tag-flat m__tag--muted">coming</span></li>
+              </ul>
+              <p class="marketecture__footnote">
+                Batch and real-time on every family.
+              </p>
+            </div>
+
+            <div class="marketecture__engine">
+              <h3 class="marketecture__part-title">
+                Velma
+                <span class="marketecture__part-note"
+                  >— one engine, four model families</span
+                >
+              </h3>
+              <div
+                class="models-nav m__rounded"
+                role="group"
+                aria-label="Model families">
+                <div class="models-nav__cols">
+                  <div class="models-nav__col">
+                    <span class="models-nav__col-title">Triage</span>
+                    <div class="models-nav__models">
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#velma"></use>
+                        </svg>
+                        <span>Velma Triage</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#velma"></use>
+                        </svg>
+                        <span>Velma Triage Mini <span class="m__tag-flat m__tag--muted">coming</span></span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#overview"></use>
+                        </svg>
+                        <span>ToxMod Triage <span class="m__tag-flat m__tag--muted">coming</span></span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="models-nav__col">
+                    <span class="models-nav__col-title">Redaction</span>
+                    <div class="models-nav__models">
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#redaction"></use>
+                        </svg>
+                        <span>PII / PHI</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="models-nav__col">
+                    <span class="models-nav__col-title">Transcription</span>
+                    <div class="models-nav__models">
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#transcript"></use>
+                        </svg>
+                        <span>Multilingual</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#transcript"></use>
+                        </svg>
+                        <span>Multilingual Fast</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#transcript"></use>
+                        </svg>
+                        <span>English Fast</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#stt-med"></use>
+                        </svg>
+                        <span>Medical <span class="m__tag-flat m__tag--muted">preview</span></span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="models-nav__col">
+                    <span class="models-nav__col-title">Detection</span>
+                    <div class="models-nav__models">
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#deepfake"></use>
+                        </svg>
+                        <span>Deepfake</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#emotions"></use>
+                        </svg>
+                        <span>Emotions</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#language"></use>
+                        </svg>
+                        <span>Language</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#accent"></use>
+                        </svg>
+                        <span>Accent</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#ai-music"></use>
+                        </svg>
+                        <span>AI Music and Singing</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#music"></use>
+                        </svg>
+                        <span>Music and Speech</span>
+                      </span>
+                      <span class="models-nav__link m__rounded">
+                        <svg
+                          class="models-nav__link-icon"
+                          viewBox="0 0 32 32"
+                          aria-hidden="true">
+                          <use href="#overview"></use>
+                        </svg>
+                        <span>Event Classifier <span class="m__tag-flat m__tag--muted">coming</span></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="marketecture__io">
+              <h3 class="marketecture__part-title">Results out</h3>
+              <p class="marketecture__label">Outputs:</p>
+              <ul class="marketecture__list">
+                <li>Real-time alerts</li>
+                <li>Dashboards</li>
+                <li>Data and APIs</li>
+              </ul>
+              <p class="marketecture__label">Distribution:</p>
+              <ul class="marketecture__list">
+                <li>Zendesk</li>
+                <li>ServiceNow <span class="m__tag-flat m__tag--muted">coming</span></li>
+              </ul>
+              <p class="marketecture__footnote">
+                Every verdict traces back to the clip.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="marketecture__section">
+          <h2 class="marketecture__section-title">How you get in</h2>
+          <div class="marketecture__pair">
+            <div>
+              <p class="marketecture__label">APIs (main entrance):</p>
+              <ul class="marketecture__list">
+                <li>Models API</li>
+                <li>Jobs API</li>
+                <li>Admin API</li>
+                <li>Pay-as-you-go</li>
+              </ul>
+            </div>
+            <div>
+              <p class="marketecture__label">Platform (CS-assisted preview):</p>
+              <ul class="marketecture__list">
+                <li>Dashboards</li>
+                <li>Playground</li>
+                <li>Behaviors and actions</li>
+                <li>Admin controls</li>
+                <li>Integrations</li>
+                <li>Storage <span class="m__tag-flat m__tag--muted">coming</span></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="marketecture__section">
+          <h2 class="marketecture__section-title">Where it runs</h2>
+          <ul class="marketecture__list">
+            <li>Cloud</li>
+            <li>
+              VPC and marketplaces
+              <span class="m__tag-flat m__tag--muted">coming</span>
+            </li>
+            <li>On-prem <span class="m__tag-flat m__tag--muted">coming</span></li>
+            <li>On-device <span class="m__tag-flat m__tag--muted">coming</span></li>
+          </ul>
+          <p class="marketecture__footnote">
+            On-device covers individual models only, not the platform.
+          </p>
+        </section>
+
+        <section class="marketecture__section">
+          <h2 class="marketecture__section-title">Why trust it</h2>
+          <div class="marketecture__pair">
+            <div>
+              <p class="marketecture__label">Why Modulate:</p>
+              <ul class="marketecture__list">
+                <li>Fully integrated</li>
+                <li>Whole-call deepfake detection</li>
+                <li>Behaviors defined in plain English</li>
+                <li>Same models via API and Platform</li>
+                <li>Every verdict traced to clip</li>
+                <li>Redacts the recording, not just the transcript</li>
+                <li>#1 ASR accuracy + deepfake detection (Hugging Face benchmarks)</li>
+              </ul>
+            </div>
+            <div>
+              <p class="marketecture__label">Trust:</p>
+              <ul class="marketecture__list">
+                <li>ISO 27001</li>
+                <li>HIPAA</li>
+                <li>GDPR</li>
+                <li>CCPA</li>
+                <li>EU AI Act</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <footer class="marketecture__footer">
+          Industries: CX and contact centers · Financial services · Gaming and
+          social · IT and helpdesk
+        </footer>
+      </article>
+    </div>
+  </div>
+</main>
+
+<script
+  type="module"
+  src="/assets/service/marketecture/marketecture-studio.js"></script>
+
+{% endblock %}

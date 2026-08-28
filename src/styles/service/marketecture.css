@@ -1,0 +1,188 @@
+/* Marketecture draft (`/tools/marketecture-draft/`).
+
+   Studio chrome (panel + stage, velma-fraud pattern) around a fully static
+   one-page poster: no links, no hovers — typography and one models-nav
+   plaque quoted visually from the pricing page (its hover is neutralized
+   below). marketecture-embed.css bakes the same poster rules with a
+   self-contained token set for the standalone HTML export — keep the
+   `.marketecture` block byte-identical between the two files. */
+
+.marketecture-studio {
+  & .marketecture-studio__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: var(--m__font-size-xs);
+
+    & button {
+      flex: 1;
+    }
+  }
+
+  /* Isolated stage, scatterplot pattern: full page width, target frame
+     1140px collapsing to 100% below 1139px. */
+  & .marketecture-studio__stage {
+    width: 100%;
+    margin: 0 0 3rem;
+    box-sizing: border-box;
+  }
+
+  & .marketecture-studio__frame {
+    width: 1140px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 1139px) {
+    & .marketecture-studio__frame {
+      width: 100%;
+      padding: 0 1rem;
+    }
+  }
+}
+
+/* The plaque is a picture here, not a nav: keep the resting color on hover.
+   Extra `.models-nav` in the selector outranks the rule in models-nav.css
+   regardless of bundle order. */
+.marketecture .models-nav .models-nav__link:hover:not(.active) {
+  color: var(--m__text);
+}
+
+/* ── Poster ───────────────────────────────────────────────────────────── */
+
+.marketecture {
+  box-sizing: border-box;
+  padding: 2.5rem 3rem 2rem;
+  border: var(--m__border-width-s) solid var(--m__border);
+  background-color: var(--m__bg);
+  color: var(--m__text);
+  font-family: var(--m__font-family-sans);
+  line-height: var(--m__line-height-base);
+
+  & .marketecture__header {
+    margin-bottom: 2.2rem;
+
+    & svg {
+      display: block;
+      width: 7.2rem;
+      height: auto;
+    }
+  }
+
+  /* Section rubrics (the former left rail), house eyebrow voice. */
+  & .marketecture__section-title {
+    margin: 0 0 1.1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: var(--m__border-width-s) solid var(--m__border);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+  }
+
+  & .marketecture__section + .marketecture__section {
+    margin-top: 2.4rem;
+  }
+
+  & .marketecture__part-title {
+    margin: 0 0 0.7rem;
+    font-size: var(--m__font-size-l);
+    font-weight: var(--m__font-weight-bold);
+  }
+
+  & .marketecture__part-note {
+    font-weight: var(--m__font-weight-regular);
+    color: var(--m__text-caption);
+  }
+
+  & .marketecture__label {
+    margin: 1rem 0 0.3rem;
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+  }
+
+  & .marketecture__part-title + .marketecture__label {
+    margin-top: 0;
+  }
+
+  & .marketecture__list {
+    margin: 0;
+    padding-left: 1.1em;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+
+    & li {
+      margin: 0.2em 0;
+
+      &::marker {
+        color: var(--m__text-caption);
+      }
+    }
+  }
+
+  & .marketecture__footnote {
+    margin: 1rem 0 0;
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption);
+  }
+
+  /* Coming/preview chips sit inline after the item name. */
+  & .m__tag-flat {
+    margin-left: 0.35em;
+    vertical-align: 0.1em;
+  }
+
+  & .models-nav .m__tag-flat {
+    margin-left: 0;
+    vertical-align: baseline;
+  }
+
+  /* How it works: io — engine — io. */
+  & .marketecture__flow {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 3.2fr) 1fr;
+    column-gap: var(--m__gap-xxxl);
+    row-gap: var(--m__gap-xl);
+    align-items: start;
+  }
+
+  /* The plaque columns are narrower than on the pricing page — let
+     family titles and model names wrap instead of clipping. */
+  & .models-nav .models-nav__col-title,
+  & .models-nav .models-nav__link {
+    white-space: normal;
+  }
+
+  & .marketecture__pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--m__gap-xxxl);
+    row-gap: var(--m__gap-xl);
+    align-items: start;
+  }
+
+  & .marketecture__footer {
+    margin-top: 2.4rem;
+    padding-top: 0.5rem;
+    border-top: var(--m__border-width-s) solid var(--m__border);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    letter-spacing: 0.02em;
+    color: var(--m__text-caption);
+  }
+
+  @media (width < 767px) {
+    padding: 1.5rem 1.2rem 1.2rem;
+
+    & .marketecture__flow,
+    & .marketecture__pair {
+      grid-template-columns: 1fr;
+    }
+  }
+}

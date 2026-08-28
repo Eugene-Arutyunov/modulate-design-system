@@ -1,0 +1,341 @@
+/* Marketecture poster — standalone export stylesheet. Not linked on the
+   site; marketecture-studio.js inlines it into the exported HTML file.
+
+   Self-contained: the token subset the poster consumes (light on :root,
+   dark on .dark-mode — the export bakes the active theme as a body class),
+   minimal copies of .m__rounded / .m__tag-flat / .models-nav (no hover,
+   no active, no vertical variant), and the `.marketecture` poster rules —
+   keep those byte-identical to src/styles/service/marketecture.css. */
+
+/* ── Tokens ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Site rem base (base.css). */
+  font-size: 118%;
+
+  /* Palette subset (tokens/palette.css). */
+  --m__color-white: rgb(255, 255, 255);
+  --m__color-gray-50: rgb(242, 242, 246);
+  --m__color-gray-100: rgb(220, 220, 230);
+  --m__color-gray-300: rgb(176, 176, 190);
+  --m__color-gray-400: rgb(153, 153, 170);
+  --m__color-gray-500: rgb(126, 126, 144);
+  --m__color-gray-700: rgb(68, 68, 86);
+  --m__color-gray-800: rgb(45, 45, 60);
+  --m__color-gray-900: rgb(30, 30, 40);
+  --m__color-gray-950: rgb(20, 20, 25);
+
+  /* Typography (tokens/typography.css). */
+  --m__font-size-xs: 0.65rem;
+  --m__font-size-s: 0.8rem;
+  --m__font-size-m: 1rem;
+  --m__font-size-l: 1.15rem;
+  --m__font-weight-regular: 400;
+  --m__font-weight-medium: 500;
+  --m__font-weight-bold: 600;
+  --m__line-height-base: 1.3;
+  --m__font-family-sans: "Inter", sans-serif;
+  --m__font-family-semi-mono: "CoFo Sans Semi Mono", monospace;
+
+  /* Layout + gaps (tokens/layout.css, tokens/gap.css). */
+  --m__border-width-s: 1px;
+  --m__radius-s: 0.3rem;
+  --m__rounded-radius: 1.5em;
+  --m__gap-xxs: 0.4rem;
+  --m__gap-l: 0.9rem;
+  --m__gap-xl: 1rem;
+  --m__gap-xxxl: 2.4rem;
+}
+
+@media (width < 768px) {
+  :root {
+    font-size: 100%;
+  }
+}
+
+@media (width < 767px) {
+  :root {
+    --m__gap-xxs: 0.3rem;
+    --m__gap-l: 0.6rem;
+    --m__gap-xl: 0.7rem;
+    --m__gap-xxxl: 1.6rem;
+  }
+}
+
+/* Semantic colors (tokens/colors.css), poster subset. */
+:root {
+  --m__text: var(--m__color-gray-800);
+  --m__text-caption: var(--m__color-gray-400);
+  --m__bg: var(--m__color-white);
+  --m__bg-surface: var(--m__color-gray-50);
+  --m__border: var(--m__color-gray-100);
+}
+
+.dark-mode {
+  --m__text: var(--m__color-gray-300);
+  --m__text-caption: var(--m__color-gray-500);
+  --m__bg: var(--m__color-gray-950);
+  --m__bg-surface: var(--m__color-gray-900);
+  --m__border: var(--m__color-gray-700);
+}
+
+/* ── Component copies ─────────────────────────────────────────────────── */
+
+/* components/rounded.css */
+.m__rounded {
+  border-radius: var(--m__rounded-radius);
+  corner-shape: squircle;
+  overflow: hidden;
+}
+
+@supports not (corner-shape: squircle) {
+  .m__rounded {
+    border-radius: 0;
+    border-radius: initial;
+    mask:
+      url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,1 c0,-1 0,-1 1,-1 l99,0 l0,100 l-100,0 Z"/></svg>')
+        top left / calc(var(--m__rounded-radius) * 100) no-repeat intersect,
+      url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l99,0 c1,0 1,0 1,1 l0,99 l-100,0 l0,-100 Z"/></svg>')
+        top right / calc(var(--m__rounded-radius) * 100) no-repeat intersect,
+      url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,99 c0,1 -0,1 -1,1 l-99,0 Z"/></svg>')
+        bottom right / calc(var(--m__rounded-radius) * 100) no-repeat intersect,
+      url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="m0,0 l100,0 l0,100 l-99,0 c-1,0 -1,-0 -1,-1 Z"/></svg>')
+        bottom left / calc(var(--m__rounded-radius) * 100) no-repeat intersect;
+  }
+}
+
+/* components/tag.css, flat + muted only */
+.m__tag-flat {
+  display: inline-flex;
+  align-items: center;
+  font-weight: var(--m__font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  font-size: var(--m__font-size-xs);
+  padding: 0.2em 0.45em;
+  border-radius: var(--m__radius-s);
+  background-color: color-mix(in srgb, currentColor 15%, transparent);
+  color: var(--m__text-caption);
+}
+
+.m__tag--muted {
+  color: var(--m__text-caption);
+}
+
+/* prototypes/models-nav.css, static subset: no hover, no active,
+   no vertical variant, no transition. */
+.models-nav {
+  width: 100%;
+  padding: 0.2rem 0.5rem;
+  background-color: var(--m__bg-surface);
+
+  & .models-nav__cols {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+
+  & .models-nav__col {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  & .models-nav__col-title {
+    display: block;
+    padding: 0.4rem 0.5rem 0.4rem 0.35rem;
+    border-bottom: var(--m__border-width-s) solid var(--m__border);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+    white-space: nowrap;
+  }
+
+  & .models-nav__models {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    padding-top: 0.15em;
+    padding-bottom: 0.5em;
+  }
+
+  & .models-nav__link {
+    display: flex;
+    align-items: center;
+    gap: var(--m__gap-xxs);
+    padding: 0.3rem 0.5rem 0.3rem 0.35rem;
+    color: var(--m__text);
+    text-decoration: none;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    white-space: nowrap;
+  }
+
+  & .models-nav__link-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: currentColor;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  @media (width < 767px) {
+    & .models-nav__cols {
+      flex-wrap: wrap;
+      gap: var(--m__gap-l);
+    }
+
+    & .models-nav__col {
+      flex: 1 1 calc(50% - var(--m__gap-l) / 2);
+    }
+
+    & .models-nav__col-title {
+      white-space: normal;
+    }
+
+    & .models-nav__link {
+      white-space: normal;
+    }
+  }
+}
+
+/* ── Poster ───────────────────────────────────────────────────────────── */
+
+.marketecture {
+  box-sizing: border-box;
+  padding: 2.5rem 3rem 2rem;
+  border: var(--m__border-width-s) solid var(--m__border);
+  background-color: var(--m__bg);
+  color: var(--m__text);
+  font-family: var(--m__font-family-sans);
+  line-height: var(--m__line-height-base);
+
+  & .marketecture__header {
+    margin-bottom: 2.2rem;
+
+    & svg {
+      display: block;
+      width: 7.2rem;
+      height: auto;
+    }
+  }
+
+  /* Section rubrics (the former left rail), house eyebrow voice. */
+  & .marketecture__section-title {
+    margin: 0 0 1.1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: var(--m__border-width-s) solid var(--m__border);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+  }
+
+  & .marketecture__section + .marketecture__section {
+    margin-top: 2.4rem;
+  }
+
+  & .marketecture__part-title {
+    margin: 0 0 0.7rem;
+    font-size: var(--m__font-size-l);
+    font-weight: var(--m__font-weight-bold);
+  }
+
+  & .marketecture__part-note {
+    font-weight: var(--m__font-weight-regular);
+    color: var(--m__text-caption);
+  }
+
+  & .marketecture__label {
+    margin: 1rem 0 0.3rem;
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    font-weight: var(--m__font-weight-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--m__text-caption);
+  }
+
+  & .marketecture__part-title + .marketecture__label {
+    margin-top: 0;
+  }
+
+  & .marketecture__list {
+    margin: 0;
+    padding-left: 1.1em;
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+
+    & li {
+      margin: 0.2em 0;
+
+      &::marker {
+        color: var(--m__text-caption);
+      }
+    }
+  }
+
+  & .marketecture__footnote {
+    margin: 1rem 0 0;
+    font-size: var(--m__font-size-s);
+    color: var(--m__text-caption);
+  }
+
+  /* Coming/preview chips sit inline after the item name. */
+  & .m__tag-flat {
+    margin-left: 0.35em;
+    vertical-align: 0.1em;
+  }
+
+  & .models-nav .m__tag-flat {
+    margin-left: 0;
+    vertical-align: baseline;
+  }
+
+  /* How it works: io — engine — io. */
+  & .marketecture__flow {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 3.2fr) 1fr;
+    column-gap: var(--m__gap-xxxl);
+    row-gap: var(--m__gap-xl);
+    align-items: start;
+  }
+
+  /* The plaque columns are narrower than on the pricing page — let
+     family titles and model names wrap instead of clipping. */
+  & .models-nav .models-nav__col-title,
+  & .models-nav .models-nav__link {
+    white-space: normal;
+  }
+
+  & .marketecture__pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--m__gap-xxxl);
+    row-gap: var(--m__gap-xl);
+    align-items: start;
+  }
+
+  & .marketecture__footer {
+    margin-top: 2.4rem;
+    padding-top: 0.5rem;
+    border-top: var(--m__border-width-s) solid var(--m__border);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    letter-spacing: 0.02em;
+    color: var(--m__text-caption);
+  }
+
+  @media (width < 767px) {
+    padding: 1.5rem 1.2rem 1.2rem;
+
+    & .marketecture__flow,
+    & .marketecture__pair {
+      grid-template-columns: 1fr;
+    }
+  }
+}
