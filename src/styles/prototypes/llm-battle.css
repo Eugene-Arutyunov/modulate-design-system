@@ -1,8 +1,8 @@
 /* Velma LLM Battle — /tools/velma-llm-battle/ design mock.
    The page reuses the playground plumbing as is (dashboard-layout, upload
    plate, player lanes, split-button menu, modal canon); vlb-* covers only
-   what the battle adds: the sidebar control panel, upload-header behavior
-   picker, gray "no signal / no emotions" clip treatment, per-behavior mini
+   what the battle adds: the sidebar control panel and behavior picker,
+   gray "no signal / no emotions" clip treatment, per-behavior mini
    players, receipt modals, and the accuracy dashboard. */
 
 /* Sidebar control panel — geometry echoes .models-nav--vertical.
@@ -40,20 +40,11 @@
 
 }
 
-/* Behaviors follows the Playground setup-link pattern, backed by a custom
-   checkbox menu because the native select cannot express multiple choices. */
+/* Behaviors uses the same compact outline-button treatment as the other
+   sidebar actions, backed by a custom checkbox menu because the native
+   select cannot express multiple choices. */
 .vlb-select {
   position: relative;
-
-  & .vlb-select__button {
-    appearance: none;
-    padding: 0 0 0.05rem;
-    border: 0;
-    border-bottom: 1.5px dotted currentColor;
-    background: none;
-    font: inherit;
-    cursor: pointer;
-  }
 
   & .vlb-select__menu {
     position: absolute;
@@ -70,6 +61,39 @@
     &[hidden] {
       display: none;
     }
+  }
+}
+
+/* The sticky player establishes its own elevated layer. Lift the sidebar's
+   whole stacking context while the behaviors action menu is open so the
+   popover stays above every player and results visualization. */
+.vlb-page:has(.vlb-select[data-open='true']) > .nav-sidebar {
+  z-index: 1002;
+}
+
+.vlb-controls button.vlb-controls__behaviors-btn {
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: var(--m__radius-m);
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-medium);
+  white-space: nowrap;
+  transition:
+    color var(--m__duration-xslow) var(--m__easing-base),
+    border-color var(--m__duration-xslow) var(--m__easing-base);
+
+  & svg {
+    width: 1.2em;
+    height: 1.2em;
+    flex: 0 0 auto;
+    transform: translateY(0.03em);
+  }
+
+  &:hover {
+    transition-duration: var(--m__duration-instant);
   }
 }
 
@@ -333,16 +357,10 @@
   }
 
   & .pg-player-dataviz:has(
-      .transcript-clip[data-speaker-index='1']:hover,
-      .behaviour-indicator[data-speaker-index='1']:hover
+      .transcript-clip:hover,
+      .behaviour-indicator:hover
     )
-    .speaker-label[data-speaker-index='1']
-    span,
-  & .pg-player-dataviz:has(
-      .transcript-clip[data-speaker-index='2']:hover,
-      .behaviour-indicator[data-speaker-index='2']:hover
-    )
-    .speaker-label[data-speaker-index='2']
+    .speaker-label
     span {
     opacity: 1;
     transition: opacity var(--m__duration-instant) var(--m__easing-base);
@@ -933,20 +951,7 @@
 /* Four demo recordings in the menu: while it is open the plate releases
    its overflow clip (the canonical plate height stays; four items would
    not fit inside it) */
-.pg-upload-section:has(.vlb-select[data-open='true']) {
-  position: relative;
-  z-index: 1000;
-}
-
-.vlb-plate:has(.vlb-select[data-open='true']) > .vlb-behaviors-header {
-  z-index: 1001;
-}
-
-.pg-upload-section:has(
-    .pg-upload-stream[data-open='true'],
-    .vlb-select[data-open='true']
-  )
-  .pg-upload-plate {
+.pg-upload-section:has(.pg-upload-stream[data-open='true']) .pg-upload-plate {
   overflow: visible;
 }
 
