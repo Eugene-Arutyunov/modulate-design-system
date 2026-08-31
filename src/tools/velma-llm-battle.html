@@ -28,7 +28,83 @@
       <div class="vlb-controls">
         <div class="vlb-controls__group">
           <div class="vlb-controls__field">
-            <label class="vlb-controls__title" for="vlb-stt-model-trigger">STT</label>
+            <span class="vlb-controls__title">VELMA</span>
+            <div class="vlb-select" data-open="false">
+              <button
+                type="button"
+                class="m__button-secondary-outline S vlb-controls__behaviors-btn vlb-select__button"
+                aria-haspopup="true"
+                aria-expanded="false">
+                <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true">
+                  <use href="#behaviors"></use>
+                </svg>
+                Set up behaviors
+              </button>
+              <div class="m__popover vlb-select__menu" hidden>
+                <div class="m__popover-list">
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary">
+                      <input type="checkbox" />
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                    </span>
+                    <span class="m__popover-item-name">Complaints</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary">
+                      <input type="checkbox" checked />
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                    </span>
+                    <span class="m__popover-item-name">Vishing</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary">
+                      <input type="checkbox" checked />
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                    </span>
+                    <span class="m__popover-item-name">Account Impersonation</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary">
+                      <input type="checkbox" checked />
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                    </span>
+                    <span class="m__popover-item-name">Coercion Manipulation</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary">
+                      <input type="checkbox" />
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                    </span>
+                    <span class="m__popover-item-name">Return Fraud Attempt</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary">
+                      <input type="checkbox" />
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                    </span>
+                    <span class="m__popover-item-name">Service Churn</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary">
+                      <input type="checkbox" />
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                    </span>
+                    <span class="m__popover-item-name">Off-topic Discussion</span>
+                  </label>
+                  <label class="m__popover-item">
+                    <span class="m__checkbox-primary">
+                      <input type="checkbox" />
+                      <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
+                    </span>
+                    <span class="m__popover-item-name">Action Plan Created</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="vlb-controls__field">
+            <span class="vlb-controls__title">STT + LLM</span>
+            <div class="vlb-controls__stack">
             <div class="m__menu-button vlb-model-select">
               <button
                 id="vlb-stt-model-trigger"
@@ -65,9 +141,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="vlb-controls__field">
-            <label class="vlb-controls__title" for="vlb-llm-model-trigger">LLM</label>
             <div class="m__menu-button vlb-model-select">
               <button
                 id="vlb-llm-model-trigger"
@@ -104,13 +177,14 @@
                 </div>
               </div>
             </div>
+              <button
+                type="button"
+                class="m__button-secondary-outline S vlb-controls__prompt-btn"
+                data-modal-open="vlb-prompt-modal">
+                System prompt
+              </button>
+            </div>
           </div>
-          <button
-            type="button"
-            class="m__button-secondary-outline S vlb-controls__prompt-btn"
-            data-modal-open="vlb-prompt-modal">
-            System prompt
-          </button>
           <label class="m__checkbox-primary vlb-controls__check">
             <input type="checkbox" data-vlb-emotions /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
             Show emotions
@@ -127,83 +201,6 @@
         {% set uploadPlateShowMeta = false %}
         {% set uploadPlateCollapsedLabel = 'New analysis' %}
         {% set uploadPlateStateInputName = 'vlb-plate-state' %}
-        {% set uploadPlateOptions %}
-        <div class="pg-options-row pg-velma-setup vlb-behaviors-header">
-          <div class="vlb-select" data-open="false">
-            <button
-              type="button"
-              class="pg-velma-setup-link vlb-select__button"
-              aria-haspopup="true"
-              aria-expanded="false">
-              <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true">
-                <use href="#behaviors"></use>
-              </svg>
-              Set up behaviors
-            </button>
-            <div class="m__popover vlb-select__menu" hidden>
-              <div class="m__popover-list">
-                <label class="m__popover-item">
-                  <span class="m__checkbox-primary">
-                    <input type="checkbox" />
-                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
-                  </span>
-                  <span class="m__popover-item-name">Complaints</span>
-                </label>
-                <label class="m__popover-item">
-                  <span class="m__checkbox-primary">
-                    <input type="checkbox" checked />
-                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
-                  </span>
-                  <span class="m__popover-item-name">Vishing</span>
-                </label>
-                <label class="m__popover-item">
-                  <span class="m__checkbox-primary">
-                    <input type="checkbox" checked />
-                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
-                  </span>
-                  <span class="m__popover-item-name">Account Impersonation</span>
-                </label>
-                <label class="m__popover-item">
-                  <span class="m__checkbox-primary">
-                    <input type="checkbox" checked />
-                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
-                  </span>
-                  <span class="m__popover-item-name">Coercion Manipulation</span>
-                </label>
-                <label class="m__popover-item">
-                  <span class="m__checkbox-primary">
-                    <input type="checkbox" />
-                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
-                  </span>
-                  <span class="m__popover-item-name">Return Fraud Attempt</span>
-                </label>
-                <label class="m__popover-item">
-                  <span class="m__checkbox-primary">
-                    <input type="checkbox" />
-                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
-                  </span>
-                  <span class="m__popover-item-name">Service Churn</span>
-                </label>
-                <label class="m__popover-item">
-                  <span class="m__checkbox-primary">
-                    <input type="checkbox" />
-                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
-                  </span>
-                  <span class="m__popover-item-name">Off-topic Discussion</span>
-                </label>
-                <label class="m__popover-item">
-                  <span class="m__checkbox-primary">
-                    <input type="checkbox" />
-                    <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#checkmark"></use></svg>
-                  </span>
-                  <span class="m__popover-item-name">Action Plan Created</span>
-                </label>
-              </div>
-            </div>
-          </div>
-          <span class="pg-velma-setup-summary" data-vlb-behaviors-value>3 behaviors</span>
-        </div>
-        {% endset %}
         {% set uploadPlateAnalyzingContent %}
         <div class="pg-processing-stages">
           <span class="pg-processing-stage">
@@ -376,7 +373,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     this moment and only flagged the later, text-visible push.
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:00</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -391,17 +388,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         Come on! We've been at this for five minutes. I've answered
         everything. Just change the email on the account so I can get my
         code.
-      </div>
-    </div>
-    <div class="pg-transcript-utterance speaker-right">
-      <div class="pg-transcript-utterance-header">
-        <span class="pg-transcript-time">0:09</span>
-        <span class="pg-transcript-speaker">Agent</span>
-        <span class="pg-transcript-emotion ec-calm">Calm</span>
-      </div>
-      <div class="pg-transcript-text">
-        I do apologize, sir, but the answers you gave didn't match what we
-        have on file.
       </div>
     </div>
   </div>
@@ -421,7 +407,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     left no trace in the transcript and went unflagged.
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:15</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -453,7 +439,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     impersonation. The stack caught it too, from the transcript (64%).
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:31</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -467,17 +453,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       <div class="pg-transcript-text">
         I'm overseas, that's the whole point. Just update the email and
         phone. You can hear it's me. Who else would know the account number?
-      </div>
-    </div>
-    <div class="pg-transcript-utterance speaker-right">
-      <div class="pg-transcript-utterance-header">
-        <span class="pg-transcript-time">0:41</span>
-        <span class="pg-transcript-speaker">Agent</span>
-        <span class="pg-transcript-emotion ec-confident">Confident</span>
-      </div>
-      <div class="pg-transcript-text">
-        Knowing the account number isn't identity verification, sir. It's
-        for your protection.
       </div>
     </div>
   </div>
@@ -497,7 +472,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     threatening escalation, not posing as someone else.
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence is-false">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:47</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -529,7 +504,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     the transcript alone (61%).
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:47</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -543,18 +518,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       <div class="pg-transcript-text">
         This is unbelievable. What's your name? Alex, you said? I'll make
         sure your supervisor knows you cost me this transfer.
-      </div>
-    </div>
-    <div class="pg-transcript-utterance speaker-right">
-      <div class="pg-transcript-utterance-header">
-        <span class="pg-transcript-time">0:56</span>
-        <span class="pg-transcript-speaker">Agent</span>
-        <span class="pg-transcript-emotion ec-calm">Calm</span>
-      </div>
-      <div class="pg-transcript-text">
-        Yes, that's correct. And again, I understand that you're frustrated,
-        sir. But unfortunately, I'm not going to be able to make that change
-        today for you.
       </div>
     </div>
   </div>
@@ -692,7 +655,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   </div>
 
   <div class="vlb-transcript-col">
-  <span class="vlb-transcript-col__title">STT + LLM</span>
+  <span class="vlb-transcript-col__title" data-vlb-transcript-stack-models>Whisper v4 + GPT-5.5</span>
   <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">
     <div class="pg-transcript-utterance">
       <div class="pg-transcript-utterance-header">
@@ -778,7 +741,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
             <use href="#behaviors"></use></svg
           >Account Impersonation</a
         >
-        <span class="vlb-false-text">false alarm</span>
       </div>
       <div class="pg-transcript-text">this is unbelievable what's your name alex you said</div>
     </div>
@@ -863,14 +825,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 8.9, e: 13.4, sp: 'Ben', emotion: 'happy', text: "Okay, it's cereal. But it's artisanal cereal." },
         { s: 13.4, e: 19.2, sp: 'Maya', emotion: 'affectionate', behaviour: 'Smile in the Voice', modal: 'vlb-r1-smile', text: "You're an idiot. Order the pizza." },
         { s: 19.2, e: 21.1, event: true, behaviour: 'Meow', modal: 'vlb-r1-ev-meow', text: '(a cat pads in and meows at the empty bowl)' },
-        { s: 21.1, e: 26.4, sp: 'Dana', emotion: 'concerned', behaviour: 'Accusatory Question', modal: 'vlb-r1-accusatory', text: 'Why does the odometer say sixty thousand when your listing said forty?' },
+        { s: 21.1, e: 26.4, sp: 'Dana', emotion: 'concerned', behaviour: 'Accusatory Question', transcriptBehaviours: ['Complaints'], modal: 'vlb-r1-accusatory', text: 'Why does the odometer say sixty thousand when your listing said forty?' },
         { s: 26.4, e: 32.7, sp: 'Rick', emotion: 'calm', behaviour: 'Read, Not Said', modal: 'vlb-r1-read', text: 'This vehicle has one owner, a clean title, and a fully documented service history.' },
         { s: 32.7, e: 37.2, sp: 'Dana', emotion: 'angry', text: 'Documented by who? The air freshener is older than that paperwork.' },
-        { s: 37.2, e: 41.3, sp: 'Dana', emotion: 'frustrated', behaviour: 'Inappropriate Speech', modal: 'vlb-r1-inap', text: "You're a con artist, and this lot is a junkyard with balloons." },
+        { s: 37.2, e: 41.3, sp: 'Dana', emotion: 'frustrated', behaviour: 'Inappropriate Speech', transcriptBehaviours: ['Harassment', 'Threat-based harassment', 'Coercion Manipulation'], modal: 'vlb-r1-inap', text: "You're a con artist, and this lot is a junkyard with balloons." },
         { s: 41.3, e: 45.1, sp: 'Rick', emotion: 'angry', text: "And you always know better, huh? Door's right there." },
         { s: 45.1, e: 46.9, event: true, behaviour: 'Shatter', modal: 'vlb-r1-ev-shatter', text: '(a side mirror hits the pavement)' },
         { s: 46.9, e: 51.1, sp: 'Priya', emotion: 'neutral', text: 'Tom, can you land the migration by Thursday?' },
-        { s: 51.1, e: 55.9, sp: 'Tom', emotion: 'stressed', behaviour: 'Reluctance', modal: 'vlb-r1-reluctance', text: '…Yes.' },
+        { s: 51.1, e: 55.9, sp: 'Tom', emotion: 'stressed', behaviour: 'Reluctance', transcriptBehaviours: ['Unvoiced Disagreement'], modal: 'vlb-r1-reluctance', text: '…Yes.' },
         { s: 55.9, e: 59.4, sp: 'Aisha', emotion: 'anxious', behaviour: 'Lost Attempt to Speak', modal: 'vlb-r1-lost', text: 'I— actually, we should—' },
         { s: 59.4, e: 65.7, sp: 'Priya', emotion: 'confident', text: "Great, then we'll kill the old pipeline right after we ship." },
         { s: 65.7, e: 70.8, sp: 'Tom', emotion: 'tired', text: 'Sure. Sounds good.' },
@@ -888,7 +850,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 7.1, e: 9.2, guess: 'happy', text: 'truly' },
         { s: 9.2, e: 11.4, guess: 'amused', text: "okay it's cereal" },
         { s: 11.4, e: 13.6, guess: 'amused', text: "but it's artisanal cereal" },
-        { s: 13.6, e: 16.4, guess: 'angry', behaviour: 'Inappropriate Speech', false: true, modal: 'vlb-r1-inap-false', text: "you're an idiot" },
+        { s: 13.6, e: 16.4, guess: 'angry', behaviour: 'Inappropriate Speech', transcriptBehaviours: ['Harassment'], false: true, modal: 'vlb-r1-inap-false', text: "you're an idiot" },
         { s: 16.4, e: 19.4, guess: 'neutral', behaviour: 'Request or order', false: true, modal: 'vlb-r1-order-false', text: 'order the pizza' },
         { s: 19.4, e: 21.3, guess: 'calm', halluc: true, text: 'thank you' },
         { s: 21.3, e: 24.1, guess: 'interested', behaviour: 'Complaints', false: true, modal: 'vlb-r1-complaints-false', text: 'why does the odometer say sixty thousand' },
@@ -905,7 +867,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 47.1, e: 49.2, guess: 'neutral', text: 'tom can you land' },
         { s: 49.2, e: 51.3, guess: 'neutral', text: 'the migration by thursday' },
         { s: 51.3, e: 59.6, guess: 'confident', text: 'yes' },
-        { s: 59.6, e: 62.4, guess: 'confident', behaviour: 'Threat-based harassment', false: true, modal: 'vlb-r1-threat-false', text: "great then we'll kill the old pipeline" },
+        { s: 59.6, e: 62.4, guess: 'confident', behaviour: 'Threat-based harassment', transcriptBehaviours: ['Coercion Manipulation'], false: true, modal: 'vlb-r1-threat-false', text: "great then we'll kill the old pipeline" },
         { s: 62.4, e: 65.9, guess: 'confident', text: 'right after we ship' },
         { s: 65.9, e: 68.3, guess: 'happy', text: 'sure' },
         { s: 68.3, e: 71.0, guess: 'happy', text: 'sounds good' },
@@ -1216,12 +1178,26 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       : 'behaviour-indicator--tech';
   }
 
+  function behaviourCount(c) {
+    return new Set([c.behaviour, ...(c.transcriptBehaviours || [])].filter(Boolean)).size;
+  }
+
+  function techKikiColor(c) {
+    return c.false ? 'var(--m__color-red-600)' : 'rgba(var(--emotion-neutral-RGB), 1)';
+  }
+
   // Kikis anchor to the bottom-left corner of their clip (the renderer's
   // default position) — the signal's exact moment lives in the receipt,
   // not in the glyph's coordinates, so a glyph can never visually drift
   // into a neighboring clip.
   function velmaClip(c) {
-    const clip = { ...baseClip(1, c), behaviour: c.behaviour, behaviourModal: c.modal };
+    const clip = {
+      ...baseClip(1, c),
+      behaviour: c.behaviour,
+      behaviourCount: behaviourCount(c),
+      behaviourCountColor: emotionGlow(c.event ? 'neutral' : c.emotion),
+      behaviourModal: c.modal,
+    };
     if (c.event) {
       // Sound interludes paint neutral — no emotion was heard; only the
       // event glyph marks them.
@@ -1250,7 +1226,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
     call().velma.forEach((c) => clips.push(velmaClip(c)));
     call().stt.forEach((c) => {
-      const clip = { ...baseClip(2, c), behaviour: c.behaviour, behaviourClasses: kikiClasses(c), behaviourModal: c.modal };
+      const clip = {
+        ...baseClip(2, c),
+        behaviour: c.behaviour,
+        behaviourCount: behaviourCount(c),
+        behaviourCountColor: techKikiColor(c),
+        behaviourClasses: kikiClasses(c),
+        behaviourModal: c.modal,
+      };
 
       if (emotionsOn) {
         clip.emotion = c.guess;
@@ -1296,6 +1279,8 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         }
         clip.classes += ' clip-signal-glow';
         clip.behaviour = strip.name;
+        clip.behaviourCount = behaviourCount(c);
+        clip.behaviourCountColor = techKikiColor(c);
         clip.behaviourClasses = kikiClasses(c);
         clip.behaviourModal = c.modal;
       }
@@ -1444,15 +1429,9 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   }
 
   // ---------------------------------------------------------------- //
-  // Upload header: the behaviors multiselect mirrors the selected     //
-  // recording; its summary always follows the checked item count.    //
+  // Sidebar: the behaviors multiselect mirrors the selected           //
+  // recording.                                                        //
   // ---------------------------------------------------------------- //
-  function syncBehaviorSummary() {
-    const summary = document.querySelector('[data-vlb-behaviors-value]');
-    const count = document.querySelectorAll('.vlb-select__menu input[type="checkbox"]:checked').length;
-    if (summary) summary.textContent = `${count} ${count === 1 ? 'behavior' : 'behaviors'}`;
-  }
-
   function renderSidebar() {
     const menu = document.querySelector('.vlb-select__menu .m__popover-list');
 
@@ -1467,7 +1446,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </label>`;
     const names = call().strips.map((s) => s.name);
     menu.innerHTML = names.map((n) => item(n, true)).join('') + call().sidebarExtra.map((n) => item(n, false)).join('');
-    syncBehaviorSummary();
   }
 
   // ---------------------------------------------------------------- //
@@ -1496,16 +1474,15 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>`;
   }
 
-  function excerptRow(velma, ref, firstSp) {
-    const c = velma[ref.i];
-    const side = c.sp === firstSp ? 'speaker-left' : 'speaker-right';
+  function excerptRow(c) {
+    const emotion = c.emotion || c.guess;
     return `
-      <div class="pg-transcript-utterance ${side}${ref.ev ? ' vlb-evidence' : ''}">
+      <div class="pg-transcript-utterance speaker-left">
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">${fmt(c.s)}</span>
-          <span class="pg-transcript-speaker">${esc(c.sp)}</span>
-          <span class="pg-transcript-emotion ec-${c.emotion}">${cap(c.emotion)}</span>
-          ${c.behaviour ? behaviourLink(c.behaviour) : ''}
+          ${c.sp ? `<span class="pg-transcript-speaker">${esc(c.sp)}</span>` : ''}
+          ${emotion ? `<span class="pg-transcript-emotion ec-${emotion}">${cap(emotion)}</span>` : ''}
+          ${transcriptSignals(c)}
         </div>
         <div class="pg-transcript-text">${esc(c.text)}</div>
       </div>`;
@@ -1543,7 +1520,10 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
           <p class="vlb-receipt__reason">${esc(r.note)}</p>
         </div>`, true);
     }
-    const firstSp = callDef.velma[r.excerpt[0].i].sp;
+    const clipRef = r.excerpt.find((ref) => ref.ev) || r.excerpt[0];
+    const agentClips = r.agent === 'STT+LLM' ? callDef.stt : callDef.velma;
+    const evidenceClip = agentClips.find((clip) => clip.modal === r.id)
+      || callDef.velma[clipRef.i];
     const proposed = r.proposed
       ? '<span class="vlb-receipt__conf">· Proposed signal</span>'
       : '';
@@ -1556,7 +1536,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         </div>
         <p class="vlb-receipt__reason">${r.reason}</p>
         <div class="pg-transcript-list vlb-receipt__excerpt">
-          ${r.excerpt.map((ref) => excerptRow(callDef.velma, ref, firstSp)).join('')}
+          ${excerptRow(evidenceClip)}
         </div>
       </div>`, true);
   }
@@ -1570,57 +1550,79 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     return `<a href="#" class="m__behavior-link S"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#behaviors"></use></svg>${esc(name)}</a>`;
   }
 
+  function transcriptSignals(clip) {
+    const links = [...new Set([clip.behaviour, ...(clip.transcriptBehaviours || [])])]
+      .filter(Boolean)
+      .map(behaviourLink)
+      .join('');
+    return links
+      ? `<span class="vlb-transcript-signals">${links}</span>`
+      : '';
+  }
+
   function transcriptModal(id, callDef) {
-    // Velma's column: diarized utterances with heard emotions, scene
-    // markers, and event rows for the sound interludes. Sides alternate
-    // by speaker within each scene.
-    const sides = {};
+    // Velma's column: diarized utterances with heard emotions. Sides
+    // alternate by speaker within each scene; scene and event rows stay
+    // out of the comparison transcript.
     let sceneSpeakers = [];
     const velmaRows = callDef.velma.map((c, i) => {
       if (callDef.sceneAt && callDef.sceneAt[i]) {
         sceneSpeakers = [];
       }
-      const marker = callDef.sceneAt && callDef.sceneAt[i]
-        ? `<div class="vlb-transcript-scene">${esc(callDef.sceneAt[i])}</div>`
-        : '';
-      if (c.event) {
-        return `${marker}<div class="vlb-transcript-event">${fmt(c.s)} · Sound event — ${esc(c.behaviour)}</div>`;
-      }
+      if (c.event) return null;
       if (!sceneSpeakers.includes(c.sp)) sceneSpeakers.push(c.sp);
       const side = sceneSpeakers.indexOf(c.sp) % 2 === 0 ? 'vlb-utt-l' : 'vlb-utt-r';
-      return `${marker}
-        <div class="pg-transcript-utterance ${side}">
+      return { time: Math.floor(c.s), html: `<div class="pg-transcript-utterance ${side}" data-vlb-time="${c.s}">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">${fmt(c.s)}</span>
             <span class="pg-transcript-speaker">${esc(c.sp)}</span>
             <span class="pg-transcript-emotion ec-${c.emotion}">${cap(c.emotion)}</span>
-            ${c.behaviour ? behaviourLink(c.behaviour) : ''}
+            ${transcriptSignals(c)}
           </div>
           <div class="pg-transcript-text">${esc(c.text)}</div>
-        </div>`;
-    }).join('');
+      </div>` };
+    }).filter(Boolean);
 
-    const sttRows = callDef.stt.map((c) => `
-      <div class="pg-transcript-utterance${c.halluc ? ' vlb-halluc' : ''}">
+    const sttRows = callDef.stt.map((c) => ({ time: Math.floor(c.s), html: `
+      <div class="pg-transcript-utterance${c.halluc ? ' vlb-halluc' : ''}" data-vlb-time="${c.s}">
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">${fmt(c.s)}</span>
-          ${c.behaviour ? behaviourLink(c.behaviour) : ''}
-          ${c.false ? '<span class="vlb-false-text">false alarm</span>' : ''}
+          ${transcriptSignals(c)}
         </div>
         <div class="pg-transcript-text">${esc(c.text)}</div>
-      </div>`).join('');
+      </div>` }));
+
+    // Keep both columns in normal flow. Every Velma utterance starts a
+    // comparison group; all STT chunks up to the next utterance stack
+    // beside it. The taller side sets the group's height, acting as a
+    // synchronization bridge before both columns continue together.
+    const syncTimes = [...new Set(velmaRows.map((row) => row.time))]
+      .sort((a, b) => a - b);
+    const firstTime = Math.min(velmaRows[0]?.time ?? Infinity, sttRows[0]?.time ?? Infinity);
+    if (!syncTimes.includes(firstTime)) syncTimes.unshift(firstTime);
+
+    const segments = syncTimes.map((time, index) => {
+      const nextTime = syncTimes[index + 1] ?? Infinity;
+      const rangeEnd = Number.isFinite(nextTime) ? nextTime : Math.floor(callDef.duration);
+      const rowsInRange = (rows) => rows
+        .filter((row) => row.time >= time && row.time < nextTime)
+        .map((row) => row.html)
+        .join('');
+      return `<div class="vlb-transcript-segment">
+        <span class="vlb-transcript-segment__time">${fmt(time)}–${fmt(rangeEnd)}</span>
+        <div class="pg-transcript-list vlb-transcript">${rowsInRange(velmaRows)}</div>
+        <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">${rowsInRange(sttRows)}</div>
+      </div>`;
+    }).join('');
 
     return modalShell(id, 'Transcript', `
       <div class="m__modal__body">
-        <div class="vlb-transcript-duo">
-          <div class="vlb-transcript-col">
+        <div class="vlb-transcript-duo vlb-transcript-duo--segmented">
+          <div class="vlb-transcript-header">
             <span class="vlb-transcript-col__title">Velma</span>
-            <div class="pg-transcript-list vlb-transcript">${velmaRows}</div>
+            <span class="vlb-transcript-col__title" data-vlb-transcript-stack-models>${esc(sttSelect?.value || 'Whisper v4')} + ${esc(llmSelect?.value || 'GPT-5.5')}</span>
           </div>
-          <div class="vlb-transcript-col">
-            <span class="vlb-transcript-col__title">STT + LLM</span>
-            <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">${sttRows}</div>
-          </div>
+          ${segments}
         </div>
       </div>
       <div class="m__modal__footer vlb-transcript-footer">
@@ -1635,12 +1637,114 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   });
   modalsHost.innerHTML = generated;
 
+  function transcriptTime(item) {
+    if (item.dataset.vlbTime) return Number(item.dataset.vlbTime);
+    const label = item.querySelector('.pg-transcript-time')?.textContent.trim();
+    if (!label) return null;
+    const [minutes, seconds] = label.split(':').map(Number);
+    return Number.isFinite(minutes) && Number.isFinite(seconds)
+      ? minutes * 60 + seconds
+      : null;
+  }
+
+  function alignTranscriptTimeline(modal) {
+    const lists = [...modal.querySelectorAll('.vlb-transcript-duo > .vlb-transcript-col > .vlb-transcript')];
+    if (lists.length < 2) return;
+
+    lists.forEach((list) => {
+      list.classList.remove('is-timeline');
+      list.style.removeProperty('--vlb-transcript-timeline-height');
+    });
+
+    const columns = lists.map((list) => [...list.children]
+      .map((item) => ({ item, time: transcriptTime(item), height: item.getBoundingClientRect().height }))
+      .filter((row) => row.time !== null)
+      .sort((a, b) => a.time - b.time));
+    const gap = parseFloat(getComputedStyle(lists[0]).rowGap) || 8;
+    const cursors = [0, 0];
+    const rowsByTime = new Map();
+
+    columns.forEach((rows, columnIndex) => rows.forEach((row) => {
+      if (!rowsByTime.has(row.time)) rowsByTime.set(row.time, [[], []]);
+      rowsByTime.get(row.time)[columnIndex].push(row);
+    }));
+
+    [...rowsByTime.keys()].sort((a, b) => a - b).forEach((time) => {
+      const groups = rowsByTime.get(time);
+      const sharedTop = groups[0].length && groups[1].length
+        ? Math.max(cursors[0], cursors[1])
+        : null;
+
+      groups.forEach((rows, columnIndex) => {
+        let top = sharedTop ?? cursors[columnIndex];
+        rows.forEach((row) => {
+          row.top = top;
+          top += row.height + gap;
+        });
+        if (rows.length) cursors[columnIndex] = top;
+      });
+    });
+
+    const timelineHeight = Math.max(...cursors) - gap;
+
+    lists.forEach((list, columnIndex) => {
+      list.style.setProperty('--vlb-transcript-timeline-height', `${timelineHeight}px`);
+      columns[columnIndex].forEach(({ item, top }) => {
+        item.style.setProperty('--vlb-transcript-top', `${top}px`);
+      });
+      list.classList.add('is-timeline');
+    });
+  }
+
+  // Fade only where more transcript exists beyond the current viewport:
+  // no top fade at scroll start, no footer fade at scroll end.
+  document.querySelectorAll(`
+    :is(
+      [id^='vlb-transcript-'].m__modal-backdrop,
+      #vlb-transcript-modal.m__modal-backdrop
+    )
+  `).forEach((modal) => {
+    const body = modal.querySelector('.m__modal__body');
+    if (!body) return;
+
+    const syncScrollEdges = () => {
+      const maxScroll = Math.max(0, body.scrollHeight - body.clientHeight);
+      body.classList.toggle('is-scroll-start', body.scrollTop <= 1);
+      body.classList.toggle('is-scroll-end', body.scrollTop >= maxScroll - 1);
+    };
+
+    body.addEventListener('scroll', syncScrollEdges, { passive: true });
+    new ResizeObserver(syncScrollEdges).observe(body);
+    new MutationObserver(() => {
+      if (!modal.hidden) requestAnimationFrame(() => {
+        alignTranscriptTimeline(modal);
+        syncScrollEdges();
+      });
+    }).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
+    syncScrollEdges();
+  });
+
+  document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-modal-open^="vlb-transcript-"]');
+    if (!trigger) return;
+    const modal = document.getElementById(trigger.dataset.modalOpen);
+    if (!modal) return;
+    requestAnimationFrame(() => alignTranscriptTimeline(modal));
+  });
+
   // ---------------------------------------------------------------- //
   function renderAll() {
     renderMain();
     renderStrips();
     renderDashboard();
     renderSidebar();
+  }
+
+  function updateTranscriptModelLabels() {
+    const label = `${sttSelect?.value || 'Whisper v4'} + ${llmSelect?.value || 'GPT-5.5'}`;
+    document.querySelectorAll('[data-vlb-transcript-stack-models]').forEach((title) => {
+      title.textContent = label;
+    });
   }
 
   renderAll();
@@ -1652,7 +1756,10 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   }
   [sttSelect, llmSelect].forEach((sel) => {
     if (!sel) return;
-    sel.addEventListener('change', renderDashboard);
+    sel.addEventListener('change', () => {
+      renderDashboard();
+      updateTranscriptModelLabels();
+    });
   });
   document.querySelectorAll('.vlb-model-select').forEach((modelSelect) => {
     const select = modelSelect.querySelector('select');
@@ -1676,13 +1783,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       select.dispatchEvent(new Event('change', { bubbles: true }));
     });
   });
-  const behaviorsMenu = document.querySelector('.vlb-select__menu');
-  if (behaviorsMenu) {
-    behaviorsMenu.addEventListener('change', (event) => {
-      if (event.target.matches('input[type="checkbox"]')) syncBehaviorSummary();
-    });
-  }
-
   // Dropdowns that stay open while picking: the demo-audio split button
   // closes on menu items (and switches the recording), the behaviors
   // multi-select closes on an outside click only.
