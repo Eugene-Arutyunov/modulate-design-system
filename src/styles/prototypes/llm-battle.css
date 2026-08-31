@@ -38,6 +38,12 @@
     gap: var(--m__gap-xs);
   }
 
+  & .vlb-controls__stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--m__gap-xxs);
+  }
+
 }
 
 /* Behaviors uses the same compact outline-button treatment as the other
@@ -185,7 +191,6 @@
   align-items: center;
   box-sizing: border-box;
   width: 100%;
-  margin-top: calc(-1 * var(--m__gap-xxs));
   border-radius: var(--m__radius-m);
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-medium);
@@ -822,23 +827,6 @@
   margin-block: var(--m__spacer-m);
 }
 
-/* evidence line the model keyed on — the review-report blue tint */
-.vlb-evidence {
-  background: color-mix(
-    in srgb,
-    var(--m__text-link-hover) 12%,
-    var(--m__bg-surface)
-  );
-
-  &.is-false {
-    background: color-mix(
-      in srgb,
-      var(--m__color-red-600) 10%,
-      var(--m__bg-surface)
-    );
-  }
-}
-
 /* Transcript modal: a viewport-sized workspace with a fixed header and
    independently scrolling transcript body. */
 :is(
@@ -953,6 +941,22 @@
   padding-top: var(--m__modal-padding);
   padding-bottom: var(--m__gap-s);
   background: var(--m__bg);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    height: var(--m__spacer-m);
+    background: linear-gradient(
+      to bottom,
+      var(--m__bg),
+      color-mix(in srgb, var(--m__bg) 75%, transparent) 45%,
+      transparent
+    );
+    pointer-events: none;
+  }
 }
 
 .vlb-transcript-segment {
@@ -969,10 +973,6 @@
 
   @media (width < 768px) {
     grid-template-columns: 1fr;
-
-    & > .vlb-transcript {
-      position: static;
-    }
   }
 }
 
@@ -984,13 +984,6 @@
   font-size: var(--m__font-size-xs);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
-}
-
-.vlb-transcript-segment > .vlb-transcript {
-  position: sticky;
-  z-index: 1;
-  top: calc(var(--m__font-size-s) + var(--m__gap-l));
-  align-self: start;
 }
 
 /* The two compact columns flow independently between reference transcript
@@ -1055,7 +1048,8 @@
   }
 }
 
-.m__modal__body.is-scroll-start .vlb-transcript-col__title::after {
+.m__modal__body.is-scroll-start
+  :is(.vlb-transcript-col__title, .vlb-transcript-header)::after {
   opacity: 0;
 }
 
@@ -1154,6 +1148,12 @@
 
 .vlb-transcript-duo .pg-transcript-list > .pg-transcript-utterance.vlb-utt-r {
   align-self: flex-end;
+}
+
+.vlb-transcript-duo
+  .pg-transcript-list.vlb-transcript:not(.vlb-transcript--stt)
+  > .pg-transcript-utterance {
+  align-self: flex-start;
 }
 
 /* STT hallucinations over non-speech: visibly not speech — muted italics */

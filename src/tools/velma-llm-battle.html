@@ -103,7 +103,8 @@
             </div>
           </div>
           <div class="vlb-controls__field">
-            <label class="vlb-controls__title" for="vlb-stt-model-trigger">STT</label>
+            <span class="vlb-controls__title">STT + LLM</span>
+            <div class="vlb-controls__stack">
             <div class="m__menu-button vlb-model-select">
               <button
                 id="vlb-stt-model-trigger"
@@ -140,9 +141,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="vlb-controls__field">
-            <label class="vlb-controls__title" for="vlb-llm-model-trigger">LLM</label>
             <div class="m__menu-button vlb-model-select">
               <button
                 id="vlb-llm-model-trigger"
@@ -179,13 +177,14 @@
                 </div>
               </div>
             </div>
+              <button
+                type="button"
+                class="m__button-secondary-outline S vlb-controls__prompt-btn"
+                data-modal-open="vlb-prompt-modal">
+                System prompt
+              </button>
+            </div>
           </div>
-          <button
-            type="button"
-            class="m__button-secondary-outline S vlb-controls__prompt-btn"
-            data-modal-open="vlb-prompt-modal">
-            System prompt
-          </button>
           <label class="m__checkbox-primary vlb-controls__check">
             <input type="checkbox" data-vlb-emotions /><svg aria-hidden="true"><use href="#checkmark"></use></svg>
             Show emotions
@@ -374,7 +373,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     this moment and only flagged the later, text-visible push.
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:00</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -389,17 +388,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         Come on! We've been at this for five minutes. I've answered
         everything. Just change the email on the account so I can get my
         code.
-      </div>
-    </div>
-    <div class="pg-transcript-utterance speaker-right">
-      <div class="pg-transcript-utterance-header">
-        <span class="pg-transcript-time">0:09</span>
-        <span class="pg-transcript-speaker">Agent</span>
-        <span class="pg-transcript-emotion ec-calm">Calm</span>
-      </div>
-      <div class="pg-transcript-text">
-        I do apologize, sir, but the answers you gave didn't match what we
-        have on file.
       </div>
     </div>
   </div>
@@ -419,7 +407,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     left no trace in the transcript and went unflagged.
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:15</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -451,7 +439,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     impersonation. The stack caught it too, from the transcript (64%).
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:31</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -465,17 +453,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       <div class="pg-transcript-text">
         I'm overseas, that's the whole point. Just update the email and
         phone. You can hear it's me. Who else would know the account number?
-      </div>
-    </div>
-    <div class="pg-transcript-utterance speaker-right">
-      <div class="pg-transcript-utterance-header">
-        <span class="pg-transcript-time">0:41</span>
-        <span class="pg-transcript-speaker">Agent</span>
-        <span class="pg-transcript-emotion ec-confident">Confident</span>
-      </div>
-      <div class="pg-transcript-text">
-        Knowing the account number isn't identity verification, sir. It's
-        for your protection.
       </div>
     </div>
   </div>
@@ -495,7 +472,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     threatening escalation, not posing as someone else.
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence is-false">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:47</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -527,7 +504,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     the transcript alone (61%).
   </p>
   <div class="pg-transcript-list vlb-receipt__excerpt">
-    <div class="pg-transcript-utterance speaker-left vlb-evidence">
+    <div class="pg-transcript-utterance speaker-left">
       <div class="pg-transcript-utterance-header">
         <span class="pg-transcript-time">0:47</span>
         <span class="pg-transcript-speaker">Caller</span>
@@ -541,18 +518,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       <div class="pg-transcript-text">
         This is unbelievable. What's your name? Alex, you said? I'll make
         sure your supervisor knows you cost me this transfer.
-      </div>
-    </div>
-    <div class="pg-transcript-utterance speaker-right">
-      <div class="pg-transcript-utterance-header">
-        <span class="pg-transcript-time">0:56</span>
-        <span class="pg-transcript-speaker">Agent</span>
-        <span class="pg-transcript-emotion ec-calm">Calm</span>
-      </div>
-      <div class="pg-transcript-text">
-        Yes, that's correct. And again, I understand that you're frustrated,
-        sir. But unfortunately, I'm not going to be able to make that change
-        today for you.
       </div>
     </div>
   </div>
@@ -690,7 +655,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   </div>
 
   <div class="vlb-transcript-col">
-  <span class="vlb-transcript-col__title">STT + LLM</span>
+  <span class="vlb-transcript-col__title" data-vlb-transcript-stack-models>Whisper v4 + GPT-5.5</span>
   <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">
     <div class="pg-transcript-utterance">
       <div class="pg-transcript-utterance-header">
@@ -1509,16 +1474,15 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       </div>`;
   }
 
-  function excerptRow(velma, ref, firstSp) {
-    const c = velma[ref.i];
-    const side = c.sp === firstSp ? 'speaker-left' : 'speaker-right';
+  function excerptRow(c) {
+    const emotion = c.emotion || c.guess;
     return `
-      <div class="pg-transcript-utterance ${side}${ref.ev ? ' vlb-evidence' : ''}">
+      <div class="pg-transcript-utterance speaker-left">
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">${fmt(c.s)}</span>
-          <span class="pg-transcript-speaker">${esc(c.sp)}</span>
-          <span class="pg-transcript-emotion ec-${c.emotion}">${cap(c.emotion)}</span>
-          ${c.behaviour ? behaviourLink(c.behaviour) : ''}
+          ${c.sp ? `<span class="pg-transcript-speaker">${esc(c.sp)}</span>` : ''}
+          ${emotion ? `<span class="pg-transcript-emotion ec-${emotion}">${cap(emotion)}</span>` : ''}
+          ${transcriptSignals(c)}
         </div>
         <div class="pg-transcript-text">${esc(c.text)}</div>
       </div>`;
@@ -1556,7 +1520,10 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
           <p class="vlb-receipt__reason">${esc(r.note)}</p>
         </div>`, true);
     }
-    const firstSp = callDef.velma[r.excerpt[0].i].sp;
+    const clipRef = r.excerpt.find((ref) => ref.ev) || r.excerpt[0];
+    const agentClips = r.agent === 'STT+LLM' ? callDef.stt : callDef.velma;
+    const evidenceClip = agentClips.find((clip) => clip.modal === r.id)
+      || callDef.velma[clipRef.i];
     const proposed = r.proposed
       ? '<span class="vlb-receipt__conf">· Proposed signal</span>'
       : '';
@@ -1569,7 +1536,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         </div>
         <p class="vlb-receipt__reason">${r.reason}</p>
         <div class="pg-transcript-list vlb-receipt__excerpt">
-          ${r.excerpt.map((ref) => excerptRow(callDef.velma, ref, firstSp)).join('')}
+          ${excerptRow(evidenceClip)}
         </div>
       </div>`, true);
   }
@@ -1653,7 +1620,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <div class="vlb-transcript-duo vlb-transcript-duo--segmented">
           <div class="vlb-transcript-header">
             <span class="vlb-transcript-col__title">Velma</span>
-            <span class="vlb-transcript-col__title">STT + LLM</span>
+            <span class="vlb-transcript-col__title" data-vlb-transcript-stack-models>${esc(sttSelect?.value || 'Whisper v4')} + ${esc(llmSelect?.value || 'GPT-5.5')}</span>
           </div>
           ${segments}
         </div>
@@ -1773,6 +1740,13 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     renderSidebar();
   }
 
+  function updateTranscriptModelLabels() {
+    const label = `${sttSelect?.value || 'Whisper v4'} + ${llmSelect?.value || 'GPT-5.5'}`;
+    document.querySelectorAll('[data-vlb-transcript-stack-models]').forEach((title) => {
+      title.textContent = label;
+    });
+  }
+
   renderAll();
   if (emotionsToggle) {
     emotionsToggle.addEventListener('change', () => {
@@ -1782,7 +1756,10 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   }
   [sttSelect, llmSelect].forEach((sel) => {
     if (!sel) return;
-    sel.addEventListener('change', renderDashboard);
+    sel.addEventListener('change', () => {
+      renderDashboard();
+      updateTranscriptModelLabels();
+    });
   });
   document.querySelectorAll('.vlb-model-select').forEach((modelSelect) => {
     const select = modelSelect.querySelector('select');
