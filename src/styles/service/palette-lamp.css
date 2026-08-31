@@ -190,18 +190,76 @@
   }
 }
 
+/* One ink for the whole control — label and switch move together:
+   black when the lamp is off, purple when it is on, link-hover on hover
+   (hovering the label text counts as hovering the switch). */
 .palette-lamp__toggle {
-  color: var(--m__color-gray-950);
+  --palette-lamp-toggle-ink: var(--m__color-gray-950);
+
+  color: var(--palette-lamp-toggle-ink);
+
+  &:has(input:checked) {
+    --palette-lamp-toggle-ink: var(--m__color-purple-500);
+  }
+
+  &:hover {
+    --palette-lamp-toggle-ink: var(--m__text-link-hover);
+
+    color: var(--palette-lamp-toggle-ink);
+  }
+
+  & input[type="checkbox"] {
+    border-color: var(--palette-lamp-toggle-ink);
+
+    &::after {
+      background-color: var(--palette-lamp-toggle-ink);
+    }
+
+    &:checked {
+      background-color: var(--palette-lamp-toggle-ink);
+
+      &::after {
+        background-color: var(--m__bg);
+      }
+    }
+  }
+
+  &:hover input[type="checkbox"] {
+    border-color: var(--palette-lamp-toggle-ink);
+    background-color: transparent;
+
+    &::after {
+      background-color: var(--palette-lamp-toggle-ink);
+    }
+  }
 }
 
-/* Embedded variant — the figure inside a blog post keeps its own light context */
+/* Embedded variant — the figure inside a blog post keeps its own light context.
+   The band spans the viewport: the palette's left edge lines up with the text
+   column (wrapper offset + wrapper padding, plus a hair), the lamp's glow runs
+   into the right edge of the page. */
 .palette-lamp-page.palette-lamp-embed {
+  --palette-lamp-embed-pad-block: clamp(1rem, 2vw, 2rem);
+  /* Distance from the band edge to the text column (the band sits inside
+     `.m__wrapper.full-width`, so 100% is already minus the wrapper padding). */
+  --palette-lamp-embed-column-offset: calc(
+    max(0px, (100% - 1050px) / 2) + var(--m__wrapper-pad)
+  );
+
   min-height: 0;
-  padding: clamp(1rem, 2vw, 2rem);
+  padding: var(--palette-lamp-embed-pad-block)
+    var(--palette-lamp-embed-column-offset) var(--palette-lamp-embed-pad-block)
+    calc(var(--palette-lamp-embed-column-offset) / 1.5);
 
   & .palette-lamp__stage {
-    grid-template-columns: minmax(0, 1fr) minmax(12rem, 28%);
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 18%);
+    max-width: none;
     height: auto;
+    gap: clamp(1.5rem, 3vw, 3rem);
+  }
+
+  & .palette-lamp__bulb {
+    display: contents;
   }
 
   & .palette-lamp__palette {
@@ -220,6 +278,55 @@
 @media (width < 900px) {
   .palette-lamp-page {
     overflow: auto;
+  }
+
+  /* Embedded, narrow: lamp lies horizontally under the palette, toggle below it */
+  .palette-lamp-page.palette-lamp-embed {
+    padding-inline: var(--m__wrapper-pad);
+    overflow: hidden;
+
+    & .palette-lamp__stage {
+      grid-template-columns: 1fr;
+      gap: var(--m__spacer-m);
+    }
+
+    & .palette-lamp__palette {
+      min-height: 15rem;
+    }
+
+    & .palette-lamp__tile code {
+      display: none;
+    }
+
+    & .palette-lamp__fixture {
+      width: 100%;
+      gap: var(--m__spacer-xs);
+
+      &::before {
+        top: 0;
+        left: 50%;
+        width: min(30rem, 92%);
+        height: 6rem;
+        transform: translateX(-50%);
+        filter: blur(2.5rem);
+      }
+    }
+
+    & .palette-lamp__bulb {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 6rem;
+    }
+
+    & .palette-lamp__svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6rem;
+      height: min(26rem, 84vw);
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
   }
 
   .palette-lamp__stage {
