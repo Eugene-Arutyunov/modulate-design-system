@@ -1562,25 +1562,18 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   }
 
   function transcriptModal(id, callDef) {
-    // Velma's column: diarized utterances with heard emotions, scene
-    // markers, and event rows for the sound interludes. Sides alternate
-    // by speaker within each scene.
-    const sides = {};
+    // Velma's column: diarized utterances with heard emotions. Sides
+    // alternate by speaker within each scene; scene and event rows stay
+    // out of the comparison transcript.
     let sceneSpeakers = [];
     const velmaRows = callDef.velma.map((c, i) => {
       if (callDef.sceneAt && callDef.sceneAt[i]) {
         sceneSpeakers = [];
       }
-      const marker = callDef.sceneAt && callDef.sceneAt[i]
-        ? `<div class="vlb-transcript-scene">${esc(callDef.sceneAt[i])}</div>`
-        : '';
-      if (c.event) {
-        return `${marker}<div class="vlb-transcript-event">${fmt(c.s)} · Sound event — ${esc(c.behaviour)}</div>`;
-      }
+      if (c.event) return null;
       if (!sceneSpeakers.includes(c.sp)) sceneSpeakers.push(c.sp);
       const side = sceneSpeakers.indexOf(c.sp) % 2 === 0 ? 'vlb-utt-l' : 'vlb-utt-r';
-      return `${marker}
-        <div class="pg-transcript-utterance ${side}">
+      return { time: Math.floor(c.s), html: `<div class="pg-transcript-utterance ${side}" data-vlb-time="${c.s}">
           <div class="pg-transcript-utterance-header">
             <span class="pg-transcript-time">${fmt(c.s)}</span>
             <span class="pg-transcript-speaker">${esc(c.sp)}</span>
@@ -1588,30 +1581,45 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
             ${c.behaviour ? behaviourLink(c.behaviour) : ''}
           </div>
           <div class="pg-transcript-text">${esc(c.text)}</div>
-        </div>`;
-    }).join('');
+      </div>` };
+    }).filter(Boolean);
 
-    const sttRows = callDef.stt.map((c) => `
-      <div class="pg-transcript-utterance${c.halluc ? ' vlb-halluc' : ''}">
+    const sttRows = callDef.stt.map((c) => ({ time: Math.floor(c.s), html: `
+      <div class="pg-transcript-utterance${c.halluc ? ' vlb-halluc' : ''}" data-vlb-time="${c.s}">
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">${fmt(c.s)}</span>
           ${c.behaviour ? behaviourLink(c.behaviour) : ''}
           ${c.false ? '<span class="vlb-false-text">false alarm</span>' : ''}
         </div>
         <div class="pg-transcript-text">${esc(c.text)}</div>
-      </div>`).join('');
+      </div>` }));
+
+    const sttTimes = new Set(sttRows.map((row) => row.time));
+    const syncTimes = [...new Set(velmaRows
+      .map((row) => row.time)
+      .filter((time) => sttTimes.has(time)))]
+      .sort((a, b) => a - b);
+    const firstTime = Math.min(velmaRows[0]?.time ?? Infinity, sttRows[0]?.time ?? Infinity);
+    if (!syncTimes.includes(firstTime)) syncTimes.unshift(firstTime);
+
+    const segments = syncTimes.map((time, index) => {
+      const nextTime = syncTimes[index + 1] ?? Infinity;
+      const rowsInRange = (rows) => rows
+        .filter((row) => row.time >= time && row.time < nextTime)
+        .map((row) => row.html)
+        .join('');
+      return `<div class="vlb-transcript-segment">
+        <div class="pg-transcript-list vlb-transcript">${rowsInRange(velmaRows)}</div>
+        <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">${rowsInRange(sttRows)}</div>
+      </div>`;
+    }).join('');
 
     return modalShell(id, 'Transcript', `
       <div class="m__modal__body">
-        <div class="vlb-transcript-duo">
-          <div class="vlb-transcript-col">
-            <span class="vlb-transcript-col__title">Velma</span>
-            <div class="pg-transcript-list vlb-transcript">${velmaRows}</div>
-          </div>
-          <div class="vlb-transcript-col">
-            <span class="vlb-transcript-col__title">STT + LLM</span>
-            <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">${sttRows}</div>
-          </div>
+        <div class="vlb-transcript-duo vlb-transcript-duo--segmented">
+          <span class="vlb-transcript-col__title">Velma</span>
+          <span class="vlb-transcript-col__title">STT + LLM</span>
+          ${segments}
         </div>
       </div>
       <div class="m__modal__footer vlb-transcript-footer">
@@ -1625,6 +1633,65 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     if (!def.transcriptModal) generated += transcriptModal(`vlb-transcript-${id}`, def);
   });
   modalsHost.innerHTML = generated;
+
+  function transcriptTime(item) {
+    if (item.dataset.vlbTime) return Number(item.dataset.vlbTime);
+    const label = item.querySelector('.pg-transcript-time')?.textContent.trim();
+    if (!label) return null;
+    const [minutes, seconds] = label.split(':').map(Number);
+    return Number.isFinite(minutes) && Number.isFinite(seconds)
+      ? minutes * 60 + seconds
+      : null;
+  }
+
+  function alignTranscriptTimeline(modal) {
+    const lists = [...modal.querySelectorAll('.vlb-transcript-duo > .vlb-transcript-col > .vlb-transcript')];
+    if (lists.length < 2) return;
+
+    lists.forEach((list) => {
+      list.classList.remove('is-timeline');
+      list.style.removeProperty('--vlb-transcript-timeline-height');
+    });
+
+    const columns = lists.map((list) => [...list.children]
+      .map((item) => ({ item, time: transcriptTime(item), height: item.getBoundingClientRect().height }))
+      .filter((row) => row.time !== null)
+      .sort((a, b) => a.time - b.time));
+    const gap = parseFloat(getComputedStyle(lists[0]).rowGap) || 8;
+    const cursors = [0, 0];
+    const rowsByTime = new Map();
+
+    columns.forEach((rows, columnIndex) => rows.forEach((row) => {
+      if (!rowsByTime.has(row.time)) rowsByTime.set(row.time, [[], []]);
+      rowsByTime.get(row.time)[columnIndex].push(row);
+    }));
+
+    [...rowsByTime.keys()].sort((a, b) => a - b).forEach((time) => {
+      const groups = rowsByTime.get(time);
+      const sharedTop = groups[0].length && groups[1].length
+        ? Math.max(cursors[0], cursors[1])
+        : null;
+
+      groups.forEach((rows, columnIndex) => {
+        let top = sharedTop ?? cursors[columnIndex];
+        rows.forEach((row) => {
+          row.top = top;
+          top += row.height + gap;
+        });
+        if (rows.length) cursors[columnIndex] = top;
+      });
+    });
+
+    const timelineHeight = Math.max(...cursors) - gap;
+
+    lists.forEach((list, columnIndex) => {
+      list.style.setProperty('--vlb-transcript-timeline-height', `${timelineHeight}px`);
+      columns[columnIndex].forEach(({ item, top }) => {
+        item.style.setProperty('--vlb-transcript-top', `${top}px`);
+      });
+      list.classList.add('is-timeline');
+    });
+  }
 
   // Fade only where more transcript exists beyond the current viewport:
   // no top fade at scroll start, no footer fade at scroll end.
@@ -1646,9 +1713,20 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     body.addEventListener('scroll', syncScrollEdges, { passive: true });
     new ResizeObserver(syncScrollEdges).observe(body);
     new MutationObserver(() => {
-      if (!modal.hidden) requestAnimationFrame(syncScrollEdges);
+      if (!modal.hidden) requestAnimationFrame(() => {
+        alignTranscriptTimeline(modal);
+        syncScrollEdges();
+      });
     }).observe(modal, { attributes: true, attributeFilter: ['hidden'] });
     syncScrollEdges();
+  });
+
+  document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-modal-open^="vlb-transcript-"]');
+    if (!trigger) return;
+    const modal = document.getElementById(trigger.dataset.modalOpen);
+    if (!modal) return;
+    requestAnimationFrame(() => alignTranscriptTimeline(modal));
   });
 
   // ---------------------------------------------------------------- //
