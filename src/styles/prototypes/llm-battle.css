@@ -412,10 +412,6 @@
   }
 }
 
-.vlb-false-text {
-  color: var(--m__color-red-600);
-}
-
 /* Accuracy dashboard: scatter on the left half, the metric pile on the
    right. Pure CSS, no chart.js. */
 @keyframes vlb-scatter-dot-pulse {
@@ -933,24 +929,73 @@
   row-gap: var(--m__gap-xxxs);
 
   & .vlb-transcript-col__title {
-    margin-bottom: var(--m__gap-s);
+    position: static;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+
+    &::after {
+      display: none;
+    }
   }
+}
+
+.vlb-transcript-header {
+  position: sticky;
+  top: calc(-1 * var(--m__modal-padding));
+  z-index: 2;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--m__gap-xl);
+  margin-top: calc(-1 * var(--m__modal-padding));
+  margin-bottom: var(--m__gap-s);
+  padding-top: var(--m__modal-padding);
+  padding-bottom: var(--m__gap-s);
+  background: var(--m__bg);
 }
 
 .vlb-transcript-segment {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--m__gap-xl);
+  column-gap: var(--m__gap-xl);
+  row-gap: var(--m__gap-xs);
   align-items: start;
+
+  & + & {
+    margin-top: var(--m__gap-l);
+  }
 
   @media (width < 768px) {
     grid-template-columns: 1fr;
+
+    & > .vlb-transcript {
+      position: static;
+    }
   }
 }
 
-/* The two compact columns flow independently, pausing only at shared
-   timestamps so matching cards line up by their top edges. */
+.vlb-transcript-segment__time {
+  grid-column: 1 / -1;
+  justify-self: center;
+  color: var(--m__text-caption);
+  font-family: var(--m__font-family-semi-mono);
+  font-size: var(--m__font-size-xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.vlb-transcript-segment > .vlb-transcript {
+  position: sticky;
+  z-index: 1;
+  top: calc(var(--m__font-size-s) + var(--m__gap-l));
+  align-self: start;
+}
+
+/* The two compact columns flow independently between reference transcript
+   anchors. Each segment's taller column pauses the shorter one before the
+   next pair continues, keeping corresponding speech groups top-aligned. */
 .vlb-transcript.is-timeline {
   position: relative;
   display: block;
@@ -1019,10 +1064,6 @@
 .vlb-transcript-duo .pg-transcript-list.vlb-transcript--stt > .pg-transcript-utterance {
   align-self: flex-start;
   cursor: default;
-}
-
-.vlb-transcript--stt .pg-transcript-utterance .vlb-false-text {
-  font-size: var(--m__font-size-xs);
 }
 
 .vlb-transcript-signals {

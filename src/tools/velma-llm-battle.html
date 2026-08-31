@@ -776,7 +776,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
             <use href="#behaviors"></use></svg
           >Account Impersonation</a
         >
-        <span class="vlb-false-text">false alarm</span>
       </div>
       <div class="pg-transcript-text">this is unbelievable what's your name alex you said</div>
     </div>
@@ -1589,9 +1588,8 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       .filter(Boolean)
       .map(behaviourLink)
       .join('');
-    const falseAlarm = clip.false ? '<span class="vlb-false-text">false alarm</span>' : '';
-    return links || falseAlarm
-      ? `<span class="vlb-transcript-signals">${links}${falseAlarm}</span>`
+    return links
+      ? `<span class="vlb-transcript-signals">${links}</span>`
       : '';
   }
 
@@ -1627,21 +1625,24 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         <div class="pg-transcript-text">${esc(c.text)}</div>
       </div>` }));
 
-    const sttTimes = new Set(sttRows.map((row) => row.time));
-    const syncTimes = [...new Set(velmaRows
-      .map((row) => row.time)
-      .filter((time) => sttTimes.has(time)))]
+    // Keep both columns in normal flow. Every Velma utterance starts a
+    // comparison group; all STT chunks up to the next utterance stack
+    // beside it. The taller side sets the group's height, acting as a
+    // synchronization bridge before both columns continue together.
+    const syncTimes = [...new Set(velmaRows.map((row) => row.time))]
       .sort((a, b) => a - b);
     const firstTime = Math.min(velmaRows[0]?.time ?? Infinity, sttRows[0]?.time ?? Infinity);
     if (!syncTimes.includes(firstTime)) syncTimes.unshift(firstTime);
 
     const segments = syncTimes.map((time, index) => {
       const nextTime = syncTimes[index + 1] ?? Infinity;
+      const rangeEnd = Number.isFinite(nextTime) ? nextTime : Math.floor(callDef.duration);
       const rowsInRange = (rows) => rows
         .filter((row) => row.time >= time && row.time < nextTime)
         .map((row) => row.html)
         .join('');
       return `<div class="vlb-transcript-segment">
+        <span class="vlb-transcript-segment__time">${fmt(time)}–${fmt(rangeEnd)}</span>
         <div class="pg-transcript-list vlb-transcript">${rowsInRange(velmaRows)}</div>
         <div class="pg-transcript-list vlb-transcript vlb-transcript--stt">${rowsInRange(sttRows)}</div>
       </div>`;
@@ -1650,8 +1651,10 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     return modalShell(id, 'Transcript', `
       <div class="m__modal__body">
         <div class="vlb-transcript-duo vlb-transcript-duo--segmented">
-          <span class="vlb-transcript-col__title">Velma</span>
-          <span class="vlb-transcript-col__title">STT + LLM</span>
+          <div class="vlb-transcript-header">
+            <span class="vlb-transcript-col__title">Velma</span>
+            <span class="vlb-transcript-col__title">STT + LLM</span>
+          </div>
           ${segments}
         </div>
       </div>
