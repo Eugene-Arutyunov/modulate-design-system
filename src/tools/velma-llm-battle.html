@@ -861,14 +861,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 8.9, e: 13.4, sp: 'Ben', emotion: 'happy', text: "Okay, it's cereal. But it's artisanal cereal." },
         { s: 13.4, e: 19.2, sp: 'Maya', emotion: 'affectionate', behaviour: 'Smile in the Voice', modal: 'vlb-r1-smile', text: "You're an idiot. Order the pizza." },
         { s: 19.2, e: 21.1, event: true, behaviour: 'Meow', modal: 'vlb-r1-ev-meow', text: '(a cat pads in and meows at the empty bowl)' },
-        { s: 21.1, e: 26.4, sp: 'Dana', emotion: 'concerned', behaviour: 'Accusatory Question', modal: 'vlb-r1-accusatory', text: 'Why does the odometer say sixty thousand when your listing said forty?' },
+        { s: 21.1, e: 26.4, sp: 'Dana', emotion: 'concerned', behaviour: 'Accusatory Question', transcriptBehaviours: ['Complaints'], modal: 'vlb-r1-accusatory', text: 'Why does the odometer say sixty thousand when your listing said forty?' },
         { s: 26.4, e: 32.7, sp: 'Rick', emotion: 'calm', behaviour: 'Read, Not Said', modal: 'vlb-r1-read', text: 'This vehicle has one owner, a clean title, and a fully documented service history.' },
         { s: 32.7, e: 37.2, sp: 'Dana', emotion: 'angry', text: 'Documented by who? The air freshener is older than that paperwork.' },
-        { s: 37.2, e: 41.3, sp: 'Dana', emotion: 'frustrated', behaviour: 'Inappropriate Speech', modal: 'vlb-r1-inap', text: "You're a con artist, and this lot is a junkyard with balloons." },
+        { s: 37.2, e: 41.3, sp: 'Dana', emotion: 'frustrated', behaviour: 'Inappropriate Speech', transcriptBehaviours: ['Harassment', 'Threat-based harassment', 'Coercion Manipulation'], modal: 'vlb-r1-inap', text: "You're a con artist, and this lot is a junkyard with balloons." },
         { s: 41.3, e: 45.1, sp: 'Rick', emotion: 'angry', text: "And you always know better, huh? Door's right there." },
         { s: 45.1, e: 46.9, event: true, behaviour: 'Shatter', modal: 'vlb-r1-ev-shatter', text: '(a side mirror hits the pavement)' },
         { s: 46.9, e: 51.1, sp: 'Priya', emotion: 'neutral', text: 'Tom, can you land the migration by Thursday?' },
-        { s: 51.1, e: 55.9, sp: 'Tom', emotion: 'stressed', behaviour: 'Reluctance', modal: 'vlb-r1-reluctance', text: '…Yes.' },
+        { s: 51.1, e: 55.9, sp: 'Tom', emotion: 'stressed', behaviour: 'Reluctance', transcriptBehaviours: ['Unvoiced Disagreement'], modal: 'vlb-r1-reluctance', text: '…Yes.' },
         { s: 55.9, e: 59.4, sp: 'Aisha', emotion: 'anxious', behaviour: 'Lost Attempt to Speak', modal: 'vlb-r1-lost', text: 'I— actually, we should—' },
         { s: 59.4, e: 65.7, sp: 'Priya', emotion: 'confident', text: "Great, then we'll kill the old pipeline right after we ship." },
         { s: 65.7, e: 70.8, sp: 'Tom', emotion: 'tired', text: 'Sure. Sounds good.' },
@@ -886,7 +886,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 7.1, e: 9.2, guess: 'happy', text: 'truly' },
         { s: 9.2, e: 11.4, guess: 'amused', text: "okay it's cereal" },
         { s: 11.4, e: 13.6, guess: 'amused', text: "but it's artisanal cereal" },
-        { s: 13.6, e: 16.4, guess: 'angry', behaviour: 'Inappropriate Speech', false: true, modal: 'vlb-r1-inap-false', text: "you're an idiot" },
+        { s: 13.6, e: 16.4, guess: 'angry', behaviour: 'Inappropriate Speech', transcriptBehaviours: ['Harassment'], false: true, modal: 'vlb-r1-inap-false', text: "you're an idiot" },
         { s: 16.4, e: 19.4, guess: 'neutral', behaviour: 'Request or order', false: true, modal: 'vlb-r1-order-false', text: 'order the pizza' },
         { s: 19.4, e: 21.3, guess: 'calm', halluc: true, text: 'thank you' },
         { s: 21.3, e: 24.1, guess: 'interested', behaviour: 'Complaints', false: true, modal: 'vlb-r1-complaints-false', text: 'why does the odometer say sixty thousand' },
@@ -903,7 +903,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         { s: 47.1, e: 49.2, guess: 'neutral', text: 'tom can you land' },
         { s: 49.2, e: 51.3, guess: 'neutral', text: 'the migration by thursday' },
         { s: 51.3, e: 59.6, guess: 'confident', text: 'yes' },
-        { s: 59.6, e: 62.4, guess: 'confident', behaviour: 'Threat-based harassment', false: true, modal: 'vlb-r1-threat-false', text: "great then we'll kill the old pipeline" },
+        { s: 59.6, e: 62.4, guess: 'confident', behaviour: 'Threat-based harassment', transcriptBehaviours: ['Coercion Manipulation'], false: true, modal: 'vlb-r1-threat-false', text: "great then we'll kill the old pipeline" },
         { s: 62.4, e: 65.9, guess: 'confident', text: 'right after we ship' },
         { s: 65.9, e: 68.3, guess: 'happy', text: 'sure' },
         { s: 68.3, e: 71.0, guess: 'happy', text: 'sounds good' },
@@ -1561,6 +1561,17 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     return `<a href="#" class="m__behavior-link S"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#behaviors"></use></svg>${esc(name)}</a>`;
   }
 
+  function transcriptSignals(clip) {
+    const links = [...new Set([clip.behaviour, ...(clip.transcriptBehaviours || [])])]
+      .filter(Boolean)
+      .map(behaviourLink)
+      .join('');
+    const falseAlarm = clip.false ? '<span class="vlb-false-text">false alarm</span>' : '';
+    return links || falseAlarm
+      ? `<span class="vlb-transcript-signals">${links}${falseAlarm}</span>`
+      : '';
+  }
+
   function transcriptModal(id, callDef) {
     // Velma's column: diarized utterances with heard emotions. Sides
     // alternate by speaker within each scene; scene and event rows stay
@@ -1578,7 +1589,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
             <span class="pg-transcript-time">${fmt(c.s)}</span>
             <span class="pg-transcript-speaker">${esc(c.sp)}</span>
             <span class="pg-transcript-emotion ec-${c.emotion}">${cap(c.emotion)}</span>
-            ${c.behaviour ? behaviourLink(c.behaviour) : ''}
+            ${transcriptSignals(c)}
           </div>
           <div class="pg-transcript-text">${esc(c.text)}</div>
       </div>` };
@@ -1588,8 +1599,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       <div class="pg-transcript-utterance${c.halluc ? ' vlb-halluc' : ''}" data-vlb-time="${c.s}">
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">${fmt(c.s)}</span>
-          ${c.behaviour ? behaviourLink(c.behaviour) : ''}
-          ${c.false ? '<span class="vlb-false-text">false alarm</span>' : ''}
+          ${transcriptSignals(c)}
         </div>
         <div class="pg-transcript-text">${esc(c.text)}</div>
       </div>` }));
