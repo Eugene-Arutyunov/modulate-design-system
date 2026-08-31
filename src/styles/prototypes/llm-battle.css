@@ -367,8 +367,32 @@
   }
 
   & .pg-player-dataviz .behaviour-indicators .behaviour-indicator {
+    font-size: 1.5em;
     transform: translate(6%, -12%);
   }
+}
+
+.vlb-page .behaviour-icon__count {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: var(--behaviour-count-color, var(--m__text));
+  font-family: var(--m__font-family-sans);
+  font-size: 0.5rem;
+  font-weight: 900;
+  line-height: 1;
+  -webkit-text-stroke: 0.025em currentColor;
+  pointer-events: none;
+}
+
+.vlb-page
+  [data-vlb-player]
+  .pg-player-dataviz
+  .behaviour-indicators
+  .behaviour-indicator {
+  font-size: 1.5em;
 }
 
 /* Kikis are the receipt entry points: re-enable pointer events under the

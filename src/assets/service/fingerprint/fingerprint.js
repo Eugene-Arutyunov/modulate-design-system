@@ -401,6 +401,8 @@ const VERDICT_COLORS = {
 //   clip.behaviourClasses  extra classes on the behaviour indicator
 //                          (`behaviour-indicator--tech/--ghost/--false`)
 //   clip.behaviourModal    id of a modal the glyph opens (data-modal-open)
+//   clip.behaviourCount    optional signal count rendered inside the glyph
+//   clip.behaviourCountColor optional color for the count label
 //   clip.behaviourAtSec    glyph position on the timeline (defaults to the
 //                          clip start)
 export function renderFingerprint(root, data, options = {}) {
@@ -657,13 +659,16 @@ function buildBehaviourIndicators(data, lanes) {
     .forEach((clip) => {
       const indicator = el(
         "div",
-        `behaviour-indicator${clip.behaviourClasses ? ` ${clip.behaviourClasses}` : ""}`
+        `behaviour-indicator${clip.behaviourCount > 1 ? " behaviour-indicator--counted" : ""}${clip.behaviourClasses ? ` ${clip.behaviourClasses}` : ""}`
       );
 
       indicator.dataset.speakerIndex = clip.speaker;
       indicator.dataset.behaviourIndex = "1";
       if (clip.emotion) indicator.dataset.emotion = clip.emotion;
       if (clip.behaviourModal) indicator.dataset.modalOpen = clip.behaviourModal;
+      if (clip.behaviourCountColor) {
+        indicator.style.setProperty("--behaviour-count-color", clip.behaviourCountColor);
+      }
       indicator.style.left = `${pct(
         clip.behaviourAtSec === undefined ? clip.startSec : clip.behaviourAtSec,
         data.durationSec
@@ -674,6 +679,9 @@ function buildBehaviourIndicators(data, lanes) {
 
       icon.title = clip.behaviour;
       icon.innerHTML = KIKI_SVG;
+      if (clip.behaviourCount > 1) {
+        icon.appendChild(el("span", "behaviour-icon__count", String(clip.behaviourCount)));
+      }
       indicator.appendChild(icon);
       indicators.appendChild(indicator);
     });

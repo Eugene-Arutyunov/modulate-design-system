@@ -1214,12 +1214,26 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       : 'behaviour-indicator--tech';
   }
 
+  function behaviourCount(c) {
+    return new Set([c.behaviour, ...(c.transcriptBehaviours || [])].filter(Boolean)).size;
+  }
+
+  function techKikiColor(c) {
+    return c.false ? 'var(--m__color-red-600)' : 'rgba(var(--emotion-neutral-RGB), 1)';
+  }
+
   // Kikis anchor to the bottom-left corner of their clip (the renderer's
   // default position) — the signal's exact moment lives in the receipt,
   // not in the glyph's coordinates, so a glyph can never visually drift
   // into a neighboring clip.
   function velmaClip(c) {
-    const clip = { ...baseClip(1, c), behaviour: c.behaviour, behaviourModal: c.modal };
+    const clip = {
+      ...baseClip(1, c),
+      behaviour: c.behaviour,
+      behaviourCount: behaviourCount(c),
+      behaviourCountColor: emotionGlow(c.event ? 'neutral' : c.emotion),
+      behaviourModal: c.modal,
+    };
     if (c.event) {
       // Sound interludes paint neutral — no emotion was heard; only the
       // event glyph marks them.
@@ -1248,7 +1262,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
     call().velma.forEach((c) => clips.push(velmaClip(c)));
     call().stt.forEach((c) => {
-      const clip = { ...baseClip(2, c), behaviour: c.behaviour, behaviourClasses: kikiClasses(c), behaviourModal: c.modal };
+      const clip = {
+        ...baseClip(2, c),
+        behaviour: c.behaviour,
+        behaviourCount: behaviourCount(c),
+        behaviourCountColor: techKikiColor(c),
+        behaviourClasses: kikiClasses(c),
+        behaviourModal: c.modal,
+      };
 
       if (emotionsOn) {
         clip.emotion = c.guess;
@@ -1294,6 +1315,8 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         }
         clip.classes += ' clip-signal-glow';
         clip.behaviour = strip.name;
+        clip.behaviourCount = behaviourCount(c);
+        clip.behaviourCountColor = techKikiColor(c);
         clip.behaviourClasses = kikiClasses(c);
         clip.behaviourModal = c.modal;
       }
