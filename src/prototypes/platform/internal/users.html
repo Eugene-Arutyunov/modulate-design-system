@@ -1,0 +1,151 @@
+---
+pageTitle: Users & Organizations
+permalink: /internal/users/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <div class="m__segmented-control-primary" role="group">
+        <label>
+          <input
+            type="radio"
+            name="internal-users-tabs"
+            value="users"
+            checked
+          />
+          Users
+        </label>
+        <label>
+          <input type="radio" name="internal-users-tabs" value="organizations" />
+          Organizations
+        </label>
+        <label>
+          <input type="radio" name="internal-users-tabs" value="unverified-signups" />
+          Unverified Signups
+        </label>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <section
+        class="dashboard-section internal-users-tab-content"
+        data-tab="users"
+      >
+        <h1 class="dashboard-page-title">Users</h1>
+        <p>Manage platform users. Click a row to view details, activity logs, and management actions.</p>
+
+        <div class="m__space XS"></div>
+
+        {% include 'prototypes/internal/users-table.html' %}
+      </section>
+
+      <section
+        class="dashboard-section internal-users-tab-content"
+        data-tab="organizations"
+        hidden
+      >
+        <h1 class="dashboard-page-title">Organizations</h1>
+        <p>Manage platform organizations. Click a row to view details, activity logs, and management actions.</p>
+
+        <div class="m__space XS"></div>
+
+        {% include 'prototypes/internal/organizations-table.html' %}
+      </section>
+
+      <section
+        class="dashboard-section internal-users-tab-content"
+        data-tab="unverified-signups"
+        hidden
+      >
+        <h1 class="dashboard-page-title">Unverified Signups</h1>
+        <p>Review unverified signups. Click a row to view details and management actions.</p>
+
+        <div class="m__space XS"></div>
+
+        {% include 'service/table-conversation-types.html' %}
+      </section>
+
+      <div class="m__space XL"></div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script>
+  const tabInputs = document.querySelectorAll('[name="internal-users-tabs"]');
+  const tabContents = document.querySelectorAll(".internal-users-tab-content");
+
+  tabInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      tabContents.forEach((content) => {
+        content.hidden = content.dataset.tab !== input.value;
+      });
+    });
+  });
+</script>
+
+{% include 'service/modal-delete.html' %}
+{% include 'service/modal-behaviors-create.html' %}
+{% include 'service/modal-behaviors-edit.html' %}
+{% include 'service/modal-conversation-type-create.html' %}
+{% include 'service/modal-conversation-type-edit.html' %}
+{% include 'service/modal-role-create.html' %}
+{% include 'service/modal-role-edit.html' %}
+<script>
+  var deleteBehaviorsModal = document.getElementById("modal-delete");
+  var createBehaviorModal = document.getElementById("modal-behaviors-create");
+  var editBehaviorModal = document.getElementById("modal-behaviors-edit");
+  var createConversationTypeModal = document.getElementById("modal-conversation-type-create");
+  var editConversationTypeModal = document.getElementById("modal-conversation-type-edit");
+  var createRoleModal = document.getElementById("modal-role-create");
+  var editRoleModal = document.getElementById("modal-role-edit");
+
+
+
+  function getActiveTab() {
+    var checked = document.querySelector('[name="internal-users-tabs"]:checked');
+    return checked ? checked.value : "users";
+  }
+
+  document.addEventListener("click", function (e) {
+    if (e.target.closest("[data-behaviors-delete]")) {
+      window.M.openModal(deleteBehaviorsModal);
+    }
+
+
+    if (e.target.closest("[data-behaviors-create]")) {
+      var tab = getActiveTab();
+      if (tab === "conversation-types") {
+        window.M.openModal(createConversationTypeModal);
+      } else if (tab === "roles") {
+        window.M.openModal(createRoleModal);
+      } else {
+        if (window.bwTplReset) window.bwTplReset();
+        window.M.openModal(createBehaviorModal);
+      }
+    }
+
+    if (e.target.closest("[data-behaviors-edit]")) {
+      var tab = getActiveTab();
+      if (tab === "conversation-types") {
+        window.M.openModal(editConversationTypeModal);
+      } else if (tab === "roles") {
+        window.M.openModal(editRoleModal);
+      } else {
+        window.M.openModal(editBehaviorModal);
+      }
+    }
+
+  });
+
+</script>
+
+{% endblock %}

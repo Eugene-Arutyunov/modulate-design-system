@@ -1,4 +1,4 @@
-{% set isDashboardFooter = page.url | startsWith('/dashboard/') %}
+{% set isDashboardFooter = (page.url | startsWith('/dashboard/')) or (page.url | startsWith('/internal/')) %}
 <footer class="footer {{ 'footer--minimal' if isDashboardFooter }}">
   {% if not isDashboardFooter %}
   <div class="footer-columns">

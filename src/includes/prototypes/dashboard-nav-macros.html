@@ -1,5 +1,5 @@
-{% macro primary_nav(variant, currentUrl) %} {% set isDashboard = currentUrl |
-startsWith('/dashboard/') %} {% set isDashboardLinkActive = isDashboard %} {% set isPlaygroundLinkActive = currentUrl |
+{% macro primary_nav(variant, currentUrl) %} {% set isDashboard = (currentUrl |
+startsWith('/dashboard/')) or (currentUrl | startsWith('/internal/')) %} {% set isDashboardLinkActive = isDashboard %} {% set isPlaygroundLinkActive = currentUrl |
 startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
 '/dashboard/overview/' %}<span class="prototype-header__link active">Dashboard</span
 >{% else %}<a
