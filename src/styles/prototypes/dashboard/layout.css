@@ -875,6 +875,12 @@ table.config-details {
   min-width: 12rem;
 }
 
+.internal-directory-table {
+  & :is(th, td):not(.m__col-actions) {
+    padding-inline-end: var(--m__gap-xxl);
+  }
+}
+
 .internal-directory-row {
   cursor: pointer;
 
@@ -893,7 +899,16 @@ table.config-details {
     transition: color var(--m__duration-base) var(--m__easing-base);
   }
 
+  & :is(.m__tag, .m__tag-flat) {
+    transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+
   &:is(:hover, :focus-visible) > td:not(.muted, .m__col-actions) {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+
+  &:is(:hover, :focus-visible) :is(.m__tag, .m__tag-flat) {
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
@@ -916,6 +931,36 @@ table.config-details {
   min-block-size: 10rem;
   font-size: var(--m__font-size-s);
   color: var(--m__text-caption);
+}
+
+.internal-directory-detail-widget {
+  & :is(th, td):not(:last-child) {
+    padding-inline-end: var(--m__gap-xxl);
+  }
+
+  & .internal-directory-member-actions {
+    text-align: right;
+    white-space: nowrap;
+
+    & > div {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--m__gap-xs);
+    }
+  }
+}
+
+.internal-directory-role-select {
+  min-inline-size: 7.5rem;
+}
+
+.internal-directory-widget-placeholder {
+  display: grid;
+  place-items: center;
+  min-block-size: 8rem;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-s);
+  text-align: center;
 }
 
 @media (max-width: 768px) {
