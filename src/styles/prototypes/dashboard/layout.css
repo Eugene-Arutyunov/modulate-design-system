@@ -966,6 +966,7 @@ table.config-details {
   align-items: center;
   flex: 0 0 auto;
   block-size: 0.875rem;
+  transition: filter var(--m__duration-base) var(--m__easing-base);
 
   & > span {
     position: relative;
@@ -979,6 +980,12 @@ table.config-details {
   & > span + span {
     margin-inline-start: -0.25rem;
   }
+}
+
+.internal-directory-uuid:is(:hover, :focus-visible) .internal-uuid-barcode,
+.internal-directory-row:is(:hover, :focus-visible) .internal-uuid-barcode {
+  filter: brightness(103%) saturate(102%);
+  transition-duration: var(--m__duration-instant);
 }
 
 .dark-mode .internal-uuid-barcode {
