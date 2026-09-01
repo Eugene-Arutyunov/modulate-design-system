@@ -125,6 +125,16 @@ permalink: /internal/users/
       openDetails();
     });
   });
+
+  document.querySelectorAll("[data-copy-uuid]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(button.dataset.copyUuid);
+      button.textContent = "Copied";
+      window.setTimeout(() => {
+        button.textContent = "Copy UUID";
+      }, 1500);
+    });
+  });
 </script>
 
 {% endblock %}

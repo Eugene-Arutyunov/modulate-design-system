@@ -1,4 +1,4 @@
-{% macro organization_actions(label, href) %}
+{% macro organization_actions(label, href, uuid) %}
 <div class="m__menu-button">
   <button
     type="button"
@@ -12,6 +12,7 @@
   </button>
   <div class="m__menu-button-list internal-directory-actions" hidden>
     <a href="{{ href }}" class="m__menu-button-item">Details</a>
+    <button type="button" class="m__menu-button-item" data-copy-uuid="{{ uuid }}">Copy UUID</button>
     <button type="button" class="m__menu-button-item">Add Member</button>
     <button type="button" class="m__menu-button-item">Set Credit Limit</button>
     <button type="button" class="m__menu-button-item">Enable Invoice Only</button>
@@ -68,7 +69,7 @@
           <td class="muted">&mdash;</td>
           <td><span class="m__tag m__tag--success">Active</span></td>
           <td class="internal-directory-meta">01/09/2026, 18:28:35</td>
-          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=e2e-test-personal') }}</td>
+          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=e2e-test-personal', '10b8d430-b67d-40d3-9348-36ab8ae769d0') }}</td>
         </tr>
         <tr
           class="internal-directory-row"
@@ -84,7 +85,7 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:40:39</td>
-          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=grubhub-personal') }}</td>
+          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=grubhub-personal', '28d72d8d-c4f8-47eb-8864-217ef4883b68') }}</td>
         </tr>
         <tr
           class="internal-directory-row"
@@ -100,7 +101,7 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:31:01</td>
-          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=kiara-personal') }}</td>
+          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=kiara-personal', '6b9ba7b0-779b-4f26-b87e-eebdb38bca79') }}</td>
         </tr>
       </tbody>
     </table>

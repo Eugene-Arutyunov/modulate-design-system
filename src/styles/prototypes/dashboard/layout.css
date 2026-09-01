@@ -875,6 +875,10 @@ table.config-details {
   min-width: 12rem;
 }
 
+.internal-directory-detail-page > .dashboard-back-link {
+  margin-top: 0.48rem;
+}
+
 .internal-directory-table {
   & :is(th, td):not(.m__col-actions) {
     padding-inline-end: var(--m__gap-xxl);
@@ -886,7 +890,6 @@ table.config-details {
 
   & .internal-directory-email {
     display: block;
-    font-size: var(--m__font-size-xs);
     line-height: 1.3;
   }
 
@@ -934,6 +937,14 @@ table.config-details {
 }
 
 .internal-directory-detail-widget {
+  & .m__table-toolbar {
+    margin-bottom: var(--m__gap-xs);
+
+    & h2 {
+      margin: 0;
+    }
+  }
+
   & :is(th, td):not(:last-child) {
     padding-inline-end: var(--m__gap-xxl);
   }
@@ -941,26 +952,18 @@ table.config-details {
   & .internal-directory-member-actions {
     text-align: right;
     white-space: nowrap;
-
-    & > div {
-      display: flex;
-      justify-content: flex-end;
-      gap: var(--m__gap-xs);
-    }
   }
 }
 
 .internal-directory-role-select {
-  min-inline-size: 7.5rem;
+  flex: 0 0 9rem;
+  inline-size: 9rem;
 }
 
-.internal-directory-widget-placeholder {
-  display: grid;
-  place-items: center;
-  min-block-size: 8rem;
-  color: var(--m__text-caption);
-  font-size: var(--m__font-size-s);
-  text-align: center;
+.internal-directory-inline-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--m__gap-xs);
 }
 
 @media (max-width: 768px) {
