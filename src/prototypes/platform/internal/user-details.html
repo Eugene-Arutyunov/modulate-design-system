@@ -22,9 +22,184 @@ permalink: /internal/users/details/
 
       <div class="m__space XS"></div>
 
-      <h1 class="dashboard-page-title" data-directory-detail-name>User details</h1>
-      <p data-directory-detail-email></p>
-      <p class="internal-directory-meta muted" data-directory-detail-uuid></p>
+      <h1 class="dashboard-page-title" data-directory-detail="name">User details</h1>
+
+      <div class="dashboard-section">
+        <p>View user identity, organization access, and account status.</p>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        <table class="org-details internal-directory-detail-table">
+          <tbody>
+            <tr>
+              <th>User Name</th>
+              <td data-directory-detail="name">E2E Test 0</td>
+              <td>
+                <button type="button" class="m__button-secondary-outline S">Edit</button>
+              </td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td data-directory-detail="email">e2e.test.0@example.com</td>
+              <td>
+                <button type="button" class="m__button-secondary-outline S">Send Password Reset</button>
+              </td>
+            </tr>
+            <tr>
+              <th>UUID</th>
+              <td class="internal-directory-meta" data-directory-detail="uuid">014f3307-7a76-47d1-bd8e-f1ccee0afa26</td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Organization</th>
+              <td data-directory-detail="organization">Personal</td>
+              <td>
+                <button type="button" class="m__button-secondary-outline S">Add to Organization</button>
+              </td>
+            </tr>
+            <tr>
+              <th>Roles</th>
+              <td data-directory-detail="roles">Admin</td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td><span class="m__tag m__tag--success" data-directory-detail="status">Active</span></td>
+              <td>
+                <button type="button" class="m__button-secondary-outline S">Block</button>
+              </td>
+            </tr>
+            <tr>
+              <th>Created</th>
+              <td class="internal-directory-meta" data-directory-detail="created">01/09/2026, 18:28:35</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        <div class="m__widget internal-directory-detail-widget">
+          <div class="m__table-toolbar">
+            <h2>Members</h2>
+          </div>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Organization</th>
+                  <th>Role</th>
+                  <th>Internal</th>
+                  <th class="internal-directory-member-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Personal</td>
+                  <td>Admin</td>
+                  <td class="muted">&mdash;</td>
+                  <td class="internal-directory-member-actions">
+                    <div>
+                      <label class="m__select S internal-directory-role-select">
+                        <span class="m__select__inline-control">
+                          <span class="m__select__value">Admin</span>
+                          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                            <use href="#chevron-down"></use>
+                          </svg>
+                          <select aria-label="Role in Personal">
+                            <option selected>Admin</option>
+                            <option>Developer</option>
+                            <option>Member</option>
+                          </select>
+                        </span>
+                      </label>
+                      <button type="button" class="m__button-danger-outline S">Remove</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>GrubHub Pilot</td>
+                  <td>Developer</td>
+                  <td class="muted">&mdash;</td>
+                  <td class="internal-directory-member-actions">
+                    <div>
+                      <label class="m__select S internal-directory-role-select">
+                        <span class="m__select__inline-control">
+                          <span class="m__select__value">Developer</span>
+                          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                            <use href="#chevron-down"></use>
+                          </svg>
+                          <select aria-label="Role in GrubHub Pilot">
+                            <option>Admin</option>
+                            <option selected>Developer</option>
+                            <option>Member</option>
+                          </select>
+                        </span>
+                      </label>
+                      <button type="button" class="m__button-danger-outline S">Remove</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        <div class="m__widget">
+          <div class="m__table-toolbar">
+            <h2>Last Active</h2>
+          </div>
+          <div class="internal-directory-widget-placeholder">
+            No session activity recorded.
+          </div>
+        </div>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        <div class="m__widget internal-directory-detail-widget">
+          <div class="m__table-toolbar">
+            <h2>Activity Log</h2>
+          </div>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Activity</th>
+                  <th>Details</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Signed in</td>
+                  <td>Dashboard session · 192.0.2.24</td>
+                  <td class="internal-directory-meta">01/09/2026, 18:28:35</td>
+                </tr>
+                <tr>
+                  <td>Added to organization</td>
+                  <td>Personal · Admin</td>
+                  <td class="internal-directory-meta">28/08/2026, 14:12:08</td>
+                </tr>
+                <tr>
+                  <td>Password reset link generated</td>
+                  <td>Internal admin</td>
+                  <td class="internal-directory-meta">21/08/2026, 09:43:17</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
       <div class="m__space XL"></div>
     </main>
@@ -38,23 +213,35 @@ permalink: /internal/users/details/
       name: "E2E Test 0",
       email: "e2e.test.0@example.com",
       uuid: "014f3307-7a76-47d1-bd8e-f1ccee0afa26",
+      organization: "Personal",
+      roles: "Admin",
+      status: "Active",
+      created: "01/09/2026, 18:28:35",
     },
     "alexandra-stern": {
       name: "Alexandra Stern",
       email: "alexandra.stern@example.com",
       uuid: "0cb48d2d-43b9-461d-a429-7fc8f14c65bf",
+      organization: "Personal, GrubHub Pilot",
+      roles: "Member",
+      status: "Active",
+      created: "01/09/2026, 17:40:39",
     },
     kiara: {
       name: "Kiara",
       email: "kiara.sanchez@example.com",
       uuid: "5795a57f-9273-4f4e-8289-a39783d387c1",
+      organization: "Personal",
+      roles: "Member",
+      status: "Active",
+      created: "01/09/2026, 17:31:01",
     },
   };
   const user = users[new URLSearchParams(window.location.search).get("user")] || users["e2e-test-0"];
 
-  document.querySelector("[data-directory-detail-name]").textContent = user.name;
-  document.querySelector("[data-directory-detail-email]").textContent = user.email;
-  document.querySelector("[data-directory-detail-uuid]").textContent = user.uuid;
+  document.querySelectorAll("[data-directory-detail]").forEach((element) => {
+    element.textContent = user[element.dataset.directoryDetail];
+  });
 </script>
 
 {% endblock %}
