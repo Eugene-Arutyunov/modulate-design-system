@@ -927,6 +927,66 @@ table.config-details {
   overflow-wrap: anywhere;
 }
 
+.internal-directory-uuid {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--m__gap-xxxxs);
+}
+
+.internal-directory-uuid--detail {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--m__gap-xs);
+}
+
+.internal-directory-uuid-value {
+  white-space: nowrap;
+}
+
+.internal-uuid-barcode {
+  --internal-uuid-0: rgb(97, 97, 118);
+  --internal-uuid-1: rgb(20, 20, 50);
+  --internal-uuid-2: rgb(40, 95, 235);
+  --internal-uuid-3: rgb(30, 50, 160);
+  --internal-uuid-4: rgb(40, 95, 235);
+  --internal-uuid-5: rgb(185, 163, 252);
+  --internal-uuid-6: rgb(152, 116, 246);
+  --internal-uuid-7: rgb(124, 58, 237);
+  --internal-uuid-8: rgb(255, 90, 113);
+  --internal-uuid-9: rgb(220, 30, 58);
+  --internal-uuid-a: rgb(255, 150, 110);
+  --internal-uuid-b: rgb(100, 255, 140);
+  --internal-uuid-c: rgb(74, 185, 108);
+  --internal-uuid-d: rgb(48, 147, 77);
+  --internal-uuid-e: rgb(20, 110, 47);
+  --internal-uuid-f: rgb(200, 80, 160);
+
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  block-size: 0.875rem;
+
+  & > span {
+    position: relative;
+    flex: 0 0 auto;
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    border-radius: 50%;
+    background: var(--internal-uuid-dot);
+  }
+
+  & > span + span {
+    margin-inline-start: -0.25rem;
+  }
+}
+
+.dark-mode .internal-uuid-barcode {
+  --internal-uuid-1: rgb(120, 120, 180);
+  --internal-uuid-3: rgb(90, 120, 235);
+  --internal-uuid-e: rgb(70, 180, 110);
+}
+
 .internal-directory-placeholder {
   display: grid;
   place-items: center;

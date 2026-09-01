@@ -39,7 +39,12 @@ permalink: /internal/users/details/
             </tr>
             <tr>
               <th>UUID</th>
-              <td class="internal-directory-meta" data-directory-detail="uuid">014f3307-7a76-47d1-bd8e-f1ccee0afa26</td>
+              <td class="internal-directory-meta">
+                <span class="internal-directory-uuid internal-directory-uuid--detail">
+                  <span class="internal-uuid-barcode" data-uuid-barcode="014f3307-7a76-47d1-bd8e-f1ccee0afa26" aria-hidden="true"></span>
+                  <span class="internal-directory-uuid-value" data-directory-detail="uuid">014f3307-7a76-47d1-bd8e-f1ccee0afa26</span>
+                </span>
+              </td>
               <td>
                 <button type="button" class="m__button-secondary-outline S" data-directory-copy-uuid>Copy</button>
               </td>
@@ -73,6 +78,7 @@ permalink: /internal/users/details/
               <thead>
                 <tr>
                   <th>Organization</th>
+                  <th>UUID</th>
                   <th>Role</th>
                   <th>Internal</th>
                   <th class="m__col-actions internal-directory-member-actions"></th>
@@ -81,6 +87,12 @@ permalink: /internal/users/details/
               <tbody>
                 <tr>
                   <td>Personal</td>
+                  <td class="internal-directory-meta">
+                    <span class="internal-directory-uuid">
+                      <span class="internal-uuid-barcode" data-uuid-barcode="10b8d430-b67d-40d3-9348-36ab8ae769d0" aria-hidden="true"></span>
+                      <span class="internal-directory-uuid-value">10b8d430-b67d-40d3-9348-36ab8ae769d0</span>
+                    </span>
+                  </td>
                   <td>
                     <label class="m__select S internal-directory-role-select">
                       <div class="m__select__inline-control">
@@ -103,6 +115,12 @@ permalink: /internal/users/details/
                 </tr>
                 <tr>
                   <td>GrubHub Pilot</td>
+                  <td class="internal-directory-meta">
+                    <span class="internal-directory-uuid">
+                      <span class="internal-uuid-barcode" data-uuid-barcode="28d72d8d-c4f8-47eb-8864-217ef4883b68" aria-hidden="true"></span>
+                      <span class="internal-directory-uuid-value">28d72d8d-c4f8-47eb-8864-217ef4883b68</span>
+                    </span>
+                  </td>
                   <td>
                     <label class="m__select S internal-directory-role-select">
                       <div class="m__select__inline-control">
@@ -225,6 +243,7 @@ permalink: /internal/users/details/
   document.querySelectorAll("[data-directory-detail]").forEach((element) => {
     element.textContent = user[element.dataset.directoryDetail];
   });
+  document.querySelector("[data-uuid-barcode]").dataset.uuidBarcode = user.uuid;
 
   const copyUuidButton = document.querySelector("[data-directory-copy-uuid]");
   copyUuidButton.addEventListener("click", async () => {

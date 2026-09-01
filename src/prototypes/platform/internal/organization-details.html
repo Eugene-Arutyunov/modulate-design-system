@@ -34,7 +34,12 @@ permalink: /internal/organizations/details/
             </tr>
             <tr>
               <th>UUID</th>
-              <td class="internal-directory-meta" data-directory-detail="uuid">10b8d430-b67d-40d3-9348-36ab8ae769d0</td>
+              <td class="internal-directory-meta">
+                <span class="internal-directory-uuid internal-directory-uuid--detail">
+                  <span class="internal-uuid-barcode" data-uuid-barcode="10b8d430-b67d-40d3-9348-36ab8ae769d0" aria-hidden="true"></span>
+                  <span class="internal-directory-uuid-value" data-directory-detail="uuid">10b8d430-b67d-40d3-9348-36ab8ae769d0</span>
+                </span>
+              </td>
               <td>
                 <button type="button" class="m__button-secondary-outline S" data-directory-copy-uuid>Copy</button>
               </td>
@@ -108,6 +113,7 @@ permalink: /internal/organizations/details/
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
+                  <th>UUID</th>
                   <th>Role</th>
                   <th>Flags</th>
                   <th class="m__col-actions"></th>
@@ -117,6 +123,12 @@ permalink: /internal/organizations/details/
                 <tr>
                   <td>Ryan</td>
                   <td>ryan.wheeler@example.com</td>
+                  <td class="internal-directory-meta">
+                    <span class="internal-directory-uuid">
+                      <span class="internal-uuid-barcode" data-uuid-barcode="8f2d6c14-91b8-4a7e-a1d3-5c77e4b6029f" aria-hidden="true"></span>
+                      <span class="internal-directory-uuid-value">8f2d6c14-91b8-4a7e-a1d3-5c77e4b6029f</span>
+                    </span>
+                  </td>
                   <td>
                     <label class="m__select S internal-directory-role-select">
                       <div class="m__select__inline-control">
@@ -298,6 +310,7 @@ permalink: /internal/organizations/details/
   document.querySelectorAll("[data-directory-detail]").forEach((element) => {
     element.textContent = organization[element.dataset.directoryDetail];
   });
+  document.querySelector("[data-uuid-barcode]").dataset.uuidBarcode = organization.uuid;
 
   const copyUuidButton = document.querySelector("[data-directory-copy-uuid]");
   copyUuidButton.addEventListener("click", async () => {
