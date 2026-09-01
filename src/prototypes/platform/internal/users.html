@@ -84,12 +84,45 @@ permalink: /internal/users/
 <script>
   const tabInputs = document.querySelectorAll('[name="internal-users-tabs"]');
   const tabContents = document.querySelectorAll(".internal-users-tab-content");
+  const requestedTab = new URLSearchParams(window.location.search).get("tab");
+  const hasRequestedTab = Array.from(tabInputs).some((input) => input.value === requestedTab);
+
+  function activateTab(value) {
+    tabInputs.forEach((input) => {
+      input.checked = input.value === value;
+    });
+    tabContents.forEach((content) => {
+      content.hidden = content.dataset.tab !== value;
+    });
+  }
+
+  if (hasRequestedTab) {
+    activateTab(requestedTab);
+  }
 
   tabInputs.forEach((input) => {
     input.addEventListener("change", () => {
-      tabContents.forEach((content) => {
-        content.hidden = content.dataset.tab !== input.value;
-      });
+      activateTab(input.value);
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", input.value);
+      window.history.replaceState(null, "", url);
+    });
+  });
+
+  document.querySelectorAll("[data-directory-row-href]").forEach((row) => {
+    function openDetails() {
+      window.location.href = row.dataset.directoryRowHref;
+    }
+
+    row.addEventListener("click", (event) => {
+      if (event.target.closest("a, button, input, select, textarea")) return;
+      openDetails();
+    });
+
+    row.addEventListener("keydown", (event) => {
+      if (event.target !== row || (event.key !== "Enter" && event.key !== " ")) return;
+      event.preventDefault();
+      openDetails();
     });
   });
 </script>

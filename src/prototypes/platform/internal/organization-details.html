@@ -1,0 +1,60 @@
+---
+pageTitle: Users & Organizations
+permalink: /internal/organizations/details/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <a href="/internal/users/?tab=organizations" class="dashboard-back-link">
+        <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
+          <use href="#chevron-left"></use>
+        </svg>
+        Organizations
+      </a>
+
+      <div class="m__space XS"></div>
+
+      <h1 class="dashboard-page-title" data-directory-detail-name>Organization details</h1>
+      <p data-directory-detail-email></p>
+      <p class="internal-directory-meta muted" data-directory-detail-uuid></p>
+
+      <div class="m__space XL"></div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script>
+  const organizations = {
+    "e2e-test-personal": {
+      name: "Personal",
+      email: "e2e.admin@example.com",
+      uuid: "10b8d430-b67d-40d3-9348-36ab8ae769d0",
+    },
+    "grubhub-personal": {
+      name: "Personal",
+      email: "pilot.admin@example.com",
+      uuid: "28d72d8d-c4f8-47eb-8864-217ef4883b68",
+    },
+    "kiara-personal": {
+      name: "Personal",
+      email: "personal.admin@example.com",
+      uuid: "6b9ba7b0-779b-4f26-b87e-eebdb38bca79",
+    },
+  };
+  const organization = organizations[new URLSearchParams(window.location.search).get("organization")] || organizations["e2e-test-personal"];
+
+  document.querySelector("[data-directory-detail-name]").textContent = organization.name;
+  document.querySelector("[data-directory-detail-email]").textContent = organization.email;
+  document.querySelector("[data-directory-detail-uuid]").textContent = organization.uuid;
+</script>
+
+{% endblock %}
