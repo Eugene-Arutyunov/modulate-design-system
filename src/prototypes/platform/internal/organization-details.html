@@ -59,27 +59,197 @@ permalink: /internal/organizations/details/
               </td>
             </tr>
             <tr>
-              <th>Monthly Credits Spent</th>
-              <td data-directory-detail="creditsSpent">0 credits</td>
-              <td></td>
-            </tr>
-            <tr>
-              <th>Monthly Credit Limit</th>
-              <td class="muted" data-directory-detail="creditLimit">Not set</td>
-              <td>
-                <button type="button" class="m__button-secondary-outline S">Set Limit</button>
-              </td>
-            </tr>
-            <tr>
               <th>Status</th>
               <td><span class="m__tag m__tag--success" data-directory-detail="status">Active</span></td>
               <td>
-                <button type="button" class="m__button-secondary-outline S">Block</button>
+                <button type="button" class="m__button-danger-outline S">Block</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <div class="m__space S"></div>
+
+      <div class="dashboard-section">
+        <div class="m__widget internal-directory-detail-widget">
+          <div class="m__table-toolbar">
+            <h2>Credit Balance</h2>
+            <button type="button" class="m__button-secondary-outline S">Grant Credits</button>
+          </div>
+          <table class="org-details">
+            <tbody>
+              <tr>
+                <th>Balance</th>
+                <td><strong data-directory-detail="creditBalance">993.82 credits</strong></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th>Monthly Credit Limit</th>
+                <td class="muted" data-directory-detail="creditLimit">Not set</td>
+                <td>
+                  <button type="button" class="m__button-secondary-outline S">Set Limit</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <div class="m__widget internal-directory-detail-widget">
+          <div class="m__table-toolbar">
+            <h2>Members</h2>
+            <button type="button" class="m__button-secondary-outline S">Add Member</button>
+          </div>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Flags</th>
+                  <th class="m__col-actions"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ryan</td>
+                  <td>ryan.wheeler@example.com</td>
+                  <td>
+                    <label class="m__select S internal-directory-role-select">
+                      <div class="m__select__inline-control">
+                        <span class="m__select__value">Admin</span>
+                        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                          <use href="#chevron-down"></use>
+                        </svg>
+                        <select aria-label="Role for Ryan">
+                          <option selected>Admin</option>
+                          <option>Developer</option>
+                          <option>Member</option>
+                        </select>
+                      </div>
+                    </label>
+                  </td>
+                  <td class="muted">&mdash;</td>
+                  <td class="m__col-actions">
+                    <button type="button" class="m__button-danger-outline S">Remove</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <div class="m__widget internal-directory-detail-widget">
+          <div class="m__table-toolbar">
+            <h2>Request Log (Last 90 Days)</h2>
+          </div>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Status</th>
+                  <th>Credits</th>
+                  <th>Duration</th>
+                  <th>Submitted</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Velma-2 STT Batch</td>
+                  <td><span class="m__tag m__tag--success">Success</span></td>
+                  <td>1.53</td>
+                  <td>1841292 ms</td>
+                  <td class="internal-directory-meta">29/08/2026, 18:08:41</td>
+                </tr>
+                <tr>
+                  <td>Velma-2 STT Batch</td>
+                  <td><span class="m__tag m__tag--success">Success</span></td>
+                  <td>1.53</td>
+                  <td>1841292 ms</td>
+                  <td class="internal-directory-meta">26/08/2026, 09:56:08</td>
+                </tr>
+                <tr>
+                  <td>Velma-2 STT Batch</td>
+                  <td><span class="m__tag m__tag--success">Success</span></td>
+                  <td>1.58</td>
+                  <td>1897020 ms</td>
+                  <td class="internal-directory-meta">25/08/2026, 09:10:06</td>
+                </tr>
+                <tr>
+                  <td>Velma-2 STT Batch</td>
+                  <td><span class="m__tag m__tag--success">Success</span></td>
+                  <td>1.53</td>
+                  <td>1841292 ms</td>
+                  <td class="internal-directory-meta">25/08/2026, 04:42:08</td>
+                </tr>
+                <tr>
+                  <td>Velma-2 STT Batch</td>
+                  <td><span class="m__tag m__tag--muted">Client Error</span></td>
+                  <td class="muted">&mdash;</td>
+                  <td class="muted">&mdash;</td>
+                  <td class="internal-directory-meta">25/08/2026, 02:58:49</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <div class="m__widget internal-directory-detail-widget">
+          <div class="m__table-toolbar">
+            <h2>Credit Ledger (Last 90 Days)</h2>
+          </div>
+          <div class="m__table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Delta</th>
+                  <th>Reason</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="internal-directory-meta internal-credit-delta--negative">-1.53</td>
+                  <td>usage deduction</td>
+                  <td class="internal-directory-meta">29/08/2026, 18:09:14</td>
+                </tr>
+                <tr>
+                  <td class="internal-directory-meta internal-credit-delta--negative">-1.53</td>
+                  <td>usage deduction</td>
+                  <td class="internal-directory-meta">26/08/2026, 09:57:28</td>
+                </tr>
+                <tr>
+                  <td class="internal-directory-meta internal-credit-delta--negative">-1.58</td>
+                  <td>usage deduction</td>
+                  <td class="internal-directory-meta">25/08/2026, 09:10:49</td>
+                </tr>
+                <tr>
+                  <td class="internal-directory-meta internal-credit-delta--negative">-1.53</td>
+                  <td>usage deduction</td>
+                  <td class="internal-directory-meta">25/08/2026, 04:42:48</td>
+                </tr>
+                <tr>
+                  <td class="internal-directory-meta internal-credit-delta--positive">+1,000.00</td>
+                  <td>new account grant</td>
+                  <td class="internal-directory-meta">24/08/2026, 11:10:18</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="m__space S"></div>
+
+      <button type="button" class="m__button-danger-outline S">Delete Organization</button>
 
       <div class="m__space XL"></div>
     </main>
@@ -96,7 +266,7 @@ permalink: /internal/organizations/details/
       type: "Standard",
       internal: "Disabled",
       invoice: "Disabled",
-      creditsSpent: "0 credits",
+      creditBalance: "993.82 credits",
       creditLimit: "Not set",
       status: "Active",
     },
@@ -107,7 +277,7 @@ permalink: /internal/organizations/details/
       type: "Standard",
       internal: "Disabled",
       invoice: "Disabled",
-      creditsSpent: "120 credits",
+      creditBalance: "880.00 credits",
       creditLimit: "1,000 credits",
       status: "Active",
     },
@@ -118,7 +288,7 @@ permalink: /internal/organizations/details/
       type: "Standard",
       internal: "Disabled",
       invoice: "Disabled",
-      creditsSpent: "48 credits",
+      creditBalance: "952.00 credits",
       creditLimit: "Not set",
       status: "Active",
     },
