@@ -1,4 +1,4 @@
-{% macro user_actions(label) %}
+{% macro user_actions(label, href) %}
 <div class="m__menu-button">
   <button
     type="button"
@@ -11,7 +11,7 @@
     </svg>
   </button>
   <div class="m__menu-button-list internal-directory-actions" hidden>
-    <button type="button" class="m__menu-button-item">Details</button>
+    <a href="{{ href }}" class="m__menu-button-item">Details</a>
     <button type="button" class="m__menu-button-item">Add to Organization</button>
     <button type="button" class="m__menu-button-item">Send Password Reset</button>
     <button type="button" class="m__menu-button-item">Generate Reset Link</button>
@@ -27,7 +27,11 @@
       <svg viewBox="0 0 32 32" aria-hidden="true">
         <use href="#search"></use>
       </svg>
-      <input type="search" id="internal-users-search" placeholder="Search" />
+      <input
+        type="search"
+        id="internal-users-search"
+        placeholder="Search by uuid, name, email, organization name or tag"
+      />
     </label>
   </div>
   <div class="m__table-wrapper">
@@ -44,41 +48,57 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr
+          class="internal-directory-row"
+          data-directory-row-href="/internal/users/details/?user=e2e-test-0"
+          tabindex="0"
+        >
           <td>
-            <strong>E2E Test 0</strong><br />
-            <span>modulate.e2e.test+e2e-1788276501915-0-193f4027@gmail.com</span>
+            <strong>E2E Test 0</strong>
+            <span class="internal-directory-email">e2e.test.0@example.com</span>
+            <span class="m__tag-group internal-directory-tags">
+              <span class="m__tag-flat">E2E</span>
+              <span class="m__tag-flat">Demo</span>
+            </span>
           </td>
           <td class="internal-directory-meta">014f3307-7a76-47d1-bd8e-f1ccee0afa26</td>
           <td>Personal</td>
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 18:28:35</td>
-          <td class="m__col-actions">{{ user_actions('E2E Test 0') }}</td>
+          <td class="m__col-actions">{{ user_actions('E2E Test 0', '/internal/users/details/?user=e2e-test-0') }}</td>
         </tr>
-        <tr>
+        <tr
+          class="internal-directory-row"
+          data-directory-row-href="/internal/users/details/?user=alexandra-stern"
+          tabindex="0"
+        >
           <td>
-            <strong>Alexandra Stern</strong><br />
-            <span>astern@grubhub.com</span>
+            <strong>Alexandra Stern</strong>
+            <span class="internal-directory-email">alexandra.stern@example.com</span>
           </td>
           <td class="internal-directory-meta">0cb48d2d-43b9-461d-a429-7fc8f14c65bf</td>
           <td>Personal, GrubHub Pilot</td>
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:40:39</td>
-          <td class="m__col-actions">{{ user_actions('Alexandra Stern') }}</td>
+          <td class="m__col-actions">{{ user_actions('Alexandra Stern', '/internal/users/details/?user=alexandra-stern') }}</td>
         </tr>
-        <tr>
+        <tr
+          class="internal-directory-row"
+          data-directory-row-href="/internal/users/details/?user=kiara"
+          tabindex="0"
+        >
           <td>
-            <strong>Kiara</strong><br />
-            <span>kiarasanchez.business@gmail.com</span>
+            <strong>Kiara</strong>
+            <span class="internal-directory-email">kiara.sanchez@example.com</span>
           </td>
           <td class="internal-directory-meta">5795a57f-9273-4f4e-8289-a39783d387c1</td>
           <td>Personal</td>
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:31:01</td>
-          <td class="m__col-actions">{{ user_actions('Kiara') }}</td>
+          <td class="m__col-actions">{{ user_actions('Kiara', '/internal/users/details/?user=kiara') }}</td>
         </tr>
       </tbody>
     </table>

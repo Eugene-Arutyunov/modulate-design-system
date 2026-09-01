@@ -1,0 +1,60 @@
+---
+pageTitle: Users & Organizations
+permalink: /internal/users/details/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <a href="/internal/users/?tab=users" class="dashboard-back-link">
+        <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
+          <use href="#chevron-left"></use>
+        </svg>
+        Users
+      </a>
+
+      <div class="m__space XS"></div>
+
+      <h1 class="dashboard-page-title" data-directory-detail-name>User details</h1>
+      <p data-directory-detail-email></p>
+      <p class="internal-directory-meta muted" data-directory-detail-uuid></p>
+
+      <div class="m__space XL"></div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script>
+  const users = {
+    "e2e-test-0": {
+      name: "E2E Test 0",
+      email: "e2e.test.0@example.com",
+      uuid: "014f3307-7a76-47d1-bd8e-f1ccee0afa26",
+    },
+    "alexandra-stern": {
+      name: "Alexandra Stern",
+      email: "alexandra.stern@example.com",
+      uuid: "0cb48d2d-43b9-461d-a429-7fc8f14c65bf",
+    },
+    kiara: {
+      name: "Kiara",
+      email: "kiara.sanchez@example.com",
+      uuid: "5795a57f-9273-4f4e-8289-a39783d387c1",
+    },
+  };
+  const user = users[new URLSearchParams(window.location.search).get("user")] || users["e2e-test-0"];
+
+  document.querySelector("[data-directory-detail-name]").textContent = user.name;
+  document.querySelector("[data-directory-detail-email]").textContent = user.email;
+  document.querySelector("[data-directory-detail-uuid]").textContent = user.uuid;
+</script>
+
+{% endblock %}

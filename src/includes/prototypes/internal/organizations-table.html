@@ -1,4 +1,4 @@
-{% macro organization_actions(label) %}
+{% macro organization_actions(label, href) %}
 <div class="m__menu-button">
   <button
     type="button"
@@ -11,7 +11,7 @@
     </svg>
   </button>
   <div class="m__menu-button-list internal-directory-actions" hidden>
-    <button type="button" class="m__menu-button-item">Details</button>
+    <a href="{{ href }}" class="m__menu-button-item">Details</a>
     <button type="button" class="m__menu-button-item">Add Member</button>
     <button type="button" class="m__menu-button-item">Set Credit Limit</button>
     <button type="button" class="m__menu-button-item">Enable Invoice Only</button>
@@ -32,7 +32,7 @@
       <input
         type="search"
         id="internal-organizations-search"
-        placeholder="Search"
+        placeholder="Search by uuid, name, admin email or tag"
       />
     </label>
   </div>
@@ -43,7 +43,7 @@
           <th>Organization</th>
           <th>UUID</th>
           <th>Internal</th>
-          <th>Invoice Only</th>
+          <th>Invoice</th>
           <th>Status</th>
           <th>Tags</th>
           <th>Created</th>
@@ -51,10 +51,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr
+          class="internal-directory-row"
+          data-directory-row-href="/internal/organizations/details/?organization=e2e-test-personal"
+          tabindex="0"
+        >
           <td>
-            <strong>Personal</strong><br />
-            <span>modulate.e2e.test+e2e-1788276501915-0-193f4027@gmail.com</span>
+            <strong>Personal</strong>
+            <span class="internal-directory-email">e2e.admin@example.com</span>
+            <span class="m__tag-group internal-directory-tags">
+              <span class="m__tag-flat">E2E</span>
+              <span class="m__tag-flat">Demo</span>
+            </span>
           </td>
           <td class="internal-directory-meta">10b8d430-b67d-40d3-9348-36ab8ae769d0</td>
           <td class="muted">&mdash;</td>
@@ -62,12 +70,16 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 18:28:35</td>
-          <td class="m__col-actions">{{ organization_actions('Personal') }}</td>
+          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=e2e-test-personal') }}</td>
         </tr>
-        <tr>
+        <tr
+          class="internal-directory-row"
+          data-directory-row-href="/internal/organizations/details/?organization=grubhub-personal"
+          tabindex="0"
+        >
           <td>
-            <strong>Personal</strong><br />
-            <span>astern@grubhub.com</span>
+            <strong>Personal</strong>
+            <span class="internal-directory-email">pilot.admin@example.com</span>
           </td>
           <td class="internal-directory-meta">28d72d8d-c4f8-47eb-8864-217ef4883b68</td>
           <td class="muted">&mdash;</td>
@@ -75,12 +87,16 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:40:39</td>
-          <td class="m__col-actions">{{ organization_actions('Personal') }}</td>
+          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=grubhub-personal') }}</td>
         </tr>
-        <tr>
+        <tr
+          class="internal-directory-row"
+          data-directory-row-href="/internal/organizations/details/?organization=kiara-personal"
+          tabindex="0"
+        >
           <td>
-            <strong>Personal</strong><br />
-            <span>kiarasanchez.business@gmail.com</span>
+            <strong>Personal</strong>
+            <span class="internal-directory-email">personal.admin@example.com</span>
           </td>
           <td class="internal-directory-meta">6b9ba7b0-779b-4f26-b87e-eebdb38bca79</td>
           <td class="muted">&mdash;</td>
@@ -88,7 +104,7 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:31:01</td>
-          <td class="m__col-actions">{{ organization_actions('Personal') }}</td>
+          <td class="m__col-actions">{{ organization_actions('Personal', '/internal/organizations/details/?organization=kiara-personal') }}</td>
         </tr>
       </tbody>
     </table>

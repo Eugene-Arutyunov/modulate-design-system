@@ -875,6 +875,34 @@ table.config-details {
   min-width: 12rem;
 }
 
+.internal-directory-row {
+  cursor: pointer;
+
+  & .internal-directory-email {
+    display: block;
+    font-size: var(--m__font-size-xs);
+    line-height: 1.3;
+  }
+
+  & .internal-directory-tags {
+    margin-top: var(--m__gap-xxxxs);
+  }
+
+  & > td:not(.muted, .m__col-actions) {
+    transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+
+  &:is(:hover, :focus-visible) > td:not(.muted, .m__col-actions) {
+    color: var(--m__text-link-hover);
+    transition-duration: var(--m__duration-instant);
+  }
+
+  &:focus-visible {
+    outline: var(--m__border-width-s) solid var(--m__text-link-hover);
+    outline-offset: calc(-1 * var(--m__border-width-s));
+  }
+}
+
 .internal-directory-meta {
   font-family: var(--m__font-family-semi-mono);
   overflow-wrap: anywhere;
@@ -885,6 +913,7 @@ table.config-details {
   place-items: center;
   box-sizing: border-box;
   min-block-size: 10rem;
+  font-size: var(--m__font-size-s);
   color: var(--m__text-caption);
 }
 
