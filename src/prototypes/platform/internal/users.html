@@ -70,7 +70,7 @@ permalink: /internal/users/
 
         <div class="m__space XS"></div>
 
-        {% include 'service/table-conversation-types.html' %}
+        <div class="m__widget internal-directory-placeholder" aria-hidden="true"></div>
       </section>
 
       <div class="m__space XL"></div>
@@ -90,62 +90,6 @@ permalink: /internal/users/
       });
     });
   });
-</script>
-
-{% include 'service/modal-delete.html' %}
-{% include 'service/modal-behaviors-create.html' %}
-{% include 'service/modal-behaviors-edit.html' %}
-{% include 'service/modal-conversation-type-create.html' %}
-{% include 'service/modal-conversation-type-edit.html' %}
-{% include 'service/modal-role-create.html' %}
-{% include 'service/modal-role-edit.html' %}
-<script>
-  var deleteBehaviorsModal = document.getElementById("modal-delete");
-  var createBehaviorModal = document.getElementById("modal-behaviors-create");
-  var editBehaviorModal = document.getElementById("modal-behaviors-edit");
-  var createConversationTypeModal = document.getElementById("modal-conversation-type-create");
-  var editConversationTypeModal = document.getElementById("modal-conversation-type-edit");
-  var createRoleModal = document.getElementById("modal-role-create");
-  var editRoleModal = document.getElementById("modal-role-edit");
-
-
-
-  function getActiveTab() {
-    var checked = document.querySelector('[name="internal-users-tabs"]:checked');
-    return checked ? checked.value : "users";
-  }
-
-  document.addEventListener("click", function (e) {
-    if (e.target.closest("[data-behaviors-delete]")) {
-      window.M.openModal(deleteBehaviorsModal);
-    }
-
-
-    if (e.target.closest("[data-behaviors-create]")) {
-      var tab = getActiveTab();
-      if (tab === "conversation-types") {
-        window.M.openModal(createConversationTypeModal);
-      } else if (tab === "roles") {
-        window.M.openModal(createRoleModal);
-      } else {
-        if (window.bwTplReset) window.bwTplReset();
-        window.M.openModal(createBehaviorModal);
-      }
-    }
-
-    if (e.target.closest("[data-behaviors-edit]")) {
-      var tab = getActiveTab();
-      if (tab === "conversation-types") {
-        window.M.openModal(editConversationTypeModal);
-      } else if (tab === "roles") {
-        window.M.openModal(editRoleModal);
-      } else {
-        window.M.openModal(editBehaviorModal);
-      }
-    }
-
-  });
-
 </script>
 
 {% endblock %}
