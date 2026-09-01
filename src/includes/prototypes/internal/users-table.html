@@ -1,4 +1,4 @@
-{% macro user_actions(label, href) %}
+{% macro user_actions(label, href, uuid) %}
 <div class="m__menu-button">
   <button
     type="button"
@@ -12,6 +12,7 @@
   </button>
   <div class="m__menu-button-list internal-directory-actions" hidden>
     <a href="{{ href }}" class="m__menu-button-item">Details</a>
+    <button type="button" class="m__menu-button-item" data-copy-uuid="{{ uuid }}">Copy UUID</button>
     <button type="button" class="m__menu-button-item">Add to Organization</button>
     <button type="button" class="m__menu-button-item">Send Password Reset</button>
     <button type="button" class="m__menu-button-item">Generate Reset Link</button>
@@ -66,7 +67,7 @@
           <td>Admin</td>
           <td><span class="m__tag m__tag--success">Active</span></td>
           <td class="internal-directory-meta">01/09/2026, 18:28:35</td>
-          <td class="m__col-actions">{{ user_actions('E2E Test 0', '/internal/users/details/?user=e2e-test-0') }}</td>
+          <td class="m__col-actions">{{ user_actions('E2E Test 0', '/internal/users/details/?user=e2e-test-0', '014f3307-7a76-47d1-bd8e-f1ccee0afa26') }}</td>
         </tr>
         <tr
           class="internal-directory-row"
@@ -82,7 +83,7 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:40:39</td>
-          <td class="m__col-actions">{{ user_actions('Alexandra Stern', '/internal/users/details/?user=alexandra-stern') }}</td>
+          <td class="m__col-actions">{{ user_actions('Alexandra Stern', '/internal/users/details/?user=alexandra-stern', '0cb48d2d-43b9-461d-a429-7fc8f14c65bf') }}</td>
         </tr>
         <tr
           class="internal-directory-row"
@@ -98,7 +99,7 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:31:01</td>
-          <td class="m__col-actions">{{ user_actions('Kiara', '/internal/users/details/?user=kiara') }}</td>
+          <td class="m__col-actions">{{ user_actions('Kiara', '/internal/users/details/?user=kiara', '5795a57f-9273-4f4e-8289-a39783d387c1') }}</td>
         </tr>
       </tbody>
     </table>

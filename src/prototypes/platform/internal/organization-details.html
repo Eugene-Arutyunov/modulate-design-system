@@ -12,7 +12,7 @@ permalink: /internal/organizations/details/
       <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
     </div>
 
-    <main class="dashboard-content">
+    <main class="dashboard-content internal-directory-detail-page">
       <a href="/internal/users/?tab=organizations" class="dashboard-back-link">
         <svg viewBox="0 0 12 12" aria-hidden="true" width="12" height="12">
           <use href="#chevron-left"></use>
@@ -25,21 +25,8 @@ permalink: /internal/organizations/details/
       <h1 class="dashboard-page-title" data-directory-detail="name">Organization details</h1>
 
       <div class="dashboard-section">
-        <p>View organization settings, billing controls, and account status.</p>
-      </div>
-
-      <div class="m__space S"></div>
-
-      <div class="dashboard-section">
         <table class="org-details internal-directory-detail-table">
           <tbody>
-            <tr>
-              <th>Organization Name</th>
-              <td data-directory-detail="name">Personal</td>
-              <td>
-                <button type="button" class="m__button-secondary-outline S">Edit</button>
-              </td>
-            </tr>
             <tr>
               <th>Admin Email</th>
               <td data-directory-detail="email">e2e.admin@example.com</td>
@@ -48,7 +35,9 @@ permalink: /internal/organizations/details/
             <tr>
               <th>UUID</th>
               <td class="internal-directory-meta" data-directory-detail="uuid">10b8d430-b67d-40d3-9348-36ab8ae769d0</td>
-              <td></td>
+              <td>
+                <button type="button" class="m__button-secondary-outline S" data-directory-copy-uuid>Copy</button>
+              </td>
             </tr>
             <tr>
               <th>Type</th>
@@ -138,6 +127,15 @@ permalink: /internal/organizations/details/
 
   document.querySelectorAll("[data-directory-detail]").forEach((element) => {
     element.textContent = organization[element.dataset.directoryDetail];
+  });
+
+  const copyUuidButton = document.querySelector("[data-directory-copy-uuid]");
+  copyUuidButton.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(organization.uuid);
+    copyUuidButton.textContent = "Copied";
+    window.setTimeout(() => {
+      copyUuidButton.textContent = "Copy";
+    }, 1500);
   });
 </script>
 
