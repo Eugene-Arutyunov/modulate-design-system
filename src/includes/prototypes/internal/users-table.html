@@ -1,3 +1,26 @@
+{% macro user_actions(label) %}
+<div class="m__menu-button">
+  <button
+    type="button"
+    class="m__menu-button-icon S m__menu-button-trigger"
+    aria-label="Actions for {{ label }}"
+    aria-expanded="false"
+  >
+    <svg viewBox="0 0 12 12" aria-hidden="true">
+      <use href="#dots-vertical"></use>
+    </svg>
+  </button>
+  <div class="m__menu-button-list internal-directory-actions" hidden>
+    <button type="button" class="m__menu-button-item">Details</button>
+    <button type="button" class="m__menu-button-item">Add to Organization</button>
+    <button type="button" class="m__menu-button-item">Send Password Reset</button>
+    <button type="button" class="m__menu-button-item">Generate Reset Link</button>
+    <button type="button" class="m__menu-button-item">Block</button>
+    <button type="button" class="m__menu-button-item m__menu-button-item--danger">Delete</button>
+  </div>
+</div>
+{% endmacro %}
+
 <div class="m__widget internal-directory-table">
   <div class="m__widget-header">
     <label class="m__searchbar" for="internal-users-search">
@@ -17,6 +40,7 @@
           <th>Roles</th>
           <th>Status</th>
           <th>Created</th>
+          <th class="m__col-actions"></th>
         </tr>
       </thead>
       <tbody>
@@ -24,25 +48,28 @@
           <td>E2E Test 0</td>
           <td>modulate.e2e.test+e2e-1788276501915-0-193f4027@gmail.com</td>
           <td>Personal</td>
-          <td>&mdash;</td>
-          <td>&mdash;</td>
+          <td class="muted">&mdash;</td>
+          <td class="muted">&mdash;</td>
           <td>01/09/2026, 18:28:35</td>
+          <td class="m__col-actions">{{ user_actions('E2E Test 0') }}</td>
         </tr>
         <tr>
           <td>Alexandra Stern</td>
           <td>astern@grubhub.com</td>
           <td>Personal, GrubHub Pilot</td>
-          <td>&mdash;</td>
-          <td>&mdash;</td>
+          <td class="muted">&mdash;</td>
+          <td class="muted">&mdash;</td>
           <td>01/09/2026, 17:40:39</td>
+          <td class="m__col-actions">{{ user_actions('Alexandra Stern') }}</td>
         </tr>
         <tr>
           <td>Kiara</td>
           <td>kiarasanchez.business@gmail.com</td>
           <td>Personal</td>
-          <td>&mdash;</td>
-          <td>&mdash;</td>
+          <td class="muted">&mdash;</td>
+          <td class="muted">&mdash;</td>
           <td>01/09/2026, 17:31:01</td>
+          <td class="m__col-actions">{{ user_actions('Kiara') }}</td>
         </tr>
       </tbody>
     </table>
