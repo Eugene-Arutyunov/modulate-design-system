@@ -1,0 +1,181 @@
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content">
+      <nav class="m__segmented-nav" aria-label="Users and organizations sections">
+        <ul>
+          <li{% if page.url == '/internal/users/' %} class="current"{% endif %}>
+            <a href="/internal/users/">Users</a>
+          </li>
+          <li{% if page.url == '/internal/organizations/' %} class="current"{% endif %}>
+            <a href="/internal/organizations/">Organizations</a>
+          </li>
+          <li{% if page.url == '/internal/unverified-signups/' %} class="current"{% endif %}>
+            <a href="/internal/unverified-signups/">Unverified Signups</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="m__space S"></div>
+
+      {% if page.url == '/internal/users/' %}
+        <section class="dashboard-section">
+          <h1 class="dashboard-page-title">Users</h1>
+          <p>Manage platform users. Click a row to expand details, activity logs, and management actions.</p>
+
+          <div class="m__space XS"></div>
+
+          {% include 'prototypes/internal/users-table.html' %}
+        </section>
+      {% elif page.url == '/internal/organizations/' %}
+        <section class="dashboard-section">
+          <h1 class="dashboard-page-title">Organizations</h1>
+          <p>Manage platform organizations. Click a row to expand details, activity logs, and management actions.</p>
+
+          <div class="m__space XS"></div>
+
+          {% include 'prototypes/internal/organizations-table.html' %}
+        </section>
+      {% else %}
+        <section class="dashboard-section">
+          <h1 class="dashboard-page-title">Unverified Signups</h1>
+          <p>Review unverified signups. Click a row to view details and management actions.</p>
+
+          <div class="m__space XS"></div>
+
+          <div class="m__widget internal-directory-placeholder">
+            No unverified signups found.
+          </div>
+        </section>
+      {% endif %}
+
+      <div class="m__space XL"></div>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+<script>
+  const testAccountToggles = document.querySelectorAll("[data-test-accounts-toggle]");
+  const testAccountsStorageKey = "internal-directory-show-test-accounts";
+
+  function applyTestAccountsVisibility(showTestAccounts) {
+    testAccountToggles.forEach((toggle) => {
+      toggle.checked = showTestAccounts;
+    });
+
+    document.querySelectorAll("[data-account-type]").forEach((row) => {
+      const visible = showTestAccounts || row.dataset.accountType !== "test";
+      const details = document.getElementById(row.getAttribute("aria-controls"));
+
+      row.hidden = !visible;
+      if (!visible && details) {
+        row.setAttribute("aria-expanded", "false");
+        details.hidden = true;
+      }
+    });
+  }
+
+  let showTestAccounts = true;
+  try {
+    const storedVisibility = window.localStorage.getItem(testAccountsStorageKey);
+    if (storedVisibility !== null) {
+      showTestAccounts = storedVisibility === "true";
+    }
+  } catch (error) {
+    // Storage may be unavailable in privacy-restricted contexts.
+  }
+  applyTestAccountsVisibility(showTestAccounts);
+
+  testAccountToggles.forEach((toggle) => {
+    toggle.addEventListener("change", () => {
+      applyTestAccountsVisibility(toggle.checked);
+      try {
+        window.localStorage.setItem(testAccountsStorageKey, String(toggle.checked));
+      } catch (error) {
+        // Filtering still works when storage is unavailable.
+      }
+    });
+  });
+
+  function alignNestedUuidColumn(row, details) {
+    const sourceBarcode = row.querySelector(".internal-uuid-barcode");
+    const nestedTable = details.querySelector(".internal-directory-nested-uuid-table");
+    const leadingColumn = nestedTable?.querySelector("[data-nested-uuid-leading-column]");
+    const uuidColumn = nestedTable?.querySelector("[data-nested-uuid-column]");
+    const roleColumn = nestedTable?.querySelector("[data-nested-role-column]");
+    const sourceThirdColumn = row.children[3];
+    const sourceStatusColumn = row.children[5];
+
+    if (
+      !sourceBarcode ||
+      !leadingColumn ||
+      !uuidColumn ||
+      !roleColumn ||
+      !sourceThirdColumn ||
+      !sourceStatusColumn
+    ) return;
+
+    const nestedTableLeft = nestedTable.getBoundingClientRect().left;
+    const uuidLeft = sourceBarcode.getBoundingClientRect().left;
+    const thirdColumnLeft = sourceThirdColumn.getBoundingClientRect().left;
+    const statusColumnLeft = sourceStatusColumn.getBoundingClientRect().left;
+    const leadingColumnWidth = uuidLeft - nestedTableLeft;
+    leadingColumn.style.width = `${Math.max(0, leadingColumnWidth)}px`;
+    uuidColumn.style.width = `${Math.max(0, thirdColumnLeft - uuidLeft)}px`;
+    roleColumn.style.width = `${Math.max(0, statusColumnLeft - thirdColumnLeft)}px`;
+
+    details.querySelectorAll(".internal-directory-aligned-detail-table").forEach((table) => {
+      const columns = table.querySelectorAll("col");
+      const tableLeft = table.getBoundingClientRect().left;
+      columns[0].style.width = `${Math.max(0, uuidLeft - tableLeft)}px`;
+      columns[1].style.width = `${Math.max(0, thirdColumnLeft - uuidLeft)}px`;
+    });
+  }
+
+  document.querySelectorAll("[data-directory-row-toggle]").forEach((row) => {
+    const details = document.getElementById(row.getAttribute("aria-controls"));
+
+    function setExpanded(expanded) {
+      row.setAttribute("aria-expanded", String(expanded));
+      details.hidden = !expanded;
+      if (expanded) alignNestedUuidColumn(row, details);
+    }
+
+    function toggleDetails() {
+      const shouldExpand = row.getAttribute("aria-expanded") !== "true";
+
+      if (shouldExpand) {
+        row.parentElement.querySelectorAll('[data-directory-row-toggle][aria-expanded="true"]').forEach((openRow) => {
+          openRow.setAttribute("aria-expanded", "false");
+          document.getElementById(openRow.getAttribute("aria-controls")).hidden = true;
+        });
+      }
+
+      setExpanded(shouldExpand);
+    }
+
+    row.addEventListener("click", (event) => {
+      if (event.target.closest("a, button, input, select, textarea")) return;
+      toggleDetails();
+    });
+
+    row.addEventListener("keydown", (event) => {
+      if (event.target !== row || (event.key !== "Enter" && event.key !== " ")) return;
+      event.preventDefault();
+      toggleDetails();
+    });
+  });
+
+  window.addEventListener("resize", () => {
+    document
+      .querySelectorAll('[data-directory-row-toggle][aria-expanded="true"]')
+      .forEach((row) => {
+        alignNestedUuidColumn(row, document.getElementById(row.getAttribute("aria-controls")));
+      });
+  });
+</script>
