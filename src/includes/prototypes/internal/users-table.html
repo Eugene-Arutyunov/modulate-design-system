@@ -1,25 +1,116 @@
-{% macro user_actions(label, href, uuid) %}
-<div class="m__menu-button">
-  <button
-    type="button"
-    class="m__menu-button-icon S m__menu-button-trigger"
-    aria-label="Actions for {{ label }}"
-    aria-expanded="false"
-  >
-    <svg viewBox="0 0 12 12" aria-hidden="true">
-      <use href="#dots-vertical"></use>
-    </svg>
-  </button>
-  <div class="m__menu-button-list internal-directory-actions" hidden>
-    <a href="{{ href }}" class="m__menu-button-item">Details</a>
-    <button type="button" class="m__menu-button-item" data-copy-uuid="{{ uuid }}">Copy UUID</button>
-    <button type="button" class="m__menu-button-item">Add to Organization</button>
-    <button type="button" class="m__menu-button-item">Send Password Reset</button>
-    <button type="button" class="m__menu-button-item">Generate Reset Link</button>
-    <button type="button" class="m__menu-button-item">Block</button>
-    <button type="button" class="m__menu-button-item m__menu-button-item--danger">Delete</button>
-  </div>
-</div>
+{% macro user_expansion(id, uuid, organization, organizationUuid, role, lastActive, logAction, logDetails, logCreated) %}
+<tr id="{{ id }}" class="internal-directory-expanded-row" hidden>
+  <td colspan="6">
+    <div class="internal-directory-expanded-panel">
+      <section class="internal-directory-expanded-section">
+        <h3>Actions</h3>
+        <div class="internal-directory-expanded-actions">
+          <button type="button" class="m__button-secondary-outline S">Send Password Reset</button>
+          <button type="button" class="m__button-secondary-outline S">Generate Reset Link</button>
+          <button type="button" class="m__button-danger-outline S">Block</button>
+          <button type="button" class="m__button-danger-outline S">Delete User</button>
+        </div>
+      </section>
+
+      <section class="internal-directory-expanded-section">
+        <h3>Organizations</h3>
+        <div class="m__table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Organization</th>
+                <th>UUID</th>
+                <th>Role</th>
+                <th>Internal</th>
+                <th class="m__col-actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ organization }}</td>
+                <td class="internal-directory-meta">
+                  <span class="internal-directory-uuid" data-expand-uuid>
+                    <span class="internal-uuid-barcode" data-uuid-barcode="{{ organizationUuid }}" aria-hidden="true"></span>
+                    <span class="internal-directory-uuid-value">{{ organizationUuid }}</span>
+                  </span>
+                </td>
+                <td>
+                  <label class="m__select S internal-directory-role-select">
+                    <div class="m__select__inline-control">
+                      <span class="m__select__value">{{ role }}</span>
+                      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                        <use href="#chevron-down"></use>
+                      </svg>
+                      <select aria-label="Role in {{ organization }}">
+                        <option{% if role == 'Admin' %} selected{% endif %}>Admin</option>
+                        <option{% if role == 'Developer' %} selected{% endif %}>Developer</option>
+                        <option{% if role == 'Member' %} selected{% endif %}>Member</option>
+                      </select>
+                    </div>
+                  </label>
+                </td>
+                <td class="muted">&mdash;</td>
+                <td class="m__col-actions">
+                  <button type="button" class="m__button-danger-outline S">Remove</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button
+          type="button"
+          class="m__button-secondary-outline S internal-directory-expanded-section-action"
+        >
+          Add to Organization
+        </button>
+      </section>
+
+      <section class="internal-directory-expanded-section">
+        <h3>Last Active</h3>
+        <div class="m__table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Organization</th>
+                <th>Session Type</th>
+                <th>Last Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ organization }}</td>
+                <td>Web</td>
+                <td class="internal-directory-meta">{{ lastActive }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="internal-directory-expanded-section">
+        <h3>Activity Log</h3>
+        <div class="m__table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Details</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="internal-directory-meta">{{ logAction }}</td>
+                <td>{{ logDetails }}</td>
+                <td class="internal-directory-meta">{{ logCreated }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </td>
+</tr>
 {% endmacro %}
 
 <div class="m__widget internal-directory-table">
@@ -45,13 +136,14 @@
           <th>Roles</th>
           <th>Status</th>
           <th>Created</th>
-          <th class="m__col-actions"></th>
         </tr>
       </thead>
       <tbody>
         <tr
           class="internal-directory-row"
-          data-directory-row-href="/internal/users/details/?user=e2e-test-0"
+          data-directory-row-toggle
+          aria-expanded="false"
+          aria-controls="internal-user-e2e-details"
           tabindex="0"
         >
           <td>
@@ -63,7 +155,7 @@
             </span>
           </td>
           <td class="internal-directory-meta">
-            <span class="internal-directory-uuid">
+            <span class="internal-directory-uuid" data-expand-uuid>
               <span class="internal-uuid-barcode" data-uuid-barcode="014f3307-7a76-47d1-bd8e-f1ccee0afa26" aria-hidden="true"></span>
               <span class="internal-directory-uuid-value">014f3307-7a76-47d1-bd8e-f1ccee0afa26</span>
             </span>
@@ -72,11 +164,13 @@
           <td>Admin</td>
           <td><span class="m__tag m__tag--success">Active</span></td>
           <td class="internal-directory-meta">01/09/2026, 18:28:35</td>
-          <td class="m__col-actions">{{ user_actions('E2E Test 0', '/internal/users/details/?user=e2e-test-0', '014f3307-7a76-47d1-bd8e-f1ccee0afa26') }}</td>
         </tr>
+        {{ user_expansion('internal-user-e2e-details', '014f3307-7a76-47d1-bd8e-f1ccee0afa26', 'Personal', '10b8d430-b67d-40d3-9348-36ab8ae769d0', 'Admin', '24/08/2026, 11:53:02', 'api_key_create', "Created model API key 'Memorand'", '24/08/2026, 11:53:02') }}
         <tr
           class="internal-directory-row"
-          data-directory-row-href="/internal/users/details/?user=alexandra-stern"
+          data-directory-row-toggle
+          aria-expanded="false"
+          aria-controls="internal-user-alexandra-details"
           tabindex="0"
         >
           <td>
@@ -84,7 +178,7 @@
             <span class="internal-directory-email">alexandra.stern@example.com</span>
           </td>
           <td class="internal-directory-meta">
-            <span class="internal-directory-uuid">
+            <span class="internal-directory-uuid" data-expand-uuid>
               <span class="internal-uuid-barcode" data-uuid-barcode="0cb48d2d-43b9-461d-a429-7fc8f14c65bf" aria-hidden="true"></span>
               <span class="internal-directory-uuid-value">0cb48d2d-43b9-461d-a429-7fc8f14c65bf</span>
             </span>
@@ -93,11 +187,13 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:40:39</td>
-          <td class="m__col-actions">{{ user_actions('Alexandra Stern', '/internal/users/details/?user=alexandra-stern', '0cb48d2d-43b9-461d-a429-7fc8f14c65bf') }}</td>
         </tr>
+        {{ user_expansion('internal-user-alexandra-details', '0cb48d2d-43b9-461d-a429-7fc8f14c65bf', 'GrubHub Pilot', '28d72d8d-c4f8-47eb-8864-217ef4883b68', 'Developer', '28/08/2026, 14:12:08', 'organization_join', 'Joined GrubHub Pilot as Developer', '28/08/2026, 14:12:08') }}
         <tr
           class="internal-directory-row"
-          data-directory-row-href="/internal/users/details/?user=kiara"
+          data-directory-row-toggle
+          aria-expanded="false"
+          aria-controls="internal-user-kiara-details"
           tabindex="0"
         >
           <td>
@@ -105,7 +201,7 @@
             <span class="internal-directory-email">kiara.sanchez@example.com</span>
           </td>
           <td class="internal-directory-meta">
-            <span class="internal-directory-uuid">
+            <span class="internal-directory-uuid" data-expand-uuid>
               <span class="internal-uuid-barcode" data-uuid-barcode="5795a57f-9273-4f4e-8289-a39783d387c1" aria-hidden="true"></span>
               <span class="internal-directory-uuid-value">5795a57f-9273-4f4e-8289-a39783d387c1</span>
             </span>
@@ -114,8 +210,8 @@
           <td class="muted">&mdash;</td>
           <td class="muted">&mdash;</td>
           <td class="internal-directory-meta">01/09/2026, 17:31:01</td>
-          <td class="m__col-actions">{{ user_actions('Kiara', '/internal/users/details/?user=kiara', '5795a57f-9273-4f4e-8289-a39783d387c1') }}</td>
         </tr>
+        {{ user_expansion('internal-user-kiara-details', '5795a57f-9273-4f4e-8289-a39783d387c1', 'Personal', '6b9ba7b0-779b-4f26-b87e-eebdb38bca79', 'Member', '25/08/2026, 09:10:06', 'console_session_active_once_per_day', '&mdash;', '25/08/2026, 09:10:06') }}
       </tbody>
     </table>
   </div>
