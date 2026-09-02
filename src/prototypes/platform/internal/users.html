@@ -109,6 +109,48 @@ permalink: /internal/users/
     });
   });
 
+  const testAccountToggles = document.querySelectorAll("[data-test-accounts-toggle]");
+  const testAccountsStorageKey = "internal-directory-show-test-accounts";
+
+  function applyTestAccountsVisibility(showTestAccounts) {
+    testAccountToggles.forEach((toggle) => {
+      toggle.checked = showTestAccounts;
+    });
+
+    document.querySelectorAll("[data-account-type]").forEach((row) => {
+      const visible = showTestAccounts || row.dataset.accountType !== "test";
+      const details = document.getElementById(row.getAttribute("aria-controls"));
+
+      row.hidden = !visible;
+      if (!visible && details) {
+        row.setAttribute("aria-expanded", "false");
+        details.hidden = true;
+      }
+    });
+  }
+
+  let showTestAccounts = true;
+  try {
+    const storedVisibility = window.localStorage.getItem(testAccountsStorageKey);
+    if (storedVisibility !== null) {
+      showTestAccounts = storedVisibility === "true";
+    }
+  } catch (error) {
+    // Storage may be unavailable in privacy-restricted contexts.
+  }
+  applyTestAccountsVisibility(showTestAccounts);
+
+  testAccountToggles.forEach((toggle) => {
+    toggle.addEventListener("change", () => {
+      applyTestAccountsVisibility(toggle.checked);
+      try {
+        window.localStorage.setItem(testAccountsStorageKey, String(toggle.checked));
+      } catch (error) {
+        // Filtering still works when storage is unavailable.
+      }
+    });
+  });
+
   function alignNestedUuidColumn(row, details) {
     const sourceBarcode = row.querySelector(".internal-uuid-barcode");
     const nestedTable = details.querySelector(".internal-directory-nested-uuid-table");
@@ -135,6 +177,13 @@ permalink: /internal/users/
     leadingColumn.style.width = `${Math.max(0, leadingColumnWidth)}px`;
     uuidColumn.style.width = `${Math.max(0, thirdColumnLeft - uuidLeft)}px`;
     roleColumn.style.width = `${Math.max(0, statusColumnLeft - thirdColumnLeft)}px`;
+
+    details.querySelectorAll(".internal-directory-aligned-detail-table").forEach((table) => {
+      const columns = table.querySelectorAll("col");
+      const tableLeft = table.getBoundingClientRect().left;
+      columns[0].style.width = `${Math.max(0, uuidLeft - tableLeft)}px`;
+      columns[1].style.width = `${Math.max(0, thirdColumnLeft - uuidLeft)}px`;
+    });
   }
 
   document.querySelectorAll("[data-directory-row-toggle]").forEach((row) => {

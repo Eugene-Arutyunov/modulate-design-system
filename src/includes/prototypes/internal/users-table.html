@@ -76,6 +76,11 @@
         <h3>Last Active</h3>
         <div class="m__table-wrapper">
           <table class="internal-directory-aligned-detail-table">
+            <colgroup>
+              <col />
+              <col />
+              <col />
+            </colgroup>
             <thead>
               <tr>
                 <th>Organization</th>
@@ -98,6 +103,11 @@
         <h3>Activity Log</h3>
         <div class="m__table-wrapper">
           <table class="internal-directory-aligned-detail-table">
+            <colgroup>
+              <col />
+              <col />
+              <col />
+            </colgroup>
             <thead>
               <tr>
                 <th>Action</th>
@@ -129,12 +139,27 @@
       <input
         type="search"
         id="internal-users-search"
-        placeholder="Search by uuid, name, email, organization or tag"
+        placeholder="Search by uuid, name, email or organization"
       />
     </label>
+    <div class="internal-directory-account-filter">
+      <label class="m__toggle-primary">
+        Show test accounts
+        <input type="checkbox" data-test-accounts-toggle checked />
+      </label>
+    </div>
   </div>
   <div class="m__table-wrapper">
     <table class="internal-directory-main-table">
+      <colgroup>
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+      </colgroup>
       <thead>
         <tr>
           <th class="internal-directory-expand-cell"></th>
@@ -149,6 +174,7 @@
       <tbody>
         <tr
           class="internal-directory-row"
+          data-account-type="test"
           data-directory-row-toggle
           aria-expanded="false"
           aria-controls="internal-user-e2e-details"
@@ -175,6 +201,7 @@
         {{ user_expansion('internal-user-e2e-details', '014f3307-7a76-47d1-bd8e-f1ccee0afa26', 'Personal', '10b8d430-b67d-40d3-9348-36ab8ae769d0', 'Admin', '24/08/2026, 11:53:02', 'api_key_create', "Created model API key 'Memorand'", '24/08/2026, 11:53:02') }}
         <tr
           class="internal-directory-row"
+          data-account-type="production"
           data-directory-row-toggle
           aria-expanded="false"
           aria-controls="internal-user-alexandra-details"
@@ -201,6 +228,7 @@
         {{ user_expansion('internal-user-alexandra-details', '0cb48d2d-43b9-461d-a429-7fc8f14c65bf', 'GrubHub Pilot', '28d72d8d-c4f8-47eb-8864-217ef4883b68', 'Developer', '28/08/2026, 14:12:08', 'organization_join', 'Joined GrubHub Pilot as Developer', '28/08/2026, 14:12:08') }}
         <tr
           class="internal-directory-row"
+          data-account-type="production"
           data-directory-row-toggle
           aria-expanded="false"
           aria-controls="internal-user-kiara-details"
