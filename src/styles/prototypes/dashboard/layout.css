@@ -890,6 +890,13 @@ table.config-details {
   }
 }
 
+.internal-directory-main-table
+  > :is(thead, tbody)
+  > tr
+  > :is(th, td):nth-child(2) {
+  width: 27%;
+}
+
 .internal-directory-email {
   display: block;
   line-height: 1.3;
@@ -930,7 +937,7 @@ table.config-details {
 }
 
 .internal-directory-expanded-row > td {
-  padding: 0 0 var(--m__gap-m) !important;
+  padding: 0 0 calc(3 * var(--m__widget-padding)) !important;
 }
 
 .internal-directory-row[aria-expanded="true"] > td {
@@ -951,8 +958,38 @@ table.config-details {
   filter: brightness(103%) saturate(102%);
 }
 
+.internal-directory-expand-cell {
+  box-sizing: content-box;
+  inline-size: 0.75rem;
+  padding-inline-end: var(--m__gap-xs) !important;
+  vertical-align: top;
+  color: var(--m__text-caption);
+
+  & svg {
+    position: relative;
+    top: 0.1rem;
+    display: inline-block;
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    stroke: currentColor;
+    stroke-width: 0.7;
+    stroke-linejoin: round;
+    transform: rotate(-90deg);
+    transition: color var(--m__duration-base) var(--m__easing-base);
+  }
+}
+
+.internal-directory-row:is(:hover, :focus-visible, [aria-expanded="true"])
+  .internal-directory-expand-cell {
+  color: var(--m__text-link-hover);
+}
+
+.internal-directory-row[aria-expanded="true"] .internal-directory-expand-cell svg {
+  transform: rotate(0deg);
+  stroke-width: 0.9;
+}
+
 .internal-directory-expanded-panel {
-  --internal-directory-expanded-edge-gap: var(--m__gap-xxxs);
   --internal-directory-expanded-divider: color-mix(
     in srgb,
     var(--m__text) 7%,
@@ -964,12 +1001,10 @@ table.config-details {
   background-color: var(--m__bg);
   border-radius: var(--m__widget-radius);
   corner-shape: squircle;
-  margin-inline: calc(
-    var(--internal-directory-expanded-edge-gap) - var(--m__widget-padding)
-  );
-  padding: var(--m__gap-l)
-    calc(var(--m__widget-padding) - var(--internal-directory-expanded-edge-gap))
-    var(--m__gap-xxl);
+  margin: 0 calc(2 * var(--m__widget-padding)) 0 0;
+  padding: var(--m__gap-l) calc(3 * var(--m__widget-padding))
+    calc(2 * var(--m__widget-padding))
+    calc(var(--m__widget-padding) + var(--m__gap-xxxxs));
 
   & .internal-directory-uuid {
     --internal-directory-uuid-overlay-bg: var(--m__bg);
@@ -1015,6 +1050,61 @@ table.config-details {
 
   & .internal-directory-expanded-section-header h3 {
     margin-bottom: 0;
+  }
+}
+
+.internal-directory-aligned-detail-table {
+  table-layout: fixed;
+
+  & :is(th, td):nth-child(1) {
+    width: 31%;
+  }
+
+  & :is(th, td):nth-child(2) {
+    width: 43%;
+  }
+}
+
+:is(
+  .internal-directory-request-log-table,
+  .internal-directory-credit-ledger-table
+) {
+  table-layout: fixed;
+}
+
+.internal-directory-request-log-table {
+  & :is(th, td):nth-child(1) {
+    width: 31%;
+  }
+
+  & :is(th, td):nth-child(2) {
+    width: 15%;
+  }
+
+  & :is(th, td):nth-child(3) {
+    width: 10%;
+  }
+
+  & :is(th, td):nth-child(4) {
+    width: 24%;
+  }
+
+  & :is(th, td):nth-child(5) {
+    width: 20%;
+  }
+}
+
+.internal-directory-credit-ledger-table {
+  & :is(th, td):nth-child(1) {
+    width: 31%;
+  }
+
+  & :is(th, td):nth-child(2) {
+    width: 49%;
+  }
+
+  & :is(th, td):nth-child(3) {
+    width: 20%;
   }
 }
 
@@ -1124,6 +1214,22 @@ table.config-details {
   & > span + span {
     margin-inline-start: -0.25rem;
   }
+}
+
+.internal-directory-uuid[data-expand-uuid] .internal-uuid-barcode {
+  inline-size: 7.25rem;
+
+  & > span + span {
+    margin-inline-start: -0.32rem;
+    transition: margin-inline-start var(--m__duration-base) var(--m__easing-base);
+  }
+}
+
+.internal-directory-uuid[data-expand-uuid]:is(:hover, :focus-visible)
+  .internal-uuid-barcode
+  > span
+  + span {
+  margin-inline-start: -0.22rem;
 }
 
 .internal-directory-uuid:is(:hover, :focus-visible) .internal-uuid-barcode,

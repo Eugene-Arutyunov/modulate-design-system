@@ -1,6 +1,6 @@
 {% macro user_expansion(id, uuid, organization, organizationUuid, role, lastActive, logAction, logDetails, logCreated) %}
 <tr id="{{ id }}" class="internal-directory-expanded-row" hidden>
-  <td colspan="6">
+  <td colspan="7">
     <div class="internal-directory-expanded-panel">
       <section class="internal-directory-expanded-section">
         <h3>Actions</h3>
@@ -15,7 +15,14 @@
       <section class="internal-directory-expanded-section">
         <h3>Organizations</h3>
         <div class="m__table-wrapper">
-          <table>
+          <table class="internal-directory-nested-uuid-table">
+            <colgroup>
+              <col data-nested-uuid-leading-column />
+              <col data-nested-uuid-column />
+              <col data-nested-role-column />
+              <col />
+              <col />
+            </colgroup>
             <thead>
               <tr>
                 <th>Organization</th>
@@ -68,7 +75,7 @@
       <section class="internal-directory-expanded-section">
         <h3>Last Active</h3>
         <div class="m__table-wrapper">
-          <table>
+          <table class="internal-directory-aligned-detail-table">
             <thead>
               <tr>
                 <th>Organization</th>
@@ -90,7 +97,7 @@
       <section class="internal-directory-expanded-section">
         <h3>Activity Log</h3>
         <div class="m__table-wrapper">
-          <table>
+          <table class="internal-directory-aligned-detail-table">
             <thead>
               <tr>
                 <th>Action</th>
@@ -127,9 +134,10 @@
     </label>
   </div>
   <div class="m__table-wrapper">
-    <table>
+    <table class="internal-directory-main-table">
       <thead>
         <tr>
+          <th class="internal-directory-expand-cell"></th>
           <th>User</th>
           <th>UUID</th>
           <th>Organization</th>
@@ -146,13 +154,12 @@
           aria-controls="internal-user-e2e-details"
           tabindex="0"
         >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
           <td>
             <strong>E2E Test 0</strong>
             <span class="internal-directory-email">e2e.test.0@example.com</span>
-            <span class="m__tag-group internal-directory-tags">
-              <span class="m__tag-flat">E2E</span>
-              <span class="m__tag-flat">Demo</span>
-            </span>
           </td>
           <td class="internal-directory-meta">
             <span class="internal-directory-uuid" data-expand-uuid>
@@ -173,6 +180,9 @@
           aria-controls="internal-user-alexandra-details"
           tabindex="0"
         >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
           <td>
             <strong>Alexandra Stern</strong>
             <span class="internal-directory-email">alexandra.stern@example.com</span>
@@ -196,6 +206,9 @@
           aria-controls="internal-user-kiara-details"
           tabindex="0"
         >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
           <td>
             <strong>Kiara</strong>
             <span class="internal-directory-email">kiara.sanchez@example.com</span>

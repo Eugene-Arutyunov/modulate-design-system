@@ -1,6 +1,6 @@
 {% macro organization_expansion(id, uuid, balance, limit, memberName, memberEmail, memberUuid, memberRole, model, requestStatus, credits, submitted, delta, reason) %}
 <tr id="{{ id }}" class="internal-directory-expanded-row" hidden>
-  <td colspan="6">
+  <td colspan="7">
     <div class="internal-directory-expanded-panel">
       <section class="internal-directory-expanded-section">
         <h3>Actions</h3>
@@ -29,7 +29,14 @@
       <section class="internal-directory-expanded-section">
         <h3>Members</h3>
         <div class="m__table-wrapper">
-          <table>
+          <table class="internal-directory-nested-uuid-table">
+            <colgroup>
+              <col data-nested-uuid-leading-column />
+              <col data-nested-uuid-column />
+              <col data-nested-role-column />
+              <col />
+              <col />
+            </colgroup>
             <thead>
               <tr>
                 <th>Member</th>
@@ -85,7 +92,7 @@
       <section class="internal-directory-expanded-section">
         <h3>Request Log (Last 90 Days)</h3>
         <div class="m__table-wrapper">
-          <table>
+          <table class="internal-directory-request-log-table">
             <thead>
               <tr>
                 <th>Model</th>
@@ -111,7 +118,7 @@
       <section class="internal-directory-expanded-section">
         <h3>Credit Ledger (Last 90 Days)</h3>
         <div class="m__table-wrapper">
-          <table>
+          <table class="internal-directory-credit-ledger-table">
             <thead>
               <tr>
                 <th>Delta</th>
@@ -148,9 +155,10 @@
     </label>
   </div>
   <div class="m__table-wrapper">
-    <table>
+    <table class="internal-directory-main-table">
       <thead>
         <tr>
+          <th class="internal-directory-expand-cell"></th>
           <th>Organization</th>
           <th>UUID</th>
           <th>Internal</th>
@@ -167,6 +175,9 @@
           aria-controls="internal-organization-e2e-details"
           tabindex="0"
         >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
           <td>
             <strong>Personal</strong>
             <span class="internal-directory-email">e2e.admin@example.com</span>
@@ -194,6 +205,9 @@
           aria-controls="internal-organization-grubhub-details"
           tabindex="0"
         >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
           <td>
             <strong>Personal</strong>
             <span class="internal-directory-email">pilot.admin@example.com</span>
@@ -217,6 +231,9 @@
           aria-controls="internal-organization-kiara-details"
           tabindex="0"
         >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
           <td>
             <strong>Personal</strong>
             <span class="internal-directory-email">personal.admin@example.com</span>

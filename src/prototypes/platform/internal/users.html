@@ -109,12 +109,41 @@ permalink: /internal/users/
     });
   });
 
+  function alignNestedUuidColumn(row, details) {
+    const sourceBarcode = row.querySelector(".internal-uuid-barcode");
+    const nestedTable = details.querySelector(".internal-directory-nested-uuid-table");
+    const leadingColumn = nestedTable?.querySelector("[data-nested-uuid-leading-column]");
+    const uuidColumn = nestedTable?.querySelector("[data-nested-uuid-column]");
+    const roleColumn = nestedTable?.querySelector("[data-nested-role-column]");
+    const sourceThirdColumn = row.children[3];
+    const sourceStatusColumn = row.children[5];
+
+    if (
+      !sourceBarcode ||
+      !leadingColumn ||
+      !uuidColumn ||
+      !roleColumn ||
+      !sourceThirdColumn ||
+      !sourceStatusColumn
+    ) return;
+
+    const nestedTableLeft = nestedTable.getBoundingClientRect().left;
+    const uuidLeft = sourceBarcode.getBoundingClientRect().left;
+    const thirdColumnLeft = sourceThirdColumn.getBoundingClientRect().left;
+    const statusColumnLeft = sourceStatusColumn.getBoundingClientRect().left;
+    const leadingColumnWidth = uuidLeft - nestedTableLeft;
+    leadingColumn.style.width = `${Math.max(0, leadingColumnWidth)}px`;
+    uuidColumn.style.width = `${Math.max(0, thirdColumnLeft - uuidLeft)}px`;
+    roleColumn.style.width = `${Math.max(0, statusColumnLeft - thirdColumnLeft)}px`;
+  }
+
   document.querySelectorAll("[data-directory-row-toggle]").forEach((row) => {
     const details = document.getElementById(row.getAttribute("aria-controls"));
 
     function setExpanded(expanded) {
       row.setAttribute("aria-expanded", String(expanded));
       details.hidden = !expanded;
+      if (expanded) alignNestedUuidColumn(row, details);
     }
 
     function toggleDetails() {
@@ -140,6 +169,14 @@ permalink: /internal/users/
       event.preventDefault();
       toggleDetails();
     });
+  });
+
+  window.addEventListener("resize", () => {
+    document
+      .querySelectorAll('[data-directory-row-toggle][aria-expanded="true"]')
+      .forEach((row) => {
+        alignNestedUuidColumn(row, document.getElementById(row.getAttribute("aria-controls")));
+      });
   });
 
 </script>
