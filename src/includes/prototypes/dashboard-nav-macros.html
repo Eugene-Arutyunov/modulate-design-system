@@ -1,9 +1,9 @@
-{% macro primary_nav(variant, currentUrl) %} {% set isDashboard = currentUrl |
-startsWith('/dashboard/') %} {% set isDashboardLinkActive = isDashboard %} {% set isPlaygroundLinkActive = currentUrl |
+{% macro primary_nav(variant, currentUrl) %} {% set isDashboard = (currentUrl |
+startsWith('/dashboard/')) or (currentUrl | startsWith('/internal/')) %} {% set isDashboardLinkActive = isDashboard %} {% set isPlaygroundLinkActive = currentUrl |
 startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
-'/dashboard/home/' %}<span class="prototype-header__link active">Dashboard</span
+'/dashboard/overview/' %}<span class="prototype-header__link active">Dashboard</span
 >{% else %}<a
-  href="/dashboard/home/"
+  href="/dashboard/overview/"
   class="prototype-header__link {{ 'active' if isDashboardLinkActive }}"
   >Dashboard</a
 >{% endif %}
@@ -46,7 +46,7 @@ startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
   >Docs</a
 >{% endif %} {% else %}
 <a
-  href="/dashboard/home/"
+  href="/dashboard/overview/"
   class="prototype-header__popover-link {{ 'active' if isDashboardLinkActive }}"
   role="menuitem"
   >Dashboard</a
@@ -98,12 +98,12 @@ startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
 {% endif %} {% endmacro %} {% macro dashboard_nav_main(variant) %} {% if variant
 == "sidebar" %}
 <a
-  href="/dashboard/home/"
-  class="m__nav-menu-item {{ 'active' if pageTitle == 'Home' }}"
+  href="/dashboard/overview/"
+  class="m__nav-menu-item {{ 'active' if pageTitle == 'Overview' }}"
   ><svg class="m__nav-menu-item__icon" viewBox="0 0 32 32" aria-hidden="true">
     <use href="#overview"></use>
   </svg>
-  <span>Home</span></a
+  <span>Overview</span></a
 >
 <a
   href="/dashboard/conversations/"
@@ -193,7 +193,7 @@ startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
   <a
     href="/internal/users/"
     class="m__nav-menu-item {{ 'active' if pageTitle == 'Users & Organizations' }}"
-    ><span class="m__nav-menu-item__caption">Clients</span></a
+    ><span class="m__nav-menu-item__caption">Users &amp; Organizations</span></a
   >
   <a
     href="/internal/data/"
@@ -228,8 +228,8 @@ startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
 </div>
 {% else %}
 <a
-  href="/dashboard/home/"
-  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Home' }}"
+  href="/dashboard/overview/"
+  class="prototype-header__popover-link {{ 'active' if pageTitle == 'Overview' }}"
   role="menuitem"
   ><svg
     class="prototype-header__popover-link-icon"
@@ -238,7 +238,7 @@ startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
   >
     <use href="#overview"></use>
   </svg>
-  <span>Home</span></a
+  <span>Overview</span></a
 >
 <div class="m__nav-menu-heading">OBSERVE</div>
 <a
@@ -381,7 +381,9 @@ startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
     href="/internal/users/"
     class="prototype-header__popover-meta-link {{ 'active' if pageTitle == 'Users & Organizations' }}"
     role="menuitem"
-    ><span class="prototype-header__popover-meta-caption">Clients</span></a
+    ><span class="prototype-header__popover-meta-caption"
+      >Users &amp; Organizations</span
+    ></a
   >
   <a
     href="/internal/data/"
@@ -431,7 +433,7 @@ startsWith('/playground/') %} {% if variant == "bar" %} {% if currentUrl ==
   >
 </div>
 {% endif %} {% endmacro %} {% macro dashboard_nav_settings() %}
-<a href="/dashboard/home/" class="m__nav-menu-item">
+<a href="/dashboard/overview/" class="m__nav-menu-item">
   <svg class="m__nav-menu-item__icon" viewBox="0 0 12 12" aria-hidden="true">
     <path
       d="M7.25 2.75 4 6l3.25 3.25"

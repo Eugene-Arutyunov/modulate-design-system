@@ -1,0 +1,256 @@
+{% macro organization_expansion(id, uuid, balance, limit, memberName, memberEmail, memberUuid, memberRole, model, requestStatus, credits, submitted, delta, reason) %}
+<tr id="{{ id }}" class="internal-directory-expanded-row" hidden>
+  <td colspan="7">
+    <div class="internal-directory-expanded-panel">
+      <section class="internal-directory-expanded-section">
+        <h3>Actions</h3>
+        <div class="internal-directory-expanded-actions">
+          <button type="button" class="m__button-secondary-outline S">Enable Invoice Only</button>
+          <button type="button" class="m__button-secondary-outline S" disabled>Make Internal</button>
+          <button type="button" class="m__button-danger-outline S">Block</button>
+          <button type="button" class="m__button-danger-outline S">Delete Organization</button>
+        </div>
+      </section>
+
+      <section class="internal-directory-expanded-section">
+        <h3>Credit Balance</h3>
+        <div class="internal-directory-expanded-balance">
+          <div class="internal-directory-expanded-balance-main">
+            <p class="m__widget__value">{{ balance }}</p>
+            <div class="internal-directory-expanded-balance-actions">
+              <button type="button" class="m__button-secondary-outline S">Grant Credits</button>
+              <button type="button" class="m__button-secondary-outline S">Set Limit</button>
+            </div>
+          </div>
+          <p class="internal-directory-expanded-balance-limit">Monthly Credit Limit: {{ limit }}</p>
+        </div>
+      </section>
+
+      <section class="internal-directory-expanded-section">
+        <h3>Members</h3>
+        <div class="m__table-wrapper">
+          <table class="internal-directory-nested-uuid-table">
+            <colgroup>
+              <col data-nested-uuid-leading-column />
+              <col data-nested-uuid-column />
+              <col data-nested-role-column />
+              <col />
+              <col />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>UUID</th>
+                <th>Role</th>
+                <th>Flags</th>
+                <th class="m__col-actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>{{ memberName }}</strong>
+                  <span class="internal-directory-email">{{ memberEmail }}</span>
+                </td>
+                <td class="internal-directory-meta">
+                  <span class="internal-directory-uuid" data-expand-uuid>
+                    <span class="internal-uuid-barcode" data-uuid-barcode="{{ memberUuid }}" aria-hidden="true"></span>
+                    <span class="internal-directory-uuid-value">{{ memberUuid }}</span>
+                  </span>
+                </td>
+                <td>
+                  <label class="m__select S internal-directory-role-select">
+                    <div class="m__select__inline-control">
+                      <span class="m__select__value">{{ memberRole }}</span>
+                      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                        <use href="#chevron-down"></use>
+                      </svg>
+                      <select aria-label="Role for {{ memberName }}">
+                        <option{% if memberRole == 'Admin' %} selected{% endif %}>Admin</option>
+                        <option{% if memberRole == 'Developer' %} selected{% endif %}>Developer</option>
+                        <option{% if memberRole == 'Member' %} selected{% endif %}>Member</option>
+                      </select>
+                    </div>
+                  </label>
+                </td>
+                <td class="muted">&mdash;</td>
+                <td class="m__col-actions">
+                  <button type="button" class="m__button-danger-outline S">Remove</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button
+          type="button"
+          class="m__button-secondary-outline S internal-directory-expanded-section-action"
+        >
+          Add Member
+        </button>
+      </section>
+
+      <section class="internal-directory-expanded-section">
+        <h3>Request Log (Last 90 Days)</h3>
+        <div class="m__table-wrapper">
+          <table class="internal-directory-request-log-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Status</th>
+                <th>Credits</th>
+                <th>Duration</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ model }}</td>
+                <td><span class="m__tag m__tag--success">{{ requestStatus }}</span></td>
+                <td>{{ credits }}</td>
+                <td class="internal-directory-meta">1841292 ms</td>
+                <td class="internal-directory-meta">{{ submitted }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="internal-directory-expanded-section">
+        <h3>Credit Ledger (Last 90 Days)</h3>
+        <div class="m__table-wrapper">
+          <table class="internal-directory-credit-ledger-table">
+            <thead>
+              <tr>
+                <th>Delta</th>
+                <th>Reason</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="internal-directory-meta internal-credit-delta--negative">{{ delta }}</td>
+                <td>{{ reason }}</td>
+                <td class="internal-directory-meta">{{ submitted }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </td>
+</tr>
+{% endmacro %}
+
+<div class="m__widget internal-directory-table">
+  <div class="m__widget-header">
+    <label class="m__searchbar" for="internal-organizations-search">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <use href="#search"></use>
+      </svg>
+      <input
+        type="search"
+        id="internal-organizations-search"
+        placeholder="Search by uuid, name, email or tag"
+      />
+    </label>
+  </div>
+  <div class="m__table-wrapper">
+    <table class="internal-directory-main-table">
+      <thead>
+        <tr>
+          <th class="internal-directory-expand-cell"></th>
+          <th>Organization</th>
+          <th>UUID</th>
+          <th>Internal</th>
+          <th>Invoice</th>
+          <th>Status</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="internal-directory-row"
+          data-directory-row-toggle
+          aria-expanded="false"
+          aria-controls="internal-organization-e2e-details"
+          tabindex="0"
+        >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
+          <td>
+            <strong>Personal</strong>
+            <span class="internal-directory-email">e2e.admin@example.com</span>
+            <span class="m__tag-group internal-directory-tags">
+              <span class="m__tag-flat">E2E</span>
+              <span class="m__tag-flat">Demo</span>
+            </span>
+          </td>
+          <td class="internal-directory-meta">
+            <span class="internal-directory-uuid" data-expand-uuid>
+              <span class="internal-uuid-barcode" data-uuid-barcode="10b8d430-b67d-40d3-9348-36ab8ae769d0" aria-hidden="true"></span>
+              <span class="internal-directory-uuid-value">10b8d430-b67d-40d3-9348-36ab8ae769d0</span>
+            </span>
+          </td>
+          <td class="muted">&mdash;</td>
+          <td class="muted">&mdash;</td>
+          <td><span class="m__tag m__tag--success">Active</span></td>
+          <td class="internal-directory-meta">01/09/2026, 18:28:35</td>
+        </tr>
+        {{ organization_expansion('internal-organization-e2e-details', '10b8d430-b67d-40d3-9348-36ab8ae769d0', '993.82', 'Not set', 'Ryan', 'ryan.wheeler@example.com', '8f2d6c14-91b8-4a7e-a1d3-5c77e4b6029f', 'Admin', 'Velma-2 STT Batch', 'Success', '1.53', '29/08/2026, 18:08:41', '-1.53', 'usage deduction') }}
+        <tr
+          class="internal-directory-row"
+          data-directory-row-toggle
+          aria-expanded="false"
+          aria-controls="internal-organization-grubhub-details"
+          tabindex="0"
+        >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
+          <td>
+            <strong>Personal</strong>
+            <span class="internal-directory-email">pilot.admin@example.com</span>
+          </td>
+          <td class="internal-directory-meta">
+            <span class="internal-directory-uuid" data-expand-uuid>
+              <span class="internal-uuid-barcode" data-uuid-barcode="28d72d8d-c4f8-47eb-8864-217ef4883b68" aria-hidden="true"></span>
+              <span class="internal-directory-uuid-value">28d72d8d-c4f8-47eb-8864-217ef4883b68</span>
+            </span>
+          </td>
+          <td class="muted">&mdash;</td>
+          <td class="muted">&mdash;</td>
+          <td class="muted">&mdash;</td>
+          <td class="internal-directory-meta">01/09/2026, 17:40:39</td>
+        </tr>
+        {{ organization_expansion('internal-organization-grubhub-details', '28d72d8d-c4f8-47eb-8864-217ef4883b68', '880.00', '1,000', 'Alexandra Stern', 'alexandra.stern@example.com', '0cb48d2d-43b9-461d-a429-7fc8f14c65bf', 'Developer', 'Velma-2 STT Batch', 'Success', '1.58', '26/08/2026, 09:56:08', '-1.58', 'usage deduction') }}
+        <tr
+          class="internal-directory-row"
+          data-directory-row-toggle
+          aria-expanded="false"
+          aria-controls="internal-organization-kiara-details"
+          tabindex="0"
+        >
+          <td class="internal-directory-expand-cell">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </td>
+          <td>
+            <strong>Personal</strong>
+            <span class="internal-directory-email">personal.admin@example.com</span>
+          </td>
+          <td class="internal-directory-meta">
+            <span class="internal-directory-uuid" data-expand-uuid>
+              <span class="internal-uuid-barcode" data-uuid-barcode="6b9ba7b0-779b-4f26-b87e-eebdb38bca79" aria-hidden="true"></span>
+              <span class="internal-directory-uuid-value">6b9ba7b0-779b-4f26-b87e-eebdb38bca79</span>
+            </span>
+          </td>
+          <td class="muted">&mdash;</td>
+          <td class="muted">&mdash;</td>
+          <td class="muted">&mdash;</td>
+          <td class="internal-directory-meta">01/09/2026, 17:31:01</td>
+        </tr>
+        {{ organization_expansion('internal-organization-kiara-details', '6b9ba7b0-779b-4f26-b87e-eebdb38bca79', '952.00', 'Not set', 'Kiara', 'kiara.sanchez@example.com', '5795a57f-9273-4f4e-8289-a39783d387c1', 'Member', 'Velma-2 STT Batch', 'Success', '1.53', '25/08/2026, 04:42:08', '-1.53', 'usage deduction') }}
+      </tbody>
+    </table>
+  </div>
+</div>
