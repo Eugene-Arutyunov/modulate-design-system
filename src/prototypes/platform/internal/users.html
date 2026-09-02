@@ -40,7 +40,7 @@ permalink: /internal/users/
         data-tab="users"
       >
         <h1 class="dashboard-page-title">Users</h1>
-        <p>Manage platform users. Click a row to view details, activity logs, and management actions.</p>
+        <p>Manage platform users. Click a row to expand details, activity logs, and management actions.</p>
 
         <div class="m__space XS"></div>
 
@@ -53,7 +53,7 @@ permalink: /internal/users/
         hidden
       >
         <h1 class="dashboard-page-title">Organizations</h1>
-        <p>Manage platform organizations. Click a row to view details, activity logs, and management actions.</p>
+        <p>Manage platform organizations. Click a row to expand details, activity logs, and management actions.</p>
 
         <div class="m__space XS"></div>
 
@@ -109,32 +109,39 @@ permalink: /internal/users/
     });
   });
 
-  document.querySelectorAll("[data-directory-row-href]").forEach((row) => {
-    function openDetails() {
-      window.location.href = row.dataset.directoryRowHref;
+  document.querySelectorAll("[data-directory-row-toggle]").forEach((row) => {
+    const details = document.getElementById(row.getAttribute("aria-controls"));
+
+    function setExpanded(expanded) {
+      row.setAttribute("aria-expanded", String(expanded));
+      details.hidden = !expanded;
+    }
+
+    function toggleDetails() {
+      const shouldExpand = row.getAttribute("aria-expanded") !== "true";
+
+      if (shouldExpand) {
+        row.parentElement.querySelectorAll('[data-directory-row-toggle][aria-expanded="true"]').forEach((openRow) => {
+          openRow.setAttribute("aria-expanded", "false");
+          document.getElementById(openRow.getAttribute("aria-controls")).hidden = true;
+        });
+      }
+
+      setExpanded(shouldExpand);
     }
 
     row.addEventListener("click", (event) => {
       if (event.target.closest("a, button, input, select, textarea")) return;
-      openDetails();
+      toggleDetails();
     });
 
     row.addEventListener("keydown", (event) => {
       if (event.target !== row || (event.key !== "Enter" && event.key !== " ")) return;
       event.preventDefault();
-      openDetails();
+      toggleDetails();
     });
   });
 
-  document.querySelectorAll("[data-copy-uuid]").forEach((button) => {
-    button.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(button.dataset.copyUuid);
-      button.textContent = "Copied";
-      window.setTimeout(() => {
-        button.textContent = "Copy UUID";
-      }, 1500);
-    });
-  });
 </script>
 
 {% endblock %}
