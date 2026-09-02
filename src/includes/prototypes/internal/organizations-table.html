@@ -153,9 +153,24 @@
         placeholder="Search by uuid, name, email or tag"
       />
     </label>
+    <div class="internal-directory-account-filter">
+      <label class="m__toggle-primary">
+        Show test accounts
+        <input type="checkbox" data-test-accounts-toggle checked />
+      </label>
+    </div>
   </div>
   <div class="m__table-wrapper">
     <table class="internal-directory-main-table">
+      <colgroup>
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+      </colgroup>
       <thead>
         <tr>
           <th class="internal-directory-expand-cell"></th>
@@ -170,6 +185,7 @@
       <tbody>
         <tr
           class="internal-directory-row"
+          data-account-type="test"
           data-directory-row-toggle
           aria-expanded="false"
           aria-controls="internal-organization-e2e-details"
@@ -200,6 +216,7 @@
         {{ organization_expansion('internal-organization-e2e-details', '10b8d430-b67d-40d3-9348-36ab8ae769d0', '993.82', 'Not set', 'Ryan', 'ryan.wheeler@example.com', '8f2d6c14-91b8-4a7e-a1d3-5c77e4b6029f', 'Admin', 'Velma-2 STT Batch', 'Success', '1.53', '29/08/2026, 18:08:41', '-1.53', 'usage deduction') }}
         <tr
           class="internal-directory-row"
+          data-account-type="production"
           data-directory-row-toggle
           aria-expanded="false"
           aria-controls="internal-organization-grubhub-details"
@@ -226,6 +243,7 @@
         {{ organization_expansion('internal-organization-grubhub-details', '28d72d8d-c4f8-47eb-8864-217ef4883b68', '880.00', '1,000', 'Alexandra Stern', 'alexandra.stern@example.com', '0cb48d2d-43b9-461d-a429-7fc8f14c65bf', 'Developer', 'Velma-2 STT Batch', 'Success', '1.58', '26/08/2026, 09:56:08', '-1.58', 'usage deduction') }}
         <tr
           class="internal-directory-row"
+          data-account-type="production"
           data-directory-row-toggle
           aria-expanded="false"
           aria-controls="internal-organization-kiara-details"
