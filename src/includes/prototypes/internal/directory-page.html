@@ -135,6 +135,25 @@
       columns[0].style.width = `${Math.max(0, uuidLeft - tableLeft)}px`;
       columns[1].style.width = `${Math.max(0, thirdColumnLeft - uuidLeft)}px`;
     });
+
+    const requestLogTable = details.querySelector(".internal-directory-request-log-table");
+    if (requestLogTable) {
+      const columns = requestLogTable.querySelectorAll("col");
+      const tableLeft = requestLogTable.getBoundingClientRect().left;
+      const middleColumnsWidth = Math.max(0, thirdColumnLeft - uuidLeft);
+      columns[0].style.width = `${Math.max(0, uuidLeft - tableLeft)}px`;
+      columns[1].style.width = `${middleColumnsWidth * 0.6}px`;
+      columns[2].style.width = `${middleColumnsWidth * 0.4}px`;
+      columns[3].style.width = `${Math.max(0, statusColumnLeft - thirdColumnLeft)}px`;
+    }
+
+    const creditLedgerTable = details.querySelector(".internal-directory-credit-ledger-table");
+    if (creditLedgerTable) {
+      const columns = creditLedgerTable.querySelectorAll("col");
+      const tableLeft = creditLedgerTable.getBoundingClientRect().left;
+      columns[0].style.width = `${Math.max(0, uuidLeft - tableLeft)}px`;
+      columns[1].style.width = `${Math.max(0, statusColumnLeft - uuidLeft)}px`;
+    }
   }
 
   document.querySelectorAll("[data-directory-row-toggle]").forEach((row) => {
