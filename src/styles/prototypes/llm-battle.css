@@ -203,6 +203,25 @@
   }
 }
 
+/* A ready report is an immutable snapshot. Apply appears only while the
+   next-run draft differs from that snapshot. */
+.vlb-controls__apply {
+  padding-top: var(--m__gap-xxs);
+
+  &[hidden] {
+    display: none;
+  }
+
+  & > button.S {
+    box-sizing: border-box;
+    justify-content: center;
+    width: 100%;
+    border-radius: var(--m__radius-m);
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+  }
+}
+
 /* The transcript entry point: the same compact secondary-outline treatment
    as System prompt, but content-width inside the shared player's chrome. It
    disappears instantly for hover captions, then eases back out over 0.5s. */
@@ -375,6 +394,154 @@
   & .pg-player-dataviz .behaviour-indicators .behaviour-indicator {
     font-size: 1.5em;
     transform: translate(6%, -12%);
+  }
+}
+
+/* Deepfake detection keeps the comparison-strip geometry, while its
+   verdict windows form a continuous green/red heatmap. The second model
+   lane is intentionally quieter so the direct-audio result leads. */
+.vlb-detection__track {
+  & .media-container {
+    --player-strip-height: 3rem;
+  }
+
+  & .speaker-labels {
+    z-index: 4;
+  }
+
+  & .speaker-label span {
+    opacity: 1;
+  }
+
+  & .pg-player-dataviz
+    .speaker-labels
+    .speaker-label[data-speaker-index="2"]
+    span {
+    color: var(--m__text);
+  }
+}
+
+.vlb-deepfake-lane-stats {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  font-size: var(--m__font-size-xs);
+  pointer-events: none;
+
+  & span {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: flex-end;
+    box-sizing: border-box;
+    width: fit-content;
+    height: 50%;
+    padding: 0.1rem 0.35em 0.1rem 0.25em;
+    color: var(--m__color-white);
+    line-height: 1;
+    white-space: nowrap;
+
+    &:nth-child(2) {
+      top: 50%;
+      color: var(--m__text);
+    }
+  }
+}
+
+.vlb-deepfake-strip {
+  --vlb-deepfake-authentic: var(--m__color-green-500);
+  --vlb-deepfake-synthetic: var(--m__color-red-500);
+  --vlb-deepfake-texture-velma: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.07) 0 1.4%,
+    rgba(0, 0, 0, 0.05) 1.4% 4.8%,
+    transparent 4.8% 7.2%,
+    rgba(255, 255, 255, 0.06) 7.2% 12.6%,
+    rgba(0, 0, 0, 0.07) 12.6% 15.4%,
+    transparent 15.4% 18.9%,
+    rgba(255, 255, 255, 0.08) 18.9% 23.6%,
+    rgba(0, 0, 0, 0.04) 23.6% 28.2%,
+    transparent 28.2% 35.5%,
+    rgba(0, 0, 0, 0.07) 35.5% 39.3%,
+    rgba(255, 255, 255, 0.05) 39.3% 45.8%,
+    transparent 45.8% 52.1%,
+    rgba(0, 0, 0, 0.08) 52.1% 57.4%,
+    rgba(255, 255, 255, 0.07) 57.4% 64.8%,
+    transparent 64.8% 69.2%,
+    rgba(0, 0, 0, 0.06) 69.2% 76.5%,
+    rgba(255, 255, 255, 0.06) 76.5% 81.3%,
+    transparent 81.3% 88.6%,
+    rgba(0, 0, 0, 0.07) 88.6% 93.7%,
+    rgba(255, 255, 255, 0.08) 93.7% 97.1%,
+    transparent 97.1% 100%
+  );
+  --vlb-deepfake-texture-stack: linear-gradient(
+    90deg,
+    transparent 0 3.8%,
+    rgba(0, 0, 0, 0.06) 3.8% 7.5%,
+    rgba(255, 255, 255, 0.08) 7.5% 11.4%,
+    transparent 11.4% 17.9%,
+    rgba(0, 0, 0, 0.07) 17.9% 22.2%,
+    rgba(255, 255, 255, 0.06) 22.2% 30.6%,
+    transparent 30.6% 33.1%,
+    rgba(0, 0, 0, 0.05) 33.1% 41.8%,
+    rgba(255, 255, 255, 0.08) 41.8% 49.2%,
+    transparent 49.2% 55.4%,
+    rgba(0, 0, 0, 0.07) 55.4% 60.1%,
+    transparent 60.1% 66.7%,
+    rgba(255, 255, 255, 0.07) 66.7% 74.5%,
+    rgba(0, 0, 0, 0.05) 74.5% 79.6%,
+    transparent 79.6% 86.9%,
+    rgba(255, 255, 255, 0.08) 86.9% 91.2%,
+    rgba(0, 0, 0, 0.06) 91.2% 96.8%,
+    transparent 96.8% 100%
+  );
+
+  & .transcript-clip.vlb-deepfake-lane {
+    cursor: default;
+
+    &:hover .clip-visualization,
+    &.hover .clip-visualization {
+      filter: none;
+    }
+
+    & .clip-visualization {
+      background:
+        var(--vlb-deepfake-texture-velma),
+        linear-gradient(
+          90deg,
+          var(--vlb-deepfake-authentic) 0 4%,
+          var(--vlb-deepfake-synthetic) 4% 6%,
+          var(--vlb-deepfake-authentic) 6% 14%,
+          var(--vlb-deepfake-synthetic) 14% 20%,
+          var(--vlb-deepfake-authentic) 20% 42%,
+          var(--vlb-deepfake-synthetic) 42% 48%,
+          var(--vlb-deepfake-authentic) 48% 72%,
+          var(--vlb-deepfake-synthetic) 72% 84%,
+          var(--vlb-deepfake-authentic) 84% 86%,
+          var(--vlb-deepfake-synthetic) 86% 88%,
+          var(--vlb-deepfake-authentic) 88% 100%
+        );
+    }
+
+    &.is-stack .clip-visualization {
+      opacity: 0.5;
+      filter: brightness(1.1) saturate(0.5) contrast(1.1);
+      background:
+        var(--vlb-deepfake-texture-stack),
+        linear-gradient(
+          90deg,
+          var(--vlb-deepfake-authentic) 0 16%,
+          var(--vlb-deepfake-synthetic) 16% 20%,
+          var(--vlb-deepfake-authentic) 20% 44%,
+          var(--vlb-deepfake-synthetic) 44% 46%,
+          var(--vlb-deepfake-authentic) 46% 56%,
+          var(--vlb-deepfake-synthetic) 56% 58%,
+          var(--vlb-deepfake-authentic) 58% 74%,
+          var(--vlb-deepfake-synthetic) 74% 79%,
+          var(--vlb-deepfake-authentic) 79% 100%
+        );
+    }
   }
 }
 
@@ -1070,6 +1237,11 @@
     max-inline-size: 100%;
     overflow-wrap: anywhere;
   }
+}
+
+.vlb-transcript-deepfake {
+  flex: 0 0 auto;
+  color: var(--m__color-red-500);
 }
 
 /* ==================  Scene reels & sound events  ================== */
