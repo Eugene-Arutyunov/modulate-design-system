@@ -1299,6 +1299,63 @@ table.config-details {
   color: var(--m__text-caption);
 }
 
+.internal-unverified-signups {
+  & .m__table-wrapper {
+    overflow-x: visible;
+  }
+}
+
+.internal-unverified-signups-table {
+  table-layout: fixed;
+
+  & > colgroup > col:nth-child(1) {
+    inline-size: 36%;
+  }
+
+  & > colgroup > col:nth-child(2),
+  & > colgroup > col:nth-child(3) {
+    inline-size: 15%;
+  }
+
+  & > colgroup > col:nth-child(4) {
+    inline-size: 34%;
+  }
+
+  & :is(th, td):not(.m__col-actions) {
+    padding-inline-end: var(--m__gap-xxl);
+  }
+
+  & td:first-child {
+    overflow-wrap: anywhere;
+  }
+
+  & .m__col-actions > div {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  & .m__col-actions {
+    width: auto;
+    white-space: normal;
+  }
+
+  & :is(.internal-unverified-signups-date, .internal-unverified-signups-time) {
+    display: block;
+    white-space: nowrap;
+  }
+
+  & [data-unverified-signups-empty] td {
+    border-bottom: none;
+  }
+}
+
+.internal-unverified-signups-table
+  > tbody
+  > tr[data-unverified-signup-last]
+  > td {
+  border-bottom: none;
+}
+
 .internal-directory-detail-widget {
   & .m__table-toolbar {
     margin-bottom: var(--m__gap-xs);
