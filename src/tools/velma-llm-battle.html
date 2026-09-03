@@ -23,6 +23,84 @@
 
 <div class="m__wrapper">
   <div class="m__space L"></div>
+
+  <div class="pg-upload-section">
+    {% set uploadPlateId = 'vlb-upload-plate' %}
+    {% set uploadPlateClass = 'vlb-plate' %}
+    {% set uploadPlateState = 'uploaded' %}
+    {% set uploadPlateShowMeta = false %}
+    {% set uploadPlateCollapsedLabel = 'New analysis' %}
+    {% set uploadPlateStateInputName = 'vlb-plate-state' %}
+    {% set uploadPlateAnalyzingContent %}
+    <div class="pg-processing-stages">
+      <span class="pg-processing-stage">
+        <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
+          <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
+        </svg>
+        Transcript
+      </span>
+      <span class="pg-processing-stage">
+        <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
+          <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
+        </svg>
+        Speakers
+      </span>
+      <span class="pg-processing-stage">
+        <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
+          <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
+        </svg>
+        Emotions
+      </span>
+      <span class="pg-processing-stage">
+        <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
+          <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
+        </svg>
+        Behaviors
+      </span>
+    </div>
+    {% endset %}
+    {% set uploadPlateActions %}
+    <div class="pg-upload-actions">
+      <button type="button" class="m__button-primary-outline M pg-upload-primary">
+        <span class="pg-upload-primary__label">Drop or choose file…</span>
+      </button>
+      <div class="m__split-button pg-upload-stream" data-open="false">
+        <button type="button" class="m__button-primary-outline M pg-upload-stream__main">Stream demo</button>
+        <button
+          type="button"
+          class="m__menu-button-primary M pg-upload-stream__toggle"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          aria-label="Choose demo recording">
+          <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+        </button>
+        <!-- Four preloaded recordings, all switchable: picking one
+             swaps every player, the transcript, the receipts and the
+             dashboard (wiring in the module script). The plate clips
+             its overflow, so a page-scoped :has() rule releases it
+             while the menu is open. -->
+        <div class="pg-upload-stream__menu vlb-demo-menu" role="menu" hidden>
+          <button type="button" role="menuitem" data-vlb-call="scenes">
+            Everyday scenes — dinner, deal, standup
+          </button>
+          <button type="button" role="menuitem" data-vlb-call="office">
+            Office hours — review, all-hands, negotiation
+          </button>
+          <button type="button" role="menuitem" data-vlb-call="party">
+            House party — toast, kitchen, goodbye
+          </button>
+          <button type="button" role="menuitem" data-vlb-call="harborview">
+            Harborview Bank — account takeover
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endset %}
+    {% include 'prototypes/upload-plate.html' %}
+  </div>
+
+  <div class="m__space S"></div>
+
   <div class="dashboard-layout vlb-page">
     <div class="nav-sidebar">
       <div class="vlb-controls">
@@ -202,83 +280,6 @@
     </div>
 
     <main class="pg-content">
-      <div class="pg-upload-section">
-        {% set uploadPlateId = 'vlb-upload-plate' %}
-        {% set uploadPlateClass = 'vlb-plate' %}
-        {% set uploadPlateState = 'uploaded' %}
-        {% set uploadPlateShowMeta = false %}
-        {% set uploadPlateCollapsedLabel = 'New analysis' %}
-        {% set uploadPlateStateInputName = 'vlb-plate-state' %}
-        {% set uploadPlateAnalyzingContent %}
-        <div class="pg-processing-stages">
-          <span class="pg-processing-stage">
-            <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
-              <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
-            </svg>
-            Transcript
-          </span>
-          <span class="pg-processing-stage">
-            <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
-              <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
-            </svg>
-            Speakers
-          </span>
-          <span class="pg-processing-stage">
-            <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
-              <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
-            </svg>
-            Emotions
-          </span>
-          <span class="pg-processing-stage">
-            <svg class="pg-stage-check" width="20" height="20" viewBox="0 0 10 10" aria-hidden="true">
-              <path d="M 1.5 4.55 L 4 7.95 L 9 2.05" fill="none" stroke="currentColor" stroke-width="1" />
-            </svg>
-            Behaviors
-          </span>
-        </div>
-        {% endset %}
-        {% set uploadPlateActions %}
-        <div class="pg-upload-actions">
-          <button type="button" class="m__button-primary-outline M pg-upload-primary">
-            <span class="pg-upload-primary__label">Drop or choose file…</span>
-          </button>
-          <div class="m__split-button pg-upload-stream" data-open="false">
-            <button type="button" class="m__button-primary-outline M pg-upload-stream__main">Stream demo</button>
-            <button
-              type="button"
-              class="m__menu-button-primary M pg-upload-stream__toggle"
-              aria-haspopup="menu"
-              aria-expanded="false"
-              aria-label="Choose demo recording">
-              <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-            </button>
-            <!-- Four preloaded recordings, all switchable: picking one
-                 swaps every player, the transcript, the receipts and the
-                 dashboard (wiring in the module script). The plate clips
-                 its overflow, so a page-scoped :has() rule releases it
-                 while the menu is open. -->
-            <div class="pg-upload-stream__menu vlb-demo-menu" role="menu" hidden>
-              <button type="button" role="menuitem" data-vlb-call="scenes">
-                Everyday scenes — dinner, deal, standup
-              </button>
-              <button type="button" role="menuitem" data-vlb-call="office">
-                Office hours — review, all-hands, negotiation
-              </button>
-              <button type="button" role="menuitem" data-vlb-call="party">
-                House party — toast, kitchen, goodbye
-              </button>
-              <button type="button" role="menuitem" data-vlb-call="harborview">
-                Harborview Bank — account takeover
-              </button>
-            </div>
-          </div>
-        </div>
-        {% endset %}
-        {% include 'prototypes/upload-plate.html' %}
-      </div>
-
-      <div class="m__space S"></div>
-
       <!-- Shared player and the selected-signal players are rendered by the
            canonical fingerprint renderer (the technology-comparison
            variant, see /tools/modulate-fingerprint/): lanes are agents,
