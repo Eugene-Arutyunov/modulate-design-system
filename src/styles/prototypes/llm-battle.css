@@ -405,8 +405,39 @@
     --player-strip-height: 3rem;
   }
 
+  & .speaker-labels {
+    z-index: 4;
+  }
+
   & .speaker-label span {
     opacity: 1;
+  }
+}
+
+.vlb-deepfake-lane-stats {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  font-size: var(--m__font-size-xs);
+  pointer-events: none;
+
+  & span {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: flex-end;
+    box-sizing: border-box;
+    width: fit-content;
+    height: 50%;
+    padding: 0.1rem 0.35em 0.1rem 0.25em;
+    color: var(--m__color-white);
+    line-height: 1;
+    white-space: nowrap;
+
+    &:nth-child(2) {
+      top: 50%;
+      color: var(--m__color-gray-700);
+    }
   }
 }
 
@@ -487,8 +518,8 @@
     }
 
     &.is-stack .clip-visualization {
-      opacity: 0.38;
-      filter: grayscale(1) brightness(1.12);
+      opacity: 0.5;
+      filter: brightness(1.1) saturate(0.5) contrast(1.1);
       background:
         var(--vlb-deepfake-texture-stack),
         linear-gradient(

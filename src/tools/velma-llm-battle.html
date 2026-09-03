@@ -1466,11 +1466,21 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
     renderFingerprint(block.lastElementChild, deepfakeData(), {
       labels: true,
-      names: NAMES,
+      names: [
+        'Velma: This is a deepfake',
+        'STT+LLM: This is not a deepfake',
+      ],
       className: 'fp-cmp vlb-deepfake-strip',
       laneHover: true,
       hoverCaptions: false,
     });
+
+    const stats = document.createElement('div');
+    stats.className = 'vlb-deepfake-lane-stats';
+    stats.innerHTML = `
+    <span>14/25 segments · 3 with &gt;98% conf.</span>
+    <span>4/25 segments · 1 with &gt;98% conf.</span>`;
+    block.querySelector('.pg-player-dataviz').appendChild(stats);
   }
 
   function renderStrips() {
