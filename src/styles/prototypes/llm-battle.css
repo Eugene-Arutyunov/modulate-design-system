@@ -203,12 +203,9 @@
   }
 }
 
-/* A ready report is an immutable snapshot. Pending controls appear only
-   while the next-run draft differs from that snapshot. */
+/* A ready report is an immutable snapshot. Apply appears only while the
+   next-run draft differs from that snapshot. */
 .vlb-controls__apply {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--m__gap-xxs);
   padding-top: var(--m__gap-xxs);
 
   &[hidden] {
@@ -222,11 +219,6 @@
     border-radius: var(--m__radius-m);
     font-size: var(--m__font-size-s);
     font-weight: var(--m__font-weight-medium);
-
-    &:disabled:not([aria-busy='true']) {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
   }
 }
 

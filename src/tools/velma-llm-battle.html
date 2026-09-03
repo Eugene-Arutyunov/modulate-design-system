@@ -192,15 +192,9 @@
           <div class="vlb-controls__apply" data-vlb-apply-region hidden>
             <button
               type="button"
-              class="m__button-secondary-outline S"
-              data-vlb-reset-changes>
-              Reset
-            </button>
-            <button
-              type="button"
               class="m__button-primary S"
               data-vlb-apply-changes>
-              <span class="m__button__label" data-vlb-apply-label>Apply</span>
+              <span class="m__button__label" data-vlb-apply-label>Apply changes</span>
             </button>
           </div>
         </div>
@@ -1184,7 +1178,6 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   const llmSelect = document.querySelector('[data-vlb-llm]');
   const behaviorsMenu = document.querySelector('.vlb-select__menu .m__popover-list');
   const applyRegion = document.querySelector('[data-vlb-apply-region]');
-  const resetButton = document.querySelector('[data-vlb-reset-changes]');
   const applyButton = document.querySelector('[data-vlb-apply-changes]');
   const applyLabel = document.querySelector('[data-vlb-apply-label]');
   const promptModal = document.getElementById('vlb-prompt-modal');
@@ -1227,49 +1220,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   }
 
   function syncApplyChanges() {
-    if (!applyRegion || !resetButton || !applyButton || !applyLabel) return;
+    if (!applyRegion || !applyButton || !applyLabel) return;
     const hasChanges = Boolean(appliedConfig) && !configsMatch(draftConfig(), appliedConfig);
     applyRegion.hidden = !hasChanges && !isApplyingChanges;
     if (!appliedConfig) return;
-    if (isApplyingChanges) {
-      resetButton.disabled = true;
-      return;
-    }
-    resetButton.disabled = false;
+    if (isApplyingChanges) return;
     applyButton.disabled = false;
     applyButton.removeAttribute('aria-busy');
-    applyLabel.textContent = 'Apply';
-  }
-
-  function setModelValue(select, value) {
-    if (!select) return;
-    select.value = value;
-    const modelSelect = select.closest('.vlb-model-select');
-    const label = modelSelect?.querySelector('[data-vlb-model-label]');
-    const trigger = modelSelect?.querySelector('.m__menu-button-trigger');
-    const kind = select.hasAttribute('data-vlb-stt') ? 'STT' : 'LLM';
-    if (label) label.textContent = value;
-    if (trigger) trigger.setAttribute('aria-label', `${kind} model: ${value}`);
-    modelSelect?.querySelectorAll('[data-vlb-model-option]').forEach((option) => {
-      const isSelected = option.dataset.vlbModelOption === value;
-      option.classList.toggle('is-active', isSelected);
-      option.setAttribute('aria-checked', String(isSelected));
-    });
-  }
-
-  function resetDraftChanges() {
-    if (!appliedConfig) return;
-    const appliedBehaviors = new Set(appliedConfig.behaviors);
-    document.querySelectorAll('.vlb-select__menu .m__popover-item').forEach((item) => {
-      const name = item.querySelector('.m__popover-item-name')?.textContent.trim();
-      const input = item.querySelector('input[type="checkbox"]');
-      if (input) input.checked = appliedBehaviors.has(name);
-    });
-    setModelValue(sttSelect, appliedConfig.stt);
-    setModelValue(llmSelect, appliedConfig.llm);
-    savedPrompt = appliedConfig.prompt;
-    if (promptText) promptText.value = savedPrompt;
-    syncApplyChanges();
+    applyLabel.textContent = 'Apply changes';
   }
 
   function resetReportSnapshot() {
@@ -1894,16 +1852,14 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     savedPrompt = promptText?.value || '';
     syncApplyChanges();
   });
-  resetButton?.addEventListener('click', resetDraftChanges);
   applyButton?.addEventListener('click', () => {
     if (!appliedConfig || configsMatch(draftConfig(), appliedConfig)) return;
 
     const nextConfig = draftConfig();
     isApplyingChanges = true;
-    resetButton.disabled = true;
     applyButton.disabled = true;
     applyButton.setAttribute('aria-busy', 'true');
-    applyLabel.textContent = 'Applying';
+    applyLabel.textContent = 'Applying changes';
 
     window.clearTimeout(applyChangesTimer);
     applyChangesTimer = window.setTimeout(() => {
