@@ -310,6 +310,16 @@
 
       <div class="m__space L"></div>
 
+      <!-- Detection models use the same two-lane comparison timeline as
+           behavior strips. The first lane is the direct audio model; the
+           second is deliberately quieter to keep the hierarchy legible. -->
+      <section class="vlb-detection">
+        <h2>Deepfake</h2>
+        <div data-vlb-detection></div>
+      </section>
+
+      <div class="m__space L"></div>
+
       <!-- Accuracy dashboard: shown automatically when the recording has
            reference labels (preloaded demos only). External uploads keep
            only the cost / speed / signals-found cards. -->
@@ -1171,6 +1181,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
   const playerMount = document.querySelector('[data-vlb-player]');
   const battlesMount = document.querySelector('[data-vlb-battles]');
+  const detectionMount = document.querySelector('[data-vlb-detection]');
   const dashboardMount = document.querySelector('[data-vlb-dashboard]');
   const emotionsToggle = document.querySelector('[data-vlb-emotions]');
   const transcriptBtn = document.querySelector('.vlb-transcript-btn');
@@ -1401,16 +1412,70 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     }
   }
 
+  const DEEPFAKE_RANGES = {
+    velma: [[4, 6], [14, 20], [42, 48], [72, 84], [86, 88]],
+    stack: [[16, 20], [44, 46], [56, 58], [74, 79]],
+  };
+
+  function hasDeepfakeSignal(clip, callDef, lane) {
+    const midpoint = ((clip.s + clip.e) / 2 / callDef.duration) * 100;
+    return DEEPFAKE_RANGES[lane].some(([start, end]) => midpoint >= start && midpoint < end);
+  }
+
+  function deepfakeTranscriptLabel(clip, callDef, lane) {
+    return hasDeepfakeSignal(clip, callDef, lane)
+      ? '<span class="vlb-transcript-deepfake">Deepfake</span>'
+      : '';
+  }
+
+  function deepfakeData() {
+    return {
+      speakers: 2,
+      durationSec: call().duration,
+      clips: [
+        {
+          speaker: 1,
+          startSec: 0,
+          durationSec: call().duration,
+          text: 'Deepfake detection · Velma',
+          classes: 'vlb-deepfake-lane is-velma',
+        },
+        {
+          speaker: 2,
+          startSec: 0,
+          durationSec: call().duration,
+          text: 'Deepfake detection · STT+LLM',
+          classes: 'vlb-deepfake-lane is-stack',
+        },
+      ],
+    };
+  }
+
+  function mountStripTitle(block, title) {
+    const heading = document.createElement('h3');
+    heading.className = 'vlb-battle__title';
+    heading.textContent = title;
+    block.querySelector('.pg-player-dataviz').appendChild(heading);
+  }
+
+  function renderDetection() {
+    const block = document.createElement('div');
+    block.className = 'vlb-battle vlb-detection__track';
+    block.innerHTML = '<div></div>';
+    detectionMount.replaceChildren(block);
+
+    renderFingerprint(block.lastElementChild, deepfakeData(), {
+      labels: true,
+      names: NAMES,
+      className: 'fp-cmp vlb-deepfake-strip',
+      laneHover: true,
+      hoverCaptions: false,
+    });
+  }
+
   function renderStrips() {
     const emotionsOn = emotionsToggle && emotionsToggle.checked;
     const hasEvents = call().velma.some((c) => c.event);
-
-    const mountTitle = (block, title) => {
-      const heading = document.createElement('h3');
-      heading.className = 'vlb-battle__title';
-      heading.textContent = title;
-      block.querySelector('.pg-player-dataviz').appendChild(heading);
-    };
 
     battlesMount.innerHTML = '';
     call().strips.forEach((strip) => {
@@ -1426,7 +1491,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         laneHover: true,
         hoverCaptions: false,
       });
-      mountTitle(block, strip.name);
+      mountStripTitle(block, strip.name);
     });
     if (hasEvents) {
       const block = document.createElement('div');
@@ -1441,7 +1506,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
         laneHover: true,
         hoverCaptions: false,
       });
-      mountTitle(block, 'Sound Events');
+      mountStripTitle(block, 'Sound Events');
     }
   }
 
@@ -1650,6 +1715,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
             <span class="pg-transcript-time">${fmt(c.s)}</span>
             <span class="pg-transcript-speaker">${esc(c.sp)}</span>
             <span class="pg-transcript-emotion ec-${c.emotion}">${cap(c.emotion)}</span>
+            ${deepfakeTranscriptLabel(c, callDef, 'velma')}
             ${transcriptSignals(c)}
           </div>
           <div class="pg-transcript-text">${esc(c.text)}</div>
@@ -1660,6 +1726,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       <div class="pg-transcript-utterance${c.halluc ? ' vlb-halluc' : ''}" data-vlb-time="${c.s}">
         <div class="pg-transcript-utterance-header">
           <span class="pg-transcript-time">${fmt(c.s)}</span>
+          ${deepfakeTranscriptLabel(c, callDef, 'stack')}
           ${transcriptSignals(c)}
         </div>
         <div class="pg-transcript-text">${esc(c.text)}</div>
@@ -1709,6 +1776,35 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     if (!def.transcriptModal) generated += transcriptModal(`vlb-transcript-${id}`, def);
   });
   modalsHost.innerHTML = generated;
+
+  function decorateStaticTranscript(modal, callDef) {
+    if (!modal) return;
+    const columns = modal.querySelectorAll('.vlb-transcript-col');
+    const lanes = [
+      { clips: callDef.velma.filter((clip) => !clip.event), name: 'velma' },
+      { clips: callDef.stt, name: 'stack' },
+    ];
+
+    lanes.forEach((lane, columnIndex) => {
+      const rows = columns[columnIndex]?.querySelectorAll('.pg-transcript-utterance') || [];
+      rows.forEach((row, rowIndex) => {
+        const clip = lane.clips[rowIndex];
+        const header = row.querySelector('.pg-transcript-utterance-header');
+        if (!clip || !header) return;
+        const behaviorLinks = [...header.querySelectorAll('.m__behavior-link')];
+
+        if (hasDeepfakeSignal(clip, callDef, lane.name)) {
+          const label = document.createElement('span');
+          label.className = 'vlb-transcript-deepfake';
+          label.textContent = 'Deepfake';
+          header.appendChild(label);
+        }
+        behaviorLinks.forEach((link) => header.appendChild(link));
+      });
+    });
+  }
+
+  decorateStaticTranscript(document.getElementById('vlb-transcript-modal'), CALLS.harborview);
 
   function transcriptTime(item) {
     if (item.dataset.vlbTime) return Number(item.dataset.vlbTime);
@@ -1809,6 +1905,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
   function renderAll() {
     renderMain();
     renderStrips();
+    renderDetection();
     renderDashboard();
     renderSidebar();
   }
