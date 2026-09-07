@@ -137,6 +137,28 @@
 
 /* Demo-audio menu: wide enough to keep titles on one line inside the
    overflow-clipped upload plate */
+.vlb-demo-recordings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--m__gap-xxs) var(--m__gap-s);
+  margin-top: var(--m__gap-xs);
+  font-size: var(--m__font-size-s);
+
+  & .vlb-demo-recordings__label {
+    color: var(--m__text-caption);
+  }
+
+  & a {
+    white-space: nowrap;
+  }
+
+  & a[aria-current="true"] {
+    font-weight: var(--m__font-weight-bold);
+  }
+}
+
 .vlb-demo-menu {
   min-width: 26rem;
 
@@ -408,15 +430,34 @@
    lane is intentionally quieter so the direct-audio result leads. */
 .vlb-detection__track {
   & .media-container {
-    --player-strip-height: 3rem;
+    --player-strip-height: 4.5rem;
   }
 
   & .speaker-labels {
     z-index: 4;
   }
 
-  & .speaker-label span {
+  & .vlb-battle__title {
+    top: 25%;
+    left: 50%;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  & .vlb-deepfake-title--stack {
+    top: 75%;
+    color: var(--m__text);
+  }
+
+  & .pg-player-dataviz .speaker-labels .speaker-label {
+    box-sizing: border-box;
+    padding-bottom: 0;
+  }
+
+  &:is(:hover, :focus-within) .speaker-label span {
     opacity: 1;
+    transition: opacity var(--m__duration-instant) var(--m__easing-base);
   }
 
   & .pg-player-dataviz
@@ -424,33 +465,6 @@
     .speaker-label[data-speaker-index="2"]
     span {
     color: var(--m__text);
-  }
-}
-
-.vlb-deepfake-lane-stats {
-  position: absolute;
-  z-index: 4;
-  inset: 0;
-  font-size: var(--m__font-size-xs);
-  pointer-events: none;
-
-  & span {
-    position: absolute;
-    right: 0;
-    display: flex;
-    align-items: flex-end;
-    box-sizing: border-box;
-    width: fit-content;
-    height: 50%;
-    padding: 0.1rem 0.35em 0.1rem 0.25em;
-    color: var(--m__color-white);
-    line-height: 1;
-    white-space: nowrap;
-
-    &:nth-child(2) {
-      top: 50%;
-      color: var(--m__text);
-    }
   }
 }
 
