@@ -438,21 +438,36 @@
   }
 
   & .vlb-battle__title {
-    top: 25%;
-    left: 50%;
+    top: 0;
+    left: 0;
     bottom: auto;
-    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 50%;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    font-size: var(--m__font-size-l);
+    font-weight: var(--m__font-weight-bold);
     text-align: center;
   }
 
   & .vlb-deepfake-title--stack {
-    top: 75%;
+    top: 50%;
     color: var(--m__text);
   }
 
   & .pg-player-dataviz .speaker-labels .speaker-label {
     box-sizing: border-box;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--m__gap-xs);
     padding-bottom: 0;
+
+    & span:last-child {
+      text-align: right;
+    }
   }
 
   &:is(:hover, :focus-within) .speaker-label span {
@@ -498,22 +513,22 @@
   --vlb-deepfake-texture-stack: linear-gradient(
     90deg,
     transparent 0 3.8%,
-    rgba(0, 0, 0, 0.06) 3.8% 7.5%,
+    var(--fp-cmp-hit) 3.8% 7.5%,
     rgba(255, 255, 255, 0.08) 7.5% 11.4%,
-    transparent 11.4% 17.9%,
-    rgba(0, 0, 0, 0.07) 17.9% 22.2%,
+    transparent 11.4% 20%,
+    var(--fp-cmp-hit) 20% 22.2%,
     rgba(255, 255, 255, 0.06) 22.2% 30.6%,
     transparent 30.6% 33.1%,
-    rgba(0, 0, 0, 0.05) 33.1% 41.8%,
+    var(--fp-cmp-hit) 33.1% 41.8%,
     rgba(255, 255, 255, 0.08) 41.8% 49.2%,
-    transparent 49.2% 55.4%,
-    rgba(0, 0, 0, 0.07) 55.4% 60.1%,
+    transparent 49.2% 58%,
+    var(--fp-cmp-hit) 58% 60.1%,
     transparent 60.1% 66.7%,
-    rgba(255, 255, 255, 0.07) 66.7% 74.5%,
-    rgba(0, 0, 0, 0.05) 74.5% 79.6%,
+    rgba(255, 255, 255, 0.07) 66.7% 79%,
+    var(--fp-cmp-hit) 79% 79.6%,
     transparent 79.6% 86.9%,
     rgba(255, 255, 255, 0.08) 86.9% 91.2%,
-    rgba(0, 0, 0, 0.06) 91.2% 96.8%,
+    var(--fp-cmp-hit) 91.2% 96.8%,
     transparent 96.8% 100%
   );
 
@@ -545,8 +560,12 @@
     }
 
     &.is-stack .clip-visualization {
-      opacity: 0.5;
-      filter: brightness(1.1) saturate(0.5) contrast(1.1);
+      --vlb-deepfake-authentic: var(--fp-cmp-quiet-tech);
+      --vlb-deepfake-synthetic: color-mix(
+        in srgb, var(--fp-cmp-quiet-tech) 55%, var(--m__color-red-500)
+      );
+      opacity: 1;
+      filter: none;
       background:
         var(--vlb-deepfake-texture-stack),
         linear-gradient(
