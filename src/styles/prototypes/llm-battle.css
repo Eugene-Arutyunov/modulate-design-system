@@ -5,15 +5,21 @@
    gray "no signal / no emotions" clip treatment, per-behavior mini
    players, receipt modals, and the accuracy dashboard. */
 
-/* Sidebar control panel — geometry echoes .models-nav--vertical.
-   Rounded by hand, not via .m__rounded: its overflow clip would cut the
-   dropdowns. */
+/* Use the playground's canonical rounding on a separate background so
+   its overflow clip and fallback mask leave dropdowns unobstructed. */
 .vlb-controls {
+  position: relative;
+  isolation: isolate;
   min-width: 13rem;
   padding: 0.75rem 0.85rem 0.85rem;
-  background-color: var(--m__bg-surface);
-  border-radius: var(--m__rounded-radius);
-  corner-shape: squircle;
+
+  & .vlb-controls__background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--m__bg-surface);
+    pointer-events: none;
+  }
 
   & .vlb-controls__group {
     display: flex;
@@ -131,6 +137,74 @@
 
 /* Demo-audio menu: wide enough to keep titles on one line inside the
    overflow-clipped upload plate */
+.vlb-demo-recordings {
+  display: flex;
+  flex-wrap: nowrap;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: var(--m__gap-xxs) var(--m__gap-s);
+  margin-top: var(--m__gap-xs);
+  font-size: var(--m__font-size-s);
+
+  & > * {
+    flex-shrink: 0;
+  }
+
+  & > [hidden] {
+    display: none;
+  }
+
+  & .vlb-demo-recordings__label {
+    font-weight: var(--m__font-weight-bold);
+    color: var(--m__text);
+    white-space: nowrap;
+  }
+
+  & a {
+    white-space: nowrap;
+    font-weight: var(--m__font-weight-bold);
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 0.12em;
+  }
+
+  & .vlb-demo-recordings__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15em;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--m__text);
+    font: inherit;
+    font-weight: var(--m__font-weight-bold);
+    cursor: pointer;
+
+    &:hover,
+    &[aria-expanded="true"] {
+      color: var(--m__text-link-hover);
+    }
+
+    & svg {
+      width: 0.85em;
+      height: 0.85em;
+      stroke: currentColor;
+      stroke-width: 0.65;
+      stroke-linejoin: round;
+    }
+  }
+}
+
+#vlb-demo-more-menu .conversation-report__report-items {
+  max-height: min(18rem, 50dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  & > [hidden] {
+    display: none;
+  }
+}
+
 .vlb-demo-menu {
   min-width: 26rem;
 
@@ -402,15 +476,49 @@
    lane is intentionally quieter so the direct-audio result leads. */
 .vlb-detection__track {
   & .media-container {
-    --player-strip-height: 3rem;
+    --player-strip-height: 4.5rem;
   }
 
   & .speaker-labels {
     z-index: 4;
   }
 
-  & .speaker-label span {
+  & .vlb-battle__title {
+    top: 0;
+    left: 0;
+    bottom: auto;
+    width: 100%;
+    height: 50%;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    font-size: var(--m__font-size-l);
+    font-weight: var(--m__font-weight-bold);
+    text-align: center;
+  }
+
+  & .vlb-deepfake-title--stack {
+    top: 50%;
+    color: var(--m__text);
+  }
+
+  & .pg-player-dataviz .speaker-labels .speaker-label {
+    box-sizing: border-box;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--m__gap-xs);
+    padding-bottom: 0;
+
+    & span:last-child {
+      text-align: right;
+    }
+  }
+
+  &:is(:hover, :focus-within) .speaker-label span {
     opacity: 1;
+    transition: opacity var(--m__duration-instant) var(--m__easing-base);
   }
 
   & .pg-player-dataviz
@@ -418,33 +526,6 @@
     .speaker-label[data-speaker-index="2"]
     span {
     color: var(--m__text);
-  }
-}
-
-.vlb-deepfake-lane-stats {
-  position: absolute;
-  z-index: 4;
-  inset: 0;
-  font-size: var(--m__font-size-xs);
-  pointer-events: none;
-
-  & span {
-    position: absolute;
-    right: 0;
-    display: flex;
-    align-items: flex-end;
-    box-sizing: border-box;
-    width: fit-content;
-    height: 50%;
-    padding: 0.1rem 0.35em 0.1rem 0.25em;
-    color: var(--m__color-white);
-    line-height: 1;
-    white-space: nowrap;
-
-    &:nth-child(2) {
-      top: 50%;
-      color: var(--m__text);
-    }
   }
 }
 
@@ -478,22 +559,22 @@
   --vlb-deepfake-texture-stack: linear-gradient(
     90deg,
     transparent 0 3.8%,
-    rgba(0, 0, 0, 0.06) 3.8% 7.5%,
+    var(--fp-cmp-hit) 3.8% 7.5%,
     rgba(255, 255, 255, 0.08) 7.5% 11.4%,
-    transparent 11.4% 17.9%,
-    rgba(0, 0, 0, 0.07) 17.9% 22.2%,
+    transparent 11.4% 20%,
+    var(--fp-cmp-hit) 20% 22.2%,
     rgba(255, 255, 255, 0.06) 22.2% 30.6%,
     transparent 30.6% 33.1%,
-    rgba(0, 0, 0, 0.05) 33.1% 41.8%,
+    var(--fp-cmp-hit) 33.1% 41.8%,
     rgba(255, 255, 255, 0.08) 41.8% 49.2%,
-    transparent 49.2% 55.4%,
-    rgba(0, 0, 0, 0.07) 55.4% 60.1%,
+    transparent 49.2% 58%,
+    var(--fp-cmp-hit) 58% 60.1%,
     transparent 60.1% 66.7%,
-    rgba(255, 255, 255, 0.07) 66.7% 74.5%,
-    rgba(0, 0, 0, 0.05) 74.5% 79.6%,
+    rgba(255, 255, 255, 0.07) 66.7% 79%,
+    var(--fp-cmp-hit) 79% 79.6%,
     transparent 79.6% 86.9%,
     rgba(255, 255, 255, 0.08) 86.9% 91.2%,
-    rgba(0, 0, 0, 0.06) 91.2% 96.8%,
+    var(--fp-cmp-hit) 91.2% 96.8%,
     transparent 96.8% 100%
   );
 
@@ -525,8 +606,12 @@
     }
 
     &.is-stack .clip-visualization {
-      opacity: 0.5;
-      filter: brightness(1.1) saturate(0.5) contrast(1.1);
+      --vlb-deepfake-authentic: var(--fp-cmp-quiet-tech);
+      --vlb-deepfake-synthetic: color-mix(
+        in srgb, var(--fp-cmp-quiet-tech) 55%, var(--m__color-red-500)
+      );
+      opacity: 1;
+      filter: none;
       background:
         var(--vlb-deepfake-texture-stack),
         linear-gradient(
@@ -618,17 +703,25 @@
 }
 
 .vlb-scatter {
+  --m__rounded-radius: var(--m__radius-xl);
+
+  /* Two rounded surfaces form the frame. A CSS border would be drawn
+     square and then cut off by m__rounded's SVG fallback mask. */
+  box-sizing: border-box;
+  padding: var(--m__border-width-s);
+  background-color: var(--m__border);
+
   & .vlb-scatter__plot {
     --vlb-scatter-grid-line: color-mix(
       in srgb,
       var(--m__text) 6%,
       transparent
     );
-    --m__rounded-radius: var(--m__radius-xl);
+    --m__rounded-radius: calc(var(--m__radius-xl) - var(--m__border-width-s));
 
     position: relative;
     aspect-ratio: 4 / 3;
-    border: var(--m__border-width-s) solid var(--m__border);
+    background-color: var(--m__bg);
     /* Draw only the three inner quarter lines. Repeating gradients also
        painted the outer edge, doubling the plot border. */
     background-image:

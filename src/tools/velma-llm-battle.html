@@ -64,46 +64,52 @@
       <button type="button" class="m__button-primary-outline M pg-upload-primary">
         <span class="pg-upload-primary__label">Drop or choose file…</span>
       </button>
-      <div class="m__split-button pg-upload-stream" data-open="false">
+      <div class="pg-upload-stream">
         <button type="button" class="m__button-primary-outline M pg-upload-stream__main">Stream demo</button>
-        <button
-          type="button"
-          class="m__menu-button-primary M pg-upload-stream__toggle"
-          aria-haspopup="menu"
-          aria-expanded="false"
-          aria-label="Choose demo recording">
-          <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
-        </button>
-        <!-- Four preloaded recordings, all switchable: picking one
-             swaps every player, the transcript, the receipts and the
-             dashboard (wiring in the module script). The plate clips
-             its overflow, so a page-scoped :has() rule releases it
-             while the menu is open. -->
-        <div class="pg-upload-stream__menu vlb-demo-menu" role="menu" hidden>
-          <button type="button" role="menuitem" data-vlb-call="scenes">
-            Everyday scenes — dinner, deal, standup
-          </button>
-          <button type="button" role="menuitem" data-vlb-call="office">
-            Office hours — review, all-hands, negotiation
-          </button>
-          <button type="button" role="menuitem" data-vlb-call="party">
-            House party — toast, kitchen, goodbye
-          </button>
-          <button type="button" role="menuitem" data-vlb-call="harborview">
-            Harborview Bank — account takeover
-          </button>
-        </div>
       </div>
     </div>
     {% endset %}
     {% include 'prototypes/upload-plate.html' %}
   </div>
 
-  <div class="m__space S"></div>
+  <div class="vlb-demo-recordings" role="group" aria-label="Demo recordings">
+    <span class="vlb-demo-recordings__label">Demo recordings:</span>
+    <a href="#" data-vlb-demo="scenes" data-vlb-demo-description="Dinner, Deal, Standup" aria-current="true">Everyday scenes</a>
+    <a href="#" data-vlb-demo="office" data-vlb-demo-description="Review, All-hands, Negotiation">Office hours</a>
+    <a href="#" data-vlb-demo="party" data-vlb-demo-description="Toast, Kitchen, Goodbye">House party</a>
+    <a href="#" data-vlb-demo="harborview" data-vlb-demo-description="Account takeover">Harborview Bank</a>
+    <div class="m__menu-button">
+      <button type="button" class="vlb-demo-recordings__more m__menu-button-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="vlb-demo-more-menu">
+        <span>More</span>
+        <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+      </button>
+      <div id="vlb-demo-more-menu" class="m__menu-button-list conversation-report__report-list" role="menu" aria-label="Demo recordings" hidden>
+        <div class="conversation-report__report-items" role="presentation">
+          {% set demoSources = ['scenes', 'office', 'party', 'harborview'] %}
+          {% for name in [
+            'Monday standup', 'Midnight taxi', 'Coffee shop mix-up',
+            'The missing suitcase', 'Customer support call', 'Weekend getaway',
+            'A tricky negotiation', 'Family game night', 'The wrong delivery',
+            'Late-night radio', 'Job interview jitters', 'Apartment hunting',
+            'Birthday surprise', 'Airport announcement', 'Team retrospective',
+            'Dinner reservation', 'The refund request', 'Road trip detour',
+            'Unexpected voicemail', 'Last train home'
+          ] %}
+          <button type="button" class="m__menu-button-item conversation-report__report-item" role="menuitem" data-vlb-demo="{{ demoSources[loop.index0 % 4] }}" data-vlb-demo-description="{{ name }}">
+            <span class="conversation-report__report-item-title">{{ name }}</span>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="m__space L"></div>
 
   <div class="dashboard-layout vlb-page">
     <div class="nav-sidebar">
       <div class="vlb-controls">
+        <div class="vlb-controls__background m__rounded" aria-hidden="true"></div>
         <div class="vlb-controls__group">
           <div class="vlb-controls__field">
             <span class="vlb-controls__title">VELMA</span>
@@ -314,12 +320,12 @@
       <!-- Detection models use the same two-lane comparison timeline as
            behavior strips. The first lane is the direct audio model; the
            second is deliberately quieter to keep the hierarchy legible. -->
-      <section class="vlb-detection" hidden>
+      <section class="vlb-detection">
         <h2>Deepfake</h2>
         <div data-vlb-detection></div>
       </section>
 
-      <div class="m__space L" hidden></div>
+      <div class="m__space L"></div>
 
       <!-- Accuracy dashboard: shown automatically when the recording has
            reference labels (preloaded demos only). External uploads keep
@@ -1467,21 +1473,27 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
     renderFingerprint(block.lastElementChild, deepfakeData(), {
       labels: true,
-      names: [
-        'Velma: This is a deepfake',
-        'STT+LLM: This is not a deepfake',
-      ],
+      names: ['Velma', 'STT+LLM'],
       className: 'fp-cmp vlb-deepfake-strip',
       laneHover: true,
       hoverCaptions: false,
     });
 
-    const stats = document.createElement('div');
-    stats.className = 'vlb-deepfake-lane-stats';
-    stats.innerHTML = `
-    <span>14/25 segments · 3 with &gt;98% conf.</span>
-    <span>4/25 segments · 1 with &gt;98% conf.</span>`;
-    block.querySelector('.pg-player-dataviz').appendChild(stats);
+    const laneStats = [
+      '14/25 segments · 3 with >98% conf.',
+      '4/25 segments · 1 with >98% conf.',
+    ];
+    block.querySelectorAll('.speaker-label').forEach((label, index) => {
+      const stats = document.createElement('span');
+      stats.textContent = laneStats[index];
+      label.appendChild(stats);
+    });
+
+    mountStripTitle(block, 'This is a deepfake');
+    mountStripTitle(block, 'This is not a deepfake');
+    block.querySelector('.vlb-battle__title:last-child')
+      .classList.add('vlb-deepfake-title--stack');
+
   }
 
   function renderStrips() {
@@ -1549,7 +1561,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     };
 
     dashboardMount.innerHTML = `
-      <div class="vlb-scatter">
+      <div class="vlb-scatter m__rounded">
         <div class="vlb-scatter__plot m__rounded">
           <span class="vlb-scatter__zone" aria-hidden="true"></span>
           <span class="vlb-scatter__ylab">Flag accuracy →</span>
@@ -1914,6 +1926,10 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
 
   // ---------------------------------------------------------------- //
   function renderAll() {
+    document.querySelectorAll('[data-vlb-demo]').forEach((link) => {
+      link.setAttribute('aria-current', String(link.dataset.vlbDemo === currentId));
+      link.title = `${fmt(CALLS[link.dataset.vlbDemo].duration)} · ${link.dataset.vlbDemoDescription}`;
+    });
     renderMain();
     renderStrips();
     renderDetection();
@@ -1928,6 +1944,88 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       title.textContent = label;
     });
   }
+
+  function selectDemo(id) {
+    if (!CALLS[id]) return;
+    const plate = document.querySelector('[data-upload-plate]');
+    if (plate) {
+      plate.dataset.state = 'uploaded';
+      const expandBtn = plate.querySelector('[data-upload-plate-expand]');
+      if (expandBtn) expandBtn.setAttribute('aria-expanded', 'false');
+      const radio = plate.querySelector('.pg-plate-state-switch input[value="uploaded"]');
+      if (radio) radio.checked = true;
+    }
+    if (id !== currentId) {
+      currentId = id;
+      appliedConfig = null;
+      renderAll();
+      resetReportSnapshot();
+    }
+  }
+
+  // Keep a link and a menu item for each demo; only one is visible.
+  // Hold menu references because the shared menu controller portals it to body.
+  const demoRow = document.querySelector('.vlb-demo-recordings');
+  const demoMore = demoRow.querySelector('.m__menu-button');
+  const demoTrigger = demoMore.querySelector('button');
+  const demoMenuItems = document.querySelector('#vlb-demo-more-menu .conversation-report__report-items');
+  const initialDemoLinks = [...demoRow.querySelectorAll(':scope > a')];
+  const extraDemoItems = [...demoMenuItems.children];
+  const demoPairs = initialDemoLinks.map((link) => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'm__menu-button-item conversation-report__report-item';
+    item.setAttribute('role', 'menuitem');
+    Object.assign(item.dataset, link.dataset);
+    const title = document.createElement('span');
+    title.className = 'conversation-report__report-item-title';
+    title.textContent = link.textContent;
+    item.appendChild(title);
+    return { link, item };
+  });
+  demoMenuItems.prepend(...demoPairs.map(({ item }) => item));
+  extraDemoItems.forEach((item) => {
+    const link = document.createElement('a');
+    link.href = '#';
+    link.textContent = item.textContent.trim();
+    Object.assign(link.dataset, item.dataset);
+    demoRow.insertBefore(link, demoMore);
+    demoPairs.push({ link, item });
+  });
+
+  function layoutDemoRecordings() {
+    demoMore.hidden = false;
+    demoPairs.forEach(({ link }) => { link.hidden = false; });
+    const gap = parseFloat(getComputedStyle(demoRow).columnGap) || 0;
+    const labelWidth = demoRow.firstElementChild.getBoundingClientRect().width;
+    const widths = demoPairs.map(({ link }) => link.getBoundingClientRect().width);
+    const available = demoRow.clientWidth;
+    const total = labelWidth + widths.reduce((sum, width) => sum + width + gap, 0);
+    const needsMore = total > available;
+    let used = labelWidth + (needsMore ? gap + demoMore.getBoundingClientRect().width : 0);
+    let overflow = false;
+    demoPairs.forEach(({ link, item }, index) => {
+      overflow ||= used + gap + widths[index] > available;
+      link.hidden = overflow;
+      item.hidden = !overflow;
+      if (!overflow) used += gap + widths[index];
+    });
+    if (!needsMore && demoTrigger.getAttribute('aria-expanded') === 'true') {
+      demoTrigger.click();
+    }
+    demoMore.hidden = !needsMore;
+  }
+
+  layoutDemoRecordings();
+  new ResizeObserver(layoutDemoRecordings).observe(demoRow);
+  document.fonts.ready.then(layoutDemoRecordings);
+
+  document.querySelectorAll('[data-vlb-demo]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      selectDemo(link.dataset.vlbDemo);
+    });
+  });
 
   renderAll();
   resetReportSnapshot();
@@ -2038,22 +2136,7 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
       e.stopPropagation();
       close();
       if (!item.dataset.vlbCall) return;
-      // Picking a recording collapses the plate back to its analyzed
-      // state (mirrors the canonical setPlateState) and swaps the page.
-      const plate = document.querySelector('[data-upload-plate]');
-      if (plate) {
-        plate.dataset.state = 'uploaded';
-        const expandBtn = plate.querySelector('[data-upload-plate-expand]');
-        if (expandBtn) expandBtn.setAttribute('aria-expanded', 'false');
-        const radio = plate.querySelector('.pg-plate-state-switch input[value="uploaded"]');
-        if (radio) radio.checked = true;
-      }
-      if (item.dataset.vlbCall !== currentId) {
-        currentId = item.dataset.vlbCall;
-        appliedConfig = null;
-        renderAll();
-        resetReportSnapshot();
-      }
+      selectDemo(item.dataset.vlbCall);
     });
   });
 </script>
