@@ -139,12 +139,21 @@
    overflow-clipped upload plate */
 .vlb-demo-recordings {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-width: 0;
   align-items: center;
   justify-content: center;
   gap: var(--m__gap-xxs) var(--m__gap-s);
   margin-top: var(--m__gap-xs);
   font-size: var(--m__font-size-s);
+
+  & > * {
+    flex-shrink: 0;
+  }
+
+  & > [hidden] {
+    display: none;
+  }
 
   & .vlb-demo-recordings__label {
     font-weight: var(--m__font-weight-bold);
@@ -190,6 +199,10 @@
   max-height: min(18rem, 50dvh);
   overflow-y: auto;
   overscroll-behavior: contain;
+
+  & > [hidden] {
+    display: none;
+  }
 }
 
 .vlb-demo-menu {

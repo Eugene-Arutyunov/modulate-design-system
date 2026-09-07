@@ -1963,6 +1963,63 @@ If emotion guessing is enabled, also return { "segment": n, "emotion": "…", "c
     }
   }
 
+  // Keep a link and a menu item for each demo; only one is visible.
+  // Hold menu references because the shared menu controller portals it to body.
+  const demoRow = document.querySelector('.vlb-demo-recordings');
+  const demoMore = demoRow.querySelector('.m__menu-button');
+  const demoTrigger = demoMore.querySelector('button');
+  const demoMenuItems = document.querySelector('#vlb-demo-more-menu .conversation-report__report-items');
+  const initialDemoLinks = [...demoRow.querySelectorAll(':scope > a')];
+  const extraDemoItems = [...demoMenuItems.children];
+  const demoPairs = initialDemoLinks.map((link) => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'm__menu-button-item conversation-report__report-item';
+    item.setAttribute('role', 'menuitem');
+    Object.assign(item.dataset, link.dataset);
+    const title = document.createElement('span');
+    title.className = 'conversation-report__report-item-title';
+    title.textContent = link.textContent;
+    item.appendChild(title);
+    return { link, item };
+  });
+  demoMenuItems.prepend(...demoPairs.map(({ item }) => item));
+  extraDemoItems.forEach((item) => {
+    const link = document.createElement('a');
+    link.href = '#';
+    link.textContent = item.textContent.trim();
+    Object.assign(link.dataset, item.dataset);
+    demoRow.insertBefore(link, demoMore);
+    demoPairs.push({ link, item });
+  });
+
+  function layoutDemoRecordings() {
+    demoMore.hidden = false;
+    demoPairs.forEach(({ link }) => { link.hidden = false; });
+    const gap = parseFloat(getComputedStyle(demoRow).columnGap) || 0;
+    const labelWidth = demoRow.firstElementChild.getBoundingClientRect().width;
+    const widths = demoPairs.map(({ link }) => link.getBoundingClientRect().width);
+    const available = demoRow.clientWidth;
+    const total = labelWidth + widths.reduce((sum, width) => sum + width + gap, 0);
+    const needsMore = total > available;
+    let used = labelWidth + (needsMore ? gap + demoMore.getBoundingClientRect().width : 0);
+    let overflow = false;
+    demoPairs.forEach(({ link, item }, index) => {
+      overflow ||= used + gap + widths[index] > available;
+      link.hidden = overflow;
+      item.hidden = !overflow;
+      if (!overflow) used += gap + widths[index];
+    });
+    if (!needsMore && demoTrigger.getAttribute('aria-expanded') === 'true') {
+      demoTrigger.click();
+    }
+    demoMore.hidden = !needsMore;
+  }
+
+  layoutDemoRecordings();
+  new ResizeObserver(layoutDemoRecordings).observe(demoRow);
+  document.fonts.ready.then(layoutDemoRecordings);
+
   document.querySelectorAll('[data-vlb-demo]').forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
