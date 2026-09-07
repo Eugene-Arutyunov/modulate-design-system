@@ -73,11 +73,35 @@
   </div>
 
   <div class="vlb-demo-recordings" role="group" aria-label="Demo recordings">
-    <span class="vlb-demo-recordings__label">Demo recordings</span>
+    <span class="vlb-demo-recordings__label">Demo recordings:</span>
     <a href="#" data-vlb-demo="scenes" data-vlb-demo-description="Dinner, Deal, Standup" aria-current="true">Everyday scenes</a>
     <a href="#" data-vlb-demo="office" data-vlb-demo-description="Review, All-hands, Negotiation">Office hours</a>
     <a href="#" data-vlb-demo="party" data-vlb-demo-description="Toast, Kitchen, Goodbye">House party</a>
     <a href="#" data-vlb-demo="harborview" data-vlb-demo-description="Account takeover">Harborview Bank</a>
+    <div class="m__menu-button">
+      <button type="button" class="vlb-demo-recordings__more m__menu-button-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="vlb-demo-more-menu">
+        <span>More</span>
+        <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down" /></svg>
+      </button>
+      <div id="vlb-demo-more-menu" class="m__menu-button-list conversation-report__report-list" role="menu" aria-label="Demo recordings" hidden>
+        <div class="conversation-report__report-items" role="presentation">
+          {% set demoSources = ['scenes', 'office', 'party', 'harborview'] %}
+          {% for name in [
+            'Monday standup', 'Midnight taxi', 'Coffee shop mix-up',
+            'The missing suitcase', 'Customer support call', 'Weekend getaway',
+            'A tricky negotiation', 'Family game night', 'The wrong delivery',
+            'Late-night radio', 'Job interview jitters', 'Apartment hunting',
+            'Birthday surprise', 'Airport announcement', 'Team retrospective',
+            'Dinner reservation', 'The refund request', 'Road trip detour',
+            'Unexpected voicemail', 'Last train home'
+          ] %}
+          <button type="button" class="m__menu-button-item conversation-report__report-item" role="menuitem" data-vlb-demo="{{ demoSources[loop.index0 % 4] }}" data-vlb-demo-description="{{ name }}">
+            <span class="conversation-report__report-item-title">{{ name }}</span>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="m__space L"></div>

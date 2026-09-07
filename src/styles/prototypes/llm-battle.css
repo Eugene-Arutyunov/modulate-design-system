@@ -158,6 +158,38 @@
     text-decoration-color: currentColor;
     text-decoration-thickness: 0.12em;
   }
+
+  & .vlb-demo-recordings__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15em;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--m__text);
+    font: inherit;
+    font-weight: var(--m__font-weight-bold);
+    cursor: pointer;
+
+    &:hover,
+    &[aria-expanded="true"] {
+      color: var(--m__text-link-hover);
+    }
+
+    & svg {
+      width: 0.85em;
+      height: 0.85em;
+      stroke: currentColor;
+      stroke-width: 0.65;
+      stroke-linejoin: round;
+    }
+  }
+}
+
+#vlb-demo-more-menu .conversation-report__report-items {
+  max-height: min(18rem, 50dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .vlb-demo-menu {
