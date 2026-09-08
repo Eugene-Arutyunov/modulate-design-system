@@ -53,7 +53,7 @@ const COLORED_ICONS = new Set(["google", "microsoft", "facebook"]);
 
 ## Icon palette colors
 
-Product icons that need fixed accent fills reference palette tokens from **`src/styles/tokens/colors.css`** directly — there is no separate icon token layer.
+Product icons that need fixed accent fills reference palette tokens from **`src/styles/tokens/palette.css`** directly (semantic tokens live in `src/styles/tokens/colors.css`) — there is no separate icon token layer.
 
 | Token                       | Typical use                           |
 | --------------------------- | ------------------------------------- |
@@ -97,8 +97,10 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 ## Notes
 
 - **`overview-muted.svg`** → **`#overview-muted`**: same three bars as **`overview.svg`**, with **`fill-opacity="0.3"`** on the top two rectangles and full opacity on the bottom bar. Used in online docs only; not listed on the design-system icon grid.
-- **`music.svg`** → **`#music`**: colored icon — inner circle uses **`var(--m__color-yellow-500)`**; outer ring uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
-- **`ai-music.svg`** → **`#ai-music`**: colored icon — outer ring and waveform frame use **`currentColor`**; inner ring and accent bars use **`var(--m__color-yellow-500)`**. Listed in **`COLORED_ICONS`**.
+- **`music.svg`** → **`#music`**: colored icon, a vinyl disc — inner ring uses **`var(--m__color-yellow-500)`**; outer ring uses **`currentColor`**. Shapes are fully de-overlapped (rings, not stacked discs), so the same file feeds the 3D fallback. Listed in **`COLORED_ICONS`**.
+- **`ai-music.svg`** → **`#ai-music`**: colored icon, a square vinyl (the "wrong" disc) — outer square frame uses **`currentColor`**; inner square frame uses **`var(--m__color-yellow-500)`**; the center is a see-through hole. Fully de-overlapped, feeds the 3D fallback. Listed in **`COLORED_ICONS`**.
+- **`conversations.svg`** → **`#conversations`**: monochrome — four quadrant bars (the graphic formerly known as `models.svg`, which was removed; the Limits nav item temporarily uses **`#usage`**). Inherits **`currentColor`**. Used on the dashboard nav "Conversations" item.
+- **`sound-events.svg`** → **`#sound-events`**: monochrome swoosh-wave glyph (single path); inherits **`currentColor`**.
 - **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use **`var(--m__color-red-500)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.
 - **`stt-med.svg`** → **`#stt-med`**: colored icon — all bars use **`var(--m__color-red-500)`**. Listed in **`COLORED_ICONS`**.
 - **`accent.svg`** → **`#accent`**: colored icon — top stripe uses **`var(--m__color-red-500)`**; the road/wave shape uses **`currentColor`**. Listed in **`COLORED_ICONS`**.
