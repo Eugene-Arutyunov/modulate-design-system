@@ -18,7 +18,7 @@ That file is a hidden SVG sprite. Each source SVG becomes one `<symbol>`:
 
 - `account.svg` -> `<symbol id="account">`
 - `api-key.svg` -> `<symbol id="api-key">`
-- `api-docs.svg` -> `<symbol id="api-docs">`
+- `billing.svg` -> `<symbol id="billing">`
 
 The sprite is included globally in both layouts:
 
@@ -98,7 +98,7 @@ If the source file is named `billing.svg`, the symbol id is `billing`.
 
 - **`overview-muted.svg`** → **`#overview-muted`**: same three bars as **`overview.svg`**, with **`fill-opacity="0.3"`** on the top two rectangles and full opacity on the bottom bar. Used in online docs only; not listed on the design-system icon grid.
 - **`music.svg`** → **`#music`**: colored icon, a vinyl disc — inner ring uses **`var(--m__color-yellow-500)`**; outer ring uses **`currentColor`**. Shapes are fully de-overlapped (rings, not stacked discs), so the same file feeds the 3D fallback. Listed in **`COLORED_ICONS`**.
-- **`ai-music.svg`** → **`#ai-music`**: colored icon, a square vinyl (the "wrong" disc) — outer square frame uses **`currentColor`**; inner square frame uses **`var(--m__color-yellow-500)`**; the center is a see-through hole. Fully de-overlapped, feeds the 3D fallback. Listed in **`COLORED_ICONS`**.
+- **`music-ai.svg`** → **`#music-ai`**: colored icon, a square vinyl (the "wrong" disc) — outer square frame uses **`currentColor`**; inner square frame uses **`var(--m__color-yellow-500)`**; the center is a see-through hole. Fully de-overlapped, feeds the 3D fallback. Listed in **`COLORED_ICONS`**.
 - **`conversations.svg`** → **`#conversations`**: monochrome — four quadrant bars (the graphic formerly known as `models.svg`, which was removed; the Limits nav item temporarily uses **`#usage`**). Inherits **`currentColor`**. Used on the dashboard nav "Conversations" item.
 - **`sound-events.svg`** → **`#sound-events`**: monochrome swoosh-wave glyph (single path); inherits **`currentColor`**.
 - **`deepfake.svg`** → **`#deepfake`**: colored icon — top bars use **`var(--m__color-red-500)`**; bottom bars use **`currentColor`**. Listed in **`COLORED_ICONS`**.

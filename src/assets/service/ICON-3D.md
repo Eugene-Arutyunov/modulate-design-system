@@ -59,7 +59,7 @@ white becomes `var(--m__bg-surface)` so spacer shapes match the tile face.
 
 ## Icon notes
 
-- `music` and `ai-music` have no dedicated 3D source: their flat sources are
+- `music` and `music-ai` have no dedicated 3D source: their flat sources are
   fully de-overlapped (rings / square frames with a center hole), so the
   generator's flat fallback renders them as flat one-layer "vinyl" discs
   (`shapeLayers: [0, 0]`).
