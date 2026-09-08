@@ -70,8 +70,9 @@ white becomes `var(--m__bg-surface)` so spacer shapes match the tile face.
   (see `layers/modulate.layers.json`), like the emotions bars but
   non-ascending.
 - `conversations` and `sound-events` are monochrome flat fallbacks;
-  `conversations` (the ex-`models` quadrant bars) raises its outer diagonal
-  pair half a layer, `sound-events` has no layer map (everything base-thick).
+  `conversations` (the ex-`models` quadrant bars) is layered like `deepfake`
+  (top bars span both layers, bottom bars stay base-thick), `sound-events`
+  has no layer map (everything base-thick).
 
 ## Runtime
 
