@@ -48,5 +48,6 @@ are carried back here by hand so this repo stays the complete final state:
    `REPOSITORY-REGISTRY.md`).
 5. Build, review, commit to `main` here, push.
 
-Last reverse sync: August 25, 2026 (blog post renames + editorial pass, palette-lamp
-toggle, layouts→page-composition part move, carried from site commit `d43c289`).
+Last reverse sync: September 9, 2026 (abstracts dropped from every post, icons post
+rework with the Icon Studio card, home posts-card and 3D-tile swaps, tools list trim,
+icon-copy opt-out, carried from site commit `20ec337`).

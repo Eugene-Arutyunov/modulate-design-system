@@ -1,8 +1,12 @@
 /* Design system home (`src/index.html`) — section layout not tied to color samples */
 
 .docs-icon-row {
+  /* Column count is a variable so the same tile grid can be reused in narrower
+     contexts (e.g. the side-by-side comparisons in the icons post). */
+  --docs-icon-row-columns: 6;
+
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--docs-icon-row-columns), minmax(0, 1fr));
   gap: var(--m__gap-xs);
   margin-top: 1rem;
 
@@ -27,6 +31,16 @@
         white
       );
       transition-duration: var(--m__duration-instant);
+    }
+  }
+
+  /* A tile that opted out of click-to-copy (its icon is not in the sprite)
+     is a plain illustration — no pointer, no hover feedback. */
+  & .docs-icon-row__item[data-icon-copy="off"] {
+    cursor: default;
+
+    &:hover {
+      background-color: var(--m__bg-surface);
     }
   }
 
@@ -56,6 +70,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+.docs-icon-row--cols-3 {
+  --docs-icon-row-columns: 3;
 }
 
 .docs-icon-row--3d {

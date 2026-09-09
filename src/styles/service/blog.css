@@ -87,22 +87,12 @@
   white-space: nowrap;
 }
 
-/* Post pages: annotation card between the title and the body — a widget-like
-   surface panel (base aside styles) with a small-caps heading. Authored via
-   the post-abstract skill. Padding one step tighter than .m__widget — blog /
-   narrative only, not a design-system size. */
-.post-abstract {
-  margin-block: var(--m__spacer-s);
-  padding: var(--m__spacer-xs);
-  font-size: var(--m__font-size-s);
+}
 
-  & .posts-list-col-title {
-    padding-top: 0;
-  }
-
-  & p:last-child {
-    margin-bottom: 0;
-  }
+/* The title sits directly on the first paragraph now that posts carry no
+   abstract; give it the breathing room the abstract used to provide. */
+.narrative-text-width > h1.loud {
+  margin-bottom: var(--m__spacer-m);
 }
 
 /* Narrative column: body one step above base; paragraph rhythm one step
@@ -305,5 +295,153 @@ a.read-next {
 
   & strong {
     font-weight: var(--m__font-weight-bold);
+  }
+}
+
+/* Icons post: example blocks reuse the Graphics → Icons tile grid.
+   A row of six tiles, or two three-tile groups compared side by side. */
+.icon-example {
+  margin-bottom: var(--m__spacer-s);
+
+  & .docs-icon-row {
+    margin-top: 0;
+  }
+
+  & .caption {
+    margin-top: var(--m__gap-xs);
+    margin-bottom: 0;
+  }
+
+  /* Three-tile groups sit in half a column: trim the tile's side padding so
+     the longest captions ("Voice match") still fit on one line. */
+  & .docs-icon-row--cols-3 .docs-icon-row__item {
+    padding-inline: 0.4rem;
+  }
+
+  /* Six tiles are too narrow inside the narrative column on a phone. */
+  @media (width < 767px) {
+    & .docs-icon-row {
+      --docs-icon-row-columns: 3;
+    }
+  }
+}
+
+/* Verdict label above a compared group. Same small-caps voice as a column
+   title; the tint is the only signal, so the groups stay readable in print. */
+.icon-example__verdict {
+  color: var(--m__error);
+
+  &.is-yes {
+    color: var(--m__success);
+  }
+}
+
+/* Icons quoted from another set: stroke-drawn, unlike ours. Sized and boxed
+   by the shared tile rules, painted here — the selector has to outweigh the
+   component's own `fill: currentColor`. */
+.icon-example .docs-icon-row .icon-example__icon--foreign {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* Corner badges (the plus, the lens) sit on the frame's corner and their
+     caps run a hair past the 24-unit box. */
+  overflow: visible;
+}
+
+/* Interface-and-text comparison: the playground sidebar (a static copy — the
+   post shows it, never links into it, so no pointer affordance) takes one
+   column of three, the running text takes the other two. `--columns: 1.5`
+   makes an item exactly two thirds wide in the sequence's width formula. */
+.icon-example--interface {
+  & .models-nav__link {
+    cursor: default;
+
+    /* At one fifth of the column the longest label ("Music & Speech") does not
+       fit; truncate like the tile captions do. */
+    & > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  /* Both selectors repeat `.m__sequence.L` on purpose: the component sets
+     `--columns` on `.m__sequence.L .m__sequence-item`, and only a heavier
+     selector can override a custom property it sets. */
+  /* Sidebar one quarter, text the rest: 4 and 4/3 columns add up to a full
+     row once the sequence's own gap is counted. */
+  & .m__sequence.L .m__sequence-item.icon-example__sidebar {
+    --columns: 4;
+  }
+
+  & .m__sequence.L .m__sequence-item.icon-example__text {
+    --columns: 1.3333;
+  }
+
+  @media (width < 767px) {
+    & .m__sequence.L .m__sequence-item {
+      --columns: 1;
+    }
+  }
+}
+
+/* Running text with icons set inline, display-sized in the Gothic face:
+   each icon is one em on the baseline, so it scales with the type. */
+.icon-example__prose {
+  margin: 0;
+  font-family: var(--m__font-family-gothic);
+  /* The lightest weight the Gothic face is loaded in (Medium and Bold only). */
+  font-weight: var(--m__font-weight-medium);
+  font-size: calc(var(--m__font-size-xxl) * 1.3);
+  line-height: 1.25;
+
+  /* An icon never separates from its word at a line break. */
+  & .icon-example__term {
+    white-space: nowrap;
+  }
+
+  & .icon-example__inline-icon {
+    width: 0.95em;
+    height: 0.95em;
+    vertical-align: calc(-0.15em - 0.1rem);
+    margin-inline-end: 0;
+    fill: currentColor;
+  }
+}
+
+/* A screenshot that is a link: the home promo card's recipe (squircle, hair
+   border, shadow, blue hover), with the image rounded to the inner radius. */
+a.post-figure-link {
+  --post-figure-link-pad: calc(var(--m__gap-xs) * 1.5);
+
+  display: block;
+  padding: var(--post-figure-link-pad);
+  border: var(--m__border-width-s) solid
+    color-mix(in srgb, var(--m__color-slate-700) 12.5%, transparent);
+  border-radius: 2em;
+  corner-shape: squircle;
+  background-color: var(--m__color-white);
+  box-shadow: 0 0.35rem 1.1rem
+    color-mix(in srgb, var(--m__color-slate-700) 25%, transparent);
+  transition:
+    border-color var(--m__duration-slow) var(--m__easing-base),
+    box-shadow var(--m__duration-slow) var(--m__easing-base);
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--m__color-blue-500) 17.5%, transparent);
+    box-shadow: 0 0.35rem 1.1rem
+      color-mix(in srgb, var(--m__color-blue-500) 35%, transparent);
+    transition-duration: var(--m__duration-instant);
+  }
+
+  & img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: calc(2em - var(--post-figure-link-pad));
+    corner-shape: squircle;
   }
 }
