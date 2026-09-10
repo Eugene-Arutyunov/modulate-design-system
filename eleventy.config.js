@@ -19,7 +19,11 @@ module.exports = function (conf) {
       "assets/vendor/three-addons/loaders/SVGLoader.js",
   });
 
+  conf.setServerOptions({ middleware: [require("./scripts/ui/serve").auditMiddleware] });
+
   conf.addWatchTarget("./src/styles/");
+  conf.addWatchTarget("./scripts/ui/");
+  conf.addWatchTarget("./src/service/ui.yaml");
 
   // remove internal structure
   conf.addGlobalData("permalink", () => {

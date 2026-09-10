@@ -1,28 +1,9 @@
 /**
- * UI Visualizer: loads ui.yaml, normalizes data, renders into #ui-structure.
+ * UI Scheme: one page table with structure and screenshot comparison views.
  * Data and rendering can be extended without changing the load flow.
  */
 
 const UI_STRUCTURE_ID = 'ui-structure';
-
-function waitForJsYaml(maxAttempts = 50, interval = 100) {
-  return new Promise((resolve, reject) => {
-    let attempts = 0;
-    const check = () => {
-      attempts++;
-      if (typeof jsyaml !== 'undefined' && jsyaml.load) {
-        resolve(jsyaml);
-      } else if (typeof YAML !== 'undefined' && YAML.load) {
-        resolve(YAML);
-      } else if (attempts >= maxAttempts) {
-        reject(new Error('js-yaml library failed to load'));
-      } else {
-        setTimeout(check, interval);
-      }
-    };
-    check();
-  });
-}
 
 /**
  * Normalizes raw YAML into a fixed shape. Extend here when ui.yaml format changes.
@@ -97,12 +78,6 @@ function normalizeRouteList(routes) {
   });
 }
 
-function normalizeUiData(raw) {
-  const current = normalizeRouteList(raw?.current);
-  const target = normalizeRouteList(raw?.target);
-  return { current, target };
-}
-
 function renderRouteBody(cell, route) {
   const hasSections = route?.sections?.length > 0;
   const hasSubsections = route?.subsections?.length > 0;
@@ -133,31 +108,6 @@ function renderRouteBody(cell, route) {
     });
     cell.appendChild(wrap);
   }
-}
-
-function renderRoutePaths(routes) {
-  const list = (routes ?? []).filter((r) => typeof r === 'string' && r.length > 0);
-  if (list.length === 0) {
-    const span = document.createElement('span');
-    span.className = 'ui-viz__route-path';
-    span.textContent = '—';
-    return span;
-  }
-  if (list.length === 1) {
-    const span = document.createElement('span');
-    span.className = 'ui-viz__route-path';
-    span.textContent = list[0];
-    return span;
-  }
-  const wrap = document.createElement('div');
-  wrap.className = 'ui-viz__route-paths';
-  list.forEach((r) => {
-    const span = document.createElement('span');
-    span.className = 'ui-viz__route-path';
-    span.textContent = r;
-    wrap.appendChild(span);
-  });
-  return wrap;
 }
 
 function renderSectionsList(sections, listClass) {
@@ -207,108 +157,149 @@ function renderSectionsList(sections, listClass) {
   return list;
 }
 
-function renderUIStructure(data) {
-  const container = document.getElementById(UI_STRUCTURE_ID);
-  if (!container) {
-    console.error(`Container #${UI_STRUCTURE_ID} not found`);
-    return;
+const ui = { data: null, checks: [], mode: 'scheme', compareError: null };
+function node(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+function routePaths(route) { return (route?.routes || [route?.route]).filter(value => typeof value === 'string' && value.startsWith('/')); }
+function empty() { return node('p', 'ui-viz__empty', '—'); }
+function link(label, href, className) {
+  const element = node('a', className, label);
+  element.href = href; element.target = '_blank'; element.rel = 'noopener'; return element;
+}
+function imageURL(value) { return typeof value === 'string' && /^\/ui-audit\/[a-z0-9][a-z0-9._-]*\.png$/i.test(value) ? value : null; }
+function renderStructure(cell, route, side) {
+  const paths = routePaths(route);
+  if (!paths.length) { cell.append(empty()); return; }
+  paths.forEach(url => cell.append(link(url, side === 'prototype' ? url : `https://platform.modulate.ai${url}`, 'ui-viz__route-path')));
+  renderRouteBody(cell, normalizeRouteList([route])[0]);
+}
+function captureURL(value) {
+  try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : null; }
+  catch { return null; }
+}
+function renderDifferences(pair, route, check) {
+  if (!imageURL(check.screenshots?.prototype) || !imageURL(check.screenshots?.production)) return;
+  const block = node('div', 'ui-viz__differences');
+  if (check.fingerprint !== route.fingerprint) block.append(node('p', 'caption', 'Prototype changed. Capture again to compare.'));
+  else if (check.status === 'match') block.append(node('p', 'caption', 'No differences detected.'));
+  const findings = check.reviewedFindings || check.findings;
+  if (findings?.length) {
+    const heading = node('p');
+    heading.append(node('strong', '', 'Conclusion:')); block.append(heading);
+    const list = node('ul', 'ui-viz__differences-list');
+    findings.forEach(finding => list.append(node('li', '', finding))); block.append(list);
   }
-
-  container.innerHTML = '';
-  const { current, target } = data;
-
-  const table = document.createElement('table');
-  table.className = 'ui-viz__table';
-
-  const thead = document.createElement('thead');
-  const headerTr = document.createElement('tr');
-  const thRoute = document.createElement('th');
-  thRoute.textContent = 'Route';
-  const thCurrent = document.createElement('th');
-  thCurrent.textContent = 'Production';
-  const thTarget = document.createElement('th');
-  thTarget.textContent = 'Prototype';
-  headerTr.appendChild(thRoute);
-  headerTr.appendChild(thTarget);
-  headerTr.appendChild(thCurrent);
-  thead.appendChild(headerTr);
-  table.appendChild(thead);
-
-  const tbody = document.createElement('tbody');
-
-  const routeKeys = new Set([
-    ...target.map((r) => r.id),
-    ...current.map((r) => r.id),
-  ]);
-  const currentById = new Map(current.map((r) => [r.id, r]));
-  const targetById = new Map(target.map((r) => [r.id, r]));
-
-  routeKeys.forEach((routeId) => {
-    const currentRoute = currentById.get(routeId);
-    const targetRoute = targetById.get(routeId);
-    const route = targetRoute ?? currentRoute;
-    const title = route?.title ?? routeId;
-    const titleDeprecated = route?.title_deprecated ?? '';
-
-    const tr = document.createElement('tr');
-
-    const tdPage = document.createElement('td');
-    const titleEl = document.createElement('code');
-    titleEl.className = 'ui-viz__route-title';
-    if (titleDeprecated) {
-      const del = document.createElement('del');
-      del.textContent = titleDeprecated;
-      titleEl.appendChild(del);
-      titleEl.appendChild(document.createTextNode(' '));
-      titleEl.appendChild(document.createTextNode(title));
-    } else {
-      titleEl.textContent = title;
+  const diff = imageURL(check.screenshots?.diff);
+  if (diff) block.append(link('Pixel differences', diff));
+  if (block.childElementCount) pair.prepend(block);
+}
+function renderComparison(cell, route, checks) {
+  for (const check of checks.length ? checks : [{ scenario: 'default' }]) {
+    const pair = node('div', 'ui-viz__comparison-state'); pair.dataset.scenario = check.scenario;
+    for (const side of ['prototype', 'production']) {
+      const figure = node('figure', 'ui-viz__screenshot'); figure.dataset.side = side;
+      figure.dataset.label = side === 'prototype' ? 'Prototype' : 'Production';
+      const caption = node('figcaption', 'caption');
+      if (checks.length > 1 || check.scenario !== 'default') caption.textContent = check.scenario;
+      const address = node('div', 'ui-viz__capture-url');
+      const src = imageURL(check.screenshots?.[side]), url = captureURL(check.urls?.[side]);
+      if (src && url) {
+        const { pathname, search, hash } = new URL(url);
+        address.append(link(`${pathname.replace(/\/$/, '') || '/'}${search}${hash}`, url, 'ui-viz__route-path'));
+      }
+      const preview = node('div', 'ui-viz__preview');
+      if (src) {
+        const anchor = link('', src), image = node('img');
+        image.src = src; image.alt = `${figure.dataset.label}: ${route.title}, ${check.scenario}`; image.loading = 'lazy';
+        image.addEventListener('error', () => {
+          anchor.replaceWith(empty()); address.replaceChildren();
+          pair.querySelector('.ui-viz__differences')?.remove();
+        });
+        anchor.append(image); preview.append(anchor);
+      } else preview.append(empty());
+      figure.append(caption, address, preview); pair.append(figure);
     }
-    tdPage.appendChild(titleEl);
-    tr.appendChild(tdPage);
-
-    const tdCurrent = document.createElement('td');
-    tdCurrent.appendChild(renderRoutePaths(currentRoute?.routes));
-    renderRouteBody(tdCurrent, currentRoute);
-    const tdTarget = document.createElement('td');
-    tdTarget.appendChild(renderRoutePaths(targetRoute?.routes));
-    renderRouteBody(tdTarget, targetRoute);
-    tr.appendChild(tdTarget);
-    tr.appendChild(tdCurrent);
-
-    tbody.appendChild(tr);
-  });
-
-  table.appendChild(tbody);
-  container.appendChild(table);
-}
-
-function showError(message) {
-  const container = document.getElementById(UI_STRUCTURE_ID);
-  if (container) {
-    container.innerHTML = `<p class="ui-viz__error">Error loading UI structure: ${message}</p>`;
+    renderDifferences(pair, route, check); cell.append(pair);
   }
 }
-
+function renderTable(container) {
+  const table = node('table', `ui-viz__table ui-viz__table--${ui.mode}`);
+  const columns = node('colgroup');
+  [24, 38, 38].forEach(width => { const column = node('col'); column.style.width = `${width}%`; columns.append(column); });
+  table.append(columns);
+  const head = node('thead'), headers = node('tr'), body = node('tbody');
+  ['Route', 'Prototype', 'Production'].forEach(label => { const cell = node('th', '', label); cell.scope = 'col'; headers.append(cell); });
+  head.append(headers); table.append(head, body);
+  for (const route of ui.data.routes) {
+    const row = node('tr'); row.dataset.pageId = route.id;
+    const page = node('td', 'ui-viz__page-cell'); page.dataset.label = 'Route';
+    const title = node('code', 'ui-viz__route-title');
+    const deprecated = route.target?.title_deprecated || route.current?.title_deprecated;
+    if (deprecated) title.append(node('del', '', deprecated), document.createTextNode(' '));
+    title.append(document.createTextNode(route.title)); page.append(title); row.append(page);
+    const checks = ui.checks.filter(check => check.pageId === route.id);
+    if (ui.mode === 'compare') {
+      const cell = node('td', 'ui-viz__comparison-cell'); cell.colSpan = 2;
+      renderComparison(cell, route, checks); row.append(cell);
+    } else {
+      for (const [key, side, label] of [['target', 'prototype', 'Prototype'], ['current', 'production', 'Production']]) {
+        const cell = node('td'); cell.dataset.label = label;
+        renderStructure(cell, route[key], side); row.append(cell);
+      }
+    }
+    body.append(row);
+  }
+  container.append(table);
+}
+async function loadChecks() {
+  ui.compareError = null;
+  try {
+    const response = await fetch('/ui-audit-data.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+    if (!Array.isArray(data.checks)) throw new Error();
+    ui.checks = data.checks;
+  } catch { ui.compareError = 'Could not load comparison screenshots. Reload the page to retry.'; }
+}
+async function setMode(mode) {
+  ui.mode = mode;
+  history.replaceState(null, '', `#mode=${mode}`);
+  if (mode === 'compare') await loadChecks();
+  render(); document.getElementById(`ui-tab-${mode}`).focus();
+}
+function render() {
+  const container = document.getElementById(UI_STRUCTURE_ID); container.replaceChildren();
+  const tabs = node('nav', 'm__segmented-nav ui-viz__tabs'), list = node('ul');
+  list.setAttribute('role', 'tablist'); list.setAttribute('aria-label', 'UI Scheme view');
+  for (const [mode, label] of [['scheme', 'Scheme'], ['compare', 'Compare']]) {
+    const item = node('li', ui.mode === mode ? 'current' : ''); item.setAttribute('role', 'presentation');
+    const tab = node('a', '', label); tab.href = `#mode=${mode}`; tab.id = `ui-tab-${mode}`;
+    tab.setAttribute('role', 'tab'); tab.setAttribute('aria-selected', String(ui.mode === mode)); tab.setAttribute('aria-controls', 'ui-viz-panel'); tab.tabIndex = ui.mode === mode ? 0 : -1;
+    tab.addEventListener('click', event => { event.preventDefault(); setMode(mode); });
+    tab.addEventListener('keydown', event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault(); setMode(event.key === 'Home' ? 'scheme' : event.key === 'End' ? 'compare' : mode === 'scheme' ? 'compare' : 'scheme');
+    });
+    item.append(tab); list.append(item);
+  }
+  tabs.append(list); container.append(tabs);
+  const panel = node('section'); panel.id = 'ui-viz-panel'; panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', `ui-tab-${ui.mode}`);
+  if (ui.mode === 'compare' && ui.compareError) { const error = node('p', 'ui-viz__error', ui.compareError); error.setAttribute('role', 'alert'); panel.append(error); }
+  renderTable(panel); container.append(panel);
+}
 async function loadUIStructure() {
   try {
-    const yamlLib = await waitForJsYaml();
-    const response = await fetch('/ui.yaml');
-    if (!response.ok) {
-      throw new Error(`Failed to load ui.yaml: ${response.status}`);
-    }
-    const yamlText = await response.text();
-    const raw = yamlLib.load(yamlText);
-    const data = normalizeUiData(raw);
-    renderUIStructure(data);
-  } catch (error) {
-    console.error('Error loading UI structure:', error);
-    showError(error.message);
-  }
+    const response = await fetch('/ui-data.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error(`Unable to load the scheme (${response.status}).`);
+    ui.data = await response.json();
+    ui.mode = new URLSearchParams(location.hash.slice(1)).get('mode') === 'compare' ? 'compare' : 'scheme';
+    if (ui.mode === 'compare') await loadChecks();
+    render();
+  } catch (error) { document.getElementById(UI_STRUCTURE_ID).replaceChildren(node('p', 'ui-viz__error', error.message)); }
 }
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadUIStructure);
-} else {
-  loadUIStructure();
-}
+loadUIStructure();
+window.addEventListener('hashchange', loadUIStructure);

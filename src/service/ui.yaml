@@ -377,6 +377,13 @@ target:
   - id: docs
     route: /docs/
     title: Docs
+    audit:
+      production_route: https://docs.modulate.ai/
+      scenarios:
+        - name: default
+          production:
+            ready: body
+            networkIdle: false
     sections:
       - section:
           text-content: docs-external-link
@@ -575,6 +582,8 @@ target:
           widget: conversation-upload
 
   - id: conversations-review
+    audit:
+      production_route: /dashboard/conversations/review-queue
     route: /dashboard/conversations/review/
     title: Review Queue
     sections:
@@ -650,6 +659,28 @@ target:
           widget: recent-usage
 
   - id: dashboard-api-keys
+    audit:
+      production_route: /dashboard/api-keys
+      regions:
+        - id: api-keys-table
+          states: [default]
+          prototype: 'main table'
+          production: 'main table'
+      scenarios:
+        - name: default
+        - name: create-key
+          prototype:
+            steps:
+              - action: click
+                selector: '[data-api-key-create]'
+            visible: '#modal-api-key-create'
+            scope: '#modal-api-key-create'
+          production:
+            steps:
+              - action: click
+                selector: { role: button, name: Create API Key }
+            visible: { role: dialog }
+            scope: { role: dialog }
     route: /dashboard/api-keys/
     title: API Keys
     sections:
@@ -690,6 +721,40 @@ target:
           widget: model-limits-table
 
   - id: dashboard-behaviors
+    audit:
+      production_route: /dashboard/behaviors
+      scenarios:
+        - name: detection-packages
+        - name: behaviors
+          prototype:
+            steps:
+              - action: click
+                selector: 'label:has([name="behaviors-tabs"][value="behaviors"])'
+            visible: '[data-tab="behaviors"]'
+          production:
+            steps:
+              - action: click
+                selector: { role: tab, name: Behaviors }
+        - name: conversation-types
+          prototype:
+            steps:
+              - action: click
+                selector: 'label:has([name="behaviors-tabs"][value="conversation-types"])'
+            visible: '[data-tab="conversation-types"]'
+          production:
+            steps:
+              - action: click
+                selector: { role: tab, name: Conversation Types }
+        - name: roles
+          prototype:
+            steps:
+              - action: click
+                selector: 'label:has([name="behaviors-tabs"][value="roles"])'
+            visible: '[data-tab="roles"]'
+          production:
+            steps:
+              - action: click
+                selector: { role: tab, name: Roles }
     route: /dashboard/behaviors/
     title: Behaviors
     sections:
