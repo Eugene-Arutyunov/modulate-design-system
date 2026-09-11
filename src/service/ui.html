@@ -4,11 +4,19 @@ content %}
 <div class="m__wrapper">
   <div class="m__space L"></div>
 
+  {% include 'service/ui-navigation.html' %}
+
   <h1>UI Scheme</h1>
 
   <div id="ui-structure" class="ui-viz"><p class="caption">Loading scheme…</p></div>
   <noscript><p>Enable JavaScript to view the scheme and comparison.</p></noscript>
 </div>
+
+<template id="ui-scheme-legend">
+  <div class="ui-viz__legend">
+    {% include 'service/ui-arch-diagram.html' %}
+  </div>
+</template>
 
 <script type="module" src="/assets/service/ui-visualizer.js"></script>
 

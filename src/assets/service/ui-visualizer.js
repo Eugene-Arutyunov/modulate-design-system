@@ -1,5 +1,5 @@
 /**
- * UI Scheme: one page table with structure and screenshot comparison views.
+ * UI Scheme and Compare: separate pages sharing the table renderer.
  * Data and rendering can be extended without changing the load flow.
  */
 
@@ -157,7 +157,7 @@ function renderSectionsList(sections, listClass) {
   return list;
 }
 
-const ui = { data: null, checks: [], mode: 'scheme', compareError: null };
+const ui = { data: null, checks: [], view: 'scheme', compareError: null };
 function node(tag, className, text) {
   const element = document.createElement(tag);
   if (className) element.className = className;
@@ -170,7 +170,7 @@ function link(label, href, className) {
   const element = node('a', className, label);
   element.href = href; element.target = '_blank'; element.rel = 'noopener'; return element;
 }
-function imageURL(value) { return typeof value === 'string' && /^\/ui-audit\/[a-z0-9][a-z0-9._-]*\.png$/i.test(value) ? value : null; }
+function imageURL(value) { return typeof value === 'string' && /^\/ui-audit\/[a-z0-9][a-z0-9._-]*\.(?:png|webp)$/i.test(value) ? value : null; }
 function renderStructure(cell, route, side) {
   const paths = routePaths(route);
   if (!paths.length) { cell.append(empty()); return; }
@@ -209,7 +209,7 @@ function renderComparison(cell, route, checks) {
       const src = imageURL(check.screenshots?.[side]), url = captureURL(check.urls?.[side]);
       if (src && url) {
         const { pathname, search, hash } = new URL(url);
-        address.append(link(`${pathname.replace(/\/$/, '') || '/'}${search}${hash}`, url, 'ui-viz__route-path'));
+        address.append(link(`${pathname}${search}${hash}`, url, 'ui-viz__route-path'));
       }
       const preview = node('div', 'ui-viz__preview');
       if (src) {
@@ -227,7 +227,7 @@ function renderComparison(cell, route, checks) {
   }
 }
 function renderTable(container) {
-  const table = node('table', `ui-viz__table ui-viz__table--${ui.mode}`);
+  const table = node('table', `ui-viz__table ui-viz__table--${ui.view}`);
   const columns = node('colgroup');
   [24, 38, 38].forEach(width => { const column = node('col'); column.style.width = `${width}%`; columns.append(column); });
   table.append(columns);
@@ -242,7 +242,7 @@ function renderTable(container) {
     if (deprecated) title.append(node('del', '', deprecated), document.createTextNode(' '));
     title.append(document.createTextNode(route.title)); page.append(title); row.append(page);
     const checks = ui.checks.filter(check => check.pageId === route.id);
-    if (ui.mode === 'compare') {
+    if (ui.view === 'compare') {
       const cell = node('td', 'ui-viz__comparison-cell'); cell.colSpan = 2;
       renderComparison(cell, route, checks); row.append(cell);
     } else {
@@ -265,30 +265,12 @@ async function loadChecks() {
     ui.checks = data.checks;
   } catch { ui.compareError = 'Could not load comparison screenshots. Reload the page to retry.'; }
 }
-async function setMode(mode) {
-  ui.mode = mode;
-  history.replaceState(null, '', `#mode=${mode}`);
-  if (mode === 'compare') await loadChecks();
-  render(); document.getElementById(`ui-tab-${mode}`).focus();
-}
 function render() {
   const container = document.getElementById(UI_STRUCTURE_ID); container.replaceChildren();
-  const tabs = node('nav', 'm__segmented-nav ui-viz__tabs'), list = node('ul');
-  list.setAttribute('role', 'tablist'); list.setAttribute('aria-label', 'UI Scheme view');
-  for (const [mode, label] of [['scheme', 'Scheme'], ['compare', 'Compare']]) {
-    const item = node('li', ui.mode === mode ? 'current' : ''); item.setAttribute('role', 'presentation');
-    const tab = node('a', '', label); tab.href = `#mode=${mode}`; tab.id = `ui-tab-${mode}`;
-    tab.setAttribute('role', 'tab'); tab.setAttribute('aria-selected', String(ui.mode === mode)); tab.setAttribute('aria-controls', 'ui-viz-panel'); tab.tabIndex = ui.mode === mode ? 0 : -1;
-    tab.addEventListener('click', event => { event.preventDefault(); setMode(mode); });
-    tab.addEventListener('keydown', event => {
-      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-      event.preventDefault(); setMode(event.key === 'Home' ? 'scheme' : event.key === 'End' ? 'compare' : mode === 'scheme' ? 'compare' : 'scheme');
-    });
-    item.append(tab); list.append(item);
-  }
-  tabs.append(list); container.append(tabs);
-  const panel = node('section'); panel.id = 'ui-viz-panel'; panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', `ui-tab-${ui.mode}`);
-  if (ui.mode === 'compare' && ui.compareError) { const error = node('p', 'ui-viz__error', ui.compareError); error.setAttribute('role', 'alert'); panel.append(error); }
+  const legend = document.getElementById('ui-scheme-legend');
+  if (ui.view === 'scheme' && legend) container.append(legend.content.cloneNode(true));
+  const panel = node('section'); panel.id = 'ui-viz-panel'; panel.setAttribute('aria-labelledby', `ui-tab-${ui.view}`);
+  if (ui.view === 'compare' && ui.compareError) { const error = node('p', 'ui-viz__error', ui.compareError); error.setAttribute('role', 'alert'); panel.append(error); }
   renderTable(panel); container.append(panel);
 }
 async function loadUIStructure() {
@@ -296,10 +278,9 @@ async function loadUIStructure() {
     const response = await fetch('/ui-data.json', { cache: 'no-store' });
     if (!response.ok) throw new Error(`Unable to load the scheme (${response.status}).`);
     ui.data = await response.json();
-    ui.mode = new URLSearchParams(location.hash.slice(1)).get('mode') === 'compare' ? 'compare' : 'scheme';
-    if (ui.mode === 'compare') await loadChecks();
+    ui.view = /^\/ui\/compare\/?$/.test(location.pathname) ? 'compare' : 'scheme';
+    if (ui.view === 'compare') await loadChecks();
     render();
   } catch (error) { document.getElementById(UI_STRUCTURE_ID).replaceChildren(node('p', 'ui-viz__error', error.message)); }
 }
 loadUIStructure();
-window.addEventListener('hashchange', loadUIStructure);

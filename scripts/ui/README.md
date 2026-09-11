@@ -1,6 +1,6 @@
 # UI Scheme and comparison
 
-`/ui/` has two DS tabs, Scheme and Compare, with the same complete page table.
+Scheme (`/ui/`) and Compare (`/ui/compare/`) share navigation and the same complete page table.
 Scheme shows the structure recorded in `src/service/ui.yaml`. Compare shows prototype/production screenshots and descriptions of differences. Missing pages have a dash.
 
 ## Start
@@ -69,7 +69,17 @@ Production requests allow GET, HEAD and OPTIONS. Verified read-only POST endpoin
 Local artifacts are ignored by Git:
 
 - `.ui-audit/auth.json`: saved login, never served by the dev server.
-- `.ui-audit/latest/results.json` and PNGs: current comparison.
+- `.ui-audit/latest/results.json` and lossless WebP images: current comparison.
+
+New page screenshots, region crops and pixel differences are saved as lossless WebP, preserving dimensions and pixels. Existing PNG reports remain readable. To convert an existing capture set in place:
+
+```sh
+node scripts/ui/migrate-webp.js
+# Another set:
+node scripts/ui/migrate-webp.js --input=.ui-audit/trial
+```
+
+Stop capture jobs before converting. The converter verifies every pixel, updates screenshot references (including regions) and then removes the replaced PNGs. Reviewed findings and all other report fields are preserved.
 
 ## Export
 

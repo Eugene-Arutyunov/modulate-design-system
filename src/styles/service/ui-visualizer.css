@@ -315,7 +315,6 @@
 
 /* The two views share the same columns and the DS navigation component. */
 .ui-viz {
-  & .ui-viz__tabs { margin-bottom: 1.25rem; }
   & .ui-viz__table { table-layout: fixed; }
   & .ui-viz__table td { padding-right: 1rem; overflow-wrap: anywhere; }
   & .ui-viz__table td:last-child { padding-right: 0; }
@@ -332,7 +331,6 @@
   & .ui-viz__differences-list { padding: 0; margin: .5em 0; }
   & .ui-viz__differences-list li { position: relative; padding-left: 0; margin-bottom: .6em; }
   & .ui-viz__differences-list li::before { left: -.8rem; }
-  & [role="tab"]:focus-visible { outline: 2px solid var(--m__text-link); outline-offset: -3px; }
   @media (max-width: 767px) {
     & .ui-viz__table { font-size: 1em; }
     & .ui-viz__table thead, & .ui-viz__table colgroup { display: none; }
@@ -345,3 +343,32 @@
     & .ui-viz__table td[data-label]:not(:first-child)::before { display: block; content: attr(data-label); font-size: var(--m__font-size-s); color: var(--m__text-caption-color); margin-bottom: .5em; }
   }
 }
+
+/* Scheme legend reuses the architecture illustration without changing other pages. */
+.ui-viz__legend {
+  width: 100%;
+  max-width: 32rem;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+
+  & .ui-arch-diagram {
+    box-sizing: border-box;
+    margin: 0;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 1rem;
+  }
+  & .ui-arch-diagram__path,
+  & .ui-arch-diagram__structure-list { font-size: .85em; }
+  & .ui-arch-diagram__arrow { width: 2rem; }
+
+  @media (max-width: 600px) {
+    font-size: .85rem;
+    & .ui-arch-diagram { gap: .5rem; min-height: 0; padding: .75rem; }
+    & .ui-arch-diagram__arrow { width: 1rem; padding-bottom: 0; }
+    & .ui-arch-diagram__structure-list { padding-left: .75rem; }
+    & .ui-arch-diagram__block { padding-inline: .25em; }
+  }
+}
+
+.ui-viz__tabs { margin-bottom: 1.25rem; }
+.ui-viz__tabs a:focus-visible { outline: 2px solid var(--m__text-link); outline-offset: -3px; }

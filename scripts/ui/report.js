@@ -13,7 +13,7 @@ function exportReport({ data, report, latestDir, output }) {
   const routes = data.routes;
   const exported = new Set();
   const image = src => {
-    if (typeof src !== 'string' || !/^\/ui-audit\/[a-z0-9][a-z0-9._-]*\.png$/i.test(src)) return '';
+    if (typeof src !== 'string' || !/^\/ui-audit\/[a-z0-9][a-z0-9._-]*\.(?:png|webp)$/i.test(src)) return '';
     const name = path.basename(src), source = path.join(latestDir, name);
     if (!fs.existsSync(source)) return '';
     const actual = fs.realpathSync(source), base = fs.realpathSync(latestDir);

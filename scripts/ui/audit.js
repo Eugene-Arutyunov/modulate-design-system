@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('@playwright/test');
 const { PNG } = require('pngjs');
+const { readImage, writeImage } = require('./images');
 const { buildData } = require('./data');
 const { digest, paths } = require('./model');
 const root = path.resolve(__dirname, '../..');
@@ -92,7 +93,7 @@ async function capture(browser, job, side, base, storageState, config, dest) {
       return { headings, columns, controls, styles };
     });
     if (!structure.headings.length && !structure.columns.length && !structure.controls.length) throw new Error('No inspectable dashboard content loaded. The shell was not counted as a completed check.');
-    fs.writeFileSync(dest, image);
+    await writeImage(image, dest);
     const regions = {};
     for (const original of (job.route.target?.audit?.regions || [])) {
       const region = { ...original, ...(mapping.regions?.[original.id] || {}) };
@@ -100,8 +101,8 @@ async function capture(browser, job, side, base, storageState, config, dest) {
       const selector = region[side]; if (!selector) continue;
       const locator = find(page, selector);
       if (await locator.count() === 1 && await locator.isVisible()) {
-        const filename = dest.replace('.png', `-${region.id}.png`);
-        await locator.screenshot({ path: filename, animations: 'disabled', caret: 'hide' }); regions[region.id] = filename;
+        const filename = dest.replace('.webp', `-${region.id}.webp`);
+        await writeImage(await locator.screenshot({ animations: 'disabled', caret: 'hide' }), filename); regions[region.id] = filename;
       }
     }
     return { structure, regions, url: page.url() };
@@ -127,13 +128,13 @@ function structuralFindings(prototype, production) {
 }
 async function pixelDiff(aPath, bPath, output) {
   const pixelmatch = (await import('pixelmatch')).default;
-  const a = PNG.sync.read(fs.readFileSync(aPath)), b = PNG.sync.read(fs.readFileSync(bPath));
+  const [a, b] = await Promise.all([readImage(aPath), readImage(bPath)]);
   const width = Math.max(a.width, b.width), height = Math.max(a.height, b.height);
   if (width * height > 40_000_000) throw new Error('Screenshot exceeds the 40 megapixel comparison limit. Narrow the capture scope.');
   const paddedA = new PNG({ width, height }), paddedB = new PNG({ width, height }), diff = new PNG({ width, height });
   PNG.bitblt(a, paddedA, 0, 0, a.width, a.height, 0, 0); PNG.bitblt(b, paddedB, 0, 0, b.width, b.height, 0, 0);
   const pixels = pixelmatch(paddedA.data, paddedB.data, diff.data, width, height, { threshold: 0.1 });
-  fs.writeFileSync(output, PNG.sync.write(diff));
+  await writeImage(PNG.sync.write(diff), output);
   return { pixels, ratio: pixels / (width * height), sameDimensions: a.width === b.width && a.height === b.height };
 }
 async function main() {
@@ -176,7 +177,7 @@ async function main() {
       while (index < jobs.length) {
         const job = jobs[index++];
         const key = `${job.route.id}-${digest(job.scenario.name).slice(0, 10)}`;
-        const dest = suffix => path.join(latestDir, `${key}-${suffix}.png`);
+        const dest = suffix => path.join(latestDir, `${key}-${suffix}.webp`);
         const result = { key, pageId: job.route.id, title: job.route.title, scenario: job.scenario.name, fingerprint: job.route.fingerprint, viewport: config.viewport, theme: config.theme, role: config.role || '', dataMode: 'Live content; data differences require review', findings: [], status: 'error' };
         try {
           const prototype = await capture(browser, job, 'prototype', base.prototype, undefined, config, dest('prototype'));
@@ -215,7 +216,7 @@ async function main() {
   const ids = new Set(results.map(result => result.key));
   const checks = [...previous.filter(check => !ids.has(check.key)), ...results].filter(check => !routes.some(route => route.id === check.pageId) || ids.has(check.key));
   writeJSON(resultsFile, { contextId, checks });
-  console.log(`Results: ${resultsFile}\nOpen ${base.prototype}/ui/#mode=compare`);
+  console.log(`Results: ${resultsFile}\nOpen ${base.prototype}/ui/compare/`);
   if (results.some(result => ['error', 'blocked'].includes(result.status))) process.exitCode = 1;
 }
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });

@@ -7,7 +7,7 @@ const { pathToFileURL } = require('node:url');
 const { chromium, expect } = require('@playwright/test');
 const { exportReport } = require('../../scripts/ui/report');
 const { buildData } = require('../../scripts/ui/data');
-const { PNG } = require('pngjs');
+const { readImage } = require('../../scripts/ui/images');
 const prototype = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
 (async () => {
   let signin = false;
@@ -43,10 +43,11 @@ const prototype = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
     assert.equal(captured.length, 2); assert.ok(captured.every(check => check.status === 'differences'));
     assert.ok(captured.find(check => check.scenario === 'default').findings.some(finding => finding.includes('fontSize: production 43px')));
     assert.ok(captured.every(check => check.screenshots.production && check.pixelDiff.pixels > 0));
+    assert.ok(captured.every(check => Object.values(check.screenshots).every(src => src.endsWith('.webp'))));
     const defaultCheck = captured.find(check => check.scenario === 'default');
     const region = defaultCheck.regions[0];
-    const regionImage = side => PNG.sync.read(fs.readFileSync(path.join(output, 'latest', path.basename(region.screenshots[side]))));
-    const prototypeRegion = regionImage('prototype'), productionRegion = regionImage('production');
+    const regionImage = side => readImage(path.join(output, 'latest', path.basename(region.screenshots[side])));
+    const prototypeRegion = await regionImage('prototype'), productionRegion = await regionImage('production');
     assert.equal(prototypeRegion.width, productionRegion.width);
     // A shifted fractional bounding box can add one crop pixel even when the table layout is unchanged.
     assert.ok(Math.abs(prototypeRegion.height - productionRegion.height) <= 1);
@@ -59,8 +60,8 @@ const prototype = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
     try {
       const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
       await page.route('**/ui-audit-data.json', request => request.fulfill({ json: { checks: captured } }));
-      await page.route('**/ui-audit/*.png', request => request.fulfill({ contentType: 'image/png', body: fs.readFileSync(path.join(output, 'latest', path.basename(new URL(request.request().url()).pathname))) }));
-      await page.goto(`${prototype}/ui/#mode=compare`);
+      await page.route('**/ui-audit/*.webp', request => request.fulfill({ contentType: 'image/webp', body: fs.readFileSync(path.join(output, 'latest', path.basename(new URL(request.request().url()).pathname))) }));
+      await page.goto(`${prototype}/ui/compare/`);
       const row = page.locator('[data-page-id=dashboard-api-keys]');
       await expect(row.locator('[data-side=prototype]').locator('img')).toHaveCount(2);
       await expect(row.locator('[data-side=production]').locator('img')).toHaveCount(2);
