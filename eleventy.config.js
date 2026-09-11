@@ -1,6 +1,20 @@
 const prototypeModels = require("./src/assets/prototypes/data/models.json");
 
 module.exports = function (conf) {
+  conf.on("eleventy.before", () => {
+    for (const modulePath of ["./scripts/ui/render", "./src/assets/service/ui-review"]) {
+      delete require.cache[require.resolve(modulePath)];
+    }
+  });
+  conf.addShortcode("uiTable", view => require("./scripts/ui/render").renderUI(view));
+  // Preserve source exclusions, but allow the explicit local-result watch target.
+  // Git still ignores all audit artifacts; none are input templates or passthroughs.
+  conf.setUseGitIgnore(false);
+  for (const line of require("node:fs").readFileSync(".gitignore", "utf8").split(/\r?\n/)) {
+    const rule = line.trim();
+    if (rule && !rule.startsWith("#") && rule !== ".ui-audit/") conf.ignores.add(rule);
+  }
+  conf.addWatchTarget("./.ui-audit/latest/");
   conf.addFilter("startsWith", (str, prefix) => str.startsWith(prefix));
   conf.addFilter("formatNumber", (value) => {
     const number = Number(value);
@@ -19,7 +33,11 @@ module.exports = function (conf) {
       "assets/vendor/three-addons/loaders/SVGLoader.js",
   });
 
+  conf.setServerOptions({ middleware: [require("./scripts/ui/serve").auditMiddleware] });
+
   conf.addWatchTarget("./src/styles/");
+  conf.addWatchTarget("./scripts/ui/");
+  conf.addWatchTarget("./src/service/ui.yaml");
 
   // remove internal structure
   conf.addGlobalData("permalink", () => {

@@ -1,0 +1,17 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'UI Compare' %} {% block
+content %}
+
+<div class="m__wrapper">
+  <div class="m__space L"></div>
+
+  {% include 'service/ui-navigation.html' %}
+
+  <h1 class="ui-viz__heading">UI Compare</h1>
+  {% include 'service/ui-updated.html' %}
+
+  <div id="ui-structure" class="ui-viz">{% uiTable "compare" %}</div>
+</div>
+
+<script type="module" src="/assets/service/ui-visualizer.js"></script>
+
+{% endblock %}

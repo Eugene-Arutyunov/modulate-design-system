@@ -97,14 +97,19 @@ Dropdown menu: trigger shows user name + chevron; click opens popover. Account a
 
 ---
 
-## UI structure visualizer
+## UI Scheme
 
-**Script:** `src/assets/service/ui-visualizer.js`  
-**Data:** `src/service/ui.yaml` with two root keys: **current** (product) and **target** (prototype for this repo). Each is an array of routes; every section is a node `section:` with **widget**, **widgets**, or **text-content**. Optional per route: **title_deprecated** (string) — shown struck through before **title** in the Route column when set.  
-**Page:** `src/service/ui.html` (UI Architecture).  
-**Styles:** `.ui-viz` + `.ui-viz__*` in `src/styles/service/ui-visualizer.css`.
+**Page:** `src/service/ui.html` (`/ui/`).
+**Browser:** `src/assets/service/ui-visualizer.js`.
+**Data:** `src/service/ui.yaml` → `scripts/ui/data.js` → `src/service/ui-data.11ty.js` (`/ui-data.json`).
+**Styles:** `src/styles/service/ui-visualizer.css`.
+**Capture, local server and usage:** `scripts/ui/README.md`.
 
-Loads YAML → `normalizeUiData()` → `renderUIStructure()`. Renders three columns per row (Route title, Current, Target). Static diagram: `src/includes/service/ui-arch-diagram.html` (`<aside class="ui-arch-diagram">` with both columns), `ui-arch-diagram-structure.html` (left: route + list), `ui-arch-diagram-layout.html` (right: 4 section blocks). Full diagram on `src/service/ui.html`; index uses only the layout include inside `<aside class="ui-arch-diagram ui-arch-diagram--layout-only">`. Grid and `min-height` are in `ui-visualizer.css`; surface, padding, and radius come from the shared prose `aside` rule in `page-composition/wrappers.css`.
+The Scheme and Compare tabs use the DS segmented navigation and the same full page table: Route / Prototype / Production. Missing pages are shown with a dash. Compare places screenshots in their respective columns and difference descriptions beside the page name.
+
+The local Playwright runner captures configured states and regions. It preserves prototype images when production is unavailable. Both `npm run dev` and `npm run ui:serve` serve local comparison results and PNGs from ignored `.ui-audit/latest/`; login state is never served. `npm run ui:report` exports a portable HTML report. See `scripts/ui/README.md` for capture and authentication instructions.
+
+The original static structure/layout diagram includes remain available for other pages, including the homepage layout illustration.
 
 ---
 

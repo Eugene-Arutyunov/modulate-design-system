@@ -1,52 +1,30 @@
 current:
-  - id: landing
-    route: /web/landing
-    title: Landing
+  - id: component-pagination
+    kind: component
+    route: /dashboard/overview
+    title: Pagination
     sections:
       - section:
-          widget: hero
-      - section:
-          widgets:
-            - feature-transcription
-            - feature-voice-native
-            - feature-ensemble
-      - section:
-          text-content: built-for-developers
-      - section:
-          widgets:
-            - learn-more-modulate
-            - learn-more-ensemble
-            - learn-more-velma
-      - section:
-          widget: cta
+          widget: pagination
 
-  - id: docs-models-api
-    route: /web/docs#model-docs
-    title: Models API
+  - id: header-account-menu
+    kind: component
+    route: /dashboard/overview
+    title: 'Header: Account menu'
     sections:
       - section:
-          widget: model-selector
-      - section:
-          widget: model-info
-
-  - id: docs-jobs-api
-    route: —
-    title: Jobs API
-    sections: []
+          widget: account-menu
+          states: [open]
 
   - id: docs-models-overview
     route: /web/docs#models
-    title: Models Overview
+    title: Pricing
     sections:
       - section:
           text-content: models-intro
       - section:
           widget: models-tabs
     subsections:
-      - title: Transcription
-        sections:
-          - section:
-              widget: transcription-pricing-table
       - title: Deepfake Detection
         sections:
           - section:
@@ -65,6 +43,10 @@ current:
               text-content: music-speech-detection-intro
           - section:
               widget: music-speech-detection-pricing-table
+      - title: Transcription
+        sections:
+          - section:
+              widget: transcription-pricing-table
 
   - id: playground
     route: —
@@ -75,6 +57,61 @@ current:
     route: —
     title: Conversations
     sections: []
+
+  - id: conversations-review-detail
+    route: /dashboard/conversations/f238e9ca-6509-4a8d-9a79-b18aa09f5a1f
+    title: Conversation Review
+    sections:
+      - section:
+          text-content: conversation-status
+      - section:
+          widgets:
+            - conversation-type
+            - speech-summary
+            - conversation-topics
+            - conversation-player
+      - section:
+          widget: behaviors
+      - section:
+          widget: transcript
+      - section:
+          widget: your-review
+      - section:
+          widget: all-reviews
+      - section:
+          widget: participant-roles
+      - section:
+          widget: topics-and-sentiment
+      - section:
+          widget: exports-fired
+
+
+  - id: conversations-report
+    route: /dashboard/conversations/f238e9ca-6509-4a8d-9a79-b18aa09f5a1f
+    title: Conversation Report
+    sections:
+      - section:
+          text-content: conversation-status
+      - section:
+          widgets:
+            - conversation-type
+            - speech-summary
+            - conversation-topics
+            - conversation-player
+      - section:
+          widget: behaviors
+      - section:
+          widget: transcript
+      - section:
+          widget: your-review
+      - section:
+          widget: all-reviews
+      - section:
+          widget: participant-roles
+      - section:
+          widget: topics-and-sentiment
+      - section:
+          widget: exports-fired
 
   - id: dashboard-home
     route: /web/dashboard
@@ -102,6 +139,12 @@ current:
           text-content: api-keys-intro
       - section:
           widget: api-keys-table
+  - id: dashboard-api-keys-create-key
+    route: /web/api-keys
+    title: 'API Keys: Create key'
+    sections:
+      - section:
+          widget: create-api-key-dialog
 
   - id: dashboard-models
     route: /web/models
@@ -138,14 +181,30 @@ current:
       - section:
           widget: model-limits-table
 
-  - id: dashboard-behaviors
+  - id: dashboard-behaviors-detection-packages
     route: —
-    title: Behaviors
+    title: 'Behaviors: Detection Packages'
+    sections: []
+  - id: dashboard-behaviors-behaviors
+    route: —
+    title: 'Behaviors: Behaviors'
+    sections: []
+  - id: dashboard-behaviors-conversation-types
+    route: —
+    title: 'Behaviors: Conversation Types'
+    sections: []
+  - id: dashboard-behaviors-roles
+    route: —
+    title: 'Behaviors: Roles'
     sections: []
 
-  - id: dashboard-behaviors-package-editor
+  - id: dashboard-behaviors-package-editor-create
     route: —
-    title: Detection Package Editor
+    title: 'Detection Package: Create'
+    sections: []
+  - id: dashboard-behaviors-package-editor-edit
+    route: —
+    title: 'Detection Package: Edit'
     sections: []
 
   - id: dashboard-billing
@@ -164,7 +223,7 @@ current:
           widget: billing-history
 
   - id: dashboard-account
-    route: /web/account/
+    route: /account
     title: Account
     sections:
       - section:
@@ -208,34 +267,93 @@ current:
           text-content: leave-organization
 
   - id: internal-users
-    route: /web/internal-users
-    title: Users & Organizations
+    route: /internal/users
+    title: 'Internal: Users'
     sections:
       - section:
           text-content: users-orgs-intro
       - section:
+          widget: directory-tabs
+      - section:
           widget: users-table
+  - id: internal-organizations
+    route: /internal/users
+    title: 'Internal: Organizations'
+    sections:
+      - section:
+          text-content: users-orgs-intro
+      - section:
+          widget: directory-tabs
+      - section:
+          widget: organizations-table
+  - id: internal-unverified-signups
+    route: /internal/users
+    title: 'Internal: Unverified Signups'
+    sections:
+      - section:
+          text-content: users-orgs-intro
+      - section:
+          widget: directory-tabs
+      - section:
+          widget: unverified-signups-table
 
-  - id: internal-data
-    route: /web/internal-data
-    title: Data Management
+  - id: internal-data-export
+    route: /internal/data
+    title: 'Data Management: Export'
     sections:
       - section:
           text-content: data-management-intro
       - section:
+          widget: data-management-tabs
+      - section:
           widget: data-export
 
+  - id: internal-data-deletion
+    route: /internal/data
+    title: 'Data Management: Deletion'
+    sections:
+      - section:
+          text-content: data-management-intro
+      - section:
+          widget: data-management-tabs
+      - section:
+          widget: data-deletion
+
+  - id: internal-training-exclusions
+    route: /internal/data
+    title: 'Data Management: Exclude from Training'
+    sections:
+      - section:
+          text-content: data-management-intro
+      - section:
+          widget: data-management-tabs
+      - section:
+          widget: training-exclusions
+
   - id: internal-invites
-    route: /web/internal-invites
-    title: Invites & Credits
+    route: /internal/invites
+    title: 'Invites & Credits: Invites'
     sections:
       - section:
           text-content: invites-credits-intro
       - section:
+          widget: invites-credits-tabs
+      - section:
           widget: invites-table
 
+  - id: internal-credit-codes
+    route: /internal/invites
+    title: 'Invites & Credits: Credit Codes'
+    sections:
+      - section:
+          text-content: invites-credits-intro
+      - section:
+          widget: invites-credits-tabs
+      - section:
+          widget: credit-codes-table
+
   - id: internal-usage
-    route: /web/internal-usage
+    route: /internal/usage
     title: Platform Usage
     sections:
       - section:
@@ -243,19 +361,34 @@ current:
       - section:
           widget: usage-filters
       - section:
-          widgets:
-            - stat-total-requests
-            - stat-credits-consumed
-            - stat-duration
-            - stat-purchased-credits
-            - stat-granted-credits
+          widget: usage-totals
       - section:
-          widgets:
-            - usage-by-model
-            - credit-consumption
+          widget: usage-by-model
+      - section:
+          widget: credit-consumption
+      - section:
+          widget: credit-grants
+      - section:
+          widget: requests-by-status
+      - section:
+          widget: active-users
+      - section:
+          widget: console-status-over-time
+      - section:
+          widget: new-signups-per-period
+      - section:
+          widget: cumulative-signups
+      - section:
+          widget: top-credit-grants
+      - section:
+          widget: top-credit-purchases
+      - section:
+          widget: top-credit-consumption
+      - section:
+          widget: top-requests
 
   - id: internal-overrides
-    route: /web/internal-overrides
+    route: /internal/overrides
     title: Org Overrides
     sections:
       - section:
@@ -264,9 +397,11 @@ current:
           widget: org-selector
       - section:
           widget: bulk-tag-overrides
+      - section:
+          widget: conversations-access
 
   - id: internal-reports
-    route: /web/internal-reports
+    route: /internal/reports
     title: Reports
     sections:
       - section:
@@ -275,21 +410,26 @@ current:
           widget: report-generator
 
   - id: internal-models
-    route: /web/internal-models
+    route: /internal/models
     title: Model Management
     sections:
       - section:
           text-content: model-management-intro
       - section:
-          text-content: velma-music-detection
+          widget: model-list
+
+  - id: internal-email-status
+    route: /internal/email-status
+    title: Email Status
+    sections:
       - section:
-          text-content: velma-stt-batch
+          text-content: email-status-intro
       - section:
-          text-content: velma-stt-batch-english-fast
+          widget: email-status-filters
       - section:
-          text-content: velma-stt-streaming
+          widget: email-status-table
       - section:
-          text-content: velma-synthetic-voice-detection
+          widget: email-bulk-export
 
   - id: docs-admin-apis
     route: —
@@ -301,21 +441,21 @@ current:
           widget: api-spec-viewer
 
   - id: auth-login
-    route: /web/login
+    route: /signin
     title: Sign in
     sections:
       - section:
           widget: login-form
 
   - id: auth-signup
-    route: /web/signup-request
+    route: /signup-request
     title: Create account
     sections:
       - section:
           widget: signup-form
 
   - id: auth-reset-password
-    route: /web/password-reset-request
+    route: /password-reset-request
     title: Reset password
     sections:
       - section:
@@ -350,7 +490,7 @@ current:
           widget: org-invite-form
 
   - id: auth-org-select
-    route: /web/org-select
+    route: /org-select
     title: Select organization
     sections:
       - section:
@@ -359,27 +499,30 @@ current:
           widget: org-create
 
 target:
-  - id: landing
+  - id: component-pagination
+    kind: component
     route: —
-    title: Landing
+    title: Pagination
     sections: []
 
-  - id: docs-models-api
-    route: —
-    title: Models API
-    sections: []
-
-  - id: docs-jobs-api
-    route: —
-    title: Jobs API
-    sections: []
-
-  - id: docs
-    route: /docs/
-    title: Docs
+  - id: header-account-menu
+    kind: component
+    route: /dashboard/overview/
+    title: 'Header: Account menu'
     sections:
       - section:
-          text-content: docs-external-link
+          widget: account-menu
+          states: [open]
+    audit:
+      production_route: /dashboard/overview
+      scenarios:
+        - name: default
+          prototype:
+            steps:
+              - action: click
+                selector: '#header-user-trigger'
+            visible: '#header-user-popover'
+            scope: '#header-user-popover'
 
   - id: docs-models-overview
     route: /pricing/
@@ -575,6 +718,8 @@ target:
           widget: conversation-upload
 
   - id: conversations-review
+    audit:
+      production_route: /dashboard/conversations/review-queue
     route: /dashboard/conversations/review/
     title: Review Queue
     sections:
@@ -586,6 +731,8 @@ target:
           widget: review-queue-table
 
   - id: conversations-review-detail
+    audit:
+      production_route: /dashboard/conversations/f238e9ca-6509-4a8d-9a79-b18aa09f5a1f
     route: /dashboard/conversations/review/7839f2/
     title: Conversation Review
     sections:
@@ -597,6 +744,8 @@ target:
           text-content: transcript
 
   - id: conversations-report
+    audit:
+      production_route: /dashboard/conversations/f238e9ca-6509-4a8d-9a79-b18aa09f5a1f
     route: /dashboard/conversations/7839f2/
     title: Conversation Report
     sections:
@@ -650,6 +799,16 @@ target:
           widget: recent-usage
 
   - id: dashboard-api-keys
+    audit:
+      production_route: /dashboard/api-keys
+      regions:
+        - id: api-keys-table
+          states:
+            - default
+          prototype: main table
+          production: main table
+      scenarios:
+        - name: default
     route: /dashboard/api-keys/
     title: API Keys
     sections:
@@ -657,6 +816,33 @@ target:
           text-content: api-keys-intro
       - section:
           widget: api-keys-table
+  - id: dashboard-api-keys-create-key
+    audit:
+      production_route: /dashboard/api-keys
+      regions: []
+      scenarios:
+        - name: default
+          prototype:
+            steps:
+              - action: click
+                selector: '[data-api-key-create]'
+            visible: '#modal-api-key-create'
+            scope: '#modal-api-key-create'
+          production:
+            steps:
+              - action: click
+                selector:
+                  role: button
+                  name: Create API Key
+            visible:
+              role: dialog
+            scope:
+              role: dialog
+    route: /dashboard/api-keys/
+    title: 'API Keys: Create key'
+    sections:
+      - section:
+          widget: create-api-key-dialog
 
   - id: dashboard-models
     route: /dashboard/model-settings/
@@ -689,48 +875,112 @@ target:
       - section:
           widget: model-limits-table
 
-  - id: dashboard-behaviors
+  - id: dashboard-behaviors-detection-packages
+    audit:
+      production_route: /dashboard/behaviors
+      scenarios:
+        - name: default
     route: /dashboard/behaviors/
-    title: Behaviors
+    title: 'Behaviors: Detection Packages'
     sections:
       - section:
           widget: behaviors-tabs
-    subsections:
-      - title: Detection Packages
-        sections:
-          - section:
-              text-content: detection-packages-intro
-          - section:
-              widget: detection-packages-table
-      - title: Behaviors
-        sections:
-          - section:
-              text-content: behaviors-intro
-          - section:
-              widget: behaviors-table
-      - title: Conversation Types
-        sections:
-          - section:
-              text-content: conversation-types-intro
-          - section:
-              widget: conversation-types-table
-      - title: Roles
-        sections:
-          - section:
-              text-content: roles-intro
-          - section:
-              widget: roles-table
+      - section:
+          text-content: detection-packages-intro
+      - section:
+          widget: detection-packages-table
+  - id: dashboard-behaviors-behaviors
+    audit:
+      production_route: /dashboard/behaviors
+      scenarios:
+        - name: default
+          prototype:
+            steps:
+              - action: click
+                selector: label:has([name="behaviors-tabs"][value="behaviors"])
+            visible: '[data-tab="behaviors"]'
+          production:
+            steps:
+              - action: click
+                selector:
+                  role: tab
+                  name: Behaviors
+    route: /dashboard/behaviors/
+    title: 'Behaviors: Behaviors'
+    sections:
+      - section:
+          widget: behaviors-tabs
+      - section:
+          text-content: behaviors-intro
+      - section:
+          widget: behaviors-table
+  - id: dashboard-behaviors-conversation-types
+    audit:
+      production_route: /dashboard/behaviors
+      scenarios:
+        - name: default
+          prototype:
+            steps:
+              - action: click
+                selector: label:has([name="behaviors-tabs"][value="conversation-types"])
+            visible: '[data-tab="conversation-types"]'
+          production:
+            steps:
+              - action: click
+                selector:
+                  role: tab
+                  name: Conversation Types
+    route: /dashboard/behaviors/
+    title: 'Behaviors: Conversation Types'
+    sections:
+      - section:
+          widget: behaviors-tabs
+      - section:
+          text-content: conversation-types-intro
+      - section:
+          widget: conversation-types-table
+  - id: dashboard-behaviors-roles
+    audit:
+      production_route: /dashboard/behaviors
+      scenarios:
+        - name: default
+          prototype:
+            steps:
+              - action: click
+                selector: label:has([name="behaviors-tabs"][value="roles"])
+            visible: '[data-tab="roles"]'
+          production:
+            steps:
+              - action: click
+                selector:
+                  role: tab
+                  name: Roles
+    route: /dashboard/behaviors/
+    title: 'Behaviors: Roles'
+    sections:
+      - section:
+          widget: behaviors-tabs
+      - section:
+          text-content: roles-intro
+      - section:
+          widget: roles-table
 
-  - id: dashboard-behaviors-package-editor
-    routes:
-      - /dashboard/behaviors/detection-package-create/
-      - /dashboard/behaviors/detection-package-edit/
-    title: Detection Package Editor
+  - id: dashboard-behaviors-package-editor-create
+    title: 'Detection Package: Create'
     sections:
       - section:
           text-content: package-name
       - section:
           widget: behaviors-included-table
+    route: /dashboard/behaviors/detection-package-create/
+  - id: dashboard-behaviors-package-editor-edit
+    title: 'Detection Package: Edit'
+    sections:
+      - section:
+          text-content: package-name
+      - section:
+          widget: behaviors-included-table
+    route: /dashboard/behaviors/detection-package-edit/
 
   - id: dashboard-actions
     route: /dashboard/actions/
@@ -832,18 +1082,96 @@ target:
           text-content: notifications-intro
 
   - id: internal-users
+    route: /internal/users/
+    title: 'Internal: Users'
+    audit:
+      production_route: /internal/users
+      scenarios:
+        - name: default
+          route: /internal/users/
+          production:
+            visible:
+              role: tabpanel
+              name: Users
+    sections:
+      - section:
+          widget: directory-tabs
+      - section:
+          text-content: users-intro
+      - section:
+          widget: users-table
+  - id: internal-organizations
+    route: /internal/organizations/
+    title: 'Internal: Organizations'
+    audit:
+      production_route: /internal/users
+      scenarios:
+        - name: default
+          route: /internal/organizations/
+          production:
+            steps:
+              - action: click
+                selector:
+                  role: tab
+                  name: Organizations
+            visible:
+              role: tabpanel
+              name: Organizations
+    sections:
+      - section:
+          widget: directory-tabs
+      - section:
+          text-content: organizations-intro
+      - section:
+          widget: organizations-table
+  - id: internal-unverified-signups
+    route: /internal/unverified-signups/
+    title: 'Internal: Unverified Signups'
+    audit:
+      production_route: /internal/users
+      scenarios:
+        - name: default
+          route: /internal/unverified-signups/
+          production:
+            steps:
+              - action: click
+                selector:
+                  role: tab
+                  name: Unverified Signups
+            visible:
+              role: tabpanel
+              name: Unverified Signups
+    sections:
+      - section:
+          widget: directory-tabs
+      - section:
+          text-content: unverified-signups-intro
+      - section:
+          widget: unverified-signups-table
+
+  - id: internal-data-export
     route: —
-    title: Users & Organizations
+    title: 'Data Management: Export'
     sections: []
 
-  - id: internal-data
+  - id: internal-data-deletion
     route: —
-    title: Data Management
+    title: 'Data Management: Deletion'
+    sections: []
+
+  - id: internal-training-exclusions
+    route: —
+    title: 'Data Management: Exclude from Training'
     sections: []
 
   - id: internal-invites
     route: —
-    title: Invites & Credits
+    title: 'Invites & Credits: Invites'
+    sections: []
+
+  - id: internal-credit-codes
+    route: —
+    title: 'Invites & Credits: Credit Codes'
     sections: []
 
   - id: internal-usage
@@ -866,6 +1194,11 @@ target:
     title: Model Management
     sections: []
 
+  - id: internal-email-status
+    route: —
+    title: Email Status
+    sections: []
+
   - id: docs-admin-apis
     route: —
     title: Admin APIs
@@ -873,6 +1206,8 @@ target:
 
   - id: auth-login
     route: /auth/login/
+    audit:
+      production_route: /signin
     title: Sign in
     sections:
       - section:
@@ -880,6 +1215,8 @@ target:
 
   - id: auth-signup
     route: /auth/signup/
+    audit:
+      production_route: /signup-request
     title: Create account
     sections:
       - section:
@@ -887,6 +1224,8 @@ target:
 
   - id: auth-reset-password
     route: /auth/reset-password/
+    audit:
+      production_route: /password-reset-request
     title: Reset password
     sections:
       - section:
@@ -922,6 +1261,8 @@ target:
 
   - id: auth-org-select
     route: /auth/org-select/
+    audit:
+      production_route: /org-select
     title: Select organization
     sections:
       - section:

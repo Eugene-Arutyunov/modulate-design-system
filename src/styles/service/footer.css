@@ -7,8 +7,9 @@ body:has(.footer) {
 /* Breathing room above the footer goes on the last content block, not on
    the footer (its margin-top: auto is what pins it to the viewport bottom on
    short pages). Pages may end with inline scripts before the footer — they
-   render no box, so the block is found among non-script children. */
-body:has(.footer:not(.footer--minimal)) > :nth-last-child(2 of :not(script)) {
+   render no box. Select the last non-script child BEFORE the footer so browser
+   extensions adding nodes after it cannot shift the spacing onto the footer. */
+body:has(.footer:not(.footer--minimal)) > :nth-last-child(1 of :not(script):has(~ .footer)) {
   margin-bottom: 9.6rem;
 }
 
