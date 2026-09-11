@@ -164,7 +164,7 @@
         position: sticky;
         top: 0;
         text-align: left;
-        font-size: 0.75em;
+        font-size: var(--ui-viz-caption-size);
         font-weight: var(--m__font-weight-regular);
         border-bottom: var(--m__border-width-s) solid
           color-mix(in srgb, var(--m__text) 30%, transparent);
@@ -379,19 +379,62 @@
 .ui-viz__shared-links { font-size: var(--m__font-size-s); }
 .ui-viz__comparison-notes {
   margin: .75rem 0;
-  color: var(--m__text-caption);
+  color: var(--m__text);
   & summary { cursor: pointer; margin-bottom: .5em; }
 }
 .ui-viz__recommendations {
-  margin-top: 3rem;
-  & h2 { margin-bottom: .5rem; }
-  & .ui-viz__recommendation { padding: 1.5rem 0; border-top: var(--m__border-width-s) solid var(--m__border); }
-  & .ui-viz__recommendation h3 { margin-bottom: 1rem; }
-  & .ui-viz__style-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1rem; }
-  & .ui-viz__style-values p { margin-bottom: .25rem; }
-  & .ui-viz__recommendation-fix { padding: .75rem 1rem; border-radius: var(--m__widget-radius); background: var(--m__bg-surface); }
-  & .ui-viz__affected-pages { font-size: var(--m__font-size-s); }
-  & li { overflow-wrap: anywhere; }
+  margin: 0 0 3rem;
+  scroll-margin-top: 2rem;
+  & h2 { margin-bottom: 1rem; }
+  & tr { scroll-margin-top: 2rem; }
+  & .ui-viz__issues-table .ui-viz__page-cell strong { font-size: var(--m__font-size-s); }
+  & .ui-viz__recommendation-fix { margin: .8rem 0 .5em; font-size: var(--m__font-size-s); }
+  & summary { cursor: pointer; font-size: var(--m__font-size-s); }
+  & .ui-viz__affected-pages { margin-top: .5em; font-size: var(--m__font-size-s); }
 }
 
 .ui-viz__heading { margin-bottom: 0; }
+
+.ui-viz .ui-viz__table details > summary {
+  display: block;
+  position: relative;
+  list-style: none;
+  padding-inline-start: 1em;
+  font-size: var(--ui-viz-caption-size);
+  font-weight: var(--m__font-weight-bold);
+  color: var(--m__text);
+}
+
+.ui-viz,
+.ui-viz__updated { --ui-viz-caption-size: 0.675rem; }
+
+.ui-viz__updated {
+  margin-top: .25rem;
+  font-size: var(--ui-viz-caption-size);
+  color: var(--m__text);
+}
+
+.ui-viz .ui-viz__table details > :not(summary) {
+  margin-inline-start: 1em;
+  color: var(--m__text);
+  font-size: var(--ui-viz-caption-size);
+}
+
+.ui-viz .ui-viz__table summary::-webkit-details-marker { display: none; }
+.ui-viz .ui-viz__table details > summary::before {
+  content: "▶";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  transform: translateY(-50%) scale(.65);
+  transform-origin: left center;
+}
+.ui-viz .ui-viz__table details[open] > summary::before { content: "▼"; }
+
+.ui-viz .ui-viz__table details > summary {
+  transition: color var(--m__duration-xslow) var(--m__easing-base);
+}
+.ui-viz .ui-viz__table details > summary:hover {
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
+}

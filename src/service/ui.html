@@ -9,15 +9,11 @@ content %}
   <h1 class="ui-viz__heading">UI Scheme</h1>
   {% include 'service/ui-updated.html' %}
 
-  <div id="ui-structure" class="ui-viz"><p class="caption">Loading scheme…</p></div>
-  <noscript><p>Enable JavaScript to view the scheme and comparison.</p></noscript>
-</div>
-
-<template id="ui-scheme-legend">
-  <div class="ui-viz__legend">
-    {% include 'service/ui-arch-diagram.html' %}
+  <div id="ui-structure" class="ui-viz">
+    <div class="ui-viz__legend">{% include 'service/ui-arch-diagram.html' %}</div>
+    {% uiTable "scheme" %}
   </div>
-</template>
+</div>
 
 <script type="module" src="/assets/service/ui-visualizer.js"></script>
 

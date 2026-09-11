@@ -1,6 +1,15 @@
 const prototypeModels = require("./src/assets/prototypes/data/models.json");
 
 module.exports = function (conf) {
+  conf.addShortcode("uiTable", view => require("./scripts/ui/render").renderUI(view));
+  // Preserve source exclusions, but allow the explicit local-result watch target.
+  // Git still ignores all audit artifacts; none are input templates or passthroughs.
+  conf.setUseGitIgnore(false);
+  for (const line of require("node:fs").readFileSync(".gitignore", "utf8").split(/\r?\n/)) {
+    const rule = line.trim();
+    if (rule && !rule.startsWith("#") && rule !== ".ui-audit/") conf.ignores.add(rule);
+  }
+  conf.addWatchTarget("./.ui-audit/latest/");
   conf.addFilter("startsWith", (str, prefix) => str.startsWith(prefix));
   conf.addFilter("formatNumber", (value) => {
     const number = Number(value);

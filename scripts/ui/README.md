@@ -1,7 +1,20 @@
 # UI Scheme and comparison
 
+For AI agents: first read [the feature instructions](../../src/service/AGENTS.md).
+
 Scheme (`/ui/`) and Compare (`/ui/compare/`) share navigation and the same complete page table.
 Scheme shows the structure recorded in `src/service/ui.yaml`. Compare shows prototype/production screenshots and descriptions of differences. Missing pages have a dash.
+
+## Rendering
+
+Eleventy renders both tables into HTML using `scripts/ui/render.js`. The browser
+only enhances screenshot fading and handles image errors; it does not fetch data
+to construct the page. Native links and accordions work without JavaScript.
+The dev watcher rebuilds on `.ui-audit/latest/` changes, including image approval
+receipts. Missing local results leave comparison cells empty. Production builds
+need local reviewed artifacts present at build time to include comparisons; the
+renderer does not copy images into `_site`. The existing local image server or
+the portable report export serves those images. Git still ignores audit files.
 
 ## Start
 
@@ -108,7 +121,7 @@ Incremental captures preserve the other rows, including when signing in again. E
 
 Compare keeps element differences below each production screenshot. Use `reviewedElements` on a saved check for concise `{ "element": "Filter bar", "difference": "Production …; prototype …" }` entries. `comparisonNotes` is a list of data, catalog or permission caveats shown under “Data and access”; these are not confirmed missing UI. Existing `reviewedFindings` remain supported as a fallback. A new capture resets reviewed content for that state.
 
-“General recommendations” groups identical measured style differences on at least two distinct pages, with matching viewport, theme and role. It lists the prototype/production values, a shared-component recommendation and links back to the affected captures. Old prototype fingerprints are excluded from these groups. Repeated labels inside a single modal do not establish a site-wide issue. Automatically detected, unreviewed differences are labeled as candidates for confirmation; pixel percentages stay out of the element list. The offline export uses the same review model.
+“Issues” groups identical measured style differences on at least two distinct pages, with matching viewport, theme and role. It lists the prototype/production values, a shared-component recommendation and links back to the affected captures. Old prototype fingerprints are excluded from these groups. Repeated labels inside a single modal do not establish a site-wide issue. Automatically detected, unreviewed differences are labeled as candidates for confirmation; pixel percentages stay out of the element list. The offline export uses the same review model.
 
 ### Public Internal screenshots
 
@@ -125,5 +138,5 @@ Serving and report export require `latest/public-internal.json` (version 1,
 The receipt is a record of manual review, not an automated privacy guarantee.
 Internal filenames must start with `internal-`. Do not put raw findings, source
 DOM, customer URLs or private data into public check metadata. No pixel-diff score
-is computed on synthetic replacements. Production-only pages are labelled as
-such until a prototype exists. New captures must be redacted and reviewed again.
+is computed on synthetic replacements. Production-only pages show a dash on the prototype side; do not add an unavailable
+caption. New captures must be redacted and reviewed again.
