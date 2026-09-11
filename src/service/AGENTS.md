@@ -12,7 +12,11 @@ Applies to the Scheme/Compare feature, including its renderer, styles and script
 - `src/styles/service/ui-visualizer.css`: shared table appearance.
 - `src/assets/service/ui-review.js`: shared review model for the page and offline export.
 - `scripts/ui/`: data building, capture, privacy checks, serving and export. Read its README for commands.
-- `.ui-audit/latest/results.json` and images: local Compare content, not committed.
+- `.ui-audit/latest/results.json` and images: private/local working content, not committed.
+- `ui-public/`: separately reviewed public checks and lossless images, committed for deployment.
+  `manifest.json` binds approved metadata and images to their hashes; never copy the
+  whole local audit directory here. `scripts/ui/published.js` validates before rendering
+  and copies only referenced images into `_site/ui-audit/`.
 - `src/includes/service/ui-updated.html`: shared editorial update date.
 
 ## Rows and schema
@@ -53,7 +57,8 @@ client-side table construction or Loading placeholders. Eleventy reads the schem
 and privacy-filtered local results at build time. The dev watcher includes
 `.ui-audit/latest/`; changes to results, review receipts and images rebuild the
 pages. Missing results produce rows with dashes. Invalid results show an error.
-No audit source files are copied into the site by this renderer.
+Local audit source files are never copied into the site. CI uses `UI_AUDIT_SOURCE=public`;
+a clean checkout falls back to the reviewed `ui-public` dataset.
 Verify the served HTML after updates, not only the source JSON. If the watcher
 serves old content, run `npx eleventy`, reload and verify again before reporting success.
 
@@ -68,6 +73,8 @@ serves old content, run `npx eleventy`, reload and verify again before reporting
 - Keep URL hover styling. Do not show `Sample data · personal and confidential
   values replaced` or `Prototype not available`; use a dash for a missing image.
   Privacy metadata and enforcement remain in place even without visible labels.
+  Missing-side dashes belong in the URL row, aligned with the opposite route link,
+  not in the screenshot preview row.
 
 In Compare only, below the update date, show a bold `Table of Contents` label
 and a plain vertical list of text anchor links (not an accordion). Scheme must
@@ -127,7 +134,8 @@ with 0s ease on hover and .5s ease on exit.
    Chrome. Run `npm run test:ui` for schema/model/capture changes; for a small
    spacing/text edit, a focused check is enough. Run `git diff --check`.
 7. Report what changed and any uncaptured states. Code commits do not include local
-   `.ui-audit` images/results; say so when committing feature changes.
+   `.ui-audit` images/results. Deployable Compare content must be separately reviewed
+   and included in `ui-public`; report any withheld states.
 
 ## Capture and privacy
 
@@ -143,11 +151,32 @@ an appropriate user-provided link; do not invent a successful state.
 
 Treat screenshots as intended for public use. Inspect names, emails, phone
 numbers, organization identifiers, keys, invite codes, charts and account chrome.
-Replace private values with synthetic text using opaque pixel replacement; keep
+Replace concrete private fields in the capture browser before taking a new screenshot,
+using reviewed selectors and meaningful synthetic values (names, emails, organizations,
+codes and numbers). Preserve styles, element structure, formatting and control labels.
+Never blanket-replace unknown text with Demo/Example counters or repaint text on
+existing images. Use scripts/ui/semantic-capture.js with an authorized Playwright
+session; do not bypass browser-tool restrictions. Do not dispatch input/change events
+or submit synthetic values. Review all fields, graphics and overflow before approval;
+selector replacement alone does not guarantee privacy. Keep separate candidate files
+and original screenshots; keep
 raw captures in `.ui-audit/private/` or private temporary files, never in the
 served directory. Inspect the sanitized output before adding it to Compare.
-Redact prototype fixtures too when they contain personal-looking values. Never
-put raw DOM, customer values or secret URLs into public check metadata.
+Apply this workflow to both Prototype and Production, across every affected page,
+tab, dialog and component in the requested scope, not just Internal tables. Replace
+personal-looking prototype fixtures too. Choose replacements appropriate to each
+field and similar in length; keep dates, units, punctuation and empty placeholders.
+Do not replace headings, statuses, control labels or other non-private UI copy.
+Wait for fonts and stable rendering, inspect the full image for wrapping, clipped
+text, broken borders and missing assets, then restore original values even if the
+capture fails. Do not overwrite original screenshots or modify application data.
+
+If the authorized browser is read-only, use the private frozen-DOM workflow in
+`scripts/ui/snapshot-capture.js` described in the README. Identify it as a rendered
+snapshot and verify fidelity; DOM serialization does not preserve canvas charts.
+If a faithful capture is unavailable, retain the previous reviewed image and report
+the unresolved state. Never publish an incomplete replacement as a successful fix.
+Never put raw DOM, customer values or secret URLs into public check metadata.
 
 Internal images additionally require the hash receipt in `public-internal.json`
 and `privacy: { version: 1, reviewed: true }`; see `scripts/ui/README.md`.

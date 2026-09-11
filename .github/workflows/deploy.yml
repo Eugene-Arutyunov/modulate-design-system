@@ -30,6 +30,8 @@ jobs:
         run: npm i
 
       - name: Build
+        env:
+          UI_AUDIT_SOURCE: public
         run: npm run build
 
       - name: Upload artifact

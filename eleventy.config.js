@@ -6,6 +6,8 @@ module.exports = function (conf) {
       delete require.cache[require.resolve(modulePath)];
     }
   });
+  conf.on("eleventy.after", ({ dir }) => require("./scripts/ui/published").publishAssets(process.cwd(), dir.output));
+  conf.addWatchTarget("./ui-public/");
   conf.addShortcode("uiTable", view => require("./scripts/ui/render").renderUI(view));
   // Preserve source exclusions, but allow the explicit local-result watch target.
   // Git still ignores all audit artifacts; none are input templates or passthroughs.
