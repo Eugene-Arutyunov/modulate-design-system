@@ -73,6 +73,8 @@ serves old content, run `npx eleventy`, reload and verify again before reporting
 - Keep URL hover styling. Do not show `Sample data · personal and confidential
   values replaced` or `Prototype not available`; use a dash for a missing image.
   Privacy metadata and enforcement remain in place even without visible labels.
+  Missing-side dashes belong in the URL row, aligned with the opposite route link,
+  not in the screenshot preview row.
 
 In Compare only, below the update date, show a bold `Table of Contents` label
 and a plain vertical list of text anchor links (not an accordion). Scheme must
@@ -149,7 +151,15 @@ an appropriate user-provided link; do not invent a successful state.
 
 Treat screenshots as intended for public use. Inspect names, emails, phone
 numbers, organization identifiers, keys, invite codes, charts and account chrome.
-Replace private values with synthetic text using opaque pixel replacement; keep
+Replace concrete private fields in the capture browser before taking a new screenshot,
+using reviewed selectors and meaningful synthetic values (names, emails, organizations,
+codes and numbers). Preserve styles, element structure, formatting and control labels.
+Never blanket-replace unknown text with Demo/Example counters or repaint text on
+existing images. Use scripts/ui/semantic-capture.js with an authorized Playwright
+session; do not bypass browser-tool restrictions. Do not dispatch input/change events
+or submit synthetic values. Review all fields, graphics and overflow before approval;
+selector replacement alone does not guarantee privacy. Keep separate candidate files
+and original screenshots; keep
 raw captures in `.ui-audit/private/` or private temporary files, never in the
 served directory. Inspect the sanitized output before adding it to Compare.
 Redact prototype fixtures too when they contain personal-looking values. Never

@@ -125,12 +125,33 @@ Compare keeps element differences below each production screenshot. Use `reviewe
 
 ### Public Internal screenshots
 
-Internal captures contain private production data. Keep original captures under
-`.ui-audit/private/`, never in `latest`. Use regular signed-in Chrome, inspect only
-read-only pages and tabs, and collect geometry with `public-capture-dom.js` at DPR 1.
-`redact-image.js` replaces unapproved text, input values, identifier graphics and
-charts with fully opaque synthetic content; it preserves native image dimensions
-and writes lossless WebP. Review every resulting image before exposing it.
+Internal captures contain private production data. Keep originals and unreviewed
+candidates under `.ui-audit/private/`. Use `semantic-capture.js` with an authorized
+Playwright page to replace specifically reviewed text fields before capture:
+
+```js
+const { captureCandidate } = require('./scripts/ui/semantic-capture');
+await captureCandidate(page, [
+  { selector: '.reviewed-email-cell', kind: 'email' },
+  { selector: '.reviewed-code-cell', kind: 'code' },
+  { selector: '.reviewed-name-cell', kind: 'name' },
+], '.ui-audit/private/candidates/example.webp');
+```
+
+These selectors are examples, not production selectors. Inspect each state's DOM
+and supply exact field selectors; never target entire rows or generic buttons.
+Supported kinds: name, organization, email, keyName, code, number; `text` supplies
+an explicit reviewed replacement. Same input/kind gets the same synthetic value.
+Numeric/code replacements preserve character count and punctuation. Names and
+emails require visual inspection for wrapping. No events or server writes occur;
+original text is restored after capture, including on failure. Existing files
+cannot be overwritten. Lossless screenshots preserve CSS pixel dimensions.
+
+This helper does not approve privacy, handle private canvas/chart content, or
+bypass browser access restrictions. Review the full candidate before updating
+public metadata and hash receipts. Never compute pixel scores on synthetic data.
+The old `public-capture-dom.js` / `redact-image.js` raster workflow is legacy;
+do not use it for new captures. Blurred text is not an automatic privacy approval.
 
 Serving and report export require `latest/public-internal.json` (version 1,
 `images` mapping each Internal filename to its SHA-256 digest) and a check with
@@ -184,6 +205,20 @@ metadata/image hashes and copies only referenced images to `_site/ui-audit`.
 A mismatch fails the build. Receipts certify a manual privacy review, not an
 automated guarantee. Re-review changed pixels before regenerating their hashes.
 
-The initial published subset contains 17 privacy-reviewed states (23 images).
-Older captures without a privacy review remain local until sanitized and reviewed.
+The published subset contains 48 states (60 images).
+18 additional captures require content replacement; see [PRIVACY-REVIEW.md](PRIVACY-REVIEW.md).
+Unapproved captures remain local until sanitized and reviewed.
 Run `UI_AUDIT_SOURCE=public npm run build` and `npm run test:ui` before publishing.
+
+### Read-only interactive browser fallback
+
+When the interactive browser cannot modify DOM, save its observed
+`document.documentElement.outerHTML` and readable stylesheets (`{href, css}`)
+as `{html, styles}` in a private local JSON file. Do not collect storage/cookies.
+`node scripts/ui/snapshot-capture.js snapshot.json rules.json .ui-audit/private/candidates/state.webp`
+renders that frozen state in local Chrome. It removes executable markup, blocks
+page network requests, and embeds only public production WOFF2 fonts. This is a
+rendered snapshot, not a new live capture: inspect responsive layout and assets.
+Canvas, images, hidden values and private graphics require separate review.
+The output is always unapproved until manually inspected. `identity` handles
+mixed name/email text nodes while preserving punctuation and empty placeholders.
