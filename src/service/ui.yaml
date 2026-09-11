@@ -1,4 +1,21 @@
 current:
+  - id: component-pagination
+    kind: component
+    route: /dashboard/overview
+    title: Pagination
+    sections:
+      - section:
+          widget: pagination
+
+  - id: header-account-menu
+    kind: component
+    route: /dashboard/overview
+    title: 'Header: Account menu'
+    sections:
+      - section:
+          widget: account-menu
+          states: [open]
+
   - id: docs-models-overview
     route: /web/docs#models
     title: Pricing
@@ -482,6 +499,31 @@ current:
           widget: org-create
 
 target:
+  - id: component-pagination
+    kind: component
+    route: —
+    title: Pagination
+    sections: []
+
+  - id: header-account-menu
+    kind: component
+    route: /dashboard/overview/
+    title: 'Header: Account menu'
+    sections:
+      - section:
+          widget: account-menu
+          states: [open]
+    audit:
+      production_route: /dashboard/overview
+      scenarios:
+        - name: default
+          prototype:
+            steps:
+              - action: click
+                selector: '#header-user-trigger'
+            visible: '#header-user-popover'
+            scope: '#header-user-popover'
+
   - id: docs-models-overview
     route: /pricing/
     title: Pricing

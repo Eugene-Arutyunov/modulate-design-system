@@ -31,10 +31,10 @@ function exportReport({ data, report, latestDir, output }) {
     ${item.shared.length ? `<details><summary>Linked issues</summary><p>${item.shared.map(group => `<a href="#${escape(group.id)}">${escape(group.title)}</a>`).join(', ')}</p></details>` : ''}
     ${item.notes.length ? `<details><summary>View data diff</summary>${item.notes.map(note => `<p>${escape(note)}</p>`).join('')}</details>` : ''}
   </div>` : '';
-  const screenshots = (value, title, item) => `<div class="screenshots">${Object.entries({ prototype: 'Prototype', production: 'Production' }).map(([key, label]) => {
+  const screenshots = (value, title, item, prototypeNotes = []) => `<div class="screenshots">${Object.entries({ prototype: 'Prototype', production: 'Production' }).map(([key, label]) => {
     const src = image(value?.[key]);
     const diff = key === 'production' ? image(value?.diff) : '';
-    return `<figure><figcaption>${label}</figcaption>${src ? `<a href="${escape(src)}"><img src="${escape(src)}" alt="${escape(`${label}: ${title}`)}" loading="lazy"></a>` : '<p>—</p>'}${key === 'production' && src ? notes(item) : ''}${diff ? `<p><a class="pixel-diff-button" href="${escape(diff)}">View pixel diff ↗</a></p>` : ''}</figure>`;
+    return `<figure><figcaption>${label}</figcaption>${src ? `<a href="${escape(src)}"><img src="${escape(src)}" alt="${escape(`${label}: ${title}`)}" loading="lazy"></a>` : '<p>—</p>'}${key === 'production' && src ? notes(item) : ''}${key === 'prototype' && prototypeNotes.length ? `<div class="differences" aria-label="Prototype updates"><ul>${prototypeNotes.filter(n => n && typeof n.element === 'string' && typeof n.difference === 'string').map(n => `<li><strong>${escape(n.element)}</strong> — ${escape(n.difference)}</li>`).join('')}</ul></div>` : ''}${diff ? `<p><a class="pixel-diff-button" href="${escape(diff)}">View pixel diff ↗</a></p>` : ''}</figure>`;
   }).join('')}</div>`;
   const recommendations = review.shared.length ? `<section class="recommendations" id="general-issues"><h2>Issues</h2>
     <table class="issues-table"><thead><tr><th scope="col">Element</th><th scope="col">Prototype</th><th scope="col">Production</th></tr></thead><tbody>
@@ -45,7 +45,7 @@ function exportReport({ data, report, latestDir, output }) {
       <details><summary>Found in ${group.affected.length} places</summary><ul>${group.affected.map(item => `<li><a href="#${escape(item.anchor)}">${escape(item.title)}${item.scenario !== 'default' ? ` · ${escape(item.scenario)}` : ''}</a> — ${escape(item.elements.join(', '))}</li>`).join('')}</ul></details></td>
     </tr>`).join('')}</tbody></table></section>` : '';
   let current = 0;
-  const pages = routes.map(route => {
+  const renderRoute = route => {
     const pageChecks = checks.filter(check => check.pageId === route.id);
     const states = pageChecks.map(check => checkStatus(check, route.fingerprint));
     const status = !states.length ? 'not-checked' : ['stale', 'blocked', 'error', 'prototype-only', 'production-only', 'differences'].find(value => states.includes(value)) || 'match';
@@ -56,11 +56,14 @@ function exportReport({ data, report, latestDir, output }) {
       ${check.urls ? `<p class="meta">Production: <a href="${escape(check.urls.production)}">${escape(check.urls.production)}</a><br>Prototype: ${escape(check.urls.prototype)}</p>` : ''}
       ${check.fingerprint !== route.fingerprint ? '<p>The prototype or capture settings changed after this check. Capture this state again.</p>' : ''}
       ${check.error ? `<p>${escape(check.error)}</p>` : ''}
-      ${screenshots(check.screenshots, `${route.title}, ${check.scenario}`, review.byCheck.get(check))}
+      ${screenshots(check.screenshots, `${route.title}, ${check.scenario}`, review.byCheck.get(check), check.prototypeNotes)}
       ${(check.regions || []).map(region => `<details><summary>Region: ${escape(region.id)} · ${(region.ratio * 100).toFixed(2)}% of pixels differ</summary>${screenshots(region.screenshots, region.id)}</details>`).join('')}
     </section>`).join('');
     return `<article id="${escape(route.id)}"><h2>${escape(route.title)} <span class="status">${escape(labels[status])}</span></h2>${details || '<p class="meta">No production capture is available for this page.</p>'}</article>`;
-  }).join('');
+  };
+  const isComponent = route => (route.target?.kind || route.current?.kind) === 'component';
+  const pages = routes.filter(route => !isComponent(route)).map(renderRoute).join('');
+  const components = routes.filter(isComponent).map(renderRoute).join('');
   const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>UI Scheme · Production comparison</title>
 <style>
@@ -70,7 +73,7 @@ function exportReport({ data, report, latestDir, output }) {
 </style></head><body><header><h1>UI Scheme · Production comparison</h1>
 <p>Automated findings are candidates for review. Compare the same organization, role and data before assigning a development task. The scenarios below define capture coverage.</p>
 <nav aria-label="Report pages">${routes.map(route => `<a href="#${escape(route.id)}">${escape(route.title)}</a>`).join('')}</nav></header>
-<main>${recommendations}<h2>Pages</h2>${pages}</main><footer>Open the images to inspect them at full size. This folder contains the report and its comparison images.</footer></body></html>`;
+<main>${recommendations}<h2>Pages</h2>${pages}${components ? `<h2>Components</h2>${components}` : ''}</main><footer>Open the images to inspect them at full size. This folder contains the report and its comparison images.</footer></body></html>`;
   const filename = path.join(output, 'index.html'); fs.writeFileSync(filename, html);
   return { filename, images: exported.size, current, total: routes.length };
 }

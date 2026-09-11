@@ -36,8 +36,14 @@ Use a single `default` scenario for a separated row, retaining its required step
 
 `text-content` means a flat text block; `widget` means one framed/card block;
 `widgets` means multiple items within one frame. Keep block names consistent
-between the two sides. Shared headers, sidebars and footers do not belong in
-schema sections. Their visual differences may still be documented in Compare.
+between the two sides. Shared headers, sidebars and footers do not belong in individual page
+schema sections. Review shared interactive states as separate rows when requested,
+e.g. `Header: Account menu`, using the host page URL and an open-menu scenario.
+Mark these rows `kind: component` on both schema sides. Render them only in Compare, in a separate
+Components table after Pages, with the same columns and styles. Never render
+component rows or a Components section in Scheme. A component absent
+from the DS (such as Pagination) has no prototype image, but still shows its
+`prototypeNotes` with a bold `To do: Component name` and an action description. Their visual differences may still be documented in Compare.
 Exclude development sandboxes and redirect-only pages.
 
 ## Rendering and rebuilds
@@ -63,6 +69,11 @@ serves old content, run `npx eleventy`, reload and verify again before reporting
   values replaced` or `Prototype not available`; use a dash for a missing image.
   Privacy metadata and enforcement remain in place even without visible labels.
 
+In Compare only, below the update date, show a bold `Table of Contents` label
+and a plain vertical list of text anchor links (not an accordion). Scheme must
+not show this navigation. The links use
+the normal table body size (`--m__font-size-s`) to the available sections:
+Issues (`#general-issues`), Pages (`#pages`) and Components (`#components`).
 The screen comparison table is preceded by the heading `Pages`.
 Issues uses `#general-issues` with no subtitle. Render a three-column
 table: Element / Prototype / Production. Element names use the normal small body size (`--m__font-size-s`) in bold,
@@ -98,6 +109,8 @@ with 0s ease on hover and .5s ease on exit.
    migration only; never mark an outdated screenshot current to hide staleness.
 4. Add concrete `{ element, difference }` entries in `reviewedElements` below the
    production screenshot. Describe differing elements, not an overall verdict.
+   Use `prototypeNotes` with the same `{ element, difference }` shape for requested
+   prototype work; render these below the prototype image, including in export.
    Use `comparisonNotes` for dataset, access and state limitations. Do not call a
    different dataset or an unobserved state a design defect.
 5. Put repeated measured style differences and specific shared-component fixes in
