@@ -1011,7 +1011,7 @@
       "key": "dashboard-billing-37a8eec1ce",
       "scenario": "default",
       "title": "Billing",
-      "status": "prototype-only",
+      "status": "differences",
       "fingerprint": "e155fb7875deababaa8544bc49f06bb30e2ec8af2c104e2b883a914aa95481a6",
       "reviewedElements": [
         {
@@ -1028,7 +1028,8 @@
         }
       ],
       "comparisonNotes": [
-        "Purchase Credits and Apply Credit Code are absent from the capture. Verify availability for the same role and organization type before requesting these sections. Transactions and balances reflect live data."
+        "Purchase Credits and Apply Credit Code are absent from the capture. Verify availability for the same role and organization type before requesting these sections. Transactions and balances reflect live data.",
+        "Capture refreshed from a reviewed browser snapshot. Private account and table fields use synthetic values."
       ],
       "sharedIssues": [
         {
@@ -1073,7 +1074,11 @@
         "reviewed": true
       },
       "screenshots": {
-        "prototype": "/ui-audit/dashboard-billing-native-prototype.webp"
+        "prototype": "/ui-audit/dashboard-billing-native-prototype.webp",
+        "production": "/ui-audit/dashboard-billing-reviewed-production.webp"
+      },
+      "urls": {
+        "production": "https://platform.modulate.ai/dashboard/billing"
       }
     },
     {
@@ -1274,6 +1279,596 @@
       "screenshots": {
         "prototype": "/ui-audit/auth-reset-password-native-prototype.webp",
         "production": "/ui-audit/auth-reset-password-37a8eec1ce-production-public.webp"
+      }
+    },
+    {
+      "pageId": "playground",
+      "key": "playground-37a8eec1ce",
+      "scenario": "default",
+      "title": "Playground — Velma Triage",
+      "fingerprint": "8c717389baee2c85ded864c7b1fb0af97b16c2a8ef32c05bb2f8ddeb2c657beb",
+      "screenshots": {
+        "prototype": "/ui-audit/playground-reviewed-v2-prototype.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "prototype-only",
+      "urls": {
+        "prototype": "https://m-design-system.intuition.team/playground/velma/"
+      }
+    },
+    {
+      "pageId": "playground-redaction",
+      "key": "playground-redaction-37a8eec1ce",
+      "scenario": "default",
+      "title": "Playground — PII/PHI Redaction",
+      "fingerprint": "5fb88002e2d10be2849ac96678712671ff2f2b196df523ac93dced48d1ed128f",
+      "screenshots": {
+        "prototype": "/ui-audit/playground-redaction-reviewed-v2-prototype.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "prototype-only",
+      "urls": {
+        "prototype": "https://m-design-system.intuition.team/playground/redaction/"
+      }
+    },
+    {
+      "pageId": "conversations",
+      "key": "conversations-37a8eec1ce",
+      "scenario": "default",
+      "title": "Browse Conversations",
+      "fingerprint": "4c80e061b9a6b5887d2cdb299d7ee04798da59b7340f46fffcfcfe363a89a5cb",
+      "reviewedElements": [
+        {
+          "element": "Page navigation",
+          "difference": "Browse / Review Queue tabs are absent above the heading."
+        },
+        {
+          "element": "Page heading",
+          "difference": "The prototype uses “Browse Conversations”."
+        },
+        {
+          "element": "Filter bar",
+          "difference": "Production uses dates, Status / Type / Role / Behavior and Apply. The prototype uses Search, Status, a shared date range and Bulk actions. Several production field labels are clipped."
+        },
+        {
+          "element": "Conversation rows",
+          "difference": "Production shows a Started / Status / Type / Duration / Summary table. The prototype has titles, metadata, audio visualizations, model results and a row menu."
+        }
+      ],
+      "comparisonNotes": [
+        "Upload conversations is absent from the production capture; verify availability for the intended role. Conversation text and counts depend on data.",
+        "Capture refreshed from a reviewed browser snapshot. Private account and table fields use synthetic values."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "page-subtitle-color",
+          "title": "Page subtitle color",
+          "prototype": "var(--m__text)",
+          "production": "rgb(150, 150, 170)",
+          "recommendation": "Use color: var(--m__text) for page descriptions in the shared subtitle style.",
+          "element": "Page subtitle",
+          "property": "color"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "screenshots": {
+        "prototype": "/ui-audit/conversations-reviewed-v2-prototype.webp",
+        "production": "/ui-audit/conversations-reviewed-production.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "differences",
+      "urls": {
+        "prototype": "https://m-design-system.intuition.team/dashboard/conversations/",
+        "production": "https://platform.modulate.ai/dashboard/conversations"
+      }
+    },
+    {
+      "pageId": "conversations-review",
+      "key": "conversations-review-37a8eec1ce",
+      "scenario": "default",
+      "title": "Review Queue",
+      "fingerprint": "c2f6adb01bf7d00c1037c98cb859b96b6f6b4204995291e9c034b864528c249d",
+      "reviewedElements": [
+        {
+          "element": "Page navigation",
+          "difference": "Browse / Review Queue tabs are absent. The sidebar marks Conversations and Review Queue active at the same time."
+        },
+        {
+          "element": "Filter bar",
+          "difference": "Production uses Unreviewed / Reviewed, one behavior filter, two dates and Apply. The prototype has Search, Behaviors, Verdict, Status, Sort and Bulk actions."
+        },
+        {
+          "element": "Review rows",
+          "difference": "Production shows a Confidence / Started / Status / Type / Summary table. The prototype has titles, metadata, audio visualizations, multiple behavior badges with scores, status, participants and an actions menu."
+        }
+      ],
+      "comparisonNotes": [
+        "Production uses /dashboard/conversations/review-queue. Compare this mapped route with the prototype review queue.",
+        "Capture refreshed from a reviewed browser snapshot. Private account and table fields use synthetic values."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "page-subtitle-color",
+          "title": "Page subtitle color",
+          "prototype": "var(--m__text)",
+          "production": "rgb(150, 150, 170)",
+          "recommendation": "Use color: var(--m__text) for page descriptions in the shared subtitle style.",
+          "element": "Page subtitle",
+          "property": "color"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "screenshots": {
+        "prototype": "/ui-audit/conversations-review-reviewed-v2-prototype.webp",
+        "production": "/ui-audit/conversations-review-reviewed-production.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "differences",
+      "urls": {
+        "prototype": "https://m-design-system.intuition.team/dashboard/conversations/review/",
+        "production": "https://platform.modulate.ai/dashboard/conversations/review-queue"
+      }
+    },
+    {
+      "pageId": "conversations-review-detail",
+      "key": "conversations-review-detail-37a8eec1ce",
+      "scenario": "default",
+      "title": "Conversation Review",
+      "fingerprint": "fede6208ee7b31d74a76c95a274df99f85c97f3946bfab706e93797dd435966f",
+      "reviewedElements": [
+        {
+          "element": "Heading and review status",
+          "difference": "Production shows “Conversation” and a Completed processing badge. The prototype has a descriptive title, a Pending / In review / Reviewed control and reviewer avatars beside it."
+        },
+        {
+          "element": "Behavior review",
+          "difference": "Production has a Behavior / Speaker / Detected / Confidence / Evidence table with Highlight buttons, and a separate conversation-level Accurate / Mostly Accurate / Inaccurate form. The prototype shows reasoning and evidence excerpts inline, with True / False positive actions for each detection."
+        },
+        {
+          "element": "Behavior filters",
+          "difference": "The prototype’s Behaviors and Verdict filters above the table are absent from this production page."
+        },
+        {
+          "element": "Transcript",
+          "difference": "Production shows outlined rows with speaker IDs, start times and emotion labels. The prototype uses speech bubbles with descriptive speaker labels, language/accent metadata and behavior badges with confidence."
+        },
+        {
+          "element": "Queue navigation",
+          "difference": "Production links back to Conversations. The prototype links back to Review Queue and has Previous / Next controls below the transcript; these controls are absent from the production capture."
+        },
+        {
+          "element": "Section layout",
+          "difference": "Production adds Overview, Your Review, All Reviews, Participant Roles, Topic Sentiments and Exports Fired cards around the behavior table and transcript. The prototype focuses on the player, behavior review and transcript in one main column."
+        }
+      ],
+      "comparisonNotes": [
+        "Production uses the same conversation page for the report and Review Queue detail. Both Compare rows reuse the same saved production image.",
+        "Production and prototype contain different conversations. Text, duration, detection counts and confidence values are data differences. Completed describes processing, while Pending / In review / Reviewed describes the prototype review workflow.",
+        "Capture refreshed from a reviewed browser snapshot. Private account and table fields use synthetic values.",
+        "The current production conversation uses seeded demo content and has no audio player. Verify player availability with an equivalent audio-backed record."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "screenshots": {
+        "prototype": "/ui-audit/conversations-review-detail-reviewed-v2-prototype.webp",
+        "production": "/ui-audit/detail-reviewed-production.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "differences",
+      "urls": {}
+    },
+    {
+      "pageId": "conversations-report",
+      "key": "conversations-report-37a8eec1ce",
+      "scenario": "default",
+      "title": "Conversation Report",
+      "fingerprint": "61c3dd28be641b18960ba123fb1193d8db96dc38fffb4df7aa31b0a3ba50e80b",
+      "reviewedElements": [
+        {
+          "element": "Page heading",
+          "difference": "Production shows “Conversation”, a Completed badge and timestamps. The prototype uses a descriptive conversation title and a model selector."
+        },
+        {
+          "element": "Section layout",
+          "difference": "Production puts Overview, Behavior Detections and Transcript in cards in the main column, with review and analysis cards in a right column. The prototype presents its analysis sections in one wide column."
+        },
+        {
+          "element": "Audio player and summary",
+          "difference": "Production places a native audio player below the summary and topic tags inside Overview. The prototype starts with a custom timeline player and shows Speech Summary as a separate section below it."
+        },
+        {
+          "element": "Behavior Detections",
+          "difference": "Production uses a table with Behavior, Speaker, Detected, Confidence and Evidence columns, plus Highlight buttons. The prototype groups behaviors by speaker and shows reasoning and confidence inline."
+        },
+        {
+          "element": "Participants",
+          "difference": "Production’s Participant Roles card lists speaker IDs, roles and confidence. The prototype’s Speakers table also includes emotion pattern, speaking time and language."
+        },
+        {
+          "element": "Topics and sentiment",
+          "difference": "Production lists topics, speaker IDs and sentiment badges in the right column. The prototype places Topics & Sentiment in the main analysis flow."
+        },
+        {
+          "element": "Transcript",
+          "difference": "Production uses outlined rows with a speaker ID, start time and emotion. The prototype uses speech bubbles with speaker labels and behavior badges."
+        },
+        {
+          "element": "Additional sections",
+          "difference": "Production includes Your Review, All Reviews and Exports Fired cards. The prototype report instead includes Raw JSON and Statistics sections, which are not visible on this production page."
+        }
+      ],
+      "comparisonNotes": [
+        "The production capture is the seeded support call supplied for this review. The prototype uses a different conversation fixture; utterances, duration, scores and the number of results are data differences.",
+        "The production page combines analysis and review controls. Confirm the intended scope of Conversation Report versus Conversation Review before treating the extra review cards as defects.",
+        "Capture refreshed from a reviewed browser snapshot. Private account and table fields use synthetic values.",
+        "The current production conversation uses seeded demo content and has no audio player. Verify player availability with an equivalent audio-backed record."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "screenshots": {
+        "prototype": "/ui-audit/conversations-report-reviewed-v2-prototype.webp",
+        "production": "/ui-audit/detail-reviewed-production.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "differences",
+      "urls": {}
+    },
+    {
+      "pageId": "dashboard-home",
+      "key": "dashboard-home-37a8eec1ce",
+      "scenario": "default",
+      "title": "Overview",
+      "fingerprint": "0fe583caaab7492e3af21ea21081e821dc1a6b509e4888a41891ceeac21e4e1e",
+      "reviewedElements": [
+        {
+          "element": "Sidebar and header",
+          "difference": "Navigation order and grouping differ. The captured header has no Playground and uses a different Docs / Pricing order."
+        },
+        {
+          "element": "Card icons and spacing",
+          "difference": "Icons and spacing differ from the prototype cards."
+        },
+        {
+          "element": "Footer",
+          "difference": "The shared prototype footer is absent from the production capture."
+        }
+      ],
+      "comparisonNotes": [
+        "Insights, Behaviors, Actions, Jobs and Limits are absent from the captured sidebar; availability depends on role.",
+        "The main sections match: balance, three charts and Recent Usage. Values, periods, models, row counts and pagination vary with live data.",
+        "Capture refreshed from a browser snapshot at 1237px width. Chart pixels are preserved with user approval; account and table fields are synthetic. No pixel score is calculated."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "screenshots": {
+        "prototype": "/ui-audit/dashboard-home-reviewed-v2-prototype.webp",
+        "production": "/ui-audit/dashboard-home-reviewed-v3-production.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "differences",
+      "urls": {
+        "prototype": "https://m-design-system.intuition.team/dashboard/overview/",
+        "production": "https://platform.modulate.ai/dashboard/overview"
+      }
+    },
+    {
+      "pageId": "dashboard-usage",
+      "key": "dashboard-usage-37a8eec1ce",
+      "scenario": "default",
+      "title": "Usage",
+      "fingerprint": "a78c36b93bc791905a99f3d7b157da02a03b25f589716a6d80dffaba318a0397",
+      "reviewedElements": [
+        {
+          "element": "Usage charts",
+          "difference": "Credits Consumed and Requests by Status are absent below the production request log."
+        },
+        {
+          "element": "Table header and filters",
+          "difference": "Production does not match the prototype table header: Model, Start and End filters and the Apply button should form one compact toolbar integrated into the top of the table widget, with vertical separators between filter groups and a divider below. Match the prototype filter controls, alignment and spacing."
+        },
+        {
+          "element": "Date and duration values",
+          "difference": "Formatting differs from the prototype request log."
+        }
+      ],
+      "comparisonNotes": [
+        "Request log columns match. Request counts, selected periods, models and pagination depend on data.",
+        "Capture refreshed from a reviewed browser snapshot. Private account and table fields use synthetic values."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "page-subtitle-color",
+          "title": "Page subtitle color",
+          "prototype": "var(--m__text)",
+          "production": "rgb(150, 150, 170)",
+          "recommendation": "Use color: var(--m__text) for page descriptions in the shared subtitle style.",
+          "element": "Page subtitle",
+          "property": "color"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "screenshots": {
+        "prototype": "/ui-audit/dashboard-usage-reviewed-v2-prototype.webp",
+        "production": "/ui-audit/dashboard-usage-reviewed-production.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "differences",
+      "urls": {
+        "prototype": "https://m-design-system.intuition.team/dashboard/usage/",
+        "production": "https://platform.modulate.ai/dashboard/usage"
+      }
+    },
+    {
+      "pageId": "dashboard-organization",
+      "key": "dashboard-organization-37a8eec1ce",
+      "scenario": "default",
+      "title": "Organization",
+      "fingerprint": "d8d349b814a8c690532e983198c82245ae91ef9eabd7658bca811a55aca1b19d",
+      "reviewedElements": [
+        {
+          "element": "Settings navigation",
+          "difference": "Production keeps the main dashboard menu. The prototype switches to Back / Organization / Members / Models / Activity Logs / Alerts."
+        },
+        {
+          "element": "Settings fields and badges",
+          "difference": "Label weights, vertical spacing and badges differ from the prototype."
+        }
+      ],
+      "comparisonNotes": [
+        "Invoice Only and Edit / Enable / Set Limit are absent from the capture. Production is Internal / Developer and the prototype is Standard / Admin; verify these controls with matching permissions and organization type.",
+        "Capture refreshed from a reviewed browser snapshot. Private account and table fields use synthetic values."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "page-subtitle-color",
+          "title": "Page subtitle color",
+          "prototype": "var(--m__text)",
+          "production": "rgb(150, 150, 170)",
+          "recommendation": "Use color: var(--m__text) for page descriptions in the shared subtitle style.",
+          "element": "Page subtitle",
+          "property": "color"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "screenshots": {
+        "prototype": "/ui-audit/dashboard-organization-reviewed-v2-prototype.webp",
+        "production": "/ui-audit/dashboard-organization-reviewed-production.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "differences",
+      "urls": {
+        "prototype": "https://m-design-system.intuition.team/dashboard/organization/",
+        "production": "https://platform.modulate.ai/dashboard/organization"
+      }
+    },
+    {
+      "pageId": "dashboard-members",
+      "key": "dashboard-members-37a8eec1ce",
+      "scenario": "default",
+      "title": "Members",
+      "fingerprint": "30bc8c2d3502fcf312aa02c4e6e3d4f9f8661aff3c387fd6cea7f1c7609d4798",
+      "screenshots": {
+        "prototype": "/ui-audit/dashboard-members-reviewed-v2-prototype.webp"
+      },
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "status": "prototype-only",
+      "urls": {
+        "prototype": "https://m-design-system.intuition.team/dashboard/members/"
       }
     }
   ]

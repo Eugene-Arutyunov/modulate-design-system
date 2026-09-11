@@ -29,7 +29,7 @@ async function captureSnapshot(snapshot, rules, output) {
   const sprite = snapshot.html.includes('/icons.svg#') ? execFileSync('curl', ['-fsS', '--retry', '2', '--max-time', '15', 'https://platform.modulate.ai/icons.svg']).toString() : '';
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    const page = await browser.newPage({ viewport: snapshot.viewport || { width: 1440, height: 1000 } });
     await page.route('**/*', route => route.abort());
     // Parse in an inert document first; strip executable markup before rendering.
     const html = await page.evaluate(({ html, css, sprite }) => {
@@ -48,6 +48,21 @@ async function captureSnapshot(snapshot, rules, output) {
       return '<!doctype html>' + doc.documentElement.outerHTML;
     }, { html: snapshot.html, css, sprite });
     await page.setContent(html);
+    if (snapshot.canvases?.length) {
+      await page.evaluate(async captures => {
+        const canvases = [...document.querySelectorAll('canvas')];
+        if (canvases.length !== captures.length) throw new Error('Canvas count changed');
+        for (const [index, capture] of captures.entries()) {
+          if (!/^data:image\/png;base64,/.test(capture.image || '')) throw new Error('Missing reviewed canvas image');
+          const canvas = canvases[index], bounds = canvas.getBoundingClientRect();
+          if (Math.abs(bounds.width - capture.width) > 1 || Math.abs(bounds.height - capture.height) > 1) throw new Error('Canvas layout changed');
+          const image = new Image(); image.src = capture.image; await image.decode();
+          canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+        }
+      }, snapshot.canvases);
+    } else if (await page.locator('canvas').count()) {
+      throw new Error('Canvas pixels missing; capture cancelled');
+    }
     return await captureCandidate(page, rules, output);
   } finally { await browser.close(); }
 }
