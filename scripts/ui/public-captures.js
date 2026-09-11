@@ -1,11 +1,17 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { digest } = require('./model');
+const { validatePublished } = require('./published');
 
 function isPublicCapture(base, name) {
   if (!name.startsWith('internal-')) return true;
   if (path.basename(name) !== name) return false;
   try {
+    if (path.basename(base) === 'ui-public') {
+      const published = validatePublished(path.dirname(base));
+      return Boolean(published?.report.checks.some(check =>
+        Object.values(check.screenshots || {}).includes(`/ui-audit/${name}`)));
+    }
     const manifest = JSON.parse(fs.readFileSync(path.join(base, 'public-internal.json'), 'utf8'));
     return manifest.version === 1 && manifest.images?.[name] === digest(fs.readFileSync(path.join(base, name)));
   } catch { return false; }
