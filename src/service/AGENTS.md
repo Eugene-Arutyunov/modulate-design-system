@@ -162,8 +162,21 @@ selector replacement alone does not guarantee privacy. Keep separate candidate f
 and original screenshots; keep
 raw captures in `.ui-audit/private/` or private temporary files, never in the
 served directory. Inspect the sanitized output before adding it to Compare.
-Redact prototype fixtures too when they contain personal-looking values. Never
-put raw DOM, customer values or secret URLs into public check metadata.
+Apply this workflow to both Prototype and Production, across every affected page,
+tab, dialog and component in the requested scope, not just Internal tables. Replace
+personal-looking prototype fixtures too. Choose replacements appropriate to each
+field and similar in length; keep dates, units, punctuation and empty placeholders.
+Do not replace headings, statuses, control labels or other non-private UI copy.
+Wait for fonts and stable rendering, inspect the full image for wrapping, clipped
+text, broken borders and missing assets, then restore original values even if the
+capture fails. Do not overwrite original screenshots or modify application data.
+
+If the authorized browser is read-only, use the private frozen-DOM workflow in
+`scripts/ui/snapshot-capture.js` described in the README. Identify it as a rendered
+snapshot and verify fidelity; DOM serialization does not preserve canvas charts.
+If a faithful capture is unavailable, retain the previous reviewed image and report
+the unresolved state. Never publish an incomplete replacement as a successful fix.
+Never put raw DOM, customer values or secret URLs into public check metadata.
 
 Internal images additionally require the hash receipt in `public-internal.json`
 and `privacy: { version: 1, reviewed: true }`; see `scripts/ui/README.md`.
