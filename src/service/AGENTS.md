@@ -173,13 +173,19 @@ capture fails. Do not overwrite original screenshots or modify application data.
 
 If the authorized browser is read-only, use the private frozen-DOM workflow in
 `scripts/ui/snapshot-capture.js` described in the README. Identify it as a rendered
-snapshot and verify fidelity; DOM serialization does not preserve canvas charts.
+snapshot and verify fidelity; DOM serialization alone does not preserve canvas charts.
+The user has approved leaving chart content unchanged for this Compare report.
+Preserve reviewed canvas pixels separately in the snapshot; do not blur, replace
+or invent chart data. Continue replacing personal/account text outside charts.
+Capture canvas regions after layout is stable and check their dimensions; a full-page
+capture can trigger chart reflow. Never substitute an empty canvas.
 If a faithful capture is unavailable, retain the previous reviewed image and report
 the unresolved state. Never publish an incomplete replacement as a successful fix.
 Never put raw DOM, customer values or secret URLs into public check metadata.
 
-Internal images additionally require the hash receipt in `public-internal.json`
+Internal local images additionally require the hash receipt in `public-internal.json`
 and `privacy: { version: 1, reviewed: true }`; see `scripts/ui/README.md`.
+Published images use the validated `ui-public/manifest.json` receipt instead.
 Changing bytes invalidates review. The receipt records manual review, not an
 automatic guarantee. Keep these safeguards in serving and offline export.
 Do not force-add ignored captures or deploy/share a report without the relevant

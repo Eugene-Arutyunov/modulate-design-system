@@ -206,7 +206,7 @@ metadata/image hashes and copies only referenced images to `_site/ui-audit`.
 A mismatch fails the build. Receipts certify a manual privacy review, not an
 automated guarantee. Re-review changed pixels before regenerating their hashes.
 
-The published subset contains 48 states (60 images).
+The published subset contains 58 states (77 unique images).
 See [PRIVACY-REVIEW.md](PRIVACY-REVIEW.md) for capture history and unresolved states.
 Unapproved captures remain local until sanitized and reviewed.
 Run `UI_AUDIT_SOURCE=public npm run build` and `npm run test:ui` before publishing.
@@ -220,7 +220,14 @@ as `{html, styles}` in a private local JSON file. Do not collect storage/cookies
 renders that frozen state in local Chrome. It removes executable markup, blocks
 page network requests, and embeds only public production WOFF2 fonts. This is a
 rendered snapshot, not a new live capture: inspect responsive layout and assets.
-Canvas pixels are not preserved by DOM serialization. Do not publish a snapshot
+Canvas pixels are not preserved by DOM serialization alone. The helper accepts
+`viewport: {width, height}` and `canvases: [{width, height, image}]` in DOM order,
+where `image` is a reviewed PNG data URL captured from the corresponding canvas.
+It rejects missing pixels or changed canvas dimensions. For this Compare report,
+the user approved keeping chart data unchanged. Capture each canvas after layout
+settles; full-page screenshot capture may change responsive chart dimensions.
+Run `node tests/ui/snapshot-capture.js` to check preservation and failure cases.
+Do not publish a snapshot
 with missing charts or assets; retain the previous reviewed image and report the
 unresolved state. Images, hidden values and private graphics require separate review.
 The output is always unapproved until manually inspected. `identity` handles
