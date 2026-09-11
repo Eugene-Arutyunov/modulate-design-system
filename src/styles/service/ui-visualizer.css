@@ -381,7 +381,7 @@
   margin: .75rem 0;
   color: var(--m__text);
   & summary { cursor: pointer; margin-bottom: 0; }
-  &[open] > summary { margin-bottom: .5em; }
+  &[open] > summary { margin-bottom: .25em; }
 }
 .ui-viz__comparison-notes:has(+ .ui-viz__comparison-notes) { margin-bottom: 0; }
 .ui-viz__comparison-notes + .ui-viz__comparison-notes { margin-top: .25rem; }
@@ -452,4 +452,20 @@
 .ui-viz__pixel-link a.m__rounded {
   border-radius: var(--m__radius-m);
   corner-shape: squircle;
+}
+
+.ui-viz .ui-viz__table details > summary + * { margin-top: .25em; }
+
+/* Semantic value tags in the Issues table. */
+.ui-viz__issues-table td[data-label="Prototype"] > code {
+  color: var(--m__success);
+}
+.ui-viz__issues-table td[data-label="Production"] > code {
+  color: var(--m__error);
+}
+.ui-viz__issues-table td > code {
+  background-color: color-mix(in srgb, currentColor 15%, transparent);
+  border-color: color-mix(in srgb, currentColor 25%, transparent);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }

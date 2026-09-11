@@ -1,6 +1,11 @@
 const prototypeModels = require("./src/assets/prototypes/data/models.json");
 
 module.exports = function (conf) {
+  conf.on("eleventy.before", () => {
+    for (const modulePath of ["./scripts/ui/render", "./src/assets/service/ui-review"]) {
+      delete require.cache[require.resolve(modulePath)];
+    }
+  });
   conf.addShortcode("uiTable", view => require("./scripts/ui/render").renderUI(view));
   // Preserve source exclusions, but allow the explicit local-result watch target.
   // Git still ignores all audit artifacts; none are input templates or passthroughs.

@@ -46,6 +46,18 @@
       affected: [...group.affected].map(([check, elements]) => ({ check, anchor: checkId(check), title: check.title || routeMap.get(check.pageId)?.title || check.pageId, scenario: check.scenario, elements: [...new Set(elements)] })),
       matches: group,
     }));
+    // Explicitly reviewed shared issues can start with one confirmed location.
+    const reviewedGroups = new Map();
+    for (const check of complete) {
+      const route = routeMap.get(check.pageId);
+      if ((route && check.fingerprint !== route.fingerprint) || ['blocked', 'error'].includes(check.status)) continue;
+      for (const issue of check.sharedIssues || []) {
+        if (!issue || !['id', 'title', 'prototype', 'production', 'recommendation', 'element'].every(key => typeof issue[key] === 'string') || !/^[a-z0-9-]+$/.test(issue.id)) continue;
+        if (!reviewedGroups.has(issue.id)) reviewedGroups.set(issue.id, { ...issue, property: issue.property || "color", id: `ui-issue-${issue.id}`, affected: [], matches: {} });
+        reviewedGroups.get(issue.id).affected.push({ check, anchor: checkId(check), title: check.title || routeMap.get(check.pageId)?.title || check.pageId, scenario: check.scenario, elements: [issue.element] });
+      }
+    }
+    shared.push(...reviewedGroups.values());
     const byCheck = new Map();
     for (const check of complete) {
       const sharedForCheck = shared.filter(group => group.affected.some(item => item.check === check));
