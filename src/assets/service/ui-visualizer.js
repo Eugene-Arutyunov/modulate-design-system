@@ -1,9 +1,18 @@
+import './ui-review.js';
+const { buildReview, checkId } = globalThis.UIReview;
+
 /**
  * UI Scheme and Compare: separate pages sharing the table renderer.
  * Data and rendering can be extended without changing the load flow.
  */
 
 const UI_STRUCTURE_ID = 'ui-structure';
+const screenshotObserver = new ResizeObserver(entries => {
+  for (const { target: image } of entries) {
+    const frame = image.parentElement;
+    frame?.classList.toggle('ui-viz__image-frame--cropped', image.clientHeight > frame.clientHeight + 1);
+  }
+});
 
 /**
  * Normalizes raw YAML into a fixed shape. Extend here when ui.yaml format changes.
@@ -157,7 +166,7 @@ function renderSectionsList(sections, listClass) {
   return list;
 }
 
-const ui = { data: null, checks: [], view: 'scheme', compareError: null };
+const ui = { data: null, checks: [], view: 'scheme', compareError: null, review: null };
 function node(tag, className, text) {
   const element = document.createElement(tag);
   if (className) element.className = className;
@@ -181,25 +190,64 @@ function captureURL(value) {
   try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : null; }
   catch { return null; }
 }
-function renderDifferences(pair, route, check) {
-  if (!imageURL(check.screenshots?.prototype) || !imageURL(check.screenshots?.production)) return;
-  const block = node('div', 'ui-viz__differences');
+function renderDifferences(figure, route, check) {
+  const review = ui.review.byCheck.get(check);
+  if (!review) return;
+  const block = node('div', 'ui-viz__differences'); block.setAttribute('aria-label', 'Differences in production');
   if (check.fingerprint !== route.fingerprint) block.append(node('p', 'caption', 'Prototype changed. Capture again to compare.'));
   else if (check.status === 'match') block.append(node('p', 'caption', 'No differences detected.'));
-  const findings = check.reviewedFindings || check.findings;
-  if (findings?.length) {
-    const heading = node('p');
-    heading.append(node('strong', '', 'Conclusion:')); block.append(heading);
+  if (review.elements.length) {
+    if (!review.reviewed) block.append(node('p', 'caption', 'Detected elements — confirm against the screenshots.'));
     const list = node('ul', 'ui-viz__differences-list');
-    findings.forEach(finding => list.append(node('li', '', finding))); block.append(list);
+    for (const finding of review.elements) {
+      const item = node('li');
+      if (finding.element) item.append(node('strong', '', finding.element), document.createTextNode(' — '));
+      item.append(document.createTextNode(finding.difference)); list.append(item);
+    }
+    block.append(list);
+  }
+  if (review.shared.length) {
+    const links = node('p', 'ui-viz__shared-links'); links.append(document.createTextNode('Shared styles: '));
+    review.shared.forEach((group, index) => {
+      if (index) links.append(document.createTextNode(', '));
+      const anchor = node('a', '', group.title); anchor.href = `#${group.id}`; links.append(anchor);
+    });
+    block.append(links);
+  }
+  if (review.notes.length) {
+    const details = node('details', 'ui-viz__comparison-notes'); details.append(node('summary', '', 'Data and access'));
+    review.notes.forEach(note => details.append(node('p', '', note))); block.append(details);
   }
   const diff = imageURL(check.screenshots?.diff);
   if (diff) block.append(link('Pixel differences', diff));
-  if (block.childElementCount) pair.prepend(block);
+  if (block.childElementCount) figure.append(block);
+}
+function renderRecommendations(container) {
+  if (!ui.review.shared.length) return;
+  const section = node('section', 'ui-viz__recommendations'); section.id = 'ui-general-recommendations';
+  section.append(node('h2', '', 'General recommendations'));
+  section.append(node('p', 'caption', 'Repeated style differences across the captured screens. Fix these in shared components.'));
+  for (const group of ui.review.shared) {
+    const article = node('article', 'ui-viz__recommendation'); article.id = group.id;
+    article.append(node('h3', '', group.title));
+    const values = node('div', 'ui-viz__style-values');
+    for (const [side, label] of [['prototype', 'Prototype'], ['production', 'Production']]) {
+      const value = node('div'); value.append(node('p', 'caption', label), node('code', '', `${group.property}: ${group[side]}`)); values.append(value);
+    }
+    article.append(values);
+    const fix = node('p', 'ui-viz__recommendation-fix'); fix.append(node('strong', '', 'Recommendation: '), document.createTextNode(group.recommendation)); article.append(fix);
+    const affected = node('ul', 'ui-viz__affected-pages');
+    for (const item of group.affected) {
+      const li = node('li'), anchor = node('a', '', item.title + (item.scenario !== 'default' ? ` · ${item.scenario}` : ''));
+      anchor.href = `#${item.anchor}`; li.append(anchor, document.createTextNode(` — ${item.elements.join(', ')}`)); affected.append(li);
+    }
+    article.append(affected); section.append(article);
+  }
+  container.append(section);
 }
 function renderComparison(cell, route, checks) {
   for (const check of checks.length ? checks : [{ scenario: 'default' }]) {
-    const pair = node('div', 'ui-viz__comparison-state'); pair.dataset.scenario = check.scenario;
+    const pair = node('div', 'ui-viz__comparison-state'); pair.dataset.scenario = check.scenario; pair.id = checkId({ ...check, pageId: route.id });
     for (const side of ['prototype', 'production']) {
       const figure = node('figure', 'ui-viz__screenshot'); figure.dataset.side = side;
       figure.dataset.label = side === 'prototype' ? 'Prototype' : 'Production';
@@ -213,20 +261,24 @@ function renderComparison(cell, route, checks) {
       }
       const preview = node('div', 'ui-viz__preview');
       if (src) {
-        const anchor = link('', src), image = node('img');
+        const anchor = link('', src, 'ui-viz__image-frame'), image = node('img');
+        anchor.title = 'Open full screenshot';
         image.src = src; image.alt = `${figure.dataset.label}: ${route.title}, ${check.scenario}`; image.loading = 'lazy';
         image.addEventListener('error', () => {
           anchor.replaceWith(empty()); address.replaceChildren();
           pair.querySelector('.ui-viz__differences')?.remove();
         });
-        anchor.append(image); preview.append(anchor);
+        anchor.append(image); preview.append(anchor); screenshotObserver.observe(image);
       } else preview.append(empty());
-      figure.append(caption, address, preview); pair.append(figure);
+      figure.append(caption, address, preview);
+      if (side === 'production') renderDifferences(preview, route, check);
+      pair.append(figure);
     }
-    renderDifferences(pair, route, check); cell.append(pair);
+    cell.append(pair);
   }
 }
 function renderTable(container) {
+  screenshotObserver.disconnect();
   const table = node('table', `ui-viz__table ui-viz__table--${ui.view}`);
   const columns = node('colgroup');
   [24, 38, 38].forEach(width => { const column = node('col'); column.style.width = `${width}%`; columns.append(column); });
@@ -267,11 +319,13 @@ async function loadChecks() {
 }
 function render() {
   const container = document.getElementById(UI_STRUCTURE_ID); container.replaceChildren();
+  ui.review = buildReview(ui.checks, ui.data.routes);
   const legend = document.getElementById('ui-scheme-legend');
   if (ui.view === 'scheme' && legend) container.append(legend.content.cloneNode(true));
   const panel = node('section'); panel.id = 'ui-viz-panel'; panel.setAttribute('aria-labelledby', `ui-tab-${ui.view}`);
   if (ui.view === 'compare' && ui.compareError) { const error = node('p', 'ui-viz__error', ui.compareError); error.setAttribute('role', 'alert'); panel.append(error); }
   renderTable(panel); container.append(panel);
+  if (ui.view === 'compare') renderRecommendations(container);
 }
 async function loadUIStructure() {
   try {

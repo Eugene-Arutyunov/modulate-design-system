@@ -65,7 +65,7 @@ const prototype = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
       const row = page.locator('[data-page-id=dashboard-api-keys]');
       await expect(row.locator('[data-side=prototype]').locator('img')).toHaveCount(2);
       await expect(row.locator('[data-side=production]').locator('img')).toHaveCount(2);
-      await expect(row.locator('.ui-viz__differences').first()).toContainText('fontSize: production 43px');
+      await expect(row.locator('.ui-viz__differences').first()).toContainText('font-size: production 43px');
       await row.scrollIntoViewIfNeeded();
       await row.locator('img').evaluateAll(images => images.forEach(image => image.loading = 'eager'));
       await expect.poll(() => row.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0))).toBe(true);

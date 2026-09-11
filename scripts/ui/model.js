@@ -6,7 +6,7 @@ function checkStatus(check, fingerprint) {
   if (!check) return 'not-checked';
   if (check.fingerprint !== fingerprint) return 'stale';
   if (check.status === 'blocked' || check.status === 'error') return check.status;
-  return ['match', 'differences', 'prototype-only'].includes(check.status) ? check.status : 'error';
+  return ['match', 'differences', 'prototype-only', 'production-only'].includes(check.status) ? check.status : 'error';
 }
 function assertScheme(raw) {
   for (const side of ['current', 'target']) {

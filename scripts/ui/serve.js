@@ -1,6 +1,7 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const { isPublicCapture, publicChecks } = require('./public-captures');
 const root = path.resolve(__dirname, '../..');
 const port = Number(process.env.UI_AUDIT_PORT || 4611);
 function fileFor(base, requestPath) {
@@ -15,6 +16,7 @@ function auditMiddleware(req, res, next) {
     if (pathname === '/ui-audit-data.json') {
       const file = path.join(root, '.ui-audit/latest/results.json');
       const data = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : { checks: [] };
+      data.checks = publicChecks(data.checks || [], path.join(root, '.ui-audit/latest'));
       res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(req.method === 'HEAD' ? '' : JSON.stringify({ checks: data.checks }));
     }
@@ -23,6 +25,7 @@ function auditMiddleware(req, res, next) {
     if (!file || !/\.(png|webp)$/i.test(file) || !fs.existsSync(file) || !fs.statSync(file).isFile() || !fs.realpathSync(file).startsWith(fs.realpathSync(base) + path.sep)) {
       res.writeHead(404); return res.end('Not found');
     }
+    if (!isPublicCapture(path.dirname(file), path.basename(file))) { res.writeHead(404); return res.end('Not found'); }
     res.writeHead(200, { 'Content-Type': path.extname(file).toLowerCase() === '.webp' ? 'image/webp' : 'image/png', 'Cache-Control': 'no-store' });
     if (req.method === 'HEAD') return res.end();
     fs.createReadStream(file).pipe(res);

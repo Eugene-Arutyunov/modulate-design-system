@@ -24,8 +24,7 @@ const base = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
     await expect(ui.locator('thead th')).toHaveText(['Route', 'Prototype', 'Production']);
     await expect(ui.locator('select,time')).toHaveCount(0);
     await expect(ui.getByText(/No route recorded|Updated|History|Progress|Scope/)).toHaveCount(0);
-    await expect(ui.locator('[data-page-id=landing] td').nth(1)).toHaveText('—');
-    await expect(ui.locator('[data-page-id=docs] td').nth(2)).toHaveText('—');
+    for (const removed of ['landing', 'docs-models-api', 'docs-jobs-api', 'docs']) assert.ok(!ids.includes(removed));
     const screenshotDir = path.join(process.cwd(), '.ui-audit/qa'); fs.mkdirSync(screenshotDir, { recursive: true });
     await page.screenshot({ path: path.join(screenshotDir, 'scheme-desktop.png') });
     await ui.getByRole('link', { name: 'Compare', exact: true }).click();
@@ -46,13 +45,25 @@ const base = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
     await expect(ui.locator('thead th')).toHaveText(['Route', 'Prototype', 'Production']);
     const data = await (await page.request.get(`${base}/ui-audit-data.json`)).json();
     assert.ok(!('history' in data));
+    data.checks = data.checks.filter(check => ids.includes(check.pageId));
     for (const check of data.checks.filter(check => check.screenshots?.production)) {
       const row = ui.locator(`[data-page-id="${check.pageId}"]`);
       const productionImage = row.locator('[data-side=production]').locator(`img[src="${check.screenshots.production}"]`);
       await expect(productionImage).toHaveCount(1);
       await productionImage.evaluate(image => image.loading = 'eager');
       await expect.poll(() => productionImage.evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
-      if (check.reviewedFindings?.length) await expect(row.locator(`[data-scenario="${check.scenario}"] .ui-viz__differences`)).toContainText(check.reviewedFindings[0]);
+      if (check.reviewedElements?.length || check.reviewedFindings?.length) await expect(row.locator(`[data-scenario="${check.scenario}"] [data-side=production] .ui-viz__differences`)).toContainText(check.reviewedElements?.[0]?.difference || check.reviewedFindings[0]);
+    }
+    await expect(ui.getByText('Conclusion:', { exact: true })).toHaveCount(0);
+    const recommendations = ui.locator('.ui-viz__recommendations');
+    if (await recommendations.count()) {
+      const tableBottom = (await ui.locator('.ui-viz__table').boundingBox()).y + (await ui.locator('.ui-viz__table').boundingBox()).height;
+      assert.ok((await recommendations.boundingBox()).y >= tableBottom);
+      await recommendations.screenshot({ path: path.join(screenshotDir, 'compare-recommendations.png') });
+      for (const link of await recommendations.locator('a').all()) {
+        const href = await link.getAttribute('href');
+        await expect(page.locator(href)).toHaveCount(1);
+      }
     }
     const tabStyle = await ui.getByRole('link', { name: 'Compare', exact: true }).evaluate(tab => {
       const baseline = document.createElement('nav'); baseline.className = 'm__segmented-nav';
@@ -65,6 +76,7 @@ const base = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
     for (const check of data.checks) {
       const pair = ui.locator(`[data-page-id="${check.pageId}"] [data-scenario="${check.scenario}"]`);
       const comments = pair.locator('.ui-viz__differences');
+      await expect(pair.locator('[data-side=prototype] .ui-viz__differences')).toHaveCount(0);
       if (!check.screenshots?.production || !check.screenshots?.prototype) await expect(comments).toHaveCount(0);
       else {
         assert.ok(!/[А-Яа-яЁё]/.test(await comments.allTextContents().then(items => items.join(''))), 'Differences must be in English');
@@ -79,12 +91,12 @@ const base = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
     const positions = await multi.locator('.ui-viz__comparison-state').evaluateAll(pairs => pairs.map(pair => {
       const figures = [...pair.querySelectorAll('figure')].map(figure => figure.getBoundingClientRect());
       const images = [...pair.querySelectorAll('img')].map(image => image.getBoundingClientRect());
-      return { tops: figures.map(rect => rect.top), bottoms: figures.map(rect => rect.bottom), imageTops: images.map(rect => rect.top), comments: pair.querySelector('.ui-viz__differences')?.getBoundingClientRect().bottom, bottom: pair.getBoundingClientRect().bottom };
+      return { tops: figures.map(rect => rect.top), bottoms: figures.map(rect => rect.bottom), imageTops: images.map(rect => rect.top), comments: pair.querySelector('.ui-viz__differences')?.getBoundingClientRect().top, productionBottom: pair.querySelector('[data-side=production] img')?.getBoundingClientRect().bottom, bottom: pair.getBoundingClientRect().bottom };
     }));
     for (const position of positions) {
       assert.equal(position.tops[0], position.tops[1], 'State captions align across columns');
       assert.equal(position.imageTops[0], position.imageTops[1], 'Images align even when URLs wrap');
-      if (position.comments !== undefined) assert.ok(position.comments <= Math.min(...position.tops), 'Comments precede both screenshots');
+      if (position.comments !== undefined) assert.ok(position.comments >= position.productionBottom, 'Element differences follow the production screenshot');
     }
     if (positions.length > 1) assert.ok(positions[1].tops[0] >= positions[0].bottom, 'Next state follows the previous pair and its comments');
     const partial = data.checks.find(check => check.scenario === 'page-2' && !check.screenshots?.production);

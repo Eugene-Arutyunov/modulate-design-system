@@ -15,6 +15,8 @@ Open `http://localhost:8080/ui/`. The normal dev server serves local comparison 
 
 ## Screenshots
 
+For interactive review, use the installed regular Chrome and its existing signed-in session. Do not open a fresh Chrome for Testing login for every review. Capture at the comparison viewport without resizing the resulting image; verify its dimensions before publishing it to Compare. Avoid reduced-resolution in-app browser captures.
+
 With the dev server running:
 
 ```sh
@@ -101,3 +103,27 @@ node tests/ui/capture.js
 Capture tests use a separate local fixture and never populate the production comparison.
 
 Incremental captures preserve the other rows, including when signing in again. Each row retains its own capture URLs, viewport and role; compare equivalent roles and data. Reviewed per-capture comments can be stored in `reviewedFindings` in the local results file; both Compare and the exported report use these instead of raw DOM findings. A new capture resets these comments.
+
+## Review format
+
+Compare keeps element differences below each production screenshot. Use `reviewedElements` on a saved check for concise `{ "element": "Filter bar", "difference": "Production …; prototype …" }` entries. `comparisonNotes` is a list of data, catalog or permission caveats shown under “Data and access”; these are not confirmed missing UI. Existing `reviewedFindings` remain supported as a fallback. A new capture resets reviewed content for that state.
+
+“General recommendations” groups identical measured style differences on at least two distinct pages, with matching viewport, theme and role. It lists the prototype/production values, a shared-component recommendation and links back to the affected captures. Old prototype fingerprints are excluded from these groups. Repeated labels inside a single modal do not establish a site-wide issue. Automatically detected, unreviewed differences are labeled as candidates for confirmation; pixel percentages stay out of the element list. The offline export uses the same review model.
+
+### Public Internal screenshots
+
+Internal captures contain private production data. Keep original captures under
+`.ui-audit/private/`, never in `latest`. Use regular signed-in Chrome, inspect only
+read-only pages and tabs, and collect geometry with `public-capture-dom.js` at DPR 1.
+`redact-image.js` replaces unapproved text, input values, identifier graphics and
+charts with fully opaque synthetic content; it preserves native image dimensions
+and writes lossless WebP. Review every resulting image before exposing it.
+
+Serving and report export require `latest/public-internal.json` (version 1,
+`images` mapping each Internal filename to its SHA-256 digest) and a check with
+`privacy: { version: 1, reviewed: true }`. A changed file invalidates approval.
+The receipt is a record of manual review, not an automated privacy guarantee.
+Internal filenames must start with `internal-`. Do not put raw findings, source
+DOM, customer URLs or private data into public check metadata. No pixel-diff score
+is computed on synthetic replacements. Production-only pages are labelled as
+such until a prototype exists. New captures must be redacted and reviewed again.
