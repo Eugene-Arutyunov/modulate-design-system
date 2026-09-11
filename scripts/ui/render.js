@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { buildData } = require('./data');
+const { validatePublished } = require('./published');
 const { publicChecks, isPublicCapture } = require('./public-captures');
 const { buildReview, checkId } = require('../../src/assets/service/ui-review');
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -53,7 +54,11 @@ function comparison(route, checks, review, base) {
 }
 function renderUI(view, root = process.cwd()) {
   if (!['scheme','compare'].includes(view)) throw new Error('Unknown UI view');
-  const data=buildData(root),base=path.join(root,'.ui-audit/latest');let checks=[],error='';
+  const data=buildData(root);
+  const published = validatePublished(root);
+  const local = path.join(root,'.ui-audit/latest');
+  const base = process.env.UI_AUDIT_SOURCE === 'public' || !fs.existsSync(path.join(local,'results.json')) ? (published?.base || local) : local;
+  let checks=[],error='';
   if(view==='compare'){
     const file=path.join(base,'results.json');
     if(fs.existsSync(file))try{const report=JSON.parse(fs.readFileSync(file,'utf8'));if(!Array.isArray(report.checks))throw Error('Invalid results');checks=publicChecks(report.checks,base).map(c=>({...c,screenshots:Object.fromEntries(Object.entries(c.screenshots||{}).filter(([,u])=>imageURL(u,base)))}));}catch{error='<p class="ui-viz__error" role="alert">Could not read comparison results. Check the local audit files and rebuild.</p>';}

@@ -1,0 +1,569 @@
+{
+  "version": 1,
+  "checks": [
+    {
+      "pageId": "dashboard-account",
+      "key": "dashboard-account-37a8eec1ce",
+      "scenario": "default",
+      "title": "Account",
+      "status": "differences",
+      "fingerprint": "1f675c37c363efadcc3365cf96f0279b40854be7369590be2d13375808e70a7e",
+      "reviewedElements": [
+        {
+          "element": "Settings layout",
+          "difference": "Production places each setting in a separate filled card. The prototype uses a compact two-column table for Email, Display Name, Password and Training Data Opt-Out."
+        },
+        {
+          "element": "Heading and field order",
+          "difference": "Production uses “Account Settings” and places Display Name before Email. The prototype uses “Account” and starts with Email."
+        },
+        {
+          "element": "Organization Role",
+          "difference": "Production adds an Organization Role card between Email and Change Password; this section is absent from the prototype."
+        },
+        {
+          "element": "Password fields",
+          "difference": "Production uses full-width fields with labels above them and a “Change Password” button. The prototype uses narrower fields with placeholder labels and a “Change” button."
+        },
+        {
+          "element": "Delete Account",
+          "difference": "Production uses a filled card with a solid red heading strip. The prototype uses an outlined red “Danger Zone” block."
+        },
+        {
+          "element": "Footer",
+          "difference": "The prototype has copyright and legal links below the settings; these are absent from the production capture."
+        }
+      ],
+      "comparisonNotes": [
+        "Production shows a Developer role and disables training opt-out with an admin-permission message. The prototype explains availability after purchasing credits. These are different access states."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "prototype": "/ui-audit/dashboard-account-public-prototype.webp",
+        "production": "/ui-audit/dashboard-account-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-users",
+      "key": "internal-users-37a8eec1ce",
+      "scenario": "default",
+      "title": "Internal: Users",
+      "status": "differences",
+      "fingerprint": "8cefba77cfe6143c7d41011743a8eb662f475a37a517a87dd1cc7543ccff9fe0",
+      "reviewedElements": [
+        {
+          "element": "Heading and tabs",
+          "difference": "Production keeps the shared “Users & Organizations” heading and introduction above the tabs. The prototype places the tabs first and gives each section its own heading and introductory text."
+        },
+        {
+          "element": "Search field",
+          "difference": "Production places a full-width bordered search field above the card. The prototype integrates an icon-led search field into the card header."
+        },
+        {
+          "element": "Test-account filter",
+          "difference": "The prototype includes a Show test accounts switch beside search; it is absent from the production capture."
+        },
+        {
+          "element": "User identity columns",
+          "difference": "Production separates Name and Email. The prototype combines them in the User column and adds a UUID column with a visual identifier and shortened UUID."
+        },
+        {
+          "element": "Row expand indicators",
+          "difference": "The prototype shows a leading chevron on each row; production has no visible expand indicator."
+        }
+      ],
+      "comparisonNotes": [
+        "Production contains live records and pagination; the prototype contains a small fixture dataset. Names, record counts and values are not design defects. Row details were not opened in this comparison.",
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "page-subtitle-color",
+          "title": "Page subtitle color",
+          "prototype": "var(--m__text)",
+          "production": "rgb(150, 150, 170)",
+          "recommendation": "Use color: var(--m__text) for page descriptions in the shared subtitle style.",
+          "element": "Page subtitle",
+          "property": "color"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "prototype": "/ui-audit/internal-users-7dfb4cf677-public-prototype.webp",
+        "production": "/ui-audit/internal-users-7dfb4cf677-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-organizations",
+      "key": "internal-organizations-37a8eec1ce",
+      "scenario": "default",
+      "title": "Internal: Organizations",
+      "status": "differences",
+      "fingerprint": "85ab5e98a587a1eab8081f674f079566a9c92278262fa8c63c8e9db1ab9650eb",
+      "reviewedElements": [
+        {
+          "element": "Heading and tabs",
+          "difference": "Production keeps the shared “Users & Organizations” heading and introduction above the tabs. The prototype places the tabs first and gives each section its own heading and introductory text."
+        },
+        {
+          "element": "Search field",
+          "difference": "Production places a full-width bordered search field above the card. The prototype integrates an icon-led search field into the card header."
+        },
+        {
+          "element": "Test-account filter",
+          "difference": "The Show test accounts switch in the prototype card header is absent from the production capture."
+        },
+        {
+          "element": "Organization columns",
+          "difference": "Production shows Name, Members, Internal, Invoice Only, Status, Tags and Created. The prototype instead includes Organization and UUID columns and labels the invoice column “Invoice”; Members and Tags are not top-level columns."
+        },
+        {
+          "element": "Row expand indicators",
+          "difference": "The prototype shows leading chevrons and visual UUID identifiers; these are absent from the production rows."
+        }
+      ],
+      "comparisonNotes": [
+        "Production contains live records and pagination; the prototype contains a small fixture dataset. Names, record counts and values are not design defects. Row details were not opened in this comparison.",
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "page-subtitle-color",
+          "title": "Page subtitle color",
+          "prototype": "var(--m__text)",
+          "production": "rgb(150, 150, 170)",
+          "recommendation": "Use color: var(--m__text) for page descriptions in the shared subtitle style.",
+          "element": "Page subtitle",
+          "property": "color"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "prototype": "/ui-audit/internal-users-f8a665a977-public-prototype.webp",
+        "production": "/ui-audit/internal-users-f8a665a977-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-unverified-signups",
+      "key": "internal-unverified-signups-37a8eec1ce",
+      "scenario": "default",
+      "title": "Internal: Unverified Signups",
+      "status": "differences",
+      "fingerprint": "2464f6c05338accd0379cf09718e088abc1a9b620b94eb0c49e2d00703872266",
+      "reviewedElements": [
+        {
+          "element": "Heading and tabs",
+          "difference": "Production keeps the shared “Users & Organizations” heading and introduction above the tabs. The prototype places the tabs first and gives each section its own heading and introductory text."
+        },
+        {
+          "element": "Search field",
+          "difference": "Production places a full-width bordered search field above the card. The prototype integrates an icon-led search field into the card header."
+        },
+        {
+          "element": "Empty-state layout",
+          "difference": "Production shows a separate empty-state card below search. The populated prototype keeps search and the signup table inside one card; the empty production capture does not establish whether its table or row actions differ."
+        }
+      ],
+      "comparisonNotes": [
+        "Production currently shows “No unverified signups.” The prototype contains sample records. Table columns, token expiry and Resend email / Generate link actions cannot be assessed from an empty production list.",
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "sharedIssues": [
+        {
+          "id": "widget-shadow",
+          "title": "Widget shadow",
+          "property": "box-shadow",
+          "prototype": "none",
+          "production": "0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px -1px rgb(0 0 0 / 10%)",
+          "recommendation": "Remove the drop shadow from the shared widget/card container style (box-shadow: none) to match the prototype.",
+          "element": "Widget containers"
+        },
+        {
+          "id": "page-subtitle-color",
+          "title": "Page subtitle color",
+          "prototype": "var(--m__text)",
+          "production": "rgb(150, 150, 170)",
+          "recommendation": "Use color: var(--m__text) for page descriptions in the shared subtitle style.",
+          "element": "Page subtitle",
+          "property": "color"
+        },
+        {
+          "id": "widget-padding",
+          "title": "Widget padding",
+          "property": "padding",
+          "prototype": "var(--m__widget-padding)",
+          "production": "23.6px 28.32px",
+          "recommendation": "Use padding: var(--m__widget-padding) in shared widget containers to match the prototype. The displayed production padding was measured on Overview statistic cards (Recent Usage uses 28.32px on all sides); other widget layouts may use different overrides. Apply the shared spacing fix wherever dashboard widgets are used.",
+          "element": "Widget inner spacing"
+        },
+        {
+          "id": "control-table-padding",
+          "title": "Control and table padding",
+          "property": "padding",
+          "prototype": "var(--m__padding-button-s)",
+          "production": "9.44px 18.88px",
+          "recommendation": "Align internal spacing in buttons, table cells, segmented controls and inputs with their matching DS components and size variants. Use --m__padding-button-s/m for buttons, --m__padding-button-s for segmented controls, --m__padding-input-s/m for inputs, and the shared DS table cell styles. The values above illustrate the reviewed API Keys dialog Cancel/Create buttons; they are not a universal padding for all controls. Apply the component-specific spacing across the linked pages.",
+          "element": "Buttons, table cells, segmented controls and inputs"
+        }
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "prototype": "/ui-audit/internal-users-4641036b2b-public-prototype.webp",
+        "production": "/ui-audit/internal-users-4641036b2b-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-data-export",
+      "key": "internal-data-export-37a8eec1ce",
+      "scenario": "default",
+      "title": "Data Management: Export",
+      "status": "production-only",
+      "fingerprint": "d66de1514e88dbbfdeeb4c0bf184c7d1e4c726b0c0f149d14ea49fbd45369bfb",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-data-d46aee08cc-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-data-deletion",
+      "key": "internal-data-deletion-37a8eec1ce",
+      "scenario": "default",
+      "title": "Data Management: Deletion",
+      "status": "production-only",
+      "fingerprint": "e369e7d36608e8aa1b2a95647b94d1191c0ce97f86a31c274396c842f73fd875",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-data-7770ba60e6-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-training-exclusions",
+      "key": "internal-training-exclusions-37a8eec1ce",
+      "scenario": "default",
+      "title": "Data Management: Exclude from Training",
+      "status": "production-only",
+      "fingerprint": "51e5625324d5fe7a749da8f20de5309b95fbb00845a2598ec4f9ba4cff69c6e0",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-data-c2fb788c7d-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-invites",
+      "key": "internal-invites-37a8eec1ce",
+      "scenario": "default",
+      "title": "Invites & Credits: Invites",
+      "status": "production-only",
+      "fingerprint": "7268e0a91b89db54912919ef55d6c1bae8b362f601ff044b2f2220779f4bf432",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-invites-8b624246b7-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-credit-codes",
+      "key": "internal-credit-codes-37a8eec1ce",
+      "scenario": "default",
+      "title": "Invites & Credits: Credit Codes",
+      "status": "production-only",
+      "fingerprint": "899b5047822f746464431f84176107e8bb5a7428f0b6ee6ee36bc8fb032ff0a9",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-invites-d047031560-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-usage",
+      "key": "internal-usage-37a8eec1ce",
+      "scenario": "default",
+      "title": "Platform Usage",
+      "status": "production-only",
+      "fingerprint": "4eb8c521e7605c6809a3ab92795ec21a6bc3fbfe78e4d12491703536cef73555",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-usage-37a8eec1ce-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-overrides",
+      "key": "internal-overrides-37a8eec1ce",
+      "scenario": "default",
+      "title": "Org Overrides",
+      "status": "production-only",
+      "fingerprint": "06c394a3b12041faf9e2e9215f5effa3394d2f0661c3a304e3e3d4df09640d1d",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-overrides-37a8eec1ce-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-reports",
+      "key": "internal-reports-37a8eec1ce",
+      "scenario": "default",
+      "title": "Reports",
+      "status": "production-only",
+      "fingerprint": "cb50462f52d540eb22d716a36a59c2272a211cf36155fc6e99b8856d18abfe51",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-reports-37a8eec1ce-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-models",
+      "key": "internal-models-37a8eec1ce",
+      "scenario": "default",
+      "title": "Model Management",
+      "status": "production-only",
+      "fingerprint": "27aa5629db44a7fab6fdc357d8eec240a645854834e23a4766102aacf3fde536",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-models-37a8eec1ce-public-production.webp"
+      }
+    },
+    {
+      "pageId": "internal-email-status",
+      "key": "internal-email-status-37a8eec1ce",
+      "scenario": "default",
+      "title": "Email Status",
+      "status": "production-only",
+      "fingerprint": "445e548f60d51c84afd5e1004b5508379b58f6b88543a9b460ae10b8cb8be50f",
+      "reviewedElements": [],
+      "comparisonNotes": [
+        "Personal and confidential values are replaced with synthetic examples. Charts and graphical identifiers are masked. Compare layout and controls only; replacement text and values are not design defects."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/internal-email-status-37a8eec1ce-public-production.webp"
+      }
+    },
+    {
+      "pageId": "auth-org-select",
+      "key": "auth-org-select-37a8eec1ce",
+      "scenario": "default",
+      "title": "Select organization",
+      "status": "differences",
+      "fingerprint": "4e7ff2c109ce68dfe8b686b43c6a78742b9f3ce693b7efce72c5837b1c917e79",
+      "reviewedElements": [
+        {
+          "element": "Organization rows and role badges",
+          "difference": "Production rows are taller and use larger colored role badges. The prototype uses compact neutral badges."
+        },
+        {
+          "element": "New Organization section",
+          "difference": "Production adds a horizontal divider between the organization list and creation form; the prototype separates them with whitespace."
+        },
+        {
+          "element": "Promotional panel",
+          "difference": "Production uses a smaller headline, flat model icons with a model description, and a Models Overview link. The prototype uses larger headline text, 3D model icons and a Pricing link."
+        }
+      ],
+      "comparisonNotes": [
+        "Organization names are replaced with Demo 1 and Demo 2 in both screenshots. Roles belong to different datasets and are not design defects. Selection and creation were not performed."
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "prototype": "/ui-audit/auth-org-select-37a8eec1ce-public-prototype.webp",
+        "production": "/ui-audit/auth-org-select-37a8eec1ce-public-production.webp"
+      }
+    },
+    {
+      "pageId": "header-account-menu",
+      "key": "header-account-menu-default",
+      "scenario": "default",
+      "title": "Header: Account menu",
+      "status": "reviewed",
+      "fingerprint": "9299bcbad6d8a064d1026d2c31af4538148279ba8c020603588c166e710b37c4",
+      "reviewedElements": [
+        {
+          "element": "Account navigation",
+          "difference": "Production adds separate Account Settings and Switch organization rows. The prototype links directly from the email and organization rows."
+        },
+        {
+          "element": "Theme control",
+          "difference": "Production uses a Theme section with System / Light / Dark icon buttons. The prototype uses one Appearance row with a compact toggle."
+        },
+        {
+          "element": "Menu surface and spacing",
+          "difference": "Production uses a tinted menu surface, larger internal spacing and separators between sections. The prototype has a compact white menu without these section dividers."
+        }
+      ],
+      "comparisonNotes": [
+        "Production is the user-supplied menu crop; the host URL identifies the shared header, not a separate page. Prototype is an element capture at DPR 2. Capture contexts differ; no pixel score or measured size comparison is assigned."
+      ],
+      "prototypeNotes": [
+        {
+          "element": "To do: Theme selector",
+          "difference": "Add System / Light / Dark selection as in production instead of the current two-state Appearance toggle."
+        },
+        {
+          "element": "To do: Organization switcher",
+          "difference": "Add an explicit organization switching action, matching the production Switch organization entry."
+        }
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "prototype": "/ui-audit/header-account-menu-prototype.webp",
+        "production": "/ui-audit/header-account-menu-production.webp"
+      }
+    },
+    {
+      "pageId": "component-pagination",
+      "key": "component-pagination-default",
+      "scenario": "default",
+      "title": "Pagination",
+      "status": "production-only",
+      "fingerprint": "50eba5ff127d85eb82fc91e5c50b03ce974db457cbae3102e79ac9a0988b962c",
+      "prototypeNotes": [
+        {
+          "element": "To do: Pagination",
+          "difference": "Create the DS pagination component: Previous / Next controls, page numbers, current-page styling and disabled states. Use the production example as a functional reference."
+        }
+      ],
+      "privacy": {
+        "version": 1,
+        "reviewed": true
+      },
+      "screenshots": {
+        "production": "/ui-audit/component-pagination-production.webp"
+      }
+    }
+  ]
+}

@@ -170,3 +170,20 @@ to all applicable captured states in the requested scope, preserving unrelated
 metadata. Verify the resulting affected-location count in the served Compare page.
 If the watcher leaves old output, run `npx eleventy` and reload. These entries stay
 in ignored local results; committing the renderer does not publish their content.
+
+## Deployable Compare content
+
+`ui-public/` is a versioned, explicitly reviewed subset of the private local audit.
+It contains allowlisted check metadata, lossless WebP images, and hash receipts.
+It contains no authentication, raw findings, raw DOM, pixel diffs, or private URLs.
+Do not copy `.ui-audit` wholesale or mark unreviewed screenshots as approved.
+
+CI sets `UI_AUDIT_SOURCE=public`. A clean checkout also falls back to this dataset;
+local development can continue to use `.ui-audit/latest`. The build validates the
+metadata/image hashes and copies only referenced images to `_site/ui-audit`.
+A mismatch fails the build. Receipts certify a manual privacy review, not an
+automated guarantee. Re-review changed pixels before regenerating their hashes.
+
+The initial published subset contains 17 privacy-reviewed states (23 images).
+Older captures without a privacy review remain local until sanitized and reviewed.
+Run `UI_AUDIT_SOURCE=public npm run build` and `npm run test:ui` before publishing.

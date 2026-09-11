@@ -12,7 +12,11 @@ Applies to the Scheme/Compare feature, including its renderer, styles and script
 - `src/styles/service/ui-visualizer.css`: shared table appearance.
 - `src/assets/service/ui-review.js`: shared review model for the page and offline export.
 - `scripts/ui/`: data building, capture, privacy checks, serving and export. Read its README for commands.
-- `.ui-audit/latest/results.json` and images: local Compare content, not committed.
+- `.ui-audit/latest/results.json` and images: private/local working content, not committed.
+- `ui-public/`: separately reviewed public checks and lossless images, committed for deployment.
+  `manifest.json` binds approved metadata and images to their hashes; never copy the
+  whole local audit directory here. `scripts/ui/published.js` validates before rendering
+  and copies only referenced images into `_site/ui-audit/`.
 - `src/includes/service/ui-updated.html`: shared editorial update date.
 
 ## Rows and schema
@@ -53,7 +57,8 @@ client-side table construction or Loading placeholders. Eleventy reads the schem
 and privacy-filtered local results at build time. The dev watcher includes
 `.ui-audit/latest/`; changes to results, review receipts and images rebuild the
 pages. Missing results produce rows with dashes. Invalid results show an error.
-No audit source files are copied into the site by this renderer.
+Local audit source files are never copied into the site. CI uses `UI_AUDIT_SOURCE=public`;
+a clean checkout falls back to the reviewed `ui-public` dataset.
 Verify the served HTML after updates, not only the source JSON. If the watcher
 serves old content, run `npx eleventy`, reload and verify again before reporting success.
 
@@ -127,7 +132,8 @@ with 0s ease on hover and .5s ease on exit.
    Chrome. Run `npm run test:ui` for schema/model/capture changes; for a small
    spacing/text edit, a focused check is enough. Run `git diff --check`.
 7. Report what changed and any uncaptured states. Code commits do not include local
-   `.ui-audit` images/results; say so when committing feature changes.
+   `.ui-audit` images/results. Deployable Compare content must be separately reviewed
+   and included in `ui-public`; report any withheld states.
 
 ## Capture and privacy
 
