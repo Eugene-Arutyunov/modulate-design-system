@@ -48,6 +48,8 @@ and privacy-filtered local results at build time. The dev watcher includes
 `.ui-audit/latest/`; changes to results, review receipts and images rebuild the
 pages. Missing results produce rows with dashes. Invalid results show an error.
 No audit source files are copied into the site by this renderer.
+Verify the served HTML after updates, not only the source JSON. If the watcher
+serves old content, run `npx eleventy`, reload and verify again before reporting success.
 
 ## Presentation
 
@@ -72,6 +74,19 @@ primary text color (`--m__text`). Accordion body text also uses the table header
 font size, with regular weight and primary color. Align body text with the
 summary label, leaving the disclosure arrow in a separate gutter. Preserve per-issue anchors and links back to the screen comparisons.
 
+Issues value tags use `--m__success` for Prototype and `--m__error` for
+Production, with lightly tinted backgrounds and borders. Keep CSS values readable
+when they wrap. Prefer the actual DS token for prototype values where available
+(e.g. `color: var(--m__text)`); use verified production CSS, not prose such as
+“Visible drop shadow”. Recommendations should name the DS token to use.
+
+Below page differences, show `Linked issues` as a closed accordion even for one
+link; its body is comma-separated links, not a list. Follow it with `View data diff`
+when present, then the small secondary outline squircle button `View pixel diff ↗`.
+Keep a .25rem gap between adjacent accordions and .25em between the summary and
+first body block. Use small disclosure arrows; label and arrow hover together,
+with 0s ease on hover and .5s ease on exit.
+
 ## Updating content
 
 1. Determine the requested scope from context; ask only for genuinely missing
@@ -88,6 +103,13 @@ summary label, leaving the disclosure arrow in a separate gutter. Preserve per-i
 5. Put repeated measured style differences and specific shared-component fixes in
    Issues above the screen comparison table, through the shared review model. Do not
    invent measured CSS values or compute pixel scores on synthetic replacements.
+   Use per-check `sharedIssues` for explicitly reviewed common issues (format in
+   `scripts/ui/README.md`), rather than hardcoding content in the renderer. Link
+   every applicable captured page in the requested scope, not only the first
+   example: widget shadows apply where dashboard widgets exist; subtitle color
+   applies where that subtitle exists. Distinguish scope inferred from shared
+   components/schema from individually measured pages. Do not claim measurements
+   for uninspected pages. Keep the same stable issue ID across affected checks.
 6. Check the served Scheme/Compare data, image URLs and relevant layout in regular
    Chrome. Run `npm run test:ui` for schema/model/capture changes; for a small
    spacing/text edit, a focused check is enough. Run `git diff --check`.

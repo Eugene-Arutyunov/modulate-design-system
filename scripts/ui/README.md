@@ -140,3 +140,33 @@ Internal filenames must start with `internal-`. Do not put raw findings, source
 DOM, customer URLs or private data into public check metadata. No pixel-diff score
 is computed on synthetic replacements. Production-only pages show a dash on the prototype side; do not add an unavailable
 caption. New captures must be redacted and reviewed again.
+
+### Explicitly reviewed shared issues
+
+A check may contain `sharedIssues` for a confirmed shared-component issue, including
+one initially confirmed location. The review model groups these by stable `id`
+and adds links from each applicable check. Stale fingerprints, blocked/error checks
+and checks without both comparison images are excluded. This is separate from the
+automatic two-page grouping above.
+
+```json
+{
+  "sharedIssues": [{
+    "id": "page-subtitle-color",
+    "title": "Page subtitle color",
+    "property": "color",
+    "prototype": "var(--m__text)",
+    "production": "rgb(150, 150, 170)",
+    "recommendation": "Use color: var(--m__text) for page descriptions in the shared subtitle style.",
+    "element": "Page subtitle"
+  }]
+}
+```
+
+The values above illustrate a reviewed issue; verify them for new captures.
+Keep group metadata consistent across checks sharing an ID. Use real CSS values
+or verified DS tokens, never descriptive text in CSS value fields. Add the issue
+to all applicable captured states in the requested scope, preserving unrelated
+metadata. Verify the resulting affected-location count in the served Compare page.
+If the watcher leaves old output, run `npx eleventy` and reload. These entries stay
+in ignored local results; committing the renderer does not publish their content.
