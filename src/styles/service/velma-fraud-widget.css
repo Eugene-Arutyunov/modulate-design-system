@@ -4,8 +4,10 @@
    hard dark-mode (like the fingerprint illustrations): the `dark-mode`
    class on the root resolves the `--m__*` / `--ids__*` tokens, so these
    rules stay theme-agnostic. Fingerprint player internals come from
-   player.css / playground.css in the bundle; velma-fraud-embed.css bakes
-   the same rules with literal values for the Webflow export.
+   player.css / playground.css in the bundle. This file is the only source
+   of widget styles: the HTML export collects the widget-scoped rules from
+   the live stylesheets at export time (see widget-studio.js) — there is no
+   separate embed stylesheet.
 
    Em scale. The widget scales from its own em base (16px → 14px below
    992px), while the DS tokens are rem-based — so sizes here are the
@@ -38,6 +40,7 @@
     width: 1140px;
     margin: 0 auto;
     box-sizing: border-box;
+    container-type: inline-size;
   }
 
   @media (max-width: 1139px) {
@@ -48,9 +51,26 @@
 
 }
 
-/* Any embed of the widget shrinks its em base on narrow viewports (the
-   embed CSS bakes the same rule for the Webflow export). */
-@media (max-width: 992px) {
+/* Standalone-embed frame (the HTML export's markup; also usable on doc
+   pages): target-site geometry, and the container the widget's
+   width-responsive rules measure against. */
+.velma-fraud-embed {
+  width: 100%;
+}
+
+.velma-fraud-frame {
+  width: 1140px;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  container-type: inline-size;
+}
+
+/* Any mount of the widget shrinks its em base when its frame is narrow.
+   Container queries (not media): the widget responds to the width it is
+   actually given, so the studio's screenshot sizing and narrow-column
+   embeds behave the same as a narrow viewport. */
+@container (width <= 992px) {
   .velma-fraud-widget {
     font-size: 14px;
   }
@@ -455,7 +475,7 @@
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 1fr);
 }
 
-@media (max-width: 768px) {
+@container (width <= 768px) {
   .velma-fraud-widget .vf-main {
     grid-template-columns: 1fr;
   }
@@ -479,7 +499,7 @@
   border-left: 1px solid var(--vf-border);
 }
 
-@media (max-width: 768px) {
+@container (width <= 768px) {
   .velma-fraud-widget .vf-transcript {
     height: 17em;
     border-bottom: 1px solid var(--vf-border);

@@ -96,6 +96,7 @@
   }
 
   & .scatterplot-studio__frame {
+    container-type: inline-size;
     margin: 0 auto;
     box-sizing: border-box;
   }
@@ -115,8 +116,10 @@
     width: var(--scatter-stage-width, 1140px);
   }
 
-  @media (max-width: 992px) {
-    & .scatterplot-studio__stage[data-mode="responsive"] .scatterplot-wrapper {
+  /* Container, not viewport: screenshot sizing and narrow-column embeds
+     get the same layout as a narrow viewport. */
+  @container (width <= 992px) {
+    & .scatterplot-wrapper {
       font-size: 14px;
     }
   }
@@ -148,7 +151,7 @@
     padding: 1.25em 3em 0.625em;
     box-sizing: border-box;
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       font-size: 15px;
       padding: 1.25em 1em 0.625em 1em;
       overflow: hidden;
@@ -161,7 +164,7 @@
       opacity: 0.8;
       text-align: center;
 
-      @media (max-width: 768px) {
+      @container (width <= 768px) {
         font-size: 1.4em;
       }
     }
@@ -174,7 +177,7 @@
       opacity: 0.8;
       text-align: center;
 
-      @media (max-width: 768px) {
+      @container (width <= 768px) {
         font-size: 0.9em;
       }
     }
@@ -193,7 +196,7 @@
       position: relative;
       border-left: 1px solid rgba(var(--ids__text-RGB), 0.5);
 
-      @media (max-width: 768px) {
+      @container (width <= 768px) {
         margin-left: 2em;
         width: calc(100% - 2em);
         height: 20em;
@@ -287,7 +290,7 @@
     opacity: 0.6;
     transition: opacity 0.2s ease;
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       max-width: 9.5em;
       min-width: 5em;
       font-size: 0.7em;
@@ -391,7 +394,7 @@
     letter-spacing: 0.15em;
     color: rgba(var(--ids__text-caption-RGB), 1);
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       width: 100%;
       text-align: center;
       bottom: -3.5em;
@@ -411,7 +414,7 @@
     color: rgba(var(--ids__text-caption-RGB), 1);
     white-space: nowrap;
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       left: -2.8em;
     }
   }
@@ -448,7 +451,7 @@
     bottom: -0.75em;
     transform: translateX(-50%);
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       height: 0.35em;
       bottom: -0.35em;
     }
@@ -460,7 +463,7 @@
     left: -0.75em;
     transform: translateY(-50%);
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       width: 0.35em;
       left: -0.35em;
     }
@@ -544,7 +547,7 @@
     left: -1.7692em;
     bottom: -2.3077em;
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       bottom: -1.6em;
       left: -1.2em;
     }
@@ -554,7 +557,7 @@
     bottom: -2.3077em;
     transform: translateX(-50%);
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       bottom: -1.6em;
     }
   }
@@ -563,7 +566,7 @@
     transform: translateY(-50%) translateX(calc(-100% - 1.0769em));
     text-align: right;
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       transform: translateY(-50%) translateX(calc(-100% - 0.6em));
     }
   }
@@ -602,7 +605,7 @@
     transform-origin: center;
   }
 
-  @media (max-width: 768px) {
+  @container (width <= 768px) {
     & .scatterplot-axis-break {
       bottom: calc(0.4375em * 0.35 / 0.75);
       height: calc(0.625em * 0.35 / 0.75);
@@ -624,7 +627,7 @@
     align-items: center;
     justify-content: center;
 
-    @media (max-width: 768px) {
+    @container (width <= 768px) {
       padding: 1em 0;
     }
   }
@@ -661,4 +664,14 @@
   & .scatterplot-studio__stage[data-mode="screenshot"] .scatterplot-wrapper {
     font-size: 16px;
   }
+}
+
+/* Standalone-embed frame (the HTML export's markup): target-site geometry,
+   and the container the widget's width-responsive rules measure against. */
+.scatterplot-embed {
+  box-sizing: border-box;
+  width: 1140px;
+  max-width: 100%;
+  margin: 0 auto;
+  container-type: inline-size;
 }

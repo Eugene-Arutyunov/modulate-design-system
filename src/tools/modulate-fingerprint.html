@@ -263,13 +263,9 @@
   <div class="m__text-width">
     <p>
       Lanes can also be technologies instead of speakers: the same call
-      analyzed by two engines, one lane each, and each lane hovers on its
-      own. Every lane keeps its own transcript variant — segmentation,
-      timings and recognition details differ, so the clip structures never
-      match. A lane without an emotion channel goes uniformly gray with
-      hairline seams between chunks (the color means nothing, the clip
-      pattern survives); clips where the engine fired step one gray away from
-      the lane and keep their glyphs:
+      analyzed by two engines, one lane each, each with its own transcript
+      variant. A clip that carries a signal blooms its color into the lane;
+      a glyph with a count aggregates several signals:
     </p>
   </div>
 
@@ -281,11 +277,9 @@
 
   <div class="m__text-width">
     <p>
-      The comparison can also isolate one selected signal. Clips without it
-      go neutral on the heard lane and plain gray on the stack lane; every
-      clip the engine flagged gets the same one-step-off highlight, and the
-      glyph tells the case — a catch, or a red-marked false positive. A
-      missed signal simply leaves the lane quiet:
+      The comparison can also isolate one selected signal: every flagged
+      clip gets the same one-step highlight, and the glyph tells the case —
+      a catch, or a red-marked false positive:
     </p>
   </div>
 
@@ -384,8 +378,11 @@
 
   <!-- The Velma fraud demo widget (see /tools/velma-fraud-demo-widget/),
        mounted with its default data; keyboard control stays off so the
-       page keeps Space and the arrows. -->
-  <div data-vf-widget></div>
+       page keeps Space and the arrows. The frame is the widget's size
+       container — width-responsive rules measure against it. -->
+  <div class="velma-fraud-frame">
+    <div data-vf-widget></div>
+  </div>
 
   <div class="m__space XL"></div>
 
