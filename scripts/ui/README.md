@@ -119,7 +119,7 @@ Incremental captures preserve the other rows, including when signing in again. E
 
 ## Review format
 
-Compare keeps element differences below each production screenshot. Use `reviewedElements` on a saved check for concise `{ "element": "Filter bar", "difference": "Production …; prototype …" }` entries. `comparisonNotes` is a list of data, catalog or permission caveats shown under “Data and access”; these are not confirmed missing UI. Existing `reviewedFindings` remain supported as a fallback. A new capture resets reviewed content for that state.
+Compare keeps element differences below each production screenshot. Use `reviewedElements` on a saved check for concise `{ "element": "Filter bar", "difference": "Production …; prototype …" }` entries. `comparisonNotes` is a list of data, catalog or permission caveats shown under “View data diff”; these are not confirmed missing UI. Existing `reviewedFindings` remain supported as a fallback. A new capture resets reviewed content for that state.
 
 “Issues” groups identical measured style differences on at least two distinct pages, with matching viewport, theme and role. It lists the prototype/production values, a shared-component recommendation and links back to the affected captures. Old prototype fingerprints are excluded from these groups. Repeated labels inside a single modal do not establish a site-wide issue. Automatically detected, unreviewed differences are labeled as candidates for confirmation; pixel percentages stay out of the element list. The offline export uses the same review model.
 

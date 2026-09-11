@@ -32,9 +32,9 @@ function notes(check, route, review, base) {
   const item=review.byCheck.get(check); if (!item) return '';
   return `<div class="ui-viz__differences" aria-label="Differences in production">${check.fingerprint !== route.fingerprint ? '<p class="caption">Prototype changed. Capture again to compare.</p>' : check.status === 'match' ? '<p class="caption">No differences detected.</p>' : ''}
   ${item.elements.length ? `${!item.reviewed ? '<p class="caption">Detected elements — confirm against the screenshots.</p>':''}<ul class="ui-viz__differences-list">${item.elements.map(e=>`<li>${e.element?`<strong>${escape(e.element)}</strong> — `:''}${escape(e.difference)}</li>`).join('')}</ul>`:''}
-  ${item.shared.length ? `<p class="ui-viz__shared-links">Shared styles: ${item.shared.map(g=>`<a href="#${escape(g.id)}">${escape(g.title)}</a>`).join(', ')}</p>`:''}
-  ${item.notes.length ? `<details class="ui-viz__comparison-notes"><summary>Data and access</summary>${item.notes.map(n=>`<p>${escape(n)}</p>`).join('')}</details>`:''}
-  ${imageURL(check.screenshots?.diff,base) ? link('Pixel differences',check.screenshots.diff):''}</div>`;
+  ${item.shared.length ? `<details class="ui-viz__comparison-notes ui-viz__shared-links"><summary>Shared styles</summary><ul>${item.shared.map(g=>`<li><a href="#${escape(g.id)}">${escape(g.title)}</a></li>`).join('')}</ul></details>`:''}
+  ${item.notes.length ? `<details class="ui-viz__comparison-notes"><summary>View data diff</summary>${item.notes.map(n=>`<p>${escape(n)}</p>`).join('')}</details>`:''}
+  ${imageURL(check.screenshots?.diff,base) ? `<p class="ui-viz__pixel-link">${link('View pixel diff ↗',check.screenshots.diff,'m__button-secondary-outline XS m__rounded')}</p>`:''}</div>`;
 }
 function issues(review) {
   if (!review.shared.length) return '';

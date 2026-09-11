@@ -28,13 +28,13 @@ function exportReport({ data, report, latestDir, output }) {
   const notes = item => item ? `<div class="differences">
     ${!item.reviewed && item.elements.length ? '<p class="meta">Detected elements — confirm against the screenshots.</p>' : ''}
     <ul>${item.elements.map(finding => `<li>${finding.element ? `<strong>${escape(finding.element)}</strong> — ` : ''}${escape(finding.difference)}</li>`).join('')}</ul>
-    ${item.shared.length ? `<p>Shared styles: ${item.shared.map(group => `<a href="#${escape(group.id)}">${escape(group.title)}</a>`).join(', ')}</p>` : ''}
-    ${item.notes.length ? `<details><summary>Data and access</summary>${item.notes.map(note => `<p>${escape(note)}</p>`).join('')}</details>` : ''}
+    ${item.shared.length ? `<details><summary>Shared styles</summary><ul>${item.shared.map(group => `<li><a href="#${escape(group.id)}">${escape(group.title)}</a></li>`).join('')}</ul></details>` : ''}
+    ${item.notes.length ? `<details><summary>View data diff</summary>${item.notes.map(note => `<p>${escape(note)}</p>`).join('')}</details>` : ''}
   </div>` : '';
   const screenshots = (value, title, item) => `<div class="screenshots">${Object.entries({ prototype: 'Prototype', production: 'Production' }).map(([key, label]) => {
     const src = image(value?.[key]);
     const diff = key === 'production' ? image(value?.diff) : '';
-    return `<figure><figcaption>${label}</figcaption>${src ? `<a href="${escape(src)}"><img src="${escape(src)}" alt="${escape(`${label}: ${title}`)}" loading="lazy"></a>` : '<p>—</p>'}${key === 'production' && src ? notes(item) : ''}${diff ? `<p><a href="${escape(diff)}">Pixel differences</a></p>` : ''}</figure>`;
+    return `<figure><figcaption>${label}</figcaption>${src ? `<a href="${escape(src)}"><img src="${escape(src)}" alt="${escape(`${label}: ${title}`)}" loading="lazy"></a>` : '<p>—</p>'}${key === 'production' && src ? notes(item) : ''}${diff ? `<p><a class="pixel-diff-button" href="${escape(diff)}">View pixel diff ↗</a></p>` : ''}</figure>`;
   }).join('')}</div>`;
   const recommendations = review.shared.length ? `<section class="recommendations" id="general-issues"><h2>Issues</h2>
     <table class="issues-table"><thead><tr><th scope="col">Element</th><th scope="col">Prototype</th><th scope="col">Production</th></tr></thead><tbody>
@@ -66,6 +66,7 @@ function exportReport({ data, report, latestDir, output }) {
 <style>
 :root{color-scheme:light;font:16px/1.5 system-ui,sans-serif;color:#2d2c3d;background:#fff}*{box-sizing:border-box}body{max-width:1440px;margin:auto;padding:32px}h1{font-size:32px;letter-spacing:-.03em}h2{font-size:24px}h3{font-size:18px}a,summary{color:#46426e}nav{display:flex;gap:8px 20px;flex-wrap:wrap;margin:24px 0}nav a{font-size:14px}article{border-top:1px solid #d9d8e0;padding:24px 0}h2,h3{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline}.status,.meta{font-size:14px;font-weight:400;color:#626073}.state{padding:8px 0 24px}.meta{overflow-wrap:anywhere}li{margin:8px 0}summary{cursor:pointer;margin:16px 0}.screenshots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}figure{margin:0;min-width:0}figcaption{font-size:14px;margin:8px 0}img{width:100%;height:auto;border:1px solid #d9d8e0}footer{font-size:14px;margin-top:32px;color:#626073}@media(max-width:700px){body{padding:20px}.screenshots{grid-template-columns:1fr}}@media print{nav{display:none}article{break-inside:avoid}body{padding:0}}
 .recommendations{margin:0 0 48px;scroll-margin-top:24px}.issues-table{width:100%;table-layout:fixed;border-collapse:collapse}.issues-table th,.issues-table td{text-align:left;vertical-align:top;padding:16px;border-bottom:1px solid #d9d8e0;overflow-wrap:anywhere}.issues-table th:first-child{width:24%}.issues-table thead th:nth-child(2){width:28%}.issues-table tr{scroll-margin-top:24px}.style-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.recommendation-fix{padding:16px;background:#f2f2f6;border-radius:8px}.differences{margin-top:16px}article,.state{scroll-margin-top:24px}
+.pixel-diff-button{display:inline-flex;font-size:14px;font-weight:600;border:1px solid currentColor;border-radius:4px;padding:4px 8px;text-decoration:none;transition:color .5s ease}.pixel-diff-button:hover{color:#4660db;transition-duration:0s}
 </style></head><body><header><h1>UI Scheme · Production comparison</h1>
 <p>Automated findings are candidates for review. Compare the same organization, role and data before assigning a development task. The scenarios below define capture coverage.</p>
 <nav aria-label="Report pages">${routes.map(route => `<a href="#${escape(route.id)}">${escape(route.title)}</a>`).join('')}</nav></header>

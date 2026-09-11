@@ -380,8 +380,12 @@
 .ui-viz__comparison-notes {
   margin: .75rem 0;
   color: var(--m__text);
-  & summary { cursor: pointer; margin-bottom: .5em; }
+  & summary { cursor: pointer; margin-bottom: 0; }
+  &[open] > summary { margin-bottom: .5em; }
 }
+.ui-viz__comparison-notes:has(+ .ui-viz__comparison-notes) { margin-bottom: 0; }
+.ui-viz__comparison-notes + .ui-viz__comparison-notes { margin-top: .25rem; }
+
 .ui-viz__recommendations {
   margin: 0 0 3rem;
   scroll-margin-top: 2rem;
@@ -437,4 +441,15 @@
 .ui-viz .ui-viz__table details > summary:hover {
   color: var(--m__text-link-hover);
   transition-duration: var(--m__duration-instant);
+}
+
+.ui-viz__pixel-link {
+  margin: .75rem 0;
+  font-size: var(--ui-viz-caption-size);
+  font-weight: var(--m__font-weight-bold);
+}
+
+.ui-viz__pixel-link a.m__rounded {
+  border-radius: var(--m__radius-m);
+  corner-shape: squircle;
 }
