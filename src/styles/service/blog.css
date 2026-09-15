@@ -309,53 +309,42 @@ a.read-next {
 }
 
 
-/* Compare article: shared capture workflow and its two outputs. */
+/* Compare article: one compact workflow, using shared DS tokens. */
 .compare-workflow {
   margin: var(--m__spacer-m) 0;
   font-size: var(--m__font-size-s);
 
-  & .compare-workflow__step {
-    display: flex;
-    flex-direction: column;
-    gap: var(--m__gap-xs);
-    padding: var(--m__spacer-s);
-    background: var(--m__bg-surface);
-    color: var(--m__text);
-    min-width: 0;
-  }
-
-  & .posts-list-col-title {
-    margin: 0;
-  }
-
-  & .compare-workflow__arrow {
-    text-align: center;
-    padding-block: var(--m__gap-xxs);
-    color: var(--m__text-caption);
-  }
-
+  & .compare-workflow__chain,
   & .compare-workflow__outputs {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: var(--m__gap-s);
   }
 
-  & a.compare-workflow__step:hover strong {
-    color: var(--m__text-link-hover);
+  & .compare-workflow__outputs {
+    padding: var(--m__spacer-xs) var(--m__spacer-s);
+    background: var(--m__bg-surface);
+    white-space: nowrap;
   }
 
-  & .compare-workflow__review {
-    background: transparent;
-    border: var(--m__border-width-s) solid var(--m__text-caption);
+  & .compare-workflow__arrow {
+    color: var(--m__text-caption);
   }
 
   & figcaption {
-    margin-top: var(--m__gap-s);
+    margin-top: var(--m__gap-xs);
+    text-align: center;
   }
 }
 
 @media (max-width: 480px) {
-  .compare-workflow .compare-workflow__outputs {
-    grid-template-columns: 1fr;
+  .compare-workflow .compare-workflow__chain {
+    flex-direction: column;
+    gap: var(--m__gap-xxs);
+  }
+
+  .compare-workflow .compare-workflow__arrow {
+    transform: rotate(90deg);
   }
 }
