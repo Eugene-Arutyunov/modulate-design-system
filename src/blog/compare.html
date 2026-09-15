@@ -1,0 +1,51 @@
+{% extends 'service/layout.html' %}
+{% set pageTitle = 'Compare: Bringing the Prototype and Production Together — Modulate Design System' %}
+{% block content %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="narrative-text-width">
+    {% set postAuthor = 'Eugene Vlasov' %}
+    {% set postAuthorPhoto = '/assets/images/authors/eugene-vlasov.jpg' %}
+    {% set postDate = 'September 15, 2026' %}
+    {% include 'service/post-meta.html' %}
+    <h1 class="loud">Compare: Bringing the Prototype and Production Together</h1>
+
+    <aside class="post-abstract">
+      <span class="posts-list-col-title">Abstract</span>
+      <p>Prototype, production, and review notes in one place. How Compare connects shared issues to individual screens, and how an agent helps keep the review and the UI Scheme up to date.</p>
+    </aside>
+
+    <div class="m__space L"></div>
+    <p>I updated the production column in the <a href="https://m-design-system.intuition.team/ui/">UI Scheme</a> and built <a href="https://m-design-system.intuition.team/ui/compare/">Compare</a> — an all-in-one page for reviewing the prototype against the live product.</p>
+    <p>The motivation was laziness. Going through every screen with a ruler takes time, and leaving feedback in chat means eventually hunting down which page each comment referred to. I wanted the intended design, the actual implementation, and the suggested fixes in one place. With an agent handling the first pass.</p>
+
+    <div class="m__space L"></div>
+    <h2 class="loud">Three Levels of Comparison</h2>
+    <p>Compare has three sections: <strong>Issues, Pages, and Components</strong>. They let you move between individual screens and problems that repeat across the product.</p>
+    <p><strong>Issues collects shared problems.</strong> When the same style differs across several pages, you can describe it once: what the prototype uses, what production uses, and how to fix it. An expandable list below each recommendation links to the affected screens.</p>
+    <p>This makes the scope visible and helps identify where the fix belongs. Instead of ten comments about subtitle color, you get one recommendation for the shared style, linked to every example.</p>
+    <p><strong>Pages puts screens face to face.</strong> Prototype on the left, production on the right, with specific differences described below the screenshot. <strong>Linked issues</strong> connects each screen to the shared problems.</p>
+    <p><strong>Data diff</strong> separately records differences in content, permissions, or screen state. A different number in a table or an empty list doesn’t necessarily mean the interface was implemented incorrectly. That context belongs alongside the review.</p>
+    <p>There’s also <strong>Pixel diff</strong>, but it isn’t useful yet. Different data and screen states introduce too much noise. For now, a description of <em>what actually differs</em> is much more helpful.</p>
+    <p><strong>Components covers individual components and their states</strong>, such as an open account menu. These need reviewing too, so they get their own section with the same comparison layout.</p>
+
+    <div class="m__space L"></div>
+    <h2 class="loud">One Pass, Two Results</h2>
+    <p>One of my favorite parts: Scheme and Compare share the same update workflow.</p>
+    <p>The agent opens a page, anonymizes sensitive information where needed, takes a screenshot, and describes the differences it finds. Prepared images are reviewed before publication.</p>
+    <p>If the page structure also differs from what’s recorded in Scheme, that gets updated too. One pass through the product produces both an updated interface map and material for visual review.</p>
+    <p>Then I can refine the findings with a regular message:</p>
+    <blockquote><p>These things differ across several pages. It’s a shared problem, and this is how it should work.</p></blockquote>
+    <p>The agent records the issue and links it to the relevant screens. The recommendation stays connected to its examples, and each page links back to the shared fix.</p>
+
+    <div class="m__space L"></div>
+    <h2 class="loud">Why I Like This Setup</h2>
+    <p>You can navigate both ways: from a particular screen to a shared cause, or from a shared problem to every place it appears. Screenshots, observations, and recommendations stay connected, so there’s less context to reconstruct each time.</p>
+    <p>It still needs human review. I’ll still be checking things by eye. But the machine can handle the first pass, and I can keep refining its instructions: what to look for, what counts as a problem, and which differences come from the data.</p>
+    <p>Basically, being too lazy to crawl through screens with a ruler turned out to be a good reason to build a tool. Now there’s one place to inspect the differences, discuss them, and keep the results.</p>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% endblock %}
