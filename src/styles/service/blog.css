@@ -446,40 +446,14 @@ a.post-figure-link {
   }
 }
 
-/* Compare article: one compact workflow, using shared DS tokens. */
-.compare-workflow {
-  margin: var(--m__spacer-m) 0;
-  padding: var(--m__spacer-s);
-  box-sizing: border-box;
-  width: 100%;
+.narrative-text-width > .compare-message {
+  position: relative;
+  margin: var(--m__spacer-m) 0 var(--m__spacer-m) var(--m__spacer-l);
+  padding: var(--m__spacer-s) var(--m__spacer-m);
+  border-radius: 1.2rem 1.2rem 0.25rem 1.2rem;
   background: var(--m__bg-surface);
-  font-size: var(--m__font-size-l);
-  line-height: calc(var(--m__line-height-base) + 0.1);
 
-  & .compare-workflow__chain,
-  & .compare-workflow__outputs {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--m__gap-s);
-  }
-
-  & .compare-workflow__outputs {
-    white-space: nowrap;
-  }
-
-  & .compare-workflow__arrow {
-    color: var(--m__text-caption);
-  }
-}
-
-@media (max-width: 480px) {
-  .compare-workflow .compare-workflow__chain {
-    flex-direction: column;
-    gap: var(--m__gap-xxs);
-  }
-
-  .compare-workflow .compare-workflow__arrow {
-    transform: rotate(90deg);
+  & p {
+    margin: 0;
   }
 }
