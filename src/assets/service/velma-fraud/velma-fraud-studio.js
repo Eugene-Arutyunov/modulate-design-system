@@ -120,14 +120,14 @@ body {
 }
 @font-face {
   font-family: "ABC Areal Semi Mono";
-  font-weight: 100 900;
+  font-weight: 400 700;
   font-style: normal;
   font-display: swap;
   src: url("${fontDataUrl}") format("woff2");
 }
 @font-face {
   font-family: "ABC Areal";
-  font-weight: 100 900;
+  font-weight: 400 700;
   font-style: normal;
   font-display: swap;
   src: url("${sansDataUrl}") format("woff2");
