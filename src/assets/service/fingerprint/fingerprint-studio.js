@@ -420,7 +420,93 @@ const DEMOS = {
     data: { speakers: 2, durationSec: 300, seed: 48 },
     opts: { amplitude: true },
   },
+  comparison: {
+    raw: () => buildComparisonDemo(false),
+    opts: {
+      behaviours: true,
+      className: "fp-cmp",
+      laneHover: true,
+      names: ["Velma", "STT+LLM"],
+    },
+  },
+  "comparison-signal": {
+    raw: () => buildComparisonDemo(true),
+    opts: {
+      behaviours: true,
+      className: "fp-cmp",
+      laneHover: true,
+      hoverCaptions: false,
+      names: ["Velma", "STT+LLM"],
+    },
+  },
 };
+
+// Technology comparison: lanes are engines, not speakers — the same call
+// analyzed twice. Each lane carries its own transcript variant (its own
+// segmentation, timings and recognition details: STT slices finer, merges
+// across utterance boundaries, sometimes keeps a whole utterance in one
+// chunk with shifted bounds), which is why the clip structures never
+// match. Both lanes are gapless and span the full duration. The dataset
+// feeds both flavors: the full comparison and the selected-signal player
+// (`signalOnly`). On the stack lane every glyph-carrying clip gets the
+// one-step-off gray highlight; the glyph itself tells the case — a catch,
+// or a red-marked false positive. Misses simply leave the lane quiet.
+function buildComparisonDemo(signalOnly) {
+  const durationSec = 47.5;
+  const velma = [
+    { s: 0, e: 6, emotion: "calm", text: "Thanks for calling — how can I help?" },
+    { s: 6, e: 13, emotion: "neutral", text: "I ordered the standing desk two weeks ago and it still shows processing." },
+    { s: 13, e: 21, emotion: "frustrated", behaviour: "Urgency pressure", at: 13.4, text: "I need this resolved today, not eventually — today." },
+    { s: 21, e: 29, emotion: "neutral", text: "Let me check what the warehouse says about that order." },
+    { s: 29, e: 38, emotion: "angry", behaviour: "Coercion manipulation", at: 33.9, text: "If you can't fix it, I'll make sure your manager hears about this call." },
+    { s: 38, e: 47.5, emotion: "calm", text: "I understand. I'm escalating it right now." },
+  ];
+  const stack = [
+    { s: 0, e: 3.3, text: "thanks for calling" },
+    { s: 3.3, e: 6.4, text: "how can i help i" },
+    { s: 6.4, e: 13.2, text: "ordered the standing desk two weeks ago and it still shows processing" },
+    { s: 13.2, e: 16.9, text: "i need this resolved today" },
+    { s: 16.9, e: 21.3, text: "not eventually today" },
+    { s: 21.3, e: 25.1, text: "let me check what the warehouse says" },
+    { s: 25.1, e: 29.2, text: "about that order", falsePositive: true },
+    { s: 29.2, e: 33.7, text: "if you can't fix it" },
+    { s: 33.7, e: 38.2, text: "i'll make sure your manager hears about this call", hit: true },
+    { s: 38.2, e: 43.1, text: "i understand i'm escalating" },
+    { s: 43.1, e: 47.5, text: "it right now" },
+  ];
+  const clips = [];
+
+  velma.forEach((c) => {
+    const clip = { speaker: 1, startSec: c.s, durationSec: c.e - c.s, text: c.text };
+
+    if (!signalOnly || c.behaviour === "Urgency pressure") {
+      clip.emotion = c.emotion;
+      clip.behaviour = c.behaviour;
+      clip.behaviourAtSec = c.at;
+    } else {
+      clip.classes = "clip-quiet";
+    }
+    clips.push(clip);
+  });
+  stack.forEach((c) => {
+    const clip = { speaker: 2, startSec: c.s, durationSec: c.e - c.s, text: c.text };
+
+    clip.classes = "clip-quiet-tech";
+    if (signalOnly) {
+      if (c.falsePositive) {
+        clip.classes = "clip-hit";
+        clip.behaviour = "Urgency pressure";
+        clip.behaviourClasses = "behaviour-indicator--tech behaviour-indicator--false";
+      }
+    } else if (c.hit || c.falsePositive) {
+      clip.classes = "clip-hit";
+      clip.behaviour = c.hit ? "Coercion manipulation" : "Urgency pressure";
+      clip.behaviourClasses = "behaviour-indicator--tech";
+    }
+    clips.push(clip);
+  });
+  return { speakers: 2, durationSec, clips };
+}
 
 // Brick-wall sample: miniatures at exactly the table scale (same height,
 // same seconds-per-rem), without time labels, flowing like inline blocks.
@@ -452,7 +538,7 @@ function renderExamples() {
     const demo = DEMOS[node.dataset.fpDemo];
 
     if (!demo) return;
-    renderFingerprint(node, generateConversation(demo.data), {
+    renderFingerprint(node, demo.raw ? demo.raw() : generateConversation(demo.data), {
       names: DEFAULT_NAMES,
       ...demo.opts,
     });

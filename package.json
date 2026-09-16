@@ -31,7 +31,12 @@
     "predev": "node scripts/generate-svg-sprite.js && node scripts/generate-icon-3d-manifest.js",
     "dev": "eleventy --serve",
     "tokens:build": "node scripts/build-tokens.js",
-    "prepare": "npm run tokens:build"
+    "prepare": "npm run tokens:build",
+    "ui:serve": "node --watch scripts/ui/serve.js",
+    "ui:audit": "node scripts/ui/audit.js",
+    "ui:login": "node scripts/ui/login.js",
+    "test:ui": "node --test tests/ui/*.test.js",
+    "ui:report": "node scripts/ui/report.js"
   },
   "dependencies": {
     "browserslist": "^4.24.0",
@@ -39,6 +44,11 @@
     "three": "^0.184.0"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.0.0"
+    "@11ty/eleventy": "^3.0.0",
+    "@playwright/test": "^1.63.0",
+    "js-yaml": "^5.4.1",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
+    "sharp": "^0.35.4"
   }
 }

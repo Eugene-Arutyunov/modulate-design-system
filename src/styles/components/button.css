@@ -233,6 +233,40 @@
   transition-duration: var(--m__duration-instant);
 }
 
+/* Processing buttons keep their container stable while their label breathes.
+   Pair aria-busy with disabled so the state is semantic and non-interactive. */
+button[aria-busy='true']:disabled {
+  opacity: 0.45;
+  cursor: wait;
+
+  & > .m__button__label {
+    animation: m__button-label-breathe 2s ease-in-out infinite;
+  }
+}
+
+button.m__button-primary[aria-busy='true']:disabled:is(:hover, :active) {
+  background-color: var(--m__bg-accent);
+  color: var(--m__text-inverted);
+}
+
+@keyframes m__button-label-breathe {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button[aria-busy='true']:disabled > .m__button__label {
+    animation: none;
+    opacity: 0.65;
+  }
+}
+
 .m__split-button {
   display: inline-flex;
   align-items: stretch;

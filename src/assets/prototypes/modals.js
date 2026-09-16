@@ -10,11 +10,12 @@
       var hasStableScrollbarGutter = window
         .getComputedStyle(document.documentElement)
         .scrollbarGutter.includes("stable");
-      document.body.style.overflow = "hidden";
       if (!hasStableScrollbarGutter) {
         document.body.style.paddingRight = scrollbarWidth + "px";
       }
-      document.documentElement.style.overflow = "hidden";
+      // Lock the root without turning body into a non-scrolling ancestor:
+      // body overflow breaks position: sticky sidebars on scrolled pages.
+      document.documentElement.style.overflow = "clip";
     }
     if (backdrop.dataset.modalAutofocus !== "false") {
       var firstInput = backdrop.querySelector("input, select, textarea");
@@ -27,7 +28,6 @@
     backdrop.hidden = true;
     openCount = Math.max(0, openCount - 1);
     if (openCount === 0) {
-      document.body.style.overflow = "";
       document.body.style.paddingRight = "";
       document.documentElement.style.overflow = "";
     }

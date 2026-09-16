@@ -36,21 +36,28 @@
       list.style.width = listWidth + "px";
     }
 
+    list.hidden = false;
+    var actualListWidth = list.getBoundingClientRect().width;
+    var viewportWidth = document.documentElement.clientWidth;
+
     list.style.top = rect.bottom + 4 + "px";
     if (list.classList.contains("conversation-report__report-list--start")) {
       var start = Math.max(
         16,
-        Math.min(rect.left, document.documentElement.clientWidth - listWidth - 16)
+        Math.min(rect.left, viewportWidth - actualListWidth - 16)
       );
       list.style.left = start + "px";
       list.style.right = "auto";
     } else {
-      list.style.left = "auto";
-      list.style.right = document.documentElement.clientWidth - rect.right + "px";
+      var end = Math.max(
+        16,
+        Math.min(rect.right - actualListWidth, viewportWidth - actualListWidth - 16)
+      );
+      list.style.left = end + "px";
+      list.style.right = "auto";
     }
     list.style.transform = "";
 
-    list.hidden = false;
     activeList = list;
     activeTrigger = trigger;
     trigger.classList.add("m__menu-button-trigger--active");

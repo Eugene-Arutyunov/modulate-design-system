@@ -93,7 +93,7 @@ const ICON_NAMES = {
   redaction: "PII/PHI Redaction",
   music: "Music & Speech Detection",
   "stt-med": "Medical Transcription",
-  "ai-music": "AI Music Detection",
+  "music-ai": "AI Music Detection",
   language: "Language Detection",
   accent: "Accent Identification",
   emotions: "Emotion Detection",

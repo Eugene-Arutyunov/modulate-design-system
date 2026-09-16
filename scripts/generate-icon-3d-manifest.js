@@ -28,12 +28,16 @@ const OUTPUT_FILE = path.join(
 
 const REQUIRED_ICON_IDS = [
   "accent",
-  "ai-music",
+  "behaviors",
+  "conversations",
   "deepfake",
   "emotions",
   "language",
+  "modulate",
   "music",
+  "music-ai",
   "redaction",
+  "sound-events",
   "stt-med",
   "transcript",
   "velma",

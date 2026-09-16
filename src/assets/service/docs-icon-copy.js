@@ -167,7 +167,11 @@
   }
 
   function initIconCopy() {
-    var items = document.querySelectorAll(".docs-icon-row__item");
+    // Tiles marked [data-icon-copy="off"] show an icon that is not in the
+    // sprite (e.g. quoted from another set) — nothing to copy.
+    var items = document.querySelectorAll(
+      '.docs-icon-row__item:not([data-icon-copy="off"])'
+    );
     items.forEach(function (item) {
       item.setAttribute("role", "button");
       item.setAttribute("tabindex", "0");

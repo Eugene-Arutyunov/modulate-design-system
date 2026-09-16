@@ -4,16 +4,17 @@ content %}
 <div class="m__wrapper">
   <div class="m__space L"></div>
 
-  <h1>UI Scheme</h1>
+  {% include 'service/ui-navigation.html' %}
 
-  <div class="ui-arch-diagram-wrap">
-    {% include 'service/ui-arch-diagram.html' %}
+  <h1 class="ui-viz__heading">UI Scheme</h1>
+  {% include 'service/ui-updated.html' %}
+
+  <div id="ui-structure" class="ui-viz">
+    <div class="ui-viz__legend">{% include 'service/ui-arch-diagram.html' %}</div>
+    {% uiTable "scheme" %}
   </div>
-
-  <div id="ui-structure" class="ui-viz"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 <script type="module" src="/assets/service/ui-visualizer.js"></script>
 
 {% endblock %}

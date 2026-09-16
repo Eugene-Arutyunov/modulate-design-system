@@ -1,0 +1,151 @@
+{% set signups = [
+  {
+    email: 'alice.nguyen@acme-robotics.com',
+    signedUpDate: '9/1/2026',
+    signedUpTime: '9:11:45 PM',
+    tokenExpiresDate: '9/8/2026',
+    tokenExpiresTime: '9:11:45 PM'
+  },
+  {
+    email: 'bob.martinez@northwind.io',
+    signedUpDate: '8/31/2026',
+    signedUpTime: '9:11:45 PM',
+    tokenExpiresDate: '9/7/2026',
+    tokenExpiresTime: '9:11:45 PM'
+  },
+  {
+    email: 'kate.sullivan@vandelay-industries.com',
+    signedUpDate: '8/30/2026',
+    signedUpTime: '9:11:45 PM',
+    tokenExpiresDate: '9/6/2026',
+    tokenExpiresTime: '9:11:45 PM'
+  },
+  {
+    email: 'carol.white@globex.dev',
+    signedUpDate: '8/29/2026',
+    signedUpTime: '9:11:45 PM',
+    tokenExpiresDate: '9/5/2026',
+    tokenExpiresTime: '9:11:45 PM'
+  },
+  {
+    email: 'dan.oconnor@initech.co',
+    signedUpDate: '8/26/2026',
+    signedUpTime: '9:11:45 PM',
+    tokenExpiresDate: '9/2/2026',
+    tokenExpiresTime: '9:11:45 PM'
+  },
+  {
+    email: 'erin.patel@umbrella-labs.ai',
+    signedUpDate: '8/23/2026',
+    signedUpTime: '9:11:45 PM',
+    tokenExpiresDate: '8/22/2026',
+    tokenExpiresTime: '9:11:45 PM'
+  },
+  {
+    email: 'frank.li@hooli.tech',
+    signedUpDate: '8/20/2026',
+    signedUpTime: '9:11:45 PM',
+    tokenExpiresDate: '8/19/2026',
+    tokenExpiresTime: '9:11:45 PM'
+  }
+] %}
+
+<div class="m__widget internal-unverified-signups" data-unverified-signups>
+  <div class="m__widget-header">
+    <label class="m__searchbar" for="internal-unverified-signups-search">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <use href="#search"></use>
+      </svg>
+      <input
+        type="search"
+        id="internal-unverified-signups-search"
+        placeholder="Search by email"
+        autocomplete="off"
+        data-unverified-signups-search
+      />
+    </label>
+  </div>
+
+  <div class="m__table-wrapper">
+    <table class="internal-unverified-signups-table">
+      <colgroup>
+        <col />
+        <col />
+        <col />
+        <col />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Signed up</th>
+          <th>Token expires</th>
+          <th class="m__col-actions" aria-label="Actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for signup in signups %}
+          <tr
+            data-unverified-signup
+            data-email="{{ signup.email }}"
+            {% if loop.last %}data-unverified-signup-last{% endif %}
+          >
+            <td>{{ signup.email }}</td>
+            <td class="internal-directory-meta">
+              <span class="internal-unverified-signups-date">{{ signup.signedUpDate }}</span>
+              <span class="internal-unverified-signups-time">{{ signup.signedUpTime }}</span>
+            </td>
+            <td class="internal-directory-meta">
+              <span class="internal-unverified-signups-date">{{ signup.tokenExpiresDate }}</span>
+              <span class="internal-unverified-signups-time">{{ signup.tokenExpiresTime }}</span>
+            </td>
+            <td class="m__col-actions">
+              <div>
+                <button type="button" class="m__button-secondary-outline S">Resend email</button>
+                <button type="button" class="m__button-secondary-outline S">Generate link</button>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+        <tr data-unverified-signups-empty hidden>
+          <td colspan="4">
+            <div class="m__table-empty">
+              <p>No signups match this email.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector("[data-unverified-signups]");
+    if (!root) return;
+
+    var searchInput = root.querySelector("[data-unverified-signups-search]");
+    var rows = root.querySelectorAll("[data-unverified-signup]");
+    var emptyRow = root.querySelector("[data-unverified-signups-empty]");
+
+    function applySearch() {
+      var query = searchInput.value.trim().toLowerCase();
+      var visibleRows = 0;
+      var lastVisibleRow = null;
+
+      rows.forEach(function (row) {
+        var visible = !query || row.dataset.email.toLowerCase().includes(query);
+        row.hidden = !visible;
+        row.removeAttribute("data-unverified-signup-last");
+        if (visible) {
+          visibleRows += 1;
+          lastVisibleRow = row;
+        }
+      });
+
+      if (lastVisibleRow) lastVisibleRow.setAttribute("data-unverified-signup-last", "");
+      emptyRow.hidden = visibleRows !== 0;
+    }
+
+    searchInput.addEventListener("input", applySearch);
+  })();
+</script>

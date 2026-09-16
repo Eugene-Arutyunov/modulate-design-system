@@ -21,7 +21,7 @@ const OUTPUT_FILE = path.join(
 // These are typically brand/vendor logos that must render in their trademark colors.
 const COLORED_ICONS = new Set([
   "accent",
-  "ai-music",
+  "music-ai",
   "google",
   "microsoft",
   "facebook",

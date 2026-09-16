@@ -57,6 +57,23 @@ The generator maps source hex fills to design-system tokens where possible.
 Black becomes `currentColor`, prepared accent fills become palette tokens, and
 white becomes `var(--m__bg-surface)` so spacer shapes match the tile face.
 
+## Icon notes
+
+- `music` and `music-ai` have no dedicated 3D source: their flat sources are
+  fully de-overlapped (rings / square frames with a center hole), so the
+  generator's flat fallback renders them as flat one-layer "vinyl" discs
+  (`shapeLayers: [0, 0]`).
+- `behaviors` (dedicated 3D source) paints the whole kiki star
+  `var(--m__color-red-500)`; the flat sprite version stays monochrome.
+- `modulate` is monochrome, rendered from the flat fallback; the body stays
+  base-thick while the rays get organically varied, deliberately low spans
+  (see `layers/modulate.layers.json`), like the emotions bars but
+  non-ascending.
+- `conversations` and `sound-events` are monochrome flat fallbacks;
+  `conversations` (the ex-`models` quadrant bars) is layered like `deepfake`
+  (top bars span both layers, bottom bars stay base-thick), `sound-events`
+  has no layer map (everything base-thick).
+
 ## Runtime
 
 Pages include `service/icon-3d-importmap.html` before loading

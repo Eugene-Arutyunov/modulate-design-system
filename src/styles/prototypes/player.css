@@ -762,3 +762,173 @@
     }
   }
 }
+
+/* Technology comparison ─────────────────────────────────────────────────
+   A fingerprint variety where lanes are technologies (Velma vs an STT+LLM
+   stack), not speakers. Rendered by fingerprint.js via the per-clip hooks
+   (`clip.classes`, `clip.behaviourClasses`); documented with a live
+   example on /tools/modulate-fingerprint/. Two modes share these styles:
+   the full player (all signals) and the selected-signal player. */
+
+/* Emotions guessed from text: the emotion palette pushed way down —
+   translucent, meaning "assumed, not heard" */
+.media-container .transcript-clip.clip-guess .clip-visualization {
+  opacity: 0.45;
+}
+
+/* Stack-lane grays, theme-aware: the base sits one step off the player
+   bottom (so the lane never merges with the chrome), highlights sit
+   exactly one palette step towards contrast — darker in the light theme,
+   lighter in the dark one. Hairline mixes below reuse the same props. */
+.media-container {
+  --fp-cmp-quiet-tech: var(--m__color-gray-100);
+  --fp-cmp-hit: var(--m__color-gray-200);
+}
+
+.dark-mode .media-container {
+  --fp-cmp-quiet-tech: var(--m__color-gray-800);
+  --fp-cmp-hit: var(--m__color-gray-700);
+}
+
+/* Clips that carry nothing: neutral on the heard lane, the base gray on
+   the stack lane (also the stack's whole no-emotions default — color
+   means nothing there, the clip pattern survives via hairlines) */
+.media-container .transcript-clip.clip-quiet .clip-visualization {
+  background-color: rgba(var(--emotion-neutral-RGB), 1);
+}
+
+.media-container .transcript-clip.clip-quiet-tech .clip-visualization {
+  background-color: var(--fp-cmp-quiet-tech);
+}
+
+/* A stack clip that carries a glyph — a catch, a false positive (red kiki)
+   or a missed reference (ghost kiki) — gets the same pale highlight; the
+   glyph itself tells which case it is */
+.media-container .transcript-clip.clip-hit .clip-visualization {
+  background-color: var(--fp-cmp-hit);
+}
+
+/* Hairline separators, only where two same-color clips touch and the
+   boundary would vanish — nuanced, close to the clip background */
+.media-container
+  .transcript-clip.clip-quiet
+  + .transcript-clip.clip-quiet
+  .clip-visualization {
+  border-left: 1px solid
+    color-mix(in srgb, rgba(var(--emotion-neutral-RGB), 1) 90%, white);
+}
+
+.media-container
+  .transcript-clip.clip-quiet-tech
+  + .transcript-clip.clip-quiet-tech
+  .clip-visualization {
+  border-left: 1px solid
+    color-mix(in srgb, var(--fp-cmp-quiet-tech) 90%, var(--m__text));
+}
+
+.media-container
+  .transcript-clip.clip-hit
+  + .transcript-clip.clip-hit
+  .clip-visualization {
+  border-left: 1px solid
+    color-mix(in srgb, var(--fp-cmp-hit) 88%, var(--m__text));
+}
+
+.media-container
+  .transcript-clip.clip-guess
+  + .transcript-clip.clip-guess
+  .clip-visualization {
+  border-left: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Comparison behaviour glyphs: the stack's neutral-gray blob, the ghost
+   of a missed reference signal, and the false positive */
+.media-container
+  .behaviour-indicators
+  .behaviour-indicator--tech
+  .behaviour-icon
+  .behaviour-icon__outline {
+  fill: rgba(var(--emotion-neutral-RGB), 1);
+}
+
+/* Comparison glyphs are half again bigger and pulled further out of the
+   clip's bottom-left corner — the battle's kikis are entry points, not
+   decorations */
+.fp-cmp .pg-player-dataviz .behaviour-indicators .behaviour-indicator {
+  font-size: 1.2em;
+  transform: translate(6%, -12%);
+}
+
+/* The false-positive glyph keeps its red outline even when the clip
+   carries a guessed emotion (the doubled class outweighs the canon's
+   [data-emotion] outline coloring) */
+.media-container
+  .behaviour-indicators
+  .behaviour-indicator.behaviour-indicator--false
+  .behaviour-icon
+  .behaviour-icon__outline {
+  fill: var(--m__color-red-600);
+}
+
+/* Comparison lane labels: no plate behind the text — a comparison-mode
+   trait (the playground canon carries a plate and sits later in the
+   bundle, hence the .pg-player-dataviz anchor to outweigh it); the heard
+   lane in white, the stack lane in dark gray (lifted in the dark theme,
+   where the stack lane itself is near that gray) */
+.fp-cmp .pg-player-dataviz .speaker-labels .speaker-label span {
+  background: none;
+  padding: 0.1rem 0.35em 0.1rem 0.25em;
+  font-weight: var(--m__font-weight-regular);
+}
+
+.fp-cmp .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index='1'] span {
+  color: var(--m__color-white);
+}
+
+.fp-cmp .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index='2'] span {
+  color: var(--m__color-gray-700);
+}
+
+.dark-mode .fp-cmp .pg-player-dataviz .speaker-labels .speaker-label[data-speaker-index='2'] span {
+  color: var(--m__color-gray-400);
+}
+
+/* Hover captions, shared by player chrome and the player-less strip:
+   emotion name to the left of the total time (chrome) or on the right of
+   the caption strip; the transcript line on the left. */
+.fp-media .player-total-time {
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+}
+
+.fp-emotion-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+  height: 1.1rem;
+  margin-top: 0.35rem;
+  line-height: 1.1rem;
+}
+
+.fp-emotion-caption,
+.fp-transcript-caption {
+  font-size: 0.8em;
+  opacity: 0;
+  transition: opacity var(--m__duration-xslow) var(--m__easing-base);
+}
+
+.fp-emotion-caption.visible,
+.fp-transcript-caption.visible {
+  opacity: 1;
+  transition: opacity var(--m__duration-instant) var(--m__easing-base);
+}
+
+.fp-transcript-caption {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--m__text-caption);
+}

@@ -310,8 +310,7 @@
 .pg-transcript-utterance {
   background: var(--m__bg-surface);
   padding: var(--m__spacer-xs) var(--m__spacer-s);
-  border-radius: 2rem;
-  corner-shape: squircle;
+  border-radius: 1.35rem;
   max-width: min(92%, 60rem);
   cursor: pointer;
   transition:
@@ -920,7 +919,7 @@ a.pg-verdict-statement-link:active {
   color: var(--m__text);
   text-decoration: none;
   cursor: pointer;
-  transition: color var(--m__duration-base) var(--m__easing-base);
+  transition: color var(--m__duration-xslow) var(--m__easing-base);
 }
 .pg-upload-collapsed-cta:hover,
 .pg-upload-plate[data-state="uploaded"]:hover .pg-upload-collapsed-cta {
@@ -928,7 +927,7 @@ a.pg-verdict-statement-link:active {
   transition-duration: var(--m__duration-instant);
 }
 .pg-upload-plate[data-state="uploaded"] {
-  transition: border-color var(--m__duration-base) var(--m__easing-base);
+  transition: border-color var(--m__duration-xslow) var(--m__easing-base);
 }
 .pg-upload-plate[data-state="uploaded"]:hover {
   border-color: var(--m__text-link-hover);
@@ -1476,9 +1475,8 @@ a.pg-verdict-statement-link:active {
   margin: 0;
 }
 
-.pg-upload-section > .pg-upload-plate {
-  margin-top: var(--m__spacer-s);
-}
+/* (The gap between the page header and the upload plate is an explicit
+   m__space in the layout, not a margin on the plate.) */
 
 /* Player overrides ────────────────────────────────────────────────────── */
 /* Player + visualization form a modular system of equal-height strips
