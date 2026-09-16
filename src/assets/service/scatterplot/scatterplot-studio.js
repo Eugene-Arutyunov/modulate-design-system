@@ -335,25 +335,36 @@ async function exportHtml() {
     meta: { ...meta },
   };
 
+  const fontResponse = await fetch("/assets/fonts/ABCArealVariable.woff2");
+  if (!fontResponse.ok) throw new Error("Could not load ABC Areal");
+  const fontBytes = new Uint8Array(await fontResponse.arrayBuffer());
+  let fontBinary = "";
+  fontBytes.forEach((byte) => { fontBinary += String.fromCharCode(byte); });
+  const fontDataUrl = `data:font/woff2;base64,${btoa(fontBinary)}`;
+
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${escapeAttr(meta.title || "Scatterplot")}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
+@font-face {
+  font-family: "ABC Areal";
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("${fontDataUrl}") format("woff2");
+}
 ${css}
 body {
   margin: 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: "ABC Areal", system-ui, sans-serif;
   background: #fff;
   color: rgb(20, 20, 50);
 }
 .scatterplot-embed .scatterplot-wrapper {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: "ABC Areal", system-ui, sans-serif;
 }
   </style>
 </head>

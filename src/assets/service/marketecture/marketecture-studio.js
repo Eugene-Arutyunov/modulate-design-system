@@ -66,12 +66,13 @@ async function exportHtml() {
   if (!cssResponse.ok) throw new Error("Could not load marketecture-embed.css");
 
   const css = await cssResponse.text();
-  const [semiMonoDataUrl, gothicDataUrl] = await Promise.all([
+  const [semiMonoDataUrl, gothicDataUrl, sansDataUrl] = await Promise.all([
     fetchFontDataUrl(
-      "/assets/fonts/CoFoSansSemi-Mono-Regular.woff2",
-      "CoFo Sans Semi Mono"
+      "/assets/fonts/ABCArealSemiMonoVariable.woff2",
+      "ABC Areal Semi Mono"
     ),
     fetchFontDataUrl("/assets/fonts/CoFoGothic-Bold.woff2", "CoFo Gothic"),
+    fetchFontDataUrl("/assets/fonts/ABCArealVariable.woff2", "ABC Areal"),
   ]);
   const sprite = collectSpriteSymbols(poster);
   const clone = poster.cloneNode(true);
@@ -85,9 +86,6 @@ async function exportHtml() {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Modulate Marketecture</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
 body {
   margin: 0;
@@ -101,8 +99,8 @@ body {
   max-width: 1140px;
 }
 @font-face {
-  font-family: "CoFo Sans Semi Mono";
-  font-weight: 400;
+  font-family: "ABC Areal Semi Mono";
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
   src: url("${semiMonoDataUrl}") format("woff2");
@@ -113,6 +111,13 @@ body {
   font-style: normal;
   font-display: swap;
   src: url("${gothicDataUrl}") format("woff2");
+}
+@font-face {
+  font-family: "ABC Areal";
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("${sansDataUrl}") format("woff2");
 }
 ${css}
   </style>
