@@ -391,9 +391,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               </button>
               <div class="m__menu-button-list moderation-sort-list" role="menu" hidden>
                 <div class="moderation-sort-heading">Sort by</div>
-                <button type="button" role="menuitemradio" data-sort-option="newest" aria-checked="true">Newest<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
-                <button type="button" role="menuitemradio" data-sort-option="score-desc" aria-checked="false">Highest confidence<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
-                <button type="button" role="menuitemradio" data-sort-option="score-asc" aria-checked="false">Lowest confidence<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
+                <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="newest" aria-checked="true">Newest<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
+                <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="score-desc" aria-checked="false">Highest confidence<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
+                <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="score-asc" aria-checked="false">Lowest confidence<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
               </div>
               <select data-sort-filter hidden aria-label="Sort order">
                 <option value="newest" selected>Sort by newest</option>
@@ -436,7 +436,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
             <input
               type="text"
               id="moderation-tag-filter-search"
-              placeholder="Search…"
+              placeholder="Search"
               autocomplete="off"
               data-behavior-filter-search
             />
@@ -997,6 +997,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       headerResize.observe(label);
       new MutationObserver(updateHeaderFade).observe(label, { childList: true, characterData: true, subtree: true });
     });
+    var sortOptions = Array.from(root.querySelectorAll("[data-sort-option]"));
     var sortFilter = root.querySelector("[data-sort-filter]");
     var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
     var statusFilterLabel = root.querySelector("[data-status-filter-label]");
@@ -1175,7 +1176,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       var query = searchInput.value.trim().toLowerCase();
       var activeBehaviors = Array.from(selectedBehaviors);
       var sort = sortFilter.value;
-      root.querySelectorAll("[data-sort-option]").forEach(function (option) {
+      sortOptions.forEach(function (option) {
         option.setAttribute("aria-checked", String(option.dataset.sortOption === sort));
       });
       sortFilterLabel.textContent =
@@ -1188,6 +1189,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
             ? "False positive"
             : "All verdicts";
       root.querySelector("[data-assignee-filter-label]").textContent = assigneeFilter.value ? assigneeFilter.selectedOptions[0].text : "All assignees";
+      renderFilterBuilder();
       syncSharedFilterParams();
       rows.forEach(function (row) {
         row.classList.remove("moderation-table__row--last-visible");
@@ -1647,17 +1649,132 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       },
       true,
     );
-    root.querySelectorAll("[data-sort-option]").forEach(function (option) {
+    sortOptions.forEach(function (option) {
       option.addEventListener("click", function () {
         sortFilter.value = option.dataset.sortOption;
         applyQueueState();
-        root.querySelector(".moderation-sort-list").hidden = true;
+        option.closest(".moderation-sort-list").hidden = true;
         var trigger = root.querySelector(".moderation-sort-trigger");
         trigger.setAttribute("aria-expanded", "false");
         trigger.focus();
         queueMicrotask(applyQueueState);
       });
     });
+
+    const filterHost = document.createElement("div");
+    filterHost.className = "review-filter-builder";
+    filterHost.innerHTML = `<button type="button" class="m__button-secondary-outline S" data-filter-open aria-expanded="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#filter"></use></svg>Filter</button>
+      <div class="review-filter-popup" hidden><div class="review-filter-categories"></div><div class="review-filter-options" hidden><div class="review-filter-options-title"></div><input type="search" placeholder="Search" aria-label="Search filter options"><div class="review-filter-values"></div></div></div>`;
+    root.querySelector(".moderation-table__header").append(filterHost);
+    const filterStrip = document.createElement("div");
+    filterStrip.className = "review-filter-strip";
+    filterStrip.hidden = true;
+    root.querySelector("[data-behavior-filter-root]").before(filterStrip);
+    const filterPopup = filterHost.querySelector(".review-filter-popup");
+    const filterOpen = filterHost.querySelector("[data-filter-open]");
+    const categories = ["Behavior", "Verdict", "Status", "Assignee"];
+    let activeFilterCategory = "";
+    function filterChoices(category) {
+      if (category === "Behavior") return behaviorOptions.map(option => [option.value, option.value]);
+      if (category === "Verdict") return [["true", "True positive"], ["false", "False positive"]];
+      if (category === "Status") return Array.from(statusFilterOptionsRoot.querySelectorAll("[data-status-filter-option]")).map(option => [option.dataset.statusFilterOption, option.dataset.statusFilterOption]).filter(([value]) => value);
+      return Array.from(assigneeFilter.options).filter(option => option.value).map(option => [option.value, option.text]);
+    }
+    function filterValue(category) {
+      return category === "Behavior" ? Array.from(selectedBehaviors) : [category === "Verdict" ? selectedResult : category === "Status" ? selectedStatus : assigneeFilter.value].filter(Boolean);
+    }
+    function changeBuilderFilter(category, value) {
+      if (category === "Behavior") {
+        if (!value) selectedBehaviors.clear();
+        else if (selectedBehaviors.has(value)) selectedBehaviors.delete(value);
+        else selectedBehaviors.add(value);
+        behaviorOptions.forEach(option => { option.checked = selectedBehaviors.has(option.value); });
+        renderSelectedBehaviors();
+        applyQueueState();
+      } else if (category === "Verdict") setResultFilter(value);
+      else if (category === "Status") setStatusFilter(value);
+      else { assigneeFilter.value = value; assigneeFilter.dispatchEvent(new Event("change", { bubbles: true })); }
+    }
+    function showFilterCategory(category) {
+      activeFilterCategory = category;
+      const categoryButtons = Array.from(filterHost.querySelectorAll(".review-filter-categories button"));
+      categoryButtons.forEach(button => button.classList.toggle("is-active", button.textContent === category));
+      const categoryButton = categoryButtons.find(button => button.textContent === category);
+      filterHost.querySelector(".review-filter-options").style.top = (categoryButton ? categoryButton.offsetTop : 0) + "px";
+      filterPopup.hidden = false;
+      filterOpen.setAttribute("aria-expanded", "true");
+      filterHost.querySelector(".review-filter-options").hidden = false;
+      filterHost.querySelector(".review-filter-options-title").textContent = category;
+      filterHost.querySelector("input").value = "";
+      renderFilterValues();
+    }
+    function renderFilterValues() {
+      const list = filterHost.querySelector(".review-filter-values");
+      list.replaceChildren();
+      const query = filterHost.querySelector("input").value.toLowerCase();
+      filterChoices(activeFilterCategory).filter(([,label]) => label.toLowerCase().includes(query)).forEach(([value,label]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = label;
+        const selected = filterValue(activeFilterCategory).includes(value);
+        button.setAttribute("aria-pressed", String(selected));
+        button.insertAdjacentHTML("beforeend", '<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg>');
+        button.addEventListener("click", event => { event.stopPropagation(); changeBuilderFilter(activeFilterCategory, value); renderFilterValues(); });
+        list.append(button);
+      });
+      if (!list.children.length) list.textContent = "No matching options";
+    }
+    categories.forEach(category => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = category;
+      button.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>');
+      button.addEventListener("click", () => showFilterCategory(category));
+      button.addEventListener("mouseenter", () => showFilterCategory(category));
+      filterHost.querySelector(".review-filter-categories").append(button);
+    });
+    function renderFilterBuilder() {
+      if (!root.querySelector(".review-filter-strip")) return;
+      filterStrip.replaceChildren();
+      categories.forEach(category => {
+        const values = filterValue(category);
+        if (!values.length) return;
+        const condition = document.createElement("div");
+        condition.className = "review-filter-condition";
+        const edit = document.createElement("button");
+        edit.type = "button";
+        const labels = filterChoices(category);
+        const label = values.length > 1 ? values.length + " behaviors" : (labels.find(([value]) => value === values[0]) || [null, values[0]])[1];
+        [category + ": ", label].forEach(text => {
+          const segment = document.createElement("span"); segment.textContent = text; edit.append(segment);
+        });
+        edit.addEventListener("click", () => {
+          showFilterCategory(category);
+          filterPopup.classList.add("is-direct-filter");
+          const anchor = edit.getBoundingClientRect();
+          const host = filterHost.getBoundingClientRect();
+          filterPopup.style.left = Math.max(-host.left + 16, Math.min(anchor.left - host.left, window.innerWidth - host.left - 300)) + "px";
+          filterPopup.style.top = (anchor.bottom - host.top + 6) + "px";
+        });
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.setAttribute("aria-label", "Remove " + category + " filter");
+        remove.innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg>';
+        remove.addEventListener("click", () => changeBuilderFilter(category, ""));
+        condition.append(edit, remove); filterStrip.append(condition);
+      });
+      filterStrip.hidden = !filterStrip.children.length;
+      if (!filterStrip.hidden) {
+        const clear = document.createElement("button"); clear.type = "button"; clear.className = "review-filter-clear"; clear.textContent = "Reset filters";
+        clear.addEventListener("click", () => { categories.forEach(category => changeBuilderFilter(category, "")); });
+        filterStrip.append(clear);
+      }
+    }
+    filterOpen.addEventListener("click", () => { filterPopup.classList.remove("is-direct-filter"); filterPopup.style.left = ""; filterPopup.style.top = ""; filterPopup.hidden = !filterPopup.hidden; filterOpen.setAttribute("aria-expanded", String(!filterPopup.hidden)); });
+    filterHost.querySelector("input").addEventListener("input", renderFilterValues);
+    document.addEventListener("click", event => { if (!filterHost.contains(event.target) && !filterStrip.contains(event.target)) { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); } });
+    filterHost.addEventListener("keydown", event => { if (event.key === "Escape") { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); filterOpen.focus(); } });
+
     sortFilter.addEventListener("change", applyQueueState);
     rows.forEach(function (row) {
       var override = getRowStatusOverride(row);
