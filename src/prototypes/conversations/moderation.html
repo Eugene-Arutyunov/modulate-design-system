@@ -472,7 +472,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               <col class="moderation-table__col-pattern" />
               <col class="moderation-table__col-detection" />
               <col class="moderation-table__col-status" />
-              <col class="moderation-table__col-assignee" />
               <col class="moderation-table__col-actions" />
             </colgroup>
             <tbody data-moderation-tbody>
@@ -683,11 +682,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       </div>
                     </div>
                   </div>
-                  {% set assignmentId = row.id %}
-                  {% include 'prototypes/conversations/review-assignee.html' %}
-                  </div>
-                </td>
-                <td class="moderation-table__participants-cell">
                   {% if row.participants %}
                   <div class="m__menu-button moderation-participants">
                     <button
@@ -739,6 +733,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                     </div>
                   </div>
                   {% endif %}
+                  </div>
                 </td>
                 <td class="m__col-actions moderation-table__row-actions">
                   <div class="m__menu-button moderation-table__actions-menu">
@@ -771,7 +766,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 data-moderation-empty
                 hidden
               >
-                <td colspan="6">
+                <td colspan="5">
                   <div class="moderation-table__empty-state">
                     <p>No conversations match these filters.</p>
                     <button
