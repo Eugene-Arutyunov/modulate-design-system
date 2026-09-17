@@ -1031,7 +1031,14 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var pendingStatusRemove = "";
     var initialFilterParams = new URLSearchParams(window.location.search);
     var assigneeFilter = root.querySelector("[data-assignee-filter]");
-    assigneeFilter.addEventListener("change", applyQueueState);
+    var selectedAssignees = new Set(initialFilterParams.getAll("assignee").filter(value =>
+      Array.from(assigneeFilter.options).some(option => option.value === value && value && value !== "me" && value !== "unassigned")
+    ));
+    assigneeFilter.addEventListener("change", () => {
+      selectedAssignees.clear();
+      if (assigneeFilter.value) selectedAssignees.add(assigneeFilter.value);
+      applyQueueState();
+    });
     document.addEventListener("review-assignment-change", applyQueueState);
     var statusStorageKey = "modulate-review-status-overrides";
     var reviewResultsStorageKey = "modulate-review-results";
@@ -1095,8 +1102,8 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     }
 
     function applySharedFilterParams(url) {
-      if (assigneeFilter.value) url.searchParams.set("assignee", assigneeFilter.value);
-      else url.searchParams.delete("assignee");
+      url.searchParams.delete("assignee");
+      selectedAssignees.forEach(value => url.searchParams.append("assignee", value));
       url.searchParams.delete("behavior");
       selectedBehaviors.forEach(function (behavior) {
         url.searchParams.append("behavior", behavior);
@@ -1221,7 +1228,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
             );
           });
         var show =
-          window.ReviewAssignments.matches(row.dataset.rowId, assigneeFilter.value) &&
+          (!selectedAssignees.size || Array.from(selectedAssignees).some(value => window.ReviewAssignments.matches(row.dataset.rowId, value))) &&
           matchesBehaviors &&
           matchesStatus &&
           matchesResult &&
@@ -1314,6 +1321,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     });
     emptyStateReset.addEventListener("click", function () {
       assigneeFilter.value = "";
+      selectedAssignees.clear();
       searchInput.value = "";
       selectedBehaviors.clear();
       behaviorOptions.forEach(function (option) {
@@ -1664,7 +1672,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     const filterHost = document.createElement("div");
     filterHost.className = "review-filter-builder";
     filterHost.innerHTML = `<button type="button" class="m__button-secondary-outline S" data-filter-open aria-expanded="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#filter"></use></svg>Filter</button>
-      <div class="review-filter-popup" hidden><div class="review-filter-categories"></div><div class="review-filter-options" hidden><div class="review-filter-options-title"></div><input type="search" placeholder="Search" aria-label="Search filter options"><div class="review-filter-values"></div></div></div>`;
+      <div class="review-filter-popup" hidden><div class="review-filter-categories"></div><div class="review-filter-options" hidden><div class="review-filter-options-title"></div><input type="search" placeholder="Search" aria-label="Search filter options"><button type="button" class="review-filter-search-clear" aria-label="Clear search" hidden><svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg></button><div class="review-filter-values"></div></div></div>`;
     root.querySelector(".moderation-table__header").append(filterHost);
     const filterStrip = document.createElement("div");
     filterStrip.className = "review-filter-strip";
@@ -1676,16 +1684,31 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     let activeFilterCategory = "";
     let filterHoverTimer;
     const cancelFilterHover = () => clearTimeout(filterHoverTimer);
+    let previousFilterPointer;
+    document.addEventListener("mousemove", event => {
+      previousFilterPointer = { x: event.clientX, y: event.clientY, time: performance.now() };
+    });
+    function movingTowardFilterOptions(event) {
+      const submenu = filterHost.querySelector(".review-filter-options");
+      if (submenu.hidden || !previousFilterPointer || performance.now() - previousFilterPointer.time > 150) return false;
+      const dx = event.clientX - previousFilterPointer.x;
+      if (dx >= -1) return false;
+      const bounds = submenu.getBoundingClientRect();
+      const distance = bounds.right - event.clientX;
+      if (distance > 0) return false;
+      const projectedY = event.clientY + (event.clientY - previousFilterPointer.y) * distance / dx;
+      return projectedY >= bounds.top && projectedY <= bounds.bottom;
+    }
     filterHost.querySelector(".review-filter-options").addEventListener("mouseenter", cancelFilterHover);
     filterPopup.addEventListener("mouseleave", cancelFilterHover);
     function filterChoices(category) {
       if (category === "Behavior") return behaviorOptions.map(option => [option.value, option.value]);
       if (category === "Verdict") return [["true", "True positive"], ["false", "False positive"]];
       if (category === "Status") return Array.from(statusFilterOptionsRoot.querySelectorAll("[data-status-filter-option]")).map(option => [option.dataset.statusFilterOption, option.dataset.statusFilterOption]).filter(([value]) => value);
-      return Array.from(assigneeFilter.options).filter(option => option.value).map(option => [option.value, option.text]);
+      return Array.from(assigneeFilter.options).filter(option => option.value && option.value !== "me" && option.value !== "unassigned").map(option => [option.value, option.text]);
     }
     function filterValue(category) {
-      return category === "Behavior" ? Array.from(selectedBehaviors) : [category === "Verdict" ? selectedResult : category === "Status" ? selectedStatus : assigneeFilter.value].filter(Boolean);
+      return category === "Assignee" ? Array.from(selectedAssignees) : category === "Behavior" ? Array.from(selectedBehaviors) : [category === "Verdict" ? selectedResult : category === "Status" ? selectedStatus : assigneeFilter.value].filter(Boolean);
     }
     function changeBuilderFilter(category, value) {
       if (category === "Behavior") {
@@ -1697,7 +1720,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         applyQueueState();
       } else if (category === "Verdict") setResultFilter(value);
       else if (category === "Status") setStatusFilter(value);
-      else { assigneeFilter.value = value; assigneeFilter.dispatchEvent(new Event("change", { bubbles: true })); }
+      else {
+        if (!value) selectedAssignees.clear();
+        else if (selectedAssignees.has(value)) selectedAssignees.delete(value);
+        else selectedAssignees.add(value);
+        applyQueueState();
+      }
     }
     function showFilterCategory(category) {
       cancelFilterHover();
@@ -1723,6 +1751,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       const list = filterHost.querySelector(".review-filter-values");
       list.replaceChildren();
       const query = filterHost.querySelector("input").value.toLowerCase();
+      filterHost.querySelector(".review-filter-search-clear").hidden = !query;
       filterChoices(activeFilterCategory).filter(([,label]) => label.toLowerCase().includes(query)).forEach(([value,label]) => {
         const button = document.createElement("button");
         button.type = "button";
@@ -1738,7 +1767,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           filterOpen.setAttribute("aria-expanded", "false");
           filterOpen.focus();
         });
-        if (activeFilterCategory === "Behavior") {
+        if (activeFilterCategory === "Behavior" || activeFilterCategory === "Assignee") {
           const row = document.createElement("div");
           row.className = "review-filter-checkbox-row";
           const checkboxLabel = document.createElement("label");
@@ -1751,7 +1780,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           checkboxLabel.insertAdjacentHTML("beforeend", '<svg aria-hidden="true"><use href="#checkmark"></use></svg>');
           checkboxLabel.addEventListener("click", event => event.stopPropagation());
           checkbox.addEventListener("change", () => {
-            changeBuilderFilter("Behavior", value);
+            changeBuilderFilter(activeFilterCategory, value);
             button.setAttribute("aria-pressed", String(checkbox.checked));
           });
           row.append(checkboxLabel, button);
@@ -1761,7 +1790,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           list.append(button);
         }
       });
-      if (!list.children.length) list.textContent = "No matching options";
+      if (!list.children.length) {
+        const empty = document.createElement("div");
+        empty.className = "review-filter-empty";
+        empty.textContent = "No matching options";
+        list.append(empty);
+      }
     }
     categories.forEach(category => {
       const button = document.createElement("button");
@@ -1769,9 +1803,14 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       button.textContent = category;
       button.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>');
       button.addEventListener("click", () => showFilterCategory(category));
-      button.addEventListener("mouseenter", () => {
+      button.addEventListener("mouseenter", event => {
         cancelFilterHover();
-        filterHoverTimer = setTimeout(() => showFilterCategory(category), activeFilterCategory ? 300 : 100);
+        if (category === activeFilterCategory && !filterHost.querySelector(".review-filter-options").hidden) return;
+        if (movingTowardFilterOptions(event)) {
+          filterHoverTimer = setTimeout(() => showFilterCategory(category), 300);
+        } else {
+          showFilterCategory(category);
+        }
       });
       button.addEventListener("mouseleave", cancelFilterHover);
       filterHost.querySelector(".review-filter-categories").append(button);
@@ -1787,7 +1826,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         const edit = document.createElement("button");
         edit.type = "button";
         const labels = filterChoices(category);
-        const label = values.length > 1 ? values.length + " behaviors" : (labels.find(([value]) => value === values[0]) || [null, values[0]])[1];
+        const label = values.length > 1 ? values.length + (category === "Assignee" ? " members" : " behaviors") : (labels.find(([value]) => value === values[0]) || [null, values[0]])[1];
         [category + ": ", label].forEach(text => {
           const segment = document.createElement("span"); segment.textContent = text; edit.append(segment);
         });
@@ -1813,8 +1852,25 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         filterStrip.append(clear);
       }
     }
-    filterOpen.addEventListener("click", () => { filterPopup.classList.remove("is-direct-filter"); filterPopup.style.left = ""; filterPopup.style.top = ""; filterPopup.hidden = !filterPopup.hidden; filterOpen.setAttribute("aria-expanded", String(!filterPopup.hidden)); });
+    filterOpen.addEventListener("click", () => {
+      const opening = filterPopup.hidden || filterPopup.classList.contains("is-direct-filter");
+      cancelFilterHover();
+      filterPopup.classList.remove("is-direct-filter");
+      filterPopup.style.left = "";
+      filterPopup.style.top = "";
+      activeFilterCategory = "";
+      filterHost.querySelector(".review-filter-options").hidden = true;
+      filterHost.querySelectorAll(".review-filter-categories button").forEach(button => button.classList.remove("is-active"));
+      filterPopup.hidden = !opening;
+      filterOpen.setAttribute("aria-expanded", String(opening));
+    });
     filterHost.querySelector("input").addEventListener("input", renderFilterValues);
+    filterHost.querySelector(".review-filter-search-clear").addEventListener("click", () => {
+      const input = filterHost.querySelector('input[type="search"]');
+      input.value = "";
+      renderFilterValues();
+      input.focus();
+    });
     document.addEventListener("click", event => { if (!filterHost.contains(event.target) && !filterStrip.contains(event.target)) { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); } });
     filterHost.addEventListener("keydown", event => { if (event.key === "Escape") { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); filterOpen.focus(); } });
 
