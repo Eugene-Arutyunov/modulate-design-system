@@ -2,6 +2,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const { isPublicCapture, publicChecks } = require('./public-captures');
+const { validatePublished } = require('./published');
 const root = path.resolve(__dirname, '../..');
 const port = Number(process.env.UI_AUDIT_PORT || 4611);
 function fileFor(base, requestPath) {
@@ -13,14 +14,16 @@ function auditMiddleware(req, res, next) {
   if (pathname !== '/ui-audit-data.json' && !pathname.startsWith('/ui-audit/')) return next();
   if (!['GET', 'HEAD'].includes(req.method)) { res.writeHead(405); return res.end(); }
   try {
+    const local = path.join(root, '.ui-audit/latest');
+    const base = process.env.UI_AUDIT_SOURCE === 'public' || !fs.existsSync(path.join(local, 'results.json'))
+      ? (validatePublished(root)?.base || local) : local;
     if (pathname === '/ui-audit-data.json') {
-      const file = path.join(root, '.ui-audit/latest/results.json');
+      const file = path.join(base, 'results.json');
       const data = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : { checks: [] };
-      data.checks = publicChecks(data.checks || [], path.join(root, '.ui-audit/latest'));
+      data.checks = publicChecks(data.checks || [], base);
       res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       return res.end(req.method === 'HEAD' ? '' : JSON.stringify({ checks: data.checks }));
     }
-    const base = path.join(root, '.ui-audit/latest');
     const file = fileFor(base, decodeURIComponent(pathname.slice('/ui-audit'.length)));
     if (!file || !/\.(png|webp)$/i.test(file) || !fs.existsSync(file) || !fs.statSync(file).isFile() || !fs.realpathSync(file).startsWith(fs.realpathSync(base) + path.sep)) {
       res.writeHead(404); return res.end('Not found');
