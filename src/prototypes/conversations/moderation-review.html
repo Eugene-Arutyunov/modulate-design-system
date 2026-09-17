@@ -721,9 +721,6 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     var behaviorFilterEmptyState = root.querySelector(
       "[data-review-behavior-filter-empty]",
     );
-    var behaviorFilterEmptyReset = root.querySelector(
-      "[data-review-behavior-filter-empty-reset]",
-    );
     var verdictFilterLabel = root.querySelector(
       "[data-review-verdict-filter-label]",
     );
@@ -1553,10 +1550,6 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       applyReviewBehaviorFilters();
     });
     behaviorFilterReset.addEventListener("click", resetReviewBehaviorFilters);
-    behaviorFilterEmptyReset.addEventListener(
-      "click",
-      resetReviewBehaviorFilters,
-    );
     behaviorFilterSearch.addEventListener("input", function () {
       var query = behaviorFilterSearch.value.trim().toLowerCase();
       behaviorFilterOptions.forEach(function (option) {

@@ -4341,7 +4341,7 @@ table.config-details {
   border-radius: var(--m__radius-s);
   background-color: transparent;
   font-size: var(--m__font-size-s);
-  font-weight: var(--m__font-weight-bold);
+  font-weight: var(--m__font-weight-medium);
   line-height: 1.15;
 }
 
@@ -5781,3 +5781,39 @@ button.moderation-review-behaviors__comment-link.S:hover {
 .review-filter-popup .review-filter-search-clear:hover { color: var(--m__text-link-hover); background: transparent; }
 .review-filter-search-clear svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: .65; }
 .review-filter-empty { padding: .5rem .65rem; color: var(--m__text-caption); }
+
+.moderation-review-behaviors__filter-reset {
+  margin-left: .4rem;
+  opacity: 1;
+  pointer-events: auto;
+}
+.moderation-review-behaviors__selected-tag {
+  transition: color .5s ease, border-color .5s ease;
+}
+.moderation-review-behaviors__selected-tag:hover {
+  color: var(--m__text-link-hover);
+  transition-duration: 0s;
+}
+
+.m__menu-button-list.moderation-sort-list {
+  padding: .25rem;
+  border: 0;
+  border-radius: var(--m__widget-radius);
+  background: var(--m__bg);
+  font-size: var(--m__font-size-m);
+  box-shadow: 0 4px 20px color-mix(in srgb, #000 22%, transparent);
+}
+.moderation-sort-list [data-sort-option] {
+  padding: .45rem .65rem;
+  border-radius: var(--m__radius-m);
+  font-weight: var(--m__font-weight-regular);
+}
+.moderation-sort-list [aria-checked="true"],
+.moderation-sort-list [data-sort-option]:hover {
+  background: var(--m__bg-surface);
+}
+
+.moderation-table .moderation-sort-trigger[aria-expanded="true"],
+.moderation-table .moderation-sort-trigger[aria-expanded="true"] [data-sort-filter-label] {
+  color: var(--m__text-link-hover);
+}

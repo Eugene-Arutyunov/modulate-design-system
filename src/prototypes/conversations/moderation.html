@@ -390,7 +390,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
               </button>
               <div class="m__menu-button-list moderation-sort-list" role="menu" hidden>
-                <div class="moderation-sort-heading">Sort by</div>
+                <div class="moderation-sort-heading">Sorted by</div>
                 <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="newest" aria-checked="true">Newest<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
                 <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="score-desc" aria-checked="false">Highest confidence<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
                 <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="score-asc" aria-checked="false">Lowest confidence<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
@@ -769,13 +769,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 <td colspan="5">
                   <div class="moderation-table__empty-state">
                     <p>No conversations match these filters.</p>
-                    <button
-                      type="button"
-                      class="m__button-secondary-outline S"
-                      data-moderation-empty-reset
-                    >
-                      Reset filters
-                    </button>
                   </div>
                 </td>
               </tr>
@@ -947,9 +940,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     document.fonts.ready.then(resizeSearch);
     resizeSearch();
     var emptyState = root.querySelector("[data-moderation-empty]");
-    var emptyStateReset = root.querySelector(
-      "[data-moderation-empty-reset]",
-    );
     var behaviorFilterRoot = root.querySelector("[data-behavior-filter-root]");
     var behaviorFilterTriggers = Array.from(
       root.querySelectorAll("[data-behavior-filter-trigger]"),
@@ -1313,19 +1303,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       closeBehaviorFilter();
       renderSelectedBehaviors();
       applyQueueState();
-    });
-    emptyStateReset.addEventListener("click", function () {
-      assigneeFilter.value = "";
-      selectedAssignees.clear();
-      searchInput.value = "";
-      selectedBehaviors.clear();
-      behaviorOptions.forEach(function (option) {
-        option.checked = false;
-      });
-      closeBehaviorFilter();
-      renderSelectedBehaviors();
-      setStatusFilter("");
-      setResultFilter("");
     });
     behaviorFilterSearch.addEventListener("input", function () {
       var query = behaviorFilterSearch.value.trim().toLowerCase();
@@ -1828,9 +1805,11 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         edit.addEventListener("click", () => {
           showFilterCategory(category);
           filterPopup.classList.add("is-direct-filter");
-          const anchor = edit.getBoundingClientRect();
+          const anchor = condition.getBoundingClientRect();
+          filterOpen.setAttribute("aria-expanded", "false");
           const host = filterHost.getBoundingClientRect();
-          filterPopup.style.left = Math.max(-host.left + 16, Math.min(anchor.left - host.left, window.innerWidth - host.left - 300)) + "px";
+          const popupWidth = filterPopup.getBoundingClientRect().width;
+          filterPopup.style.left = Math.max(16, Math.min(anchor.left, window.innerWidth - popupWidth - 16)) - host.left + "px";
           filterPopup.style.top = (anchor.bottom - host.top + 6) + "px";
         });
         const remove = document.createElement("button");
