@@ -1674,6 +1674,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     const filterOpen = filterHost.querySelector("[data-filter-open]");
     const categories = ["Behavior", "Verdict", "Status", "Assignee"];
     let activeFilterCategory = "";
+    let filterHoverTimer;
+    const cancelFilterHover = () => clearTimeout(filterHoverTimer);
+    filterHost.querySelector(".review-filter-options").addEventListener("mouseenter", cancelFilterHover);
+    filterPopup.addEventListener("mouseleave", cancelFilterHover);
     function filterChoices(category) {
       if (category === "Behavior") return behaviorOptions.map(option => [option.value, option.value]);
       if (category === "Verdict") return [["true", "True positive"], ["false", "False positive"]];
@@ -1696,6 +1700,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       else { assigneeFilter.value = value; assigneeFilter.dispatchEvent(new Event("change", { bubbles: true })); }
     }
     function showFilterCategory(category) {
+      cancelFilterHover();
       activeFilterCategory = category;
       const categoryButtons = Array.from(filterHost.querySelectorAll(".review-filter-categories button"));
       categoryButtons.forEach(button => button.classList.toggle("is-active", button.textContent === category));
@@ -1707,6 +1712,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       filterHost.querySelector(".review-filter-options-title").textContent = category;
       filterHost.querySelector("input").value = "";
       renderFilterValues();
+      const submenu = filterHost.querySelector(".review-filter-options");
+      const firstChoice = submenu.querySelector(".review-filter-values button");
+      if (categoryButton && firstChoice) {
+        const offset = firstChoice.getBoundingClientRect().top - submenu.getBoundingClientRect().top;
+        submenu.style.top = (categoryButton.offsetTop - offset) + "px";
+      }
     }
     function renderFilterValues() {
       const list = filterHost.querySelector(".review-filter-values");
@@ -1718,9 +1729,37 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         button.textContent = label;
         const selected = filterValue(activeFilterCategory).includes(value);
         button.setAttribute("aria-pressed", String(selected));
-        button.insertAdjacentHTML("beforeend", '<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg>');
-        button.addEventListener("click", event => { event.stopPropagation(); changeBuilderFilter(activeFilterCategory, value); renderFilterValues(); });
-        list.append(button);
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          changeBuilderFilter(activeFilterCategory, value);
+          renderFilterValues();
+          cancelFilterHover();
+          filterPopup.hidden = true;
+          filterOpen.setAttribute("aria-expanded", "false");
+          filterOpen.focus();
+        });
+        if (activeFilterCategory === "Behavior") {
+          const row = document.createElement("div");
+          row.className = "review-filter-checkbox-row";
+          const checkboxLabel = document.createElement("label");
+          checkboxLabel.className = "m__checkbox-primary";
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = selected;
+          checkbox.setAttribute("aria-label", label);
+          checkboxLabel.append(checkbox);
+          checkboxLabel.insertAdjacentHTML("beforeend", '<svg aria-hidden="true"><use href="#checkmark"></use></svg>');
+          checkboxLabel.addEventListener("click", event => event.stopPropagation());
+          checkbox.addEventListener("change", () => {
+            changeBuilderFilter("Behavior", value);
+            button.setAttribute("aria-pressed", String(checkbox.checked));
+          });
+          row.append(checkboxLabel, button);
+          list.append(row);
+        } else {
+          button.insertAdjacentHTML("beforeend", '<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg>');
+          list.append(button);
+        }
       });
       if (!list.children.length) list.textContent = "No matching options";
     }
@@ -1730,7 +1769,11 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       button.textContent = category;
       button.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>');
       button.addEventListener("click", () => showFilterCategory(category));
-      button.addEventListener("mouseenter", () => showFilterCategory(category));
+      button.addEventListener("mouseenter", () => {
+        cancelFilterHover();
+        filterHoverTimer = setTimeout(() => showFilterCategory(category), activeFilterCategory ? 300 : 100);
+      });
+      button.addEventListener("mouseleave", cancelFilterHover);
       filterHost.querySelector(".review-filter-categories").append(button);
     });
     function renderFilterBuilder() {
