@@ -682,57 +682,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       </div>
                     </div>
                   </div>
-                  {% if row.participants %}
-                  <div class="m__menu-button moderation-participants">
-                    <button
-                      type="button"
-                      class="m__menu-button-trigger moderation-participants__trigger"
-                      aria-label="{{ row.participants.length }} participant{% if row.participants.length != 1 %}s{% endif %} working on {{ row.title }}"
-                      aria-haspopup="menu"
-                      aria-expanded="false"
-                    >
-                      {% for participant in row.participants %}
-                      {% if loop.index < 5 %}
-                      <span
-                        class="moderation-participants__avatar"
-                        aria-hidden="true"
-                      >{{ participant.initials }}</span>
-                      {% elif loop.index == 5 %}
-                      <span
-                        class="moderation-participants__avatar moderation-participants__avatar--more"
-                        aria-hidden="true"
-                      >+{{ row.participants.length - 4 }}</span>
-                      {% endif %}
-                      {% endfor %}
-                    </button>
-                    <div
-                      class="m__menu-button-list moderation-participants__list"
-                      hidden
-                      role="menu"
-                      aria-label="Participants"
-                    >
-                      {% for participant in row.participants %}
-                      <div
-                        class="moderation-participants__item"
-                        role="menuitem"
-                      >
-                        <span
-                          class="moderation-participants__avatar"
-                          aria-hidden="true"
-                        >{{ participant.initials }}</span>
-                        <span class="moderation-participants__details">
-                          <span class="moderation-participants__name"
-                            >{{ participant.name }}</span
-                          >
-                          <span class="moderation-participants__activity"
-                            >{{ participant.activity }}</span
-                          >
-                        </span>
-                      </div>
-                      {% endfor %}
-                    </div>
+                  <div class="m__menu-button review-assignment-avatar" data-assignment-avatar="{{ row.id }}" data-initial-members="{% for participant in row.participants %}{{ participant.name }}{% if not loop.last %}|{% endif %}{% endfor %}">
+                    <button type="button" class="m__menu-button-trigger review-assignment-avatar__trigger" aria-label="Assign reviewer" aria-haspopup="menu" aria-expanded="false">+</button>
+                    <div class="m__menu-button-list moderation-sort-list" role="menu" hidden></div>
+                    <label hidden><span data-assignee-label></span><select data-review-assignee="{{ row.id }}" aria-label="Assign reviewer"></select></label>
                   </div>
-                  {% endif %}
+
                   </div>
                 </td>
                 <td class="m__col-actions moderation-table__row-actions">

@@ -19,12 +19,40 @@
   }
   const controls = Array.from(document.querySelectorAll("[data-review-assignee]"));
   const filter = document.querySelector("[data-assignee-filter]");
+  const initialMembers = Object.fromEntries(Array.from(document.querySelectorAll("[data-assignment-avatar]"), avatar => [avatar.dataset.assignmentAvatar, (avatar.dataset.initialMembers || "").split("|").filter(Boolean)]));
+  const assignedPeople = id => {
+    const value = Object.prototype.hasOwnProperty.call(assignments, id) ? assignments[id] : (initialMembers[id] || []);
+    return (Array.isArray(value) ? value : [value]).filter(name => people.includes(name));
+  };
   function refresh() {
     controls.forEach(select => {
-      select.value = people.includes(assignments[select.dataset.reviewAssignee]) ? assignments[select.dataset.reviewAssignee] : "";
+      select.value = assignedPeople(select.dataset.reviewAssignee)[0] || "";
       const label = select.closest("label").querySelector("[data-assignee-label]");
       label.textContent = select.value || "Unassigned";
       label.title = label.textContent;
+      const avatar = select.closest("[data-assignment-avatar]");
+      if (avatar) {
+        const trigger = avatar.querySelector(".review-assignment-avatar__trigger");
+        const names = assignedPeople(select.dataset.reviewAssignee);
+        trigger.replaceChildren();
+        trigger.classList.toggle("has-members", !!names.length);
+        if (names.length) {
+          names.slice(0, 4).forEach(name => {
+            const badge = document.createElement("span");
+            badge.className = "moderation-participants__avatar";
+            badge.textContent = name.split(" ").map(part => part[0]).slice(0, 2).join("");
+            trigger.append(badge);
+          });
+          if (names.length > 4) {
+            const more = document.createElement("span");
+            more.className = "moderation-participants__avatar";
+            more.textContent = "+" + (names.length - 4);
+            trigger.append(more);
+          }
+        } else trigger.innerHTML = '<svg viewBox="0 0 32 32" aria-hidden="true"><use href="#account"></use></svg>';
+        trigger.setAttribute("aria-label", select.value ? "Assigned to " + select.value + ". Change assignee" : "Assign reviewer");
+        trigger.title = names.join(", ") || "Assign reviewer";
+      }
     });
     document.dispatchEvent(new Event("review-assignment-change"));
   }
@@ -39,6 +67,50 @@
       refresh();
     });
   });
+  document.querySelectorAll("[data-assignment-avatar]").forEach(avatar => {
+    const select = avatar.querySelector("select");
+    const menu = avatar.querySelector('[role="menu"]');
+    menu.classList.add("review-assignment-options");
+    const search = document.createElement("input");
+    search.type = "search";
+    search.placeholder = "Search";
+    search.setAttribute("aria-label", "Search members");
+    menu.append(search);
+    people.forEach(name => {
+      const row = document.createElement("div");
+      row.className = "review-filter-checkbox-row";
+      const label = document.createElement("label");
+      label.className = "m__checkbox-primary";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.setAttribute("aria-label", name);
+      const sync = () => { checkbox.checked = assignedPeople(select.dataset.reviewAssignee).includes(name); };
+      sync();
+      document.addEventListener("review-assignment-change", sync);
+      label.append(checkbox);
+      label.insertAdjacentHTML("beforeend", '<svg aria-hidden="true"><use href="#checkmark"></use></svg>');
+      label.addEventListener("click", event => event.stopPropagation());
+      const toggle = () => {
+        read();
+        const names = new Set(assignedPeople(select.dataset.reviewAssignee));
+        if (names.has(name)) names.delete(name); else names.add(name);
+        assignments[select.dataset.reviewAssignee] = Array.from(names);
+        try { localStorage.setItem(key, JSON.stringify(assignments)); } catch {}
+        refresh();
+      };
+      checkbox.addEventListener("change", toggle);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "m__menu-button-item";
+      button.dataset.sortOption = name;
+      button.textContent = name;
+      button.addEventListener("click", toggle);
+      row.append(label, button);
+      menu.append(row);
+      search.addEventListener("input", () => { row.hidden = !name.toLowerCase().includes(search.value.toLowerCase()); });
+    });
+  });
+
   if (filter) {
     [["All assignees", ""], ["Assigned to me", "me"], ["Unassigned", "unassigned"], ...people.map(name => [name, name])]
       .forEach(([label, value]) => filter.add(new Option(label, value)));
@@ -86,8 +158,8 @@
   }
   window.ReviewAssignments = {
     matches(id, value) {
-      const assignee = assignments[id] || "";
-      return !value || (value === "unassigned" ? !assignee : assignee === (value === "me" ? me : value));
+      const names = assignedPeople(id);
+      return !value || (value === "unassigned" ? !names.length : names.includes(value === "me" ? me : value));
     },
   };
   refresh();
