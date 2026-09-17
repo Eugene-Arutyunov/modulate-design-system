@@ -67,14 +67,13 @@ function applyImport(parsed) {
   mountWidget();
 }
 
-// The semi-mono is the widget's brand voice (eyebrows, tags) — inline it
-// into the export as a data: URL so the standalone page keeps it (~58 KB).
-async function fetchFontDataUrl() {
+// Inline both variable fonts so standalone exports retain the DS typography.
+async function fetchFontDataUrl(filename) {
   const response = await fetch(
-    new URL("/assets/fonts/CoFoSansSemi-Mono-Regular.woff2", window.location.origin)
+    new URL(`/assets/fonts/${filename}`, window.location.origin)
   );
 
-  if (!response.ok) throw new Error("Could not load CoFo Sans Semi Mono");
+  if (!response.ok) throw new Error(`Could not load ${filename}`);
 
   const bytes = new Uint8Array(await response.arrayBuffer());
   let binary = "";
@@ -97,7 +96,10 @@ async function exportHtml() {
       return response.text();
     })
   );
-  const fontDataUrl = await fetchFontDataUrl();
+  const [fontDataUrl, sansDataUrl] = await Promise.all([
+    fetchFontDataUrl("ABCArealSemiMonoVariable.woff2"),
+    fetchFontDataUrl("ABCArealVariable.woff2"),
+  ]);
 
   const payload = {
     format: DATA_FORMAT,
@@ -111,20 +113,24 @@ async function exportHtml() {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${escapeHtml(data.meta.title || "Velma Fraud Demo")}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
 body {
   margin: 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: "ABC Areal", system-ui, sans-serif;
 }
 @font-face {
-  font-family: "CoFo Sans Semi Mono";
-  font-weight: 400;
+  font-family: "ABC Areal Semi Mono";
+  font-weight: 400 700;
   font-style: normal;
   font-display: swap;
   src: url("${fontDataUrl}") format("woff2");
+}
+@font-face {
+  font-family: "ABC Areal";
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("${sansDataUrl}") format("woff2");
 }
 ${css}
   </style>

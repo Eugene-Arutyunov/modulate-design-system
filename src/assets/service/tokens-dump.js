@@ -339,10 +339,10 @@
   }
 
   var FONT_FAMILY_SAMPLE = {
-    "font-family-sans": "Inter",
+    "font-family-sans": "ABC Areal",
     "font-family-gothic": "CoFo Gothic",
-    "font-family-semi-mono": "CoFo Sans Semi Mono",
-    "font-family-mono": "CoFo Sans Mono"
+    "font-family-semi-mono": "ABC Areal Semi Mono",
+    "font-family-mono": "ABC Areal Mono"
   };
 
   function renderTextFamily(container, tokens) {
