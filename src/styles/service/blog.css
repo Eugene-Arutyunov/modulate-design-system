@@ -457,3 +457,37 @@ a.post-figure-link {
     margin: 0;
   }
 }
+
+/* Design review: the same title / surface / caption rhythm as the proximity figure. */
+.post-review-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3em;
+
+  & figure {
+    min-width: 0;
+    margin: 0;
+  }
+
+  & .post-review-tools__image {
+    display: block;
+    overflow: hidden;
+    background-color: var(--m__bg-surface);
+    padding: 0;
+    margin-bottom: var(--m__gap-xs);
+  }
+
+  & svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  & .caption {
+    margin: 0;
+  }
+
+  @media (width < 767px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

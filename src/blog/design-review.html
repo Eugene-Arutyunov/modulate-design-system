@@ -1,5 +1,5 @@
 {% extends 'service/layout.html' %}
-{% set pageTitle = 'Design Review with an AI Agent — Modulate Design System' %}
+{% set pageTitle = 'Design Review: Keeping the Product Consistent — Modulate Design System' %}
 {% block content %}
 
 <div class="m__wrapper">
@@ -7,50 +7,43 @@
   <div class="narrative-text-width">
     {% set postAuthor = 'Eugene Vlasov' %}
     {% set postAuthorPhoto = '/assets/images/authors/eugene-vlasov.jpg' %}
-    {% set postDate = 'September 18, 2026' %}
+    {% set postDate = 'September 17, 2026' %}
     {% include 'service/post-meta.html' %}
-    <h1 class="loud">Design Review with an AI Agent</h1>
+    <h1 class="loud">Design Review: Keeping the Product Consistent</h1>
 
-    <p>A design review starts with a few practical questions: which screens need checking, where are their prototypes, and what’s different in production? As the product grows, keeping track of all that becomes part of the work.</p>
-    <p>Going through every screen with a ruler takes time. Leaving feedback in chat means eventually hunting down which page each comment referred to. I wanted an agent to handle the first pass, but it needed the same context I did: what to review, what to compare it with, and where to keep the findings. That led to two sections:</p>
-    <ul>
-      <li>The <a href="https://m-design-system.intuition.team/ui/"><strong>UI Scheme</strong></a> provides the map: it lists the product’s screens and connects their prototypes with the corresponding pages in production. It gives us a place to see what the interface consists of and choose what to review.</li>
-      <li><a href="https://m-design-system.intuition.team/ui/compare/"><strong>Compare</strong></a> is where the review itself lives. It puts prototype and production screenshots side by side, alongside the differences and suggested fixes. The map helps us find a screen; the comparison helps us decide what needs to change.</li>
-    </ul>
-
-    <div class="m__space L"></div>
-    <h2 class="loud">One Problem, Several Screens</h2>
-    <p>Say the subtitle color is wrong on ten pages. You can leave ten comments, but then someone has to work out whether those are ten separate fixes or one shared style.</p>
-    <p>In Compare, that can be one issue: the color used in the prototype, the color used in production, and a recommendation for the shared style. The affected screens sit below it, so you can check whether the same recommendation really applies to all of them.</p>
-    <p>That’s why there are separate <strong>Issues</strong> and <strong>Pages</strong> views. On a page, the prototype sits on the left and production on the right, with notes underneath and links to shared issues. The <strong>Components</strong> view does the same for smaller pieces and their states, such as an open account menu.</p>
+    <p>We’ve had a <a href="/ui/">UI Scheme</a> for a long time, maintaining it by hand as the product evolved. It records the intended structure of our interface: which screens belong in the product and how they fit together. It’s our shared source of truth.</p>
+    <p>That matters because we design directly in prototypes. Carter could build and deploy a change straight into the product, and Ryan’s team should have that freedom by design. Neither the prototype nor the live product alone can be the definitive reference for the intended structure. The UI Scheme is where we keep that shared picture.</p>
+    <p>Keeping the map current is only part of the job. We also need to check how the live product matches what we intended. <a href="/ui/compare/">UI Compare</a> brings that review alongside the scheme, so we can see what needs attention and keep the findings connected to the product.</p>
   </div>
 
-  <img
-    src="/assets/images/design-review-compare.png"
-    alt="Compare: shared design issues with prototype and production styles, recommendations, and links to affected pages"
-  />
+  <div class="m__space L"></div>
+  <div class="post-review-tools proximity-grid-figure">
+    <figure>
+      <p class="proximity-grid-figure__title"><a href="/ui/">UI Scheme</a></p>
+      <a href="/ui/" class="post-review-tools__image m__rounded">
+        {% include 'service/design-review-scheme.html' %}
+      </a>
+      <figcaption class="caption">The map of the interface, connecting each screen’s prototype and production page. A shared reference for what we’re building and where to look.</figcaption>
+    </figure>
+    <figure>
+      <p class="proximity-grid-figure__title"><a href="/ui/compare/">UI Compare</a></p>
+      <a href="/ui/compare/" class="post-review-tools__image m__rounded">
+        {% include 'service/design-review-compare.html' %}
+      </a>
+      <figcaption class="caption">The review, with prototype and production side by side, differences explained, and suggested fixes linked to the affected screens. A shared place to decide what needs to change.</figcaption>
+    </figure>
+  </div>
 
+  <div class="m__space XL"></div>
   <div class="narrative-text-width">
-    <p>Of course, two screenshots can look different even when the styling is correct. A table may contain different data; a user may have different permissions. Those differences go into <strong>Data diff</strong>, so they can be considered separately during review.</p>
+    <h2 class="loud">Making Quality Part of the Routine</h2>
+    <p>We maintain the shared reference for how the interface should work, and check the live product against it. That gives anyone at Modulate a place to see what’s intended, where the experience differs, and what we recommend changing. Small discrepancies deserve attention too: a repeated problem can affect how the whole product feels.</p>
+    <p>An AI agent gathers the evidence and keeps the map and review up to date as part of that routine. We use the review to decide which differences are intentional and which need fixing. Each decision helps refine the agent’s instructions about what to look for, so we spend less time repeating manual checks and more time improving the experience.</p>
 
     <div class="m__space L"></div>
-    <h2 class="loud">One Pass, Two Results</h2>
-    <p>Scheme and Compare share the same update workflow.</p>
-    <p>The agent opens a page, anonymizes sensitive information where needed, takes a screenshot, and describes the differences it finds. Prepared images are reviewed before publication.</p>
-    <p>If the page structure also differs from what’s recorded in Scheme, that gets updated too. One pass through the product produces both an updated interface map and material for visual review.</p>
-
-    <p>Then I can refine the findings with a regular message:</p>
-    <blockquote class="compare-message"><p>The subtitle color differs on these pages. Group it as one issue and recommend using the shared style from the prototype.</p></blockquote>
-    <p>The agent updates the review. I can check the result and correct it again without rewriting each page’s notes myself.</p>
-
-    <div class="m__space L"></div>
-    <h2 class="loud">What Still Needs a Human</h2>
-    <p>The agent gathers screenshots, describes differences, and organizes the findings. I check whether those findings make sense: is this a styling mistake, a different screen state, or an intentional change?</p>
-    <p>For the subtitle example, I still need to confirm that those pages should use the same style before recommending a shared fix. If the agent grouped them incorrectly, I explain the distinction and ask it to revise the issue. Those corrections also help refine the instructions for the next review.</p>
-    <div class="m__space M"></div>
-    <a href="/blog/not-a-designer/" class="m__button-primary-outline read-next"
-      >Read next: <strong>Why You Can’t Seriously Say “I’m Not a Designer”</strong></a
-    >
+    <h2 class="loud">Consistency Builds Trust</h2>
+    <p>When familiar controls behave the same way and screens feel like parts of one product, people spend less effort figuring out the interface and can feel more confident using it.</p>
+    <p>Fixing the shared problems found during review brings that consistency to more screens. Small improvements add up to a product people can depend on.</p>
   </div>
   <div class="m__space XL"></div>
 </div>
