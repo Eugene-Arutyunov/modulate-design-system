@@ -4491,6 +4491,10 @@ table.config-details {
   display: none;
 }
 
+.moderation-review-behaviors__table.pg-behaviors-table
+  .pg-evidence-link.is-evidence-highlighted,
+.moderation-review-behaviors__table.pg-behaviors-table
+  .pg-evidence-link.is-evidence-highlighted:hover,
 .moderation-review-page
   .pg-transcript-utterance.is-evidence-highlighted,
 .moderation-review-page
@@ -4616,22 +4620,31 @@ table.config-details {
   display: none;
 }
 
-@media (hover: hover) {
-  [data-detection-review]:not([data-review-comment-count])
-    .moderation-review-behaviors__review-meta {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity var(--m__duration-base) var(--m__easing-base);
-  }
+button.moderation-review-top.M {
+  align-items: center;
+  font-weight: var(--m__font-weight-medium);
+  padding-left: 0.6rem;
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 20;
+}
 
-  [data-detection-review]:not([data-review-comment-count]):hover
-    .moderation-review-behaviors__review-meta,
-  [data-detection-review]:not([data-review-comment-count])
-    .moderation-review-behaviors__review-meta:focus-within {
-    opacity: 1;
-    pointer-events: auto;
-    transition-duration: var(--m__duration-instant);
-  }
+.moderation-review-top svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+.moderation-review-top[hidden],
+.moderation-review-behaviors__author[hidden] {
+  display: none;
+}
+
+.moderation-review-behaviors__author {
+  display: block;
+  margin-bottom: 0.25rem;
+  white-space: normal;
 }
 
 .moderation-review-behaviors__comment-link {
