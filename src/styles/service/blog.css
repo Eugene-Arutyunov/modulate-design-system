@@ -229,7 +229,7 @@
     margin-bottom: var(--m__gap-xs);
   }
 
-  & svg {
+  & img {
     display: block;
     width: 100%;
     height: auto;
@@ -458,7 +458,7 @@ a.post-figure-link {
   }
 }
 
-/* Design review: the same title / surface / caption rhythm as the proximity figure. */
+/* UI Scheme tool: canonical diagram and a screenshot of the review. */
 .post-review-tools {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -469,18 +469,41 @@ a.post-figure-link {
     margin: 0;
   }
 
+  & .post-review-tools__title {
+    margin: 0 0 var(--m__gap-xs);
+    font-weight: var(--m__font-weight-bold);
+  }
+
   & .post-review-tools__image {
     display: block;
     overflow: hidden;
-    background-color: var(--m__bg-surface);
+    aspect-ratio: 1 / 1.1;
+    background-color: var(--m__color-white);
+    border: var(--m__border-width-s) solid
+      color-mix(in srgb, var(--m__color-slate-700) 12.5%, transparent);
     padding: 0;
     margin-bottom: var(--m__gap-xs);
+    transition: border-color var(--m__duration-base) var(--m__easing-base);
   }
 
-  & svg {
+  & figure:has(a:hover, a:focus-visible) {
+    & .post-review-tools__title a {
+      color: var(--m__text-link-hover);
+      transition-duration: var(--m__duration-instant);
+    }
+
+    & .post-review-tools__image {
+      border-color: color-mix(in srgb, var(--m__text-link-hover) 30%, transparent);
+      transition-duration: var(--m__duration-instant);
+    }
+  }
+
+  & img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
   }
 
   & .caption {
@@ -489,5 +512,20 @@ a.post-figure-link {
 
   @media (width < 767px) {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.post-review-scheme {
+  background: var(--m__bg-surface);
+  padding: var(--m__spacer-s);
+  margin-block: var(--m__spacer-m);
+}
+
+/* A mask clips the border itself; use a rounded border for screenshot links
+   when native squircle corners are unavailable. */
+@supports not (corner-shape: squircle) {
+  .post-review-tools .post-review-tools__image {
+    mask: none;
+    border-radius: calc(var(--m__rounded-radius) * 0.58);
   }
 }
