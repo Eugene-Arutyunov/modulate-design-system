@@ -50,10 +50,11 @@
     const reviewedGroups = new Map();
     for (const check of complete) {
       const route = routeMap.get(check.pageId);
-      if ((route && check.fingerprint !== route.fingerprint) || ['blocked', 'error'].includes(check.status)) continue;
+      if (['blocked', 'error'].includes(check.status)) continue;
       for (const issue of check.sharedIssues || []) {
         if (!issue || !['id', 'title', 'prototype', 'production', 'recommendation', 'element'].every(key => typeof issue[key] === 'string') || !/^[a-z0-9-]+$/.test(issue.id)) continue;
-        if (!reviewedGroups.has(issue.id)) reviewedGroups.set(issue.id, { ...issue, property: issue.property || "color", id: `ui-issue-${issue.id}`, affected: [], matches: {} });
+        if (!reviewedGroups.has(issue.id)) reviewedGroups.set(issue.id, { ...issue, property: issue.property || "color", id: `ui-issue-${issue.id}`, affected: [], stale: false, matches: {} });
+        if (route && check.fingerprint !== route.fingerprint) reviewedGroups.get(issue.id).stale = true;
         reviewedGroups.get(issue.id).affected.push({ check, anchor: checkId(check), title: check.title || routeMap.get(check.pageId)?.title || check.pageId, scenario: check.scenario, elements: [issue.element] });
       }
     }

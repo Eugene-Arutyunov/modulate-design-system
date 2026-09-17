@@ -42,3 +42,16 @@ test('a different CSS property remains local when the shared property is extract
   assert.equal(review.shared.length, 1);
   assert.deepEqual(review.byCheck.get(a).elements, [{ element: 'Heading “a”', difference: 'padding: production 12px → prototype 8px.' }]);
 });
+
+test('reviewed issues remain linked after prototype changes and are marked stale', () => {
+  const issue = { id: 'subtitle', title: 'Subtitle', prototype: 'black', production: 'gray', recommendation: 'Use shared color.', element: 'Subtitle' };
+  const a = check('a', { fingerprint: 'old', sharedIssues: [issue] });
+  const b = check('b', { sharedIssues: [issue] });
+  const review = buildReview([a, b], routes);
+  assert.equal(review.shared.length, 1);
+  assert.equal(review.shared[0].stale, true);
+  assert.equal(review.shared[0].affected.length, 2);
+  assert.equal(review.byCheck.get(a).shared[0], review.shared[0]);
+  assert.equal(buildReview([b], routes).shared[0].stale, false);
+  assert.equal(buildReview([check('a', { status: 'blocked', sharedIssues: [issue] })], routes).shared.length, 0);
+});
