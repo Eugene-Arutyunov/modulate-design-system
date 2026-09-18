@@ -216,7 +216,7 @@ async function main() {
   const ids = new Set(results.map(result => result.key));
   const checks = [...previous.filter(check => !ids.has(check.key)), ...results].filter(check => !routes.some(route => route.id === check.pageId) || ids.has(check.key));
   writeJSON(resultsFile, { contextId, checks });
-  console.log(`Results: ${resultsFile}\nOpen ${base.prototype}/ui/compare/`);
+  console.log(`Results: ${resultsFile}\nOpen ${base.prototype}/tools/ui-compare/`);
   if (results.some(result => ['error', 'blocked'].includes(result.status))) process.exitCode = 1;
 }
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });

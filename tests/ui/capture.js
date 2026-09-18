@@ -61,7 +61,7 @@ const prototype = process.env.UI_TEST_URL || 'http://127.0.0.1:8080';
       const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
       await page.route('**/ui-audit-data.json', request => request.fulfill({ json: { checks: captured } }));
       await page.route('**/ui-audit/*.webp', request => request.fulfill({ contentType: 'image/webp', body: fs.readFileSync(path.join(output, 'latest', path.basename(new URL(request.request().url()).pathname))) }));
-      await page.goto(`${prototype}/ui/compare/`);
+      await page.goto(`${prototype}/tools/ui-compare/`);
       const row = page.locator('[data-page-id=dashboard-api-keys]');
       await expect(row.locator('[data-side=prototype]').locator('img')).toHaveCount(2);
       await expect(row.locator('[data-side=production]').locator('img')).toHaveCount(2);
