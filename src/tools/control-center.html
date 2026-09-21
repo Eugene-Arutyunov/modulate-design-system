@@ -1,0 +1,171 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Control Center' %} {%
+block content %}
+
+<div class="m__wrapper cc__wide">
+  <div class="m__space XL"></div>
+  <h1>Control Center</h1>
+  <div class="m__space M"></div>
+
+  <div
+    class="m__segmented-control-secondary S cc__filter"
+    role="group"
+    aria-label="Filter by type">
+    <label>
+      <input type="radio" name="cc-filter" value="all" data-cc-filter checked />
+      All
+    </label>
+    <label>
+      <input type="radio" name="cc-filter" value="discovery" data-cc-filter />
+      Discovery
+    </label>
+    <label>
+      <input type="radio" name="cc-filter" value="delivery" data-cc-filter />
+      Delivery
+    </label>
+  </div>
+
+  <div class="m__space S"></div>
+
+  <div class="m__table-wrapper">
+    <!-- Row anatomy: one <tr data-cc-type="delivery|discovery"
+         data-cc-stream="..."> per project: Stream / Project / Type tag /
+         October scope / Next steps. Within a stream, discovery rows come
+         first. The stream cell is left empty except on the first row of a
+         stream; control-center.js keeps the label on the first VISIBLE row
+         when filtering. -->
+    <table>
+      <colgroup>
+        <col style="width: 11%" />
+        <col style="width: 19%" />
+        <col style="width: 10%" />
+        <col style="width: 30%" />
+        <col style="width: 30%" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Stream</th>
+          <th>Project</th>
+          <th>Type</th>
+          <th>October scope</th>
+          <th>Next steps</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cc-type="discovery" data-cc-stream="Platform">
+          <td class="cc__stream">Platform</td>
+          <td><strong>Review Queue</strong></td>
+          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="delivery" data-cc-stream="Platform">
+          <td class="cc__stream"></td>
+          <td><strong>Users &amp; Organizations</strong></td>
+          <td><span class="m__tag m__tag--success">Delivery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="delivery" data-cc-stream="Platform">
+          <td class="cc__stream"></td>
+          <td><strong>Platform Design Maintenance</strong></td>
+          <td><span class="m__tag m__tag--success">Delivery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="delivery" data-cc-stream="Platform">
+          <td class="cc__stream"></td>
+          <td><strong>Pricing Page</strong></td>
+          <td><span class="m__tag m__tag--success">Delivery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
+          <td class="cc__stream">Deeptalk</td>
+          <td><strong>Speech Navigator</strong></td>
+          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
+          <td class="cc__stream"></td>
+          <td><strong>Emma</strong></td>
+          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
+          <td class="cc__stream"></td>
+          <td><strong>Vocal Effort Conductor</strong></td>
+          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
+          <td class="cc__stream"></td>
+          <td><strong>Signals Tuning</strong></td>
+          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
+          <td class="cc__stream"></td>
+          <td><strong>Feedback Loop</strong></td>
+          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="delivery" data-cc-stream="Deeptalk">
+          <td class="cc__stream"></td>
+          <td><strong>Deeptalk Product</strong></td>
+          <td><span class="m__tag m__tag--success">Delivery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <tr data-cc-type="discovery" data-cc-stream="Tools">
+          <td class="cc__stream">Tools</td>
+          <td><strong>Strategy Research Tool</strong></td>
+          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="delivery" data-cc-stream="Tools">
+          <td class="cc__stream"></td>
+          <td><strong>UI Scheme &amp; Compare</strong></td>
+          <td><span class="m__tag m__tag--success">Delivery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="delivery" data-cc-stream="Tools">
+          <td class="cc__stream"></td>
+          <td><strong>Velma LLM Battle</strong></td>
+          <td><span class="m__tag m__tag--success">Delivery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <tr data-cc-type="delivery" data-cc-stream="Design System">
+          <td class="cc__stream">Design System</td>
+          <td><strong>Design System Releases</strong></td>
+          <td><span class="m__tag m__tag--success">Delivery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr data-cc-type="delivery" data-cc-stream="Design System">
+          <td class="cc__stream"></td>
+          <td><strong>Deeptalk Icons</strong></td>
+          <td><span class="m__tag m__tag--success">Delivery</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space XL"></div>
+</div>
+
+<script src="/assets/service/control-center.js"></script>
+
+{% endblock %}

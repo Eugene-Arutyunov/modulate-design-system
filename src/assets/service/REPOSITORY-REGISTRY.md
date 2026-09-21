@@ -16,9 +16,27 @@ Promo grid: two card sizes (full width and 50%, gap `--m__gap-xl`), two behavior
 
 ## Tools section
 
-**Pages:** `src/tools/index.html` → `/tools/`; `src/tools/icon-studio.html` → `/tools/icon-studio/`; `src/tools/modulate-fingerprint.html` → `/tools/modulate-fingerprint/`; `src/tools/scatterplot.html` → `/tools/scatterplot/`; `src/tools/velma-fraud-demo-widget.html` → `/tools/velma-fraud-demo-widget/`; `src/tools/charts.html` → `/tools/charts/`; `src/tools/online-docs/*` → `/tools/online-docs/*`; `src/tools/square-element.html` → `/tools/square-element/`.
+**Pages:** `src/tools/index.html` → `/tools/`; `src/tools/icon-studio.html` → `/tools/icon-studio/`; `src/tools/modulate-fingerprint.html` → `/tools/modulate-fingerprint/`; `src/tools/scatterplot.html` → `/tools/scatterplot/`; `src/tools/velma-fraud-demo-widget.html` → `/tools/velma-fraud-demo-widget/`; `src/tools/charts.html` → `/tools/charts/`; `src/tools/online-docs/*` → `/tools/online-docs/*`; `src/tools/square-element.html` → `/tools/square-element/`; `src/tools/control-center.html` → `/tools/control-center/`; `src/tools/knowledge-map.html` → `/tools/knowledge-map/`.
 
-Working tools around the design system, grouped on the index into three lists: **Studios** (screenshot sandboxes — Icon Studio, Modulate Fingerprint), **Builders** (constructors — Scatterplot: responsive/screenshot preview of `#conv-scatter` with JSON export/import), and **Documents** (technical documents — Chart.js Integration plus “There has to be a square element”, moved from the blog with no redirect, listed without a date). The index reuses the blog-index list pattern (`posts-list`, `posts-list-col-title`). The two online-doc case studies and the two Velma builders (Fraud Demo Widget, LLM Battle) are deliberately not listed — the pages keep building and stay reachable by direct URL.
+Working tools around the design system, grouped on the index into lists: **Studios** (screenshot sandboxes — Icon Studio, Modulate Fingerprint), **Builders** (constructors — Scatterplot: responsive/screenshot preview of `#conv-scatter` with JSON export/import), **Team** (Control Center, Voice Agent Knowledge Map), and **Documents** (technical documents — Chart.js Integration plus “There has to be a square element”, moved from the blog with no redirect, listed without a date). The index reuses the blog-index list pattern (`posts-list`, `posts-list-col-title`). The two online-doc case studies and the two Velma builders (Fraud Demo Widget, LLM Battle) are deliberately not listed — the pages keep building and stay reachable by direct URL.
+
+---
+
+## Control Center
+
+**Page:** `src/tools/control-center.html` → `/tools/control-center/` **Styles:** `src/styles/service/control-center.css`
+
+**Scripts:** `src/assets/service/control-center.js`
+
+The team’s projects in one wide table (`.cc__wide` widens `.m__wrapper` to 1400px): columns Stream / Project / Type / October scope / Next steps, one row per project across four streams (Platform, Deeptalk, Tools, Design System), discovery rows first within each stream. Delivery (`.m__tag--success`) and Discovery (`.m__tag--secondary`) are a property of the project, not a phase; an All / Discovery / Delivery `.m__segmented-control-secondary S` above the table filters rows (`control-center.js`; rows carry `data-cc-type` and `data-cc-stream`). The stream label is not repeated per row: `control-center.js` re-renders it onto the first visible row of each stream after every filter change (cells quieted with `.cc__stream`). Content is hand-maintained inline HTML (no data file); the October scope and Next steps columns are intentionally empty for now, awaiting a content pass; unconfirmed cells will carry `.cc__draft` (quiets to `--m__text-caption` — dimmed, never decorated). Plain `h1` heading (no post-meta, no intro), table inside `.m__table-wrapper` with `<colgroup>` widths.
+
+---
+
+## Voice Agent Knowledge Map
+
+**Page:** `src/tools/knowledge-map.html` → `/tools/knowledge-map/` **Styles:** `src/styles/service/knowledge-map.css` **Scripts:** `src/assets/service/knowledge-map/knowledge-map.js` (behavior), `knowledge-map-data.js` (dataset)
+
+Interactive map of the 29 disciplines behind voice-agent work: six “clouds” of tag buttons on a 16:9 stage (`figure.km`, `container-type: size`, cq-unit typography), an SVG layer of quadratic curves connecting related disciplines (recomputed on resize and `document.fonts.ready`), and a side panel with each discipline’s description, external “Read more” links and “Connected to” neighbor navigation. Selecting a tag highlights its links and dims the rest; background click or Escape deselects. Port of a standalone bilingual page: EN is the public language, RU is kept behind a hidden toggle — double-clicking the invisible 72px bottom-right corner of the stage (`.km__lang-zone`) switches languages, persisted in `localStorage["km-lang"]` (the original 37 disciplines were merged down to 29 in review — Post-training→ML, Semantics→Pragmatics, Discourse→Conversation analysis, Group dynamics→Social psychology, IxD→Conversation design, Psychoacoustics→DSP, SWE→Real-time systems, Prototyping removed). Wide wrapper (`.km__wide`, 1400px), plain `h1`, and the panel merges into the stage: no left border or own rounding, surface background from the global `aside` rule. All colors derive from semantic tokens via page-local props on `.km` (`--km-line` is the table hairline recipe, `--km-accent` is `--m__text-link-hover`), so the site’s `.dark-mode` toggle restyles the map with no page-specific overrides; group headings use CoFo Gothic, the panel eyebrow is semi-mono uppercase. Below 720px the clouds stack, the SVG hides and the panel flows underneath.
 
 ---
 
