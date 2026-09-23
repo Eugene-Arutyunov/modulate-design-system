@@ -5862,3 +5862,41 @@ button.moderation-review-behaviors__comment-link.S:hover {
 
 .review-assignment-avatar__trigger.has-members { width: auto; height: auto; flex-basis: auto; border: 0; box-shadow: none; background: transparent; }
 .review-assignment-avatar__trigger:is(:hover, [aria-expanded="true"]) .moderation-participants__avatar { color: var(--m__text-link-hover); background: color-mix(in srgb, var(--m__text-link-hover) 15%, var(--m__bg-surface)); }
+
+.review-assignment-avatar__trigger .moderation-participants__avatar + .moderation-participants__avatar { margin-left: -.6rem; }
+.moderation-review-presence { color: var(--m__text); font-size: var(--m__font-size-xs); margin: 0 0 1rem; }
+
+.conversation-report__title-actions > .review-assignment-avatar { align-self: flex-end; }
+.conversation-report__title-actions .review-assignment-avatar__trigger .moderation-participants__avatar {
+  width: 2rem;
+  height: 2rem;
+  flex-basis: 2rem;
+  border-color: var(--m__bg);
+  font-size: var(--m__font-size-s);
+}
+.conversation-report__title-actions .review-assignment-avatar__trigger:not(.has-members) {
+  width: 2rem;
+  height: 2rem;
+  flex-basis: 2rem;
+  border-color: var(--m__bg);
+}
+
+[data-moderation-review] .conversation-report__title-row { margin-bottom: .35rem; }
+
+.moderation-review-behaviors__table td.moderation-review-behaviors__actions {
+  text-align: left;
+  padding-left: 0;
+}
+.moderation-review-behaviors__controls { justify-items: start; }
+.moderation-review-behaviors__controls .moderation-review-behaviors__choices,
+.moderation-review-behaviors__controls .moderation-review-behaviors__review-meta { margin-left: 0; text-align: left; }
+
+.moderation-verdict-activity { padding: 0; color: var(--m__text-caption); font-size: var(--m__font-size-xs); line-height: var(--m__line-height-base); }
+.moderation-verdict-activity time { display: inline; margin: 0; font-size: inherit; }
+
+.moderation-verdict-comment-modal__thread { gap: .5rem; }
+
+.moderation-verdict-comment-modal__thread > .moderation-verdict-activity + .moderation-verdict-comment-modal__comment,
+.moderation-verdict-comment-modal__thread > .moderation-verdict-comment-modal__comment + .moderation-verdict-activity {
+  margin-top: .6rem;
+}

@@ -16,6 +16,7 @@
   if (reportId && /^[a-z0-9]+$/.test(reportId) && report) {
     report.dataset.conversationId = reportId;
     report.querySelector("[data-review-assignee]").dataset.reviewAssignee = reportId;
+    report.querySelector("[data-assignment-avatar]").dataset.assignmentAvatar = reportId;
   }
   const controls = Array.from(document.querySelectorAll("[data-review-assignee]"));
   const filter = document.querySelector("[data-assignee-filter]");
@@ -76,6 +77,10 @@
     search.placeholder = "Search";
     search.setAttribute("aria-label", "Search members");
     menu.append(search);
+    const heading = document.createElement("div");
+    heading.className = "moderation-sort-heading";
+    heading.textContent = "Assigned to";
+    menu.append(heading);
     people.forEach(name => {
       const row = document.createElement("div");
       row.className = "review-filter-checkbox-row";

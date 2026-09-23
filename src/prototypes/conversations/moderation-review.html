@@ -37,8 +37,6 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           </h1>
         </div>
         <div class="conversation-report__title-actions">
-          {% set assignmentId = "7839f2" %}
-          {% include 'prototypes/conversations/review-assignee.html' %}
           <div
             class="m__menu-button conversation-report__report-menu moderation-review-status"
             data-review-status-control
@@ -182,54 +180,15 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
               </div>
             </div>
           </div>
-          <div class="m__menu-button moderation-participants">
-            <button
-              type="button"
-              class="m__menu-button-trigger moderation-participants__trigger"
-              aria-label="{{ reviewParticipants.length }} participants working on this conversation"
-              aria-haspopup="menu"
-              aria-expanded="false"
-            >
-              {% for participant in reviewParticipants %}
-              {% if loop.index < 5 %}
-              <span
-                class="moderation-participants__avatar"
-                aria-hidden="true"
-              >{{ participant.initials }}</span>
-              {% elif loop.index == 5 %}
-              <span
-                class="moderation-participants__avatar moderation-participants__avatar--more"
-                aria-hidden="true"
-              >+{{ reviewParticipants.length - 4 }}</span>
-              {% endif %}
-              {% endfor %}
-            </button>
-            <div
-              class="m__menu-button-list moderation-participants__list"
-              hidden
-              role="menu"
-              aria-label="Participants"
-            >
-              {% for participant in reviewParticipants %}
-              <div class="moderation-participants__item" role="menuitem">
-                <span
-                  class="moderation-participants__avatar"
-                  aria-hidden="true"
-                >{{ participant.initials }}</span>
-                <span class="moderation-participants__details">
-                  <span class="moderation-participants__name"
-                    >{{ participant.name }}</span
-                  >
-                  <span class="moderation-participants__activity"
-                    >{{ participant.activity }}</span
-                  >
-                </span>
-              </div>
-              {% endfor %}
-            </div>
+          <div class="m__menu-button review-assignment-avatar" data-assignment-avatar="7839f2" data-initial-members="{% for participant in reviewParticipants %}{{ participant.name }}{% if not loop.last %}|{% endif %}{% endfor %}">
+            <button type="button" class="m__menu-button-trigger review-assignment-avatar__trigger" aria-label="Assign reviewers" aria-haspopup="menu" aria-expanded="false"></button>
+            <div class="m__menu-button-list moderation-sort-list" role="menu" hidden></div>
+            <label hidden><span data-assignee-label></span><select data-review-assignee="7839f2" aria-label="Assign reviewers"></select></label>
           </div>
         </div>
       </div>
+
+      <p class="moderation-review-presence">Now viewing this report: {% for participant in reviewParticipants %}{{ participant.name }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
 
       <div class="conversation-report__player m__rounded">
         <div class="media-container" data-fingerprint-player>
@@ -541,7 +500,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                       <span>Edit comment</span>
                       <button
                         type="button"
-                        class="moderation-review-behaviors__comment-link"
+                        class="moderation-verdict-comment-modal__text-action"
                         data-review-comment-edit-cancel
                       >
                         Cancel
@@ -618,6 +577,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     var statusStorageKey = "modulate-review-status-overrides";
     var reviewResultsStorageKey = "modulate-review-results";
     var verdictAuthorsKey = "modulate-review-verdict-authors";
+    var verdictHistoryKey = "modulate-review-verdict-history";
     var evidenceReturnLink = null;
     var evidenceReturnScrollY = 0;
     var evidenceReturnFromModal = false;
@@ -826,6 +786,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     function setReviewResult(review, value, restoring) {
       var state = review.querySelector("[data-review-state]");
       var meta = review.querySelector("[data-review-meta]");
+      var previousValue = review.dataset.reviewResult || "";
       var nextValue = restoring ? value : review.dataset.reviewResult === value ? "" : value;
       review.querySelectorAll("[data-review-choice]").forEach(function (button) {
         var isSelected = button.dataset.reviewChoice === nextValue;
@@ -840,6 +801,17 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       var authors = readStorage(verdictAuthorsKey);
       var conversationAuthors = authors[conversationId] || {};
       if (!restoring) {
+        var history = readStorage(verdictHistoryKey);
+        var events = history[conversationId] || {};
+        var index = review.dataset.reviewIndex;
+        if (!events[index]) {
+          events[index] = [];
+          var previousAuthor = conversationAuthors[index];
+          if (previousValue && previousAuthor) events[index].push({ author: previousAuthor.author, createdAt: previousAuthor.at, verdict: previousValue });
+        }
+        if (previousValue !== nextValue) events[index].push({ author: reviewerName, createdAt: new Date().toISOString(), verdict: nextValue });
+        history[conversationId] = events;
+        writeStorage(verdictHistoryKey, history);
         if (nextValue) conversationAuthors[review.dataset.reviewIndex] = { author: reviewerName, at: new Date().toISOString() };
         else delete conversationAuthors[review.dataset.reviewIndex];
         authors[conversationId] = conversationAuthors;
@@ -848,7 +820,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       var attribution = conversationAuthors[review.dataset.reviewIndex];
       if (state) {
         state.hidden = !nextValue;
-        state.textContent = nextValue ? attribution ? attribution.author + " · " + formatVerdictTimestamp(attribution.at) : "Reviewer not recorded" : "";
+        state.textContent = nextValue ? attribution ? shortReviewerName(attribution.author) + " · " + formatVerdictTimestamp(attribution.at) : "Reviewer not recorded" : "";
         state.title = nextValue && attribution ? formatCommentTimestamp(attribution.at) : "";
       }
       if (meta) meta.hidden = false;
@@ -964,9 +936,15 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       );
     }
 
+    function shortReviewerName(name) {
+      var parts = String(name || "").trim().split(/\s+/);
+      return parts.length > 1 ? parts[0] + " " + parts[parts.length - 1][0] + "." : parts[0];
+    }
+
     function formatVerdictTimestamp(value) {
-      return new Date(value).toLocaleString("en-GB", {
-        day: "numeric", month: "short", year: "numeric",
+      var date = new Date(value);
+      return date.toLocaleString("en-GB", {
+        day: "numeric", month: "short", year: date.getFullYear() === new Date().getFullYear() ? undefined : "numeric",
         hour: "2-digit", minute: "2-digit",
       });
     }
@@ -975,7 +953,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       var attribution = commentModal.querySelector("[data-review-comment-attribution]");
       var state = review.querySelector("[data-review-state]");
       attribution.hidden = !review.dataset.reviewResult;
-      attribution.textContent = state ? state.textContent.replace("\n", " · ") : "";
+      var author = (readStorage(verdictAuthorsKey)[conversationId] || {})[review.dataset.reviewIndex];
+      attribution.textContent = author ? author.author + " · " + formatVerdictTimestamp(author.at) : state ? state.textContent : "";
       var selectedResult = review.dataset.reviewResult || "";
       if (selectedResult) {
         commentChoices.dataset.reviewResult = selectedResult;
@@ -1033,14 +1012,37 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         ? getReviewComments(activeCommentReview)
         : [];
       commentList.replaceChildren();
-      if (!comments.length) {
+      var events = activeCommentReview ? (readStorage(verdictHistoryKey)[conversationId] || {})[activeCommentReview.dataset.reviewIndex] || [] : [];
+      if (!events.length && activeCommentReview && activeCommentReview.dataset.reviewResult) {
+        var recorded = (readStorage(verdictAuthorsKey)[conversationId] || {})[activeCommentReview.dataset.reviewIndex];
+        if (recorded) events = [{ author: recorded.author, createdAt: recorded.at, verdict: activeCommentReview.dataset.reviewResult }];
+      }
+      var timeline = comments.map((comment, index) => ({ comment, index, createdAt: comment.createdAt }))
+        .concat(events.map(event => ({ event, createdAt: event.createdAt })))
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      if (!timeline.length) {
         var emptyState = document.createElement("p");
         emptyState.className =
           "moderation-verdict-comment-modal__empty-state";
-        emptyState.textContent = "No comments yet";
+        emptyState.textContent = "No activity yet";
         commentList.appendChild(emptyState);
       }
-      comments.forEach(function (comment, index) {
+      timeline.forEach(function (entry) {
+        if (entry.event) {
+          var event = entry.event;
+          var activity = document.createElement("div");
+          activity.className = "moderation-verdict-activity";
+          var message = document.createElement("span");
+          message.textContent = event.author + (event.verdict ? " set the verdict to " + (event.verdict === "true" ? "True" : "False positive") : " cleared the verdict");
+          var time = document.createElement("time");
+          time.dateTime = event.createdAt;
+          time.textContent = formatCommentTimestamp(event.createdAt);
+          activity.append(message, document.createTextNode(" · "), time);
+          commentList.append(activity);
+          return;
+        }
+        var comment = entry.comment;
+        var index = entry.index;
         var item = document.createElement("article");
         var avatar = document.createElement("span");
         var body = document.createElement("div");
@@ -1722,6 +1724,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           commentChoice.dataset.reviewCommentChoice,
         );
         renderCommentVerdict(activeCommentReview);
+        renderCommentList();
         return;
       }
 
