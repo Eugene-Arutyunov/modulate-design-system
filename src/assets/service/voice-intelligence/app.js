@@ -24,13 +24,23 @@ function table(headers,widths,rows,prefix='row',numbered=true){
  }
  return `<div class="m__table-wrapper" tabindex="0" aria-label="Таблица исследования"><table><colgroup>${widths.map(w=>`<col style="width:${w}%">`).join('')}</colgroup><thead><tr>${headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr id="${prefix}-${r.id}" ${target===r.id?'class="target-row"':''}>${r.cells.map((c,n)=>`<td data-label="${esc(headers[n])}" ${numbered&&n===0?'class="number-cell"':n===(numbered?1:0)?'class="title-cell"':''}>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
+function sceneScript(text) {
+ const paragraphs = [];
+ for (const line of text.split('\n').map(line => line.trim()).filter(Boolean)) {
+   const dialogue = line.startsWith('—');
+   const previous = paragraphs.at(-1);
+   if (!dialogue && previous && !previous.dialogue) previous.text += ` ${line}`;
+   else paragraphs.push({text: line, dialogue});
+ }
+ return `<div class="scene-script">${paragraphs.map(part => `<p>${md(part.text)}</p>`).join('')}</div>`;
+}
 function scenePreview(id) {
  const scene = D.scenes[id - 1];
  const columns = [['Почему важно', scene[2]]];
  if (scene.length > 3) columns.push(['Опора на схему', scene[3]], ['Похожее / что проверить', scene[4]]);
  else columns.push(['Похожее / что проверить', 'Гипотеза. Наличие сценария у конкурентов пока не проверено.']);
  return `<section class="scene-preview"><h3>${md(plain(scene[0]).replace(/^\d+\.\s*/, ''))}</h3>
-   <p class="scene-script">${scene[1].split('\n').map(md).join('<br><br>')}</p>
+   ${sceneScript(scene[1])}
    <div class="scene-facts-wrapper"><table class="scene-facts" aria-label="Подробности сцены"><thead><tr>${columns.map(([label]) => `<th scope="col">${esc(label)}</th>`).join('')}</tr></thead><tbody><tr>${columns.map(([, value]) => `<td>${md(value)}</td>`).join('')}</tr></tbody></table></div>
    </section>`;
 }
