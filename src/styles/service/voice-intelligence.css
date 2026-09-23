@@ -17,7 +17,8 @@
   & .impression-cards {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--m__spacer-xs);
+    column-gap: var(--m__gap-xs);
+    row-gap: var(--m__spacer-m);
   }
   @media (width < 1024px) {
     & .impression-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -26,8 +27,10 @@
     & .impression-cards { grid-template-columns: minmax(0, 1fr); }
   }
   & .impression-card {
+    --m__widget-radius: var(--m__rounded-radius);
     display: flex;
     flex-direction: column;
+    min-height: 18rem;
     padding: var(--m__spacer-xs) calc(var(--m__widget-padding) * 2)
       calc(var(--m__widget-padding) * 2) var(--m__spacer-xs);
     gap: var(--m__spacer-xs);
@@ -141,6 +144,7 @@
   & .scene-facts { margin-bottom: var(--m__spacer-m); }
   & .scene-facts-wrapper { overflow-x: auto; }
   & .idea-preview .scene-preview > p { margin-bottom: var(--m__spacer-xxs); }
+  & .idea-preview .scene-preview.m__widget { padding-bottom: var(--m__spacer-l); }
   & .idea-preview .scene-script > p { margin: 0; }
   & .idea-preview .scene-script > p + p { margin-top: var(--m__spacer-xs); }
   & .research-modal-body { padding-top: var(--m__spacer-xs); }

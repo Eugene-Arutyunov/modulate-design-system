@@ -69,11 +69,11 @@ function companion() {
    ]})), 'quality', false
  );
  const impressions = `<div class="impression-cards">${D.wow.map((item, id) => `
-   <article class="m__widget impression-card" id="impression-${id}">
+   <article class="m__widget m__rounded impression-card" id="impression-${id}">
      <span class="row-no">${String(id + 1).padStart(2, '0')}</span>
      <h3>${esc(plain(item[0]))}</h3>
      <section><h4>Behavior</h4><p>${md(item[1])}</p></section>
-     <section><h4>What it could become</h4><p>${md(item[2])}</p></section>
+     <section><p>${md(item[2])}</p></section>
    </article>`).join('')}</div>`;
  return `<div class="companion-tables">
    <div class="companion-intro">
