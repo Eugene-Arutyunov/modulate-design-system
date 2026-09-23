@@ -1,0 +1,39 @@
+{% extends 'service/layout.html' %}
+{% set pageTitle = 'Voice AI Intelligence — Modulate Design System' %}
+{% set pageDesc = 'Исследование Voice AI Intelligence: идеи, сцены, критерии идеального собеседника и вендоры.' %}
+{% block content %}
+<main class="m__wrapper voice-intelligence" lang="ru">
+  <div class="m__space XL"></div>
+  <h1 class="loud">Voice AI Intelligence</h1>
+  <div class="m__space M"></div>
+  <nav id="views" class="m__segmented-nav" aria-label="Разделы исследования"></nav>
+  <div class="m__space M"></div>
+  <div id="idea-controls">
+    <div id="quality-filters" class="m__chip-group" role="group" aria-label="Фильтр идей по качеству"></div>
+  </div>
+  <div id="results" tabindex="-1"></div>
+  <dialog id="research-modal" class="m__modal-backdrop research-modal" aria-labelledby="research-modal-title">
+    <div class="m__modal">
+    <div class="m__modal__header">
+      <h2 id="research-modal-title" class="m__modal__title"></h2>
+      <button type="button" class="m__modal__close" aria-label="Закрыть" autofocus>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="m__modal__body research-modal-body"></div>
+    </div>
+  </dialog>
+  <aside id="idea-preview" class="m__popover m__rounded idea-preview" popover="auto" role="dialog" aria-labelledby="idea-preview-title">
+    <div class="idea-preview-header">
+      <h2 id="idea-preview-title"></h2>
+      <button type="button" class="m__modal__close" popovertarget="idea-preview" popovertargetaction="hide" aria-label="Закрыть" autofocus>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="idea-preview-content research-modal-body"></div>
+  </aside>
+  <noscript><p>Для просмотра разделов исследования и фильтрации идей включите JavaScript.</p></noscript>
+  <div class="m__space XL"></div>
+</main>
+<script type="module" src="/assets/service/voice-intelligence/app.js"></script>
+{% endblock %}
