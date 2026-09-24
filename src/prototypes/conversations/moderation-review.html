@@ -590,7 +590,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     var statusStorageKey = "modulate-review-status-overrides";
     var reviewResultsStorageKey = "modulate-review-results";
     var verdictAuthorsKey = "modulate-review-verdict-authors";
-    var verdictHistoryKey = "modulate-review-verdict-history";
+    var verdictHistory = {};
+    try { window.localStorage.removeItem("modulate-review-verdict-history"); } catch (error) {}
     var evidenceReturnLink = null;
     var evidenceReturnScrollY = 0;
     var evidenceReturnFromModal = false;
@@ -858,17 +859,15 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       var authors = readStorage(verdictAuthorsKey);
       var conversationAuthors = authors[conversationId] || {};
       if (!restoring) {
-        var history = readStorage(verdictHistoryKey);
+        var history = verdictHistory;
         var events = history[conversationId] || {};
         var index = review.dataset.reviewIndex;
         if (!events[index]) {
           events[index] = [];
-          var previousAuthor = conversationAuthors[index];
-          if (previousValue && previousAuthor) events[index].push({ author: previousAuthor.author, createdAt: previousAuthor.at, verdict: previousValue });
         }
         if (previousValue !== nextValue) events[index].push({ author: reviewerName, createdAt: new Date().toISOString(), verdict: nextValue });
         history[conversationId] = events;
-        writeStorage(verdictHistoryKey, history);
+
         if (nextValue) conversationAuthors[review.dataset.reviewIndex] = { author: reviewerName, at: new Date().toISOString() };
         else delete conversationAuthors[review.dataset.reviewIndex];
         authors[conversationId] = conversationAuthors;
@@ -1076,11 +1075,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         ? getReviewComments(activeCommentReview)
         : [];
       commentList.replaceChildren();
-      var events = activeCommentReview ? (readStorage(verdictHistoryKey)[conversationId] || {})[activeCommentReview.dataset.reviewIndex] || [] : [];
-      if (!events.length && activeCommentReview && activeCommentReview.dataset.reviewResult) {
-        var recorded = (readStorage(verdictAuthorsKey)[conversationId] || {})[activeCommentReview.dataset.reviewIndex];
-        if (recorded) events = [{ author: recorded.author, createdAt: recorded.at, verdict: activeCommentReview.dataset.reviewResult }];
-      }
+      var events = activeCommentReview ? (verdictHistory[conversationId] || {})[activeCommentReview.dataset.reviewIndex] || [] : [];
       var timeline = comments.map((comment, index) => ({ comment, index, createdAt: comment.createdAt }))
         .concat(events.map(event => ({ event, createdAt: event.createdAt })))
         .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
