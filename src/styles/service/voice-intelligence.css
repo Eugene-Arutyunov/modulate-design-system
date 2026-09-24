@@ -2,6 +2,27 @@
 .voice-intelligence {
   & [hidden] { display: none !important; }
 
+  /* Same hidden corner gesture as Knowledge Map; visible on keyboard focus. */
+  & .voice-language-toggle {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 72px;
+    height: 72px;
+    z-index: 30;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: transparent;
+    user-select: none;
+  }
+  & .voice-language-toggle:focus-visible {
+    color: var(--m__text-caption);
+    background: var(--m__bg);
+    outline: 2px solid var(--m__text-link);
+    outline-offset: -2px;
+  }
+
   --voice-caption-size: 0.675rem;
 
   & .m__chip-group { margin-bottom: var(--m__spacer-m); }
