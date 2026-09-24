@@ -31,7 +31,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
           Review Queue
         </a>
-        <span class="m__tag-flat moderation-review-meta-line__id">7839f2</span>
+        <span class="m__tag-flat moderation-review-meta-line__id review-copy-id" data-copy-review-id="7839f2" role="button" tabindex="0" aria-label="Copy conversation ID" title="Copy ID">7839f2</span>
         <span>Today, 10:24</span>
         <span aria-hidden="true">·</span>
         <span>ServiceOne</span>
@@ -773,6 +773,9 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     }
 
     function applyIncomingFilterParams(url) {
+      ["dateFrom", "dateTo", "updatedFrom", "updatedTo"].forEach(function (key) {
+        if (initialFilterParams.get(key)) url.searchParams.set(key, initialFilterParams.get(key));
+      });
       if (initialFilterParams.get("assignee")) url.searchParams.set("assignee", initialFilterParams.get("assignee"));
       url.searchParams.delete("behavior");
       initialFilterParams.getAll("behavior").forEach(function (behavior) {

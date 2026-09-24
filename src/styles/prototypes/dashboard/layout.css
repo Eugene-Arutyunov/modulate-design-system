@@ -3752,11 +3752,10 @@ table.config-details {
   }
 
   &
-    .moderation-table__conversation-link:hover
+    .moderation-table__conversation-cell:hover:not(:has(.review-copy-id:is(:hover, :focus-visible)))
     :is(
       .moderation-table__title,
-      .moderation-table__meta,
-      .moderation-table__conversation-id
+      .moderation-table__meta
     ) {
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
@@ -5284,11 +5283,11 @@ button.moderation-review-behaviors__comment-link.S:hover {
   white-space: nowrap;
 }
 
-.moderation-table__table-wrapper .moderation-table__col-conversation { width: 21%; }
+.moderation-table__table-wrapper .moderation-table__col-conversation { width: 25%; }
 .moderation-table__table-wrapper .moderation-table__col-pattern { width: 11%; }
-.moderation-table__table-wrapper .moderation-table__col-detection { width: 42%; }
-.moderation-table__table-wrapper .moderation-table__col-status { width: 13%; }
-.moderation-table__table-wrapper .moderation-table__col-assigned { width: 10%; }
+.moderation-table__table-wrapper .moderation-table__col-detection { width: 38%; }
+.moderation-table__table-wrapper .moderation-table__col-status { width: 12%; }
+.moderation-table__table-wrapper .moderation-table__col-assigned { width: 11%; }
 .moderation-table__table-wrapper .moderation-table__col-actions { width: 3%; }
 
 .review-assignee-field {
@@ -6252,3 +6251,44 @@ button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expa
 .moderation-review-meta-line__id {
   align-self: center;
 }
+
+.review-copy-id { position: relative; cursor: pointer; }
+.review-copy-id:is(:hover, :focus-visible) { color: var(--m__text-link-hover); }
+
+.moderation-table .review-copy-id {
+  color: var(--m__text-caption);
+  transition: color .5s ease, background-color .5s ease;
+}
+.moderation-table .review-copy-id:is(:hover, :focus-visible) {
+  color: var(--m__text-link-hover);
+  transition-duration: 0s;
+}
+
+.moderation-table .moderation-table__conversation-cell:hover:not(:has(.review-copy-id:is(:hover, :focus-visible))) .review-copy-id {
+  color: var(--m__text-link-hover);
+  transition-duration: 0s;
+}
+
+/* Created date uses the same compact, single-line range treatment as Conversations. */
+.review-filter-options.has-date-range { width: 15rem; }
+.review-date-range-header { display: flex; align-items: center; margin: -.25rem -.25rem 0; padding: .25rem; border-bottom: 1px solid var(--m__border); white-space: nowrap; font: inherit; }
+.review-filter-popup .review-date-range-header button { width: 100%; padding: .4rem .65rem; font: inherit; color: var(--m__text); }
+.review-date-range-fields { display: flex; align-items: center; gap: .25rem; padding: .4rem .65rem; min-width: 0; width: 100%; box-sizing: border-box; }
+.review-date-range-fields > span { color: var(--m__text-caption); }
+.review-date-range-fields input { width: auto; min-width: 0; flex: 0 0 auto; padding: 0; border: 0; background: transparent; color: var(--m__text); font: inherit; outline: none; }
+.review-date-range-fields input::-webkit-calendar-picker-indicator { display: none; }
+.review-date-range-header [hidden],
+.review-filter-options.has-date-range > input[type="search"],
+.review-filter-options.has-date-range .review-filter-search-clear { display: none !important; }
+
+.review-date-range-fields input::-webkit-date-and-time-value { text-align: left; }
+.review-date-range-fields input::-webkit-datetime-edit { padding: 0; }
+.review-date-range-fields input::-webkit-inner-spin-button { display: none; }
+.review-date-range-fields input::-webkit-datetime-edit-fields-wrapper { padding: 0; }
+.review-date-range-fields input::-webkit-datetime-edit-day-field,
+.review-date-range-fields input::-webkit-datetime-edit-month-field,
+.review-date-range-fields input::-webkit-datetime-edit-year-field,
+.review-date-range-fields input::-webkit-datetime-edit-text { padding: 0; }
+.review-date-range-fields input::-webkit-datetime-edit { display: inline-flex; flex: none; }
+
+.review-date-range-fields input.review-date-calendar-anchor { position: fixed; opacity: 0; pointer-events: none; margin: 0; padding: 0; border: 0; }
