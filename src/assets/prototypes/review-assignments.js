@@ -109,7 +109,13 @@
       button.type = "button";
       button.className = "m__menu-button-item";
       button.dataset.sortOption = name;
-      button.textContent = name;
+      const avatar = document.createElement("span");
+      avatar.className = "moderation-participants__avatar review-assignment-options__avatar";
+      avatar.setAttribute("aria-hidden", "true");
+      avatar.textContent = name.split(/\s+/).map(part => part[0]).join("");
+      const nameLabel = document.createElement("span");
+      nameLabel.textContent = name;
+      button.append(avatar, nameLabel);
       button.addEventListener("click", toggle);
       row.append(label, button);
       menu.append(row);

@@ -3939,7 +3939,7 @@ table.config-details {
   display: block;
   max-width: 12rem;
   overflow: hidden;
-  color: var(--m__text-caption);
+  color: var(--m__text);
   font-size: var(--m__font-size-xs);
   font-weight: var(--m__font-weight-regular);
   line-height: 1.2;
@@ -3956,7 +3956,8 @@ table.config-details {
 }
 
 .moderation-table__status-option-check svg,
-.moderation-sort-check {
+.moderation-sort-check,
+.moderation-review-accuracy__list svg {
   display: block;
   width: 1rem;
   height: 1rem;
@@ -5204,7 +5205,7 @@ button.moderation-review-behaviors__comment-link.S {
 .moderation-review-behaviors__comment-count {
   font-size: var(--m__font-size-s);
   font-weight: var(--m__font-weight-bold);
-  color: var(--m__text);
+  color: inherit;
 }
 
 .moderation-verdict-comment-modal__text-action {
@@ -6103,4 +6104,84 @@ button.moderation-review-behaviors__comment-link.S svg {
 
 .moderation-review-viewers__list .moderation-participants__name {
   font-weight: var(--m__font-weight-regular);
+}
+
+button.moderation-review-accuracy__trigger {
+  min-width: 10rem;
+  justify-content: space-between;
+  border: var(--m__border-width-m) solid var(--m__bg-accent);
+  border-radius: var(--m__radius-s);
+  color: var(--m__text);
+  font-weight: var(--m__font-weight-medium);
+  transition: color .5s ease, border-color .5s ease;
+}
+button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expanded="true"]) {
+  color: var(--m__text-link-hover);
+  border-color: currentColor;
+  transition-duration: 0s;
+}
+
+.moderation-review-accuracy.is-unreviewed > button:not(:hover):not(:focus-visible):not([aria-expanded="true"]) {
+  color: var(--m__text-caption);
+  border-color: var(--m__text-caption);
+}
+.moderation-review-accuracy__list {
+  z-index: 1001;
+  min-width: 15rem;
+  max-width: calc(100vw - 2rem);
+}
+.moderation-review-accuracy__list .m__menu-button-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.moderation-review-accuracy__list svg {
+  visibility: hidden;
+}
+.moderation-review-accuracy__list [aria-checked="true"] svg { visibility: visible; }
+
+.moderation-review-accuracy__list .m__menu-button-item[aria-checked="true"] {
+  background-color: var(--m__bg-surface);
+  color: var(--m__text);
+  font-weight: var(--m__font-weight-bold);
+}
+
+.moderation-review-accuracy__list .m__menu-button-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.1rem 1rem;
+}
+.moderation-review-accuracy__author {
+  grid-column: 1 / -1;
+  font-size: var(--m__font-size-xs);
+  font-weight: var(--m__font-weight-regular);
+  color: var(--m__text);
+  white-space: normal;
+}
+
+.review-assignment-options .m__menu-button-item[data-sort-option] {
+  justify-content: flex-start;
+  gap: .4rem;
+}
+.review-assignment-options__avatar {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: 0 0 1.35rem;
+  border: 0;
+  font-size: .55rem;
+}
+
+.m__menu-button-list.review-assignment-options {
+  min-width: 17rem;
+  max-width: calc(100vw - 2rem);
+}
+
+.review-assignment-options__avatar {
+  transition: color .5s ease, background-color .5s ease;
+}
+.review-assignment-options .review-filter-checkbox-row:is(:hover, :focus-within) .review-assignment-options__avatar {
+  color: var(--m__text-link-hover);
+  background-color: color-mix(in srgb, var(--m__text-link-hover) 15%, var(--m__bg-surface));
+  transition-duration: 0s;
 }
