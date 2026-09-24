@@ -11,6 +11,16 @@
     catch { /* Keep session state when storage is unavailable. */ }
   }
   read();
+  // Show the unassigned demo state once, including in existing prototype sessions.
+  try {
+    const demoKey = "modulate-review-assignment-demo-v2";
+    if (!localStorage.getItem(demoKey)) {
+      assignments["7622f4"] = ["Maya Chen"];
+      assignments["7691d5"] = [];
+      localStorage.setItem(key, JSON.stringify(assignments));
+      localStorage.setItem(demoKey, "1");
+    }
+  } catch { /* Storage is optional for the prototype. */ }
   const reportId = new URLSearchParams(location.search).get("reviewId");
   const report = document.querySelector("[data-moderation-review]");
   if (reportId && /^[a-z0-9]+$/.test(reportId) && report) {
@@ -50,7 +60,7 @@
             more.textContent = "+" + (names.length - 4);
             trigger.append(more);
           }
-        } else trigger.innerHTML = '<svg viewBox="0 0 32 32" aria-hidden="true"><use href="#account"></use></svg>';
+        } else trigger.innerHTML = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 6v20M6 16h20" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="butt"/></svg>';
         trigger.setAttribute("aria-label", select.value ? "Assigned to " + select.value + ". Change assignee" : "Assign reviewer");
         trigger.title = names.join(", ") || "Assign reviewer";
 
