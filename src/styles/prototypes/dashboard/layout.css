@@ -4441,11 +4441,11 @@ table.config-details {
 }
 
 .moderation-review-behaviors__table.pg-behaviors-table th:nth-child(2) {
-  width: 26%;
+  width: 22%;
 }
 
 .moderation-review-behaviors__table.pg-behaviors-table th:nth-child(3) {
-  width: 35%;
+  width: 39%;
 }
 
 .moderation-review-behaviors__table.pg-behaviors-table th:nth-child(4) {
@@ -5233,7 +5233,7 @@ button.moderation-review-behaviors__comment-link.S svg {
   width: 1.3rem;
   height: 1.3rem;
   /* Compensate for the glyph inset in its 32px sprite canvas. */
-  margin-inline: calc(-1.3rem * 2.975 / 32);
+  margin-inline: calc(-1.3rem * 5 / 32);
   flex-shrink: 0;
 }
 
@@ -5283,11 +5283,12 @@ button.moderation-review-behaviors__comment-link.S:hover {
   white-space: nowrap;
 }
 
-.moderation-table__table-wrapper .moderation-table__col-conversation { width: 27%; }
-.moderation-table__table-wrapper .moderation-table__col-pattern { width: 13%; }
-.moderation-table__table-wrapper .moderation-table__col-detection { width: 38%; }
-.moderation-table__table-wrapper .moderation-table__col-status { width: 18%; }
-.moderation-table__table-wrapper .moderation-table__col-actions { width: 4%; }
+.moderation-table__table-wrapper .moderation-table__col-conversation { width: 21%; }
+.moderation-table__table-wrapper .moderation-table__col-pattern { width: 11%; }
+.moderation-table__table-wrapper .moderation-table__col-detection { width: 42%; }
+.moderation-table__table-wrapper .moderation-table__col-status { width: 13%; }
+.moderation-table__table-wrapper .moderation-table__col-assigned { width: 10%; }
+.moderation-table__table-wrapper .moderation-table__col-actions { width: 3%; }
 
 .review-assignee-field {
   display: flex;
@@ -5899,4 +5900,207 @@ button.moderation-review-behaviors__comment-link.S:hover {
 .moderation-verdict-comment-modal__thread > .moderation-verdict-activity + .moderation-verdict-comment-modal__comment,
 .moderation-verdict-comment-modal__thread > .moderation-verdict-comment-modal__comment + .moderation-verdict-activity {
   margin-top: .6rem;
+}
+
+[data-moderation-review] .moderation-review-behaviors__filters,
+[data-moderation-review] [data-review-behavior-filter-root] { display: none; }
+[data-moderation-review] .review-filter-builder { padding: 0; }
+[data-moderation-review] .review-filter-popup:not(.is-direct-filter) { right: 0; }
+[data-moderation-review] .review-filter-strip { margin-top: 0; padding: 0 0 1.5rem; }
+
+[data-moderation-review] .review-filter-builder [data-filter-open] {
+  font-weight: var(--m__font-weight-medium);
+  border: var(--m__border-width-m) solid var(--m__bg-accent);
+}
+[data-moderation-review] .review-filter-builder [data-filter-open]:is(:hover, [aria-expanded="true"]) {
+  border-color: var(--m__text-link-hover);
+}
+
+.moderation-table__table td:is(:nth-child(2), :nth-child(5), :nth-child(6)) {
+  padding-inline: 0 .25rem;
+}
+.moderation-table__table td:last-child { padding-right: 0; }
+
+.moderation-review-behaviors__name-confidence a.m__behavior-link {
+  background-image: none;
+  padding-bottom: 0;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--m__border-width-l);
+  text-underline-offset: .18em;
+  text-decoration-skip-ink: none;
+}
+
+[data-moderation-review] .conversation-report__title-row { align-items: flex-start; gap: 2rem; margin-bottom: .65rem; }
+.moderation-review-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+.moderation-review-control { display: flex; align-items: center; gap: .4rem; }
+.moderation-review-control__label { font-size: var(--m__font-size-xs); color: var(--m__text-caption); }
+.moderation-review-controls .moderation-review-status { width: auto; }
+.moderation-review-controls .moderation-review-status > button { min-width: 14rem; }
+.moderation-review-viewers { display: flex; flex-direction: column; align-items: flex-end; gap: .25rem; flex-shrink: 0; }
+.moderation-review-viewers__avatars { display: flex; }
+.moderation-review-viewers__avatars .moderation-participants__avatar,
+.moderation-review-controls .review-assignment-avatar__trigger .moderation-participants__avatar { width: 2rem; height: 2rem; flex-basis: 2rem; border-color: var(--m__bg); font-size: var(--m__font-size-s); }
+.moderation-review-viewers__avatars .moderation-participants__avatar + .moderation-participants__avatar { margin-left: -.6rem; }
+@media (width < 720px) { .moderation-review-viewers { align-self: flex-end; } }
+
+.moderation-review-export { margin-left: auto; flex-shrink: 0; font-weight: var(--m__font-weight-bold); }
+
+button.moderation-review-behaviors__comment-link.S {
+  color: var(--m__bg-accent);
+  border: var(--m__border-width-m) solid var(--m__bg-accent);
+  border-radius: var(--m__radius-m);
+  font-weight: var(--m__font-weight-medium);
+}
+button.moderation-review-behaviors__comment-link.S:hover {
+  color: var(--m__text-link-hover);
+  border-color: var(--m__text-link-hover);
+}
+
+button.moderation-review-behaviors__comment-link.S {
+  align-self: start;
+  align-items: center;
+  block-size: calc(1lh + .6rem + 2 * var(--m__border-width-m));
+  border-radius: var(--m__radius-s);
+}
+button.moderation-review-behaviors__comment-link.S svg {
+  height: 1rem;
+  width: 1rem;
+  margin-inline: 0;
+}
+
+[data-detection-review]:not([data-review-comment-count]) button.moderation-review-behaviors__comment-link.S:not(:hover):not(:focus-visible) {
+  color: var(--m__text-caption);
+  border-color: var(--m__text-caption);
+}
+
+.moderation-review-behaviors__controls {
+  grid-template-columns: max-content max-content;
+  justify-content: end;
+  column-gap: .3rem;
+}
+
+.moderation-review-behaviors__table td.moderation-review-behaviors__actions { padding-right: 0; }
+
+.moderation-review-controls .review-assignment-avatar__trigger:not(.has-members) {
+  width: 2rem;
+  height: 2rem;
+  flex-basis: 2rem;
+  box-sizing: border-box;
+  border: 2px solid color-mix(in srgb, currentColor 25%, transparent);
+  box-shadow: none;
+  background: transparent;
+}
+
+.moderation-review-controls .review-assignment-avatar__trigger:not(.has-members) {
+  border: 2px dashed var(--m__text-caption);
+  box-shadow: none;
+  outline: none;
+}
+
+.moderation-review-controls .review-assignment-avatar__trigger:not(.has-members) {
+  width: calc(1rem * var(--m__line-height-base) + 1rem);
+  height: calc(1rem * var(--m__line-height-base) + 1rem);
+  flex-basis: auto;
+}
+.moderation-review-controls .review-assignment-avatar__trigger:not(.has-members) svg {
+  width: 20px;
+  height: 20px;
+}
+
+.moderation-review-controls .review-assignment-avatar__trigger .moderation-participants__avatar {
+  width: calc(1rem * var(--m__line-height-base) + 1rem + 2 * var(--m__border-width-m));
+  height: calc(1rem * var(--m__line-height-base) + 1rem + 2 * var(--m__border-width-m));
+  flex-basis: calc(1rem * var(--m__line-height-base) + 1rem + 2 * var(--m__border-width-m));
+  font-size: var(--m__font-size-m);
+}
+
+.moderation-review-controls .review-assignment-avatar__trigger,
+.moderation-review-controls .review-assignment-avatar__trigger .moderation-participants__avatar {
+  transition: color .5s ease, border-color .5s ease, background-color .5s ease;
+}
+.moderation-review-controls .review-assignment-avatar__trigger:is(:hover, :focus-visible, [aria-expanded="true"]),
+.moderation-review-controls .review-assignment-avatar__trigger:is(:hover, :focus-visible, [aria-expanded="true"]) .moderation-participants__avatar {
+  transition-duration: 0s;
+  transition-timing-function: ease;
+}
+.moderation-review-controls .review-assignment-avatar__trigger:not(.has-members):is(:hover, :focus-visible, [aria-expanded="true"]) {
+  color: var(--m__text-link-hover);
+  border-color: var(--m__text-link-hover);
+}
+
+.moderation-table .review-assignment-avatar__trigger:not(.has-members) {
+  width: calc(1.45rem - 2 * var(--m__border-width-m));
+  height: calc(1.45rem - 2 * var(--m__border-width-m));
+  flex-basis: auto;
+  border: var(--m__border-width-s) dashed var(--m__text-caption);
+  box-shadow: none;
+  outline: none;
+  color: var(--m__text-caption);
+  transition: color .5s ease, border-color .5s ease;
+}
+.moderation-table .review-assignment-avatar__trigger:not(.has-members) svg {
+  width: .7rem;
+  height: .7rem;
+}
+.moderation-table .review-assignment-avatar__trigger:not(.has-members):is(:hover, :focus-visible, [aria-expanded="true"]) {
+  color: var(--m__text-link-hover);
+  border-color: var(--m__text-link-hover);
+  transition-duration: 0s;
+}
+
+.moderation-table .review-assignment-avatar__trigger,
+.moderation-table .review-assignment-avatar__trigger .moderation-participants__avatar {
+  transition: color .5s ease, background-color .5s ease, border-color .5s ease;
+}
+.moderation-table .review-assignment-avatar__trigger:is(:hover, :focus-visible, [aria-expanded="true"]),
+.moderation-table .review-assignment-avatar__trigger:is(:hover, :focus-visible, [aria-expanded="true"]) .moderation-participants__avatar {
+  transition-duration: 0s;
+  transition-timing-function: ease;
+}
+
+.moderation-review-export > .m__menu-button-trigger {
+  align-items: center;
+  justify-content: center;
+  padding-inline: .65rem;
+}
+.moderation-review-export > .m__menu-button-trigger svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.moderation-review-export > .m__menu-button-trigger {
+  box-sizing: border-box;
+  width: calc(1rem * var(--m__line-height-base) + 1rem + 2 * var(--m__border-width-m));
+  height: calc(1rem * var(--m__line-height-base) + 1rem + 2 * var(--m__border-width-m));
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.moderation-review-controls > .moderation-review-viewers { margin-left: auto; }
+.moderation-review-export > .m__menu-button-trigger {
+  border: 0;
+  background: transparent;
+  color: var(--m__text);
+  transition: color .5s ease, background-color .5s ease;
+}
+.moderation-review-export > .m__menu-button-trigger:hover {
+  background: var(--m__bg-surface);
+  color: var(--m__text);
+  transition-duration: 0s;
+}
+
+.moderation-review-viewers__text {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .2rem 0; border: 0; background: transparent;
+  color: var(--m__text); font: inherit; font-size: var(--m__font-size-m);
+  font-weight: var(--m__font-weight-medium);
+  cursor: pointer; transition: color .5s ease;
+}
+.moderation-review-viewers__text svg { width: .72lh; height: .72lh; stroke: currentColor; stroke-width: .65; stroke-linejoin: round; }
+.moderation-review-viewers__text:is(:hover, [aria-expanded="true"]) { color: var(--m__text-link-hover); transition-duration: 0s; }
+
+.moderation-review-viewers__list .moderation-participants__name {
+  font-weight: var(--m__font-weight-regular);
 }

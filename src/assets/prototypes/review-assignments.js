@@ -53,6 +53,7 @@
         } else trigger.innerHTML = '<svg viewBox="0 0 32 32" aria-hidden="true"><use href="#account"></use></svg>';
         trigger.setAttribute("aria-label", select.value ? "Assigned to " + select.value + ". Change assignee" : "Assign reviewer");
         trigger.title = names.join(", ") || "Assign reviewer";
+
       }
     });
     document.dispatchEvent(new Event("review-assignment-change"));

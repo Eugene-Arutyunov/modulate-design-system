@@ -12,6 +12,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
 'DK', activity: 'Viewing' }, { name: 'Priya Shah', initials: 'PS', activity:
 'Editing' }, { name: 'Lena Ortiz', initials: 'LO', activity: 'Viewing' } ] %}
 
+{% set reportViewers = [reviewParticipants[0], reviewParticipants[1], reviewParticipants[2]] %}
+
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
@@ -36,7 +38,10 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
             referral
           </h1>
         </div>
-        <div class="conversation-report__title-actions">
+
+      </div>
+      <div class="moderation-review-controls">
+          <div class="moderation-review-control">
           <div
             class="m__menu-button conversation-report__report-menu moderation-review-status"
             data-review-status-control
@@ -180,15 +185,29 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
               </div>
             </div>
           </div>
+          </div>
+          <div class="moderation-review-control">
           <div class="m__menu-button review-assignment-avatar" data-assignment-avatar="7839f2" data-initial-members="{% for participant in reviewParticipants %}{{ participant.name }}{% if not loop.last %}|{% endif %}{% endfor %}">
             <button type="button" class="m__menu-button-trigger review-assignment-avatar__trigger" aria-label="Assign reviewers" aria-haspopup="menu" aria-expanded="false"></button>
             <div class="m__menu-button-list moderation-sort-list" role="menu" hidden></div>
             <label hidden><span data-assignee-label></span><select data-review-assignee="7839f2" aria-label="Assign reviewers"></select></label>
           </div>
+          </div>
+        <div class="m__menu-button moderation-participants moderation-review-viewers">
+          <button type="button" class="m__menu-button-trigger moderation-review-viewers__text" aria-label="People viewing this report" aria-haspopup="menu" aria-expanded="false">
+            <span>{{ reportViewers.length }} people viewing now</span>
+            <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </button>
+          <div class="m__menu-button-list moderation-participants__list moderation-review-viewers__list" role="menu" aria-label="People viewing this report" hidden>
+            <div class="moderation-sort-heading" role="presentation">Viewing now</div>
+            {% for participant in reportViewers %}
+            <div class="moderation-participants__item" role="menuitem">
+              <span class="moderation-participants__name">{{ participant.name }}</span>
+            </div>
+            {% endfor %}
+          </div>
         </div>
       </div>
-
-      <p class="moderation-review-presence">Now viewing this report: {% for participant in reviewParticipants %}{{ participant.name }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
 
       <div class="conversation-report__player m__rounded">
         <div class="media-container" data-fingerprint-player>
@@ -1200,6 +1219,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       }
       behaviorFilterEmptyState.hidden = visibleRowCount > 0;
       updateReviewSpeakerGroups();
+      renderFilterBuilder();
     }
 
     function resetReviewBehaviorFilters() {
@@ -1634,7 +1654,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
             : "";
           row.dataset.reviewIndex = String(reviewBehaviorRows.length);
           reviewBehaviorRows.push(row);
-          actions.innerHTML = '<div class="moderation-review-behaviors__controls"><div class="moderation-review-behaviors__choices"><button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true" aria-pressed="false">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false" aria-pressed="false">False positive</button></div><div class="moderation-review-behaviors__review-meta" data-review-meta><span class="moderation-review-behaviors__author" data-review-state hidden></span></div><button type="button" class="m__menu-button-icon S moderation-review-behaviors__comment-link" data-review-comment-trigger aria-label="Add comment" title="Add comment"><svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#comment" /></svg><span class="moderation-review-behaviors__comment-count" data-review-comment-count-label hidden></span></button></div>';
+          actions.innerHTML = '<div class="moderation-review-behaviors__controls"><div class="moderation-review-behaviors__choices"><button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true" aria-pressed="false">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false" aria-pressed="false">False positive</button></div><div class="moderation-review-behaviors__review-meta" data-review-meta><span class="moderation-review-behaviors__author" data-review-state hidden></span></div><button type="button" class="m__button-primary-outline S moderation-review-behaviors__comment-link" data-review-comment-trigger aria-label="Add comment" title="Add comment"><svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#comment" /></svg><span class="moderation-review-behaviors__comment-count" data-review-comment-count-label hidden></span></button></div>';
         }
 
         row.appendChild(actions);
@@ -1801,6 +1821,204 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       renderCommentList();
       commentInput.focus();
     });
+    const filterHost = document.createElement("div");
+    filterHost.className = "review-filter-builder";
+    filterHost.innerHTML = `<button type="button" class="m__button-primary-outline M" data-filter-open aria-expanded="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#filter"></use></svg>Filter</button>
+      <div class="review-filter-popup" hidden><div class="review-filter-categories"></div><div class="review-filter-options" hidden><div class="review-filter-options-title"></div><input type="search" placeholder="Search" aria-label="Search filter options"><button type="button" class="review-filter-search-clear" aria-label="Clear search" hidden><svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg></button><div class="review-filter-values"></div></div></div>`;
+    root.querySelector(".moderation-review-behaviors__heading").append(filterHost);
+    const filterStrip = document.createElement("div");
+    filterStrip.className = "review-filter-strip";
+    filterStrip.hidden = true;
+    root.querySelector("[data-review-behavior-filter-root]").before(filterStrip);
+    const filterPopup = filterHost.querySelector(".review-filter-popup");
+    const filterOpen = filterHost.querySelector("[data-filter-open]");
+    const categories = ["Behavior", "Verdict"];
+    let activeFilterCategory = "";
+    let filterHoverTimer;
+    const cancelFilterHover = () => clearTimeout(filterHoverTimer);
+    let previousFilterPointer;
+    document.addEventListener("mousemove", event => {
+      previousFilterPointer = { x: event.clientX, y: event.clientY, time: performance.now() };
+    });
+    function movingTowardFilterOptions(event) {
+      const submenu = filterHost.querySelector(".review-filter-options");
+      if (submenu.hidden || !previousFilterPointer || performance.now() - previousFilterPointer.time > 150) return false;
+      const dx = event.clientX - previousFilterPointer.x;
+      if (dx >= -1) return false;
+      const bounds = submenu.getBoundingClientRect();
+      const distance = bounds.right - event.clientX;
+      if (distance > 0) return false;
+      const projectedY = event.clientY + (event.clientY - previousFilterPointer.y) * distance / dx;
+      return projectedY >= bounds.top && projectedY <= bounds.bottom;
+    }
+    filterHost.querySelector(".review-filter-options").addEventListener("mouseenter", cancelFilterHover);
+    filterPopup.addEventListener("mouseleave", cancelFilterHover);
+    function filterChoices(category) {
+      return category === "Behavior" ? behaviorFilterOptions.map(option => [option.value, option.value]) : [["true", "True positive"], ["false", "False positive"]];
+    }
+    function filterValue(category) {
+      return category === "Behavior" ? Array.from(selectedBehaviorFilters) : [selectedVerdictFilter].filter(Boolean);
+    }
+    function changeBuilderFilter(category, value) {
+      if (category === "Behavior") {
+        if (!value) selectedBehaviorFilters.clear();
+        else if (selectedBehaviorFilters.has(value)) selectedBehaviorFilters.delete(value);
+        else selectedBehaviorFilters.add(value);
+        behaviorFilterOptions.forEach(option => { option.checked = selectedBehaviorFilters.has(option.value); });
+        renderReviewBehaviorFilters();
+        applyReviewBehaviorFilters();
+      } else setReviewVerdictFilter(value);
+    }
+    function showFilterCategory(category) {
+      cancelFilterHover();
+      activeFilterCategory = category;
+      const categoryButtons = Array.from(filterHost.querySelectorAll(".review-filter-categories button"));
+      categoryButtons.forEach(button => button.classList.toggle("is-active", button.textContent === category));
+      const categoryButton = categoryButtons.find(button => button.textContent === category);
+      filterHost.querySelector(".review-filter-options").style.top = (categoryButton ? categoryButton.offsetTop : 0) + "px";
+      filterPopup.hidden = false;
+      filterOpen.setAttribute("aria-expanded", "true");
+      filterHost.querySelector(".review-filter-options").hidden = false;
+      filterHost.querySelector(".review-filter-options-title").textContent = category;
+      filterHost.querySelector("input").value = "";
+      renderFilterValues();
+      const submenu = filterHost.querySelector(".review-filter-options");
+      const firstChoice = submenu.querySelector(".review-filter-values button");
+      if (categoryButton && firstChoice) {
+        const offset = firstChoice.getBoundingClientRect().top - submenu.getBoundingClientRect().top;
+        submenu.style.top = (categoryButton.offsetTop - offset) + "px";
+      }
+    }
+    function renderFilterValues() {
+      const list = filterHost.querySelector(".review-filter-values");
+      list.replaceChildren();
+      const query = filterHost.querySelector("input").value.toLowerCase();
+      filterHost.querySelector(".review-filter-search-clear").hidden = !query;
+      filterChoices(activeFilterCategory).filter(([,label]) => label.toLowerCase().includes(query)).forEach(([value,label]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = label;
+        const selected = filterValue(activeFilterCategory).includes(value);
+        button.setAttribute("aria-pressed", String(selected));
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          changeBuilderFilter(activeFilterCategory, value);
+          renderFilterValues();
+          cancelFilterHover();
+          filterPopup.hidden = true;
+          filterOpen.setAttribute("aria-expanded", "false");
+          filterOpen.focus();
+        });
+        if (activeFilterCategory === "Behavior" || activeFilterCategory === "Assignee") {
+          const row = document.createElement("div");
+          row.className = "review-filter-checkbox-row";
+          const checkboxLabel = document.createElement("label");
+          checkboxLabel.className = "m__checkbox-primary";
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = selected;
+          checkbox.setAttribute("aria-label", label);
+          checkboxLabel.append(checkbox);
+          checkboxLabel.insertAdjacentHTML("beforeend", '<svg aria-hidden="true"><use href="#checkmark"></use></svg>');
+          checkboxLabel.addEventListener("click", event => event.stopPropagation());
+          checkbox.addEventListener("change", () => {
+            changeBuilderFilter(activeFilterCategory, value);
+            button.setAttribute("aria-pressed", String(checkbox.checked));
+          });
+          row.append(checkboxLabel, button);
+          list.append(row);
+        } else {
+          button.insertAdjacentHTML("beforeend", '<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg>');
+          list.append(button);
+        }
+      });
+      if (!list.children.length) {
+        const empty = document.createElement("div");
+        empty.className = "review-filter-empty";
+        empty.textContent = "No matching options";
+        list.append(empty);
+      }
+    }
+    categories.forEach(category => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = category;
+      button.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>');
+      button.addEventListener("click", () => showFilterCategory(category));
+      button.addEventListener("mouseenter", event => {
+        cancelFilterHover();
+        if (category === activeFilterCategory && !filterHost.querySelector(".review-filter-options").hidden) return;
+        if (movingTowardFilterOptions(event)) {
+          filterHoverTimer = setTimeout(() => showFilterCategory(category), 300);
+        } else {
+          showFilterCategory(category);
+        }
+      });
+      button.addEventListener("mouseleave", cancelFilterHover);
+      filterHost.querySelector(".review-filter-categories").append(button);
+    });
+    function renderFilterBuilder() {
+      if (!root.querySelector(".review-filter-strip")) return;
+      filterStrip.replaceChildren();
+      categories.forEach(category => {
+        const values = filterValue(category);
+        if (!values.length) return;
+        const condition = document.createElement("div");
+        condition.className = "review-filter-condition";
+        const edit = document.createElement("button");
+        edit.type = "button";
+        const labels = filterChoices(category);
+        const label = values.length > 1 ? values.length + (category === "Assignee" ? " members" : " behaviors") : (labels.find(([value]) => value === values[0]) || [null, values[0]])[1];
+        [category + ": ", label].forEach(text => {
+          const segment = document.createElement("span"); segment.textContent = text; edit.append(segment);
+        });
+        edit.addEventListener("click", () => {
+          showFilterCategory(category);
+          filterPopup.classList.add("is-direct-filter");
+          const anchor = condition.getBoundingClientRect();
+          filterOpen.setAttribute("aria-expanded", "false");
+          const host = filterHost.getBoundingClientRect();
+          const popupWidth = filterPopup.getBoundingClientRect().width;
+          filterPopup.style.left = Math.max(16, Math.min(anchor.left, window.innerWidth - popupWidth - 16)) - host.left + "px";
+          filterPopup.style.top = (anchor.bottom - host.top + 6) + "px";
+        });
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.setAttribute("aria-label", "Remove " + category + " filter");
+        remove.innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg>';
+        remove.addEventListener("click", () => changeBuilderFilter(category, ""));
+        condition.append(edit, remove); filterStrip.append(condition);
+      });
+      filterStrip.hidden = !filterStrip.children.length;
+      if (!filterStrip.hidden) {
+        const clear = document.createElement("button"); clear.type = "button"; clear.className = "review-filter-clear"; clear.textContent = "Reset filters";
+        clear.addEventListener("click", () => { categories.forEach(category => changeBuilderFilter(category, "")); });
+        filterStrip.append(clear);
+      }
+    }
+    filterOpen.addEventListener("click", () => {
+      const opening = filterPopup.hidden || filterPopup.classList.contains("is-direct-filter");
+      cancelFilterHover();
+      filterPopup.classList.remove("is-direct-filter");
+      filterPopup.style.left = "";
+      filterPopup.style.top = "";
+      activeFilterCategory = "";
+      filterHost.querySelector(".review-filter-options").hidden = true;
+      filterHost.querySelectorAll(".review-filter-categories button").forEach(button => button.classList.remove("is-active"));
+      filterPopup.hidden = !opening;
+      filterOpen.setAttribute("aria-expanded", String(opening));
+    });
+    filterHost.querySelector("input").addEventListener("input", renderFilterValues);
+    filterHost.querySelector(".review-filter-search-clear").addEventListener("click", () => {
+      const input = filterHost.querySelector('input[type="search"]');
+      input.value = "";
+      renderFilterValues();
+      input.focus();
+    });
+    document.addEventListener("click", event => { if (!filterHost.contains(event.target) && !filterStrip.contains(event.target)) { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); } });
+    filterHost.addEventListener("keydown", event => { if (event.key === "Escape") { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); filterOpen.focus(); } });
+
+    renderFilterBuilder();
   })();
 </script>
 

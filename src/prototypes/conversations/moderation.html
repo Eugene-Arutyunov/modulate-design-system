@@ -472,6 +472,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               <col class="moderation-table__col-pattern" />
               <col class="moderation-table__col-detection" />
               <col class="moderation-table__col-status" />
+              <col class="moderation-table__col-assigned" />
               <col class="moderation-table__col-actions" />
             </colgroup>
             <tbody data-moderation-tbody>
@@ -543,57 +544,15 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 </td>
                 <td>
                   <div class="moderation-behavior-summary">
-                    {% for behavior in row.behaviors %} {% if loop.index < 3 %}
-                    <span class="moderation-behavior-link">
+                    {% for behavior in row.behaviors %}
+                    <span class="moderation-behavior-link" data-behavior-overflow-item>
                       <span class="moderation-behavior-link__content">
-                        <span class="moderation-behavior-link__name"
-                          >{{ behavior.name }}</span
-                        >
-                        <span class="moderation-behavior-link__confidence"
-                          >{{ behavior.score }}%</span
-                        >
+                        <span class="moderation-behavior-link__name">{{ behavior.name }}</span>
+                        <span class="moderation-behavior-link__confidence">{{ behavior.score }}%</span>
                       </span>
                     </span>
-                    {% elif loop.index == 3 %} {% if row.behaviors.length > 3
-                    %}<span class="moderation-behavior-link__wrap"
-                      >{% endif %}
-                      <span class="moderation-behavior-link">
-                        <span class="moderation-behavior-link__content">
-                          <span class="moderation-behavior-link__name"
-                            >{{ behavior.name }}</span
-                          >
-                          <span class="moderation-behavior-link__confidence"
-                            >{{ behavior.score }}%</span
-                          >
-                        </span>
-                      </span>
-                      {% if row.behaviors.length > 3 %}
-                      <button
-                        type="button"
-                        class="moderation-behavior-link__more moderation-behavior-overflow__trigger"
-                        aria-label="Show {{ row.behaviors.length - 3 }} more behaviors for {{ row.title }}"
-                        aria-expanded="false"
-                        data-behavior-overflow-trigger
-                      >
-                        +{{ row.behaviors.length - 3 }}
-                      </button>
-                      </span>
-                      {% endif %} {% elif loop.index > 3 %}
-                      <span
-                        class="moderation-behavior-link"
-                        data-behavior-overflow-item
-                        hidden
-                      >
-                        <span class="moderation-behavior-link__content">
-                          <span class="moderation-behavior-link__name"
-                            >{{ behavior.name }}</span
-                          >
-                          <span class="moderation-behavior-link__confidence"
-                            >{{ behavior.score }}%</span
-                          >
-                        </span>
-                      </span>
-                      {% endif %} {% endfor %}
+                    {% endfor %}
+                    <button type="button" class="moderation-behavior-link__more moderation-behavior-overflow__trigger" data-behavior-overflow-trigger aria-expanded="false" hidden></button>
                   </div>
                 </td>
                 <td>
@@ -682,12 +641,13 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       </div>
                     </div>
                   </div>
+                  </div>
+                </td>
+                <td class="moderation-table__assigned-cell">
                   <div class="m__menu-button review-assignment-avatar" data-assignment-avatar="{{ row.id }}" data-initial-members="{% for participant in row.participants %}{{ participant.name }}{% if not loop.last %}|{% endif %}{% endfor %}">
                     <button type="button" class="m__menu-button-trigger review-assignment-avatar__trigger" aria-label="Assign reviewer" aria-haspopup="menu" aria-expanded="false">+</button>
                     <div class="m__menu-button-list moderation-sort-list" role="menu" hidden></div>
                     <label hidden><span data-assignee-label></span><select data-review-assignee="{{ row.id }}" aria-label="Assign reviewer"></select></label>
-                  </div>
-
                   </div>
                 </td>
                 <td class="m__col-actions moderation-table__row-actions">
@@ -705,6 +665,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       <a href="{{ row.href }}" class="m__menu-button-item"
                         >Review</a
                       >
+                      <button type="button" class="m__menu-button-item">
+                        Export to CSV
+                      </button>
                       <button
                         type="button"
                         class="m__menu-button-item m__menu-button-item--danger"
@@ -721,7 +684,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 data-moderation-empty
                 hidden
               >
-                <td colspan="5">
+                <td colspan="6">
                   <div class="moderation-table__empty-state">
                     <p>No conversations match these filters.</p>
                   </div>
@@ -1202,6 +1165,38 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     }
 
     searchInput.addEventListener("input", applyQueueState);
+    function fitBehaviorSummary(trigger) {
+      const summary = trigger.closest(".moderation-behavior-summary");
+      if (!summary.getBoundingClientRect().width || trigger.getAttribute("aria-expanded") === "true") return;
+      const items = Array.from(summary.querySelectorAll("[data-behavior-overflow-item]"));
+      items.forEach(item => { item.hidden = false; });
+      trigger.hidden = true;
+      const fits = () => {
+        const tops = [...items.filter(item => !item.hidden), ...(!trigger.hidden ? [trigger] : [])].map(item => item.getBoundingClientRect().top);
+        const first = items[0];
+        if (!first) return true;
+        const gap = parseFloat(getComputedStyle(summary).rowGap) || 0;
+        return Math.max(...tops) - Math.min(...tops) < first.getBoundingClientRect().height * 2 + gap;
+      };
+      if (fits()) return;
+      trigger.hidden = false;
+      for (let count = items.length - 1; count >= 0; count--) {
+        items[count].hidden = true;
+        trigger.textContent = "+" + (items.length - count);
+        trigger.setAttribute("aria-label", "Show " + (items.length - count) + " more behaviors");
+        if (fits()) break;
+      }
+    }
+    const summaryWidths = new WeakMap();
+    const summaryObserver = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        if (summaryWidths.get(entry.target) === entry.contentRect.width) return;
+        summaryWidths.set(entry.target, entry.contentRect.width);
+        fitBehaviorSummary(entry.target.querySelector("[data-behavior-overflow-trigger]"));
+      });
+    });
+    behaviorOverflowTriggers.forEach(trigger => summaryObserver.observe(trigger.closest(".moderation-behavior-summary")));
+    document.fonts.ready.then(() => behaviorOverflowTriggers.forEach(fitBehaviorSummary));
     behaviorOverflowTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function () {
         var summary = trigger.closest(".moderation-behavior-summary");
