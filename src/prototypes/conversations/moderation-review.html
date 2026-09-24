@@ -26,10 +26,17 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       data-moderation-review
       data-conversation-id="7839f2"
     >
-      <a href="/dashboard/conversations/review/" class="conversation-report__back">
-        <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
-        Review Queue
-      </a>
+      <div class="moderation-review-meta-line">
+        <a href="/dashboard/conversations/review/" class="conversation-report__back">
+          <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
+          Review Queue
+        </a>
+        <span class="m__tag-flat moderation-review-meta-line__id">7839f2</span>
+        <span>Today, 10:24</span>
+        <span aria-hidden="true">·</span>
+        <span>ServiceOne</span>
+
+      </div>
 
       <div class="conversation-report__title-row">
         <div class="conversation-report__title-line">
@@ -37,6 +44,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
             Health member appeals denied MRI claim after urgent back pain
             referral
           </h1>
+
         </div>
 
       </div>
@@ -202,6 +210,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
             <div class="moderation-sort-heading" role="presentation">Viewing now</div>
             {% for participant in reportViewers %}
             <div class="moderation-participants__item" role="menuitem">
+              <span class="moderation-participants__avatar review-assignment-options__avatar" aria-hidden="true">{{ participant.initials }}</span>
               <span class="moderation-participants__name">{{ participant.name }}</span>
             </div>
             {% endfor %}
@@ -805,6 +814,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     function updateAccuracyMenu(menu, value) {
       if (!menu) return;
       menu.classList.toggle("is-unreviewed", !value);
+      menu.dataset.verdict = value || "";
       var labels = { true: "True positive", false: "False positive" };
       menu.querySelector("[data-accuracy-label]").textContent = labels[value] || "Not reviewed";
       menu.querySelectorAll("[data-accuracy-option]").forEach(function (option) {
