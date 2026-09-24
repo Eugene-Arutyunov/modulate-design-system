@@ -1,5 +1,14 @@
 import { ScatterPlot, createVendorsLegend } from "./scatterplot.js";
 import {
+  bindJsonImport,
+  buildExportDocument,
+  collectScopedCss,
+  domClassTokens,
+  downloadBlob,
+  downloadJson,
+  resolveTokenBlock,
+} from "../widget-studio/widget-studio.js";
+import {
   convScatterConfig,
   convScatterConfigMobile,
   convScatterMeta,
@@ -32,12 +41,15 @@ const titleEl = wrapper?.querySelector(".scatterplot-title");
 const subtitleEl = wrapper?.querySelector(".scatterplot-subtitle");
 const vendorsEl = wrapper?.querySelector(".vendors");
 
-function isMobileViewport() {
-  return window.innerWidth <= MOBILE_BREAKPOINT;
+// Container width, not viewport: in screenshot mode the frame carries the
+// chosen width, so the mobile config kicks in exactly when the mobile
+// styles do.
+function isMobileLayout() {
+  return (wrapper?.clientWidth || window.innerWidth) <= MOBILE_BREAKPOINT;
 }
 
 function activeConfig() {
-  return isMobileViewport() && configMobile ? configMobile : config;
+  return isMobileLayout() && configMobile ? configMobile : config;
 }
 
 function applyMeta() {
@@ -205,33 +217,12 @@ function bindExportImport() {
       });
     });
 
-  const button = document.querySelector("[data-scatter-import]");
-  const fileInput = document.querySelector("[data-scatter-import-input]");
-  if (!button || !fileInput) return;
-
-  button.addEventListener("click", () => fileInput.click());
-  fileInput.addEventListener("change", () => {
-    const file = fileInput.files?.[0];
-    if (!file) return;
-    file.text().then((text) => {
-      try {
-        applyImport(JSON.parse(text));
-      } catch (error) {
-        window.alert(error.message || "Invalid scatterplot JSON");
-      } finally {
-        fileInput.value = "";
-      }
-    });
-  });
-}
-
-function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
+  bindJsonImport(
+    document.querySelector("[data-scatter-import]"),
+    document.querySelector("[data-scatter-import-input]"),
+    applyImport,
+    "Invalid scatterplot JSON"
+  );
 }
 
 function studioPayload() {
@@ -285,18 +276,8 @@ function exportData() {
   );
 }
 
-async function exportHtml() {
+async function buildExportHtml() {
   if (!wrapper) throw new Error("Scatterplot not ready");
-
-  const cssUrl = new URL(
-    "/assets/service/scatterplot/scatterplot-embed.css",
-    window.location.origin
-  );
-  const cssResponse = await fetch(cssUrl);
-  if (!cssResponse.ok) {
-    throw new Error("Could not load embed stylesheet");
-  }
-  const css = await cssResponse.text();
 
   // Embed is always responsive geometry — screenshot settings stay in JSON only.
   const wasMode = STATE.mode;
@@ -304,6 +285,15 @@ async function exportHtml() {
     STATE.mode = "responsive";
     render();
   }
+
+  // The export CSS is collected from the live stylesheets (single source):
+  // every rule touching the widget's classes, plus the design-system tokens
+  // they consume, baked as computed values.
+  const css = collectScopedCss({
+    classes: domClassTokens(wrapper),
+    prefixes: [".scatterplot", ".vendor-"],
+  });
+  const tokens = resolveTokenBlock(wrapper, css, ".scatterplot-embed");
 
   const clone = wrapper.cloneNode(true);
   clone.removeAttribute("id");
@@ -326,74 +316,34 @@ async function exportHtml() {
     )
     .forEach((el) => el.remove());
 
-  // Chart data only — no studio / screenshot settings.
-  const dataPayload = {
-    format: DATA_FORMAT,
-    version: DATA_VERSION,
-    config,
-    configMobile,
-    meta: { ...meta },
-  };
-
-  const fontResponse = await fetch("/assets/fonts/ABCArealVariable.woff2");
-  if (!fontResponse.ok) throw new Error("Could not load ABC Areal");
-  const fontBytes = new Uint8Array(await fontResponse.arrayBuffer());
-  let fontBinary = "";
-  fontBytes.forEach((byte) => { fontBinary += String.fromCharCode(byte); });
-  const fontDataUrl = `data:font/woff2;base64,${btoa(fontBinary)}`;
-
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${escapeAttr(meta.title || "Scatterplot")}</title>
-  <style>
-@font-face {
-  font-family: "ABC Areal";
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
-  src: url("${fontDataUrl}") format("woff2");
-}
-${css}
-body {
-  margin: 0;
-  font-family: "ABC Areal", system-ui, sans-serif;
-  background: #fff;
-  color: rgb(20, 20, 50);
-}
-.scatterplot-embed .scatterplot-wrapper {
-  font-family: "ABC Areal", system-ui, sans-serif;
-}
-  </style>
-</head>
-<body>
-  <div class="scatterplot-embed">
+  // The export is a static clone — no scripts, no data payload. The
+  // `scatterplot-studio` class on the wrapper activates the collected
+  // live rules (they are scoped to it on the site).
+  const html = await buildExportDocument({
+    title: meta.title || "Scatterplot",
+    css: `${tokens}\n\n${css}`,
+    bodyHtml: `  <div class="scatterplot-embed scatterplot-studio">
 ${clone.outerHTML}
-  </div>
-  <script type="application/json" id="scatterplot-data">
-${JSON.stringify(dataPayload, null, 2)}
-  </script>
-</body>
-</html>
-`;
+  </div>`,
+  });
 
   if (wasMode === "screenshot") {
     STATE.mode = "screenshot";
     render();
   }
 
-  downloadBlob(new Blob([html], { type: "text/html" }), "conv-scatter.html");
+  return html;
 }
 
-function escapeAttr(text) {
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+async function exportHtml() {
+  downloadBlob(
+    new Blob([await buildExportHtml()], { type: "text/html" }),
+    "conv-scatter.html"
+  );
 }
+
+// Exposed for the export smoke-test harness.
+export { buildExportHtml };
 
 function applyImport(parsed) {
   if (!parsed || typeof parsed !== "object") {

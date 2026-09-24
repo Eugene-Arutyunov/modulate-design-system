@@ -52,35 +52,170 @@
 
 }
 
-/* Behaviors uses the same compact outline-button treatment as the other
-   sidebar actions, backed by a custom checkbox menu because the native
-   select cannot express multiple choices. */
-.vlb-select {
-  position: relative;
+/* The list and JSON editor share one modal and one footer. */
+#vlb-behaviors-modal {
+  & .m__modal {
+    max-width: 38rem;
+    height: min(43rem, calc(100dvh - 2 * var(--m__modal-padding) - 3rem));
+    min-height: 0;
+  }
 
-  & .vlb-select__menu {
-    position: absolute;
-    top: calc(100% + 0.35rem);
-    left: 0;
-    right: 0;
-    z-index: 1001;
-    width: 20rem;
+  @media (width < 768px) {
+    & .m__modal {
+      height: min(43rem, calc(100dvh - 2 * var(--m__modal-padding)));
+    }
+  }
 
-    & .m__popover-list {
-      max-height: min(24rem, calc(100vh - 8rem));
+  & .vlb-behaviors {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    gap: var(--m__gap-m);
+  }
+
+  & .vlb-behaviors__panel[hidden],
+  & .vlb-behaviors__actions[hidden],
+  & .vlb-behaviors__error[hidden] {
+    display: none;
+  }
+
+  & .vlb-behaviors__header {
+    align-items: flex-start;
+    gap: var(--m__gap-m);
+    border-bottom: 1px solid var(--m__border);
+  }
+
+  & .vlb-behaviors__tabs {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    gap: var(--m__gap-m);
+
+    & button {
+      margin-bottom: -1px;
+      padding: 0 0 0.7rem;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: none;
+      color: var(--m__text-caption);
+      font: inherit;
+      font-size: var(--m__font-size-l);
+      font-weight: var(--m__font-weight-bold);
+      cursor: pointer;
     }
 
-    &[hidden] {
+    & button[aria-selected='true'] {
+      color: var(--m__text);
+      border-bottom-color: currentColor;
+    }
+
+    & button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+
+  & .vlb-behaviors__panel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    gap: var(--m__gap-s);
+  }
+
+  & #vlb-behaviors-panel {
+    gap: var(--m__gap-xxxxs);
+  }
+
+  & .vlb-behaviors__intro {
+    color: var(--m__text);
+
+    & h2 {
+      margin: 0;
+      font-size: var(--m__font-size-m);
+      font-weight: var(--m__font-weight-bold);
+    }
+
+  }
+
+  & .vlb-behaviors__actions {
+    display: flex;
+    gap: var(--m__gap-xs);
+  }
+
+  & .vlb-behaviors__list {
+    flex: 1;
+    min-height: 0;
+    /* Offset the shared menu-item padding so checkboxes align with tabs. */
+    margin-inline: -0.65rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  & .vlb-behaviors__item {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    overflow-wrap: anywhere;
+  }
+
+  & .vlb-behaviors__json-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 8rem;
+
+    & .m__textfield {
+      flex: 1;
+      min-height: 0;
+    }
+  }
+
+  & #vlb-behaviors-json {
+    flex: 1;
+    min-height: 0;
+    box-sizing: border-box;
+    resize: none;
+    overscroll-behavior: contain;
+    background: var(--m__bg-surface);
+    color: var(--m__text);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-s);
+    line-height: 1.6;
+    tab-size: 2;
+  }
+
+  & .vlb-behaviors__error {
+    color: var(--m__error);
+    font-size: var(--m__font-size-s);
+  }
+
+  & .vlb-behaviors__status {
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-s);
+
+    &:empty {
       display: none;
     }
   }
-}
 
-/* The sticky player establishes its own elevated layer. Lift the sidebar's
-   whole stacking context while the behaviors action menu is open so the
-   popover stays above every player and results visualization. */
-.vlb-page:has(.vlb-select[data-open='true']) > .nav-sidebar {
-  z-index: 1002;
+  & .vlb-behaviors__footer-actions {
+    display: flex;
+    gap: var(--m__gap-xs);
+    margin-right: auto;
+  }
+
+  & :is(button, input):focus-visible {
+    outline: 2px solid var(--m__text-link-hover);
+    outline-offset: 3px;
+  }
+
+  @media (width < 480px) {
+    & .m__modal {
+      height: 94dvh;
+    }
+  }
 }
 
 .vlb-controls button.vlb-controls__behaviors-btn {
@@ -414,42 +549,6 @@
     pointer-events: none;
   }
 
-  /* Signal clips cast a broad bilateral gradient into their lane. The
-     solid clip stays crisp above it; only the surrounding color blooms. */
-  & .transcript-clip.clip-signal-glow {
-    z-index: 1;
-
-    &::before {
-      content: "";
-      position: absolute;
-      z-index: 0;
-      top: 0;
-      bottom: 0;
-      left: clamp(-5rem, -6vw, -2.75rem);
-      right: clamp(-5rem, -6vw, -2.75rem);
-      background:
-        linear-gradient(
-          90deg,
-          transparent 0%,
-          color-mix(in srgb, var(--fp-signal-glow-color) 14%, transparent) 28%,
-          color-mix(in srgb, var(--fp-signal-glow-color) 44%, transparent) 68%,
-          color-mix(in srgb, var(--fp-signal-glow-color) 60%, transparent) 100%
-        ) left / clamp(2.75rem, 6vw, 5rem) 100% no-repeat,
-        linear-gradient(
-          90deg,
-          color-mix(in srgb, var(--fp-signal-glow-color) 60%, transparent) 0%,
-          color-mix(in srgb, var(--fp-signal-glow-color) 44%, transparent) 32%,
-          color-mix(in srgb, var(--fp-signal-glow-color) 14%, transparent) 72%,
-          transparent 100%
-        ) right / clamp(2.75rem, 6vw, 5rem) 100% no-repeat;
-      pointer-events: none;
-    }
-
-    & .clip-visualization {
-      z-index: 1;
-    }
-  }
-
   & .speaker-label span {
     opacity: 0;
     transition: opacity var(--m__duration-xslow) var(--m__easing-base);
@@ -628,21 +727,6 @@
         );
     }
   }
-}
-
-.vlb-page .behaviour-icon__count {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  color: var(--behaviour-count-color, var(--m__text));
-  font-family: var(--m__font-family-sans);
-  font-size: 0.5rem;
-  font-weight: 900;
-  line-height: 1;
-  -webkit-text-stroke: 0.025em currentColor;
-  pointer-events: none;
 }
 
 .vlb-page

@@ -47,5 +47,5 @@ const server = http.createServer((req, res) => auditMiddleware(req, res, () => {
     fs.createReadStream(file).pipe(res);
   } catch { res.writeHead(500); res.end('Unable to read the built page.'); }
 }));
-if (require.main === module) server.listen(port, '127.0.0.1', () => console.log(`UI Scheme: http://127.0.0.1:${port}/ui/`));
+if (require.main === module) server.listen(port, '127.0.0.1', () => console.log(`UI Scheme: http://127.0.0.1:${port}/tools/ui-scheme/`));
 module.exports = { fileFor, auditMiddleware };

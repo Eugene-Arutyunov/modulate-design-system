@@ -1,0 +1,296 @@
+/* Voice Agent Knowledge Map (/tools/knowledge-map/).
+   Port of the standalone page. All colors derive from semantic tokens on the
+   .km root, so the dark theme needs no page-specific overrides. */
+
+.m__wrapper.km__wide {
+  max-width: 1400px;
+}
+
+.km {
+  /* Page-local props derived from semantic tokens */
+  --km-line: color-mix(in srgb, var(--m__text) 12%, transparent);
+  --km-accent: var(--m__text-link-hover);
+  --km-muted: var(--m__text-caption);
+  --km-dim: color-mix(in srgb, var(--m__text) 35%, transparent);
+
+  position: relative;
+  margin: 0;
+  display: flex;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  container-type: size;
+  background: var(--m__bg);
+  border: var(--m__border-width-s) solid var(--m__border);
+  border-radius: var(--m__widget-radius);
+  overflow: hidden;
+}
+
+/* Hidden language toggle: double-click this corner switches EN/RU */
+.km__lang-zone {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 72px;
+  height: 72px;
+  z-index: 2;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.km__map {
+  position: relative;
+  flex: 0 0 75%;
+  height: 100%;
+}
+
+.km__links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.km__links path {
+  fill: none;
+  stroke: var(--km-line);
+  stroke-width: 1;
+  transition:
+    opacity 0.2s,
+    stroke 0.2s;
+}
+
+.km__links path.on {
+  stroke: var(--km-accent);
+  stroke-width: 1.6;
+}
+
+.km__links path.off {
+  opacity: 0.12;
+}
+
+.km__cloud {
+  position: absolute;
+  text-align: center;
+  line-height: 1;
+}
+
+.km__cloud h2 {
+  font-family: var(--m__font-family-gothic);
+  font-weight: var(--m__font-weight-medium);
+  color: var(--km-muted);
+  font-size: max(11px, 1.05cqw);
+  line-height: 1;
+  margin: 0 auto 0.5em;
+  display: table;
+  background: var(--m__bg);
+  padding: 0.2em 0.6em;
+}
+
+.km__cloud[data-group="conv"] {
+  left: 1%;
+  top: 5%;
+  width: 32%;
+}
+.km__cloud[data-group="person"] {
+  left: 35%;
+  top: 10%;
+  width: 30%;
+}
+.km__cloud[data-group="hm"] {
+  left: 67%;
+  top: 4%;
+  width: 32%;
+}
+.km__cloud[data-group="voice"] {
+  left: 2%;
+  top: 62%;
+  width: 30%;
+}
+.km__cloud[data-group="char"] {
+  left: 36%;
+  top: 54%;
+  width: 28%;
+}
+.km__cloud[data-group="tech"] {
+  left: 65%;
+  top: 59%;
+  width: 34%;
+}
+
+.km__tag {
+  appearance: none;
+  border: 0;
+  background: var(--m__bg);
+  color: var(--m__text);
+  font: inherit;
+  font-weight: var(--m__font-weight-medium);
+  font-size: max(11px, 1.17cqw);
+  line-height: 1.15;
+  padding: 0.32em 0.55em;
+  margin: 0.28em 0.1em;
+  border-radius: 0.4em;
+  cursor: pointer;
+  display: inline-block;
+  transition: color 0.2s;
+}
+
+.km__tag:hover {
+  color: var(--km-accent);
+}
+
+.km__tag:focus-visible,
+.km__panel a:focus-visible,
+.km__panel button:focus-visible {
+  outline: 2px solid var(--km-accent);
+  outline-offset: 2px;
+}
+
+.km__tag.sel {
+  color: var(--km-accent);
+  font-weight: var(--m__font-weight-bold);
+}
+
+.km__tag.off {
+  color: var(--km-dim);
+}
+
+.km__panel {
+  flex: 1;
+  height: 100%;
+  margin: 0;
+  border-radius: 0;
+  padding: 5cqh 2.2cqw 4cqh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.km__panel .km__grp {
+  font-family: var(--m__font-family-semi-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--km-muted);
+  font-size: max(10px, 0.95cqw);
+  margin: 0 0 0.8em;
+  min-height: 1.2em;
+}
+
+.km__panel .km__title {
+  font-family: var(--m__font-family-sans);
+  font-weight: var(--m__font-weight-bold);
+  font-size: max(16px, 1.85cqw);
+  line-height: 1.15;
+  margin: 0 0 0.8em;
+  letter-spacing: -0.01em;
+}
+
+.km__panel p {
+  font-size: max(12px, 1.08cqw);
+  line-height: 1.6;
+  margin: 0 0 1.4em;
+}
+
+.km__panel h3 {
+  font-weight: var(--m__font-weight-medium);
+  font-size: max(11px, 0.95cqw);
+  color: var(--km-muted);
+  margin: 0 0 0.5em;
+}
+
+.km__panel ul {
+  list-style: none;
+  margin: 0 0 1.5em;
+  padding: 0;
+  font-size: max(11px, 1.02cqw);
+  line-height: 1.5;
+}
+
+.km__panel li {
+  margin: 0 0 0.25em;
+}
+
+.km__panel a {
+  color: var(--km-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.km__panel li button {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--m__text);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: var(--km-line);
+  text-underline-offset: 0.18em;
+}
+
+.km__panel li button:hover {
+  color: var(--km-accent);
+}
+
+/* Narrow screens: clouds stack, link curves hide, panel flows below */
+@media (max-width: 720px) {
+  .km {
+    display: block;
+    aspect-ratio: auto;
+    container-type: normal;
+  }
+
+  .km__map {
+    height: auto;
+    padding: 16px 12px 8px;
+  }
+
+  .km__links {
+    display: none;
+  }
+
+  .km__cloud {
+    position: static;
+    width: auto !important;
+    margin: 0 0 22px;
+  }
+
+  .km__cloud h2 {
+    font-size: 13px;
+  }
+
+  .km__tag {
+    font-size: 15px;
+  }
+
+  .km__panel {
+    border-left: 0;
+    border-top: var(--m__border-width-s) solid var(--m__border);
+    padding: 20px 18px 24px;
+    height: auto;
+  }
+
+  .km__panel .km__title {
+    font-size: 20px;
+  }
+  .km__panel p {
+    font-size: 15px;
+  }
+  .km__panel ul {
+    font-size: 14px;
+  }
+  .km__panel h3,
+  .km__panel .km__grp {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .km__tag,
+  .km__links path {
+    transition: none;
+  }
+}

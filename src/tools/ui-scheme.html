@@ -1,56 +1,20 @@
-{% extends 'service/layout.html' %}
-{% set pageTitle = 'UI Scheme Tool: Source of Truth and Consistency Keeper — Modulate Design System' %}
-{% block content %}
+{% extends 'service/layout.html' %} {% set pageTitle = 'UI Scheme' %} {% block
+content %}
 
 <div class="m__wrapper">
-  <div class="m__space XL"></div>
-  <div class="narrative-text-width">
-    {% set postAuthor = 'Eugene Vlasov' %}
-    {% set postAuthorPhoto = '/assets/images/authors/eugene-vlasov.jpg' %}
-    {% set postDate = 'September 17, 2026' %}
-    {% set backHref = '/tools/' %}
-    {% set backLabel = 'Tools' %}
-    {% include 'service/post-meta.html' %}
-    <h1 class="loud">UI Scheme Tool: Source of Truth and Consistency Keeper</h1>
-
-    <p>We’ve had a <a href="/ui/">UI Scheme</a> for a long time, maintaining it by hand as the product evolved. It records the intended structure of our interface: which screens belong in the product and how they fit together. It’s our shared source of truth.</p>
-    <div class="post-review-scheme m__rounded">
-      {% include 'service/ui-arch-diagram.html' %}
-    </div>
-    <p>That matters because we design directly in prototypes. Carter could build and deploy a change straight into the product, and Ryan’s team should have that freedom by design. Neither the prototype nor the live product alone can be the definitive reference for the intended structure. The UI Scheme is where we keep that shared picture.</p>
-    <p>Keeping the map current is only part of the job. We also need to check how the live product matches what we intended. <a href="/ui/compare/">UI Compare</a> brings that review alongside the scheme, so we can see what needs attention and keep the findings connected to the product.</p>
-  </div>
-
   <div class="m__space L"></div>
-  <div class="post-review-tools">
-    <figure>
-      <p class="post-review-tools__title"><a href="/ui/">UI Scheme</a></p>
-      <a href="/ui/" class="post-review-tools__image m__rounded">
-        <img src="/assets/images/design-review-scheme.png" alt="UI Scheme: product pages and their prototype and production structure" />
-      </a>
-      <figcaption class="caption">The map of the interface, connecting each screen’s prototype and production page. A shared reference for what we’re building and where to look.</figcaption>
-    </figure>
-    <figure>
-      <p class="post-review-tools__title"><a href="/ui/compare/">UI Compare</a></p>
-      <a href="/ui/compare/" class="post-review-tools__image m__rounded">
-        <img src="/assets/images/design-review-compare.png" alt="UI Compare: prototype and production values, recommendations, and affected screens" />
-      </a>
-      <figcaption class="caption">The review, with prototype and production side by side, differences explained, and suggested fixes linked to the affected screens. A shared place to decide what needs to change.</figcaption>
-    </figure>
-  </div>
 
-  <div class="m__space XL"></div>
-  <div class="narrative-text-width">
-    <h2 class="loud">Making quality part of the routine</h2>
-    <p>We maintain the shared reference for how the interface should work, and check the live product against it. That gives anyone at Modulate a place to see what’s intended, where the experience differs, and what we recommend changing. Small discrepancies deserve attention too: a repeated problem can affect how the whole product feels.</p>
-    <p>An AI agent gathers the evidence and keeps the map and review up to date as part of that routine. We use the review to decide which differences are intentional and which need fixing. Each decision helps refine the agent’s instructions about what to look for, so we spend less time repeating manual checks and more time improving the experience.</p>
+  {% include 'service/ui-navigation.html' %}
 
-    <div class="m__space L"></div>
-    <h2 class="loud">Consistency builds trust</h2>
-    <p>When familiar controls behave the same way and screens feel like parts of one product, people spend less effort figuring out the interface and can feel more confident using it.</p>
-    <p>Fixing the shared problems found during review brings that consistency to more screens. Small improvements add up to a product people can depend on.</p>
+  <h1 class="ui-viz__heading">UI Scheme</h1>
+  {% include 'service/ui-updated.html' %}
+
+  <div id="ui-structure" class="ui-viz">
+    <div class="ui-viz__legend">{% include 'service/ui-arch-diagram.html' %}</div>
+    {% uiTable "scheme" %}
   </div>
-  <div class="m__space XL"></div>
 </div>
+
+<script type="module" src="/assets/service/ui-visualizer.js"></script>
 
 {% endblock %}

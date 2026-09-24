@@ -90,7 +90,7 @@
   border: none;
   transition: background-color var(--m__duration-base) var(--m__easing-base);
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: var(--m__text-link-hover);
     color: var(--m__text-inverted);
     transition-duration: var(--m__duration-instant);
@@ -99,7 +99,7 @@
 
 :is(
   button.m__button-primary
-):active {
+):active:not(:disabled) {
   background-color: var(--m__bg-accent-pressed);
   transition-duration: var(--m__duration-instant);
 }
@@ -115,7 +115,7 @@
     background-color var(--m__duration-base) var(--m__easing-base),
     color var(--m__duration-base) var(--m__easing-base);
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: color-mix(in srgb, currentColor 15%, transparent);
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
@@ -124,7 +124,7 @@
 
 :is(
   button.m__button-secondary
-):active {
+):active:not(:disabled) {
   background-color: color-mix(in srgb, currentColor 8%, transparent);
   color: var(--m__text-link-pressed);
   transition-duration: var(--m__duration-instant);
@@ -144,7 +144,7 @@
     color var(--m__duration-base) var(--m__easing-base),
     border-color var(--m__duration-base) var(--m__easing-base);
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: var(--m__text-link-hover);
     border-color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
@@ -154,7 +154,7 @@
 :is(
   button.m__button-primary-outline,
   button.m__menu-button-primary
-):active {
+):active:not(:disabled) {
   color: var(--m__text-link-pressed);
   transition-duration: var(--m__duration-instant);
 }
@@ -170,7 +170,7 @@
   border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
   transition: color var(--m__duration-base) var(--m__easing-base);
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
@@ -179,7 +179,7 @@
 :is(
   button.m__button-secondary-outline,
   button.m__menu-button-secondary
-):active {
+):active:not(:disabled) {
   color: var(--m__text-link-pressed);
   transition-duration: var(--m__duration-instant);
 }
@@ -195,7 +195,7 @@
     color var(--m__duration-base) var(--m__easing-base),
     border-color var(--m__duration-base) var(--m__easing-base);
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: var(--m__error-hover);
     transition-duration: var(--m__duration-instant);
   }
@@ -203,7 +203,7 @@
 
 :is(
   button.m__button-danger-outline
-):active {
+):active:not(:disabled) {
   background-color: transparent;
   color: color-mix(in srgb, var(--m__error) 80%, transparent);
   transition-duration: var(--m__duration-instant);
@@ -220,7 +220,7 @@
     color var(--m__duration-base) var(--m__easing-base),
     border-color var(--m__duration-base) var(--m__easing-base);
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: var(--m__success-hover);
     transition-duration: var(--m__duration-instant);
   }
@@ -228,9 +228,24 @@
 
 :is(
   button.m__button-success-outline
-):active {
+):active:not(:disabled) {
   color: color-mix(in srgb, var(--m__success) 80%, transparent);
   transition-duration: var(--m__duration-instant);
+}
+
+:is(
+  button.m__button-primary,
+  button.m__button-secondary,
+  button.m__button-primary-outline,
+  button.m__button-secondary-outline,
+  button.m__button-danger-outline,
+  button.m__button-success-outline,
+  button.m__menu-button-primary,
+  button.m__menu-button-secondary,
+  button.m__button-icon
+):disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* Processing buttons keep their container stable while their label breathes.
@@ -242,11 +257,6 @@ button[aria-busy='true']:disabled {
   & > .m__button__label {
     animation: m__button-label-breathe 2s ease-in-out infinite;
   }
-}
-
-button.m__button-primary[aria-busy='true']:disabled:is(:hover, :active) {
-  background-color: var(--m__bg-accent);
-  color: var(--m__text-inverted);
 }
 
 @keyframes m__button-label-breathe {
@@ -283,7 +293,7 @@ button.m__button-primary[aria-busy='true']:disabled:is(:hover, :active) {
     border-left-width: 0;
   }
 
-  &:has(> :is(button, a):last-of-type:hover) > :is(button, a):first-of-type {
+  &:has(> :is(button, a):last-of-type:hover:not(:disabled)) > :is(button, a):first-of-type {
     border-right-color: var(--m__text-link-hover);
   }
 }
@@ -305,13 +315,13 @@ button.m__button-icon {
     height: 0.75rem;
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: color-mix(in srgb, currentColor 10%, transparent);
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     background-color: color-mix(in srgb, currentColor 8%, transparent);
     color: var(--m__text-link-pressed);
     transition-duration: var(--m__duration-instant);

@@ -1,0 +1,48 @@
+{% extends 'service/layout.html' %} {% set pageTitle = 'Voice Agent Knowledge
+Map' %} {% block content %}
+
+<div class="m__wrapper km__wide">
+  <div class="m__space XL"></div>
+  <h1>Voice Agent Knowledge Map</h1>
+  <div class="m__space M"></div>
+
+  <figure class="km">
+    <section class="km__map" aria-label="Knowledge map">
+      <svg class="km__links" aria-hidden="true"></svg>
+      <div class="km__cloud" data-group="conv">
+        <h2></h2>
+        <div class="km__tags"></div>
+      </div>
+      <div class="km__cloud" data-group="person">
+        <h2></h2>
+        <div class="km__tags"></div>
+      </div>
+      <div class="km__cloud" data-group="hm">
+        <h2></h2>
+        <div class="km__tags"></div>
+      </div>
+      <div class="km__cloud" data-group="voice">
+        <h2></h2>
+        <div class="km__tags"></div>
+      </div>
+      <div class="km__cloud" data-group="char">
+        <h2></h2>
+        <div class="km__tags"></div>
+      </div>
+      <div class="km__cloud" data-group="tech">
+        <h2></h2>
+        <div class="km__tags"></div>
+      </div>
+    </section>
+    <aside class="km__panel" aria-live="polite"></aside>
+    <div class="km__lang-zone" aria-hidden="true"></div>
+  </figure>
+
+  <div class="m__space XL"></div>
+</div>
+
+<script
+  type="module"
+  src="/assets/service/knowledge-map/knowledge-map.js"></script>
+
+{% endblock %}

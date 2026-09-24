@@ -2,9 +2,21 @@
 // the default data, JSON import/export (same envelope pattern as the
 // scatterplot studio), and the self-contained HTML export for Webflow.
 // The widget itself is a classic script (window.VelmaFraudWidget) so the
-// export can inline it verbatim.
+// export can inline it verbatim; the export CSS is collected from the live
+// stylesheets at export time (single source — no embed stylesheet).
 
 import { velmaFraudData } from "./velma-fraud-config.js";
+import {
+  bindJsonImport,
+  buildExportDocument,
+  collectScopedCss,
+  domClassTokens,
+  downloadBlob,
+  downloadJson,
+  fetchFontDataUrl,
+  fetchText,
+  resolveTokenBlock,
+} from "../widget-studio/widget-studio.js";
 
 const DATA_FORMAT = "modulate-velma-fraud-demo";
 const DATA_VERSION = 1;
@@ -20,25 +32,13 @@ function mountWidget() {
   widget = window.VelmaFraudWidget.mount(root, data);
 }
 
-function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
 function exportData() {
-  const payload = {
-    format: DATA_FORMAT,
-    version: DATA_VERSION,
-    ...structuredClone(data),
-  };
-
-  downloadBlob(
-    new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }),
+  downloadJson(
+    {
+      format: DATA_FORMAT,
+      version: DATA_VERSION,
+      ...structuredClone(data),
+    },
     "velma-fraud-demo.json"
   );
 }
@@ -62,103 +62,71 @@ function applyImport(parsed) {
       ? structuredClone(parsed.verdict)
       : structuredClone(velmaFraudData.verdict),
     actions: structuredClone(parsed.actions || []),
-    meterKeyframes: structuredClone(parsed.meterKeyframes || []),
   };
   mountWidget();
 }
 
-// Inline both variable fonts so standalone exports retain the DS typography.
-async function fetchFontDataUrl(filename) {
-  const response = await fetch(
-    new URL(`/assets/fonts/${filename}`, window.location.origin)
-  );
-
-  if (!response.ok) throw new Error(`Could not load ${filename}`);
-
-  const bytes = new Uint8Array(await response.arrayBuffer());
-  let binary = "";
-
-  bytes.forEach((byte) => {
-    binary += String.fromCharCode(byte);
+// The export CSS: every live rule that touches the widget's DOM (its class
+// inventory plus the runtime-state prefixes), then the design-system tokens
+// those rules consume, baked as computed dark-theme values from the mounted
+// widget.
+function collectExportCss() {
+  const widgetEl = root?.querySelector(".velma-fraud-widget") ?? root;
+  const css = collectScopedCss({
+    classes: domClassTokens(root),
+    // .vf-/.velma-fraud cover the widget's own runtime-state classes;
+    // .emotion- covers the emotion classes that land on clips and bubbles
+    // during playback (absent from the resting DOM).
+    prefixes: [".vf-", ".velma-fraud", ".emotion-"],
   });
-  return `data:font/woff2;base64,${btoa(binary)}`;
+  const tokens = resolveTokenBlock(widgetEl, css, ".velma-fraud-widget");
+
+  return `${tokens}\n\n${css}`;
 }
 
-async function exportHtml() {
-  const [css, widgetJs] = await Promise.all(
-    [
-      "/assets/service/velma-fraud/velma-fraud-embed.css",
-      "/assets/service/velma-fraud/velma-fraud-widget.js",
-    ].map(async (path) => {
-      const response = await fetch(new URL(path, window.location.origin));
+async function buildExportHtml() {
+  if (!root) throw new Error("Widget not mounted");
 
-      if (!response.ok) throw new Error(`Could not load ${path}`);
-      return response.text();
-    })
+  const widgetJs = await fetchText(
+    "/assets/service/velma-fraud/velma-fraud-widget.js"
   );
-  const [fontDataUrl, sansDataUrl] = await Promise.all([
-    fetchFontDataUrl("ABCArealSemiMonoVariable.woff2"),
-    fetchFontDataUrl("ABCArealVariable.woff2"),
-  ]);
-
-  const payload = {
-    format: DATA_FORMAT,
-    version: DATA_VERSION,
-    ...structuredClone(data),
-  };
-
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${escapeHtml(data.meta.title || "Velma Fraud Demo")}</title>
-  <style>
-body {
-  margin: 0;
-  font-family: "ABC Areal", system-ui, sans-serif;
-}
-@font-face {
+  // The semi-mono is the widget's brand voice (eyebrows, tags) — inline it
+  // into the export as a data: URL so the standalone page keeps it; the
+  // Areal sans itself is inlined by buildExportDocument.
+  const fontDataUrl = await fetchFontDataUrl(
+    "/assets/fonts/ABCArealSemiMonoVariable.woff2"
+  );
+  const fontFace = `@font-face {
   font-family: "ABC Areal Semi Mono";
   font-weight: 400 700;
   font-style: normal;
   font-display: swap;
   src: url("${fontDataUrl}") format("woff2");
-}
-@font-face {
-  font-family: "ABC Areal";
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
-  src: url("${sansDataUrl}") format("woff2");
-}
-${css}
-  </style>
-</head>
-<body>
-  <div class="velma-fraud-embed">
+}`;
+
+  return buildExportDocument({
+    title: data.meta.title || "Velma Fraud Demo",
+    css: `${fontFace}\n${collectExportCss()}`,
+    bodyHtml: `  <div class="velma-fraud-embed">
     <div class="velma-fraud-frame">
       <div data-vf-widget></div>
     </div>
-  </div>
-  <script type="application/json" id="velma-fraud-data">
-${JSON.stringify(payload, null, 2).replaceAll("</", "<\\/")}
-  </script>
-  <script>
-${widgetJs.replaceAll("</script>", "<\\/script>")}
-  </script>
-</body>
-</html>
-`;
-
-  downloadBlob(new Blob([html], { type: "text/html" }), "velma-fraud-demo.html");
+  </div>`,
+    jsonId: "velma-fraud-data",
+    jsonData: {
+      format: DATA_FORMAT,
+      version: DATA_VERSION,
+      ...structuredClone(data),
+    },
+    inlineJs: widgetJs,
+  });
 }
 
-function escapeHtml(text) {
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+async function exportHtml() {
+  downloadBlob(
+    new Blob([await buildExportHtml()], { type: "text/html" }),
+    "velma-fraud-demo.html"
+  );
 }
 
 function bindControls() {
@@ -178,26 +146,16 @@ function bindControls() {
       });
     });
 
-  const button = document.querySelector("[data-vf-import]");
-  const fileInput = document.querySelector("[data-vf-import-input]");
-
-  if (!button || !fileInput) return;
-  button.addEventListener("click", () => fileInput.click());
-  fileInput.addEventListener("change", () => {
-    const file = fileInput.files?.[0];
-
-    if (!file) return;
-    file.text().then((text) => {
-      try {
-        applyImport(JSON.parse(text));
-      } catch (error) {
-        window.alert(error.message || "Invalid Velma fraud demo JSON");
-      } finally {
-        fileInput.value = "";
-      }
-    });
-  });
+  bindJsonImport(
+    document.querySelector("[data-vf-import]"),
+    document.querySelector("[data-vf-import-input]"),
+    applyImport,
+    "Invalid Velma fraud demo JSON"
+  );
 }
 
 bindControls();
 mountWidget();
+
+// Exposed for the export smoke-test harness.
+export { buildExportHtml, collectExportCss };

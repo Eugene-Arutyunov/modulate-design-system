@@ -483,6 +483,11 @@ function buildComparisonDemo(signalOnly) {
       clip.emotion = c.emotion;
       clip.behaviour = c.behaviour;
       clip.behaviourAtSec = c.at;
+      // A clip that carries a signal blooms its emotion color into the lane.
+      if (c.behaviour) {
+        clip.classes = "clip-signal-glow";
+        clip.glowColor = `rgba(var(--emotion-${c.emotion}-RGB), 1)`;
+      }
     } else {
       clip.classes = "clip-quiet";
     }
@@ -494,14 +499,21 @@ function buildComparisonDemo(signalOnly) {
     clip.classes = "clip-quiet-tech";
     if (signalOnly) {
       if (c.falsePositive) {
-        clip.classes = "clip-hit";
+        clip.classes = "clip-hit clip-signal-glow";
+        clip.glowColor = "var(--fp-cmp-hit)";
         clip.behaviour = "Urgency pressure";
         clip.behaviourClasses = "behaviour-indicator--tech behaviour-indicator--false";
       }
     } else if (c.hit || c.falsePositive) {
-      clip.classes = "clip-hit";
+      clip.classes = "clip-hit clip-signal-glow";
+      clip.glowColor = "var(--fp-cmp-hit)";
       clip.behaviour = c.hit ? "Coercion manipulation" : "Urgency pressure";
       clip.behaviourClasses = "behaviour-indicator--tech";
+      // The catch aggregates two behaviors — the glyph carries the count.
+      if (c.hit) {
+        clip.behaviourCount = 2;
+        clip.behaviourCountColor = "rgba(var(--emotion-neutral-RGB), 1)";
+      }
     }
     clips.push(clip);
   });

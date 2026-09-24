@@ -851,6 +851,60 @@
   fill: rgba(var(--emotion-neutral-RGB), 1);
 }
 
+/* Signal clips cast a broad bilateral gradient into their lane. The
+   solid clip stays crisp above it; only the surrounding color blooms.
+   Activated by `clip.classes: "clip-signal-glow"` + `clip.glowColor`. */
+.media-container .transcript-clip.clip-signal-glow {
+  z-index: 1;
+
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: clamp(-5rem, -6vw, -2.75rem);
+    right: clamp(-5rem, -6vw, -2.75rem);
+    background:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--fp-signal-glow-color) 14%, transparent) 28%,
+        color-mix(in srgb, var(--fp-signal-glow-color) 44%, transparent) 68%,
+        color-mix(in srgb, var(--fp-signal-glow-color) 60%, transparent) 100%
+      ) left / clamp(2.75rem, 6vw, 5rem) 100% no-repeat,
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--fp-signal-glow-color) 60%, transparent) 0%,
+        color-mix(in srgb, var(--fp-signal-glow-color) 44%, transparent) 32%,
+        color-mix(in srgb, var(--fp-signal-glow-color) 14%, transparent) 72%,
+        transparent 100%
+      ) right / clamp(2.75rem, 6vw, 5rem) 100% no-repeat;
+    pointer-events: none;
+  }
+
+  & .clip-visualization {
+    z-index: 1;
+  }
+}
+
+/* A glyph that aggregates several signals carries their count inside
+   (`clip.behaviourCount` > 1 adds `behaviour-indicator--counted`). */
+.media-container .behaviour-indicators .behaviour-icon__count {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: var(--behaviour-count-color, var(--m__text));
+  font-family: var(--m__font-family-sans);
+  font-size: 0.5rem;
+  font-weight: 900;
+  line-height: 1;
+  -webkit-text-stroke: 0.025em currentColor;
+  pointer-events: none;
+}
+
 /* Comparison glyphs are half again bigger and pulled further out of the
    clip's bottom-left corner — the battle's kikis are entry points, not
    decorations */

@@ -108,17 +108,22 @@ button.m__menu-button-icon {
     }
   }
 
-  &:hover,
+  &:hover:not(:disabled),
   &.m__menu-button-trigger--active {
     background-color: color-mix(in srgb, currentColor 10%, transparent);
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     background-color: color-mix(in srgb, currentColor 8%, transparent);
     color: var(--m__text-link-pressed);
     transition-duration: var(--m__duration-instant);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 }
 
@@ -157,17 +162,22 @@ button.m__menu-button-icon {
       var(--m__easing-base),
     color var(--m__duration-base) var(--m__easing-base);
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: var(--m__bg-surface);
     color: var(--m__text-link-hover);
     transition-duration: var(--m__duration-instant);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 }
 
 .m__menu-button-item--danger {
   color: color-mix(in srgb, var(--m__error) 80%, transparent);
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: color-mix(
       in srgb,
       var(--m__error) 8%,
