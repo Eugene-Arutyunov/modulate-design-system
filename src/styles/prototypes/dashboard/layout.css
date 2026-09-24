@@ -4442,11 +4442,11 @@ table.config-details {
 }
 
 .moderation-review-behaviors__table.pg-behaviors-table th:nth-child(2) {
-  width: 22%;
+  width: 25%;
 }
 
 .moderation-review-behaviors__table.pg-behaviors-table th:nth-child(3) {
-  width: 39%;
+  width: 36%;
 }
 
 .moderation-review-behaviors__table.pg-behaviors-table th:nth-child(4) {
@@ -5922,13 +5922,20 @@ button.moderation-review-behaviors__comment-link.S:hover {
 }
 .moderation-table__table td:last-child { padding-right: 0; }
 
+.moderation-review-behaviors__name-confidence {
+  display: block;
+}
 .moderation-review-behaviors__name-confidence a.m__behavior-link {
-  background-image: none;
-  padding-bottom: 0;
-  text-decoration-line: underline;
-  text-decoration-thickness: var(--m__border-width-l);
-  text-underline-offset: .18em;
-  text-decoration-skip-ink: none;
+  display: inline;
+  background-image: linear-gradient(currentColor, currentColor);
+  padding-bottom: .18em;
+  text-decoration: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.moderation-review-behaviors__name-confidence .moderation-review-behaviors__confidence {
+  display: inline;
+  margin-inline-start: 0;
 }
 
 [data-moderation-review] .conversation-report__title-row { align-items: flex-start; gap: 2rem; margin-bottom: .65rem; }
@@ -6107,7 +6114,7 @@ button.moderation-review-behaviors__comment-link.S svg {
 }
 
 button.moderation-review-accuracy__trigger {
-  min-width: 10rem;
+  min-width: 9rem;
   justify-content: space-between;
   border: var(--m__border-width-m) solid var(--m__bg-accent);
   border-radius: var(--m__radius-s);
@@ -6181,6 +6188,30 @@ button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expa
   transition: color .5s ease, background-color .5s ease;
 }
 .review-assignment-options .review-filter-checkbox-row:is(:hover, :focus-within) .review-assignment-options__avatar {
+  color: var(--m__text-link-hover);
+  background-color: color-mix(in srgb, var(--m__text-link-hover) 15%, var(--m__bg-surface));
+  transition-duration: 0s;
+}
+
+.moderation-review-behaviors__table th:nth-child(-n + 2),
+.moderation-review-behaviors__table td.pg-behavior-speaker-cell,
+.moderation-review-behaviors__table td:has(> .moderation-review-behaviors__name-confidence) {
+  padding-right: 1rem;
+}
+
+.moderation-review-behaviors__name-confidence .moderation-review-behaviors__confidence {
+  transition: color .5s ease;
+}
+.moderation-review-behaviors__name-confidence:has(a.m__behavior-link:is(:hover, :focus-visible)) .moderation-review-behaviors__confidence {
+  color: var(--m__text-link-hover);
+  transition-duration: 0s;
+}
+
+.review-filter-values .review-assignee-filter-option {
+  justify-content: flex-start;
+  gap: .4rem;
+}
+.review-filter-checkbox-row:is(:hover, :focus-within) .review-assignee-filter-option .review-assignment-options__avatar {
   color: var(--m__text-link-hover);
   background-color: color-mix(in srgb, var(--m__text-link-hover) 15%, var(--m__bg-surface));
   transition-duration: 0s;

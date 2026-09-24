@@ -217,8 +217,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                   data-result-filter-options
                 >
                   {% for result in [ { value: '', label: 'All verdicts' }, { value:
-                  'true', label: 'True positive' }, { value: 'false', label:
-                  'False positive' } ] %}
+                  'unreviewed', label: 'Not reviewed' }, { value: 'true', label: 'True positive' }, { value: 'false', label: 'False positive' } ] %}
                   <button
                     type="button"
                     class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not result.value %} is-active{% endif %}"
@@ -999,7 +998,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         )[row.dataset.rowId];
         return results
           ? Object.values(results).filter(function (result) {
-              return result === "true" || result === "false";
+              return ["true", "false"].includes(result);
             }).length
           : 0;
       } catch (error) {
@@ -1013,7 +1012,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     behaviorOptions.forEach(function (option) {
       option.checked = selectedBehaviors.has(option.value);
     });
-    if (["true", "false"].includes(initialFilterParams.get("verdict"))) {
+    if (["unreviewed", "true", "false"].includes(initialFilterParams.get("verdict"))) {
       selectedResult = initialFilterParams.get("verdict");
     }
 
@@ -1106,7 +1105,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         sortFilter.options[sortFilter.selectedIndex].text;
       statusFilterLabel.textContent = selectedStatus || "All statuses";
       resultFilterLabel.textContent =
-        selectedResult === "true"
+        selectedResult === "unreviewed" ? "Not reviewed" : selectedResult === "true"
           ? "True positive"
           : selectedResult === "false"
             ? "False positive"
@@ -1134,15 +1133,11 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           });
         var matchesStatus =
           !selectedStatus || row.dataset.status === selectedStatus;
-        var matchesResult =
-          !selectedResult ||
-          behaviorResults.some(function (review) {
-            return (
-              review.result === selectedResult &&
-              (activeBehaviors.length === 0 ||
-                activeBehaviors.includes(review.behavior))
-            );
-          });
+        var matchesResult = !selectedResult || rowBehaviors.some(function (behavior) {
+          if (activeBehaviors.length && !activeBehaviors.includes(behavior)) return false;
+          var review = behaviorResults.find(function (item) { return item.behavior === behavior; });
+          return selectedResult === "unreviewed" ? !review || !review.result : review && review.result === selectedResult;
+        });
         var show =
           (!selectedAssignees.size || Array.from(selectedAssignees).some(value => window.ReviewAssignments.matches(row.dataset.rowId, value))) &&
           matchesBehaviors &&
@@ -1638,7 +1633,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     filterPopup.addEventListener("mouseleave", cancelFilterHover);
     function filterChoices(category) {
       if (category === "Behavior") return behaviorOptions.map(option => [option.value, option.value]);
-      if (category === "Verdict") return [["true", "True positive"], ["false", "False positive"]];
+      if (category === "Verdict") return [["unreviewed", "Not reviewed"], ["true", "True positive"], ["false", "False positive"]];
       if (category === "Status") return Array.from(statusFilterOptionsRoot.querySelectorAll("[data-status-filter-option]")).map(option => [option.dataset.statusFilterOption, option.dataset.statusFilterOption]).filter(([value]) => value);
       return Array.from(assigneeFilter.options).filter(option => option.value && option.value !== "me" && option.value !== "unassigned").map(option => [option.value, option.text]);
     }
@@ -1691,6 +1686,14 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         const button = document.createElement("button");
         button.type = "button";
         button.textContent = label;
+        if (activeFilterCategory === "Assignee") {
+          button.classList.add("review-assignee-filter-option");
+          const avatar = document.createElement("span");
+          avatar.className = "moderation-participants__avatar review-assignment-options__avatar";
+          avatar.setAttribute("aria-hidden", "true");
+          avatar.textContent = label.split(/\s+/).map(part => part[0]).join("");
+          button.prepend(avatar);
+        }
         const selected = filterValue(activeFilterCategory).includes(value);
         button.setAttribute("aria-pressed", String(selected));
         button.addEventListener("click", event => {
