@@ -660,11 +660,8 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       </svg>
                     </button>
                     <div class="m__menu-button-list" hidden>
-                      <a href="{{ row.href }}" class="m__menu-button-item"
-                        >Review</a
-                      >
                       <button type="button" class="m__menu-button-item">
-                        Export to CSV
+                        Rename
                       </button>
                       <button
                         type="button"
@@ -1624,6 +1621,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     filterHost.innerHTML = `<button type="button" class="m__button-secondary-outline S" data-filter-open aria-expanded="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#filter"></use></svg>Filter</button>
       <div class="review-filter-popup" hidden><div class="review-filter-categories"></div><div class="review-filter-options" hidden><div class="review-filter-options-title"></div><input type="search" placeholder="Search" aria-label="Search filter options"><button type="button" class="review-filter-search-clear" aria-label="Clear search" hidden><svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg></button><div class="review-filter-values"></div></div></div>`;
     root.querySelector(".moderation-table__header").append(filterHost);
+    const exportButton = document.createElement("button");
+    exportButton.type = "button";
+    exportButton.className = "m__button-secondary-outline S moderation-table__export";
+    exportButton.textContent = "Export";
+    exportButton.setAttribute("aria-label", "Export review queue to CSV");
+    root.querySelector(".moderation-table__header").append(exportButton);
     const filterStrip = document.createElement("div");
     filterStrip.className = "review-filter-strip";
     filterStrip.hidden = true;
