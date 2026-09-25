@@ -543,7 +543,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 <td>
                   <div class="moderation-behavior-summary">
                     {% for behavior in row.behaviors %}
-                    <span class="moderation-behavior-link" data-behavior-overflow-item>
+                    <span class="moderation-behavior-link" data-behavior-overflow-item data-verdict="{{ behavior.result }}">
                       <span class="moderation-behavior-link__content">
                         <span class="moderation-behavior-link__name">{{ behavior.name }}</span>
                         <span class="moderation-behavior-link__confidence">{{ behavior.score }}%</span>
