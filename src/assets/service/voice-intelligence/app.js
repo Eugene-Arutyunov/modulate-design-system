@@ -305,8 +305,7 @@ function readRoute(){
  view=views.some(v=>v[0]===requested)?requested:requested==='scenes'?'features':'companion';
  selectedQualities = new Set(params.getAll('quality').flatMap(value => value.split(',')).filter(value => /^\d+$/.test(value)).map(Number).filter(value => value >= 0 && value < D.groups.length));
  const r=Number(params.get('row'));
- const ideaRow=requested==='features'&&r===15?8:r;
- target=params.has('row')&&Number.isInteger(ideaRow)&&ideaRow>=0&&ideaRow<D.directions.length?ideaRow:null;
+ target=params.has('row')&&Number.isInteger(r)&&r>=0&&r<D.directions.length?r:null;
  if(requested==='scenes'){target=D.sceneMap.findIndex(ids=>ids.includes(r+1));selectedQualities.clear();}
  if(view!=='features'){selectedQualities.clear();target=null;}
  render();
