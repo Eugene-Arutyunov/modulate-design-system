@@ -44,9 +44,7 @@ tags: ['Agent', 'Manager'], behaviors: [ { name: 'Harassment', score: 74,
 result: 'true' }, { name: 'Personal attacks', score: 70, result: 'false' }, {
 name: 'Toxicity', score: 66 }, { name:
 'Team conflict', score: 58 }, { name: 'Negative sentiment', score: 54 } ],
-score: 74, detections: 5, status: 'In review', participants: [ { name: 'Eugene
-Arutyunov', initials: 'EA', activity: 'Viewing' }, { name: 'Jordan Lee', initials:
-'JL', activity: 'Writing a comment' } ], href:
+score: 74, detections: 5, status: 'In review', participants: [], href:
 '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion: 'neutral',
 lane: 'full', span: 2 }, { emotion: 'confident', lane: 'bottom', span: 1 }, {
 emotion: 'amused', lane: 'top', span: 1 }, { emotion: 'angry', lane: 'full',
@@ -59,7 +57,7 @@ lane: 'top', span: 4 }, { emotion: 'amused', lane: 'top', span: 2 }, { emotion:
 ['Customer', 'Agent'], behaviors: [ { name: 'Complaints', score: 68, result:
 'true' }, { name: 'Frustration', score: 63, result: 'false' }, { name: 'Service
 delay', score: 59, result: 'true' }, { name: 'Escalation risk', score: 52,
-result: 'false' } ], score: 68, detections: 4, status: 'Reviewed',
+result: 'false' } ], score: 68, detections: 4, status: 'Reviewed', participants: [ { name: 'Maya Chen', initials: 'MC', activity: 'Viewing' } ],
 href: '/dashboard/conversations/review/7839f2/', fingerprint: [ { emotion:
 'neutral', lane: 'full', span: 2 }, { emotion: 'calm', lane: 'top', span: 2 }, {
 emotion: 'amused', lane: 'bottom', span: 1 }, { emotion: 'neutral', lane:
@@ -155,7 +153,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               <input
                 type="search"
                 id="moderation-search"
-                placeholder="Search"
+                placeholder="Search by id, name, behaviors or members"
                 data-moderation-search
               />
             </label>
@@ -167,10 +165,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <span>Behaviors</span>
+
               <span class="m__select__inline-control">
                 <span class="m__select__value" data-behavior-filter-label
-                  >All</span
+                  >All behaviors</span
                 >
                 <svg
                   width="12"
@@ -191,10 +189,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 aria-haspopup="menu"
                 aria-expanded="false"
               >
-                <span>Verdict</span>
+
                 <span class="m__select__inline-control">
                   <span class="m__select__value" data-result-filter-label
-                    >All</span
+                    >All verdicts</span
                   >
                   <svg
                     width="12"
@@ -216,9 +214,8 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                   role="presentation"
                   data-result-filter-options
                 >
-                  {% for result in [ { value: '', label: 'All' }, { value:
-                  'true', label: 'True positive' }, { value: 'false', label:
-                  'False positive' } ] %}
+                  {% for result in [ { value: '', label: 'All verdicts' }, { value:
+                  'unreviewed', label: 'Not reviewed' }, { value: 'true', label: 'True positive' }, { value: 'false', label: 'False positive' } ] %}
                   <button
                     type="button"
                     class="m__menu-button-item conversation-report__report-item moderation-table__status-option{% if not result.value %} is-active{% endif %}"
@@ -230,7 +227,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       class="conversation-report__report-item-icon moderation-table__status-option-check"
                       aria-hidden="true"
                     >
-                      <svg viewBox="0 0 12 12">
+                      <svg viewBox="0 0 10 10">
                         <use href="#checkmark"></use>
                       </svg>
                     </span>
@@ -251,10 +248,10 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 aria-haspopup="menu"
                 aria-expanded="false"
               >
-                <span>Status</span>
+
                 <span class="m__select__inline-control">
                   <span class="m__select__value" data-status-filter-label
-                    >All</span
+                    >All statuses</span
                   >
                   <svg
                     width="12"
@@ -288,12 +285,12 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       class="conversation-report__report-item-icon moderation-table__status-option-check"
                       aria-hidden="true"
                     >
-                      <svg viewBox="0 0 12 12">
+                      <svg viewBox="0 0 10 10">
                         <use href="#checkmark"></use>
                       </svg>
                     </span>
                     <span class="conversation-report__report-item-title"
-                      >All</span
+                      >All statuses</span
                     >
                   </button>
                   <button
@@ -307,7 +304,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       class="conversation-report__report-item-icon moderation-table__status-option-check"
                       aria-hidden="true"
                     >
-                      <svg viewBox="0 0 12 12">
+                      <svg viewBox="0 0 10 10">
                         <use href="#checkmark"></use>
                       </svg>
                     </span>
@@ -326,7 +323,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       class="conversation-report__report-item-icon moderation-table__status-option-check"
                       aria-hidden="true"
                     >
-                      <svg viewBox="0 0 12 12">
+                      <svg viewBox="0 0 10 10">
                         <use href="#checkmark"></use>
                       </svg>
                     </span>
@@ -345,7 +342,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       class="conversation-report__report-item-icon moderation-table__status-option-check"
                       aria-hidden="true"
                     >
-                      <svg viewBox="0 0 12 12">
+                      <svg viewBox="0 0 10 10">
                         <use href="#checkmark"></use>
                       </svg>
                     </span>
@@ -373,33 +370,33 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               </div>
             </div>
 
-            <label
-              class="m__select S moderation-table__filter moderation-table__filter--sort"
-            >
-              <span>Sort</span>
-              <div class="m__select__inline-control">
-                <span class="m__select__value" data-sort-filter-label
-                  >Score high to low</span
-                >
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  aria-hidden="true"
-                >
-                  <use href="#chevron-down"></use>
-                </svg>
-                <select id="moderation-sort" data-sort-filter>
-                  <option value="score-desc">Score high to low</option>
-                  <option value="score-asc">Score low to high</option>
-                  <option value="newest">Newest first</option>
-                </select>
-              </div>
-            </label>
-            <div class="behaviors-toolbar-actions moderation-table__actions">
-              <button type="button" class="m__button-secondary-outline S">
-                Bulk actions
+            <div class="m__menu-button moderation-table__assignee-filter-menu">
+              <button type="button" class="m__select S moderation-table__filter review-assignee-filter m__menu-button-trigger" aria-haspopup="menu" aria-expanded="false">
+                <span class="m__select__inline-control">
+                  <span class="m__select__value" data-assignee-filter-label>All assignees</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                </span>
               </button>
+              <div class="m__menu-button-list conversation-report__report-list conversation-report__report-list--start" data-assignee-menu role="menu" hidden></div>
+              <select data-assignee-filter aria-label="Filter by assignee" hidden></select>
+            </div>
+
+            <div class="m__menu-button moderation-sort-menu">
+              <button type="button" class="m__menu-button-trigger moderation-sort-trigger" aria-haspopup="menu" aria-expanded="false">
+                <span data-sort-filter-label>Sort by newest</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+              </button>
+              <div class="m__menu-button-list moderation-sort-list" role="menu" hidden>
+                <div class="moderation-sort-heading">Sorted by</div>
+                <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="newest" aria-checked="true">Newest<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
+                <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="score-desc" aria-checked="false">Highest confidence<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
+                <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="score-asc" aria-checked="false">Lowest confidence<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
+              </div>
+              <select data-sort-filter hidden aria-label="Sort order">
+                <option value="newest" selected>Sort by newest</option>
+                <option value="score-desc">Sort by highest confidence</option>
+                <option value="score-asc">Sort by lowest confidence</option>
+              </select>
             </div>
           </div>
         </div>
@@ -436,7 +433,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
             <input
               type="text"
               id="moderation-tag-filter-search"
-              placeholder="Search…"
+              placeholder="Search"
               autocomplete="off"
               data-behavior-filter-search
             />
@@ -472,6 +469,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               <col class="moderation-table__col-pattern" />
               <col class="moderation-table__col-detection" />
               <col class="moderation-table__col-status" />
+              <col class="moderation-table__col-assigned" />
               <col class="moderation-table__col-actions" />
             </colgroup>
             <tbody data-moderation-tbody>
@@ -479,6 +477,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
               <tr
                 data-review-row
                 data-index="{{ loop.index0 }}"
+                data-submitted="{{ row.submitted }}"
                 data-row-id="{{ row.id }}"
                 data-behaviors="{% for behavior in row.behaviors %}{{ behavior.name }}{% if not loop.last %}|{% endif %}{% endfor %}"
                 data-behavior-results="{% for behavior in row.behaviors %}{% if behavior.result %}{{ behavior.name }}::{{ behavior.result }}|{% endif %}{% endfor %}"
@@ -495,7 +494,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                     <span class="moderation-table__title">{{ row.title }}</span>
                     <span class="moderation-table__meta">
                       <span
-                        class="m__tag-flat moderation-table__conversation-id"
+                        class="m__tag-flat moderation-table__conversation-id review-copy-id" data-copy-review-id="{{ row.id }}" role="button" tabindex="0" aria-label="Copy conversation ID {{ row.id }}" title="Copy ID"
                         >{{ row.id }}</span
                       >
                       <span>{{ row.submitted }} · {{ row.source }}</span>
@@ -543,57 +542,15 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 </td>
                 <td>
                   <div class="moderation-behavior-summary">
-                    {% for behavior in row.behaviors %} {% if loop.index < 3 %}
-                    <span class="moderation-behavior-link">
+                    {% for behavior in row.behaviors %}
+                    <span class="moderation-behavior-link" data-behavior-overflow-item>
                       <span class="moderation-behavior-link__content">
-                        <span class="moderation-behavior-link__name"
-                          >{{ behavior.name }}</span
-                        >
-                        <span class="moderation-behavior-link__confidence"
-                          >{{ behavior.score }}%</span
-                        >
+                        <span class="moderation-behavior-link__name">{{ behavior.name }}</span>
+                        <span class="moderation-behavior-link__confidence">{{ behavior.score }}%</span>
                       </span>
                     </span>
-                    {% elif loop.index == 3 %} {% if row.behaviors.length > 3
-                    %}<span class="moderation-behavior-link__wrap"
-                      >{% endif %}
-                      <span class="moderation-behavior-link">
-                        <span class="moderation-behavior-link__content">
-                          <span class="moderation-behavior-link__name"
-                            >{{ behavior.name }}</span
-                          >
-                          <span class="moderation-behavior-link__confidence"
-                            >{{ behavior.score }}%</span
-                          >
-                        </span>
-                      </span>
-                      {% if row.behaviors.length > 3 %}
-                      <button
-                        type="button"
-                        class="moderation-behavior-link__more moderation-behavior-overflow__trigger"
-                        aria-label="Show {{ row.behaviors.length - 3 }} more behaviors for {{ row.title }}"
-                        aria-expanded="false"
-                        data-behavior-overflow-trigger
-                      >
-                        +{{ row.behaviors.length - 3 }}
-                      </button>
-                      </span>
-                      {% endif %} {% elif loop.index > 3 %}
-                      <span
-                        class="moderation-behavior-link"
-                        data-behavior-overflow-item
-                        hidden
-                      >
-                        <span class="moderation-behavior-link__content">
-                          <span class="moderation-behavior-link__name"
-                            >{{ behavior.name }}</span
-                          >
-                          <span class="moderation-behavior-link__confidence"
-                            >{{ behavior.score }}%</span
-                          >
-                        </span>
-                      </span>
-                      {% endif %} {% endfor %}
+                    {% endfor %}
+                    <button type="button" class="moderation-behavior-link__more moderation-behavior-overflow__trigger" data-behavior-overflow-trigger aria-expanded="false" hidden></button>
                   </div>
                 </td>
                 <td>
@@ -635,7 +592,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                             class="conversation-report__report-item-icon moderation-table__status-option-check"
                             aria-hidden="true"
                           >
-                            <svg viewBox="0 0 12 12">
+                            <svg viewBox="0 0 10 10">
                               <use href="#checkmark"></use>
                             </svg>
                           </span>
@@ -682,57 +639,13 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       </div>
                     </div>
                   </div>
-                  {% if row.participants %}
-                  <div class="m__menu-button moderation-participants">
-                    <button
-                      type="button"
-                      class="m__menu-button-trigger moderation-participants__trigger"
-                      aria-label="{{ row.participants.length }} participant{% if row.participants.length != 1 %}s{% endif %} working on {{ row.title }}"
-                      aria-haspopup="menu"
-                      aria-expanded="false"
-                    >
-                      {% for participant in row.participants %}
-                      {% if loop.index < 5 %}
-                      <span
-                        class="moderation-participants__avatar"
-                        aria-hidden="true"
-                      >{{ participant.initials }}</span>
-                      {% elif loop.index == 5 %}
-                      <span
-                        class="moderation-participants__avatar moderation-participants__avatar--more"
-                        aria-hidden="true"
-                      >+{{ row.participants.length - 4 }}</span>
-                      {% endif %}
-                      {% endfor %}
-                    </button>
-                    <div
-                      class="m__menu-button-list moderation-participants__list"
-                      hidden
-                      role="menu"
-                      aria-label="Participants"
-                    >
-                      {% for participant in row.participants %}
-                      <div
-                        class="moderation-participants__item"
-                        role="menuitem"
-                      >
-                        <span
-                          class="moderation-participants__avatar"
-                          aria-hidden="true"
-                        >{{ participant.initials }}</span>
-                        <span class="moderation-participants__details">
-                          <span class="moderation-participants__name"
-                            >{{ participant.name }}</span
-                          >
-                          <span class="moderation-participants__activity"
-                            >{{ participant.activity }}</span
-                          >
-                        </span>
-                      </div>
-                      {% endfor %}
-                    </div>
                   </div>
-                  {% endif %}
+                </td>
+                <td class="moderation-table__assigned-cell">
+                  <div class="m__menu-button review-assignment-avatar" data-assignment-avatar="{{ row.id }}" data-initial-members="{% for participant in row.participants %}{{ participant.name }}{% if not loop.last %}|{% endif %}{% endfor %}">
+                    <button type="button" class="m__menu-button-trigger review-assignment-avatar__trigger" aria-label="Assign reviewer" aria-haspopup="menu" aria-expanded="false">+</button>
+                    <div class="m__menu-button-list moderation-sort-list" role="menu" hidden></div>
+                    <label hidden><span data-assignee-label></span><select data-review-assignee="{{ row.id }}" aria-label="Assign reviewer"></select></label>
                   </div>
                 </td>
                 <td class="m__col-actions moderation-table__row-actions">
@@ -750,6 +663,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                       <a href="{{ row.href }}" class="m__menu-button-item"
                         >Review</a
                       >
+                      <button type="button" class="m__menu-button-item">
+                        Export to CSV
+                      </button>
                       <button
                         type="button"
                         class="m__menu-button-item m__menu-button-item--danger"
@@ -766,16 +682,9 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
                 data-moderation-empty
                 hidden
               >
-                <td colspan="5">
+                <td colspan="6">
                   <div class="moderation-table__empty-state">
                     <p>No conversations match these filters.</p>
-                    <button
-                      type="button"
-                      class="m__button-secondary-outline S"
-                      data-moderation-empty-reset
-                    >
-                      Reset filters
-                    </button>
                   </div>
                 </td>
               </tr>
@@ -921,6 +830,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
   <div class="m__space XL"></div>
 </div>
 
+<script src="/assets/prototypes/review-assignments.js"></script>
 <script>
   (function () {
     var root = document.querySelector("[data-moderation-page]");
@@ -928,10 +838,24 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var rows = Array.from(root.querySelectorAll("[data-review-row]"));
     var tbody = root.querySelector("[data-moderation-tbody]");
     var searchInput = root.querySelector("[data-moderation-search]");
+    const searchMeasure = document.createElement("canvas").getContext("2d");
+    const resizeSearch = () => {
+      const style = getComputedStyle(searchInput);
+      searchMeasure.font = style.font;
+      const textWidth = searchMeasure.measureText(searchInput.value || searchInput.placeholder).width;
+      searchInput.parentElement.style.setProperty("--review-search-width", (textWidth + 64) + "px");
+      requestAnimationFrame(() => {
+        const field = searchInput.parentElement;
+        const fieldStyle = getComputedStyle(field);
+        const atMaximum = field.getBoundingClientRect().width >= parseFloat(fieldStyle.maxWidth) - 1 || field.getBoundingClientRect().width < Math.min(textWidth + 64, parseFloat(fieldStyle.maxWidth)) - 1;
+        searchInput.classList.toggle("is-search-overflowing", atMaximum && textWidth > searchInput.clientWidth - 8);
+      });
+    };
+    searchInput.addEventListener("input", resizeSearch);
+    new ResizeObserver(resizeSearch).observe(searchInput);
+    document.fonts.ready.then(resizeSearch);
+    resizeSearch();
     var emptyState = root.querySelector("[data-moderation-empty]");
-    var emptyStateReset = root.querySelector(
-      "[data-moderation-empty-reset]",
-    );
     var behaviorFilterRoot = root.querySelector("[data-behavior-filter-root]");
     var behaviorFilterTriggers = Array.from(
       root.querySelectorAll("[data-behavior-filter-trigger]"),
@@ -964,6 +888,17 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       '<line x1="10" y1="2" x2="2" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
       "</svg>";
     var activeBehaviorFilterTrigger = null;
+    const headerText = root.querySelectorAll(".moderation-table__header .m__select__value, [data-sort-filter-label]");
+    const updateHeaderFade = () => headerText.forEach(label => {
+      label.classList.toggle("is-text-overflowing", label.scrollWidth > label.clientWidth + 1);
+      label.title = label.textContent.trim();
+    });
+    const headerResize = new ResizeObserver(updateHeaderFade);
+    headerText.forEach(label => {
+      headerResize.observe(label);
+      new MutationObserver(updateHeaderFade).observe(label, { childList: true, characterData: true, subtree: true });
+    });
+    var sortOptions = Array.from(root.querySelectorAll("[data-sort-option]"));
     var sortFilter = root.querySelector("[data-sort-filter]");
     var sortFilterLabel = root.querySelector("[data-sort-filter-label]");
     var statusFilterLabel = root.querySelector("[data-status-filter-label]");
@@ -996,8 +931,47 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     var selectedResult = "";
     var pendingStatusRemove = "";
     var initialFilterParams = new URLSearchParams(window.location.search);
+    var dateFrom = initialFilterParams.get("dateFrom") || "";
+    var dateTo = initialFilterParams.get("dateTo") || "";
+    var updatedFrom = "";
+    var updatedTo = "";
+    rows.forEach(function (row) {
+      var date = new Date();
+      var label = row.dataset.submitted;
+      if (label.startsWith("Yesterday")) date.setDate(date.getDate() - 1);
+      else if (label.startsWith("Mon")) date.setDate(date.getDate() - ((date.getDay() + 6) % 7 || 7));
+      row.dataset.date = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+    });
+    rows.forEach(function (row) {
+      // Demo timestamps: reviewed conversations were updated today.
+      var today = new Date();
+      row.dataset.updatedDate = row.dataset.behaviorResults ? today.getFullYear() + "-" + String(today.getMonth()+1).padStart(2,"0") + "-" + String(today.getDate()).padStart(2,"0") : row.dataset.date;
+    });
+    var assigneeFilter = root.querySelector("[data-assignee-filter]");
+    var selectedAssignees = new Set(initialFilterParams.getAll("assignee").filter(value =>
+      Array.from(assigneeFilter.options).some(option => option.value === value && value && value !== "me" && value !== "unassigned")
+    ));
+    assigneeFilter.addEventListener("change", () => {
+      selectedAssignees.clear();
+      if (assigneeFilter.value) selectedAssignees.add(assigneeFilter.value);
+      applyQueueState();
+    });
+    document.addEventListener("review-assignment-change", applyQueueState);
     var statusStorageKey = "modulate-review-status-overrides";
     var reviewResultsStorageKey = "modulate-review-results";
+
+    function shortReviewerName(name) {
+      var parts = String(name || "").trim().split(/\s+/);
+      return parts.length > 1 ? parts[0] + " " + parts[parts.length - 1][0] + "." : parts[0];
+    }
+
+    function formatVerdictTimestamp(value) {
+      var date = new Date(value);
+      return date.toLocaleString("en-GB", {
+        day: "numeric", month: "short", year: date.getFullYear() === new Date().getFullYear() ? undefined : "numeric",
+        hour: "2-digit", minute: "2-digit",
+      });
+    }
 
     function readStatusOverrides() {
       try {
@@ -1021,7 +995,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
 
     function setRowStatusOverride(row, status) {
       var overrides = readStatusOverrides();
-      overrides[row.dataset.rowId] = { status: status, author: reviewerName };
+      overrides[row.dataset.rowId] = { status: status, author: reviewerName, at: new Date().toISOString() };
       writeStatusOverrides(overrides);
       return overrides[row.dataset.rowId];
     }
@@ -1039,7 +1013,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
         )[row.dataset.rowId];
         return results
           ? Object.values(results).filter(function (result) {
-              return result === "true" || result === "false";
+              return ["true", "false"].includes(result);
             }).length
           : 0;
       } catch (error) {
@@ -1053,11 +1027,16 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     behaviorOptions.forEach(function (option) {
       option.checked = selectedBehaviors.has(option.value);
     });
-    if (["true", "false"].includes(initialFilterParams.get("verdict"))) {
+    if (["unreviewed", "true", "false"].includes(initialFilterParams.get("verdict"))) {
       selectedResult = initialFilterParams.get("verdict");
     }
 
     function applySharedFilterParams(url) {
+      [["dateFrom", dateFrom], ["dateTo", dateTo], ["updatedFrom", updatedFrom], ["updatedTo", updatedTo]].forEach(([key, value]) => {
+        if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
+      });
+      url.searchParams.delete("assignee");
+      selectedAssignees.forEach(value => url.searchParams.append("assignee", value));
       url.searchParams.delete("behavior");
       selectedBehaviors.forEach(function (behavior) {
         url.searchParams.append("behavior", behavior);
@@ -1076,6 +1055,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       rows.forEach(function (row) {
         row.querySelectorAll("a[href]").forEach(function (link) {
           var linkUrl = applySharedFilterParams(new URL(link.href));
+          if (linkUrl.pathname.startsWith("/dashboard/conversations/review/")) linkUrl.searchParams.set("reviewId", row.dataset.rowId);
           link.href = linkUrl.pathname + linkUrl.search + linkUrl.hash;
         });
       });
@@ -1114,8 +1094,8 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       behaviorFilterRoot.hidden = selectedBehaviors.size === 0;
       behaviorFilterLabel.textContent =
         selectedBehaviors.size === 0
-          ? "All"
-          : selectedBehaviors.size + " selected";
+          ? "All behaviors"
+          : selectedBehaviors.size === 1 ? Array.from(selectedBehaviors)[0] : selectedBehaviors.size + " behaviors";
       Array.from(selectedBehaviors).forEach(function (behavior) {
         var chip = document.createElement("span");
         chip.className = "m__tag bw-tag-item moderation-table__selected-tag";
@@ -1136,15 +1116,20 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       var query = searchInput.value.trim().toLowerCase();
       var activeBehaviors = Array.from(selectedBehaviors);
       var sort = sortFilter.value;
+      sortOptions.forEach(function (option) {
+        option.setAttribute("aria-checked", String(option.dataset.sortOption === sort));
+      });
       sortFilterLabel.textContent =
         sortFilter.options[sortFilter.selectedIndex].text;
-      statusFilterLabel.textContent = selectedStatus || "All";
+      statusFilterLabel.textContent = selectedStatus || "All statuses";
       resultFilterLabel.textContent =
-        selectedResult === "true"
+        selectedResult === "unreviewed" ? "Not reviewed" : selectedResult === "true"
           ? "True positive"
           : selectedResult === "false"
             ? "False positive"
-            : "All";
+            : "All verdicts";
+      root.querySelector("[data-assignee-filter-label]").textContent = assigneeFilter.value ? assigneeFilter.selectedOptions[0].text : "All assignees";
+      renderFilterBuilder();
       syncSharedFilterParams();
       rows.forEach(function (row) {
         row.classList.remove("moderation-table__row--last-visible");
@@ -1166,16 +1151,15 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           });
         var matchesStatus =
           !selectedStatus || row.dataset.status === selectedStatus;
-        var matchesResult =
-          !selectedResult ||
-          behaviorResults.some(function (review) {
-            return (
-              review.result === selectedResult &&
-              (activeBehaviors.length === 0 ||
-                activeBehaviors.includes(review.behavior))
-            );
-          });
+        var matchesResult = !selectedResult || rowBehaviors.some(function (behavior) {
+          if (activeBehaviors.length && !activeBehaviors.includes(behavior)) return false;
+          var review = behaviorResults.find(function (item) { return item.behavior === behavior; });
+          return selectedResult === "unreviewed" ? !review || !review.result : review && review.result === selectedResult;
+        });
         var show =
+          (!selectedAssignees.size || Array.from(selectedAssignees).some(value => window.ReviewAssignments.matches(row.dataset.rowId, value))) &&
+          (!updatedFrom || row.dataset.updatedDate >= updatedFrom) && (!updatedTo || row.dataset.updatedDate <= updatedTo) &&
+          (!dateFrom || row.dataset.date >= dateFrom) && (!dateTo || row.dataset.date <= dateTo) &&
           matchesBehaviors &&
           matchesStatus &&
           matchesResult &&
@@ -1209,6 +1193,38 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     }
 
     searchInput.addEventListener("input", applyQueueState);
+    function fitBehaviorSummary(trigger) {
+      const summary = trigger.closest(".moderation-behavior-summary");
+      if (!summary.getBoundingClientRect().width || trigger.getAttribute("aria-expanded") === "true") return;
+      const items = Array.from(summary.querySelectorAll("[data-behavior-overflow-item]"));
+      items.forEach(item => { item.hidden = false; });
+      trigger.hidden = true;
+      const fits = () => {
+        const tops = [...items.filter(item => !item.hidden), ...(!trigger.hidden ? [trigger] : [])].map(item => item.getBoundingClientRect().top);
+        const first = items[0];
+        if (!first) return true;
+        const gap = parseFloat(getComputedStyle(summary).rowGap) || 0;
+        return Math.max(...tops) - Math.min(...tops) < first.getBoundingClientRect().height * 2 + gap;
+      };
+      if (fits()) return;
+      trigger.hidden = false;
+      for (let count = items.length - 1; count >= 0; count--) {
+        items[count].hidden = true;
+        trigger.textContent = "+" + (items.length - count);
+        trigger.setAttribute("aria-label", "Show " + (items.length - count) + " more behaviors");
+        if (fits()) break;
+      }
+    }
+    const summaryWidths = new WeakMap();
+    const summaryObserver = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        if (summaryWidths.get(entry.target) === entry.contentRect.width) return;
+        summaryWidths.set(entry.target, entry.contentRect.width);
+        fitBehaviorSummary(entry.target.querySelector("[data-behavior-overflow-trigger]"));
+      });
+    });
+    behaviorOverflowTriggers.forEach(trigger => summaryObserver.observe(trigger.closest(".moderation-behavior-summary")));
+    document.fonts.ready.then(() => behaviorOverflowTriggers.forEach(fitBehaviorSummary));
     behaviorOverflowTriggers.forEach(function (trigger) {
       trigger.addEventListener("click", function () {
         var summary = trigger.closest(".moderation-behavior-summary");
@@ -1266,17 +1282,6 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       renderSelectedBehaviors();
       applyQueueState();
     });
-    emptyStateReset.addEventListener("click", function () {
-      searchInput.value = "";
-      selectedBehaviors.clear();
-      behaviorOptions.forEach(function (option) {
-        option.checked = false;
-      });
-      closeBehaviorFilter();
-      renderSelectedBehaviors();
-      setStatusFilter("");
-      setResultFilter("");
-    });
     behaviorFilterSearch.addEventListener("input", function () {
       var query = behaviorFilterSearch.value.trim().toLowerCase();
       behaviorOptions.forEach(function (option) {
@@ -1286,7 +1291,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
     });
     function setStatusFilter(status) {
       selectedStatus = status || "";
-      statusFilterLabel.textContent = selectedStatus || "All";
+      statusFilterLabel.textContent = selectedStatus || "All statuses";
       statusFilterOptionsRoot
         .querySelectorAll("[data-status-filter-option]")
         .forEach(function (option) {
@@ -1367,7 +1372,7 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
           if (optionMeta) {
             optionMeta.hidden = !(override && isSelected);
             optionMeta.textContent = override && isSelected
-              ? "Changed by " + (override.author || "Current reviewer")
+              ? "Set " + shortReviewerName(override.author || "Current reviewer") + (override.at ? " · " + formatVerdictTimestamp(override.at) : "")
               : "";
           }
         });
@@ -1602,6 +1607,334 @@ setting' ] %} {% set statusListOptions = [ 'Pending', 'In review', 'Reviewed' ] 
       },
       true,
     );
+    sortOptions.forEach(function (option) {
+      option.addEventListener("click", function () {
+        sortFilter.value = option.dataset.sortOption;
+        applyQueueState();
+        option.closest(".moderation-sort-list").hidden = true;
+        var trigger = root.querySelector(".moderation-sort-trigger");
+        trigger.setAttribute("aria-expanded", "false");
+        trigger.focus();
+        queueMicrotask(applyQueueState);
+      });
+    });
+
+    const filterHost = document.createElement("div");
+    filterHost.className = "review-filter-builder";
+    filterHost.innerHTML = `<button type="button" class="m__button-secondary-outline S" data-filter-open aria-expanded="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#filter"></use></svg>Filter</button>
+      <div class="review-filter-popup" hidden><div class="review-filter-categories"></div><div class="review-filter-options" hidden><div class="review-filter-options-title"></div><input type="search" placeholder="Search" aria-label="Search filter options"><button type="button" class="review-filter-search-clear" aria-label="Clear search" hidden><svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg></button><div class="review-filter-values"></div></div></div>`;
+    root.querySelector(".moderation-table__header").append(filterHost);
+    const filterStrip = document.createElement("div");
+    filterStrip.className = "review-filter-strip";
+    filterStrip.hidden = true;
+    root.querySelector("[data-behavior-filter-root]").before(filterStrip);
+    const filterPopup = filterHost.querySelector(".review-filter-popup");
+    const filterOpen = filterHost.querySelector("[data-filter-open]");
+    const categories = ["Behavior", "Verdict", "Status", "Assignee", "Created date"];
+    let activeFilterCategory = "";
+    let filterHoverTimer;
+    const cancelFilterHover = () => clearTimeout(filterHoverTimer);
+    let previousFilterPointer;
+    document.addEventListener("mousemove", event => {
+      previousFilterPointer = { x: event.clientX, y: event.clientY, time: performance.now() };
+    });
+    function movingTowardFilterOptions(event) {
+      const submenu = filterHost.querySelector(".review-filter-options");
+      if (submenu.hidden || !previousFilterPointer || performance.now() - previousFilterPointer.time > 150) return false;
+      const dx = event.clientX - previousFilterPointer.x;
+      if (dx >= -1) return false;
+      const bounds = submenu.getBoundingClientRect();
+      const distance = bounds.right - event.clientX;
+      if (distance > 0) return false;
+      const projectedY = event.clientY + (event.clientY - previousFilterPointer.y) * distance / dx;
+      return projectedY >= bounds.top && projectedY <= bounds.bottom;
+    }
+    filterHost.querySelector(".review-filter-options").addEventListener("mouseenter", cancelFilterHover);
+    filterPopup.addEventListener("mouseleave", cancelFilterHover);
+    function filterChoices(category) {
+      if (category === "Created date") return [];
+      if (category === "Behavior") return behaviorOptions.map(option => [option.value, option.value]);
+      if (category === "Verdict") return [["unreviewed", "Not reviewed"], ["true", "True positive"], ["false", "False positive"]];
+      if (category === "Status") return Array.from(statusFilterOptionsRoot.querySelectorAll("[data-status-filter-option]")).map(option => [option.dataset.statusFilterOption, option.dataset.statusFilterOption]).filter(([value]) => value);
+      return Array.from(assigneeFilter.options).filter(option => option.value && option.value !== "me" && option.value !== "unassigned").map(option => [option.value, option.text]);
+    }
+    function filterValue(category) {
+      if (category === "Created date") return dateFrom || dateTo ? [(dateFrom || "…") + " — " + (dateTo || "…")] : [];
+      return category === "Assignee" ? Array.from(selectedAssignees) : category === "Behavior" ? Array.from(selectedBehaviors) : [category === "Verdict" ? selectedResult : category === "Status" ? selectedStatus : assigneeFilter.value].filter(Boolean);
+    }
+    function changeBuilderFilter(category, value) {
+      if (category === "Created date") { dateFrom = ""; dateTo = ""; updatedFrom = ""; updatedTo = ""; applyQueueState(); return; }
+      if (category === "Behavior") {
+        if (!value) selectedBehaviors.clear();
+        else if (selectedBehaviors.has(value)) selectedBehaviors.delete(value);
+        else selectedBehaviors.add(value);
+        behaviorOptions.forEach(option => { option.checked = selectedBehaviors.has(option.value); });
+        renderSelectedBehaviors();
+        applyQueueState();
+      } else if (category === "Verdict") setResultFilter(value);
+      else if (category === "Status") setStatusFilter(value);
+      else {
+        if (!value) selectedAssignees.clear();
+        else if (selectedAssignees.has(value)) selectedAssignees.delete(value);
+        else selectedAssignees.add(value);
+        applyQueueState();
+      }
+    }
+    function showFilterCategory(category) {
+      cancelFilterHover();
+      activeFilterCategory = category;
+      const categoryButtons = Array.from(filterHost.querySelectorAll(".review-filter-categories button"));
+      categoryButtons.forEach(button => button.classList.toggle("is-active", button.textContent === category));
+      const categoryButton = categoryButtons.find(button => button.textContent === category);
+      filterHost.querySelector(".review-filter-options").style.top = (categoryButton ? categoryButton.offsetTop : 0) + "px";
+      filterPopup.hidden = false;
+      filterOpen.setAttribute("aria-expanded", "true");
+      filterHost.querySelector(".review-filter-options").hidden = false;
+      filterHost.querySelector(".review-filter-options-title").textContent = category;
+      filterHost.querySelector("input").value = "";
+      renderFilterValues();
+      const submenu = filterHost.querySelector(".review-filter-options");
+      const firstChoice = submenu.querySelector(".review-filter-values button");
+      if (categoryButton && firstChoice) {
+        const offset = firstChoice.getBoundingClientRect().top - submenu.getBoundingClientRect().top;
+        submenu.style.top = (categoryButton.offsetTop - offset) + "px";
+      }
+    }
+    function renderFilterValues() {
+      const list = filterHost.querySelector(".review-filter-values");
+      list.replaceChildren();
+      filterHost.querySelector('input[type="search"]').hidden = activeFilterCategory === "Created date";
+      const options = filterHost.querySelector(".review-filter-options");
+      options.classList.toggle("has-date-range", activeFilterCategory === "Created date");
+      options.querySelector(".review-date-range-header")?.remove();
+      if (activeFilterCategory === "Created date") {
+        filterHost.querySelector(".review-filter-search-clear").hidden = true;
+        const header = document.createElement("div");
+        header.className = "review-date-range-header";
+        header.innerHTML = '<button type="button" data-date-custom aria-expanded="false">Custom range</button><div class="review-date-range-fields"><input type="date" aria-label="Created date from"><span>–</span><input type="date" aria-label="Created date to"></div>';
+        options.insertBefore(header, list);
+        const [from, to] = header.querySelectorAll("input");
+        const customButton = header.querySelector("[data-date-custom]"), fields = header.querySelector(".review-date-range-fields");
+        let editingRange = Boolean(dateFrom || dateTo);
+        from.value = dateFrom; to.value = dateTo;
+        const editors = [from, to].map((picker, index) => {
+          picker.classList.add("review-date-calendar-anchor");
+          picker.tabIndex = -1;
+          picker.setAttribute("aria-hidden", "true");
+          const editor = document.createElement("input");
+          editor.type = "text"; editor.placeholder = "dd.mm.yyyy";
+          editor.inputMode = "numeric"; editor.maxLength = 10;
+          editor.setAttribute("aria-label", index ? "Created date to" : "Created date from");
+          picker.setAttribute("aria-label", index ? "End date calendar" : "Start date calendar");
+          picker.before(editor);
+          const resize = () => {
+            const measure = document.createElement("canvas").getContext("2d");
+            measure.font = getComputedStyle(editor).font;
+            editor.style.width = Math.ceil(measure.measureText(editor.value || editor.placeholder).width + 2) + "px";
+          };
+          let wasFocused = false;
+          editor.addEventListener("pointerdown", () => { wasFocused = document.activeElement === editor; });
+          editor.addEventListener("click", () => {
+            if (!wasFocused) return;
+            const bounds = editor.getBoundingClientRect();
+            Object.assign(picker.style, {
+              left: bounds.left + "px", top: bounds.top + "px",
+              width: bounds.width + "px", height: bounds.height + "px"
+            });
+            picker.showPicker();
+          });
+          editor.addEventListener("input", () => {
+            const cursor = editor.selectionStart || 0;
+            const digitsBeforeCursor = editor.value.slice(0, cursor).replace(/\D/g, "").length;
+            const digits = editor.value.replace(/\D/g, "").slice(0, 8);
+            editor.value = [digits.slice(0, 2), digits.slice(2, 4), digits.slice(4, 8)].filter(Boolean).join(".");
+            let position = 0, seen = 0;
+            while (position < editor.value.length && seen < digitsBeforeCursor) {
+              if (/\d/.test(editor.value[position])) seen++;
+              position++;
+            }
+            editor.setSelectionRange(position, position);
+            resize();
+          });
+          editor.addEventListener("change", () => {
+            const match = editor.value.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+            if (!editor.value) picker.value = "";
+            else if (match) {
+              const iso = match[3] + "-" + match[2] + "-" + match[1];
+              const parsed = new Date(iso + "T12:00:00");
+              if (isNaN(parsed) || parsed.getDate() !== +match[1] || parsed.getMonth() + 1 !== +match[2]) return;
+              picker.value = iso;
+            } else return;
+            apply();
+          });
+          return { editor, resize, picker };
+        });
+        const refresh = () => {
+          customButton.hidden = editingRange;
+          fields.hidden = !editingRange;
+          customButton.setAttribute("aria-expanded", String(editingRange));
+          from.max = to.value; to.min = from.value;
+          editors.forEach(({editor, resize, picker}) => {
+            editor.value = picker.value ? picker.value.split("-").reverse().join(".") : "";
+            if (editingRange) resize();
+          });
+        };
+        const apply = () => {
+          if (!from.checkValidity() || !to.checkValidity()) return;
+          dateFrom = from.value; dateTo = to.value;
+          refresh(); applyQueueState();
+        };
+        refresh();
+        customButton.addEventListener("click", () => {
+          editingRange = true; refresh(); editors[0].editor.focus();
+        });
+        from.addEventListener("change", apply); to.addEventListener("change", apply);
+        [["Today",0],["1 day ago",1],["3 days ago",3],["1 week ago",7],["1 month ago",30]].forEach(([text,days]) => {
+          const preset = document.createElement("button"); preset.type = "button"; preset.textContent = text;
+          preset.addEventListener("click", () => {
+            const end = new Date(), start = new Date(); start.setDate(start.getDate()-days);
+            const iso = date => date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+            from.value = iso(start); to.value = iso(end); refresh(); apply();
+            filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false");
+          });
+          list.append(preset);
+        });
+        return;
+      }
+      const query = filterHost.querySelector("input").value.toLowerCase();
+      filterHost.querySelector(".review-filter-search-clear").hidden = !query;
+      filterChoices(activeFilterCategory).filter(([,label]) => label.toLowerCase().includes(query)).forEach(([value,label]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = label;
+        if (activeFilterCategory === "Assignee") {
+          button.classList.add("review-assignee-filter-option");
+          const avatar = document.createElement("span");
+          avatar.className = "moderation-participants__avatar review-assignment-options__avatar";
+          avatar.setAttribute("aria-hidden", "true");
+          avatar.textContent = label.split(/\s+/).map(part => part[0]).join("");
+          button.prepend(avatar);
+        }
+        const selected = filterValue(activeFilterCategory).includes(value);
+        button.setAttribute("aria-pressed", String(selected));
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          changeBuilderFilter(activeFilterCategory, value);
+          renderFilterValues();
+          cancelFilterHover();
+          filterPopup.hidden = true;
+          filterOpen.setAttribute("aria-expanded", "false");
+          filterOpen.focus();
+        });
+        if (activeFilterCategory === "Behavior" || activeFilterCategory === "Assignee") {
+          const row = document.createElement("div");
+          row.className = "review-filter-checkbox-row";
+          const checkboxLabel = document.createElement("label");
+          checkboxLabel.className = "m__checkbox-primary";
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = selected;
+          checkbox.setAttribute("aria-label", label);
+          checkboxLabel.append(checkbox);
+          checkboxLabel.insertAdjacentHTML("beforeend", '<svg aria-hidden="true"><use href="#checkmark"></use></svg>');
+          checkboxLabel.addEventListener("click", event => event.stopPropagation());
+          checkbox.addEventListener("change", () => {
+            changeBuilderFilter(activeFilterCategory, value);
+            button.setAttribute("aria-pressed", String(checkbox.checked));
+          });
+          row.append(checkboxLabel, button);
+          list.append(row);
+        } else {
+          button.insertAdjacentHTML("beforeend", '<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg>');
+          list.append(button);
+        }
+      });
+      if (!list.children.length) {
+        const empty = document.createElement("div");
+        empty.className = "review-filter-empty";
+        empty.textContent = "No matching options";
+        list.append(empty);
+      }
+    }
+    categories.forEach(category => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = category;
+      button.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>');
+      button.addEventListener("click", () => showFilterCategory(category));
+      button.addEventListener("mouseenter", event => {
+        cancelFilterHover();
+        if (category === activeFilterCategory && !filterHost.querySelector(".review-filter-options").hidden) return;
+        if (movingTowardFilterOptions(event)) {
+          filterHoverTimer = setTimeout(() => showFilterCategory(category), 300);
+        } else {
+          showFilterCategory(category);
+        }
+      });
+      button.addEventListener("mouseleave", cancelFilterHover);
+      filterHost.querySelector(".review-filter-categories").append(button);
+    });
+    function renderFilterBuilder() {
+      if (!root.querySelector(".review-filter-strip")) return;
+      filterStrip.replaceChildren();
+      categories.forEach(category => {
+        const values = filterValue(category);
+        if (!values.length) return;
+        const condition = document.createElement("div");
+        condition.className = "review-filter-condition";
+        const edit = document.createElement("button");
+        edit.type = "button";
+        const labels = filterChoices(category);
+        const label = category === "Created date" ? values.join("; ") : values.length > 1 ? values.length + (category === "Assignee" ? " members" : " behaviors") : (labels.find(([value]) => value === values[0]) || [null, values[0]])[1];
+        [category + ": ", label].forEach(text => {
+          const segment = document.createElement("span"); segment.textContent = text; edit.append(segment);
+        });
+        edit.addEventListener("click", () => {
+          showFilterCategory(category);
+          filterPopup.classList.add("is-direct-filter");
+          const anchor = condition.getBoundingClientRect();
+          filterOpen.setAttribute("aria-expanded", "false");
+          const host = filterHost.getBoundingClientRect();
+          const popupWidth = filterPopup.getBoundingClientRect().width;
+          filterPopup.style.left = Math.max(16, Math.min(anchor.left, window.innerWidth - popupWidth - 16)) - host.left + "px";
+          filterPopup.style.top = (anchor.bottom - host.top + 6) + "px";
+        });
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.setAttribute("aria-label", "Remove " + category + " filter");
+        remove.innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg>';
+        remove.addEventListener("click", () => changeBuilderFilter(category, ""));
+        condition.append(edit, remove); filterStrip.append(condition);
+      });
+      filterStrip.hidden = !filterStrip.children.length;
+      if (!filterStrip.hidden) {
+        const clear = document.createElement("button"); clear.type = "button"; clear.className = "review-filter-clear"; clear.textContent = "Reset filters";
+        clear.addEventListener("click", () => { categories.forEach(category => changeBuilderFilter(category, "")); });
+        filterStrip.append(clear);
+      }
+    }
+    filterOpen.addEventListener("click", () => {
+      const opening = filterPopup.hidden || filterPopup.classList.contains("is-direct-filter");
+      cancelFilterHover();
+      filterPopup.classList.remove("is-direct-filter");
+      filterPopup.style.left = "";
+      filterPopup.style.top = "";
+      activeFilterCategory = "";
+      filterHost.querySelector(".review-filter-options").hidden = true;
+      filterHost.querySelectorAll(".review-filter-categories button").forEach(button => button.classList.remove("is-active"));
+      filterPopup.hidden = !opening;
+      filterOpen.setAttribute("aria-expanded", String(opening));
+    });
+    filterHost.querySelector("input").addEventListener("input", renderFilterValues);
+    filterHost.querySelector(".review-filter-search-clear").addEventListener("click", () => {
+      const input = filterHost.querySelector('input[type="search"]');
+      input.value = "";
+      renderFilterValues();
+      input.focus();
+    });
+    document.addEventListener("click", event => { if (!filterHost.contains(event.target) && !filterStrip.contains(event.target)) { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); } });
+    filterHost.addEventListener("keydown", event => { if (event.key === "Escape") { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); filterOpen.focus(); } });
+
     sortFilter.addEventListener("change", applyQueueState);
     rows.forEach(function (row) {
       var override = getRowStatusOverride(row);

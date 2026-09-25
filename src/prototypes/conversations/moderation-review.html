@@ -12,6 +12,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
 'DK', activity: 'Viewing' }, { name: 'Priya Shah', initials: 'PS', activity:
 'Editing' }, { name: 'Lena Ortiz', initials: 'LO', activity: 'Viewing' } ] %}
 
+{% set reportViewers = [reviewParticipants[0], reviewParticipants[1], reviewParticipants[2]] %}
+
 <div class="m__wrapper">
   <div class="m__space XL"></div>
   <div class="dashboard-layout">
@@ -24,10 +26,17 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       data-moderation-review
       data-conversation-id="7839f2"
     >
-      <a href="/dashboard/conversations/review/" class="conversation-report__back">
-        <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
-        Review Queue
-      </a>
+      <div class="moderation-review-meta-line">
+        <a href="/dashboard/conversations/review/" class="conversation-report__back">
+          <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
+          Review Queue
+        </a>
+        <span class="m__tag-flat moderation-review-meta-line__id review-copy-id" data-copy-review-id="7839f2" role="button" tabindex="0" aria-label="Copy conversation ID" title="Copy ID">7839f2</span>
+        <span>Today, 10:24</span>
+        <span aria-hidden="true">·</span>
+        <span>ServiceOne</span>
+
+      </div>
 
       <div class="conversation-report__title-row">
         <div class="conversation-report__title-line">
@@ -35,8 +44,12 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
             Health member appeals denied MRI claim after urgent back pain
             referral
           </h1>
+
         </div>
-        <div class="conversation-report__title-actions">
+
+      </div>
+      <div class="moderation-review-controls">
+          <div class="moderation-review-control">
           <div
             class="m__menu-button conversation-report__report-menu moderation-review-status"
             data-review-status-control
@@ -82,7 +95,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                     class="conversation-report__report-item-icon moderation-table__status-option-check"
                     aria-hidden="true"
                   >
-                    <svg viewBox="0 0 12 12">
+                    <svg viewBox="0 0 10 10">
                       <use href="#checkmark"></use>
                     </svg>
                   </span>
@@ -108,7 +121,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                     class="conversation-report__report-item-icon moderation-table__status-option-check"
                     aria-hidden="true"
                   >
-                    <svg viewBox="0 0 12 12">
+                    <svg viewBox="0 0 10 10">
                       <use href="#checkmark"></use>
                     </svg>
                   </span>
@@ -134,7 +147,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                     class="conversation-report__report-item-icon moderation-table__status-option-check"
                     aria-hidden="true"
                   >
-                    <svg viewBox="0 0 12 12">
+                    <svg viewBox="0 0 10 10">
                       <use href="#checkmark"></use>
                     </svg>
                   </span>
@@ -180,57 +193,33 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
               </div>
             </div>
           </div>
-          <div class="m__menu-button moderation-participants">
-            <button
-              type="button"
-              class="m__menu-button-trigger moderation-participants__trigger"
-              aria-label="{{ reviewParticipants.length }} participants working on this conversation"
-              aria-haspopup="menu"
-              aria-expanded="false"
-            >
-              {% for participant in reviewParticipants %}
-              {% if loop.index < 5 %}
-              <span
-                class="moderation-participants__avatar"
-                aria-hidden="true"
-              >{{ participant.initials }}</span>
-              {% elif loop.index == 5 %}
-              <span
-                class="moderation-participants__avatar moderation-participants__avatar--more"
-                aria-hidden="true"
-              >+{{ reviewParticipants.length - 4 }}</span>
-              {% endif %}
-              {% endfor %}
-            </button>
-            <div
-              class="m__menu-button-list moderation-participants__list"
-              hidden
-              role="menu"
-              aria-label="Participants"
-            >
-              {% for participant in reviewParticipants %}
-              <div class="moderation-participants__item" role="menuitem">
-                <span
-                  class="moderation-participants__avatar"
-                  aria-hidden="true"
-                >{{ participant.initials }}</span>
-                <span class="moderation-participants__details">
-                  <span class="moderation-participants__name"
-                    >{{ participant.name }}</span
-                  >
-                  <span class="moderation-participants__activity"
-                    >{{ participant.activity }}</span
-                  >
-                </span>
-              </div>
-              {% endfor %}
+          </div>
+          <div class="moderation-review-control">
+          <div class="m__menu-button review-assignment-avatar" data-assignment-avatar="7839f2" data-initial-members="{% for participant in reviewParticipants %}{{ participant.name }}{% if not loop.last %}|{% endif %}{% endfor %}">
+            <button type="button" class="m__menu-button-trigger review-assignment-avatar__trigger" aria-label="Assign reviewers" aria-haspopup="menu" aria-expanded="false"></button>
+            <div class="m__menu-button-list moderation-sort-list" role="menu" hidden></div>
+            <label hidden><span data-assignee-label></span><select data-review-assignee="7839f2" aria-label="Assign reviewers"></select></label>
+          </div>
+          </div>
+        <div class="m__menu-button moderation-participants moderation-review-viewers">
+          <button type="button" class="m__menu-button-trigger moderation-review-viewers__text" aria-label="People viewing this report" aria-haspopup="menu" aria-expanded="false">
+            <span>{{ reportViewers.length }} people viewing</span>
+            <svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </button>
+          <div class="m__menu-button-list moderation-participants__list moderation-review-viewers__list" role="menu" aria-label="People viewing this report" hidden>
+            <div class="moderation-sort-heading" role="presentation">Viewing now</div>
+            {% for participant in reportViewers %}
+            <div class="moderation-participants__item" role="menuitem">
+              <span class="moderation-participants__avatar review-assignment-options__avatar" aria-hidden="true">{{ participant.initials }}</span>
+              <span class="moderation-participants__name">{{ participant.name }}</span>
             </div>
+            {% endfor %}
           </div>
         </div>
       </div>
 
       <div class="conversation-report__player m__rounded">
-        <div class="media-container">
+        <div class="media-container" data-fingerprint-player>
           <div class="pg-player-dataviz">
             <div class="player-visualization">
               {% include 'prototypes/playground/player-clips.html' %}
@@ -489,23 +478,9 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                           class="moderation-verdict-comment-modal__choices"
                           data-review-comment-choices
                         >
-                          <button
-                            type="button"
-                            class="m__button-success-outline S moderation-review-behaviors__action"
-                            data-review-comment-choice="true"
-                            aria-pressed="false"
-                          >
-                            True
-                          </button>
-                          <button
-                            type="button"
-                            class="m__button-danger-outline S moderation-review-behaviors__action"
-                            data-review-comment-choice="false"
-                            aria-pressed="false"
-                          >
-                            False positive
-                          </button>
+<div class="m__menu-button moderation-review-accuracy is-unreviewed" data-review-comment-accuracy><button type="button" class="m__menu-button-secondary S m__menu-button-trigger moderation-review-accuracy__trigger" aria-label="Verdict" aria-haspopup="menu" aria-expanded="false"><span data-accuracy-label>Not reviewed</span><svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg></button><div class="m__menu-button-list moderation-review-accuracy__list" role="menu" hidden><button type="button" class="m__menu-button-item" role="menuitemradio" aria-checked="true" data-accuracy-option="">Not reviewed<svg viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button><button type="button" class="m__menu-button-item" role="menuitemradio" aria-checked="false" data-accuracy-option="true">True positive<svg viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button><button type="button" class="m__menu-button-item" role="menuitemradio" aria-checked="false" data-accuracy-option="false">False positive<svg viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button></div></div>
                         </div>
+                        <div class="moderation-review-behaviors__author" data-review-comment-attribution hidden></div>
                       </dd>
                     </div>
                     </dl>
@@ -538,7 +513,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
                       <span>Edit comment</span>
                       <button
                         type="button"
-                        class="moderation-review-behaviors__comment-link"
+                        class="moderation-verdict-comment-modal__text-action"
                         data-review-comment-edit-cancel
                       >
                         Cancel
@@ -586,6 +561,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
   <div class="m__space XL"></div>
 </div>
 
+<script src="/assets/prototypes/review-assignments.js"></script>
 <script>
   document.querySelectorAll(".media-container").forEach(function (container) {
     container.addEventListener("mousemove", function (event) {
@@ -613,6 +589,34 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     var conversationId = root.dataset.conversationId || "conversation";
     var statusStorageKey = "modulate-review-status-overrides";
     var reviewResultsStorageKey = "modulate-review-results";
+    var verdictAuthorsKey = "modulate-review-verdict-authors";
+    var verdictHistory = {};
+    try { window.localStorage.removeItem("modulate-review-verdict-history"); } catch (error) {}
+    var evidenceReturnLink = null;
+    var evidenceReturnScrollY = 0;
+    var evidenceReturnFromModal = false;
+    var topButton = document.createElement("button");
+    topButton.type = "button";
+    topButton.className = "m__button-primary M moderation-review-top";
+    topButton.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20V4m-8 8 8-8 8 8"/></svg><span>Back to evidence</span>';
+    topButton.hidden = true;
+    root.appendChild(topButton);
+    topButton.addEventListener("click", function () {
+      clearPendingEvidenceHighlight();
+      if (activeEvidenceTarget) activeEvidenceTarget.classList.remove("is-evidence-highlighted");
+      if (evidenceReturnLink && evidenceReturnLink.isConnected) {
+        evidenceReturnLink.focus({ preventScroll: true });
+        activeEvidenceTarget = evidenceReturnLink;
+        activeEvidenceTarget.classList.add("is-evidence-highlighted");
+      }
+      var returnBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth";
+      if (evidenceReturnFromModal && evidenceReturnLink) {
+        evidenceReturnLink.scrollIntoView({ block: "center", behavior: returnBehavior });
+      } else {
+        window.scrollTo({ top: evidenceReturnScrollY, behavior: returnBehavior });
+      }
+      topButton.hidden = true;
+    });
     var activeEvidenceTarget = null;
     var pendingEvidenceTarget = null;
     var evidenceHighlightTimer = 0;
@@ -691,9 +695,6 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     var behaviorFilterEmptyState = root.querySelector(
       "[data-review-behavior-filter-empty]",
     );
-    var behaviorFilterEmptyReset = root.querySelector(
-      "[data-review-behavior-filter-empty-reset]",
-    );
     var verdictFilterLabel = root.querySelector(
       "[data-review-verdict-filter-label]",
     );
@@ -728,7 +729,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
 
     function saveStatusOverride(status) {
       var overrides = readStorage(statusStorageKey);
-      overrides[conversationId] = { status: status, author: reviewerName };
+      overrides[conversationId] = { status: status, author: reviewerName, at: new Date().toISOString() };
       writeStorage(statusStorageKey, overrides);
       return overrides[conversationId];
     }
@@ -755,8 +756,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       var savedResults = readStorage(reviewResultsStorageKey)[conversationId] || {};
       reviewBehaviorRows.forEach(function (row) {
         var result = savedResults[row.dataset.reviewIndex];
-        if (result === "true" || result === "false") {
-          setReviewResult(row, result);
+        if (["true", "false"].includes(result)) {
+          setReviewResult(row, result, true);
         }
       });
     }
@@ -767,16 +768,20 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     behaviorFilterOptions.forEach(function (option) {
       option.checked = selectedBehaviorFilters.has(option.value);
     });
-    if (["true", "false"].includes(initialFilterParams.get("verdict"))) {
+    if (["unreviewed", "true", "false"].includes(initialFilterParams.get("verdict"))) {
       selectedVerdictFilter = initialFilterParams.get("verdict");
     }
 
     function applyIncomingFilterParams(url) {
+      ["dateFrom", "dateTo", "updatedFrom", "updatedTo"].forEach(function (key) {
+        if (initialFilterParams.get(key)) url.searchParams.set(key, initialFilterParams.get(key));
+      });
+      if (initialFilterParams.get("assignee")) url.searchParams.set("assignee", initialFilterParams.get("assignee"));
       url.searchParams.delete("behavior");
       initialFilterParams.getAll("behavior").forEach(function (behavior) {
         url.searchParams.append("behavior", behavior);
       });
-      if (["true", "false"].includes(initialFilterParams.get("verdict"))) {
+      if (["unreviewed", "true", "false"].includes(initialFilterParams.get("verdict"))) {
         url.searchParams.set("verdict", initialFilterParams.get("verdict"));
       } else {
         url.searchParams.delete("verdict");
@@ -795,10 +800,55 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
 
     propagateIncomingFilterParams();
 
-    function setReviewResult(review, value) {
+    function renderAccuracyAuthor(menu, review) {
+      if (!menu || !review) return;
+      var list = menu.querySelector(".m__menu-button-list") || Array.from(document.querySelectorAll(".moderation-review-accuracy__list")).find(function (item) { return item._menuButtonOriginalParent === menu; });
+      if (!list) return;
+      list.querySelectorAll(".moderation-review-accuracy__author").forEach(function (item) { item.remove(); });
+      var value = review.dataset.reviewResult;
+      var author = (readStorage(verdictAuthorsKey)[conversationId] || {})[review.dataset.reviewIndex];
+      if (!value || !author) return;
+      var option = list.querySelector('[data-accuracy-option="' + value + '"]');
+      if (!option) return;
+      var caption = document.createElement("span");
+      caption.className = "moderation-review-accuracy__author";
+      caption.textContent = "Set " + shortReviewerName(author.author) + " · " + formatVerdictTimestamp(author.at);
+      option.appendChild(caption);
+    }
+    function updateAccuracyMenu(menu, value) {
+      if (!menu) return;
+      menu.classList.toggle("is-unreviewed", !value);
+      menu.dataset.verdict = value || "";
+      var labels = { true: "True positive", false: "False positive" };
+      menu.querySelector("[data-accuracy-label]").textContent = labels[value] || "Not reviewed";
+      menu.querySelectorAll("[data-accuracy-option]").forEach(function (option) {
+        option.setAttribute("aria-checked", String(option.dataset.accuracyOption === value));
+      });
+    }
+    document.addEventListener("click", function (event) {
+      var option = event.target.closest("[data-accuracy-option]");
+      if (!option) return;
+      var list = option.closest(".m__menu-button-list");
+      var menu = list._menuButtonOriginalParent || list.parentElement;
+      var review = menu.hasAttribute("data-review-comment-accuracy") ? activeCommentReview : menu.closest("[data-detection-review]");
+      if (!review) return;
+      setReviewResult(review, option.dataset.accuracyOption);
+      list.querySelectorAll("[data-accuracy-option]").forEach(function (item) {
+        item.setAttribute("aria-checked", String(item === option));
+      });
+      if (activeCommentReview === review) {
+        renderCommentVerdict(review);
+        renderCommentList();
+      }
+    }, true);
+
+    function setReviewResult(review, value, restoring) {
       var state = review.querySelector("[data-review-state]");
       var meta = review.querySelector("[data-review-meta]");
-      var nextValue = review.dataset.reviewResult === value ? "" : value;
+      var previousValue = review.dataset.reviewResult || "";
+      var nextValue = value;
+      var accuracySelect = review.querySelector("[data-review-accuracy]");
+      updateAccuracyMenu(accuracySelect, nextValue);
       review.querySelectorAll("[data-review-choice]").forEach(function (button) {
         var isSelected = button.dataset.reviewChoice === nextValue;
         button.classList.toggle("is-selected", isSelected);
@@ -809,8 +859,31 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       } else {
         delete review.dataset.reviewResult;
       }
-      if (state) state.textContent = nextValue ? reviewerName : "";
-      if (meta) meta.hidden = false;
+      var authors = readStorage(verdictAuthorsKey);
+      var conversationAuthors = authors[conversationId] || {};
+      if (!restoring) {
+        var history = verdictHistory;
+        var events = history[conversationId] || {};
+        var index = review.dataset.reviewIndex;
+        if (!events[index]) {
+          events[index] = [];
+        }
+        if (previousValue !== nextValue) events[index].push({ author: reviewerName, createdAt: new Date().toISOString(), verdict: nextValue });
+        history[conversationId] = events;
+
+        if (nextValue) conversationAuthors[review.dataset.reviewIndex] = { author: reviewerName, at: new Date().toISOString() };
+        else delete conversationAuthors[review.dataset.reviewIndex];
+        authors[conversationId] = conversationAuthors;
+        writeStorage(verdictAuthorsKey, authors);
+      }
+      var attribution = conversationAuthors[review.dataset.reviewIndex];
+      if (state) {
+        state.hidden = !nextValue;
+        state.textContent = nextValue ? attribution ? shortReviewerName(attribution.author) + " · " + formatVerdictTimestamp(attribution.at) : "Reviewer not recorded" : "";
+        state.title = nextValue && attribution ? formatCommentTimestamp(attribution.at) : "";
+      }
+      if (meta) meta.hidden = true;
+      renderAccuracyAuthor(accuracySelect, review);
       saveReviewResults();
       refreshReviewStatus();
       applyReviewBehaviorFilters();
@@ -855,9 +928,14 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       } else {
         delete review.dataset.reviewCommentCount;
       }
-      trigger.textContent = comments.length
+      var label = comments.length
         ? comments.length + " comment" + (comments.length === 1 ? "" : "s")
         : "Add comment";
+      trigger.setAttribute("aria-label", label);
+      trigger.title = label;
+      var count = trigger.querySelector("[data-review-comment-count-label]");
+      count.textContent = String(comments.length);
+      count.hidden = comments.length === 0;
     }
 
     function resetCommentEditor() {
@@ -880,7 +958,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
 
     function renderCommentDetails(review) {
       var reasoning = review.querySelector(".pg-model-reasoning");
-      var confidence = review.querySelector("td.pg-num");
+      var confidence = review.querySelector("[data-review-confidence]");
       var evidence = review.querySelectorAll(".pg-evidence-link");
       commentSpeaker.textContent = getReviewSpeaker(review);
       commentReasoning.textContent = reasoning
@@ -890,9 +968,10 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         ? confidence.textContent.trim()
         : "";
       commentEvidence.replaceChildren();
-      evidence.forEach(function (item) {
+      evidence.forEach(function (item, index) {
         var excerpt = document.createElement("a");
         excerpt.className = "pg-evidence-link";
+        excerpt.dataset.reviewEvidenceIndex = String(index);
         excerpt.href = item.getAttribute("href");
         excerpt.textContent = item.textContent.trim();
         commentEvidence.appendChild(excerpt);
@@ -917,8 +996,28 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       );
     }
 
+    function shortReviewerName(name) {
+      var parts = String(name || "").trim().split(/\s+/);
+      return parts.length > 1 ? parts[0] + " " + parts[parts.length - 1][0] + "." : parts[0];
+    }
+
+    function formatVerdictTimestamp(value) {
+      var date = new Date(value);
+      return date.toLocaleString("en-GB", {
+        day: "numeric", month: "short", year: date.getFullYear() === new Date().getFullYear() ? undefined : "numeric",
+        hour: "2-digit", minute: "2-digit",
+      });
+    }
+
     function renderCommentVerdict(review) {
+      var attribution = commentModal.querySelector("[data-review-comment-attribution]");
+      var state = review.querySelector("[data-review-state]");
+      attribution.hidden = true;
+      var author = (readStorage(verdictAuthorsKey)[conversationId] || {})[review.dataset.reviewIndex];
+      attribution.textContent = author ? author.author + " · " + formatVerdictTimestamp(author.at) : state ? state.textContent : "";
       var selectedResult = review.dataset.reviewResult || "";
+      updateAccuracyMenu(commentChoices.querySelector("[data-review-comment-accuracy]"), selectedResult);
+      renderAccuracyAuthor(commentChoices.querySelector("[data-review-comment-accuracy]"), review);
       if (selectedResult) {
         commentChoices.dataset.reviewResult = selectedResult;
       } else {
@@ -958,6 +1057,10 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       resetCommentEditor();
       renderCommentList();
       renderCommentNavigation();
+      window.requestAnimationFrame(function () {
+        commentList.scrollTop = commentList.scrollHeight;
+        updateCommentThreadFades();
+      });
     }
 
     function navigateCommentReview(direction) {
@@ -975,14 +1078,33 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         ? getReviewComments(activeCommentReview)
         : [];
       commentList.replaceChildren();
-      if (!comments.length) {
+      var events = activeCommentReview ? (verdictHistory[conversationId] || {})[activeCommentReview.dataset.reviewIndex] || [] : [];
+      var timeline = comments.map((comment, index) => ({ comment, index, createdAt: comment.createdAt }))
+        .concat(events.map(event => ({ event, createdAt: event.createdAt })))
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      if (!timeline.length) {
         var emptyState = document.createElement("p");
         emptyState.className =
           "moderation-verdict-comment-modal__empty-state";
-        emptyState.textContent = "No comments yet";
+        emptyState.textContent = "No activity yet";
         commentList.appendChild(emptyState);
       }
-      comments.forEach(function (comment, index) {
+      timeline.forEach(function (entry) {
+        if (entry.event) {
+          var event = entry.event;
+          var activity = document.createElement("div");
+          activity.className = "moderation-verdict-activity";
+          var message = document.createElement("span");
+          message.textContent = event.author + (event.verdict ? " set the verdict to " + (event.verdict === "true" ? "True positive" : event.verdict === "mostly" ? "Mostly accurate" : "False positive") : " cleared the verdict");
+          var time = document.createElement("time");
+          time.dateTime = event.createdAt;
+          time.textContent = formatCommentTimestamp(event.createdAt);
+          activity.append(message, document.createTextNode(" · "), time);
+          commentList.append(activity);
+          return;
+        }
+        var comment = entry.comment;
+        var index = entry.index;
         var item = document.createElement("article");
         var avatar = document.createElement("span");
         var body = document.createElement("div");
@@ -1024,11 +1146,11 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           actions.className =
             "moderation-verdict-comment-modal__comment-actions";
           edit.type = "button";
-          edit.className = "moderation-review-behaviors__comment-link";
+          edit.className = "moderation-verdict-comment-modal__text-action";
           edit.dataset.modalCommentEdit = String(index);
           edit.textContent = "Edit";
           remove.type = "button";
-          remove.className = "moderation-review-behaviors__comment-link";
+          remove.className = "moderation-verdict-comment-modal__text-action";
           remove.dataset.modalCommentDelete = String(index);
           remove.textContent = "Delete";
           actions.append(edit, remove);
@@ -1126,7 +1248,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           selectedBehaviorFilters.has(row.dataset.reviewBehavior);
         var matchesVerdict =
           !selectedVerdictFilter ||
-          row.dataset.reviewResult === selectedVerdictFilter;
+          (selectedVerdictFilter === "unreviewed" ? !row.dataset.reviewResult : row.dataset.reviewResult === selectedVerdictFilter);
         row.hidden = !(matchesBehavior && matchesVerdict);
         if (!row.hidden) visibleRowCount += 1;
       });
@@ -1139,7 +1261,11 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         );
       }
       behaviorFilterEmptyState.hidden = visibleRowCount > 0;
+      root.querySelectorAll(".moderation-review-behaviors__table thead").forEach(function (head) {
+        head.hidden = visibleRowCount === 0;
+      });
       updateReviewSpeakerGroups();
+      renderFilterBuilder();
     }
 
     function resetReviewBehaviorFilters() {
@@ -1164,6 +1290,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     }
 
     function scrollToEvidenceTarget(target) {
+      topButton.hidden = false;
       clearPendingEvidenceHighlight();
       pendingEvidenceTarget = target;
       var reduceMotion = window.matchMedia(
@@ -1198,7 +1325,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       }
 
       target.scrollIntoView({
-        behavior: reduceMotion ? "auto" : "smooth",
+        behavior: reduceMotion ? "instant" : "smooth",
         block: "center",
       });
 
@@ -1208,7 +1335,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
     function setReviewVerdictFilter(value) {
       selectedVerdictFilter = value || "";
       verdictFilterLabel.textContent =
-        selectedVerdictFilter === "true"
+        selectedVerdictFilter === "unreviewed" ? "Not reviewed" : selectedVerdictFilter === "true"
           ? "True positive"
           : selectedVerdictFilter === "false"
             ? "False positive"
@@ -1281,7 +1408,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           if (optionMeta) {
             optionMeta.hidden = !(override && isSelected);
             optionMeta.textContent = override && isSelected
-              ? "Changed by " + (override.author || "Current reviewer")
+              ? "Set " + shortReviewerName(override.author || "Current reviewer") + (override.at ? " · " + formatVerdictTimestamp(override.at) : "")
               : "";
           }
           if (isSelected) {
@@ -1300,8 +1427,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
 
     function getAutomaticReviewStatus() {
       var reviewedCount = reviewBehaviorRows.filter(function (row) {
-        return row.dataset.reviewResult === "true" ||
-          row.dataset.reviewResult === "false";
+        return ["true", "false"].includes(row.dataset.reviewResult);
       }).length;
       if (!reviewedCount) return "pending";
       if (reviewedCount < reviewBehaviorRows.length) return "in-review";
@@ -1491,10 +1617,6 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       applyReviewBehaviorFilters();
     });
     behaviorFilterReset.addEventListener("click", resetReviewBehaviorFilters);
-    behaviorFilterEmptyReset.addEventListener(
-      "click",
-      resetReviewBehaviorFilters,
-    );
     behaviorFilterSearch.addEventListener("input", function () {
       var query = behaviorFilterSearch.value.trim().toLowerCase();
       behaviorFilterOptions.forEach(function (option) {
@@ -1533,6 +1655,8 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
 
       var headRow = behaviorTable.querySelector("thead tr");
       if (headRow && !headRow.querySelector("[data-review-header]")) {
+        headRow.cells[1].textContent = "Behavior and Confidence";
+        headRow.cells[3].remove();
         var reviewHead = document.createElement("th");
         reviewHead.setAttribute("aria-label", "Review");
         reviewHead.setAttribute("data-review-header", "");
@@ -1543,11 +1667,26 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         var subheadCell = row.querySelector(".pg-behavior-subhead");
         if (subheadCell) {
           var colspanCell = subheadCell.closest("td");
-          if (colspanCell) colspanCell.colSpan = 4;
+          if (colspanCell) colspanCell.colSpan = 3;
           return;
         }
 
         if (!row.classList.contains("pg-behavior-row")) return;
+
+        var confidenceCell = row.querySelector("td.pg-num");
+        var behaviorName = row.querySelector(".m__behavior-link, .pg-behavior-name");
+        if (confidenceCell && behaviorName) {
+          var confidence = document.createElement("span");
+          confidence.className = "moderation-review-behaviors__confidence";
+          confidence.setAttribute("data-review-confidence", "");
+          confidence.textContent = confidenceCell.textContent.trim();
+          confidence.setAttribute("aria-label", "Confidence: " + confidence.textContent);
+          var heading = document.createElement("div");
+          heading.className = "moderation-review-behaviors__name-confidence";
+          behaviorName.before(heading);
+          heading.append(behaviorName, document.createTextNode("\u00a0"), confidence);
+          confidenceCell.remove();
+        }
 
         var actions = document.createElement("td");
         actions.className = "moderation-review-behaviors__actions";
@@ -1560,7 +1699,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
             : "";
           row.dataset.reviewIndex = String(reviewBehaviorRows.length);
           reviewBehaviorRows.push(row);
-          actions.innerHTML = '<div class="moderation-review-behaviors__controls"><div class="moderation-review-behaviors__choices"><button type="button" class="m__button-success-outline S moderation-review-behaviors__action" data-review-choice="true" aria-pressed="false">True</button><button type="button" class="m__button-danger-outline S moderation-review-behaviors__action" data-review-choice="false" aria-pressed="false">False positive</button></div><div class="moderation-review-behaviors__review-meta" data-review-meta><button type="button" class="moderation-review-behaviors__comment-link" data-review-comment-trigger>Add comment</button></div></div>';
+          actions.innerHTML = '<div class="moderation-review-behaviors__controls"><div class="moderation-review-behaviors__choices"><div class="m__menu-button moderation-review-accuracy is-unreviewed" data-review-accuracy><button type="button" class="m__menu-button-secondary S m__menu-button-trigger moderation-review-accuracy__trigger" aria-label="Verdict" aria-haspopup="menu" aria-expanded="false"><span data-accuracy-label>Not reviewed</span><svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg></button><div class="m__menu-button-list moderation-review-accuracy__list" role="menu" hidden><button type="button" class="m__menu-button-item" role="menuitemradio" aria-checked="true" data-accuracy-option="">Not reviewed<svg viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button><button type="button" class="m__menu-button-item" role="menuitemradio" aria-checked="false" data-accuracy-option="true">True positive<svg viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button><button type="button" class="m__menu-button-item" role="menuitemradio" aria-checked="false" data-accuracy-option="false">False positive<svg viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button></div></div></div><div class="moderation-review-behaviors__review-meta" data-review-meta><span class="moderation-review-behaviors__author" data-review-state hidden></span></div><button type="button" class="m__button-primary-outline S moderation-review-behaviors__comment-link" data-review-comment-trigger aria-label="Add comment" title="Add comment"><svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><use href="#comment" /></svg><span class="moderation-review-behaviors__comment-count" data-review-comment-count-label hidden></span></button></div>';
         }
 
         row.appendChild(actions);
@@ -1601,7 +1740,11 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
         var target = root.querySelector(evidenceLink.getAttribute("href"));
         if (!target) return;
         event.preventDefault();
-        if (commentModal.contains(evidenceLink)) {
+        evidenceReturnScrollY = window.scrollY;
+        evidenceReturnLink = evidenceLink;
+        evidenceReturnFromModal = commentModal.contains(evidenceLink);
+        if (evidenceReturnFromModal) {
+          evidenceReturnLink = activeCommentReview && activeCommentReview.querySelectorAll(".pg-evidence-link")[Number(evidenceLink.dataset.reviewEvidenceIndex)];
           activeCommentReview = null;
           window.M.closeModal(commentModal);
         }
@@ -1646,6 +1789,7 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
           commentChoice.dataset.reviewCommentChoice,
         );
         renderCommentVerdict(activeCommentReview);
+        renderCommentList();
         return;
       }
 
@@ -1722,7 +1866,206 @@ Martinez', initials: 'SM', activity: 'Viewing' }, { name: 'Daniel Kim', initials
       renderCommentList();
       commentInput.focus();
     });
+    const filterHost = document.createElement("div");
+    filterHost.className = "review-filter-builder";
+    filterHost.innerHTML = `<button type="button" class="m__button-primary-outline M" data-filter-open aria-expanded="false"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#filter"></use></svg>Filter</button>
+      <div class="review-filter-popup" hidden><div class="review-filter-categories"></div><div class="review-filter-options" hidden><div class="review-filter-options-title"></div><input type="search" placeholder="Search" aria-label="Search filter options"><button type="button" class="review-filter-search-clear" aria-label="Clear search" hidden><svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg></button><div class="review-filter-values"></div></div></div>`;
+    root.querySelector(".moderation-review-behaviors__heading").append(filterHost);
+    const filterStrip = document.createElement("div");
+    filterStrip.className = "review-filter-strip";
+    filterStrip.hidden = true;
+    root.querySelector("[data-review-behavior-filter-root]").before(filterStrip);
+    const filterPopup = filterHost.querySelector(".review-filter-popup");
+    const filterOpen = filterHost.querySelector("[data-filter-open]");
+    const categories = ["Behavior", "Verdict"];
+    let activeFilterCategory = "";
+    let filterHoverTimer;
+    const cancelFilterHover = () => clearTimeout(filterHoverTimer);
+    let previousFilterPointer;
+    document.addEventListener("mousemove", event => {
+      previousFilterPointer = { x: event.clientX, y: event.clientY, time: performance.now() };
+    });
+    function movingTowardFilterOptions(event) {
+      const submenu = filterHost.querySelector(".review-filter-options");
+      if (submenu.hidden || !previousFilterPointer || performance.now() - previousFilterPointer.time > 150) return false;
+      const dx = event.clientX - previousFilterPointer.x;
+      if (dx >= -1) return false;
+      const bounds = submenu.getBoundingClientRect();
+      const distance = bounds.right - event.clientX;
+      if (distance > 0) return false;
+      const projectedY = event.clientY + (event.clientY - previousFilterPointer.y) * distance / dx;
+      return projectedY >= bounds.top && projectedY <= bounds.bottom;
+    }
+    filterHost.querySelector(".review-filter-options").addEventListener("mouseenter", cancelFilterHover);
+    filterPopup.addEventListener("mouseleave", cancelFilterHover);
+    function filterChoices(category) {
+      return category === "Behavior" ? behaviorFilterOptions.map(option => [option.value, option.value]) : [["unreviewed", "Not reviewed"], ["true", "True positive"], ["false", "False positive"]];
+    }
+    function filterValue(category) {
+      return category === "Behavior" ? Array.from(selectedBehaviorFilters) : [selectedVerdictFilter].filter(Boolean);
+    }
+    function changeBuilderFilter(category, value) {
+      if (category === "Behavior") {
+        if (!value) selectedBehaviorFilters.clear();
+        else if (selectedBehaviorFilters.has(value)) selectedBehaviorFilters.delete(value);
+        else selectedBehaviorFilters.add(value);
+        behaviorFilterOptions.forEach(option => { option.checked = selectedBehaviorFilters.has(option.value); });
+        renderReviewBehaviorFilters();
+        applyReviewBehaviorFilters();
+      } else setReviewVerdictFilter(value);
+    }
+    function showFilterCategory(category) {
+      cancelFilterHover();
+      activeFilterCategory = category;
+      const categoryButtons = Array.from(filterHost.querySelectorAll(".review-filter-categories button"));
+      categoryButtons.forEach(button => button.classList.toggle("is-active", button.textContent === category));
+      const categoryButton = categoryButtons.find(button => button.textContent === category);
+      filterHost.querySelector(".review-filter-options").style.top = (categoryButton ? categoryButton.offsetTop : 0) + "px";
+      filterPopup.hidden = false;
+      filterOpen.setAttribute("aria-expanded", "true");
+      filterHost.querySelector(".review-filter-options").hidden = false;
+      filterHost.querySelector(".review-filter-options-title").textContent = category;
+      filterHost.querySelector("input").value = "";
+      renderFilterValues();
+      const submenu = filterHost.querySelector(".review-filter-options");
+      const firstChoice = submenu.querySelector(".review-filter-values button");
+      if (categoryButton && firstChoice) {
+        const offset = firstChoice.getBoundingClientRect().top - submenu.getBoundingClientRect().top;
+        submenu.style.top = (categoryButton.offsetTop - offset) + "px";
+      }
+    }
+    function renderFilterValues() {
+      const list = filterHost.querySelector(".review-filter-values");
+      list.replaceChildren();
+      const query = filterHost.querySelector("input").value.toLowerCase();
+      filterHost.querySelector(".review-filter-search-clear").hidden = !query;
+      filterChoices(activeFilterCategory).filter(([,label]) => label.toLowerCase().includes(query)).forEach(([value,label]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = label;
+        const selected = filterValue(activeFilterCategory).includes(value);
+        button.setAttribute("aria-pressed", String(selected));
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          changeBuilderFilter(activeFilterCategory, value);
+          renderFilterValues();
+          cancelFilterHover();
+          filterPopup.hidden = true;
+          filterOpen.setAttribute("aria-expanded", "false");
+          filterOpen.focus();
+        });
+        if (activeFilterCategory === "Behavior" || activeFilterCategory === "Assignee") {
+          const row = document.createElement("div");
+          row.className = "review-filter-checkbox-row";
+          const checkboxLabel = document.createElement("label");
+          checkboxLabel.className = "m__checkbox-primary";
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = selected;
+          checkbox.setAttribute("aria-label", label);
+          checkboxLabel.append(checkbox);
+          checkboxLabel.insertAdjacentHTML("beforeend", '<svg aria-hidden="true"><use href="#checkmark"></use></svg>');
+          checkboxLabel.addEventListener("click", event => event.stopPropagation());
+          checkbox.addEventListener("change", () => {
+            changeBuilderFilter(activeFilterCategory, value);
+            button.setAttribute("aria-pressed", String(checkbox.checked));
+          });
+          row.append(checkboxLabel, button);
+          list.append(row);
+        } else {
+          button.insertAdjacentHTML("beforeend", '<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg>');
+          list.append(button);
+        }
+      });
+      if (!list.children.length) {
+        const empty = document.createElement("div");
+        empty.className = "review-filter-empty";
+        empty.textContent = "No matching options";
+        list.append(empty);
+      }
+    }
+    categories.forEach(category => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = category;
+      button.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>');
+      button.addEventListener("click", () => showFilterCategory(category));
+      button.addEventListener("mouseenter", event => {
+        cancelFilterHover();
+        if (category === activeFilterCategory && !filterHost.querySelector(".review-filter-options").hidden) return;
+        if (movingTowardFilterOptions(event)) {
+          filterHoverTimer = setTimeout(() => showFilterCategory(category), 300);
+        } else {
+          showFilterCategory(category);
+        }
+      });
+      button.addEventListener("mouseleave", cancelFilterHover);
+      filterHost.querySelector(".review-filter-categories").append(button);
+    });
+    function renderFilterBuilder() {
+      if (!root.querySelector(".review-filter-strip")) return;
+      filterStrip.replaceChildren();
+      categories.forEach(category => {
+        const values = filterValue(category);
+        if (!values.length) return;
+        const condition = document.createElement("div");
+        condition.className = "review-filter-condition";
+        const edit = document.createElement("button");
+        edit.type = "button";
+        const labels = filterChoices(category);
+        const label = values.length > 1 ? values.length + (category === "Assignee" ? " members" : " behaviors") : (labels.find(([value]) => value === values[0]) || [null, values[0]])[1];
+        [category + ": ", label].forEach(text => {
+          const segment = document.createElement("span"); segment.textContent = text; edit.append(segment);
+        });
+        edit.addEventListener("click", () => {
+          showFilterCategory(category);
+          filterPopup.classList.add("is-direct-filter");
+          const anchor = condition.getBoundingClientRect();
+          filterOpen.setAttribute("aria-expanded", "false");
+          const host = filterHost.getBoundingClientRect();
+          const popupWidth = filterPopup.getBoundingClientRect().width;
+          filterPopup.style.left = Math.max(16, Math.min(anchor.left, window.innerWidth - popupWidth - 16)) - host.left + "px";
+          filterPopup.style.top = (anchor.bottom - host.top + 6) + "px";
+        });
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.setAttribute("aria-label", "Remove " + category + " filter");
+        remove.innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><use href="#close"></use></svg>';
+        remove.addEventListener("click", () => changeBuilderFilter(category, ""));
+        condition.append(edit, remove); filterStrip.append(condition);
+      });
+      filterStrip.hidden = !filterStrip.children.length;
+      if (!filterStrip.hidden) {
+        const clear = document.createElement("button"); clear.type = "button"; clear.className = "review-filter-clear"; clear.textContent = "Reset filters";
+        clear.addEventListener("click", () => { categories.forEach(category => changeBuilderFilter(category, "")); });
+        filterStrip.append(clear);
+      }
+    }
+    filterOpen.addEventListener("click", () => {
+      const opening = filterPopup.hidden || filterPopup.classList.contains("is-direct-filter");
+      cancelFilterHover();
+      filterPopup.classList.remove("is-direct-filter");
+      filterPopup.style.left = "";
+      filterPopup.style.top = "";
+      activeFilterCategory = "";
+      filterHost.querySelector(".review-filter-options").hidden = true;
+      filterHost.querySelectorAll(".review-filter-categories button").forEach(button => button.classList.remove("is-active"));
+      filterPopup.hidden = !opening;
+      filterOpen.setAttribute("aria-expanded", String(opening));
+    });
+    filterHost.querySelector("input").addEventListener("input", renderFilterValues);
+    filterHost.querySelector(".review-filter-search-clear").addEventListener("click", () => {
+      const input = filterHost.querySelector('input[type="search"]');
+      input.value = "";
+      renderFilterValues();
+      input.focus();
+    });
+    document.addEventListener("click", event => { if (!filterHost.contains(event.target) && !filterStrip.contains(event.target)) { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); } });
+    filterHost.addEventListener("keydown", event => { if (event.key === "Escape") { filterPopup.hidden = true; filterOpen.setAttribute("aria-expanded", "false"); filterOpen.focus(); } });
+
+    renderFilterBuilder();
   })();
 </script>
 
+<script type="module" src="/assets/prototypes/fingerprint-player.js"></script>
 {% endblock %}
