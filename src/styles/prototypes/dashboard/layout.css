@@ -6159,7 +6159,8 @@ button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expa
   gap: 0.1rem 1rem;
 }
 .moderation-review-accuracy__author {
-  grid-column: 1 / -1;
+  grid-column: 1;
+  grid-row: 2;
   font-size: var(--m__font-size-xs);
   font-weight: var(--m__font-weight-regular);
   color: var(--m__text);
@@ -6252,7 +6253,7 @@ button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expa
   align-self: center;
 }
 
-.review-copy-id { position: relative; cursor: pointer; }
+.review-copy-id { position: relative; cursor: copy; }
 .review-copy-id:is(:hover, :focus-visible) { color: var(--m__text-link-hover); }
 
 .moderation-table .review-copy-id {
@@ -6292,3 +6293,21 @@ button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expa
 .review-date-range-fields input::-webkit-datetime-edit { display: inline-flex; flex: none; }
 
 .review-date-range-fields input.review-date-calendar-anchor { position: fixed; opacity: 0; pointer-events: none; margin: 0; padding: 0; border: 0; }
+
+/* Keep queue menus 4px from their controls, excluding header padding. */
+.moderation-table .review-filter-popup:not(.is-direct-filter) {
+  top: calc(100% - .35rem + 4px);
+}
+.moderation-table .moderation-sort-menu {
+  align-self: center;
+  align-items: center;
+}
+.moderation-table .moderation-sort-trigger {
+  padding-block: 0;
+}
+
+.moderation-review-accuracy__list .m__menu-button-item:has(.moderation-review-accuracy__author) > svg {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+}
