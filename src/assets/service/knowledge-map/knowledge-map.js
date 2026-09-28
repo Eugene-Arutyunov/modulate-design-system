@@ -116,13 +116,8 @@ if (root) {
   function render() {
     panel.textContent = "";
     const u = UI[lang];
-    if (!selected) {
-      panel.appendChild(el("div", "", "km__grp"));
-      panel.appendChild(el("h2", u.title, "km__title"));
-      panel.appendChild(el("p", u.intro));
-      panel.appendChild(el("p", u.hint));
-      return;
-    }
+    // At rest the panel stays an empty, unpainted reservation
+    if (!selected) return;
     const d = DISCIPLINES[selected];
     panel.appendChild(el("div", GROUPS[d.g][lang], "km__grp"));
     panel.appendChild(el("h2", d.n[lang], "km__title"));
@@ -158,6 +153,9 @@ if (root) {
 
   function select(id) {
     selected = id;
+    // The panel's space is always reserved; the class only paints/unpaints
+    // its surface, so the map never changes width
+    root.classList.toggle("km--open", !!id);
     const nb = id ? neighbours(id) : [];
     map.querySelectorAll(".km__tag").forEach((t) => {
       const me = t.dataset.id === id;

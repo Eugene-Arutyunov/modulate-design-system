@@ -11,7 +11,7 @@ export const UI = {
     title:
       "Conversation intelligence = conversation understanding + a speaking agent",
     intro:
-      "Thirty disciplines. The upper half is what it takes to understand a conversation; the lower half is what it takes to take part in one. The platform underneath carries both. Lines connect fields that work on the same problem from different sides.",
+      "Thirty disciplines. The upper half is what it takes to understand a conversation; the lower half is what it takes to take part in one. The technology underneath carries both. Lines connect fields that work on the same problem from different sides.",
     hint: "Select a discipline to read what it is and why it matters here.",
     read: "Read more",
     linked: "Connected to",
@@ -20,7 +20,7 @@ export const UI = {
     title:
       "Conversation intelligence = понимание разговора + говорящий агент",
     intro:
-      "Тридцать дисциплин. Верхняя половина — то, что нужно, чтобы понимать разговор; нижняя — то, что нужно, чтобы в нём участвовать. Платформа внизу несёт и то и другое. Линии соединяют области, которые решают одну задачу с разных сторон.",
+      "Тридцать дисциплин. Верхняя половина — то, что нужно, чтобы понимать разговор; нижняя — то, что нужно, чтобы в нём участвовать. Технология внизу несёт и то и другое. Линии соединяют области, которые решают одну задачу с разных сторон.",
     hint: "Выберите дисциплину, чтобы прочитать, что это и зачем она здесь.",
     read: "Почитать",
     linked: "Связано с",
@@ -43,7 +43,7 @@ export const GROUPS = {
   conduct: { en: "Taking part", ru: "Участие" },
   char: { en: "Character and delivery", ru: "Персонаж и подача" },
   hm: { en: "Person and machine", ru: "Человек и машина" },
-  tech: { en: "Platform", ru: "Платформа" },
+  tech: { en: "Technology", ru: "Технология" },
 };
 
 export const DISCIPLINES = {
@@ -454,14 +454,14 @@ export const DISCIPLINES = {
 
 export const ORDER = {
   // Conversation understanding
-  conv: ["comm", "prag", "herm", "ca", "psl", "socio"],
   voice: ["pros", "phon", "para"],
+  conv: ["comm", "prag", "herm", "ca", "psl", "socio"],
   person: ["emo", "soc", "cog", "pm"],
   // Speaking agent
   conduct: ["couns", "fac", "polite", "philo"],
   char: ["impro", "drama", "scene", "rhet"],
   hm: ["hci", "cd", "eth"],
-  // Platform — the band behind both halves
+  // Technology — the band behind both halves
   tech: ["ml", "sds", "speech", "dsp", "rt", "ia"],
 };
 

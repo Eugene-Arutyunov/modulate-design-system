@@ -38,7 +38,7 @@
 }
 
 /* The formula layout: two labeled 3-cloud rows (conversation understanding /
-   speaking agent) over a full-width platform band. Content in each cell is
+   speaking agent) over a full-width technology band. Content in each cell is
    left- and top-aligned. The SVG link layer still measures tag positions at
    runtime, so the curves follow the grid for free. */
 .km__map {
@@ -56,15 +56,19 @@
 .km__half {
   position: relative;
   grid-column: 1 / -1;
+  justify-self: start;
   font-family: var(--m__font-family-semi-mono);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--km-muted);
   font-size: max(10px, 0.95cqw);
   line-height: 1;
-  display: table;
-  background: var(--m__bg);
-  padding: 0.2em 0.6em 0.2em 0;
+}
+
+/* The second half label needs air above so it doesn't stick to the row
+   of clouds before it */
+.km__half[data-half="agent"] {
+  margin-top: 1.6cqh;
 }
 
 .km__links {
@@ -123,12 +127,10 @@
   margin-left: -0.55em;
 }
 
-/* Platform band: spans all columns, sits under both halves; its tags flow
-   in a row — the band reads as a foundation, not another cloud */
+/* Technology band: spans all columns, sits under both halves; its tags
+   flow in a row — the band reads as a foundation, not another cloud */
 .km__cloud--band {
   grid-column: 1 / -1;
-  border-top: var(--m__border-width-s) solid var(--m__border);
-  padding-top: 1.6cqh;
 }
 
 .km__cloud--band .km__tags {
@@ -174,8 +176,11 @@
   color: var(--km-dim);
 }
 
+/* The panel's 25% is always reserved so nothing jumps on select; at rest
+   it is empty and unpainted (.km--open on the root, toggled in JS, brings
+   back the global aside surface) */
 .km__panel {
-  flex: 1;
+  flex: 0 0 25%;
   height: 100%;
   margin: 0;
   border-radius: 0;
@@ -183,6 +188,10 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+}
+
+.km:not(.km--open) .km__panel {
+  background: none;
 }
 
 .km__panel .km__grp {
@@ -281,11 +290,6 @@
     position: static;
     font-size: 12px;
     margin: 0 0 14px;
-    padding: 0;
-  }
-
-  .km__cloud--band {
-    padding-top: 14px;
   }
 
   .km__cloud h2 {
@@ -301,6 +305,11 @@
     border-top: var(--m__border-width-s) solid var(--m__border);
     padding: 20px 18px 24px;
     height: auto;
+  }
+
+  /* Stacked flow: no space to reserve, the empty panel simply hides */
+  .km:not(.km--open) .km__panel {
+    display: none;
   }
 
   .km__panel .km__title {
