@@ -89,7 +89,7 @@ function companion() {
    ['Quality', 'Criteria', 'Related ideas'], [19, 52, 29],
    D.groups.map((group, id) => ({id, cells: [
      `<a data-quality-preview="${id}" href="#quality-${id}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false">${esc(groupNames[id])}</a>`,
-     `<div class="criteria-cards">${group.criteria.map(criterionCard).join('')}</div><details data-side-preview><summary>What to explore</summary><div class="detail-content"><p>${esc(group.question)}</p><section><h3>Voice Agent Knowledge Map</h3><p>${group.basis.split(' · ').map(label => `<a href="/tools/knowledge-map/" target="_blank" rel="noopener">${esc(label.charAt(0).toUpperCase() + label.slice(1))}</a>`).join(', ')}</p></section></div></details>`,
+     `<div class="criteria-cards">${group.criteria.map(criterionCard).join('')}</div><details data-side-preview><summary>What to explore</summary><div class="detail-content"><p>${esc(group.question)}</p><section><h3>Conversation Intelligence Knowledge Map</h3><p>${group.basis.split(' · ').map(label => `<a href="/tools/knowledge-map/" target="_blank" rel="noopener">${esc(label.charAt(0).toUpperCase() + label.slice(1))}</a>`).join(', ')}</p></section></div></details>`,
      `<ul class="related-ideas">${group.features.map(index => `<li><a data-idea-preview="${index}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${index}">${esc(plain(D.directions[index][0]))}</a></li>`).join('')}</ul>`,
    ]})), 'quality', false
  );

@@ -1,4 +1,4 @@
-// Voice Agent Knowledge Map (/tools/knowledge-map/).
+// Conversation Intelligence Knowledge Map (/tools/knowledge-map/).
 // Behavior port of the standalone page: tag selection, neighbor highlighting,
 // SVG link curves recomputed on resize and after fonts load. All colors live
 // in knowledge-map.css so the site theme toggle restyles the map for free.
@@ -7,6 +7,7 @@
 
 import {
   UI,
+  HALVES,
   GROUPS,
   DISCIPLINES,
   ORDER,
@@ -57,6 +58,9 @@ if (root) {
   }
 
   function labels() {
+    map.querySelectorAll(".km__half").forEach((el) => {
+      el.textContent = HALVES[el.dataset.half][lang];
+    });
     map.querySelectorAll(".km__cloud h2").forEach((h) => {
       h.textContent = GROUPS[h.parentElement.dataset.group][lang];
     });
