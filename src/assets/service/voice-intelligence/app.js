@@ -89,7 +89,7 @@ function companion() {
    ['Quality', 'Criteria', 'Related ideas'], [19, 52, 29],
    D.groups.map((group, id) => ({id, cells: [
      `<a data-quality-preview="${id}" href="#quality-${id}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false">${esc(groupNames[id])}</a>`,
-     `<div class="criteria-cards">${group.criteria.map(criterionCard).join('')}</div><details data-side-preview><summary>What to explore</summary><div class="detail-content"><p>${esc(group.question)}</p><section><h3>Voice Agent Knowledge Map</h3><p>${group.basis.split(' · ').map(label => `<a href="/tools/knowledge-map/" target="_blank" rel="noopener">${esc(label.charAt(0).toUpperCase() + label.slice(1))}</a>`).join(', ')}</p></section></div></details>`,
+     `<div class="criteria-cards">${group.criteria.map(criterionCard).join('')}</div><details data-side-preview><summary>What to explore</summary><div class="detail-content"><p>${esc(group.question)}</p><section><h3>Conversation Intelligence Knowledge Map</h3><p>${group.basis.split(' · ').map(label => `<a href="/tools/knowledge-map/" target="_blank" rel="noopener">${esc(label.charAt(0).toUpperCase() + label.slice(1))}</a>`).join(', ')}</p></section></div></details>`,
      `<ul class="related-ideas">${group.features.map(index => `<li><a data-idea-preview="${index}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${index}">${esc(plain(D.directions[index][0]))}</a></li>`).join('')}</ul>`,
    ]})), 'quality', false
  );
@@ -305,8 +305,7 @@ function readRoute(){
  view=views.some(v=>v[0]===requested)?requested:requested==='scenes'?'features':'companion';
  selectedQualities = new Set(params.getAll('quality').flatMap(value => value.split(',')).filter(value => /^\d+$/.test(value)).map(Number).filter(value => value >= 0 && value < D.groups.length));
  const r=Number(params.get('row'));
- const ideaRow=requested==='features'&&r===15?8:r;
- target=params.has('row')&&Number.isInteger(ideaRow)&&ideaRow>=0&&ideaRow<D.directions.length?ideaRow:null;
+ target=params.has('row')&&Number.isInteger(r)&&r>=0&&r<D.directions.length?r:null;
  if(requested==='scenes'){target=D.sceneMap.findIndex(ids=>ids.includes(r+1));selectedQualities.clear();}
  if(view!=='features'){selectedQualities.clear();target=null;}
  render();

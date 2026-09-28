@@ -1,4 +1,4 @@
-// Voice Agent Knowledge Map (/tools/knowledge-map/).
+// Conversation Intelligence Knowledge Map (/tools/knowledge-map/).
 // Behavior port of the standalone page: tag selection, neighbor highlighting,
 // SVG link curves recomputed on resize and after fonts load. All colors live
 // in knowledge-map.css so the site theme toggle restyles the map for free.
@@ -7,6 +7,7 @@
 
 import {
   UI,
+  HALVES,
   GROUPS,
   DISCIPLINES,
   ORDER,
@@ -57,6 +58,9 @@ if (root) {
   }
 
   function labels() {
+    map.querySelectorAll(".km__half").forEach((el) => {
+      el.textContent = HALVES[el.dataset.half][lang];
+    });
     map.querySelectorAll(".km__cloud h2").forEach((h) => {
       h.textContent = GROUPS[h.parentElement.dataset.group][lang];
     });
@@ -112,13 +116,8 @@ if (root) {
   function render() {
     panel.textContent = "";
     const u = UI[lang];
-    if (!selected) {
-      panel.appendChild(el("div", "", "km__grp"));
-      panel.appendChild(el("h2", u.title, "km__title"));
-      panel.appendChild(el("p", u.intro));
-      panel.appendChild(el("p", u.hint));
-      return;
-    }
+    // At rest the panel stays an empty, unpainted reservation
+    if (!selected) return;
     const d = DISCIPLINES[selected];
     panel.appendChild(el("div", GROUPS[d.g][lang], "km__grp"));
     panel.appendChild(el("h2", d.n[lang], "km__title"));
@@ -154,6 +153,9 @@ if (root) {
 
   function select(id) {
     selected = id;
+    // The panel's space is always reserved; the class only paints/unpaints
+    // its surface, so the map never changes width
+    root.classList.toggle("km--open", !!id);
     const nb = id ? neighbours(id) : [];
     map.querySelectorAll(".km__tag").forEach((t) => {
       const me = t.dataset.id === id;
