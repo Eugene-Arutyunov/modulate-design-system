@@ -154,10 +154,11 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   }
 }
 
+/* Same split as the Overview stats row: balance 2fr, side card 3fr. */
 .billing-grid--status {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-columns: minmax(11rem, 2fr) minmax(0, 3fr);
 
-  @media (width < 900px) {
+  @media (width < 767px) {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -284,26 +285,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   background: var(--fill);
   border-radius: inherit;
   transition: width var(--m__duration-base) var(--m__easing-base);
-}
-
-.billing-usage { margin-top: var(--m__gap-s); }
-
-.billing-usage__head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0 var(--m__gap-s);
-  margin: 0 0 var(--m__gap-xxs) !important;
-  color: var(--m__text-caption);
-  font-size: var(--m__font-size-s);
-
-  & strong { color: var(--m__text); }
-}
-
-.billing-usage__base {
-  margin: var(--m__gap-xxs) 0 0 !important;
-  color: var(--m__text-caption);
-  font-size: var(--m__font-size-xs);
 }
 
 .billing-meter__legend {
@@ -1023,7 +1004,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
     gap: var(--m__gap-xs);
   }
   & .m__textfield { margin: 0; }
-  & .billing-topup-modal__hint { margin: 0 0 var(--m__gap-s) !important; }
 
   @media (width < 520px) {
     & .billing-topup-modal__presets { grid-template-columns: 1fr; }

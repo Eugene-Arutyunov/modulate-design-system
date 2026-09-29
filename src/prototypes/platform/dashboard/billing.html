@@ -34,24 +34,29 @@ permalink: /dashboard/billing/
               <span data-bind="balance">290,000.00</span>
             </p>
             {# One usage element for every type: same bar, legend names the base and the date. #}
-            <div class="billing-usage">
-              <p class="billing-usage__head">
-                <span><strong data-bind="percent">42%</strong> used</span>
-                <span data-for="contracting">Renews {{ b.nextDate }}</span>
-                <span data-for="paygo">Recharged 20 Sep 2026</span>
-                <span data-for="metered">Next invoice {{ b.nextDate }}</span>
-              </p>
-              <div class="billing-meter" data-usage-meter role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Credits used">
-                <span class="billing-meter__fill"></span>
-              </div>
-              <p class="billing-usage__base">
-                <span data-for="contracting">Of <span data-bind="total">500,000</span> credits this period, including top-ups</span>
-                <span data-for="paygo">Of <span data-bind="total">50,000</span> credits from the last recharge</span>
-                <span data-for="metered">Of <span data-bind="total">100,000</span> included credits</span>
-              </p>
-            </div>
-            <div class="m__widget__meta-list billing-meta" data-for="metered">
+            {# Same label / value rows for every type; only the labels change. #}
+            <div class="m__widget__meta-list billing-meta">
               <p class="m__widget__meta-item">
+                <span class="m__widget__meta-label">
+                  <span data-for="contracting">Used this period</span>
+                  <span data-for="paygo">Used since last recharge</span>
+                  <span data-for="metered">Included credits used</span>
+                </span>
+                <strong class="m__widget__meta-value"><span data-bind="percent">42%</span> of <span data-bind="total">500,000</span></strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="contracting">
+                <span class="m__widget__meta-label">Renews</span>
+                <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="paygo">
+                <span class="m__widget__meta-label">Last recharge</span>
+                <strong class="m__widget__meta-value">20 Sep 2026</strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="metered">
+                <span class="m__widget__meta-label">Next invoice</span>
+                <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="metered">
                 <span class="m__widget__meta-label">Monthly commitment</span>
                 <strong class="m__widget__meta-value">{{ b.metered.commitment }}</strong>
               </p>
@@ -62,20 +67,10 @@ permalink: /dashboard/billing/
         {# Contracting: top up entry point #}
         <section class="m__widget billing-card" data-for="contracting" aria-labelledby="billing-topup-title">
           <div class="billing-card__head">
-            <h2 id="billing-topup-title">Top up</h2>
+            <h2 id="billing-topup-title">Purchase Credits</h2>
           </div>
           {% call states('topup', 'No top-ups yet. Add credits at your contracted rate whenever you need more.', 'We couldn’t load your contract details.', 'lines') %}
-            <p class="billing-card__lead">Add credits at your contracted rate. They’re available as soon as payment clears.</p>
-            <div class="m__widget__meta-list billing-meta">
-              <p class="m__widget__meta-item">
-                <span class="m__widget__meta-label">Contracted rate</span>
-                <strong class="m__widget__meta-value">{{ b.contract.rate }} / credit</strong>
-              </p>
-              <p class="m__widget__meta-item">
-                <span class="m__widget__meta-label">Last top-up</span>
-                <strong class="m__widget__meta-value">3 Sep · +100,000</strong>
-              </p>
-            </div>
+            <p class="billing-card__lead">Credits pay for API usage. 1 credit = {{ b.contract.rate }} USD, spent based on audio duration and model cost.</p>
             <div class="billing-card__actions" data-role="admin">
               <button type="button" class="m__button-primary" data-modal-open="modal-billing-topup" data-role="admin">Buy Credits</button>
               <button type="button" class="m__button-secondary-outline" data-modal-open="modal-billing-code" data-role="admin">Apply Credit Code</button>
@@ -243,7 +238,6 @@ permalink: /dashboard/billing/
 {# Top-up: choose a quantity at the contracted rate, then pay in Stripe Checkout. The low-balance email links to #top-up. #}
 {% call modal("modal-billing-topup", "Buy Credits") %}
 <div class="m__modal__body billing-topup-modal">
-  <p class="m__modal__field-hint billing-topup-modal__hint">Credits pay for API usage. 1 credit = {{ b.contract.rate }} USD, spent based on audio duration and model cost.</p>
   <div class="billing-topup-modal__controls">
     <fieldset class="billing-topup-modal__presets m__radio-card-group" aria-label="Credit presets">
       <label class="m__radio-card" data-credits-preset="100">
