@@ -865,11 +865,12 @@ target:
       - section:
           text-content: usage-intro
       - section:
-          widgets:
-            - filters
-            - request-log
-            - credits-consumed
-            - requests-by-status
+          widget: usage-history
+          filters: [date, model, api-key, status]
+      - section:
+          widget: credits-consumed
+      - section:
+          widget: requests-by-status
 
   - id: dashboard-limits
     route: /dashboard/limits/

@@ -157,11 +157,11 @@ permalink: /dashboard/billing/
 
       {# ── Billing history: one list of every credit and billing event ─ #}
       <section class="m__widget billing-card billing-history" id="history" aria-labelledby="billing-history-title">
-        <div class="billing-toolbar">
+        <div class="table-toolbar">
           <h2 id="billing-history-title">Billing History</h2>
-          <div class="billing-history__controls" data-billing-history-filters></div>
+          <div class="table-filters" data-billing-history-filters></div>
         </div>
-        <div class="review-filter-strip billing-history__strip" data-billing-history-strip hidden></div>
+        <div class="review-filter-strip table-filters-strip" data-billing-history-strip hidden></div>
         {% call states('history', 'No billing history yet. Invoices, payments and credit grants appear here.', 'We couldn’t load billing history.', 'table') %}
           {% for type in ['contracting', 'paygo', 'metered'] %}
           <div class="m__table-wrapper" data-for="{{ type }}">
@@ -197,7 +197,7 @@ permalink: /dashboard/billing/
                   </td>
                 </tr>
                 {% endfor %}
-                <tr data-billing-filter-empty hidden>
+                <tr data-filter-empty hidden>
                   <td colspan="7"><div class="m__table-empty"><p>Nothing matches these filters.</p></div></td>
                 </tr>
               </tbody>
@@ -397,6 +397,7 @@ permalink: /dashboard/billing/
 
 {% include 'prototypes/billing/prototype-panel.html' %}
 <script src="/assets/prototypes/billing.js"></script>
+<script src="/assets/prototypes/table-filters.js"></script>
 <script src="/assets/prototypes/billing-history.js"></script>
 <script src="/assets/prototypes/billing-alerts.js"></script>
 <script src="/assets/prototypes/billing-credits.js"></script>

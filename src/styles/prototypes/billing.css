@@ -313,7 +313,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   & td.billing-table__wrap { white-space: normal; min-width: 14rem; }
 
   /* The last row can be followed by a hidden "empty filter" row. */
-  & tbody tr:nth-last-child(1 of :not([hidden])) td { border-bottom: 0; }
   & .is-num { text-align: right; font-variant-numeric: tabular-nums; padding-right: var(--m__gap-l); }
 
   /* Stacked rows on phones: every cell carries its column label. */
@@ -360,25 +359,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   gap: var(--m__gap-xxs);
 }
 
-.billing-history__controls {
-  display: flex;
-  align-items: center;
-  gap: var(--m__gap-xs);
-
-  & .review-filter-builder { padding: 0; }
-  & .review-filter-popup:not(.is-direct-filter) { right: 0; } /* flush with the Filter button */
-  /* No search field above the options here, so no gap for it either. */
-  & .review-filter-values { padding-top: 0; }
-  & .review-date-range-header + .review-filter-values { padding-top: .25rem; } /* gap under the divider, as in the queue */
-}
-
-/* Selected filter conditions sit inside the card, above the table. */
-.billing-history__strip {
-  margin: 0 0 var(--m__gap-xs);
-  padding: 0;
-  border: 0;
-}
-
 .billing-history__table {
   /* Same height for every row, with or without a View button; every cell top-aligned. */
   @media (width >= 640px) {
@@ -403,19 +383,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   color: var(--m__text-caption);
   font-size: var(--m__font-size-xs);
   line-height: 1.3;
-}
-
-.billing-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--m__gap-xs);
-  margin-bottom: var(--m__gap-s);
-
-  & h2 { margin: 0 !important; }
-  & > .m__select { width: auto; }
-  & > [hidden] { display: none; }
 }
 
 .billing-section-note {

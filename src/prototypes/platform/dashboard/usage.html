@@ -18,31 +18,132 @@ chartJs: true
       <div class="dashboard-section">
         <p>
           Every API request your organization makes is recorded here with its
-          status, duration, and credit cost. Use the filters to narrow by date
-          range or model. Statuses: Success, Processing, Client Error, Server
-          Error.
+          status, duration, credits and cost.
         </p>
       </div>
 
       <div class="m__space XS"></div>
 
-      <div class="dashboard-section">
-        {% set rows = [
-          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'success',    submitted: '15 Apr 2026, 09:12', completed: '15 Apr 2026, 09:14', duration: '1m 48s', credits: '0.045' },
-          { model: 'velma-2-stt-streaming',  key: 'Dev Key',        status: 'success',    submitted: '15 Apr 2026, 08:55', completed: '15 Apr 2026, 08:57', duration: '2m 03s', credits: '0.122' },
-          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'error',      submitted: '14 Apr 2026, 17:30', completed: '14 Apr 2026, 17:30', duration: '—',       credits: '0' },
-          { model: 'velma-2-stt-streaming',  key: 'CI Key',         status: 'success',    submitted: '14 Apr 2026, 14:22', completed: '14 Apr 2026, 14:25', duration: '3m 11s', credits: '0.198' },
-          { model: 'velma-2-stt-batch',      key: 'Dev Key',        status: 'processing', submitted: '14 Apr 2026, 11:08', completed: '—',                   duration: '—',       credits: '—' },
-          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'success',    submitted: '13 Apr 2026, 16:44', completed: '13 Apr 2026, 16:46', duration: '1m 55s', credits: '0.051' },
-          { model: 'velma-2-stt-streaming',  key: 'CI Key',         status: 'error',      submitted: '13 Apr 2026, 10:30', completed: '13 Apr 2026, 10:30', duration: '—',       credits: '0' },
-          { model: 'velma-2-stt-batch',      key: 'Dev Key',        status: 'success',    submitted: '12 Apr 2026, 15:17', completed: '12 Apr 2026, 15:19', duration: '2m 22s', credits: '0.087' }
-        ] %}
-        {% set showFilters = true %}
-        {% include 'service/table-usage-log.html' %}
-      </div>
+      {# 1 credit = $0.01, so cost = credits / 100. #}
+      {% set rows = [
+        { model: 'velma-2-stt-batch',     key: 'Production Key', status: 'success',    submitted: '15 Apr 2026, 09:12', completed: '15 Apr 2026, 09:14', duration: '1m 48s', credits: '108.00', cost: '$1.08' },
+        { model: 'velma-2-stt-streaming', key: 'Dev Key',        status: 'success',    submitted: '15 Apr 2026, 08:55', completed: '15 Apr 2026, 08:57', duration: '2m 03s', credits: '123.00', cost: '$1.23' },
+        { model: 'velma-2-stt-batch',     key: 'Production Key', status: 'error',      submitted: '14 Apr 2026, 17:30', completed: '14 Apr 2026, 17:30', duration: '—',      credits: '0',      cost: '$0.00' },
+        { model: 'velma-2-stt-streaming', key: 'CI Key',         status: 'success',    submitted: '14 Apr 2026, 14:22', completed: '14 Apr 2026, 14:25', duration: '3m 11s', credits: '191.00', cost: '$1.91' },
+        { model: 'velma-2-stt-batch',     key: 'Dev Key',        status: 'processing', submitted: '14 Apr 2026, 11:08', completed: '—',                  duration: '—',      credits: '—',      cost: '—' },
+        { model: 'velma-2-stt-batch',     key: 'Production Key', status: 'success',    submitted: '13 Apr 2026, 16:44', completed: '13 Apr 2026, 16:46', duration: '1m 55s', credits: '115.00', cost: '$1.15' },
+        { model: 'velma-2-stt-streaming', key: 'CI Key',         status: 'error',      submitted: '13 Apr 2026, 10:30', completed: '13 Apr 2026, 10:30', duration: '—',      credits: '0',      cost: '$0.00' },
+        { model: 'velma-2-stt-batch',     key: 'Dev Key',        status: 'success',    submitted: '12 Apr 2026, 15:17', completed: '12 Apr 2026, 15:19', duration: '2m 22s', credits: '142.00', cost: '$1.42' }
+      ] %}
+      {% set statusLabel = { success: 'Success', error: 'Error', processing: 'Processing' } %}
+
+      {# ── Usage History: filters and export like Billing History ── #}
+      <section class="dashboard-section m__widget usage-history" aria-labelledby="usage-history-title">
+        <div class="table-toolbar">
+          <h2 id="usage-history-title">Usage History</h2>
+          <div class="table-filters" data-usage-filters></div>
+        </div>
+        <div class="review-filter-strip table-filters-strip" data-usage-strip hidden></div>
+        <div class="m__table-wrapper">
+          <table class="usage-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>API Key</th>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Completed</th>
+                <th>Duration</th>
+                <th class="is-num">Credits</th>
+                <th class="is-num">Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in rows %}
+              <tr data-row data-date="{{ row.submitted }}" data-model="{{ row.model }}" data-key="{{ row.key }}" data-status="{{ statusLabel[row.status] }}">
+                <td>{{ row.model }}</td>
+                <td><code>{{ row.key }}</code></td>
+                <td>
+                  {% if row.status == 'success' %}<span class="m__tag m__tag--success">Success</span>
+                  {% elif row.status == 'error' %}<span class="m__tag m__tag--error">Error</span>
+                  {% else %}<span class="m__tag m__tag--muted">Processing</span>{% endif %}
+                </td>
+                <td>{{ row.submitted }}</td>
+                <td {% if row.completed == '—' %}class="muted"{% endif %}>{{ row.completed }}</td>
+                <td {% if row.duration == '—' %}class="muted"{% endif %}>{{ row.duration }}</td>
+                <td class="is-num{% if row.credits == '—' or row.credits == '0' %} muted{% endif %}">{{ row.credits }}</td>
+                <td class="is-num{% if row.cost == '—' or row.cost == '$0.00' %} muted{% endif %}">{{ row.cost }}</td>
+              </tr>
+              {% endfor %}
+              <tr data-filter-empty hidden>
+                <td colspan="8"><div class="m__table-empty"><p>Nothing matches these filters.</p></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="dashboard-section m__widget" aria-labelledby="usage-credits-title">
+        <h2 id="usage-credits-title">Credits Consumed</h2>
+        <div class="chart-container">
+          <canvas id="usage-credits-consumed-chart"></canvas>
+          <p class="chart-empty" hidden>No credit data available.</p>
+        </div>
+        <p class="chart-status-bar"></p>
+      </section>
+
+      <section class="dashboard-section m__widget" aria-labelledby="usage-status-title">
+        <h2 id="usage-status-title">Requests by Status</h2>
+        <div class="chart-container">
+          <canvas id="usage-requests-status-chart"></canvas>
+          <p class="chart-empty" hidden>No requests recorded.</p>
+        </div>
+        <div class="chart-legend"></div>
+      </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
 
+<script src="/assets/prototypes/table-filters.js"></script>
+<script>
+  // Usage History: Date / Model / API Key / Status filters and CSV export.
+  (function () {
+    var widget = document.querySelector(".usage-history");
+    if (!widget || !window.TableFilters) return;
+    function toast(message) {
+      var el = document.querySelector(".m__toast");
+      if (!el) {
+        el = document.createElement("div");
+        el.className = "m__toast";
+        el.setAttribute("role", "status");
+        document.body.appendChild(el);
+      }
+      el.textContent = message;
+      el.classList.add("is-visible");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(function () { el.classList.remove("is-visible"); }, 2600);
+    }
+    TableFilters.init({
+      widget: widget,
+      controls: widget.querySelector("[data-usage-filters]"),
+      strip: widget.querySelector("[data-usage-strip]"),
+      rows: function () { return [].slice.call(widget.querySelectorAll("tr[data-row]")); },
+      today: new Date(2026, 3, 16),
+      categories: [
+        { name: "Date", attr: "date" },
+        { name: "Model", attr: "model" },
+        { name: "API Key", attr: "key" },
+        { name: "Status", attr: "status" }
+      ],
+      exportCsv: {
+        filename: "usage-history.csv",
+        label: "Export usage history to CSV",
+        head: ["Model", "API Key", "Status", "Submitted", "Completed", "Duration", "Credits", "Cost"],
+        cells: function (tr) { return [].map.call(tr.children, function (td) { return td.textContent; }); }
+      },
+      toast: toast
+    });
+  })();
+</script>
 {% endblock %}
