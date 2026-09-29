@@ -121,6 +121,7 @@
     var overage = sc.overage || 0;
     var values = {
       remaining: fmt(remaining),
+      balance: remaining.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       total: fmt(t.total),
       percent: pct + "%",
       used: fmt(sc.used + overage),
@@ -246,7 +247,7 @@
     };
     var x = scale();
     var total = series.dates.length;
-    var step = Math.max(1, Math.ceil(total / 10));
+    var step = Math.max(1, Math.ceil(total / (canvas.parentNode.clientWidth < 480 ? 5 : 10)));
     x.ticks.autoSkip = false;
     x.ticks.callback = function (value, index) {
       if (index !== 0 && index !== total - 1 && index % step !== 0) return null;
@@ -432,9 +433,10 @@
       toast(toastTrigger.dataset.billingToast);
       return;
     }
-    if (e.target.closest("[data-billing-pdf]")) {
+    var pdf = e.target.closest("[data-billing-pdf]");
+    if (pdf) {
       e.preventDefault();
-      toast("Downloading PDF…");
+      toast("Opening " + (pdf.dataset.billingPdf || "document") + " (PDF)…");
     }
   });
 

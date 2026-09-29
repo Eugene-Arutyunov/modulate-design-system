@@ -62,18 +62,24 @@
 {% macro statusTag(status) %}
 {% if status in ['Paid', 'Succeeded', 'Active'] %}
 <span class="m__tag m__tag--success">{{ status }}</span>
-{% elif status == 'Failed' %}
+{% elif status in ['Failed', 'Overdue'] %}
 <span class="m__tag m__tag--error">{{ status }}</span>
-{% elif status in ['Used up', 'Pending'] %}
+{% elif status in ['Used up', 'Pending', 'Open'] %}
 <span class="m__tag m__tag--warning billing-tag-warning">{{ status }}</span>
 {% else %}
 <span class="m__tag m__tag--muted">{{ status }}</span>
 {% endif %}
 {% endmacro %}
 
-{% macro pdfLink(number) %}
-<a href="#" class="billing-pdf" data-billing-pdf aria-label="Download {{ number }} as PDF">
-  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0L4.8 6.8M8 10l3.2-3.2M3 13h10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  PDF
-</a>
+{% macro viewMenu(invoice, receipt) %}
+<div class="m__menu-button">
+  <button type="button" class="m__menu-button-secondary S m__menu-button-trigger" aria-haspopup="menu" aria-expanded="false" aria-label="View documents for {{ invoice }}">
+    View
+    <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+  </button>
+  <div class="m__menu-button-list" role="menu" hidden>
+    <button type="button" class="m__menu-button-item" role="menuitem" data-billing-pdf="{{ invoice }}">Invoice</button>
+    {% if receipt %}<button type="button" class="m__menu-button-item" role="menuitem" data-billing-pdf="{{ receipt }}">Receipt</button>{% endif %}
+  </div>
+</div>
 {% endmacro %}

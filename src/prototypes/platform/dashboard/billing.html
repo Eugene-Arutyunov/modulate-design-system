@@ -4,7 +4,7 @@ permalink: /dashboard/billing/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
-{% from 'prototypes/billing/macros.njk' import states, meter, statusTag, pdfLink %}
+{% from 'prototypes/billing/macros.njk' import states, meter, statusTag, viewMenu %}
 {% set b = billing %}
 
 <div class="m__wrapper">
@@ -16,7 +16,7 @@ permalink: /dashboard/billing/
 
     <main class="dashboard-content billing-page">
       {% set billingTitle = 'Billing' %}
-      {% set billingLead = 'Your credit balance, usage this period, and the full history of charges, top-ups and credits.' %}
+      {% set billingLead = 'Your credit balance, how it changed over time, and your invoices and credit grants.' %}
       {% include 'prototypes/billing/page-head.html' %}
 
       {# ── Account status ───────────────────────────────────────────── #}
@@ -31,9 +31,8 @@ permalink: /dashboard/billing/
             <span data-bind-status></span>
           </div>
           {% call states('balance', 'No credits yet. Your balance appears here once your first allocation or payment is processed.', 'We couldn’t load your balance. Usage is not affected.', 'stat') %}
-            <p class="m__widget__value billing-balance__value">
-              <span data-bind="remaining">290,000</span>
-              <span class="billing-unit">credits left</span>
+            <p class="m__widget__value m__widget__value--amount billing-balance__value">
+              <span data-bind="balance">290,000.00</span>
             </p>
             {{ meter('balance') }}
             <div class="billing-meter__legend">
@@ -84,6 +83,7 @@ permalink: /dashboard/billing/
             </div>
             <div class="billing-card__actions">
               <a href="/dashboard/billing/top-up/" class="m__button-primary S" data-billing-link data-role="admin">Top up credits</a>
+              <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-code" data-role="admin">Apply credit code</button>
               <p class="billing-viewer-note" data-role="viewer">Only account admins can top up.</p>
             </div>
           {% endcall %}
@@ -178,233 +178,58 @@ permalink: /dashboard/billing/
               <span><span data-bind="used">210,000</span> credits used this period</span>
               <span>· avg <span data-bind="daily">11,667</span> / day</span>
             </p>
-            <a href="#usage" class="billing-link-quiet" data-billing-link>Usage history →</a>
+            <a href="/dashboard/usage/" class="billing-link-quiet">Usage details →</a>
           </div>
         {% endcall %}
       </section>
 
-      {# ── History: documents, top-ups / recharges, usage, grants ───── #}
-      <section class="m__widget billing-card billing-history" id="history" aria-label="Billing history">
-        <div class="billing-history__head">
-          <div class="m__segmented-control-secondary billing-tabs" role="tablist" aria-label="History" data-billing-tabs>
-            <label><input type="radio" name="billing-history-tab" value="documents" checked />Documents</label>
-            <label data-for="contracting"><input type="radio" name="billing-history-tab" value="payments" />Top-ups</label>
-            <label data-for="paygo"><input type="radio" name="billing-history-tab" value="payments" />Recharges</label>
-            <label><input type="radio" name="billing-history-tab" value="usage" />Usage</label>
-            <label><input type="radio" name="billing-history-tab" value="grants" />
-            <span data-for="contracting paygo">Grants</span><span data-for="metered">Allocations</span></label>
-          </div>
-          <div class="billing-history__controls" data-billing-panel="documents">
-            <label class="m__select S" data-billing-doc-filter>
-              <span>Type</span>
-              <div class="m__select__inline-control">
-                <span class="m__select__value">All</span>
-                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                  <use href="#chevron-down"></use>
-                </svg>
-                <select id="bh-doc-type">
-                  <option value="all">All</option>
-                  <option value="Invoice">Invoices</option>
-                  <option value="Payment">Payments</option>
-                  <option value="Receipt">Receipts</option>
-                </select>
-              </div>
-            </label>
-          </div>
-          <div class="billing-history__controls" data-billing-panel="payments" data-for="contracting paygo" hidden>
-            <a href="/dashboard/billing/top-up/" class="m__button-primary S" data-billing-link data-for="contracting" data-role="admin">Top up credits</a>
-            <a href="/dashboard/billing/settings/#auto-recharge" class="m__button-secondary-outline S" data-billing-link data-for="paygo" data-role="admin">Recharge settings</a>
-          </div>
-          <div class="billing-history__controls" data-billing-panel="usage" hidden>
-            <span class="billing-future">Daily totals · CSV export coming later</span>
-          </div>
-          <div class="billing-history__controls" data-billing-panel="grants" hidden>
-            <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-code" data-role="admin">Apply credit code</button>
-          </div>
+      {# ── Billing history: one list of every credit and billing event ─ #}
+      <section class="m__widget billing-card billing-history" id="history" aria-labelledby="billing-history-title">
+        <div class="billing-toolbar">
+          <h2 id="billing-history-title">Billing history</h2>
+          <div class="billing-history__controls" data-billing-history-filters></div>
         </div>
-
-        {# Billing documents: invoices, payments, receipts #}
-        <div class="billing-history__panel" data-billing-panel="documents">
-          {% call states('documents', 'No billing documents yet. Invoices, payments and receipts appear here after your first charge.', 'We couldn’t load billing documents.', 'table') %}
-            {% for type in ['contracting', 'paygo', 'metered'] %}
-            <div class="m__table-wrapper" data-for="{{ type }}">
-              <table class="billing-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Number</th>
-                    <th>Description</th>
-                    <th class="is-num">Amount</th>
-                    <th>Status</th>
-                    <th class="m__col-actions"><span class="billing-visually-hidden">Download</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in b.documents[type] %}
-                  <tr data-doc-type="{{ row.type }}">
-                    <td data-label="Date">{{ row.date }}</td>
-                    <td data-label="Type">{{ row.type }}</td>
-                    <td data-label="Number" class="billing-muted">{{ row.number }}</td>
-                    <td data-label="Description" class="billing-table__wrap">
-                      {{ row.description }}
-                      {% if row.lines %}
-                      <button type="button" class="billing-expand" aria-expanded="false" aria-controls="lines-{{ row.number }}" data-billing-expand>
-                        Line items
-                        <svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
-                      </button>
-                      {% endif %}
-                    </td>
-                    <td data-label="Amount" class="is-num">{{ row.amount }}</td>
-                    <td data-label="Status">{{ statusTag(row.status) }}</td>
-                    <td data-label="PDF" class="m__col-actions">{{ pdfLink(row.number) }}</td>
-                  </tr>
-                  {% if row.lines %}
-                  <tr class="billing-table__lines" id="lines-{{ row.number }}" data-doc-type="{{ row.type }}" data-lines hidden>
-                    <td colspan="7">
-                      <ul>
-                        {% for line in row.lines %}
-                        <li><span>{{ line.label }}</span><strong>{{ line.amount }}</strong></li>
-                        {% endfor %}
-                        <li><span>Total</span><strong>{{ row.amount }}</strong></li>
-                      </ul>
-                    </td>
-                  </tr>
-                  {% endif %}
-                  {% endfor %}
-                  <tr data-billing-filter-empty hidden>
-                    <td colspan="7"><div class="m__table-empty"><p>No documents of this type yet.</p></div></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            {% endfor %}
-          {% endcall %}
-        </div>
-
-        {# Top-ups (Contracting) / Recharges (Pay/Go) #}
-        <div class="billing-history__panel" data-billing-panel="payments" data-for="contracting paygo" hidden>
-          <p class="billing-section-note">
-            <span data-for="contracting">Every payment and the credits it added to your balance.</span>
-            <span data-for="paygo">Every automatic and manual recharge, and the credits each payment added.</span>
-          </p>
-          {% call states('payments', '<span data-for="contracting">No top-ups yet. Credits you buy at your contracted rate appear here.</span><span data-for="paygo">No recharges yet. Recharges appear here once auto-recharge adds credits.</span>', 'We couldn’t load payment history.', 'table') %}
-            {% for type in ['contracting', 'paygo'] %}
-            <div class="m__table-wrapper" data-for="{{ type }}">
-              <table class="billing-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>{{ 'Trigger' if type == 'paygo' else 'Type' }}</th>
-                    <th>{{ 'Payment method' if type == 'paygo' else 'Purchased by' }}</th>
-                    <th class="is-num">Paid</th>
-                    <th class="is-num">Credits added</th>
-                    <th>Status</th>
-                    <th class="m__col-actions"><span class="billing-visually-hidden">Receipt</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in b.payments[type] %}
-                  <tr>
-                    <td data-label="Date">{{ row.date }}</td>
-                    <td data-label="{{ 'Trigger' if type == 'paygo' else 'Type' }}">{{ row.trigger }}</td>
-                    <td data-label="{{ 'Method' if type == 'paygo' else 'By' }}" class="billing-muted">{{ row.by }}</td>
-                    <td data-label="Paid" class="is-num">{{ row.amount }}</td>
-                    <td data-label="Credits" class="is-num {{ 'is-positive' if row.status == 'Paid' }}">{{ row.credits }}</td>
-                    <td data-label="Status">{{ statusTag(row.status) }}</td>
-                    <td data-label="Receipt" class="m__col-actions">
-                      {% if row.receipt %}{{ pdfLink(row.receipt) }}{% else %}
-                      <a href="#" class="billing-pdf billing-external" data-billing-stripe data-role="admin">Fix <span aria-hidden="true">↗</span></a>
-                      {% endif %}
-                    </td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-            {% endfor %}
-          {% endcall %}
-        </div>
-
-        {# Credit usage history #}
-        <div class="billing-history__panel" data-billing-panel="usage" hidden>
-          <p class="billing-section-note">
-            Credits consumed per day across all API keys.
-            <span data-for="metered">Included usage draws down your monthly allocation; overage is billed at {{ b.metered.overageRate }} per credit.</span>
-            For individual requests, see <a href="/dashboard/usage/">Usage</a>.
-          </p>
-          {% call states('usage', 'No usage yet. Daily credit usage appears here after your first API request.', 'We couldn’t load usage history.', 'table') %}
-            {% for type in ['contracting', 'paygo', 'metered'] %}
-            <div class="m__table-wrapper" data-for="{{ type }}">
-              <table class="billing-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th class="is-num">Requests</th>
-                    <th class="is-num">Audio hours</th>
-                    {% if type == 'metered' %}
-                    <th class="is-num">Included</th>
-                    <th class="is-num">Overage</th>
-                    {% endif %}
-                    <th class="is-num">Credits used</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in b.usage[type] %}
-                  <tr>
-                    <td data-label="Date">{{ row.date }}</td>
-                    <td data-label="Requests" class="is-num">{{ row.requests }}</td>
-                    <td data-label="Audio hours" class="is-num">{{ row.hours }}</td>
-                    {% if type == 'metered' %}
-                    <td data-label="Included" class="is-num">{{ row.included }}</td>
-                    <td data-label="Overage" class="is-num">{% if row.overage != '0' %}<span class="billing-overage-value">{{ row.overage }}</span>{% else %}<span class="billing-muted">0</span>{% endif %}</td>
-                    {% endif %}
-                    <td data-label="Credits used" class="is-num"><strong>{{ row.credits }}</strong></td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-            {% endfor %}
-          {% endcall %}
-        </div>
-
-        {# Grants / monthly allocations #}
-        <div class="billing-history__panel" data-billing-panel="grants" hidden>
-          <p class="billing-section-note">
-            <span data-for="contracting">Monthly allocations from your contract, plus one-time grants. Top-ups are listed separately.</span>
-            <span data-for="paygo">Free credits added to your account: sign-up credits, invite bonuses and credit codes.</span>
-            <span data-for="metered">Credits included with your monthly commitment. Unused included credits don’t roll over.</span>
-          </p>
-          {% call states('grants', 'No grants yet. Monthly allocations and credit codes appear here.', 'We couldn’t load credit grants.', 'table') %}
-            {% for type in ['contracting', 'paygo', 'metered'] %}
-            <div class="m__table-wrapper" data-for="{{ type }}">
-              <table class="billing-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Source</th>
-                    <th>Period</th>
-                    <th class="is-num">Credits</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in b.grants[type] %}
-                  <tr>
-                    <td data-label="Date">{{ row.date }}</td>
-                    <td data-label="Source">{{ row.source }}</td>
-                    <td data-label="Period" class="billing-muted">{{ row.period }}</td>
-                    <td data-label="Credits" class="is-num is-positive">{{ row.credits }}</td>
-                    <td data-label="Status">{{ statusTag(row.status) }}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-            {% endfor %}
-          {% endcall %}
-        </div>
+        <div class="review-filter-strip billing-history__strip" data-billing-history-strip hidden></div>
+        {% call states('history', 'No billing history yet. Invoices, payments and credit grants appear here.', 'We couldn’t load billing history.', 'table') %}
+          {% for type in ['contracting', 'paygo', 'metered'] %}
+          <div class="m__table-wrapper" data-for="{{ type }}">
+            <table class="billing-table billing-history__table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Number</th>
+                  <th class="is-num">Credits</th>
+                  <th class="is-num">Amount</th>
+                  <th>Status</th>
+                  <th class="m__col-actions"><span class="billing-visually-hidden">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in b.history[type] %}
+                <tr data-kind="{{ row.kind }}" data-status="{{ row.status }}" data-date="{{ row.date }}">
+                  <td data-label="Date">{{ row.date }}</td>
+                  <td data-label="Type">
+                    {{ row.type }}
+                    {% if row.method %}<small class="billing-history__method">{{ row.method }}</small>{% endif %}
+                  </td>
+                  <td data-label="Number" class="billing-history__number">{{ row.invoice }}</td>
+                  <td data-label="Credits" class="is-num">{% if row.credits == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.credits }}{% endif %}</td>
+                  <td data-label="Amount" class="is-num">{% if row.amount == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.amount }}{% endif %}</td>
+                  <td data-label="Status">{{ statusTag(row.status) }}</td>
+                  <td data-label="Action" class="m__col-actions billing-history__docs">
+                    {% if row.kind != 'grant' %}{{ viewMenu(row.invoice, row.receipt) }}{% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+                <tr data-billing-filter-empty hidden>
+                  <td colspan="7"><div class="m__table-empty"><p>Nothing matches these filters.</p></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          {% endfor %}
+        {% endcall %}
       </section>
     </main>
   </div>
