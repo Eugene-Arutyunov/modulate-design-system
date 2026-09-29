@@ -280,23 +280,33 @@
     amount.removeAttribute("aria-invalid");
   }
 
+  var autoWidget = document.querySelector("[data-autotopup]");
+
+  // Widget state: off → Enable button; on / failed → rule and payment rows.
+  function setAutoTopUp(value) { if (autoWidget) autoWidget.dataset.autotopup = value; }
+  function autoTopUpFromScenario() {
+    var sc = document.body.dataset.billingScenario;
+    setAutoTopUp(sc === "usage-stopped" ? "off" : sc === "failed-recharge" ? "failed" : "on");
+  }
+
   document.querySelectorAll('[data-modal-open="modal-billing-recharge"]').forEach(function (btn) {
-    btn.addEventListener("click", openRecharge);
+    btn.addEventListener("click", function () { openRecharge(btn.hasAttribute("data-autotopup-enable")); });
   });
 
-  function openRecharge() {
+  function openRecharge(enable) {
     if (!rechargeSaved) {
       rechargeSaved = rechargeState();
       rechargeSaved.on = document.body.dataset.billingScenario !== "usage-stopped";
     }
-    toggle.checked = rechargeSaved.on;
+    toggle.checked = enable || rechargeSaved.on;
     threshold.value = rechargeSaved.threshold;
     amount.value = rechargeSaved.amount;
     renderRecharge();
   }
 
   // A new prototype scenario starts from its own recharge state.
-  document.addEventListener("billing:change", function () { rechargeSaved = null; });
+  document.addEventListener("billing:change", function () { rechargeSaved = null; autoTopUpFromScenario(); });
+  autoTopUpFromScenario();
   toggle.addEventListener("change", renderRecharge);
   amount.addEventListener("input", renderRecharge);
 
@@ -310,9 +320,10 @@
     rechargeSaved = rechargeState();
     document.querySelector('[data-recharge-summary="threshold"]').textContent = threshold.value;
     document.querySelector('[data-recharge-summary="amount"]').textContent = amount.value;
-    document.querySelector('[data-recharge-summary="price"]').textContent = money(parse(amount.value) * 0.01);
+    var wasOn = autoWidget && autoWidget.dataset.autotopup !== "off";
+    setAutoTopUp(toggle.checked ? "on" : "off");
     window.M.closeModal(recharge);
-    toast(toggle.checked ? "Auto-recharge saved." : "Auto-recharge turned off.");
+    toast(!toggle.checked ? "Auto Top-Up turned off." : wasOn ? "Auto Top-Up saved." : "Auto Top-Up enabled.");
   });
 
   document.addEventListener("input", function (e) {
@@ -333,7 +344,8 @@
       openAlerts("overage");
       return true;
     }
-    var trigger = document.querySelector('[data-modal-open="' + id + '"]');
+    var triggers = [].slice.call(document.querySelectorAll('[data-modal-open="' + id + '"]'));
+    var trigger = triggers.filter(function (t) { return t.offsetParent; })[0] || triggers[0];
     if (trigger) trigger.click();
     else window.M.openModal(document.getElementById(id));
     return true;

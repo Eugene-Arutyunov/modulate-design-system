@@ -31,8 +31,8 @@
         { id: "healthy", label: "Healthy · 38% used", used: 19000 },
         { id: "usage-75", label: "Banner · 75% used", used: 38000 },
         { id: "usage-90", label: "Banner · 90% used", used: 45500 },
-        { id: "failed-recharge", label: "Failed recharge", used: 43800 },
-        { id: "usage-stopped", label: "Usage stopped · recharge off", used: 50000 }
+        { id: "failed-recharge", label: "Failed Auto Top-Up", used: 43800 },
+        { id: "usage-stopped", label: "Usage stopped · Auto Top-Up off", used: 50000 }
       ]
     },
     metered: {
@@ -224,10 +224,10 @@
 
   var toastTimer;
   function toast(message) {
-    var el = document.querySelector(".billing-toast");
+    var el = document.querySelector(".m__toast");
     if (!el) {
       el = document.createElement("div");
-      el.className = "billing-toast";
+      el.className = "m__toast";
       el.setAttribute("role", "status");
       document.body.appendChild(el);
     }

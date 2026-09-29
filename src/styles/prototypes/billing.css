@@ -8,7 +8,6 @@
   --billing-meter-track: color-mix(in srgb, var(--m__text) 10%, transparent);
   --billing-meter-height: 0.5rem;
   --billing-overage: var(--m__bg-accent-hover);
-  --billing-skeleton: color-mix(in srgb, var(--m__text) 8%, transparent);
   --billing-grid-gap: var(--m__gap-xs);
 }
 
@@ -76,59 +75,15 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   color: var(--m__error);
 }
 
-.billing-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: var(--m__gap-xs);
-  padding-top: var(--m__gap-xxs);
-}
-
-.billing-skeleton__bar,
-.billing-skeleton__chart span {
-  display: block;
-  border-radius: var(--m__radius-s);
-  background: var(--billing-skeleton);
-  animation: billing-pulse 1.4s var(--m__easing-base) infinite;
-}
-
-.billing-skeleton__bar {
-  height: 0.8rem;
-  width: 100%;
-
-  &.short { width: 45%; }
-}
-
-.billing-skeleton__bar--value { height: 2rem; width: 40%; }
-.billing-skeleton__bar--meter { height: var(--billing-meter-height); border-radius: var(--m__radius-pill); }
-.billing-skeleton__bar--line { width: 80%; }
-
-.billing-skeleton__row {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: var(--m__gap-m);
-  padding: var(--m__gap-xxs) 0;
-}
-
-.billing-skeleton__chart {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 7rem;
-
-  & span {
-    flex: 1;
-    height: var(--h);
-    border-radius: var(--m__radius-xs) var(--m__radius-xs) 0 0;
-  }
-}
-
-@keyframes billing-pulse {
-  50% { opacity: 0.45; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .billing-skeleton__bar,
-  .billing-skeleton__chart span { animation: none; }
+/* Loading shapes come from the DS skeleton; only spacing inside cards is set here. */
+.billing-skeleton { padding-top: var(--m__gap-xxs); }
+.m__skeleton-row.billing-skeleton__buttons { justify-content: flex-start; gap: var(--m__gap-xs); margin-top: var(--m__gap-s); }
+.billing-skeleton:has(.billing-skeleton__table) { padding-top: 0; }
+.billing-skeleton__table {
+  & td { vertical-align: middle; }
+  & .billing-skeleton__caption { margin-top: 0.35rem; }
+  & .billing-skeleton__num { margin-left: auto; }
+  & .billing-skeleton__tag { width: 3rem; height: 1.2rem; border-radius: var(--m__radius-xs); }
 }
 
 /* ── Page structure ────────────────────────────────────────────────── */
@@ -381,13 +336,19 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 
     & tbody td[colspan] { padding-left: 0; }
     & tbody td[colspan]::before { content: none; }
-    & .billing-history__docs:not(:has(.m__menu-button)) { display: none; }
+    & .billing-history__docs:not(:has(.m__menu-button, .billing-history__retry)) { display: none; }
     & tbody td.is-num { padding-right: 0; text-align: left; }
   }
 }
 
 .billing-history {
   scroll-margin-top: var(--m__gap-m);
+}
+
+.billing-history__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--m__gap-xxs);
 }
 
 .billing-history__controls {
@@ -596,6 +557,31 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   }
 }
 
+/* Auto Top-Up widget: rows follow its state (off / on / failed), set by billing-alerts.js. */
+.billing-autotopup[data-autotopup="off"] [data-autotopup-show]:not([data-autotopup-show~="off"]),
+.billing-autotopup[data-autotopup="on"] [data-autotopup-show]:not([data-autotopup-show~="on"]),
+.billing-autotopup[data-autotopup="failed"] [data-autotopup-show]:not([data-autotopup-show~="failed"]) {
+  display: none !important;
+}
+
+.billing-autotopup {
+  & .billing-card__head { gap: var(--m__gap-xs); justify-content: flex-start; margin-bottom: 0.25rem; }
+  & h2 { margin: 0 !important; }
+}
+
+.billing-autotopup__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m__gap-m);
+}
+
+.billing-autotopup__lead {
+  max-width: 90ch;
+  margin: 0 !important;
+  color: var(--m__text-caption);
+}
+
 /* Tabbed modal header, same as the LLM Battle config modal */
 .billing-modal-tabs__header {
   align-items: flex-start;
@@ -740,12 +726,30 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   &:disabled { color: var(--m__text-caption); cursor: not-allowed; }
 }
 
-.billing-recharge-form {
-  width: min(30rem, 100%);
+#modal-billing-recharge .m__modal {
+  width: min(32rem, calc(100vw - 2rem));
+  max-width: none;
+}
 
-  & .billing-recharge-toggle { margin-bottom: var(--m__gap-s); }
+.billing-recharge-form {
+  /* Label left, switch right, in a bordered plate the size of a field; the border follows the hover colour */
+  & .billing-recharge-toggle {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: var(--m__gap-s);
+    padding: var(--m__padding-input-m);
+    border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
+    border-radius: var(--m__radius-s);
+    line-height: var(--m__line-height-base);
+    transition:
+      color var(--m__duration-base) var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base);
+  }
   & .billing-fieldset { display: flex; flex-direction: column; gap: var(--m__gap-s); }
-  & .m__modal__field-hint { margin: -0.4rem 0 0; }
+  & .billing-fieldset .m__modal__field-hint { margin: 0.25rem 0 0; }
 }
 
 /* ── Prototype panel (not product UI), styled like the nav island ──── */
@@ -946,25 +950,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   /* The body's right padding makes room for ×; the button uses it to match the left inset. */
   margin-right: -0.65rem;
   font-size: var(--m__font-size-xs);
-}
-
-.billing-toast {
-  position: fixed;
-  left: 50%;
-  bottom: 1.25rem;
-  z-index: 70;
-  padding: var(--m__padding-button-s);
-  border-radius: var(--m__radius-m);
-  background: var(--m__bg-accent);
-  color: var(--m__text-inverted);
-  font-size: var(--m__font-size-s);
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 0.5rem);
-  transition: opacity var(--m__duration-base) var(--m__easing-base),
-    transform var(--m__duration-base) var(--m__easing-base);
-
-  &.is-visible { opacity: 1; transform: translate(-50%, 0); }
 }
 
 /* Status that depends on loaded data is hidden until data is ready. */

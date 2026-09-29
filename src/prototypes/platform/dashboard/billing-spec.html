@@ -32,7 +32,7 @@ permalink: /dashboard/billing/spec/
       <thead><tr><th>Route</th><th>Purpose</th><th>Notes</th></tr></thead>
       <tbody>
         <tr><td><code>/dashboard/billing/</code></td><td>Overview: account status, usage this period, Billing history: invoices, payments and credit grants with a Type filter (usage lives in <a href="/dashboard/usage/">Usage</a>); <code>#history</code> scrolls to it so emails can deep-link</td><td>Default landing from the sidebar.</td></tr>
-        <tr><td><code>/dashboard/billing/#recharge</code>, <code>#overage-alerts</code></td><td>No separate settings page. Auto-recharge (Pay/Go) and alert lists are edited in modals on the overview.</td><td>These hashes open the matching modal; banners link to them.</td></tr>
+        <tr><td><code>/dashboard/billing/#recharge</code>, <code>#overage-alerts</code></td><td>No separate settings page. Auto Top-Up (Pay/Go) and alert lists are edited in modals on the overview.</td><td>These hashes open the matching modal; banners link to them.</td></tr>
         <tr><td><code>/dashboard/billing/top-up/</code></td><td>Redirects to <code>/dashboard/billing/#top-up</code>, which opens the <em>Buy Credits</em> modal (Contracting admins)</td><td>Kept as a stable URL for the low-balance email link. Banners link to <code>#top-up</code> directly.</td></tr>
       </tbody>
     </table>
@@ -44,12 +44,12 @@ permalink: /dashboard/billing/spec/
     <table class="billing-spec__table">
       <thead><tr><th>Block</th><th>Contracting</th><th>Pay/Go</th><th>Metered</th></tr></thead>
       <tbody>
-        <tr><td><strong>Balance card</strong></td><td>“Credit balance”: remaining; rows “Used this period · 42% of 500,000” (allocation + top-ups), “Renews · {next allocation}”</td><td>“Credit balance”: remaining; rows “Used since last recharge · 38% of 50,000”, “Last recharge · {date}”</td><td>“Included credits”: remaining included; rows “Included credits used · 48% of 100,000”, “Next invoice · {date}”, “Monthly commitment”</td></tr>
-        <tr><td><strong>Side card</strong></td><td>Purchase Credits: “Credits pay for API usage. 1 credit = $0.01 USD, spent based on audio duration and model cost.”, <em>Buy Credits</em>, <em>Apply Credit Code</em></td><td>Auto-recharge: On / Off / Failed, rule sentence, payment method, <em>Edit recharge</em></td><td>Overage this period: estimated charge, overage credits, metered rate</td></tr>
-        <tr><td><strong>History types</strong></td><td>Monthly allocations · Top-ups · Credit grants</td><td>Auto / manual recharges · Credit grants</td><td>Monthly invoices (commitment + overage)</td></tr>
-        <tr><td><strong>Settings</strong></td><td>Low-balance alerts · Recipients</td><td>Auto-recharge · Low-balance alerts · Recipients</td><td>Low-balance alerts (against included credits) · Overage spend alerts · Recipients</td></tr>
-        <tr><td><strong>Special states</strong></td><td>Usage stopped</td><td>Failed recharge · Usage stopped (recharge off)</td><td>Now in metered billing</td></tr>
-        <tr><td><strong>Not shown</strong></td><td>Auto-recharge, overage</td><td>Top-up screen, overage</td><td>Top-up, auto-recharge, top-up and recharge history</td></tr>
+        <tr><td><strong>Balance card</strong></td><td>“Credit balance”: remaining; rows “Used this period · 42% of 500,000” (allocation + top-ups), “Renews · {next allocation}”</td><td>“Credit balance”: remaining; rows “Used since last top-up · 38% of 50,000”, “Last top-up · {date}”</td><td>“Included credits”: remaining included; rows “Included credits used · 48% of 100,000”, “Next invoice · {date}”, “Monthly commitment”</td></tr>
+        <tr><td><strong>Side card</strong></td><td>Purchase Credits: “Credits pay for API usage. 1 credit = $0.01 USD, spent based on audio duration and model cost.”, <em>Buy Credits</em>, <em>Apply Credit Code</em></td><td>Purchase Credits, same card as Contracting (one-off purchase). Auto Top-Up is its own widget below: title (+ On / Off / Failed tag), one sentence and one button on the right. Off: “Automatically purchase credits when your balance is below a certain threshold…” + <em>Enable Auto Top-Up</em>. On: “Auto top-up is enabled and will add N credits automatically when your balance drops below M.” + <em>Manage</em>. Failed: couldn’t charge the card + <em>Manage</em></td><td>Overage this period: estimated charge, overage credits, metered rate</td></tr>
+        <tr><td><strong>History types</strong></td><td>Monthly allocations · Top-ups · Credit grants</td><td>Auto top-ups · One-off top-ups · Credit grants</td><td>Monthly invoices (commitment + overage)</td></tr>
+        <tr><td><strong>Settings</strong></td><td>Low-balance alerts · Recipients</td><td>Auto Top-Up · Low-balance alerts · Recipients</td><td>Low-balance alerts (against included credits) · Overage spend alerts · Recipients</td></tr>
+        <tr><td><strong>Special states</strong></td><td>Usage stopped</td><td>Failed Auto Top-Up · Usage stopped (Auto Top-Up off)</td><td>Now in metered billing</td></tr>
+        <tr><td><strong>Not shown</strong></td><td>Auto-recharge, overage</td><td>Overage</td><td>Top-up, Auto Top-Up, top-up history</td></tr>
       </tbody>
     </table>
   </div>
@@ -60,13 +60,12 @@ permalink: /dashboard/billing/spec/
       <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
       <tbody>
         <tr><td><code>--billing-warning</code></td><td><code>var(--m__color-orange-500)</code></td><td>Spend-limit meter fill at 75–89%</td></tr>
-        <tr><td><strong>Banners</strong></td><td>DS <code>.m__alert-info</code>, blue (75%, 90%, now metered), <code>.m__alert-error</code> (usage stopped, failed recharge)</td><td>No icon or side stripe; widget padding and radius; title at widget-title size (<code>--m__font-size-m</code> bold); actions on the right.</td></tr>
+        <tr><td><strong>Banners</strong></td><td>DS <code>.m__alert-info</code>, blue (75%, 90%, now metered), <code>.m__alert-error</code> (usage stopped, failed Auto Top-Up)</td><td>No icon or side stripe; widget padding and radius; title at widget-title size (<code>--m__font-size-m</code> bold); actions on the right.</td></tr>
         <tr><td><code>--billing-overage</code></td><td><code>var(--m__bg-accent-hover)</code></td><td>Overage bar segment, used-up meter, overage values</td></tr>
         <tr><td><code>--billing-meter-track</code></td><td><code>color-mix(--m__text 10%)</code></td><td>Meter track</td></tr>
         <tr><td><code>--billing-meter-height</code></td><td><code>0.5rem</code></td><td>Meter bar, no threshold ticks</td></tr>
         <tr><td><code>--billing-grid-gap</code></td><td><code>var(--m__gap-xs)</code> (0.5rem)</td><td>Gap between cards and rows, matching dashboard widgets</td></tr>
-        <tr><td><code>--billing-skeleton</code></td><td><code>color-mix(--m__text 8%)</code></td><td>Loading placeholders, 1.4s pulse, disabled with reduced motion</td></tr>
-      </tbody>
+        </tbody>
     </table>
   </div>
   <p class="billing-spec__note">Typography: page title <code>--m__font-size-xl</code> bold; card title <code>--m__font-size-m</code> bold; big value <code>.m__widget__value</code>; body and tables <code>--m__font-size-s</code>; captions, meter legend <code>--m__font-size-xs</code> in <code>--m__text-caption</code>. Numbers in tables use <code>tabular-nums</code> and align right.</p>
@@ -79,12 +78,13 @@ permalink: /dashboard/billing/spec/
         <tr><td><strong>Card</strong> <code>.m__widget.billing-card</code></td><td>Surface <code>--m__bg-surface</code>, radius <code>--m__widget-radius</code>, padding <code>--m__widget-padding</code> (1rem). Head row min-height 1.6rem, title left, quiet link right, <code>--m__gap-xs</code> below. Actions pinned to the card bottom with <code>--m__gap-l</code> above.</td><td>Cards in a row stretch to equal height. The heading stays visible in every data state.</td></tr>
         <tr><td><strong>Balance meter</strong> <code>.billing-meter</code></td><td>Value (<code>.m__widget__value</code>) + unit caption → meter → legend (“42% used” / “of 500,000 this period”) → meta list, <code>--m__gap-m</code> above.</td><td>Fill: &lt;75% <code>--m__text-accent</code>, 75–89% <code>--billing-warning</code>, ≥90% <code>--m__error</code>, Metered used up <code>--billing-overage</code>. <code>role="meter"</code> with <code>aria-valuenow</code>.</td></tr>
         <tr><td><strong>Banner</strong> <code>.billing-banner</code></td><td>DS alert (<code>.m__alert-info</code> / <code>.m__alert-error</code>) without icon or side stripe. Widget padding and radius, <code>--billing-grid-gap</code> below. Title at widget-title size, body <code>--m__font-size-s</code> capped at 60ch, regular-size DS buttons on the right with a wide gap.</td><td>Only one at a time, most severe wins. Sits under the page description on every billing route; in product it also appears above other dashboard pages. Actions move under the text below 640px.</td></tr>
-        <tr><td><strong>History widget</strong> <code>.billing-history</code> + <code>.billing-table</code></td><td>DS table; cells don’t wrap and are top-aligned: text, tags and the View button start on one line; every row at least 2.6rem. Numbers right-aligned; credits with cents (“+50,000.00”); invoice number in regular text, column shrinks to its content; extra left padding before Status. No divider under the last visible row. Date shows day and time. Payment method as an xs caption under the type.</td><td>Covers invoice, payment, receipt and credit-disbursement history in one list, like the Anthropic and OpenAI consoles. One row per invoice or credit grant. <em>View</em> is a <code>m__menu-button-secondary S</code> with <em>Invoice</em> and <em>Receipt</em>; <em>Receipt</em> appears only once the invoice is paid. Filtering uses the Review Queue pattern: a <em>Filter</em> button opens Date (<em>Custom range</em> first, then last 30 days / 3 months / 12 months), Type and Status; Type and Status list only values present for the customer. Chosen filters show as removable conditions above the table with <em>Reset filters</em>; an empty result shows an inline row. <em>Export</em> (outline S, no icon, in the corner after <em>Filter</em>, as in the Review Queue) downloads the rows that match the current filters as CSV, with the payment method as its own column. <em>Apply Credit Code</em> lives in the Top up card for now. Consumption is not listed; it lives on the Usage page.</td></tr>
+        <tr><td><strong>History widget</strong> <code>.billing-history</code> + <code>.billing-table</code></td><td>DS table; cells don’t wrap and are top-aligned: text, tags and the View button start on one line; every row at least 2.6rem. Numbers right-aligned; credits with cents (“+50,000.00”); invoice number in regular text, column shrinks to its content; extra left padding before Status. No divider under the last visible row. Date shows day and time. Payment method as an xs caption under the type.</td><td>Covers invoice, payment, receipt and credit-disbursement history in one list, like the Anthropic and OpenAI consoles. One row per invoice or credit grant. <em>View</em> is a <code>m__menu-button-secondary S</code> with <em>Invoice</em> and <em>Receipt</em>; <em>Receipt</em> appears only once the invoice is paid. Failed rows have no documents: an outline S <em>Retry</em> replaces <em>View</em> (admins only) and retries with the primary payment method. Filtering uses the Review Queue pattern: a <em>Filter</em> button opens Date (<em>Custom range</em> first, then last 30 days / 3 months / 12 months), Type and Status; Type and Status list only values present for the customer. Chosen filters show as removable conditions above the table with <em>Reset filters</em>; an empty result shows an inline row. <em>Export</em> (outline S, no icon, in the corner after <em>Filter</em>, as in the Review Queue) downloads the rows that match the current filters as CSV, with the payment method as its own column. <em>Apply Credit Code</em> lives in the Top up card for now. Consumption is not listed; it lives on the Usage page.</td></tr>
         <tr><td><strong>Usage rows</strong></td><td>Label / value rows on the balance card for every customer type (“Used … · N% of base”, date row); no progress bar. Only the row labels change per type (see the matrix).</td><td>The % follows the per-type rule from the brief and is the same % used by banners and low-balance alerts.</td></tr>
+        <tr><td><strong>Auto Top-Up widget</strong> <code>.billing-autotopup</code></td><td>Pay/Go only, between the status row and Spend Limits. Title with tag, the state sentence right under it (max 90ch), one S button on the right. State <code>data-autotopup="off|on|failed"</code> picks the sentence, tag and button.</td><td><em>Enable Auto Top-Up</em> opens the Auto Top-Up modal with the toggle on; Save switches the widget to On. Saving with the toggle off returns it to Off. Banners link here via <code>#recharge</code>.</td></tr>
         <tr><td><strong>Spend Limits</strong> <code>.billing-alerts</code></td><td>Laid out like Claude’s <em>Spend limits</em>: title + lead, then rows without dividers: Monthly spend limit (“400,000 credits · 214,000 used this month” / “No limit. Usage isn’t capped.”) and Email alerts (“Email 3 recipients at 75% used, 90% used, 10,000 credits left”, plus overage amounts for Metered). Row = medium label + sentence summary, outline S button on the right, admins only. No meter here.</td><td><em>Adjust limit</em> / <em>Set limit</em> opens <em>Edit spend limit</em>: one field in credits, <em>Remove limit</em> (only when set) and <em>Update limit</em>. Usage pauses when the limit is reached. The limit is a cap, not a second progress indicator.</td></tr>
         <tr><td><strong>Email alerts modal</strong> <code>.billing-edit-list</code></td><td>One modal for the Email alerts row with tabs in the header, as in the LLM Battle config modal: <em>Alerts</em>, <em>Overage</em> (Metered only), <em>Recipients</em>; one Save for all tabs, and a validation error switches to its tab. Lead, field label, rows of input (+ unit select for low-balance: <em>% used</em> / <em>credits left</em>) with a trash button, “+ Add threshold / recipient”, Cancel / Save. Recipients: members show name, email and role tag; new rows are email inputs.</td><td>Edits apply on Save only. Empty rows are dropped; up to 5 thresholds, 10 recipients; no duplicates; percentage 1–100; valid email. Lists are sorted on save.</td></tr>
-        <tr><td><strong>Auto-recharge modal</strong></td><td>Toggle, threshold and amount fields, price and card hint.</td><td>Opened from the Pay/Go card’s <em>Edit recharge</em> and banners; minimum 1,000 credits; the card summary updates on save.</td></tr>
-        <tr><td><strong>Auto-recharge form</strong></td><td>Label column min 10rem, S textfields 8.5rem, price computed inline. Save / Cancel appear enabled only when something changes.</td><td>The On/Off toggle disables the fields. Validation: at least 1,000 credits per recharge. Card changes happen in Stripe.</td></tr>
+        <tr><td><strong>Auto Top-Up modal</strong></td><td>“Enable Auto Top-Up” row in a bordered plate the size of a field (label left, switch right; border and text take the hover colour); “When credits are below” and “Purchase this amount” fields; hint “$N per top-up.”; footer Cancel / Save.</td><td>Opened from <em>Manage</em>, <em>Enable Auto Top-Up</em> and banners (<code>#recharge</code>). At least 1,000 credits when enabled; switch off disables the fields. Payment methods are managed in Stripe.</td></tr>
+        
         <tr><td><strong>Buy Credits modal</strong> <code>#modal-billing-topup</code></td><td>Opened from the Purchase Credits card, the Contracting banners and <code>#top-up</code>. Three DS radio-card presets (100 / 1,000 / 10,000 with price, 1,000 preselected on every open), a custom amount field, full-width <em>Pay $N</em> sized like the fields. Nothing else: balance and invoices are already on the page behind it.</td><td>Covers the brief’s “choose a credit quantity at the contracted rate”. Price = credits × contracted rate; custom amount capped at 10,000,000. Pay continues to Stripe Checkout (the purchase flow itself is Stripe’s).</td></tr>
       </tbody>
     </table>
@@ -95,7 +95,7 @@ permalink: /dashboard/billing/spec/
     <table class="billing-spec__table">
       <thead><tr><th>State</th><th>Rendering</th></tr></thead>
       <tbody>
-        <tr><td><strong>Loading</strong></td><td>Skeleton shaped like the content (stat / chart / table rows / lines). Title stays visible; tags and banners are hidden until data arrives. Screen-reader text “Loading…”.</td></tr>
+        <tr><td><strong>Loading</strong></td><td>DS skeleton (<code>.m__skeleton</code>) shaped like each widget: stat (number + rows), actions (text + two buttons), rows (summary rows + button), lead-button (sentence + button), and the history table with its real headers and dividers. Title stays visible; tags and banners are hidden until data arrives. Screen-reader text “Loading…”.</td></tr>
         <tr><td><strong>Empty</strong></td><td>Caption-colored sentence explaining what will appear and when, plus the primary action where one exists (e.g. <em>Add alert</em>, <em>Add payment method</em>).</td></tr>
         <tr><td><strong>Error</strong></td><td>Sentence in <code>--m__error</code> that says what failed and, where true, that it doesn’t affect usage, plus a <em>Try again</em> secondary outline S button that retries only that block.</td></tr>
       </tbody>
@@ -107,14 +107,14 @@ permalink: /dashboard/billing/spec/
     <table class="billing-spec__table">
       <thead><tr><th>Trigger</th><th>Severity</th><th>Contracting</th><th>Pay/Go</th><th>Metered</th></tr></thead>
       <tbody>
-        <tr><td>75% used</td><td>Warning</td><td>Usage stops at 0 → <em>Buy Credits</em> (outline)</td><td>Auto-recharge will add N → <em>Recharge settings</em></td><td>Metered rate applies after included → <em>Overage alerts</em></td></tr>
-        <tr><td>90% used</td><td>Warning + rule</td><td>Runs out in ~N days → <em>Buy Credits</em> (outline)</td><td>Auto-recharge will add N from card</td><td>Metered billing starts in ~N days</td></tr>
-        <tr><td>100% used</td><td>Error</td><td><strong>Usage stopped</strong> → <em>Buy Credits</em> (primary)</td><td><strong>Usage stopped</strong> (recharge off) → <em>Turn on auto-recharge</em></td><td><strong>Now in metered billing</strong> (info) → <em>Set overage alert</em></td></tr>
-        <tr><td>Recharge declined</td><td>Error</td><td>—</td><td><strong>Auto-recharge failed</strong> → <em>Update payment method</em></td><td>—</td></tr>
+        <tr><td>75% used</td><td>Warning</td><td>Usage stops at 0 → <em>Buy Credits</em> (outline)</td><td>Auto Top-Up will add N → <em>Auto Top-Up Settings</em></td><td>Metered rate applies after included → <em>Overage alerts</em></td></tr>
+        <tr><td>90% used</td><td>Warning + rule</td><td>Runs out in ~N days → <em>Buy Credits</em> (outline)</td><td>Auto Top-Up will add N from card</td><td>Metered billing starts in ~N days</td></tr>
+        <tr><td>100% used</td><td>Error</td><td><strong>Usage stopped</strong> → <em>Buy Credits</em> (primary)</td><td><strong>Usage stopped</strong> (Auto Top-Up off) → <em>Buy Credits</em> (primary) + <em>Turn On Auto Top-Up</em></td><td><strong>Now in metered billing</strong> (info) → <em>Set overage alert</em></td></tr>
+        <tr><td>Auto Top-Up declined</td><td>Error</td><td>—</td><td><strong>Auto Top-Up failed</strong> → <em>Update payment method</em></td><td>—</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="billing-spec__note">Percentages are measured against the current allocation: the period allocation plus top-ups (Contracting), the last recharge (Pay/Go), or included credits (Metered).</p>
+  <p class="billing-spec__note">Percentages are measured against the current allocation: the period allocation plus top-ups (Contracting), the last top-up (Pay/Go), or included credits (Metered).</p>
 
   <h2 id="roles">Roles</h2>
   <p>Account admins can change settings, top up, and follow Stripe links. Everyone else sees the same data read-only:</p>
@@ -135,13 +135,13 @@ permalink: /dashboard/billing/spec/
   <h2 id="stripe">Stripe entry points (in scope)</h2>
   <ul>
     <li><em>Pay $X</em> on Top-up opens Stripe Checkout.</li>
-    <li><em>Update payment method</em> (failed recharge) and <em>Manage payment methods ↗</em> open the Stripe customer portal.</li>
+    <li><em>Update Payment Method</em> (failed Auto Top-Up) and <em>Manage payment methods ↗</em> open the Stripe customer portal.</li>
         <li>Buttons never carry an arrow; only inline text links to Stripe show ↗. Both open in a new tab. After returning, the page refetches balance and history.</li>
   </ul>
 
   <h2 id="later">Later (post-MVP), with a placeholder in the UI</h2>
   <ul>
-    <li>Recharge on a set date: a muted “Later” row in the auto-recharge card.</li>
+    <li>Auto Top-Up on a set date: a muted “Later” row in the Auto Top-Up card.</li>
     <li>Overage spend cap: a muted “Later” row under overage alerts.</li>
     <li>CSV export of usage: caption in the Usage tab toolbar.</li>
     <li>Card expiry banner, account pricing display, and auto top-up for Contracting: no UI yet.</li>
@@ -150,7 +150,7 @@ permalink: /dashboard/billing/spec/
   <h2 id="questions">Open questions for product</h2>
   <ol>
     <li>Contracting: do top-ups count towards the “% used” base, or does the % only track the monthly allocation? The prototype includes them.</li>
-    <li>Pay/Go: should the 75% / 90% banners show at all while auto-recharge is on and healthy? They are informational here; we could suppress them.</li>
+    <li>Pay/Go: should the 75% / 90% banners show at all while Auto Top-Up is on and healthy? They are informational here; we could suppress them.</li>
     <li>Can view-only members be alert recipients, and can external addresses be added (the prototype allows both)?</li>
     <li>Metered overage alerts: fixed amounts only, or also a percentage of the commitment?</li>
     <li>How are credit codes positioned for Contracting and Metered customers? The prototype keeps <em>Apply Credit Code</em> under Grants for admins.</li>

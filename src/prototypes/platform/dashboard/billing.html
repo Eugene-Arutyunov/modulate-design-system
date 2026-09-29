@@ -39,7 +39,7 @@ permalink: /dashboard/billing/
               <p class="m__widget__meta-item">
                 <span class="m__widget__meta-label">
                   <span data-for="contracting">Used this period</span>
-                  <span data-for="paygo">Used since last recharge</span>
+                  <span data-for="paygo">Used since last top-up</span>
                   <span data-for="metered">Included credits used</span>
                 </span>
                 <strong class="m__widget__meta-value"><span data-bind="percent">42%</span> of <span data-bind="total">500,000</span></strong>
@@ -49,7 +49,7 @@ permalink: /dashboard/billing/
                 <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
               </p>
               <p class="m__widget__meta-item" data-for="paygo">
-                <span class="m__widget__meta-label">Last recharge</span>
+                <span class="m__widget__meta-label">Last top-up</span>
                 <strong class="m__widget__meta-value">20 Sep 2026</strong>
               </p>
               <p class="m__widget__meta-item" data-for="metered">
@@ -64,51 +64,16 @@ permalink: /dashboard/billing/
           {% endcall %}
         </section>
 
-        {# Contracting: top up entry point #}
-        <section class="m__widget billing-card" data-for="contracting" aria-labelledby="billing-topup-title">
+        {# Contracting and Pay/Go: one-off purchase #}
+        <section class="m__widget billing-card" data-for="contracting paygo" aria-labelledby="billing-topup-title">
           <div class="billing-card__head">
             <h2 id="billing-topup-title">Purchase Credits</h2>
           </div>
-          {% call states('topup', 'No top-ups yet. Add credits at your contracted rate whenever you need more.', 'We couldn’t load your contract details.', 'lines') %}
+          {% call states('topup', 'No purchases yet. Buy credits whenever you need more.', 'We couldn’t load purchase options.', 'actions') %}
             <p class="billing-card__lead">Credits pay for API usage. 1 credit = {{ b.contract.rate }} USD, spent based on audio duration and model cost.</p>
             <div class="billing-card__actions" data-role="admin">
               <button type="button" class="m__button-primary" data-modal-open="modal-billing-topup" data-role="admin">Buy Credits</button>
               <button type="button" class="m__button-secondary-outline" data-modal-open="modal-billing-code" data-role="admin">Apply Credit Code</button>
-            </div>
-          {% endcall %}
-        </section>
-
-        {# Pay/Go: auto-recharge summary #}
-        <section class="m__widget billing-card" id="auto-recharge" data-for="paygo" aria-labelledby="billing-recharge-title">
-          <div class="billing-card__head">
-            <h2 id="billing-recharge-title">Auto-recharge</h2>
-            <span class="m__tag m__tag--success" data-when="healthy usage-75 usage-90">On</span>
-            <span class="m__tag m__tag--error" data-when="failed-recharge">Failed</span>
-            <span class="m__tag m__tag--muted" data-when="usage-stopped">Off</span>
-          </div>
-          {% call states('recharge', 'Auto-recharge isn’t set up. Turn it on to keep credits topped up from a saved card.', 'We couldn’t load recharge settings.', 'lines') %}
-            <p class="billing-card__lead" data-when="healthy usage-75 usage-90 failed-recharge">
-              When the balance falls below <strong data-recharge-summary="threshold">{{ b.paygo.threshold }}</strong> credits, add <strong data-recharge-summary="amount">{{ b.paygo.recharge }}</strong> credits (<span data-recharge-summary="price">{{ b.paygo.rechargeAmount }}</span>).
-            </p>
-            <p class="billing-card__lead" data-when="usage-stopped">
-              Auto-recharge is off. Credits won’t be added automatically when your balance runs out.
-            </p>
-            <div class="m__widget__meta-list billing-meta">
-              <p class="m__widget__meta-item">
-                <span class="m__widget__meta-label">Payment method</span>
-                <strong class="m__widget__meta-value">
-                  <span class="billing-error-text" data-when="failed-recharge">Declined · </span>{{ b.paygo.card }}
-                </strong>
-              </p>
-              <p class="m__widget__meta-item">
-                <span class="m__widget__meta-label">Last recharge</span>
-                <strong class="m__widget__meta-value">20 Sep · +50,000</strong>
-              </p>
-            </div>
-            <div class="billing-card__actions" data-role="admin">
-              <a href="#" class="m__button-primary S billing-external" data-billing-stripe data-when="failed-recharge">Update payment method</a>
-              <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-recharge">Edit recharge</button>
-              <a href="#" class="billing-link-quiet billing-external" data-billing-stripe data-when="healthy usage-75 usage-90 usage-stopped">Manage payment methods <span aria-hidden="true">↗</span></a>
             </div>
           {% endcall %}
         </section>
@@ -144,13 +109,34 @@ permalink: /dashboard/billing/
         </section>
       </div>
 
+      {# ── Pay/Go Auto Top-Up: title, one state sentence and one button (Enable when off, Manage otherwise) ── #}
+      <section class="m__widget billing-card billing-autotopup" id="auto-recharge" data-for="paygo" data-autotopup="on" aria-labelledby="billing-autotopup-title">
+        <div class="billing-card__head">
+          <h2 id="billing-autotopup-title">Auto Top-Up</h2>
+          <span class="m__tag m__tag--success" data-autotopup-show="on">On</span>
+          <span class="m__tag m__tag--error" data-autotopup-show="failed">Failed</span>
+          <span class="m__tag m__tag--muted" data-autotopup-show="off">Off</span>
+        </div>
+        {% call states('recharge', 'Auto Top-Up isn’t set up.', 'We couldn’t load Auto Top-Up settings.', 'lead-button') %}
+          <div class="billing-autotopup__row">
+            <p class="billing-autotopup__lead">
+              <span data-autotopup-show="off">Automatically purchase credits when your balance is below a certain threshold. You can select multiple payment methods that will be tried in order if payment fails.</span>
+              <span data-autotopup-show="on">Auto top-up is enabled and will add <span data-recharge-summary="amount">{{ b.paygo.recharge }}</span> credits automatically when your balance drops below <span data-recharge-summary="threshold">{{ b.paygo.threshold }}</span>.</span>
+              <span data-autotopup-show="failed">Auto top-up couldn’t charge <span data-recharge-summary="card">{{ b.paygo.card }}</span> on 28 Sep. Choose another payment method or update this one to resume.</span>
+            </p>
+            <button type="button" class="m__button-primary S" data-modal-open="modal-billing-recharge" data-autotopup-enable data-autotopup-show="off" data-role="admin">Enable Auto Top-Up</button>
+            <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-recharge" data-autotopup-show="on failed" data-role="admin">Manage</button>
+          </div>
+        {% endcall %}
+      </section>
+
       {# ── Spend limits: monthly cap and email alerts (edited in modals). Usage progress lives on the balance card. ── #}
       <section class="m__widget billing-card billing-alerts" id="alerts" aria-labelledby="billing-alerts-title">
         <h2 id="billing-alerts-title">Spend Limits</h2>
         <p class="billing-alerts__lead">
           Set a monthly spend limit for your organization and get notified as you approach it.
         </p>
-        {% call states('alerts', 'No alerts yet. Add a threshold to hear about low balance before usage is affected.', 'We couldn’t load alert settings. Existing alerts are still being sent.', 'lines', '<button type="button" class="m__button-primary S" data-modal-open="modal-billing-alerts" data-role="admin">Add alert</button>') %}
+        {% call states('alerts', 'No alerts yet. Add a threshold to hear about low balance before usage is affected.', 'We couldn’t load alert settings. Existing alerts are still being sent.', 'rows', '<button type="button" class="m__button-primary S" data-modal-open="modal-billing-alerts" data-role="admin">Add alert</button>') %}
           <div class="billing-alerts__row">
             <p class="billing-alerts__row-main">
               <strong>Monthly spend limit</strong>
@@ -203,7 +189,10 @@ permalink: /dashboard/billing/
                   <td data-label="Amount" class="is-num">{% if row.amount == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.amount }}{% endif %}</td>
                   <td data-label="Status">{{ statusTag(row.status) }}</td>
                   <td data-label="Action" class="m__col-actions billing-history__docs">
-                    {% if row.kind != 'grant' %}{{ viewMenu(row.invoice, row.receipt) }}{% endif %}
+                    <div class="billing-history__actions">
+                      {% if row.status == 'Failed' %}<button type="button" class="m__button-secondary-outline S billing-history__retry" data-role="admin" data-billing-toast="Retrying the payment with your primary payment method.">Retry</button>
+                      {% elif row.kind != 'grant' %}{{ viewMenu(row.invoice, row.receipt) }}{% endif %}
+                    </div>
                   </td>
                 </tr>
                 {% endfor %}
@@ -378,24 +367,23 @@ permalink: /dashboard/billing/
   </div>
 </div>
 
-{% call modal("modal-billing-recharge", "Auto-recharge") %}
+{% call modal("modal-billing-recharge", "Auto Top-Up") %}
 <div class="m__modal__body billing-recharge-form">
   <label class="m__toggle-primary billing-recharge-toggle">
     <input type="checkbox" data-billing-recharge-toggle />
-    <span>Recharge automatically</span>
+    <span>Enable Auto Top-Up</span>
   </label>
-  <p class="billing-edit-list__lead">When the balance drops below the threshold, we charge your saved payment method and add credits.</p>
   <fieldset class="billing-fieldset" data-billing-recharge-fields>
     <div class="m__textfield M">
-      <label for="br-threshold">When balance falls below, credits</label>
+      <label for="br-threshold">When credits are below</label>
       <input type="text" id="br-threshold" inputmode="numeric" value="{{ b.paygo.threshold }}" data-billing-number />
     </div>
     <div class="m__textfield M">
-      <label for="br-amount">Add credits</label>
+      <label for="br-amount">Purchase this amount, credits</label>
       <input type="text" id="br-amount" inputmode="numeric" value="{{ b.paygo.recharge }}" data-billing-number data-billing-recharge-amount />
     </div>
-    <p class="m__modal__field-hint"><span data-billing-recharge-price>{{ b.paygo.rechargeAmount }}</span> per recharge · {{ b.paygo.card }}</p>
-    <p class="billing-inline-error" data-billing-recharge-error hidden>Enter at least 1,000 credits per recharge.</p>
+    <p class="m__modal__field-hint"><span data-billing-recharge-price>{{ b.paygo.rechargeAmount }}</span> per top-up.</p>
+    <p class="billing-inline-error" data-billing-recharge-error hidden>Enter at least 1,000 credits per top-up.</p>
   </fieldset>
 </div>
 <div class="m__modal__footer">
