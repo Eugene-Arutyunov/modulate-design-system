@@ -4,7 +4,7 @@ permalink: /dashboard/billing/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
-{% from 'prototypes/billing/macros.njk' import states, meter, statusTag, viewMenu %}
+{% from 'prototypes/billing/macros.njk' import states, statusTag, viewMenu %}
 {% set b = billing %}
 
 <div class="m__wrapper">
@@ -16,7 +16,7 @@ permalink: /dashboard/billing/
 
     <main class="dashboard-content billing-page">
       {% set billingTitle = 'Billing' %}
-      {% set billingLead = 'Your credit balance, how it changed over time, and your invoices and credit grants.' %}
+      {% set billingLead = 'Your credit balance, spend limits, and your invoices and credit grants.' %}
       {% include 'prototypes/billing/page-head.html' %}
 
       {# ── Account status ───────────────────────────────────────────── #}
@@ -25,24 +25,14 @@ permalink: /dashboard/billing/
         <section class="m__widget billing-card billing-balance" aria-labelledby="billing-balance-title">
           <div class="billing-card__head">
             <h2 id="billing-balance-title">
-              <span data-for="contracting paygo">Credit balance</span>
-              <span data-for="metered">Included credits</span>
+              <span data-for="contracting paygo">Credit Balance</span>
+              <span data-for="metered">Included Credits</span>
             </h2>
-            <span data-bind-status></span>
           </div>
           {% call states('balance', 'No credits yet. Your balance appears here once your first allocation or payment is processed.', 'We couldn’t load your balance. Usage is not affected.', 'stat') %}
             <p class="m__widget__value m__widget__value--amount billing-balance__value">
               <span data-bind="balance">290,000.00</span>
             </p>
-            {{ meter('balance') }}
-            <div class="billing-meter__legend">
-              <span><strong data-bind="percent">42%</strong> used</span>
-              <span>of <span data-bind="total">500,000</span>
-                <span data-for="contracting">this period</span>
-                <span data-for="paygo">since last recharge</span>
-                <span data-for="metered">included</span>
-              </span>
-            </div>
             <div class="m__widget__meta-list billing-meta">
               <p class="m__widget__meta-item" data-for="contracting">
                 <span class="m__widget__meta-label">Next allocation</span>
@@ -81,16 +71,15 @@ permalink: /dashboard/billing/
                 <strong class="m__widget__meta-value">3 Sep · +100,000</strong>
               </p>
             </div>
-            <div class="billing-card__actions">
+            <div class="billing-card__actions" data-role="admin">
               <a href="/dashboard/billing/top-up/" class="m__button-primary S" data-billing-link data-role="admin">Top up credits</a>
               <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-code" data-role="admin">Apply credit code</button>
-              <p class="billing-viewer-note" data-role="viewer">Only account admins can top up.</p>
             </div>
           {% endcall %}
         </section>
 
         {# Pay/Go: auto-recharge summary #}
-        <section class="m__widget billing-card" data-for="paygo" aria-labelledby="billing-recharge-title">
+        <section class="m__widget billing-card" id="auto-recharge" data-for="paygo" aria-labelledby="billing-recharge-title">
           <div class="billing-card__head">
             <h2 id="billing-recharge-title">Auto-recharge</h2>
             <span class="m__tag m__tag--success" data-when="healthy usage-75 usage-90">On</span>
@@ -99,7 +88,7 @@ permalink: /dashboard/billing/
           </div>
           {% call states('recharge', 'Auto-recharge isn’t set up. Turn it on to keep credits topped up from a saved card.', 'We couldn’t load recharge settings.', 'lines') %}
             <p class="billing-card__lead" data-when="healthy usage-75 usage-90 failed-recharge">
-              When the balance falls below <strong>{{ b.paygo.threshold }}</strong> credits, add <strong>{{ b.paygo.recharge }}</strong> credits ({{ b.paygo.rechargeAmount }}).
+              When the balance falls below <strong data-recharge-summary="threshold">{{ b.paygo.threshold }}</strong> credits, add <strong data-recharge-summary="amount">{{ b.paygo.recharge }}</strong> credits (<span data-recharge-summary="price">{{ b.paygo.rechargeAmount }}</span>).
             </p>
             <p class="billing-card__lead" data-when="usage-stopped">
               Auto-recharge is off. Credits won’t be added automatically when your balance runs out.
@@ -117,11 +106,10 @@ permalink: /dashboard/billing/
               </p>
             </div>
             <div class="billing-card__actions" data-role="admin">
-              <a href="#" class="m__button-primary S billing-external" data-billing-stripe data-when="failed-recharge">Update payment method <span aria-hidden="true">↗</span></a>
-              <a href="/dashboard/billing/settings/#auto-recharge" class="m__button-secondary-outline S" data-billing-link>Edit recharge</a>
+              <a href="#" class="m__button-primary S billing-external" data-billing-stripe data-when="failed-recharge">Update payment method</a>
+              <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-recharge">Edit recharge</button>
               <a href="#" class="billing-link-quiet billing-external" data-billing-stripe data-when="healthy usage-75 usage-90 usage-stopped">Manage payment methods <span aria-hidden="true">↗</span></a>
             </div>
-            <p class="billing-viewer-note" data-role="viewer">Only account admins can change recharge settings.</p>
           {% endcall %}
         </section>
 
@@ -156,29 +144,39 @@ permalink: /dashboard/billing/
         </section>
       </div>
 
-      {# ── Balance over time (styled like the dashboard chart) ────────── #}
-      <section class="m__widget billing-card billing-balance-chart" aria-labelledby="billing-usage-title">
-        <div class="billing-card__head">
-          <h2 id="billing-usage-title">
-            <span data-for="contracting paygo">Credit balance over time</span>
-            <span data-for="metered">Included credits over time</span>
-          </h2>
-        </div>
-        {% call states('usage-chart', 'No balance history yet. It appears here after your first allocation or payment.', 'We couldn’t load your balance history.', 'chart') %}
-          <fieldset class="m__segmented-control-secondary" data-billing-chart-period>
-            <label><input type="radio" name="billing-chart-period" value="7" />Last 7 days</label>
-            <label><input type="radio" name="billing-chart-period" value="30" checked />30 days</label>
-          </fieldset>
-          <div class="chart-container billing-balance-chart__canvas">
-            <canvas data-billing-chart aria-label="Credit balance by day" role="img"></canvas>
-          </div>
-          <p class="chart-status-bar" data-billing-chart-status></p>
-          <div class="billing-chart__footer">
-            <p class="billing-chart__summary">
-              <span><span data-bind="used">210,000</span> credits used this period</span>
-              <span>· avg <span data-bind="daily">11,667</span> / day</span>
+      {# ── Usage & alerts: progress plus alert lists (edited in modals), like Claude’s spend limits ── #}
+      <section class="m__widget billing-card billing-alerts" id="alerts" aria-labelledby="billing-alerts-title">
+        <h2 id="billing-alerts-title">Spend Limits</h2>
+        <p class="billing-alerts__lead">
+          Set a monthly spend limit for your organization and get notified as you approach it.
+        </p>
+        {% call states('alerts', 'No alerts yet. Add a threshold to hear about low balance before usage is affected.', 'We couldn’t load alert settings. Existing alerts are still being sent.', 'lines', '<button type="button" class="m__button-primary S" data-modal-open="modal-billing-alerts" data-role="admin">Add alert</button>') %}
+          {# Monthly spend limit, as in Claude: the bar shows only while a limit is set. #}
+          <div class="billing-alerts__usage" data-spend-usage>
+            <p class="billing-alerts__row-main">
+              <strong><span data-spend-bind="spent">214,000</span> credits used</strong>
+              <small>Resets {{ b.spendLimit.resets }} (UTC)</small>
             </p>
-            <a href="/dashboard/usage/" class="billing-link-quiet">Usage details →</a>
+            <div class="billing-alerts__meter">
+              <div class="billing-meter" data-spend-meter role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Spend limit used">
+                <span class="billing-meter__fill"></span>
+              </div>
+              <span class="billing-alerts__percent"><span data-spend-bind="percent">54%</span> used</span>
+            </div>
+          </div>
+          <div class="billing-alerts__row">
+            <p class="billing-alerts__row-main">
+              <strong>Monthly spend limit</strong>
+              <small data-spend-bind="limit">400,000 credits</small>
+            </p>
+            <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-limit" data-role="admin" data-spend-bind="action">Adjust limit</button>
+          </div>
+          <div class="billing-alerts__row">
+            <p class="billing-alerts__row-main">
+              <strong>Email alerts</strong>
+              <small data-alerts-summary>Email {{ b.recipients | length }} recipients at {% for a in b.alerts %}{% if a.kind == 'percent' %}{{ a.value }}% used{% else %}{{ a.value }} credits left{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}.</small>
+            </p>
+            <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-alerts" data-role="admin">Edit</button>
           </div>
         {% endcall %}
       </section>
@@ -186,7 +184,7 @@ permalink: /dashboard/billing/
       {# ── Billing history: one list of every credit and billing event ─ #}
       <section class="m__widget billing-card billing-history" id="history" aria-labelledby="billing-history-title">
         <div class="billing-toolbar">
-          <h2 id="billing-history-title">Billing history</h2>
+          <h2 id="billing-history-title">Billing History</h2>
           <div class="billing-history__controls" data-billing-history-filters></div>
         </div>
         <div class="review-filter-strip billing-history__strip" data-billing-history-strip hidden></div>
@@ -250,8 +248,146 @@ permalink: /dashboard/billing/
 </div>
 {% endcall %}
 
+{# Threshold lists edit in place, like Claude’s email notifications: rows + trash, “Add threshold”, Save. #}
+{% set trash %}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M6 4V2.75h4V4M4 4l.6 9.25h6.8L12 4M6.75 6.5v4.5M9.25 6.5v4.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>{% endset %}
+{% set plus %}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>{% endset %}
+
+{% call modal("modal-billing-limit", "Edit spend limit") %}
+<div class="m__modal__body billing-edit-list">
+  <p class="billing-edit-list__lead">Set a monthly spend limit for your organization. Usage pauses once this month’s usage reaches it, until the limit resets or is raised.</p>
+  <div class="m__textfield M billing-edit-list__value billing-edit-list__value--suffix">
+    <input type="text" inputmode="numeric" aria-label="Monthly limit in credits" placeholder="400,000" data-billing-number data-limit-value />
+    <span aria-hidden="true">credits</span>
+  </div>
+  <p class="billing-inline-error" data-limit-error hidden></p>
+</div>
+<div class="m__modal__footer">
+  <button type="button" class="m__button-secondary-outline S" data-limit-remove>Remove limit</button>
+  <button type="button" class="m__button-primary S" data-limit-save>Update limit</button>
+</div>
+{% endcall %}
+
+{# One modal for everything email-related: thresholds and recipients in tabs (pattern from the LLM Battle config modal). #}
+<div class="m__modal-backdrop" id="modal-billing-alerts" hidden aria-modal="true" role="dialog" aria-label="Email alerts">
+  <div class="m__modal billing-alerts-modal">
+    <div class="m__modal__header billing-modal-tabs__header">
+      <div class="billing-modal-tabs" role="tablist" aria-label="Email alerts">
+        <button type="button" id="bea-tab-low" role="tab" aria-selected="true" aria-controls="bea-panel-low" tabindex="0" data-alerts-tab="low">Alerts</button>
+        <button type="button" id="bea-tab-overage" role="tab" aria-selected="false" aria-controls="bea-panel-overage" tabindex="-1" data-alerts-tab="overage" data-for="metered">Overage</button>
+        <button type="button" id="bea-tab-recipients" role="tab" aria-selected="false" aria-controls="bea-panel-recipients" tabindex="-1" data-alerts-tab="recipients">Recipients</button>
+      </div>
+      <button type="button" class="m__modal__close" aria-label="Close" data-modal-close="modal-billing-alerts">
+        <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><use href="#close"></use></svg>
+      </button>
+    </div>
+    <div class="m__modal__body">
+    <div class="billing-edit-list" id="bea-panel-low" role="tabpanel" aria-labelledby="bea-tab-low" data-edit-list="low" data-max="5">
+    <p class="billing-edit-list__lead">
+      Everyone on the recipient list gets an email when
+      <span data-for="contracting">this period’s credits</span><span data-for="paygo">credits since the last recharge</span><span data-for="metered">included credits</span>
+      reach a threshold.
+    </p>
+    <p class="billing-edit-list__label">Notify when</p>
+    <ul class="billing-edit-list__rows" data-edit-rows></ul>
+    <template data-edit-template>
+      <li class="billing-edit-list__row">
+        <div class="m__textfield M billing-edit-list__value">
+          <input type="text" inputmode="numeric" aria-label="Threshold" data-billing-number data-edit-value />
+        </div>
+        <div class="m__select M billing-edit-list__unit">
+          <select aria-label="Threshold type" data-edit-kind>
+            <option value="percent">% used</option>
+            <option value="remaining">credits left</option>
+          </select>
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+        </div>
+        <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove>{{ trash | safe }}</button>
+      </li>
+    </template>
+    <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add threshold</button>
+    <p class="billing-inline-error" data-edit-error hidden></p>
+  </div>
+    <div class="billing-edit-list" id="bea-panel-overage" role="tabpanel" aria-labelledby="bea-tab-overage" data-edit-list="overage" hidden data-max="5">
+    <p class="billing-edit-list__lead">Everyone on the recipient list gets an email when the estimated overage for the current period reaches an amount. Usage is never paused.</p>
+    <p class="billing-edit-list__label">Notify when estimated overage reaches</p>
+    <ul class="billing-edit-list__rows" data-edit-rows></ul>
+    <template data-edit-template>
+      <li class="billing-edit-list__row">
+        <div class="m__textfield M billing-edit-list__value billing-edit-list__value--money">
+          <span aria-hidden="true">$</span>
+          <input type="text" inputmode="numeric" aria-label="Amount in USD" data-billing-number data-edit-value />
+        </div>
+        <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove>{{ trash | safe }}</button>
+      </li>
+    </template>
+    <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add threshold</button>
+    <p class="billing-inline-error" data-edit-error hidden></p>
+  </div>
+    <div class="billing-edit-list" id="bea-panel-recipients" role="tabpanel" aria-labelledby="bea-tab-recipients" data-edit-list="recipients" hidden data-max="10">
+    <p class="billing-edit-list__lead">
+      Low-balance<span data-for="paygo">, failed recharge</span><span data-for="metered"> and overage</span> emails go to everyone on this list.
+      Add teammates or a shared address such as finance. External addresses only receive billing alerts.
+    </p>
+    <ul class="billing-edit-list__rows" data-edit-rows></ul>
+    <template data-edit-template>
+      <li class="billing-edit-list__row">
+        <div class="m__textfield M billing-edit-list__value billing-edit-list__value--wide">
+          <input type="email" autocomplete="off" placeholder="name@company.com" aria-label="Email" data-edit-value />
+        </div>
+        <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove recipient" data-edit-remove>{{ trash | safe }}</button>
+      </li>
+    </template>
+    <template data-edit-member-template>
+      <li class="billing-edit-list__row billing-edit-list__row--member">
+        <span class="billing-settings-list__main billing-edit-list__value--wide">
+          <strong data-member-name></strong>
+          <small data-member-email></small>
+        </span>
+        <span class="m__tag" data-member-role></span>
+        <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove recipient" data-edit-remove>{{ trash | safe }}</button>
+      </li>
+    </template>
+    <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add recipient</button>
+    <p class="billing-inline-error" data-edit-error hidden></p>
+  </div>
+    </div>
+    <div class="m__modal__footer">
+      <button type="button" class="m__button-secondary-outline S" data-modal-close="modal-billing-alerts">Cancel</button>
+      <button type="button" class="m__button-primary S" data-alerts-save>Save</button>
+    </div>
+  </div>
+</div>
+
+{% call modal("modal-billing-recharge", "Auto-recharge") %}
+<div class="m__modal__body billing-recharge-form">
+  <label class="m__toggle-primary billing-recharge-toggle">
+    <input type="checkbox" data-billing-recharge-toggle />
+    <span>Recharge automatically</span>
+  </label>
+  <p class="billing-edit-list__lead">When the balance drops below the threshold, we charge your saved payment method and add credits.</p>
+  <fieldset class="billing-fieldset" data-billing-recharge-fields>
+    <div class="m__textfield M">
+      <label for="br-threshold">When balance falls below, credits</label>
+      <input type="text" id="br-threshold" inputmode="numeric" value="{{ b.paygo.threshold }}" data-billing-number />
+    </div>
+    <div class="m__textfield M">
+      <label for="br-amount">Add credits</label>
+      <input type="text" id="br-amount" inputmode="numeric" value="{{ b.paygo.recharge }}" data-billing-number data-billing-recharge-amount />
+    </div>
+    <p class="m__modal__field-hint"><span data-billing-recharge-price>{{ b.paygo.rechargeAmount }}</span> per recharge · {{ b.paygo.card }}</p>
+    <p class="billing-inline-error" data-billing-recharge-error hidden>Enter at least 1,000 credits per recharge.</p>
+  </fieldset>
+</div>
+<div class="m__modal__footer">
+  <button type="button" class="m__button-secondary-outline S" data-modal-close="modal-billing-recharge">Cancel</button>
+  <button type="button" class="m__button-primary S" data-billing-recharge-save>Save</button>
+</div>
+{% endcall %}
+
+<script type="application/json" id="billing-alert-data">{{ {"low": b.alerts, "overage": b.overageAlerts, "recipients": b.recipients, "limit": b.spendLimit} | dump | safe }}</script>
+
 {% include 'prototypes/billing/prototype-panel.html' %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="/assets/prototypes/billing.js"></script>
 <script src="/assets/prototypes/billing-history.js"></script>
+<script src="/assets/prototypes/billing-alerts.js"></script>
 {% endblock %}

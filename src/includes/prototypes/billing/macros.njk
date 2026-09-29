@@ -51,14 +51,6 @@
 </div>
 {% endmacro %}
 
-{% macro meter(id) %}
-<div class="billing-meter" data-billing-meter="{{ id }}" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Credits used">
-  <span class="billing-meter__fill"></span>
-  <span class="billing-meter__tick" style="--at: 75%" aria-hidden="true"></span>
-  <span class="billing-meter__tick" style="--at: 90%" aria-hidden="true"></span>
-</div>
-{% endmacro %}
-
 {% macro statusTag(status) %}
 {% if status in ['Paid', 'Succeeded', 'Active'] %}
 <span class="m__tag m__tag--success">{{ status }}</span>

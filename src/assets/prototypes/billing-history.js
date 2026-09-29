@@ -101,6 +101,42 @@
     '<div class="review-filter-values"></div></div></div>';
   widget.querySelector("[data-billing-history-filters]").appendChild(host);
 
+  /* ── Export: the rows that match the current filters, as CSV (same button as the Review Queue) ── */
+
+  var exportButton = document.createElement("button");
+  exportButton.type = "button";
+  exportButton.className = "m__button-secondary-outline S billing-history__export";
+  exportButton.textContent = "Export";
+  exportButton.setAttribute("aria-label", "Export billing history to CSV");
+  widget.querySelector("[data-billing-history-filters]").appendChild(exportButton);
+
+  exportButton.addEventListener("click", function () {
+    var table = Array.prototype.filter.call(widget.querySelectorAll(".billing-history__table"), function (t) {
+      return t.offsetParent !== null;
+    })[0];
+    if (!table) return;
+    var cell = function (td) { return '"' + td.textContent.trim().replace(/\s+/g, " ").replace(/"/g, '""') + '"'; };
+    var head = ["Date", "Type", "Payment method", "Number", "Credits", "Amount", "Status"];
+    var lines = [head.join(",")];
+    table.querySelectorAll("tbody tr:not([data-billing-filter-empty])").forEach(function (tr) {
+      if (tr.hidden) return;
+      var td = tr.children;
+      var method = td[1].querySelector(".billing-history__method");
+      var type = td[1].cloneNode(true);
+      var small = type.querySelector("small");
+      if (small) small.remove();
+      lines.push([cell(td[0]), cell(type), method ? cell(method) : '""', cell(td[2]), cell(td[3]), cell(td[4]), cell(td[5])].join(","));
+    });
+    var count = lines.length - 1;
+    if (!count) { (window.billingToast || function () {})("Nothing to export with these filters."); return; }
+    var link = document.createElement("a");
+    link.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
+    link.download = "billing-history.csv";
+    link.click();
+    setTimeout(function () { URL.revokeObjectURL(link.href); }, 1000);
+    (window.billingToast || function () {})("Exported " + count + (count === 1 ? " row." : " rows."));
+  });
+
   var open = host.querySelector("[data-filter-open]");
   var popup = host.querySelector(".review-filter-popup");
   var options = host.querySelector(".review-filter-options");

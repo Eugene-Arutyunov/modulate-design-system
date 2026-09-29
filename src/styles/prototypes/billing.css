@@ -5,9 +5,6 @@
 
 :root {
   --billing-warning: var(--m__color-orange-500);
-  --billing-warning-bg: color-mix(in srgb, var(--m__bg-highlight) 22%, transparent);
-  --billing-error-bg: color-mix(in srgb, var(--m__error) 10%, transparent);
-  --billing-info-bg: color-mix(in srgb, var(--m__bg-accent-hover) 9%, transparent);
   --billing-meter-track: color-mix(in srgb, var(--m__text) 10%, transparent);
   --billing-meter-height: 0.5rem;
   --billing-overage: var(--m__bg-accent-hover);
@@ -137,9 +134,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 /* ── Page structure ────────────────────────────────────────────────── */
 
 .billing-page {
-  & > .billing-subnav { margin: 0.15rem 0 0.75rem; }
-
-
   & > .m__widget,
   & > .billing-grid,
   & > section {
@@ -229,7 +223,7 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 .billing-muted { color: var(--m__text-caption); }
 .billing-error-text { color: var(--m__error); }
 
-.billing-viewer-note {
+.billing-card-hint {
   color: var(--m__text-caption);
   font-size: var(--m__font-size-xs);
   margin-top: var(--m__gap-xs) !important;
@@ -289,15 +283,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   transition: width var(--m__duration-base) var(--m__easing-base);
 }
 
-.billing-meter__tick {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: var(--at);
-  width: 2px;
-  background: var(--m__bg-surface);
-}
-
 .billing-meter__legend {
   display: flex;
   justify-content: space-between;
@@ -313,54 +298,32 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 
 .billing-banners:empty { display: none; }
 
-.billing-banner {
-  --banner-accent: var(--m__text);
-
+/* Built on DS alerts (.m__alert-*): no icon or side stripe; widget padding and a widget-size title.
+   Doubled class so it wins over the alert's own padding and radius. */
+.billing-banner.billing-banner {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: start;
-  gap: var(--m__gap-xs) var(--m__gap-s);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--m__gap-xs) var(--m__spacer-l);
   margin-bottom: var(--billing-grid-gap);
-  padding: var(--m__gap-m) var(--m__widget-padding);
+  padding: var(--m__widget-padding);
+
+  & .billing-banner__body { max-width: 60ch; }
   border-radius: var(--m__widget-radius);
   font-size: var(--m__font-size-s);
 
   & p { margin: 0; }
 
   @media (width < 640px) {
-    grid-template-columns: auto minmax(0, 1fr);
-
-    & .billing-banner__actions { grid-column: 2; }
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
-.billing-banner--warning { --banner-accent: var(--billing-warning); background: var(--billing-warning-bg); }
-.billing-banner--strong { box-shadow: inset 3px 0 0 var(--billing-warning); }
-.billing-banner--error { --banner-accent: var(--m__error); background: var(--billing-error-bg); box-shadow: inset 3px 0 0 var(--m__error); }
-.billing-banner--info { --banner-accent: var(--billing-overage); background: var(--billing-info-bg); }
-
-.billing-banner__icon {
-  display: grid;
-  place-items: center;
-  width: 1.15rem;
-  height: 1.15rem;
-  margin-top: 0.05rem;
-  border-radius: 50%;
-  background: var(--banner-accent);
-  color: var(--m__bg);
-  font-size: var(--m__font-size-xs);
-  font-weight: var(--m__font-weight-bold);
-  line-height: 1;
-}
-
 .billing-banner__title {
+  margin: 0 0 var(--m__gap-xxs) !important;
+  color: inherit;
+  font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-bold);
-  margin-bottom: 0.1rem !important;
-}
-
-.billing-banner__viewer {
-  margin-top: var(--m__gap-xxxs) !important;
-  color: var(--m__text-caption);
 }
 
 .billing-banner__actions {
@@ -368,37 +331,10 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   flex-wrap: wrap;
   gap: var(--m__gap-xs);
   align-self: center;
+  font-size: var(--m__font-size-m); /* regular DS button size, not the banner's small text */
 
   & a { white-space: nowrap; }
 }
-
-/* ── Balance chart ───────────────────────────────────────────────────── */
-
-.billing-balance-chart .m__segmented-control-secondary { align-self: flex-start; }
-
-.billing-balance-chart__canvas {
-  position: relative;
-  height: 14rem;
-  margin-top: var(--m__gap-s);
-}
-
-.billing-chart__footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--m__gap-xs) var(--m__gap-m);
-  margin-top: var(--m__gap-s);
-
-  & .billing-link-quiet { margin-left: auto; }
-}
-
-.billing-chart__summary {
-  color: var(--m__text-caption);
-  display: flex;
-  gap: var(--m__gap-xxxs);
-  flex-wrap: wrap;
-}
-
 
 /* ── Tables (history) ──────────────────────────────────────────────── */
 
@@ -456,8 +392,10 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   gap: var(--m__gap-xs);
 
   & .review-filter-builder { padding: 0; }
+  & .review-filter-popup:not(.is-direct-filter) { right: 0; } /* flush with the Filter button */
   /* No search field above the options here, so no gap for it either. */
   & .review-filter-values { padding-top: 0; }
+  & .review-date-range-header + .review-filter-values { padding-top: .25rem; } /* gap under the divider, as in the queue */
 }
 
 /* Selected filter conditions sit inside the card, above the table. */
@@ -599,6 +537,211 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   color: var(--m__error);
   font-size: var(--m__font-size-xs);
   margin-top: var(--m__gap-xxxs) !important;
+}
+
+/* ── Email alerts widget + list editors in modals ──────────────────── */
+
+.billing-alerts {
+  & h2 { margin: 0 !important; }
+}
+
+.billing-alerts__lead {
+  margin: 0.25rem 0 var(--m__gap-s) !important;
+  color: var(--m__text-caption);
+}
+
+.billing-alerts__usage { margin-bottom: var(--m__gap-xs); }
+
+.billing-alerts__meter {
+  display: flex;
+  align-items: center;
+  gap: var(--m__gap-s);
+  margin-top: var(--m__gap-xs);
+
+  & .billing-meter { flex: 1; }
+}
+
+.billing-alerts__percent {
+  flex-shrink: 0;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.billing-alerts__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m__gap-m);
+  padding: var(--m__gap-xs) 0;
+
+  &:last-child { padding-bottom: 0; }
+}
+
+.billing-alerts__row-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0 !important;
+
+  & strong { font-weight: var(--m__font-weight-medium); }
+  & small {
+    margin-top: 0.15rem;
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-s);
+  }
+}
+
+/* Tabbed modal header, same as the LLM Battle config modal */
+.billing-modal-tabs__header {
+  align-items: flex-start;
+  gap: var(--m__gap-m);
+  border-bottom: 1px solid var(--m__border);
+}
+
+.billing-modal-tabs {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  gap: var(--m__gap-m);
+
+  & button {
+    margin-bottom: -1px;
+    padding: 0 0 0.7rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--m__text-caption);
+    font: inherit;
+    font-size: var(--m__font-size-l);
+    font-weight: var(--m__font-weight-bold);
+    cursor: pointer;
+  }
+
+  & button:hover { color: var(--m__text-link-hover); }
+
+  & button[aria-selected="true"] {
+    color: var(--m__text);
+    border-bottom-color: currentColor;
+  }
+}
+
+.billing-alerts-modal {
+  width: min(32rem, calc(100vw - 2rem));
+
+  & .billing-edit-list { width: auto; }
+  & .billing-edit-list[hidden] { display: none; }
+}
+
+.m__modal__body .billing-edit-list__lead {
+  color: var(--m__text-caption);
+  margin-bottom: var(--m__gap-s);
+}
+
+.billing-edit-list {
+  width: min(30rem, 100%);
+
+  & .billing-edit-list__label {
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    margin-bottom: 0.3rem;
+  }
+}
+
+.billing-edit-list__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m__gap-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &:empty { display: none; }
+}
+
+.billing-edit-list__row {
+  display: flex;
+  align-items: center;
+  gap: var(--m__gap-xs);
+  margin: 0;
+  padding: 0;
+
+  &::before { content: none; }
+}
+
+.billing-edit-list__row--member {
+  min-height: 2.5rem;
+
+  & .m__tag { flex-shrink: 0; }
+}
+
+.billing-edit-list__value { flex: 1; min-width: 0; }
+.billing-edit-list__unit { width: 9.5rem; flex-shrink: 0; }
+
+.billing-edit-list__value--money {
+  position: relative;
+
+  & > span {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--m__text-caption);
+    pointer-events: none;
+  }
+
+  & input { padding-left: 1.6rem; }
+}
+
+.billing-edit-list__value--suffix {
+  position: relative;
+
+  & > span {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--m__text-caption);
+    pointer-events: none;
+  }
+
+  & input { padding-right: 4.5rem; }
+}
+
+.billing-edit-list__value--wide { flex: 1; min-width: 0; }
+
+.billing-edit-list__remove {
+  flex-shrink: 0;
+  align-self: stretch;
+  align-items: center !important;
+  padding-inline: 0.6rem !important;
+
+  & svg { width: 1rem; height: 1rem; display: block; }
+}
+
+.billing-edit-list__add {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--m__gap-xxs);
+  margin-top: var(--m__gap-s);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--m__text);
+  font: inherit;
+  cursor: pointer;
+
+  & svg { width: 1rem; height: 1rem; }
+  &:hover:not(:disabled) { color: var(--m__text-link-hover); }
+  &:disabled { color: var(--m__text-caption); cursor: not-allowed; }
+}
+
+.billing-recharge-form {
+  width: min(30rem, 100%);
+
+  & .billing-recharge-toggle { margin-bottom: var(--m__gap-s); }
+  & .billing-fieldset { display: flex; flex-direction: column; gap: var(--m__gap-s); }
+  & .m__modal__field-hint { margin: -0.4rem 0 0; }
 }
 
 /* ── Prototype panel (not product UI), styled like the nav island ──── */
@@ -823,8 +966,7 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 /* Status that depends on loaded data is hidden until data is ready. */
 body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billing-data="error"]) {
   & .billing-banners,
-  & .billing-card__head > .m__tag,
-  & [data-bind-status] {
+  & .billing-card__head > .m__tag {
     display: none !important;
   }
 }
@@ -853,3 +995,5 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   & td { min-width: 9rem; }
   & td:first-child { white-space: nowrap; }
 }
+
+#modal-billing-limit [data-limit-remove][hidden] { display: none; }

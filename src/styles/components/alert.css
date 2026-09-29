@@ -1,5 +1,6 @@
 .m__alert-error,
-.m__alert-success {
+.m__alert-success,
+.m__alert-info {
   border-radius: var(--m__radius-m);
   padding: var(--m__padding-button-m);
 }
@@ -12,4 +13,10 @@
 .m__alert-success {
   background: color-mix(in srgb, var(--m__success) 15%, transparent);
   color: var(--m__success);
+}
+
+/* Same recipe as error/success: the color at 15% for the surface, full for the text. */
+.m__alert-info {
+  background: color-mix(in srgb, var(--m__color-blue-500) 15%, transparent);
+  color: var(--m__color-blue-500);
 }

@@ -1,4 +1,4 @@
-{# Shared head for every Billing view: sub-navigation, title, description and banners.
+{# Shared head for every Billing view: title, description and banners.
    Pages set billingTitle and billingLead before including it. #}
 <script>
   /* Apply prototype state before first paint; billing.js takes over after load. */
@@ -11,10 +11,6 @@
     b.dataset.billingData = p.get("data") || "ready";
   })();
 </script>
-{% if not hideSubnav %}
-{% include 'prototypes/billing/subnav.html' %}
-<div class="m__space S"></div>
-{% endif %}
 <h1 class="dashboard-page-title">{{ billingTitle or 'Billing' }}</h1>
 {% if billingLead %}
 <div class="dashboard-section">

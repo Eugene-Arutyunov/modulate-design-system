@@ -5,7 +5,6 @@ permalink: /dashboard/billing/top-up/
 
 {% extends 'prototypes/layout.html' %} {% block content %}
 {% set b = billing %}
-{% set hideSubnav = true %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
@@ -25,13 +24,10 @@ permalink: /dashboard/billing/top-up/
 
       <div class="billing-readonly" data-for="paygo metered">
         Top-ups are available on contract plans.
-        <span data-for="paygo">Pay/Go accounts recharge automatically — see <a href="/dashboard/billing/settings/#auto-recharge" data-billing-link>Alerts &amp; recharge</a>.</span>
+        <span data-for="paygo">Pay/Go accounts recharge automatically — set it up in <a href="/dashboard/billing/#recharge" data-billing-link>Billing</a>.</span>
         <span data-for="metered">Metered accounts keep running at the metered rate after included credits.</span>
       </div>
 
-      <div class="billing-readonly" data-for="contracting" data-role="viewer">
-        Only account admins can buy credits. Ask an admin to top up.
-      </div>
 
       <section class="m__widget billing-purchase billing-topup" data-for="contracting" aria-labelledby="topup-title">
         <div class="billing-card__head">
@@ -65,7 +61,7 @@ permalink: /dashboard/billing/top-up/
                   placeholder="Custom amount" aria-label="Credit amount" data-credits-input />
               </div>
               <button type="button" class="m__button-primary M billing-pay-btn" data-credits-pay data-billing-stripe data-role="admin">
-                Pay <span data-credits-pay-label>$800.00</span> <span aria-hidden="true">↗</span>
+                Pay <span data-credits-pay-label>$800.00</span>
               </button>
             </div>
           </fieldset>
@@ -79,7 +75,7 @@ permalink: /dashboard/billing/top-up/
               <strong class="m__widget__meta-value"><span data-credits-after="0">390,000</span> credits</strong>
             </p>
           </div>
-          <p class="billing-viewer-note">Invoices and receipts appear in <a href="/dashboard/billing/#history" data-billing-link>Billing history</a>. Payment methods are managed in Stripe.</p>
+          <p class="billing-card-hint">Invoices and receipts appear in <a href="/dashboard/billing/#history" data-billing-link>Billing History</a>. Payment methods are managed in Stripe.</p>
         </div>
       </section>
     </main>
