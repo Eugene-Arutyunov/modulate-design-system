@@ -17,6 +17,8 @@ const plain=s=>String(s).replace(/\*\*/g,'');
 const md=s=>esc(s).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
 const russianGroupNames=['Понимает меня','Чувствует ситуацию','Остаётся собой и удивляет','Откликается и уважает границы','Создаёт общее'];
 const qualityTagNames=['Understanding','Attunement','Personality','Care & boundaries','Shared meaning'];
+// Architecture: needs architectural or technical changes. Skill: trained and improved in conversation.
+const typeTagNames={architecture:'Architecture',skill:'Skill'};
 const russianTests=[['Поймать мысль','«Хочу, чтобы было серьёзно, но не…»','Сравнить уточняющий вопрос и осторожно предложенную формулировку.','«Да, именно» — или лёгкая поправка без повторения всего запроса.',6],['Принять мою реакцию','«Вообще-то мне сейчас не смешно».','После неудачной шутки сравнить формальное извинение и заметную смену поведения.','Человек замечает изменение тона в следующих репликах и может продолжить разговор.',11],['Придумать вместе','«Сегодня я официально картошка».','Сравнить нейтральный ответ и короткую импровизацию, которую легко подхватить или остановить.','Человек добавляет что-то своё. Если он не хочет продолжать, игра спокойно заканчивается.',12]];
 const russianCulture=[['Her','Spike Jonze · 2013','Чувствует меня и остаётся другой.','Повседневность становится совместной. Самостоятельный собеседник может вести себя не так, как я ожидаю.','Сколько собственной инициативы нужно Эмме, чтобы удивлять и оставаться чуткой?','https://www.filmlinc.org/daily/interview-spike-jonze-her-joaquin-phoenix-scarlett-johansson-nyff/','Интервью с режиссёром',[2,3]],['Маленький принц','Antoine de Saint-Exupéry · 1943','Знакомство делает кого-то особенным.','Со временем повторяющиеся встречи и общие ритуалы делают отношения особенными.','Что возникает между нами со временем и заслуживает сохранения в памяти?','https://www.lepetitprince.com/en/','О произведении',[4]]];
 
@@ -35,13 +37,16 @@ const russianIntro = [
   "На это наложился разбор фильма «Она». Теодор знакомится с ИИ, увлекается общением, а потом влюбляется. У Саманты нет тела или визуального образа — их отношения возникают через голос и разговор. Меня зацепила возможность почувствовать чьё-то присутствие: тебя слушают, подхватывают мысль, удивляют, между вами появляется что-то своё.",
   "И я подумал: голосовой помощник может восприниматься как собеседник. Значит, важно исследовать не только его возможности, но и качества общения с ним."
 ];
-const views=[['companion','Companion'],['features','Ideas'],['references','References']];
-let view='companion',target=null;
+const views=[['features','Ideas'],['references','References']];
+let view='features',target=null;
 let selectedQualities = new Set();
+let selectedType = null;
 const fgroups=i=>D.groups.map((g,n)=>g.features.includes(i)?n:-1).filter(n=>n>=0);
+const ftype=i=>Object.keys(typeTagNames).find(type=>D.ideaTypes[type].includes(i));
 const featureLink=i=>`<a class="m__tag" href="#view=features&row=${i}">${esc(plain(D.directions[i][0]))}</a>`;
-const tags=gs=>`<div class="m__tag-group">${gs.map(n=>`<a class="m__tag" href="#view=features&quality=${n}">${esc(qualityTagNames[n])}</a>`).join('')}</div>`;
-const include = index => selectedQualities.size === 0 || fgroups(index).some(quality => selectedQualities.has(quality));
+const tags=i=>`<div class="m__tag-group"><a class="m__tag-flat idea-type-tag" href="#view=features&type=${ftype(i)}">${esc(typeTagNames[ftype(i)])}</a>${fgroups(i).map(n=>`<a class="m__tag" href="#view=features&quality=${n}">${esc(qualityTagNames[n])}</a>`).join('')}</div>`;
+const include = index => (selectedType === null || ftype(index) === selectedType)
+ && (selectedQualities.size === 0 || fgroups(index).some(quality => selectedQualities.has(quality)));
 function table(headers,widths,rows,prefix='row',numbered=true){
  if (numbered) {
  headers=['No.',...headers];widths=[4,...widths.map(w=>w*.96)];
@@ -72,38 +77,6 @@ function scenePreview(id) {
 function ideaDetails(i){
  const test=tests.find(t=>t[4]===i);
  return `<details class="idea-details"><summary>${esc(t('Сцены и проверка'))}</summary><div class="detail-content">${D.sceneMap[i].map(scenePreview).join('')}${test?`<section class="scene-preview"><h3>${esc(t('Попробовать в прототипе'))}</h3><p>${esc(test[1])}</p><p>${esc(test[2])}</p><p><span class="detail-label">${esc(t('Сигнал'))}</span>${esc(test[3])}</p></section>`:''}</div></details>`;
-}
-function feelingDetails(i){
- const gs=fgroups(i),ws=[...new Set(gs.flatMap(n=>D.groups[n].wow))];
- return `<details><summary>${esc(t('Впечатление'))}</summary><div class="detail-content">${ws.map(w=>`<p>${md(D.wow[w][0])}</p>`).join('')}<a class="source-link" href="#view=companion">${esc(t('Критерии идеального собеседника →'))}</a></div></details>`;
-}
-function criterionCard(text) {
- const parts = text.match(/^\*\*([^*]+)\*\*\s*([\s\S]*)$/);
- const content = parts
-   ? `<h3>${esc(parts[1].replace(/\.$/, ''))}</h3><p>${md(parts[2])}</p>`
-   : `<p>${md(text)}</p>`;
- return `<div class="criterion-card">${content}</div>`;
-}
-function companion() {
- const qualities = table(
-   ['Quality', 'Criteria', 'Related ideas'], [19, 52, 29],
-   D.groups.map((group, id) => ({id, cells: [
-     `<a data-quality-preview="${id}" href="#quality-${id}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false">${esc(groupNames[id])}</a>`,
-     `<div class="criteria-cards">${group.criteria.map(criterionCard).join('')}</div><details data-side-preview><summary>What to explore</summary><div class="detail-content"><p>${esc(group.question)}</p><section><h3>Conversation Intelligence Knowledge Map</h3><p>${group.basis.split(' · ').map(label => `<a href="/tools/knowledge-map/" target="_blank" rel="noopener">${esc(label.charAt(0).toUpperCase() + label.slice(1))}</a>`).join(', ')}</p></section></div></details>`,
-     `<ul class="related-ideas">${group.features.map(index => `<li><a data-idea-preview="${index}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${index}">${esc(plain(D.directions[index][0]))}</a></li>`).join('')}</ul>`,
-   ]})), 'quality', false
- );
- const impressions = `<div class="impression-cards">${D.wow.map((item, id) => `
-   <article class="m__widget m__rounded impression-card" id="impression-${id}">
-     <span class="row-no">${String(id + 1).padStart(2, '0')}</span>
-     <h3>${esc(plain(item[0]))}</h3>
-     <section><p>${md(item[2])}</p></section>
-   </article>`).join('')}</div>`;
- return `<div class="companion-tables">
-   <div class="companion-intro">${(lang === 'en' ? english.intro : russianIntro).map(text => `<p>${esc(text)}</p>`).join('')}</div>
-   <section><h2>Qualities of a great companion</h2>${qualities}</section>
-   <section id="wow"><h2>Where the Magic Happens</h2>${impressions}</section>
- </div>`;
 }
 function references() {
  return table(
@@ -140,44 +113,19 @@ function openModal(button) {
 
 function prepareModals() {
  $('#results').querySelectorAll('table details').forEach(details => {
-   if (details.hasAttribute('data-side-preview')) {
-     const link = details.closest('tr').querySelector('[data-quality-preview]');
-     const title = link.textContent.trim();
-     const row = details.closest('tr');
-     const content = details.querySelector('.detail-content').cloneNode(true);
-     const criteria = document.createElement('section');
-     criteria.innerHTML = `<h3>Criteria</h3>${row.querySelector('.criteria-cards').outerHTML.replace(/<(\/?)h3>/g, '<$1h4>')}`;
-     content.querySelector('section').before(criteria);
-     const ideas = document.createElement('section');
-     ideas.innerHTML = `<h3>Related ideas</h3>${row.querySelector('.related-ideas').outerHTML}`;
-     criteria.after(ideas);
-     const body = content.innerHTML;
-     link.addEventListener('click', event => {
-       event.preventDefault();
-       showPreview(link, title, body);
-     });
-     details.remove();
-     return;
-   }
    const button = document.createElement('button');
    button.type = 'button';
    button.className = 'research-modal-trigger m__button-secondary-outline XS m__rounded';
    if (details.classList.contains('idea-details')) button.classList.add('idea-details');
    button.textContent = details.querySelector('summary').textContent;
    button.setAttribute('aria-haspopup', 'dialog');
-   const sidePreview = details.hasAttribute('data-side-preview');
-   button.setAttribute('aria-controls', sidePreview ? 'idea-preview' : 'research-modal');
+   button.setAttribute('aria-controls', 'research-modal');
    button.setAttribute('aria-expanded', 'false');
    modalContent.set(button, {
      title: button.textContent,
      body: details.querySelector('.detail-content').innerHTML,
    });
-   button.addEventListener('click', () => {
-     if (sidePreview) {
-       const content = modalContent.get(button);
-       showPreview(button, content.title, content.body);
-     } else openModal(button);
-   });
+   button.addEventListener('click', () => openModal(button));
    details.replaceWith(button);
  });
 }
@@ -246,7 +194,7 @@ function showIdeaPreview(link) {
  showPreview(link, plain(idea[0]), `
    <section><h3>How it works</h3><p>${md(idea[1])}</p></section>
    <section><h3>How it feels</h3><p>${md(plain(idea[2]))}</p></section>
-   <section><h3>Scenes</h3>${scenes.content.querySelector('.detail-content').innerHTML}</section>`);
+   ${scenes.content.querySelector('.detail-content').children.length ? `<section><h3>Scenes</h3>${scenes.content.querySelector('.detail-content').innerHTML}</section>` : ''}`);
 }
 
 function showPreview(link, title, body) {
@@ -276,6 +224,7 @@ function render(restoreTarget = true){
  document.documentElement.lang = lang;
  $('#views').setAttribute('aria-label', t('Разделы исследования'));
  $('#quality-filters').setAttribute('aria-label', t('Фильтр идей по качеству'));
+ $('#type-filters').setAttribute('aria-label', t('Фильтр идей по типу'));
  root.querySelectorAll('.m__modal__close').forEach(button => button.setAttribute('aria-label', t('Закрыть')));
  const languageControl = $('.voice-language-toggle');
  languageControl.textContent = lang === 'en' ? 'RU' : 'EN';
@@ -289,11 +238,13 @@ function render(restoreTarget = true){
    const count = value < 0 ? D.directions.length : D.groups[value].features.length;
    return `<label class="m__chip"><input type="checkbox" name="voice-quality" data-filter="${value}" ${(value < 0 ? selectedQualities.size === 0 : selectedQualities.has(value)) ? 'checked' : ''}>${esc(name)}<span class="chip-count">${count}</span></label>`;
  }).join('');
+ $('#type-filters').innerHTML = [[null, 'All types'], ...Object.entries(typeTagNames)].map(([type, name]) => {
+   const count = type === null ? D.directions.length : D.ideaTypes[type].length;
+   return `<label class="m__chip"><input type="radio" name="voice-type" data-type="${type ?? ''}" ${selectedType === type ? 'checked' : ''}>${esc(name)}<span class="chip-count">${count}</span></label>`;
+ }).join('');
  if(view==='features'){
- const rows=D.directions.flatMap((f,i)=>include(i)?[{id:i,cells:[`<a data-idea-preview="${i}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${i}">${md(f[0])}</a>`,`<p>${md(f[1])}</p>`,`<p>${md(plain(f[2]))}</p>`,tags(fgroups(i))]}]:[]);
- $('#results').innerHTML=table(['Idea','How it works','How it feels','Qualities'],[21,36,27,16],rows);
- }else if(view==='companion'){
- $('#results').innerHTML=companion();
+ const rows=D.directions.flatMap((f,i)=>include(i)?[{id:i,cells:[`<a data-idea-preview="${i}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${i}">${md(f[0])}</a>`,`<p>${md(f[1])}</p>`,`<p>${md(plain(f[2]))}</p>`,tags(i)]}]:[]);
+ $('#results').innerHTML=table(['Idea','How it works','How it feels','Tags'],[21,36,27,16],rows);
  }else if(view==='references'){
  $('#results').innerHTML=references();
  }
@@ -302,34 +253,39 @@ function render(restoreTarget = true){
 }
 function readRoute(){
  const params=new URLSearchParams(location.hash.slice(1)),requested=params.get('view');
- view=views.some(v=>v[0]===requested)?requested:requested==='scenes'?'features':'companion';
+ view=views.some(v=>v[0]===requested)?requested:'features';
  selectedQualities = new Set(params.getAll('quality').flatMap(value => value.split(',')).filter(value => /^\d+$/.test(value)).map(Number).filter(value => value >= 0 && value < D.groups.length));
+ selectedType = Object.hasOwn(typeTagNames, params.get('type')) ? params.get('type') : null;
  const r=Number(params.get('row'));
  target=params.has('row')&&Number.isInteger(r)&&r>=0&&r<D.directions.length?r:null;
- if(requested==='scenes'){target=D.sceneMap.findIndex(ids=>ids.includes(r+1));selectedQualities.clear();}
- if(view!=='features'){selectedQualities.clear();target=null;}
+ if(requested==='scenes'){target=D.sceneMap.findIndex(ids=>ids.includes(r+1));selectedQualities.clear();selectedType=null;}
+ if(view!=='features'){selectedQualities.clear();selectedType=null;target=null;}
  render();
 }
 function applyFilter(control) {
- const quality = Number(control.dataset.filter);
- if (quality < 0) selectedQualities.clear();
- else if (control.checked) selectedQualities.add(quality);
- else selectedQualities.delete(quality);
+ if (control.name === 'voice-type') selectedType = control.dataset.type || null;
+ else {
+   const quality = Number(control.dataset.filter);
+   if (quality < 0) selectedQualities.clear();
+   else if (control.checked) selectedQualities.add(quality);
+   else selectedQualities.delete(quality);
+ }
  target = null;
  const params = new URLSearchParams({view: 'features'});
+ if (selectedType) params.set('type', selectedType);
  if (selectedQualities.size) params.set('quality', [...selectedQualities].sort((a, b) => a - b).join(','));
  history.replaceState(null, '', '#' + params.toString());
  render();
- $(`#quality-filters input[data-filter="${quality}"]`)?.focus({preventScroll: true});
+ const selector = control.name === 'voice-type' ? `#type-filters input[data-type="${control.dataset.type}"]` : `#quality-filters input[data-filter="${control.dataset.filter}"]`;
+ $(selector)?.focus({preventScroll: true});
 }
 root.addEventListener('change', event => {
- if (event.target.matches('#quality-filters input')) applyFilter(event.target);
+ if (event.target.matches('#quality-filters input, #type-filters input')) applyFilter(event.target);
 });
 window.addEventListener('hashchange',()=>{if(location.hash==='#results')return;readRoute();if(target===null){$('h1').scrollIntoView({block:'start'});$('#views [aria-current="page"]')?.focus({preventScroll:true});}});
 function toggleLanguage() {
  const open = ideaPreview.matches(':popover-open');
  const idea = open ? previewTrigger?.dataset.ideaPreview : undefined;
- const quality = open ? previewTrigger?.dataset.qualityPreview : undefined;
  const scroll = window.scrollY;
  lang = lang === 'en' ? 'ru' : 'en';
  try { localStorage.setItem('voice-intelligence-lang', lang); } catch { /* Optional persistence. */ }
@@ -338,8 +294,6 @@ function toggleLanguage() {
  if (idea !== undefined) {
    const link = root.querySelector(`[data-idea-preview="${idea}"]`);
    if (link) showIdeaPreview(link);
- } else if (quality !== undefined) {
-   root.querySelector(`[data-quality-preview="${quality}"]`)?.click();
  }
  window.scrollTo({top: scroll});
 }

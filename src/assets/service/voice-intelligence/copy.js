@@ -21,6 +21,7 @@ export const labels = {
   'Подробности сцены': 'Scene details',
   'Разделы исследования': 'Research sections',
   'Фильтр идей по качеству': 'Filter ideas by quality',
+  'Фильтр идей по типу': 'Filter ideas by type',
   'Закрыть': 'Close',
   'Гипотеза. Наличие сценария у конкурентов пока не проверено.': 'Hypothesis. This scenario has not yet been verified in competing products.',
   'Сцены и проверка': 'Scenes and testing',
