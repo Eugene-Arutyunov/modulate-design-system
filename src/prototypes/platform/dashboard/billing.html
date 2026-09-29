@@ -33,22 +33,27 @@ permalink: /dashboard/billing/
             <p class="m__widget__value m__widget__value--amount billing-balance__value">
               <span data-bind="balance">290,000.00</span>
             </p>
-            <div class="m__widget__meta-list billing-meta">
-              <p class="m__widget__meta-item" data-for="contracting">
-                <span class="m__widget__meta-label">Next allocation</span>
-                <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
+            {# One usage element for every type: same bar, legend names the base and the date. #}
+            <div class="billing-usage">
+              <p class="billing-usage__head">
+                <span><strong data-bind="percent">42%</strong> used</span>
+                <span data-for="contracting">Renews {{ b.nextDate }}</span>
+                <span data-for="paygo">Recharged 20 Sep 2026</span>
+                <span data-for="metered">Next invoice {{ b.nextDate }}</span>
               </p>
-              <p class="m__widget__meta-item" data-for="paygo">
-                <span class="m__widget__meta-label">Last recharge</span>
-                <strong class="m__widget__meta-value">20 Sep 2026</strong>
+              <div class="billing-meter" data-usage-meter role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Credits used">
+                <span class="billing-meter__fill"></span>
+              </div>
+              <p class="billing-usage__base">
+                <span data-for="contracting">Of <span data-bind="total">500,000</span> credits this period, including top-ups</span>
+                <span data-for="paygo">Of <span data-bind="total">50,000</span> credits from the last recharge</span>
+                <span data-for="metered">Of <span data-bind="total">100,000</span> included credits</span>
               </p>
-              <p class="m__widget__meta-item" data-for="metered">
+            </div>
+            <div class="m__widget__meta-list billing-meta" data-for="metered">
+              <p class="m__widget__meta-item">
                 <span class="m__widget__meta-label">Monthly commitment</span>
                 <strong class="m__widget__meta-value">{{ b.metered.commitment }}</strong>
-              </p>
-              <p class="m__widget__meta-item" data-for="metered">
-                <span class="m__widget__meta-label">Next billing date</span>
-                <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
               </p>
             </div>
           {% endcall %}
@@ -72,8 +77,8 @@ permalink: /dashboard/billing/
               </p>
             </div>
             <div class="billing-card__actions" data-role="admin">
-              <a href="/dashboard/billing/top-up/" class="m__button-primary S" data-billing-link data-role="admin">Top up credits</a>
-              <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-code" data-role="admin">Apply credit code</button>
+              <button type="button" class="m__button-primary" data-modal-open="modal-billing-topup" data-role="admin">Buy Credits</button>
+              <button type="button" class="m__button-secondary-outline" data-modal-open="modal-billing-code" data-role="admin">Apply Credit Code</button>
             </div>
           {% endcall %}
         </section>
@@ -144,30 +149,17 @@ permalink: /dashboard/billing/
         </section>
       </div>
 
-      {# ── Usage & alerts: progress plus alert lists (edited in modals), like Claude’s spend limits ── #}
+      {# ── Spend limits: monthly cap and email alerts (edited in modals). Usage progress lives on the balance card. ── #}
       <section class="m__widget billing-card billing-alerts" id="alerts" aria-labelledby="billing-alerts-title">
         <h2 id="billing-alerts-title">Spend Limits</h2>
         <p class="billing-alerts__lead">
           Set a monthly spend limit for your organization and get notified as you approach it.
         </p>
         {% call states('alerts', 'No alerts yet. Add a threshold to hear about low balance before usage is affected.', 'We couldn’t load alert settings. Existing alerts are still being sent.', 'lines', '<button type="button" class="m__button-primary S" data-modal-open="modal-billing-alerts" data-role="admin">Add alert</button>') %}
-          {# Monthly spend limit, as in Claude: the bar shows only while a limit is set. #}
-          <div class="billing-alerts__usage" data-spend-usage>
-            <p class="billing-alerts__row-main">
-              <strong><span data-spend-bind="spent">214,000</span> credits used</strong>
-              <small>Resets {{ b.spendLimit.resets }} (UTC)</small>
-            </p>
-            <div class="billing-alerts__meter">
-              <div class="billing-meter" data-spend-meter role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Spend limit used">
-                <span class="billing-meter__fill"></span>
-              </div>
-              <span class="billing-alerts__percent"><span data-spend-bind="percent">54%</span> used</span>
-            </div>
-          </div>
           <div class="billing-alerts__row">
             <p class="billing-alerts__row-main">
               <strong>Monthly spend limit</strong>
-              <small data-spend-bind="limit">400,000 credits</small>
+              <small data-spend-bind="limit">400,000 credits · 214,000 used this month</small>
             </p>
             <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-limit" data-role="admin" data-spend-bind="action">Adjust limit</button>
           </div>
@@ -235,7 +227,7 @@ permalink: /dashboard/billing/
 </div>
 
 {% from 'service/modal-wrapper.njk' import modal %}
-{% call modal("modal-billing-code", "Apply credit code") %}
+{% call modal("modal-billing-code", "Apply Credit Code") %}
 <div class="m__modal__body">
   <div class="m__textfield M">
     <label for="billing-code">Credit code</label>
@@ -244,7 +236,41 @@ permalink: /dashboard/billing/
 </div>
 <div class="m__modal__footer">
   <button type="button" class="m__button-secondary-outline S" data-modal-close="modal-billing-code">Cancel</button>
-  <button type="button" class="m__button-primary S" data-modal-close="modal-billing-code" data-billing-toast="Credit code applied. 5,000 credits added.">Apply</button>
+  <button type="button" class="m__button-primary S" data-modal-close="modal-billing-code" data-billing-toast="Credit code applied. 5,000 credits added.">Apply Code</button>
+</div>
+{% endcall %}
+
+{# Top-up: choose a quantity at the contracted rate, then pay in Stripe Checkout. The low-balance email links to #top-up. #}
+{% call modal("modal-billing-topup", "Buy Credits") %}
+<div class="m__modal__body billing-topup-modal">
+  <p class="m__modal__field-hint billing-topup-modal__hint">Credits pay for API usage. 1 credit = {{ b.contract.rate }} USD, spent based on audio duration and model cost.</p>
+  <div class="billing-topup-modal__controls">
+    <fieldset class="billing-topup-modal__presets m__radio-card-group" aria-label="Credit presets">
+      <label class="m__radio-card" data-credits-preset="100">
+        <input type="radio" name="credits-preset" value="100" />
+        <span class="m__radio-card__value">100</span>
+        <span class="m__radio-card__caption">$1.00</span>
+      </label>
+      <label class="m__radio-card" data-credits-preset="1000">
+        <input type="radio" name="credits-preset" value="1000" checked />
+        <span class="m__radio-card__value">1,000</span>
+        <span class="m__radio-card__caption">$10.00</span>
+      </label>
+      <label class="m__radio-card" data-credits-preset="10000">
+        <input type="radio" name="credits-preset" value="10000" />
+        <span class="m__radio-card__value">10,000</span>
+        <span class="m__radio-card__caption">$100.00</span>
+      </label>
+    </fieldset>
+    <div class="m__textfield M m__textfield--no-spin">
+      <input type="text" id="credits-amount" inputmode="numeric" pattern="[0-9,]*"
+        data-credits-max="10000000" data-credits-rate="{{ b.contract.rateValue }}"
+        placeholder="Custom amount" aria-label="Credit amount" data-credits-input />
+    </div>
+  </div>
+</div>
+<div class="m__modal__footer">
+  <button type="button" class="m__button-primary" data-credits-pay data-modal-close="modal-billing-topup" data-billing-toast="Continues to Stripe Checkout to pay (handled by Stripe).">Pay <span data-credits-pay-label>$10.00</span></button>
 </div>
 {% endcall %}
 
@@ -390,4 +416,5 @@ permalink: /dashboard/billing/
 <script src="/assets/prototypes/billing.js"></script>
 <script src="/assets/prototypes/billing-history.js"></script>
 <script src="/assets/prototypes/billing-alerts.js"></script>
+<script src="/assets/prototypes/billing-credits.js"></script>
 {% endblock %}

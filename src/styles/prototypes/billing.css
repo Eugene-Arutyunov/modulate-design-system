@@ -214,6 +214,9 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   gap: var(--m__gap-xs);
   margin-top: auto;
   padding-top: var(--m__gap-l);
+
+  /* Regular-size buttons use the regular text size, as in banners. */
+  & > [class*="m__button-"]:not(.S) { font-size: var(--m__font-size-m); }
 }
 
 .billing-meta {
@@ -281,6 +284,26 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   background: var(--fill);
   border-radius: inherit;
   transition: width var(--m__duration-base) var(--m__easing-base);
+}
+
+.billing-usage { margin-top: var(--m__gap-s); }
+
+.billing-usage__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--m__gap-s);
+  margin: 0 0 var(--m__gap-xxs) !important;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-s);
+
+  & strong { color: var(--m__text); }
+}
+
+.billing-usage__base {
+  margin: var(--m__gap-xxs) 0 0 !important;
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
 }
 
 .billing-meter__legend {
@@ -971,9 +994,40 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   }
 }
 
-/* On the top-up screen itself, banner shortcuts to top-up are redundant. */
-.billing-page--top-up .billing-banner__actions a[href*="/top-up/"] {
-  display: none;
+/* Top-up modal: plain DS radio cards and textfield M; presets in a row, custom amount below. */
+/* A bit wider than the DS default so three “credits + price” cards fit on one line. */
+#modal-billing-topup .m__modal,
+#modal-billing-code .m__modal {
+  width: min(32rem, calc(100vw - 2rem));
+  max-width: none;
+}
+
+#modal-billing-topup .m__modal {
+  /* Pay matches the preset cards and the amount field: same padding and radius. */
+  & .m__modal__footer .m__button-primary {
+    flex: 1;
+    justify-content: center;
+    padding: var(--m__padding-input-m);
+    border: var(--m__border-width-s) solid transparent;
+    border-radius: var(--m__radius-s);
+  }
+}
+
+.billing-topup-modal {
+  --m__radio-card-padding: var(--m__padding-input-m);
+
+  & .billing-topup-modal__controls { display: grid; gap: var(--m__gap-xs); }
+  & .billing-topup-modal__presets {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--m__gap-xs);
+  }
+  & .m__textfield { margin: 0; }
+  & .billing-topup-modal__hint { margin: 0 0 var(--m__gap-s) !important; }
+
+  @media (width < 520px) {
+    & .billing-topup-modal__presets { grid-template-columns: 1fr; }
+  }
 }
 
 /* ── Spec page ─────────────────────────────────────────────────────── */

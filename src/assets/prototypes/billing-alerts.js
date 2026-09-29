@@ -205,7 +205,7 @@
   document.addEventListener("billing:change", renderSummary);
   renderSummary();
 
-  /* ── Monthly spend limit: bar only while a limit is set ─────────────── */
+  /* ── Monthly spend limit: a cap only; usage progress is on the balance card ── */
 
   var limits = saved.limit;
   var limitModal = document.getElementById("modal-billing-limit");
@@ -217,17 +217,10 @@
   function renderLimit() {
     var l = limitOf();
     var bind = function (k) { return document.querySelector('[data-spend-bind="' + k + '"]'); };
-    document.querySelector("[data-spend-usage]").hidden = !l.limit;
-    bind("limit").textContent = l.limit ? fmt(l.limit) + " credits" : "No limit. Usage isn’t capped.";
+    bind("limit").textContent = l.limit
+      ? fmt(l.limit) + " credits · " + fmt(l.spent) + " used this month"
+      : "No limit. Usage isn’t capped.";
     bind("action").textContent = l.limit ? "Adjust limit" : "Set limit";
-    if (!l.limit) return;
-    var pct = Math.min(100, Math.round((l.spent / l.limit) * 100));
-    bind("spent").textContent = fmt(l.spent);
-    bind("percent").textContent = pct + "%";
-    var meter = document.querySelector("[data-spend-meter]");
-    meter.style.setProperty("--value", pct + "%");
-    meter.setAttribute("aria-valuenow", pct);
-    meter.dataset.level = pct >= 100 ? "full" : pct >= 90 ? "critical" : pct >= 75 ? "warning" : "ok";
   }
 
   document.querySelectorAll('[data-modal-open="modal-billing-limit"]').forEach(function (btn) {
@@ -330,7 +323,7 @@
 
   /* ── Deep links from banners and other pages: #recharge, #overage-alerts ── */
 
-  var HASH_MODALS = { "#recharge": "modal-billing-recharge", "#overage-alerts": "modal-billing-alerts" };
+  var HASH_MODALS = { "#top-up": "modal-billing-topup", "#recharge": "modal-billing-recharge", "#overage-alerts": "modal-billing-alerts" };
 
   function openByHash(hash) {
     var id = HASH_MODALS[hash];

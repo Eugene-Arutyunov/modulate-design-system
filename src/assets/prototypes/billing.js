@@ -124,6 +124,12 @@
       overageCredits: fmt(overage),
       overageCharge: usd(overage * (t.overageRate || 0))
     };
+    var meter = document.querySelector("[data-usage-meter]");
+    if (meter) {
+      meter.style.setProperty("--value", pct + "%");
+      meter.setAttribute("aria-valuenow", pct);
+      meter.dataset.level = overage ? "metered" : pct >= 100 ? "full" : pct >= 90 ? "critical" : pct >= 75 ? "warning" : "ok";
+    }
     document.querySelectorAll("[data-credits-after]").forEach(function (el) {
       el.dataset.creditsAfter = String(remaining);
     });
