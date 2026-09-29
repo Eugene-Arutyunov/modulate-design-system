@@ -4,7 +4,7 @@ permalink: /dashboard/billing/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
-{% from 'prototypes/billing/macros.njk' import states, meter, statusTag %}
+{% from 'prototypes/billing/macros.njk' import states, meter, statusTag, pdfLink %}
 {% set b = billing %}
 
 <div class="m__wrapper">
@@ -15,6 +15,8 @@ permalink: /dashboard/billing/
     </div>
 
     <main class="dashboard-content billing-page">
+      {% set billingTitle = 'Billing' %}
+      {% set billingLead = 'Your credit balance, usage this period, and the full history of charges, top-ups and credits.' %}
       {% include 'prototypes/billing/page-head.html' %}
 
       {# ── Account status ───────────────────────────────────────────── #}
@@ -154,93 +156,277 @@ permalink: /dashboard/billing/
         </section>
       </div>
 
-      {# ── Credit usage this period ─────────────────────────────────── #}
-      <section class="m__widget billing-card" aria-labelledby="billing-usage-title">
+      {# ── Balance over time (styled like the dashboard chart) ────────── #}
+      <section class="m__widget billing-card billing-balance-chart" aria-labelledby="billing-usage-title">
         <div class="billing-card__head">
-          <h2 id="billing-usage-title">Credit usage</h2>
-          <span class="billing-card__caption">{{ b.period }}</span>
+          <h2 id="billing-usage-title">
+            <span data-for="contracting paygo">Credit balance over time</span>
+            <span data-for="metered">Included credits over time</span>
+          </h2>
         </div>
-        {% call states('usage-chart', 'No usage this period yet. Credits used by API requests appear here daily.', 'We couldn’t load usage for this period.', 'chart') %}
-          <div class="billing-chart" data-billing-chart>
-            <div class="billing-chart__plot" data-billing-chart-plot></div>
-            <div class="billing-chart__axis">
-              <span>12 Sep</span><span class="billing-chart__today">Today</span><span>11 Oct</span>
-            </div>
+        {% call states('usage-chart', 'No balance history yet. It appears here after your first allocation or payment.', 'We couldn’t load your balance history.', 'chart') %}
+          <fieldset class="m__segmented-control-secondary" data-billing-chart-period>
+            <label><input type="radio" name="billing-chart-period" value="7" />Last 7 days</label>
+            <label><input type="radio" name="billing-chart-period" value="30" checked />30 days</label>
+          </fieldset>
+          <div class="chart-container billing-balance-chart__canvas">
+            <canvas data-billing-chart aria-label="Credit balance by day" role="img"></canvas>
           </div>
+          <p class="chart-status-bar" data-billing-chart-status></p>
           <div class="billing-chart__footer">
-            <div class="chart-legend billing-chart__legend" data-for="metered">
-              <span class="chart-legend-item"><span class="chart-legend-dot billing-dot--included"></span>Included</span>
-              <span class="chart-legend-item"><span class="chart-legend-dot billing-dot--overage"></span>Overage</span>
-            </div>
             <p class="billing-chart__summary">
-              <span><span data-bind="used">210,000</span> credits used</span>
+              <span><span data-bind="used">210,000</span> credits used this period</span>
               <span>· avg <span data-bind="daily">11,667</span> / day</span>
             </p>
-            <a href="/dashboard/billing/history/#usage" class="billing-link-quiet" data-billing-link>Usage history →</a>
+            <a href="#usage" class="billing-link-quiet" data-billing-link>Usage history →</a>
           </div>
         {% endcall %}
       </section>
 
-      {# ── Recent activity + alerts summary ─────────────────────────── #}
-      <div class="billing-grid">
-        <section class="m__widget billing-card" aria-labelledby="billing-recent-title">
-          <div class="billing-card__head">
-            <h2 id="billing-recent-title">Recent billing activity</h2>
-            <a href="/dashboard/billing/history/#documents" class="billing-link-quiet" data-billing-link>View all →</a>
+      {# ── History: documents, top-ups / recharges, usage, grants ───── #}
+      <section class="m__widget billing-card billing-history" id="history" aria-label="Billing history">
+        <div class="billing-history__head">
+          <div class="m__segmented-control-secondary billing-tabs" role="tablist" aria-label="History" data-billing-tabs>
+            <label><input type="radio" name="billing-history-tab" value="documents" checked />Documents</label>
+            <label data-for="contracting"><input type="radio" name="billing-history-tab" value="payments" />Top-ups</label>
+            <label data-for="paygo"><input type="radio" name="billing-history-tab" value="payments" />Recharges</label>
+            <label><input type="radio" name="billing-history-tab" value="usage" />Usage</label>
+            <label><input type="radio" name="billing-history-tab" value="grants" />
+            <span data-for="contracting paygo">Grants</span><span data-for="metered">Allocations</span></label>
           </div>
-          {% call states('recent', 'No billing activity yet. Invoices, payments and receipts will appear here.', 'We couldn’t load recent billing activity.', 'table') %}
+          <div class="billing-history__controls" data-billing-panel="documents">
+            <label class="m__select S" data-billing-doc-filter>
+              <span>Type</span>
+              <div class="m__select__inline-control">
+                <span class="m__select__value">All</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                  <use href="#chevron-down"></use>
+                </svg>
+                <select id="bh-doc-type">
+                  <option value="all">All</option>
+                  <option value="Invoice">Invoices</option>
+                  <option value="Payment">Payments</option>
+                  <option value="Receipt">Receipts</option>
+                </select>
+              </div>
+            </label>
+          </div>
+          <div class="billing-history__controls" data-billing-panel="payments" data-for="contracting paygo" hidden>
+            <a href="/dashboard/billing/top-up/" class="m__button-primary S" data-billing-link data-for="contracting" data-role="admin">Top up credits</a>
+            <a href="/dashboard/billing/settings/#auto-recharge" class="m__button-secondary-outline S" data-billing-link data-for="paygo" data-role="admin">Recharge settings</a>
+          </div>
+          <div class="billing-history__controls" data-billing-panel="usage" hidden>
+            <span class="billing-future">Daily totals · CSV export coming later</span>
+          </div>
+          <div class="billing-history__controls" data-billing-panel="grants" hidden>
+            <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-code" data-role="admin">Apply credit code</button>
+          </div>
+        </div>
+
+        {# Billing documents: invoices, payments, receipts #}
+        <div class="billing-history__panel" data-billing-panel="documents">
+          {% call states('documents', 'No billing documents yet. Invoices, payments and receipts appear here after your first charge.', 'We couldn’t load billing documents.', 'table') %}
             {% for type in ['contracting', 'paygo', 'metered'] %}
-            <ul class="billing-activity" data-for="{{ type }}">
-              {% for row in b.documents[type] | batch(4) | first %}
-              <li class="billing-activity__item">
-                <span class="billing-activity__main">
-                  <strong>{{ row.type }}</strong> <span class="billing-muted">{{ row.number }}</span>
-                  <span class="billing-activity__desc">{{ row.description }}</span>
-                </span>
-                <span class="billing-activity__side">
-                  <span class="billing-activity__amount">{{ row.amount }}</span>
-                  <span class="billing-muted">{{ row.date }}</span>
-                </span>
-              </li>
-              {% endfor %}
-            </ul>
+            <div class="m__table-wrapper" data-for="{{ type }}">
+              <table class="billing-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Number</th>
+                    <th>Description</th>
+                    <th class="is-num">Amount</th>
+                    <th>Status</th>
+                    <th class="m__col-actions"><span class="billing-visually-hidden">Download</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in b.documents[type] %}
+                  <tr data-doc-type="{{ row.type }}">
+                    <td data-label="Date">{{ row.date }}</td>
+                    <td data-label="Type">{{ row.type }}</td>
+                    <td data-label="Number" class="billing-muted">{{ row.number }}</td>
+                    <td data-label="Description" class="billing-table__wrap">
+                      {{ row.description }}
+                      {% if row.lines %}
+                      <button type="button" class="billing-expand" aria-expanded="false" aria-controls="lines-{{ row.number }}" data-billing-expand>
+                        Line items
+                        <svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+                      </button>
+                      {% endif %}
+                    </td>
+                    <td data-label="Amount" class="is-num">{{ row.amount }}</td>
+                    <td data-label="Status">{{ statusTag(row.status) }}</td>
+                    <td data-label="PDF" class="m__col-actions">{{ pdfLink(row.number) }}</td>
+                  </tr>
+                  {% if row.lines %}
+                  <tr class="billing-table__lines" id="lines-{{ row.number }}" data-doc-type="{{ row.type }}" data-lines hidden>
+                    <td colspan="7">
+                      <ul>
+                        {% for line in row.lines %}
+                        <li><span>{{ line.label }}</span><strong>{{ line.amount }}</strong></li>
+                        {% endfor %}
+                        <li><span>Total</span><strong>{{ row.amount }}</strong></li>
+                      </ul>
+                    </td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                  <tr data-billing-filter-empty hidden>
+                    <td colspan="7"><div class="m__table-empty"><p>No documents of this type yet.</p></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             {% endfor %}
           {% endcall %}
-        </section>
+        </div>
 
-        <section class="m__widget billing-card" aria-labelledby="billing-alerts-title">
-          <div class="billing-card__head">
-            <h2 id="billing-alerts-title">Low-balance alerts</h2>
-            <a href="/dashboard/billing/settings/" class="billing-link-quiet" data-billing-link>
-              <span data-role="admin">Manage →</span><span data-role="viewer">View →</span>
-            </a>
-          </div>
-          {% call states('alerts-summary', 'No alerts set. Add a threshold to get emailed before credits run out.', 'We couldn’t load alert settings.', 'lines') %}
-            <ul class="billing-alert-list">
-              {% for a in b.alerts %}
-              <li>
-                <span class="billing-alert-list__dot" aria-hidden="true"></span>
-                <span>Email when {% if a.kind == 'percent' -%}
-                  <strong>{{ a.value }}%</strong> of <span data-for="contracting">this period’s credits</span><span data-for="paygo">the last recharge</span><span data-for="metered">included credits</span> is used
-                {%- else -%}
-                  <strong>{{ a.value }}</strong> <span data-for="metered">included </span>credits remain
-                {%- endif %}</span>
-              </li>
-              {% endfor %}
-              <li data-for="metered">
-                <span class="billing-alert-list__dot" aria-hidden="true"></span>
-                <span>Email when estimated overage reaches <strong>{{ b.overageAlerts[0].value }}</strong></span>
-              </li>
-            </ul>
-            <p class="billing-muted billing-alert-recipients">Sent to {{ b.recipients | length }} recipients</p>
+        {# Top-ups (Contracting) / Recharges (Pay/Go) #}
+        <div class="billing-history__panel" data-billing-panel="payments" data-for="contracting paygo" hidden>
+          <p class="billing-section-note">
+            <span data-for="contracting">Every payment and the credits it added to your balance.</span>
+            <span data-for="paygo">Every automatic and manual recharge, and the credits each payment added.</span>
+          </p>
+          {% call states('payments', '<span data-for="contracting">No top-ups yet. Credits you buy at your contracted rate appear here.</span><span data-for="paygo">No recharges yet. Recharges appear here once auto-recharge adds credits.</span>', 'We couldn’t load payment history.', 'table') %}
+            {% for type in ['contracting', 'paygo'] %}
+            <div class="m__table-wrapper" data-for="{{ type }}">
+              <table class="billing-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>{{ 'Trigger' if type == 'paygo' else 'Type' }}</th>
+                    <th>{{ 'Payment method' if type == 'paygo' else 'Purchased by' }}</th>
+                    <th class="is-num">Paid</th>
+                    <th class="is-num">Credits added</th>
+                    <th>Status</th>
+                    <th class="m__col-actions"><span class="billing-visually-hidden">Receipt</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in b.payments[type] %}
+                  <tr>
+                    <td data-label="Date">{{ row.date }}</td>
+                    <td data-label="{{ 'Trigger' if type == 'paygo' else 'Type' }}">{{ row.trigger }}</td>
+                    <td data-label="{{ 'Method' if type == 'paygo' else 'By' }}" class="billing-muted">{{ row.by }}</td>
+                    <td data-label="Paid" class="is-num">{{ row.amount }}</td>
+                    <td data-label="Credits" class="is-num {{ 'is-positive' if row.status == 'Paid' }}">{{ row.credits }}</td>
+                    <td data-label="Status">{{ statusTag(row.status) }}</td>
+                    <td data-label="Receipt" class="m__col-actions">
+                      {% if row.receipt %}{{ pdfLink(row.receipt) }}{% else %}
+                      <a href="#" class="billing-pdf billing-external" data-billing-stripe data-role="admin">Fix <span aria-hidden="true">↗</span></a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% endfor %}
           {% endcall %}
-        </section>
-      </div>
+        </div>
+
+        {# Credit usage history #}
+        <div class="billing-history__panel" data-billing-panel="usage" hidden>
+          <p class="billing-section-note">
+            Credits consumed per day across all API keys.
+            <span data-for="metered">Included usage draws down your monthly allocation; overage is billed at {{ b.metered.overageRate }} per credit.</span>
+            For individual requests, see <a href="/dashboard/usage/">Usage</a>.
+          </p>
+          {% call states('usage', 'No usage yet. Daily credit usage appears here after your first API request.', 'We couldn’t load usage history.', 'table') %}
+            {% for type in ['contracting', 'paygo', 'metered'] %}
+            <div class="m__table-wrapper" data-for="{{ type }}">
+              <table class="billing-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th class="is-num">Requests</th>
+                    <th class="is-num">Audio hours</th>
+                    {% if type == 'metered' %}
+                    <th class="is-num">Included</th>
+                    <th class="is-num">Overage</th>
+                    {% endif %}
+                    <th class="is-num">Credits used</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in b.usage[type] %}
+                  <tr>
+                    <td data-label="Date">{{ row.date }}</td>
+                    <td data-label="Requests" class="is-num">{{ row.requests }}</td>
+                    <td data-label="Audio hours" class="is-num">{{ row.hours }}</td>
+                    {% if type == 'metered' %}
+                    <td data-label="Included" class="is-num">{{ row.included }}</td>
+                    <td data-label="Overage" class="is-num">{% if row.overage != '0' %}<span class="billing-overage-value">{{ row.overage }}</span>{% else %}<span class="billing-muted">0</span>{% endif %}</td>
+                    {% endif %}
+                    <td data-label="Credits used" class="is-num"><strong>{{ row.credits }}</strong></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% endfor %}
+          {% endcall %}
+        </div>
+
+        {# Grants / monthly allocations #}
+        <div class="billing-history__panel" data-billing-panel="grants" hidden>
+          <p class="billing-section-note">
+            <span data-for="contracting">Monthly allocations from your contract, plus one-time grants. Top-ups are listed separately.</span>
+            <span data-for="paygo">Free credits added to your account: sign-up credits, invite bonuses and credit codes.</span>
+            <span data-for="metered">Credits included with your monthly commitment. Unused included credits don’t roll over.</span>
+          </p>
+          {% call states('grants', 'No grants yet. Monthly allocations and credit codes appear here.', 'We couldn’t load credit grants.', 'table') %}
+            {% for type in ['contracting', 'paygo', 'metered'] %}
+            <div class="m__table-wrapper" data-for="{{ type }}">
+              <table class="billing-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Source</th>
+                    <th>Period</th>
+                    <th class="is-num">Credits</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in b.grants[type] %}
+                  <tr>
+                    <td data-label="Date">{{ row.date }}</td>
+                    <td data-label="Source">{{ row.source }}</td>
+                    <td data-label="Period" class="billing-muted">{{ row.period }}</td>
+                    <td data-label="Credits" class="is-num is-positive">{{ row.credits }}</td>
+                    <td data-label="Status">{{ statusTag(row.status) }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% endfor %}
+          {% endcall %}
+        </div>
+      </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
 
+{% from 'service/modal-wrapper.njk' import modal %}
+{% call modal("modal-billing-code", "Apply credit code") %}
+<div class="m__modal__body">
+  <div class="m__textfield M">
+    <label for="billing-code">Credit code</label>
+    <input type="text" id="billing-code" autocomplete="off" placeholder="e.g. SPRING26" />
+  </div>
+</div>
+<div class="m__modal__footer">
+  <button type="button" class="m__button-secondary-outline S" data-modal-close="modal-billing-code">Cancel</button>
+  <button type="button" class="m__button-primary S" data-modal-close="modal-billing-code" data-billing-toast="Credit code applied. 5,000 credits added.">Apply</button>
+</div>
+{% endcall %}
+
 {% include 'prototypes/billing/prototype-panel.html' %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="/assets/prototypes/billing.js"></script>
+<script src="/assets/prototypes/billing-history.js"></script>
 {% endblock %}

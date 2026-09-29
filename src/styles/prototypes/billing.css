@@ -138,22 +138,8 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 /* ── Page structure ────────────────────────────────────────────────── */
 
 .billing-page {
-  & .billing-head {
-    display: flex;
-    align-items: baseline;
-    gap: var(--m__gap-xs);
+  & > .billing-subnav { margin: 0.15rem 0 0.75rem; }
 
-    & .dashboard-page-title { margin-bottom: 0.75rem; }
-  }
-
-  & .billing-plan-tag {
-    font-size: var(--m__font-size-xs);
-    transform: translateY(-0.15rem);
-  }
-
-  & .billing-subnav {
-    margin-bottom: var(--m__gap-m);
-  }
 
   & > .m__widget,
   & > .billing-grid,
@@ -176,7 +162,7 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 }
 
 .billing-grid--status {
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 
   @media (width < 900px) {
     grid-template-columns: minmax(0, 1fr);
@@ -387,67 +373,14 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   & a { white-space: nowrap; }
 }
 
-/* ── Usage chart ───────────────────────────────────────────────────── */
+/* ── Balance chart ───────────────────────────────────────────────────── */
 
-.billing-chart__plot {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 7rem;
-  padding-top: var(--m__gap-xs);
-  border-bottom: var(--m__border-width-s) solid var(--m__border);
-}
+.billing-balance-chart .m__segmented-control-secondary { align-self: flex-start; }
 
-.billing-chart__bar {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  flex: 1;
-  height: 100%;
-  min-width: 0;
-  border-radius: var(--m__radius-xs) var(--m__radius-xs) 0 0;
-  outline-offset: 2px;
-
-  &.is-future {
-    height: 6%;
-    align-self: flex-end;
-    background: var(--billing-meter-track);
-    opacity: 0.6;
-  }
-
-  &:hover .billing-chart__seg,
-  &:focus-visible .billing-chart__seg { filter: brightness(1.35); }
-}
-
-.billing-chart__seg {
-  display: block;
-  height: var(--h);
-  min-height: 1px;
-  background: var(--m__text-accent);
-
-  &:first-child { border-radius: var(--m__radius-xs) var(--m__radius-xs) 0 0; }
-  &.is-overage { background: var(--billing-overage); }
-}
-
-.billing-chart__bar.is-today .billing-chart__seg:not(.is-overage) {
-  opacity: 0.55;
-}
-
-.billing-chart__axis {
-  display: flex;
-  justify-content: space-between;
-  padding-top: var(--m__gap-xxxs);
-  color: var(--m__text-caption);
-  font-size: var(--m__font-size-xs);
-
+.billing-balance-chart__canvas {
   position: relative;
-}
-
-.billing-chart__today {
-  position: absolute;
-  left: var(--today, 60%);
-  transform: translateX(-50%);
-  color: var(--m__text);
+  height: 14rem;
+  margin-top: var(--m__gap-s);
 }
 
 .billing-chart__footer {
@@ -457,7 +390,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   gap: var(--m__gap-xs) var(--m__gap-m);
   margin-top: var(--m__gap-s);
 
-  & .billing-chart__legend { padding: 0; justify-content: flex-start; }
   & .billing-link-quiet { margin-left: auto; }
 }
 
@@ -468,76 +400,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   flex-wrap: wrap;
 }
 
-.billing-dot--included { background: var(--m__text-accent); }
-.billing-dot--overage { background: var(--billing-overage); }
-
-/* ── Activity + alert lists ────────────────────────────────────────── */
-
-.billing-activity,
-.billing-alert-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  & li::before { content: none; }
-}
-
-.billing-activity__item {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--m__gap-m);
-  margin: 0;
-  padding: var(--m__gap-xs) 0;
-  border-bottom: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 12%, transparent);
-
-  &:last-child { border-bottom: 0; }
-}
-
-.billing-activity__main { min-width: 0; }
-
-.billing-activity__desc {
-  display: block;
-  color: var(--m__text-caption);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.billing-activity__side {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  flex-shrink: 0;
-  font-size: var(--m__font-size-xs);
-}
-
-.billing-activity__amount {
-  font-size: var(--m__font-size-s);
-  font-weight: var(--m__font-weight-medium);
-  font-variant-numeric: tabular-nums;
-}
-
-.billing-alert-list li {
-  display: flex;
-  align-items: baseline;
-  gap: var(--m__gap-xs);
-  margin: 0;
-  padding: var(--m__gap-xxxs) 0;
-}
-
-.billing-alert-list__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--m__success);
-  flex-shrink: 0;
-  transform: translateY(-0.1rem);
-}
-
-.billing-alert-recipients {
-  margin-top: var(--m__gap-xs) !important;
-  font-size: var(--m__font-size-xs);
-}
 
 /* ── Tables (history) ──────────────────────────────────────────────── */
 
@@ -639,11 +501,29 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   display: flex;
   width: max-content;
   max-width: 100%;
-  margin-bottom: var(--m__gap-m);
   overflow-x: auto;
   scrollbar-width: none;
 
   & label { white-space: nowrap; }
+}
+
+.billing-history {
+  scroll-margin-top: var(--m__gap-m);
+}
+
+.billing-history__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m__gap-xs);
+  margin-bottom: var(--m__gap-s);
+}
+
+.billing-history__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--m__gap-xs);
 }
 
 .billing-toolbar {
@@ -655,6 +535,7 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   margin-bottom: var(--m__gap-s);
 
   & h2 { margin: 0 !important; }
+  & > .m__select { width: auto; }
 }
 
 .billing-section-note {

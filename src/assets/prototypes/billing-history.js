@@ -1,4 +1,4 @@
-/* Billing › History: tabs (synced with the URL hash), document type filter, invoice line items. */
+/* Billing › Overview history widget: tabs (synced with the URL hash), document type filter, invoice line items. */
 (function () {
   var tabs = document.querySelector("[data-billing-tabs]");
   if (!tabs) return;
@@ -25,7 +25,10 @@
     if (["documents", "payments", "usage", "grants"].indexOf(value) < 0) value = "documents";
     show(value, false);
   }
-  window.addEventListener("hashchange", fromHash);
+  window.addEventListener("hashchange", function () {
+    fromHash();
+    tabs.closest(".billing-history").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
   document.addEventListener("billing:change", fromHash);
   fromHash();
 

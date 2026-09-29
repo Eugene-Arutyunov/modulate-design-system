@@ -222,11 +222,6 @@ current:
       - section:
           widget: billing-history
 
-  - id: dashboard-billing-history
-    route: —
-    title: 'Billing: History'
-    sections: []
-
   - id: dashboard-billing-settings
     route: —
     title: 'Billing: Alerts & recharge'
@@ -1025,28 +1020,10 @@ target:
             - auto-recharge
             - overage-summary
       - section:
-          widget: credit-usage-chart
+          widget: credit-balance-over-time
       - section:
-          widgets:
-            - recent-billing-activity
-            - low-balance-alerts-summary
-
-  - id: dashboard-billing-history
-    route: /dashboard/billing/history/
-    title: 'Billing: History'
-    sections:
-      - section:
-          widget: billing-banner
-      - section:
-          widget: billing-documents
-      - section:
-          widget: top-up-history
-      - section:
-          widget: recharge-history
-      - section:
-          widget: credit-usage-history
-      - section:
-          widget: credit-grants
+          widget: billing-history
+          tabs: [billing-documents, top-up-history, recharge-history, credit-usage-history, credit-grants]
 
   - id: dashboard-billing-settings
     route: /dashboard/billing/settings/

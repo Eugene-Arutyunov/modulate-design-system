@@ -48,7 +48,6 @@
     }
   };
 
-  var DAYS_IN_PERIOD = 30;
   var DAYS_ELAPSED = 18; // 12 Sep → 29 Sep (today)
   var PERIOD_START = new Date(2026, 8, 12);
 
@@ -152,65 +151,170 @@
     document.querySelectorAll("[data-bind-status]").forEach(function (el) { el.innerHTML = tag; });
   }
 
-  /* ── Usage chart (daily bars for the current period) ───────────────── */
+  /* ── Balance over time (Chart.js, same look as the dashboard chart) ── */
 
-  function dayWeights() {
-    // Deterministic weekday-shaped series: weekends lighter.
-    var w = [];
-    for (var i = 0; i < DAYS_ELAPSED; i++) {
-      var d = new Date(PERIOD_START); d.setDate(d.getDate() + i);
-      var dow = d.getDay();
-      var base = dow === 0 || dow === 6 ? 0.55 : 1;
-      w.push(base * (0.8 + 0.4 * Math.abs(Math.sin(i * 1.7 + 0.4))));
+  var TODAY = new Date(2026, 8, 29);
+  var DAY = 24 * 60 * 60 * 1000;
+  var chart = null;
+
+  function dayWeight(d) {
+    // Deterministic weekday-shaped usage: weekends lighter.
+    var i = Math.round((d - PERIOD_START) / DAY);
+    var dow = d.getDay();
+    return (dow === 0 || dow === 6 ? 0.55 : 1) * (0.8 + 0.4 * Math.abs(Math.sin(i * 1.7 + 0.4)));
+  }
+
+  // Balance story per type over the last 30 days: a starting balance, then
+  // credit events (top-up, recharge, allocation reset) with the balance just
+  // before each one. Usage between events is spread across days by weight, so
+  // the line ends exactly at today's remaining balance.
+  function balanceEvents() {
+    var d = function (m, day) { return new Date(2026, m, day); };
+    if (state.type === "contracting") {
+      return { start: 150000, events: [
+        { date: d(8, 3), before: 118000, after: 218000 },
+        { date: d(8, 12), before: 86000, after: 500000 }
+      ] };
     }
-    return w;
+    if (state.type === "paygo") {
+      return { start: 31000, events: [
+        { date: d(8, 5), before: 9200, after: 59200 },
+        { date: d(8, 20), before: 8400, after: 58400 }
+      ] };
+    }
+    return { start: 34000, events: [{ date: d(8, 12), before: 6000, after: 100000 }] };
+  }
+
+  function balanceSeries(days) {
+    var t = TYPES[state.type];
+    var sc = scenarioOf(state);
+    var remaining = Math.max(0, t.total - sc.used);
+    var story = balanceEvents();
+    var from = new Date(TODAY.getTime() - 29 * DAY);
+    var dates = [];
+    for (var i = 0; i < 30; i++) dates.push(new Date(from.getTime() + i * DAY));
+
+    // Segments: [start value, end value, first day, last day]
+    var points = [{ date: from, value: story.start }];
+    story.events.forEach(function (e) {
+      points.push({ date: new Date(e.date.getTime() - DAY), value: e.before, jumpTo: e.after });
+    });
+    points.push({ date: TODAY, value: remaining });
+
+    var values = [];
+    for (var p = 0; p < points.length - 1; p++) {
+      var startVal = points[p].jumpTo != null ? points[p].jumpTo : points[p].value;
+      var endVal = points[p + 1].value;
+      var segDays = dates.filter(function (x) { return x > points[p].date && x <= points[p + 1].date; });
+      if (p === 0) values.push(startVal);
+      var weights = segDays.map(dayWeight);
+      var sum = weights.reduce(function (a, b) { return a + b; }, 0) || 1;
+      var run = startVal;
+      segDays.forEach(function (x, k) {
+        run -= ((startVal - endVal) * weights[k]) / sum;
+        values.push(Math.max(0, Math.round(run)));
+      });
+    }
+    return { dates: dates.slice(-days), values: values.slice(-days) };
+  }
+
+  function chartDays() {
+    var checked = document.querySelector("[data-billing-chart-period] input:checked");
+    return checked && checked.value === "7" ? 7 : 30;
+  }
+
+  function shortDate(d) {
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   }
 
   function renderChart() {
-    var plot = document.querySelector("[data-billing-chart-plot]");
-    if (!plot) return;
-    var t = TYPES[state.type];
-    var sc = scenarioOf(state);
-    var weights = dayWeights();
-    var sum = weights.reduce(function (a, b) { return a + b; }, 0);
-    var totalUsed = sc.used + (sc.overage || 0);
-    var values = weights.map(function (w) { return (w / sum) * totalUsed; });
-    var max = Math.max.apply(null, values) * 1.1;
+    var canvas = document.querySelector("[data-billing-chart]");
+    if (!canvas || typeof Chart === "undefined") return;
+    if (chart) chart.destroy();
 
-    var cumulative = 0;
-    var html = "";
-    for (var i = 0; i < DAYS_IN_PERIOD; i++) {
-      var d = new Date(PERIOD_START); d.setDate(d.getDate() + i);
-      var label = d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-      if (i >= DAYS_ELAPSED) {
-        html += '<span class="billing-chart__bar is-future" aria-hidden="true"></span>';
-        continue;
+    var series = balanceSeries(chartDays());
+    var style = getComputedStyle(body);
+    var caption = style.getPropertyValue("--m__text-caption").trim();
+    var grid = "color-mix(in srgb, " + style.getPropertyValue("--m__text").trim() + " 12%, transparent)";
+    var base = style.getPropertyValue("--m__chart-default").trim();
+    var rgba = function (a) {
+      var m = base.match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+      return m ? "rgba(" + m[1] + ", " + m[2] + ", " + m[3] + ", " + a + ")" : base;
+    };
+    var scale = function () {
+      return { ticks: { color: caption, font: { size: 11 }, maxRotation: 0 }, grid: { color: grid } };
+    };
+    var x = scale();
+    var total = series.dates.length;
+    var step = Math.max(1, Math.ceil(total / 10));
+    x.ticks.autoSkip = false;
+    x.ticks.callback = function (value, index) {
+      if (index !== 0 && index !== total - 1 && index % step !== 0) return null;
+      var dd = series.dates[index];
+      var prev = series.dates[Math.max(0, index - step)];
+      return index === 0 || dd.getMonth() !== prev.getMonth() ? shortDate(dd) : String(dd.getDate());
+    };
+    var y = Object.assign({ grace: "15%", beginAtZero: true }, scale());
+    y.ticks.callback = function (v) { return v >= 1000 ? v / 1000 + "k" : v; };
+
+    chart = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels: series.dates.map(shortDate),
+        datasets: [{
+          label: "Balance",
+          data: series.values,
+          borderColor: "transparent",
+          backgroundColor: function (ctx) {
+            var area = ctx.chart.chartArea;
+            if (!area) return rgba(0.35);
+            var g = ctx.chart.ctx.createLinearGradient(0, area.top, 0, area.bottom);
+            g.addColorStop(0, rgba(0.35));
+            g.addColorStop(0.67, rgba(0.35));
+            g.addColorStop(1, rgba(0));
+            return g;
+          },
+          fill: true,
+          tension: 0.15,
+          pointRadius: 0,
+          pointHoverRadius: 2.5,
+          pointHoverBackgroundColor: rgba(0.9),
+          pointHoverBorderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: { tooltip: { enabled: false }, legend: { display: false } },
+        scales: { x: x, y: y }
       }
-      var v = values[i];
-      var included = v, over = 0;
-      if (state.type === "metered") {
-        var room = Math.max(0, t.total - cumulative);
-        included = Math.min(v, room);
-        over = v - included;
-      }
-      cumulative += v;
-      var tip = label + " · " + fmt(v) + " credits";
-      if (over > 0) tip += " (" + fmt(over) + " overage)";
-      html +=
-        '<span class="billing-chart__bar' + (i === DAYS_ELAPSED - 1 ? " is-today" : "") + '" data-tooltip="' + tip + '" tabindex="0" aria-label="' + tip + '">' +
-        (over > 0 ? '<span class="billing-chart__seg is-overage" style="--h:' + (over / max) * 100 + '%"></span>' : "") +
-        '<span class="billing-chart__seg" style="--h:' + (included / max) * 100 + '%"></span>' +
-        "</span>";
+    });
+
+    var status = document.querySelector("[data-billing-chart-status]");
+    if (status && !canvas._billingStatus) {
+      canvas._billingStatus = true;
+      canvas.addEventListener("mousemove", function (e) {
+        var hit = chart.getElementsAtEventForMode(e, "index", { intersect: false }, true);
+        status.textContent = hit.length
+          ? chart.data.labels[hit[0].index] + " · " + fmt(chart.data.datasets[0].data[hit[0].index]) + " credits"
+          : "";
+      });
+      canvas.addEventListener("mouseleave", function () { status.textContent = ""; });
     }
-    plot.innerHTML = html;
-    plot.parentNode.style.setProperty("--today", ((DAYS_ELAPSED - 0.5) / DAYS_IN_PERIOD) * 100 + "%");
   }
+
+  document.addEventListener("change", function (e) {
+    if (e.target.closest("[data-billing-chart-period]")) renderChart();
+  });
 
   /* ── Links, panel, feedback ────────────────────────────────────────── */
 
   function syncLinks() {
     var q = query({ type: state.type, role: state.role, scenario: state.scenario, data: "ready" });
     document.querySelectorAll("a[data-billing-link]").forEach(function (a) {
+      if (a.getAttribute("href").charAt(0) === "#") return;
       var url = new URL(a.getAttribute("href"), location.origin);
       a.setAttribute("href", url.pathname + q + url.hash);
     });
