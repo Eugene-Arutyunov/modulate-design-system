@@ -16,7 +16,7 @@ permalink: /dashboard/billing/
 
     <main class="dashboard-content billing-page">
       {% set billingTitle = 'Billing' %}
-      {% set billingLead = 'Your credit balance, spend limits, and your invoices and credit grants.' %}
+      {% set billingLead = 'Your credit balance, alerts, and your invoices and credit grants.' %}
       {% include 'prototypes/billing/page-head.html' %}
 
       {# ── Account status ───────────────────────────────────────────── #}
@@ -29,7 +29,10 @@ permalink: /dashboard/billing/
               <span data-for="metered">Included Credits</span>
             </h2>
           </div>
-          {% call states('balance', 'No credits yet. Your balance appears here once your first allocation or payment is processed.', 'We couldn’t load your balance. Usage is not affected.', 'stat') %}
+          {% set balanceEmpty %}
+            <p class="m__widget__value m__widget__value--amount billing-balance__value">0.00</p>
+          {% endset %}
+          {% call states('balance', balanceEmpty, 'We couldn’t load your balance. Usage is not affected.', 'stat', '', 'custom') %}
             <p class="m__widget__value m__widget__value--amount billing-balance__value">
               <span data-bind="balance">290,000.00</span>
             </p>
@@ -69,7 +72,7 @@ permalink: /dashboard/billing/
           <div class="billing-card__head">
             <h2 id="billing-topup-title">Purchase Credits</h2>
           </div>
-          {% call states('topup', 'No purchases yet. Buy credits whenever you need more.', 'We couldn’t load purchase options.', 'actions') %}
+          {% call states('topup', '', 'We couldn’t load purchase options.', 'actions', '', 'ready') %}
             <p class="billing-card__lead">Credits pay for API usage. 1 credit = {{ b.contract.rate }} USD, spent based on audio duration and model cost.</p>
             <div class="billing-card__actions" data-role="admin">
               <button type="button" class="m__button-primary" data-modal-open="modal-billing-topup" data-role="admin">Buy Credits</button>
@@ -85,7 +88,11 @@ permalink: /dashboard/billing/
             <h2 id="billing-overage-title">Overage this period</h2>
             <span class="m__tag m__tag--secondary" data-when="now-metered">Metered</span>
           </div>
-          {% call states('overage', 'No usage this period yet.', 'We couldn’t load overage for this period.', 'stat') %}
+          {% set overageEmpty %}
+            <p class="m__widget__value billing-balance__value">$0.00 <span class="billing-unit">estimated</span></p>
+            <p class="billing-card__lead billing-card__lead--empty">No usage this period yet. Usage beyond your included credits is billed at {{ b.metered.overageRate }} per credit.</p>
+          {% endset %}
+          {% call states('overage', overageEmpty, 'We couldn’t load overage for this period.', 'stat', '', 'custom') %}
             <p class="m__widget__value billing-balance__value">
               <span data-bind="overageCharge">$0.00</span>
               <span class="billing-unit">estimated</span>
@@ -118,7 +125,7 @@ permalink: /dashboard/billing/
           <span class="m__tag m__tag--error" data-autotopup-show="failed">Failed</span>
           <span class="m__tag m__tag--muted" data-autotopup-show="off">Off</span>
         </div>
-        {% call states('recharge', 'Auto Top-Up isn’t set up.', 'We couldn’t load Auto Top-Up settings.', 'lead-button') %}
+        {% call states('recharge', '', 'We couldn’t load Auto Top-Up settings.', 'lead-button', '', 'ready') %}
           <div class="billing-autotopup__row">
             <p class="billing-autotopup__lead">
               <span data-autotopup-show="off">Automatically purchase credits when your balance is below a certain threshold. You can select multiple payment methods that will be tried in order if payment fails.</span>
@@ -131,33 +138,32 @@ permalink: /dashboard/billing/
         {% endcall %}
       </section>
 
-      {# ── Spend limits: monthly cap and email alerts (edited in modals). Usage progress lives on the balance card. ── #}
+      {# ── Alerts: thresholds and recipients as separate rows, each with its own modal. Spend limit is postponed. ── #}
       <section class="m__widget billing-card billing-alerts" id="alerts" aria-labelledby="billing-alerts-title">
-        <h2 id="billing-alerts-title">Spend Limits</h2>
-        <p class="billing-alerts__lead">
-          Set a monthly spend limit for your organization and get notified as you approach it.
-        </p>
-        {% call states('alerts', 'No alerts yet. Add a threshold to hear about low balance before usage is affected.', 'We couldn’t load alert settings. Existing alerts are still being sent.', 'rows', '<button type="button" class="m__button-primary S" data-modal-open="modal-billing-alerts" data-role="admin">Add alert</button>') %}
-          {# Only while a limit is set: this month's usage against it, full width above the rows. #}
-          <div class="billing-alerts__meter" data-spend-usage>
-            <div class="billing-meter" data-spend-meter role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Spend limit used">
-              <span class="billing-meter__fill"></span>
-            </div>
-            <span class="billing-alerts__percent"><span data-spend-bind="percent">54%</span> used</span>
-          </div>
+        <h2 id="billing-alerts-title">Alerts</h2>
+        <p class="billing-alerts__lead">Set the thresholds at which we’ll send you an email notification.</p>
+        {% call states('alerts', '', 'We couldn’t load alert settings. Existing alerts are still being sent.', 'rows', '', 'ready') %}
+          {# Each row edits its own list in its own modal. #}
           <div class="billing-alerts__row">
-            <div class="billing-alerts__row-main">
-              <strong>Monthly spend limit</strong>
-              <small data-spend-bind="limit">400,000 credits · 214,000 used this month</small>
-            </div>
-            <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-limit" data-role="admin" data-spend-bind="action">Adjust limit</button>
+            <p class="billing-alerts__row-main">
+              <strong>Spend limits</strong>
+              <small data-alerts-summary="low">Notify when spend this contract period reaches $500, $1,000, and $2,000.</small>
+            </p>
+            <button type="button" class="m__button-secondary-outline S" data-alerts-open="low" data-role="admin">Edit</button>
+          </div>
+          <div class="billing-alerts__row" data-for="metered">
+            <p class="billing-alerts__row-main">
+              <strong>Overage threshold</strong>
+              <small data-alerts-summary="overage">Notify when estimated overage reaches $250 and $500.</small>
+            </p>
+            <button type="button" class="m__button-secondary-outline S" data-alerts-open="overage" data-role="admin">Edit</button>
           </div>
           <div class="billing-alerts__row">
             <p class="billing-alerts__row-main">
-              <strong>Email alerts</strong>
-              <small data-alerts-summary>Email {{ b.recipients | length }} recipients at {% for a in b.alerts %}{% if a.kind == 'percent' %}{{ a.value }}% used{% else %}{{ a.value }} credits left{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}.</small>
+              <strong>Recipients</strong>
+              <small data-alerts-summary="recipients">Jordan Lee, Sam Rivera, and finance@example.com.</small>
             </p>
-            <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-alerts" data-role="admin">Edit</button>
+            <button type="button" class="m__button-secondary-outline S" data-alerts-open="recipients" data-role="admin">Edit</button>
           </div>
         {% endcall %}
       </section>
@@ -169,7 +175,24 @@ permalink: /dashboard/billing/
           <div class="table-filters" data-billing-history-filters></div>
         </div>
         <div class="review-filter-strip table-filters-strip" data-billing-history-strip hidden></div>
-        {% call states('history', 'No billing history yet. Invoices, payments and credit grants appear here.', 'We couldn’t load billing history.', 'table') %}
+        {% set historyEmpty %}
+          {# Same table as filled: headers stay, one centered row explains what will appear. #}
+          <div class="m__table-wrapper">
+            <table class="billing-table billing-history__table">
+              <thead>
+                <tr><th>Date</th><th>Type</th><th>Number</th><th class="is-num">Credits</th><th class="is-num">Amount</th><th>Status</th><th class="m__col-actions"><span class="billing-visually-hidden">Actions</span></th></tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="7"><div class="m__table-empty"><p>
+                  <span data-for="contracting">No billing history yet. Credit allocations, top-ups and invoices will appear here.</span>
+                  <span data-for="paygo">No billing history yet. Your top-ups and their receipts will appear here.</span>
+                  <span data-for="metered">No billing history yet. Monthly invoices will appear here after your first billing period.</span>
+                </p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        {% endset %}
+        {% call states('history', historyEmpty, 'We couldn’t load billing history.', 'table', '', 'custom') %}
           {% for type in ['contracting', 'paygo', 'metered'] %}
           <div class="m__table-wrapper" data-for="{{ type }}">
             <table class="billing-table billing-history__table">
@@ -269,54 +292,25 @@ permalink: /dashboard/billing/
 {% set trash %}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M6 4V2.75h4V4M4 4l.6 9.25h6.8L12 4M6.75 6.5v4.5M9.25 6.5v4.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>{% endset %}
 {% set plus %}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>{% endset %}
 
-{% call modal("modal-billing-limit", "Edit spend limit") %}
-<div class="m__modal__body billing-edit-list">
-  <p class="billing-edit-list__lead">Set a monthly spend limit for your organization. Usage pauses once this month’s usage reaches it, until the limit resets or is raised.</p>
-  <div class="m__textfield M billing-edit-list__value billing-edit-list__value--suffix">
-    <input type="text" inputmode="numeric" aria-label="Monthly limit in credits" placeholder="400,000" data-billing-number data-limit-value />
-    <span aria-hidden="true">credits</span>
-  </div>
-  <p class="billing-inline-error" data-limit-error hidden></p>
-</div>
-<div class="m__modal__footer">
-  <button type="button" class="m__button-secondary-outline S" data-limit-remove>Remove limit</button>
-  <button type="button" class="m__button-primary S" data-limit-save>Update limit</button>
-</div>
-{% endcall %}
-
-{# One modal for everything email-related: thresholds and recipients in tabs (pattern from the LLM Battle config modal). #}
-<div class="m__modal-backdrop" id="modal-billing-alerts" hidden aria-modal="true" role="dialog" aria-label="Email alerts">
+{# One modal shell; each Alerts row opens it with only its own list and title. #}
+<div class="m__modal-backdrop" id="modal-billing-alerts" hidden aria-modal="true" role="dialog" aria-labelledby="modal-billing-alerts-title">
   <div class="m__modal billing-alerts-modal">
-    <div class="m__modal__header billing-modal-tabs__header">
-      <div class="billing-modal-tabs" role="tablist" aria-label="Email alerts">
-        <button type="button" id="bea-tab-low" role="tab" aria-selected="true" aria-controls="bea-panel-low" tabindex="0" data-alerts-tab="low">Alerts</button>
-        <button type="button" id="bea-tab-overage" role="tab" aria-selected="false" aria-controls="bea-panel-overage" tabindex="-1" data-alerts-tab="overage" data-for="metered">Overage</button>
-        <button type="button" id="bea-tab-recipients" role="tab" aria-selected="false" aria-controls="bea-panel-recipients" tabindex="-1" data-alerts-tab="recipients">Recipients</button>
-      </div>
+    <div class="m__modal__header">
+      <h2 class="m__modal__title" id="modal-billing-alerts-title"><span data-alerts-title>Spend limits</span></h2>
       <button type="button" class="m__modal__close" aria-label="Close" data-modal-close="modal-billing-alerts">
         <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><use href="#close"></use></svg>
       </button>
     </div>
     <div class="m__modal__body">
-    <div class="billing-edit-list" id="bea-panel-low" role="tabpanel" aria-labelledby="bea-tab-low" data-edit-list="low" data-max="5">
-    <p class="billing-edit-list__lead">
-      Everyone on the recipient list gets an email when
-      <span data-for="contracting">this period’s credits</span><span data-for="paygo">credits since the last recharge</span><span data-for="metered">included credits</span>
-      reach a threshold.
-    </p>
-    <p class="billing-edit-list__label">Notify when</p>
+    <div class="billing-edit-list" data-edit-list="low" data-max="5">
+    <p class="billing-edit-list__lead">Everyone on the recipient list gets an email when spend <span data-for="contracting">this contract period</span><span data-for="paygo">since the last top-up</span><span data-for="metered">this billing period</span> reaches an amount.</p>
+    <p class="billing-edit-list__label">Notify when spend reaches</p>
     <ul class="billing-edit-list__rows" data-edit-rows></ul>
     <template data-edit-template>
       <li class="billing-edit-list__row">
-        <div class="m__textfield M billing-edit-list__value">
-          <input type="text" inputmode="numeric" aria-label="Threshold" data-billing-number data-edit-value />
-        </div>
-        <div class="m__select M billing-edit-list__unit">
-          <select aria-label="Threshold type" data-edit-kind>
-            <option value="percent">% used</option>
-            <option value="remaining">credits left</option>
-          </select>
-          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+        <div class="m__textfield M billing-edit-list__value billing-edit-list__value--money">
+          <span aria-hidden="true">$</span>
+          <input type="text" inputmode="numeric" aria-label="Amount in USD" data-billing-number data-edit-value />
         </div>
         <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove>{{ trash | safe }}</button>
       </li>
@@ -324,7 +318,7 @@ permalink: /dashboard/billing/
     <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add threshold</button>
     <p class="billing-inline-error" data-edit-error hidden></p>
   </div>
-    <div class="billing-edit-list" id="bea-panel-overage" role="tabpanel" aria-labelledby="bea-tab-overage" data-edit-list="overage" hidden data-max="5">
+    <div class="billing-edit-list" data-edit-list="overage" hidden data-max="5">
     <p class="billing-edit-list__lead">Everyone on the recipient list gets an email when the estimated overage for the current period reaches an amount. Usage is never paused.</p>
     <p class="billing-edit-list__label">Notify when estimated overage reaches</p>
     <ul class="billing-edit-list__rows" data-edit-rows></ul>
@@ -340,7 +334,7 @@ permalink: /dashboard/billing/
     <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add threshold</button>
     <p class="billing-inline-error" data-edit-error hidden></p>
   </div>
-    <div class="billing-edit-list" id="bea-panel-recipients" role="tabpanel" aria-labelledby="bea-tab-recipients" data-edit-list="recipients" hidden data-max="10">
+    <div class="billing-edit-list" data-edit-list="recipients" hidden data-max="10">
     <p class="billing-edit-list__lead">
       Low-balance<span data-for="paygo">, failed recharge</span><span data-for="metered"> and overage</span> emails go to everyone on this list.
       Add teammates or a shared address such as finance. External addresses only receive billing alerts.
@@ -400,7 +394,7 @@ permalink: /dashboard/billing/
 </div>
 {% endcall %}
 
-<script type="application/json" id="billing-alert-data">{{ {"low": b.alerts, "overage": b.overageAlerts, "recipients": b.recipients, "limit": b.spendLimit} | dump | safe }}</script>
+<script type="application/json" id="billing-alert-data">{{ {"low": b.alerts, "overage": b.overageAlerts, "recipients": b.recipients} | dump | safe }}</script>
 
 {% include 'prototypes/billing/prototype-panel.html' %}
 <script src="/assets/prototypes/billing.js"></script>

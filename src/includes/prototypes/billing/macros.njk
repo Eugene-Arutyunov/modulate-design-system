@@ -4,6 +4,9 @@
   states(): every data component renders Ready / Loading / Empty / Error bodies.
   The widget heading stays outside, so it is visible in every state.
   The prototype panel switches all blocks at once; Retry re-runs one block.
+  emptyMode: '' — a message (+ optional emptyAction);
+             'ready' — a new account looks the same as a filled one, the ready body stays;
+             'custom' — `empty` is raw markup (e.g. a zero balance), not a caption.
 #}
 
 {#
@@ -63,17 +66,21 @@
 </div>
 {% endmacro %}
 
-{% macro states(id, empty, error, kind = 'lines', emptyAction = '') %}
-<div class="billing-block" data-billing-block="{{ id }}" aria-live="polite">
+{% macro states(id, empty, error, kind = 'lines', emptyAction = '', emptyMode = '') %}
+<div class="billing-block" data-billing-block="{{ id }}"{% if emptyMode == 'ready' %} data-empty="ready"{% endif %} aria-live="polite">
   <div class="billing-state" data-state="ready">{{ caller() }}</div>
   <div class="billing-state" data-state="loading">
     <span class="billing-visually-hidden">Loading…</span>
     {{ skeleton(kind) }}
   </div>
+  {% if emptyMode == 'custom' %}
+  <div class="billing-state" data-state="empty">{{ empty | safe }}</div>
+  {% elif emptyMode != 'ready' %}
   <div class="billing-state billing-state--message" data-state="empty">
     <p>{{ empty | safe }}</p>
     {% if emptyAction %}{{ emptyAction | safe }}{% endif %}
   </div>
+  {% endif %}
   <div class="billing-state billing-state--message billing-state--error" data-state="error">
     <p>{{ error | safe }}</p>
     <button type="button" class="m__button-secondary-outline S" data-billing-retry>Try again</button>

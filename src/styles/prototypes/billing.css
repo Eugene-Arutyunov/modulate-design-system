@@ -50,6 +50,16 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   display: none;
 }
 
+/* Empty = a new account. Blocks marked data-empty="ready" look the same as filled ones. */
+body[data-billing-data="empty"] .billing-block[data-empty="ready"]:not([data-force]) > [data-state="ready"] {
+  display: flex !important;
+}
+
+/* Nothing to filter or export in an empty history. */
+body[data-billing-data="empty"] .billing-history :is(.table-filters, .table-filters-strip) {
+  display: none !important;
+}
+
 /* A single block can be forced (Retry → loading → ready). */
 .billing-block[data-force] > .billing-state {
   display: none !important;
@@ -161,6 +171,10 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 .billing-card__lead {
   color: var(--m__text-caption);
   max-width: 52ch;
+}
+
+.billing-card__lead--empty {
+  margin-top: var(--m__gap-s);
 }
 
 /* View-only: says who can act, placed where the buttons would be */
@@ -491,23 +505,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   color: var(--m__text-caption);
 }
 
-.billing-alerts__meter {
-  display: flex;
-  align-items: center;
-  gap: var(--m__gap-s);
-  margin-bottom: var(--m__gap-xs);
-
-  &[hidden] { display: none; }
-  & .billing-meter { flex: 1; }
-}
-
-.billing-alerts__percent {
-  flex-shrink: 0;
-  color: var(--m__text-caption);
-  font-size: var(--m__font-size-xs);
-  font-variant-numeric: tabular-nums;
-}
-
 .billing-alerts__row {
   display: flex;
   align-items: center;
@@ -555,40 +552,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   max-width: 90ch;
   margin: 0 !important;
   color: var(--m__text-caption);
-}
-
-/* Tabbed modal header, same as the LLM Battle config modal */
-.billing-modal-tabs__header {
-  align-items: flex-start;
-  gap: var(--m__gap-m);
-  border-bottom: 1px solid var(--m__border);
-}
-
-.billing-modal-tabs {
-  display: flex;
-  flex: 1;
-  min-width: 0;
-  gap: var(--m__gap-m);
-
-  & button {
-    margin-bottom: -1px;
-    padding: 0 0 0.7rem;
-    border: 0;
-    border-bottom: 2px solid transparent;
-    background: none;
-    color: var(--m__text-caption);
-    font: inherit;
-    font-size: var(--m__font-size-l);
-    font-weight: var(--m__font-weight-bold);
-    cursor: pointer;
-  }
-
-  & button:hover { color: var(--m__text-link-hover); }
-
-  & button[aria-selected="true"] {
-    color: var(--m__text);
-    border-bottom-color: currentColor;
-  }
 }
 
 .billing-alerts-modal {
@@ -927,6 +890,11 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   }
 }
 
+/* A new account has Auto Top-Up switched off, and says so. */
+body[data-billing-data="empty"] .billing-autotopup .billing-card__head > .m__tag[data-autotopup-show="off"] {
+  display: inline-flex !important;
+}
+
 /* Top-up modal: plain DS radio cards and textfield M; presets in a row, custom amount below. */
 #modal-billing-topup .m__modal {
   /* Pay matches the preset cards and the amount field: same padding and radius. */
@@ -975,4 +943,3 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   & td:first-child { white-space: nowrap; }
 }
 
-#modal-billing-limit [data-limit-remove][hidden] { display: none; }
