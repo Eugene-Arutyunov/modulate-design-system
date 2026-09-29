@@ -9,10 +9,12 @@
   if (!input || !payLabelEl || !presetCards.length) return;
 
   var maxCustomCredits = parseCredits(input.dataset.creditsMax);
+  var rate = parseFloat(input.dataset.creditsRate) || 0.01;
+  var afterEl = document.querySelector('[data-credits-after]');
   var maxCustomDigits = String(maxCustomCredits).length;
 
   function formatUSD(credits) {
-    return '$' + (credits * 0.01).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return '$' + (credits * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   function parseCredits(value) {
@@ -41,6 +43,7 @@
 
   function updatePayLabel(credits) {
     payLabelEl.textContent = formatUSD(parseCredits(credits));
+    if (afterEl) afterEl.textContent = (parseCredits(afterEl.dataset.creditsAfter) + parseCredits(credits)).toLocaleString('en-US');
   }
 
   function update(shouldReport) {
@@ -118,6 +121,11 @@
     }
   });
 
-  var initialPreset = document.querySelector('input[name="credits-preset"]:checked');
-  updatePayLabel(initialPreset ? initialPreset.value : input.value);
+  function currentCredits() {
+    var preset = document.querySelector('input[name="credits-preset"]:checked');
+    return preset ? preset.value : input.value;
+  }
+
+  document.addEventListener('billing:change', function () { updatePayLabel(currentCredits()); });
+  updatePayLabel(currentCredits());
 })();

@@ -1,0 +1,102 @@
+---
+pageTitle: Top Up Credits
+permalink: /dashboard/billing/top-up/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+{% set b = billing %}
+{% set hideSubnav = true %}
+
+<div class="m__wrapper">
+  <div class="m__space XL"></div>
+  <div class="dashboard-layout">
+    <div class="nav-sidebar">
+      <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
+    </div>
+
+    <main class="dashboard-content billing-page billing-page--top-up">
+      <a href="/dashboard/billing/" class="dashboard-back-link" data-billing-link>
+        <svg width="16" height="16" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
+        Billing
+      </a>
+      {% include 'prototypes/billing/page-head.html' %}
+
+      <div class="billing-readonly" data-for="paygo metered">
+        Top-ups are available on contract plans.
+        <span data-for="paygo">Pay/Go accounts recharge automatically — see <a href="/dashboard/billing/settings/#auto-recharge" data-billing-link>Alerts &amp; recharge</a>.</span>
+        <span data-for="metered">Metered accounts keep running at the metered rate after included credits.</span>
+      </div>
+
+      <div class="billing-readonly" data-for="contracting" data-role="viewer">
+        Only account admins can buy credits. Ask an admin to top up.
+      </div>
+
+      <section class="m__widget billing-purchase billing-topup" data-for="contracting" aria-labelledby="topup-title">
+        <div class="billing-card__head">
+          <h2 id="topup-title">Top up credits</h2>
+          <span class="billing-card__caption">Contracted rate {{ b.contract.rate }} / credit</span>
+        </div>
+        <p class="billing-card__lead">Choose how many credits to add. You’ll pay securely with Stripe, and credits are added as soon as the payment succeeds.</p>
+        <div class="billing-purchase__body">
+          <fieldset class="billing-fieldset" data-admin-control-group>
+            <div class="billing-purchase__controls">
+              <fieldset class="billing-purchase__presets m__radio-card-group" aria-label="Credit presets">
+                <label class="m__radio-card" data-credits-preset="50000">
+                  <input type="radio" name="credits-preset" value="50000" />
+                  <span class="m__radio-card__value">50,000</span>
+                  <span class="m__radio-card__caption">$400.00</span>
+                </label>
+                <label class="m__radio-card" data-credits-preset="100000">
+                  <input type="radio" name="credits-preset" value="100000" checked />
+                  <span class="m__radio-card__value">100,000</span>
+                  <span class="m__radio-card__caption">$800.00</span>
+                </label>
+                <label class="m__radio-card" data-credits-preset="250000">
+                  <input type="radio" name="credits-preset" value="250000" />
+                  <span class="m__radio-card__value">250,000</span>
+                  <span class="m__radio-card__caption">$2,000.00</span>
+                </label>
+              </fieldset>
+              <div class="m__textfield M m__textfield--no-spin">
+                <input type="text" id="credits-amount" inputmode="numeric" pattern="[0-9,]*"
+                  data-credits-max="10000000" data-credits-rate="{{ b.contract.rateValue }}"
+                  placeholder="Custom amount" aria-label="Credit amount" data-credits-input />
+              </div>
+              <button type="button" class="m__button-primary M billing-pay-btn" data-credits-pay data-billing-stripe data-role="admin">
+                Pay <span data-credits-pay-label>$800.00</span> <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </fieldset>
+          <div class="m__widget__meta-list billing-meta billing-topup__summary">
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Current balance</span>
+              <strong class="m__widget__meta-value"><span data-bind="remaining">290,000</span> credits</strong>
+            </p>
+            <p class="m__widget__meta-item">
+              <span class="m__widget__meta-label">Balance after top-up</span>
+              <strong class="m__widget__meta-value"><span data-credits-after="0">390,000</span> credits</strong>
+            </p>
+          </div>
+          <p class="billing-viewer-note">Invoices and receipts appear in <a href="/dashboard/billing/history/#documents" data-billing-link>History</a>. Payment methods are managed in Stripe.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+
+{% include 'prototypes/billing/prototype-panel.html' %}
+<script src="/assets/prototypes/billing.js"></script>
+<script src="/assets/prototypes/billing-credits.js"></script>
+<script>
+  // View-only users can see the price but not change the selection.
+  (function () {
+    function sync() {
+      var group = document.querySelector("[data-admin-control-group]");
+      if (group) group.disabled = document.body.dataset.billingRole === "viewer";
+    }
+    document.addEventListener("billing:change", sync);
+    sync();
+  })();
+</script>
+{% endblock %}

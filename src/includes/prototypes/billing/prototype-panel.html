@@ -1,0 +1,41 @@
+{#
+  Prototype-only controls, styled like the nav island. Not part of the product UI.
+  State lives in the URL (?type=&role=&scenario=&data=) so every view is linkable.
+#}
+<div class="billing-proto" data-billing-proto role="region" aria-label="Prototype controls">
+  <button type="button" class="billing-proto__open" data-billing-proto-toggle aria-expanded="false">
+    Prototype settings
+  </button>
+  <div class="billing-proto__body" data-billing-proto-body>
+    <button type="button" class="billing-proto__close" data-billing-proto-toggle aria-label="Hide prototype controls">×</button>
+    <fieldset class="billing-proto__group">
+      <legend>Customer</legend>
+      <div class="billing-proto__options">
+      <label><input type="radio" name="bp-type" value="contracting" />Contracting</label>
+      <label><input type="radio" name="bp-type" value="paygo" />Pay/Go</label>
+      <label><input type="radio" name="bp-type" value="metered" />Metered</label>
+      </div>
+    </fieldset>
+    <fieldset class="billing-proto__group">
+      <legend>Role</legend>
+      <div class="billing-proto__options">
+      <label><input type="radio" name="bp-role" value="admin" />Admin</label>
+      <label><input type="radio" name="bp-role" value="viewer" />View-only</label>
+      </div>
+    </fieldset>
+    <fieldset class="billing-proto__group">
+      <legend>Scenario</legend>
+      <div class="billing-proto__stack" data-billing-proto-scenario></div>
+    </fieldset>
+    <fieldset class="billing-proto__group">
+      <legend>Data</legend>
+      <div class="billing-proto__options">
+      <label><input type="radio" name="bp-data" value="ready" />Ready</label>
+      <label><input type="radio" name="bp-data" value="loading" />Loading</label>
+      <label><input type="radio" name="bp-data" value="empty" />Empty</label>
+      <label><input type="radio" name="bp-data" value="error" />Error</label>
+      </div>
+    </fieldset>
+    <a href="/dashboard/billing/spec/" class="m__button-secondary-outline XS billing-proto__spec">Component spec</a>
+  </div>
+</div>

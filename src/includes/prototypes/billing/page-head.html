@@ -1,0 +1,20 @@
+{# Shared head for every Billing view: title, sub-navigation and banners. #}
+<script>
+  /* Apply prototype state before first paint; billing.js takes over after load. */
+  (function () {
+    var p = new URLSearchParams(location.search), s = {};
+    try { s = JSON.parse(sessionStorage.getItem("billing-proto") || "{}"); } catch (e) {}
+    var b = document.body;
+    b.dataset.billingType = p.get("type") || s.type || "contracting";
+    b.dataset.billingRole = p.get("role") || s.role || "admin";
+    b.dataset.billingData = p.get("data") || "ready";
+  })();
+</script>
+<div class="billing-head">
+  <h1 class="dashboard-page-title">Billing</h1>
+  <span class="m__tag m__tag--muted billing-plan-tag" data-for="contracting">Contract</span>
+  <span class="m__tag m__tag--muted billing-plan-tag" data-for="paygo">Pay as you go</span>
+  <span class="m__tag m__tag--muted billing-plan-tag" data-for="metered">Monthly commitment</span>
+</div>
+{% if not hideSubnav %}{% include 'prototypes/billing/subnav.html' %}{% endif %}
+{% include 'prototypes/billing/banners.html' %}

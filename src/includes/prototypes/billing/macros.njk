@@ -1,0 +1,79 @@
+{#
+  Billing prototype building blocks.
+
+  states(): every data component renders Ready / Loading / Empty / Error bodies.
+  The widget heading stays outside, so it is visible in every state.
+  The prototype panel switches all blocks at once; Retry re-runs one block.
+#}
+
+{% macro skeleton(kind) %}
+<div class="billing-skeleton billing-skeleton--{{ kind }}" aria-hidden="true">
+  {% if kind == 'stat' %}
+  <span class="billing-skeleton__bar billing-skeleton__bar--value"></span>
+  <span class="billing-skeleton__bar billing-skeleton__bar--meter"></span>
+  <span class="billing-skeleton__bar billing-skeleton__bar--line"></span>
+  <span class="billing-skeleton__bar billing-skeleton__bar--line short"></span>
+  {% elif kind == 'chart' %}
+  <div class="billing-skeleton__chart">
+    {% for h in [40, 62, 35, 70, 55, 80, 48, 66, 38, 74, 58, 45] %}<span style="--h: {{ h }}%"></span>{% endfor %}
+  </div>
+  {% elif kind == 'table' %}
+  {% for i in range(0, 4) %}
+  <div class="billing-skeleton__row">
+    <span class="billing-skeleton__bar"></span>
+    <span class="billing-skeleton__bar"></span>
+    <span class="billing-skeleton__bar short"></span>
+  </div>
+  {% endfor %}
+  {% else %}
+  <span class="billing-skeleton__bar billing-skeleton__bar--line"></span>
+  <span class="billing-skeleton__bar billing-skeleton__bar--line"></span>
+  <span class="billing-skeleton__bar billing-skeleton__bar--line short"></span>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro states(id, empty, error, kind = 'lines', emptyAction = '') %}
+<div class="billing-block" data-billing-block="{{ id }}" aria-live="polite">
+  <div class="billing-state" data-state="ready">{{ caller() }}</div>
+  <div class="billing-state" data-state="loading">
+    <span class="billing-visually-hidden">Loading…</span>
+    {{ skeleton(kind) }}
+  </div>
+  <div class="billing-state billing-state--message" data-state="empty">
+    <p>{{ empty | safe }}</p>
+    {% if emptyAction %}{{ emptyAction | safe }}{% endif %}
+  </div>
+  <div class="billing-state billing-state--message billing-state--error" data-state="error">
+    <p>{{ error | safe }}</p>
+    <button type="button" class="m__button-secondary-outline S" data-billing-retry>Try again</button>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro meter(id) %}
+<div class="billing-meter" data-billing-meter="{{ id }}" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Credits used">
+  <span class="billing-meter__fill"></span>
+  <span class="billing-meter__tick" style="--at: 75%" aria-hidden="true"></span>
+  <span class="billing-meter__tick" style="--at: 90%" aria-hidden="true"></span>
+</div>
+{% endmacro %}
+
+{% macro statusTag(status) %}
+{% if status in ['Paid', 'Succeeded', 'Active'] %}
+<span class="m__tag m__tag--success">{{ status }}</span>
+{% elif status == 'Failed' %}
+<span class="m__tag m__tag--error">{{ status }}</span>
+{% elif status in ['Used up', 'Pending'] %}
+<span class="m__tag m__tag--warning billing-tag-warning">{{ status }}</span>
+{% else %}
+<span class="m__tag m__tag--muted">{{ status }}</span>
+{% endif %}
+{% endmacro %}
+
+{% macro pdfLink(number) %}
+<a href="#" class="billing-pdf" data-billing-pdf aria-label="Download {{ number }} as PDF">
+  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0L4.8 6.8M8 10l3.2-3.2M3 13h10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  PDF
+</a>
+{% endmacro %}

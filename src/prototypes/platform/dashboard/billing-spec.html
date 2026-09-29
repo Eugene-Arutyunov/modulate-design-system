@@ -1,0 +1,166 @@
+---
+pageTitle: Billing Spec
+permalink: /dashboard/billing/spec/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+{% set b = billing %}
+
+<div class="m__wrapper billing-spec">
+  <div class="m__space L"></div>
+  <a href="/dashboard/billing/" class="dashboard-back-link">
+    <svg width="16" height="16" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-left"></use></svg>
+    Billing prototype
+  </a>
+  <h1>Billing: component spec</h1>
+  <p class="billing-spec__lead">
+    Handoff for the customer-facing billing section: routes, per-customer-type content, component anatomy,
+    tokens, states, copy and role rules. Every value is a DS token from <code>bundle.css</code>;
+    billing-specific aliases live in <code>src/styles/prototypes/billing.css</code>.
+  </p>
+
+  <nav class="billing-spec__toc" aria-label="Contents">
+    <a href="#routes">Routes</a> · <a href="#matrix">Customer types</a> · <a href="#tokens">Tokens</a> ·
+    <a href="#components">Components</a> · <a href="#states">States</a> · <a href="#banners">Banners</a> ·
+    <a href="#roles">Roles</a> · <a href="#responsive">Responsive</a> · <a href="#stripe">Stripe entry points</a> ·
+    <a href="#later">Later</a> · <a href="#questions">Open questions</a>
+  </nav>
+
+  <h2 id="routes">Routes</h2>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>Route</th><th>Purpose</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>/dashboard/billing/</code></td><td>Overview: account status, usage this period, recent activity, alerts summary</td><td>Default landing from the sidebar.</td></tr>
+        <tr><td><code>/dashboard/billing/history/</code></td><td>Reporting tabs: Documents, Top-ups / Recharges, Usage, Grants / Allocations</td><td>Tab kept in the hash (<code>#documents</code>, <code>#payments</code>, <code>#usage</code>, <code>#grants</code>) so emails can deep-link.</td></tr>
+        <tr><td><code>/dashboard/billing/settings/</code></td><td>Alerts &amp; recharge: auto-recharge (Pay/Go), low-balance alerts, overage alerts (Metered), recipients</td><td>Anchors: <code>#auto-recharge</code>, <code>#low-balance</code>, <code>#overage-alerts</code>, <code>#recipients</code>.</td></tr>
+        <tr><td><code>/dashboard/billing/top-up/</code></td><td>Contracting top-up: choose quantity at the contracted rate, then continue to Stripe Checkout</td><td>Target of the low-balance email link. Pay/Go and Metered see an explanation instead.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="billing-spec__note">Prototype state lives in the query string: <code>?type=contracting|paygo|metered&amp;role=admin|viewer&amp;scenario=…&amp;data=ready|loading|empty|error</code>.</p>
+
+  <h2 id="matrix">Content per customer type</h2>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>Block</th><th>Contracting</th><th>Pay/Go</th><th>Metered</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Balance card</strong></td><td>“Credit balance”: remaining, % of period allocation used, next allocation date</td><td>“Credit balance”: remaining, % used since last recharge, last recharge date</td><td>“Included credits”: remaining included, % used, monthly commitment, next billing date</td></tr>
+        <tr><td><strong>Side card</strong></td><td>Top up: contracted rate, last top-up, <em>Top up credits</em></td><td>Auto-recharge: On / Off / Failed, rule sentence, payment method, <em>Edit recharge</em></td><td>Overage this period: estimated charge, overage credits, metered rate</td></tr>
+        <tr><td><strong>Usage chart</strong></td><td colspan="2">Daily credits this period, single series</td><td>Stacked: included + overage</td></tr>
+        <tr><td><strong>History tabs</strong></td><td>Documents · Top-ups · Usage · Grants</td><td>Documents · Recharges · Usage · Grants</td><td>Documents (invoices with commitment + overage line items) · Usage (Included / Overage columns) · Allocations</td></tr>
+        <tr><td><strong>Settings</strong></td><td>Low-balance alerts · Recipients</td><td>Auto-recharge · Low-balance alerts · Recipients</td><td>Low-balance alerts (against included credits) · Overage spend alerts · Recipients</td></tr>
+        <tr><td><strong>Special states</strong></td><td>Usage stopped</td><td>Failed recharge · Usage stopped (recharge off)</td><td>Now in metered billing</td></tr>
+        <tr><td><strong>Not shown</strong></td><td>Auto-recharge, overage</td><td>Top-up screen, overage</td><td>Top-up, auto-recharge, top-up and recharge history</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="tokens">Tokens</h2>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>Token</th><th>Value</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td><code>--billing-warning</code></td><td><code>var(--m__color-orange-500)</code></td><td>Meter fill 75–89%, “Low” tag, warning banner icon and 90% banner rule</td></tr>
+        <tr><td><code>--billing-warning-bg</code></td><td><code>color-mix(--m__bg-highlight 22%)</code></td><td>Warning banner surface</td></tr>
+        <tr><td><code>--billing-error-bg</code></td><td><code>color-mix(--m__error 10%)</code></td><td>Error banner surface; 3px inset rule in <code>--m__error</code></td></tr>
+        <tr><td><code>--billing-info-bg</code></td><td><code>color-mix(--m__bg-accent-hover 9%)</code></td><td>Metered info banner</td></tr>
+        <tr><td><code>--billing-overage</code></td><td><code>var(--m__bg-accent-hover)</code></td><td>Overage bar segment, used-up meter, overage values</td></tr>
+        <tr><td><code>--billing-meter-track</code></td><td><code>color-mix(--m__text 10%)</code></td><td>Meter track, future chart days</td></tr>
+        <tr><td><code>--billing-meter-height</code></td><td><code>0.5rem</code></td><td>Meter bar; ticks at 75% and 90% (2px, <code>--m__bg-surface</code>)</td></tr>
+        <tr><td><code>--billing-grid-gap</code></td><td><code>var(--m__gap-xs)</code> (0.5rem)</td><td>Gap between cards and rows, matching dashboard widgets</td></tr>
+        <tr><td><code>--billing-skeleton</code></td><td><code>color-mix(--m__text 8%)</code></td><td>Loading placeholders, 1.4s pulse, disabled with reduced motion</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="billing-spec__note">Typography: page title <code>--m__font-size-xl</code> bold; card title <code>--m__font-size-m</code> bold; big value <code>.m__widget__value</code>; body and tables <code>--m__font-size-s</code>; captions, meter legend, chart axis <code>--m__font-size-xs</code> in <code>--m__text-caption</code>. Numbers in tables use <code>tabular-nums</code> and align right.</p>
+
+  <h2 id="components">Components</h2>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>Component</th><th>Anatomy and spacing</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Card</strong> <code>.m__widget.billing-card</code></td><td>Surface <code>--m__bg-surface</code>, radius <code>--m__widget-radius</code>, padding <code>--m__widget-padding</code> (1rem). Head row min-height 1.6rem, title + optional tag left, quiet link right, <code>--m__gap-xs</code> below. Actions pinned to the card bottom with <code>--m__gap-l</code> above.</td><td>Cards in a row stretch to equal height. The heading stays visible in every data state.</td></tr>
+        <tr><td><strong>Balance meter</strong> <code>.billing-meter</code></td><td>Value (<code>.m__widget__value</code>) + unit caption → meter → legend (“42% used” / “of 500,000 this period”) → meta list, <code>--m__gap-m</code> above.</td><td>Fill: &lt;75% <code>--m__text-accent</code>, 75–89% <code>--billing-warning</code>, ≥90% <code>--m__error</code>, Metered used up <code>--billing-overage</code>. <code>role="meter"</code> with <code>aria-valuenow</code>.</td></tr>
+        <tr><td><strong>Status tag</strong></td><td>DS <code>.m__tag</code> next to the card title.</td><td>Low (warning), Usage stopped (error), Recharge failed (error), Used up (secondary). Hidden while data isn’t ready.</td></tr>
+        <tr><td><strong>Banner</strong> <code>.billing-banner</code></td><td>Grid: 1.15rem icon · text · actions. Padding <code>--m__gap-m</code> / <code>--m__widget-padding</code>, widget radius, <code>--billing-grid-gap</code> below. Title bold, body <code>--m__font-size-s</code>.</td><td>Only one at a time, most severe wins. Sits under the sub-navigation on every billing route; in product it also appears above other dashboard pages. Actions move under the text below 640px.</td></tr>
+        <tr><td><strong>Usage chart</strong></td><td>7rem plot, 3px bar gap, one bar per period day, future days as 6% track stubs, today’s bar at 55% opacity. Axis: start / Today / end.</td><td>Each bar is focusable with a tooltip (“24 Sep · 6,890 credits (1,200 overage)”). Footer: legend (Metered), totals, link to the usage history.</td></tr>
+        <tr><td><strong>Activity list</strong></td><td>Rows with <code>--m__gap-xs</code> padding and 12% text-mix dividers; type + number, description ellipsised; amount + date aligned right.</td><td>Latest 4 documents; <em>View all</em> opens History › Documents.</td></tr>
+        <tr><td><strong>History table</strong> <code>.billing-table</code></td><td>DS table; nowrap cells except description; numbers right-aligned with <code>--m__gap-l</code> end padding; credits added in <code>--m__success</code>.</td><td>Documents: type filter (All / Invoices / Payments / Receipts) as a secondary segmented control, a PDF link per row, invoice line items expandable (<code>aria-expanded</code>). An empty filter result shows an inline empty row.</td></tr>
+        <tr><td><strong>Settings list</strong> <code>.billing-settings-list</code></td><td>Label (bold) + helper (<code>--m__font-size-xs</code> caption), actions right. Rows as in the activity list.</td><td>Alerts: add / edit / remove through a modal, up to 5 per account, no duplicates, percentage 1–100. Recipients: members or external email.</td></tr>
+        <tr><td><strong>Auto-recharge form</strong></td><td>Label column min 10rem, S textfields 8.5rem, price computed inline. Save / Cancel appear enabled only when something changes.</td><td>The On/Off toggle disables the fields. Validation: at least 1,000 credits per recharge. Card changes happen in Stripe.</td></tr>
+        <tr><td><strong>Top-up</strong></td><td>Reuses the DS radio cards + custom amount + primary Pay button from the existing purchase widget. Summary: current balance → balance after top-up.</td><td>Price = credits × contracted rate. Custom amount is capped at 10,000,000. Pay opens Stripe Checkout.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="states">States (every data component)</h2>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>State</th><th>Rendering</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Loading</strong></td><td>Skeleton shaped like the content (stat / chart / table rows / lines). Title stays visible; tags and banners are hidden until data arrives. Screen-reader text “Loading…”.</td></tr>
+        <tr><td><strong>Empty</strong></td><td>Caption-colored sentence explaining what will appear and when, plus the primary action where one exists (e.g. <em>Add alert</em>, <em>Add payment method</em>).</td></tr>
+        <tr><td><strong>Error</strong></td><td>Sentence in <code>--m__error</code> that says what failed and, where true, that it doesn’t affect usage, plus a <em>Try again</em> secondary outline S button that retries only that block.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="banners">Banner matrix</h2>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>Trigger</th><th>Severity</th><th>Contracting</th><th>Pay/Go</th><th>Metered</th></tr></thead>
+      <tbody>
+        <tr><td>75% used</td><td>Warning</td><td>Usage stops at 0 → <em>Top up credits</em> (outline)</td><td>Auto-recharge will add N → <em>Recharge settings</em></td><td>Metered rate applies after included → <em>Overage alerts</em></td></tr>
+        <tr><td>90% used</td><td>Warning + rule</td><td>Runs out in ~N days → <em>Top up credits</em> (primary)</td><td>Auto-recharge will add N from card</td><td>Metered billing starts in ~N days</td></tr>
+        <tr><td>100% used</td><td>Error</td><td><strong>Usage stopped</strong> → <em>Top up credits</em></td><td><strong>Usage stopped</strong> (recharge off) → <em>Turn on auto-recharge</em></td><td><strong>Now in metered billing</strong> (info) → <em>Set overage alert</em></td></tr>
+        <tr><td>Recharge declined</td><td>Error</td><td>—</td><td><strong>Auto-recharge failed</strong> → <em>Update payment method ↗</em></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="billing-spec__note">Percentages are measured against the current allocation: the period allocation plus top-ups (Contracting), the last recharge (Pay/Go), or included credits (Metered).</p>
+
+  <h2 id="roles">Roles</h2>
+  <p>Account admins can change settings, top up, and follow Stripe links. Everyone else sees the same data read-only:</p>
+  <ul>
+    <li>Add, Edit, Remove, Save, Top up and Stripe actions are removed, not disabled, so there are no dead controls.</li>
+    <li>Settings shows a “View only” notice at the top, and form fields are disabled.</li>
+    <li>Where a viewer is blocked (usage stopped, failed recharge), the banner explains who can act: “Ask an account admin to top up.”</li>
+  </ul>
+
+  <h2 id="responsive">Responsive</h2>
+  <ul>
+    <li><strong>≥ 900px:</strong> status row 3fr / 2fr; lower row two equal columns.</li>
+    <li><strong>&lt; 900px:</strong> every card is full width in the order: banner → balance → side card → chart → activity → alerts.</li>
+    <li><strong>&lt; 768px:</strong> the sidebar is hidden (DS dashboard rule); history tabs scroll horizontally without wrapping.</li>
+    <li><strong>&lt; 640px:</strong> tables become stacked label/value rows (<code>data-label</code>); banner actions move under the text.</li>
+    <li><strong>&lt; 520px:</strong> top-up presets and Pay stack full width.</li>
+  </ul>
+
+  <h2 id="stripe">Stripe entry points (in scope)</h2>
+  <ul>
+    <li><em>Pay $X ↗</em> on Top-up opens Stripe Checkout.</li>
+    <li><em>Update payment method ↗</em> (failed recharge) and <em>Manage payment methods ↗ / Change in Stripe ↗</em> open the Stripe customer portal.</li>
+    <li><em>Add payment method ↗</em> appears in the empty auto-recharge state.</li>
+    <li>External links carry a ↗ and open in a new tab. After returning, the page refetches balance and history.</li>
+  </ul>
+
+  <h2 id="later">Later (post-MVP), with a placeholder in the UI</h2>
+  <ul>
+    <li>Recharge on a set date: a muted “Later” row in the auto-recharge card.</li>
+    <li>Overage spend cap: a muted “Later” row under overage alerts.</li>
+    <li>CSV export of usage: caption in the Usage tab toolbar.</li>
+    <li>Card expiry banner, account pricing display, and auto top-up for Contracting: no UI yet.</li>
+  </ul>
+
+  <h2 id="questions">Open questions for product</h2>
+  <ol>
+    <li>Contracting: do top-ups count towards the “% used” base, or does the % only track the monthly allocation? The prototype includes them.</li>
+    <li>Pay/Go: should the 75% / 90% banners show at all while auto-recharge is on and healthy? They are informational here; we could suppress them.</li>
+    <li>Can view-only members be alert recipients, and can external addresses be added (the prototype allows both)?</li>
+    <li>Metered overage alerts: fixed amounts only, or also a percentage of the commitment?</li>
+    <li>How are credit codes positioned for Contracting and Metered customers? The prototype keeps <em>Apply credit code</em> under Grants for admins.</li>
+  </ol>
+  <div class="m__space XL"></div>
+</div>
+{% endblock %}

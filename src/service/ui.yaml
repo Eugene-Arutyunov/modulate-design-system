@@ -209,7 +209,7 @@ current:
 
   - id: dashboard-billing
     route: /web/billing
-    title: Billing
+    title: 'Billing: Overview'
     sections:
       - section:
           text-content: billing-intro
@@ -221,6 +221,21 @@ current:
           widget: purchase-credits
       - section:
           widget: billing-history
+
+  - id: dashboard-billing-history
+    route: —
+    title: 'Billing: History'
+    sections: []
+
+  - id: dashboard-billing-settings
+    route: —
+    title: 'Billing: Alerts & recharge'
+    sections: []
+
+  - id: dashboard-billing-top-up
+    route: —
+    title: 'Billing: Top-up'
+    sections: []
 
   - id: dashboard-account
     route: /account
@@ -998,18 +1013,64 @@ target:
 
   - id: dashboard-billing
     route: /dashboard/billing/
-    title: Billing
+    title: 'Billing: Overview'
     sections:
       - section:
-          text-content: billing-intro
+          widget: billing-banner
+          states: [usage-75, usage-90, usage-stopped, failed-recharge, now-metered]
       - section:
-          widget: purchase-credits
+          widgets:
+            - credit-balance
+            - top-up
+            - auto-recharge
+            - overage-summary
       - section:
-          widget: credit-balance
+          widget: credit-usage-chart
       - section:
-          widget: apply-credit-code
+          widgets:
+            - recent-billing-activity
+            - low-balance-alerts-summary
+
+  - id: dashboard-billing-history
+    route: /dashboard/billing/history/
+    title: 'Billing: History'
+    sections:
       - section:
-          widget: billing-history
+          widget: billing-banner
+      - section:
+          widget: billing-documents
+      - section:
+          widget: top-up-history
+      - section:
+          widget: recharge-history
+      - section:
+          widget: credit-usage-history
+      - section:
+          widget: credit-grants
+
+  - id: dashboard-billing-settings
+    route: /dashboard/billing/settings/
+    title: 'Billing: Alerts & recharge'
+    sections:
+      - section:
+          widget: billing-banner
+      - section:
+          widget: auto-recharge-settings
+      - section:
+          widget: low-balance-alerts
+      - section:
+          widget: overage-spend-alerts
+      - section:
+          widget: alert-recipients
+
+  - id: dashboard-billing-top-up
+    route: /dashboard/billing/top-up/
+    title: 'Billing: Top-up'
+    sections:
+      - section:
+          widget: billing-banner
+      - section:
+          widget: top-up-credits
 
   - id: dashboard-account
     route: /dashboard/account/
