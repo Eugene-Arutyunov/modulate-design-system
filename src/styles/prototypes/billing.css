@@ -491,14 +491,13 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   color: var(--m__text-caption);
 }
 
-.billing-alerts__usage { margin-bottom: var(--m__gap-xs); }
-
 .billing-alerts__meter {
   display: flex;
   align-items: center;
   gap: var(--m__gap-s);
-  margin-top: var(--m__gap-xs);
+  margin-bottom: var(--m__gap-xs);
 
+  &[hidden] { display: none; }
   & .billing-meter { flex: 1; }
 }
 
@@ -593,9 +592,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 }
 
 .billing-alerts-modal {
-  width: min(32rem, calc(100vw - 2rem));
-
-  & .billing-edit-list { width: auto; }
   & .billing-edit-list[hidden] { display: none; }
 }
 
@@ -605,7 +601,7 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 }
 
 .billing-edit-list {
-  width: min(30rem, 100%);
+  width: 100%;
 
   & .billing-edit-list__label {
     font-size: var(--m__font-size-s);
@@ -700,11 +696,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   & svg { width: 1rem; height: 1rem; }
   &:hover:not(:disabled) { color: var(--m__text-link-hover); }
   &:disabled { color: var(--m__text-caption); cursor: not-allowed; }
-}
-
-#modal-billing-recharge .m__modal {
-  width: min(32rem, calc(100vw - 2rem));
-  max-width: none;
 }
 
 .billing-recharge-form {
@@ -937,13 +928,6 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 }
 
 /* Top-up modal: plain DS radio cards and textfield M; presets in a row, custom amount below. */
-/* A bit wider than the DS default so three “credits + price” cards fit on one line. */
-#modal-billing-topup .m__modal,
-#modal-billing-code .m__modal {
-  width: min(32rem, calc(100vw - 2rem));
-  max-width: none;
-}
-
 #modal-billing-topup .m__modal {
   /* Pay matches the preset cards and the amount field: same padding and radius. */
   & .m__modal__footer .m__button-primary {

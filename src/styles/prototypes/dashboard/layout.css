@@ -6371,8 +6371,11 @@ button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expa
   border: 0;
 }
 
-/* Usage History: numbers right-aligned in tabular figures */
+/* Usage History: numbers right-aligned in tabular figures, with room between
+   the numeric columns so right-aligned values don't run into each other. */
 .usage-table .is-num {
   text-align: right;
   font-variant-numeric: tabular-nums;
+  padding-left: var(--m__gap-l);
+  white-space: nowrap;
 }

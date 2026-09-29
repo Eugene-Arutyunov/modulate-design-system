@@ -62,7 +62,7 @@ chartJs: true
               {% for row in rows %}
               <tr data-row data-date="{{ row.submitted }}" data-model="{{ row.model }}" data-key="{{ row.key }}" data-status="{{ statusLabel[row.status] }}">
                 <td>{{ row.model }}</td>
-                <td><code>{{ row.key }}</code></td>
+                <td><span class="m__tag-flat">{{ row.key }}</span></td>
                 <td>
                   {% if row.status == 'success' %}<span class="m__tag m__tag--success">Success</span>
                   {% elif row.status == 'error' %}<span class="m__tag m__tag--error">Error</span>

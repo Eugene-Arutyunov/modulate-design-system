@@ -221,6 +221,14 @@
       ? fmt(l.limit) + " credits · " + fmt(l.spent) + " used this month"
       : "No limit. Usage isn’t capped.";
     bind("action").textContent = l.limit ? "Adjust limit" : "Set limit";
+    document.querySelector("[data-spend-usage]").hidden = !l.limit;
+    if (!l.limit) return;
+    var pct = Math.min(100, Math.round((l.spent / l.limit) * 100));
+    bind("percent").textContent = pct + "%";
+    var meter = document.querySelector("[data-spend-meter]");
+    meter.style.setProperty("--value", pct + "%");
+    meter.setAttribute("aria-valuenow", pct);
+    meter.dataset.level = pct >= 100 ? "full" : pct >= 90 ? "critical" : pct >= 75 ? "warning" : "ok";
   }
 
   document.querySelectorAll('[data-modal-open="modal-billing-limit"]').forEach(function (btn) {

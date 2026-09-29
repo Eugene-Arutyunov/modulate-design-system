@@ -138,11 +138,18 @@ permalink: /dashboard/billing/
           Set a monthly spend limit for your organization and get notified as you approach it.
         </p>
         {% call states('alerts', 'No alerts yet. Add a threshold to hear about low balance before usage is affected.', 'We couldn’t load alert settings. Existing alerts are still being sent.', 'rows', '<button type="button" class="m__button-primary S" data-modal-open="modal-billing-alerts" data-role="admin">Add alert</button>') %}
+          {# Only while a limit is set: this month's usage against it, full width above the rows. #}
+          <div class="billing-alerts__meter" data-spend-usage>
+            <div class="billing-meter" data-spend-meter role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Spend limit used">
+              <span class="billing-meter__fill"></span>
+            </div>
+            <span class="billing-alerts__percent"><span data-spend-bind="percent">54%</span> used</span>
+          </div>
           <div class="billing-alerts__row">
-            <p class="billing-alerts__row-main">
+            <div class="billing-alerts__row-main">
               <strong>Monthly spend limit</strong>
               <small data-spend-bind="limit">400,000 credits · 214,000 used this month</small>
-            </p>
+            </div>
             <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-limit" data-role="admin" data-spend-bind="action">Adjust limit</button>
           </div>
           <div class="billing-alerts__row">
