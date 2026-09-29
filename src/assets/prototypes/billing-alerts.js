@@ -19,7 +19,7 @@
   var label = {
     low: function (a) { return "$" + fmt(a.value); },
     overage: function (a) { return "$" + fmt(a.value); },
-    recipients: function (r) { return r.name || r.email; }
+    recipients: function (r) { return r.email; }
   };
   var KEYS = ["low", "overage", "recipients"];
   // "a", "a and b", "a, b, and c"
@@ -43,7 +43,8 @@
     var lines = {
       low: src.low.length ? "Notify when " + SPEND[document.body.dataset.billingType] + " reaches " + list(src.low.map(label.low)) + "." : "No thresholds yet.",
       overage: src.overage.length ? "Notify when estimated overage reaches " + list(src.overage.map(label.overage)) + "." : "No overage thresholds yet.",
-      recipients: src.recipients.length ? list(src.recipients.map(label.recipients)) + "." : "Account admins."
+      // Admins always get alerts; the list adds extra addresses.
+      recipients: src.recipients.length ? "Notify all admins and recipients from this list." : "Notify all admins."
     };
     KEYS.forEach(function (key) {
       var el = document.querySelector('[data-alerts-summary="' + key + '"]');
@@ -69,19 +70,9 @@
 
   function addRow(key, item) {
     var ed = editor(key);
-    var member = key === "recipients" && item && item.name !== undefined && item.role;
-    var tpl = ed.box.querySelector(member ? "[data-edit-member-template]" : "[data-edit-template]");
-    var li = tpl.content.firstElementChild.cloneNode(true);
-    if (member) {
-      li.dataset.email = item.email;
-      li.querySelector("[data-member-name]").textContent = item.name || item.email;
-      li.querySelector("[data-member-email]").textContent = item.name ? item.email : "Not a member";
-      var tag = li.querySelector("[data-member-role]");
-      tag.textContent = item.role;
-      tag.classList.add(item.role === "Admin" ? "m__tag--success" : "m__tag--muted");
-    } else if (item) {
-      li.querySelector("[data-edit-value]").value = fmt(item.value);
-    }
+    var li = ed.box.querySelector("[data-edit-template]").content.firstElementChild.cloneNode(true);
+    // Recipients are plain email fields, like the threshold amounts.
+    if (item) li.querySelector("[data-edit-value]").value = key === "recipients" ? item.email : fmt(item.value);
     ed.rows.appendChild(li);
     syncAdd(key);
     return li;
@@ -117,12 +108,6 @@
     var rows = Array.prototype.slice.call(ed.rows.children);
     for (var i = 0; i < rows.length; i++) {
       var li = rows[i];
-      if (li.dataset.email) {
-        var member = saved.recipients.filter(function (r) { return r.email === li.dataset.email; })[0];
-        seen[member.email] = true;
-        out.push(member);
-        continue;
-      }
       var input = li.querySelector("[data-edit-value]");
       var raw = input.value.trim();
       if (!raw) continue;
@@ -130,7 +115,7 @@
         if (!EMAIL.test(raw)) return fail(ed, "Enter a valid email address.", input);
         if (seen[raw]) return fail(ed, raw + " is already on the list.", input);
         seen[raw] = true;
-        out.push({ name: "", email: raw, role: "External" });
+        out.push({ email: raw });
         continue;
       }
       var value = parse(raw);

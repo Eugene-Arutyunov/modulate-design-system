@@ -141,7 +141,6 @@ permalink: /dashboard/billing/
       {# ── Alerts: thresholds and recipients as separate rows, each with its own modal. Spend limit is postponed. ── #}
       <section class="m__widget billing-card billing-alerts" id="alerts" aria-labelledby="billing-alerts-title">
         <h2 id="billing-alerts-title">Alerts</h2>
-        <p class="billing-alerts__lead">Set the thresholds at which we’ll send you an email notification.</p>
         {% call states('alerts', '', 'We couldn’t load alert settings. Existing alerts are still being sent.', 'rows', '', 'ready') %}
           {# Each row edits its own list in its own modal. #}
           <div class="billing-alerts__row">
@@ -161,7 +160,7 @@ permalink: /dashboard/billing/
           <div class="billing-alerts__row">
             <p class="billing-alerts__row-main">
               <strong>Recipients</strong>
-              <small data-alerts-summary="recipients">Jordan Lee, Sam Rivera, and finance@example.com.</small>
+              <small data-alerts-summary="recipients">Notify all admins and recipients from this list.</small>
             </p>
             <button type="button" class="m__button-secondary-outline S" data-alerts-open="recipients" data-role="admin">Edit</button>
           </div>
@@ -288,9 +287,8 @@ permalink: /dashboard/billing/
 </div>
 {% endcall %}
 
-{# Threshold lists edit in place, like Claude’s email notifications: rows + trash, “Add threshold”, Save. #}
-{% set trash %}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M6 4V2.75h4V4M4 4l.6 9.25h6.8L12 4M6.75 6.5v4.5M9.25 6.5v4.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>{% endset %}
-{% set plus %}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>{% endset %}
+{# Threshold lists edit in place, like Claude’s email notifications: rows + remove cross, “Add threshold”, Save. #}
+{% set plus %}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>{% endset %}
 
 {# One modal shell; each Alerts row opens it with only its own list and title. #}
 <div class="m__modal-backdrop" id="modal-billing-alerts" hidden aria-modal="true" role="dialog" aria-labelledby="modal-billing-alerts-title">
@@ -312,7 +310,7 @@ permalink: /dashboard/billing/
           <span aria-hidden="true">$</span>
           <input type="text" inputmode="numeric" aria-label="Amount in USD" data-billing-number data-edit-value />
         </div>
-        <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove>{{ trash | safe }}</button>
+        <button type="button" class="m__button-icon billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
       </li>
     </template>
     <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add threshold</button>
@@ -328,7 +326,7 @@ permalink: /dashboard/billing/
           <span aria-hidden="true">$</span>
           <input type="text" inputmode="numeric" aria-label="Amount in USD" data-billing-number data-edit-value />
         </div>
-        <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove>{{ trash | safe }}</button>
+        <button type="button" class="m__button-icon billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
       </li>
     </template>
     <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add threshold</button>
@@ -336,8 +334,7 @@ permalink: /dashboard/billing/
   </div>
     <div class="billing-edit-list" data-edit-list="recipients" hidden data-max="10">
     <p class="billing-edit-list__lead">
-      Low-balance<span data-for="paygo">, failed recharge</span><span data-for="metered"> and overage</span> emails go to everyone on this list.
-      Add teammates or a shared address such as finance. External addresses only receive billing alerts.
+      All admins get alert emails. Add more addresses, such as a shared finance inbox.
     </p>
     <ul class="billing-edit-list__rows" data-edit-rows></ul>
     <template data-edit-template>
@@ -345,17 +342,7 @@ permalink: /dashboard/billing/
         <div class="m__textfield M billing-edit-list__value billing-edit-list__value--wide">
           <input type="email" autocomplete="off" placeholder="name@company.com" aria-label="Email" data-edit-value />
         </div>
-        <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove recipient" data-edit-remove>{{ trash | safe }}</button>
-      </li>
-    </template>
-    <template data-edit-member-template>
-      <li class="billing-edit-list__row billing-edit-list__row--member">
-        <span class="billing-settings-list__main billing-edit-list__value--wide">
-          <strong data-member-name></strong>
-          <small data-member-email></small>
-        </span>
-        <span class="m__tag" data-member-role></span>
-        <button type="button" class="m__button-secondary-outline S billing-edit-list__remove" aria-label="Remove recipient" data-edit-remove>{{ trash | safe }}</button>
+        <button type="button" class="m__button-icon billing-edit-list__remove" aria-label="Remove recipient" data-edit-remove><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
       </li>
     </template>
     <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add recipient</button>
