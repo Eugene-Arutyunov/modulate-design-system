@@ -240,6 +240,13 @@
   window.billingToast = toast;
 
   document.addEventListener("click", function (e) {
+    // Info banners can be dismissed; any state change (apply) brings the matching one back.
+    var dismiss = e.target.closest("[data-billing-dismiss]");
+    if (dismiss) {
+      dismiss.closest(".billing-banner").hidden = true;
+      return;
+    }
+
     // Page error: one Try again reloads every block at once.
     if (e.target.closest("[data-billing-retry-all]")) {
       state.data = "loading";

@@ -28,6 +28,7 @@ permalink: /dashboard/billing/
               <span data-for="contracting paygo">Credit Balance</span>
               <span data-for="metered">Included Credits</span>
             </h2>
+            <span class="m__tag m__tag--secondary" data-for="metered" data-when="now-metered">Metered</span>
           </div>
           {% set balanceEmpty %}
             <p class="m__widget__value m__widget__value--amount billing-balance__value">0.00</p>
@@ -55,6 +56,15 @@ permalink: /dashboard/billing/
                 <span class="m__widget__meta-label">Last top-up</span>
                 <strong class="m__widget__meta-value">20 Sep 2026</strong>
               </p>
+              {# Overage summary: appears once included credits are used up. #}
+              <p class="m__widget__meta-item" data-for="metered" data-when="now-metered">
+                <span class="m__widget__meta-label">Overage credits</span>
+                <strong class="m__widget__meta-value" data-bind="overageCredits">0</strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="metered" data-when="now-metered">
+                <span class="m__widget__meta-label">Estimated overage</span>
+                <strong class="m__widget__meta-value" data-bind="overageCharge">$0.00</strong>
+              </p>
               <p class="m__widget__meta-item" data-for="metered">
                 <span class="m__widget__meta-label">Next invoice</span>
                 <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
@@ -65,53 +75,39 @@ permalink: /dashboard/billing/
               </p>
             </div>
           {% endcall %}
+          {# Contracting and Pay/Go: one-off purchase, full-width buttons at the card bottom in every data state. #}
+          <div class="billing-card__actions billing-card__actions--fill" data-for="contracting paygo" data-role="admin">
+            <button type="button" class="m__button-primary" data-modal-open="modal-billing-topup" data-role="admin">Buy Credits</button>
+            <button type="button" class="m__button-secondary-outline" data-modal-open="modal-billing-code" data-role="admin">Apply Credit Code</button>
+          </div>
+          <p class="billing-card__viewer-note" data-for="contracting paygo" data-role="viewer">Only your organization’s admins can buy credits.</p>
         </section>
 
-        {# Contracting and Pay/Go: one-off purchase #}
-        <section class="m__widget billing-card" data-for="contracting paygo" aria-labelledby="billing-topup-title">
-          <div class="billing-card__head">
-            <h2 id="billing-topup-title">Purchase Credits</h2>
-          </div>
-          {% call states('topup', '', 'actions', '', 'ready') %}
-            <p class="billing-card__lead">Credits pay for API usage. 1 credit = {{ b.contract.rate }} USD, spent based on audio duration and model cost.</p>
-            <div class="billing-card__actions" data-role="admin">
-              <button type="button" class="m__button-primary" data-modal-open="modal-billing-topup" data-role="admin">Buy Credits</button>
-              <button type="button" class="m__button-secondary-outline" data-modal-open="modal-billing-code" data-role="admin">Apply Credit Code</button>
+        {# ── Alerts: thresholds and recipients as separate rows, each with its own modal. Low balance is a % of the grant used or credits left, as in the brief. ── #}
+        <section class="m__widget billing-card billing-alerts" id="alerts" aria-labelledby="billing-alerts-title">
+          <h2 id="billing-alerts-title">Alerts</h2>
+          {% call states('alerts', '', 'rows', '', 'ready') %}
+            {# Each row edits its own list in its own modal. #}
+            <div class="billing-alerts__row">
+              <p class="billing-alerts__row-main">
+                <strong>Low balance</strong>
+                <small data-alerts-summary="low">Notify at 75% and 90% of credits used and at 10,000 credits left.</small>
+              </p>
+              <button type="button" class="m__button-secondary-outline S" data-alerts-open="low" data-role="admin">Edit</button>
             </div>
-            <p class="billing-card__viewer-note" data-role="viewer">Only your organization’s admins can buy credits.</p>
-          {% endcall %}
-        </section>
-
-        {# Metered: overage summary #}
-        <section class="m__widget billing-card" data-for="metered" aria-labelledby="billing-overage-title">
-          <div class="billing-card__head">
-            <h2 id="billing-overage-title">Overage this period</h2>
-            <span class="m__tag m__tag--secondary" data-when="now-metered">Metered</span>
-          </div>
-          {% set overageEmpty %}
-            <p class="m__widget__value billing-balance__value">$0.00 <span class="billing-unit">estimated</span></p>
-            <p class="billing-card__lead billing-card__lead--empty">No usage this period yet. Usage beyond your included credits is billed at {{ b.metered.overageRate }} per credit.</p>
-          {% endset %}
-          {% call states('overage', overageEmpty, 'stat', '', 'custom') %}
-            <p class="m__widget__value billing-balance__value">
-              <span data-bind="overageCharge">$0.00</span>
-              <span class="billing-unit">estimated</span>
-            </p>
-            <p class="billing-card__lead" data-when="healthy usage-75 usage-90">
-              No overage yet. Usage beyond the <span data-bind="total">100,000</span> included credits is billed at {{ b.metered.overageRate }} per credit.
-            </p>
-            <p class="billing-card__lead" data-when="now-metered">
-              Billed with your commitment on {{ b.nextDate }}. The estimate updates as usage is recorded.
-            </p>
-            <div class="m__widget__meta-list billing-meta">
-              <p class="m__widget__meta-item">
-                <span class="m__widget__meta-label">Overage credits</span>
-                <strong class="m__widget__meta-value" data-bind="overageCredits">0</strong>
+            <div class="billing-alerts__row" data-for="metered">
+              <p class="billing-alerts__row-main">
+                <strong>Overage threshold</strong>
+                <small data-alerts-summary="overage">Notify when estimated overage reaches $250 and $500.</small>
               </p>
-              <p class="m__widget__meta-item">
-                <span class="m__widget__meta-label">Metered rate</span>
-                <strong class="m__widget__meta-value">{{ b.metered.overageRate }} / credit</strong>
+              <button type="button" class="m__button-secondary-outline S" data-alerts-open="overage" data-role="admin">Edit</button>
+            </div>
+            <div class="billing-alerts__row">
+              <p class="billing-alerts__row-main">
+                <strong>Recipients</strong>
+                <small data-alerts-summary="recipients">Notify all admins and recipients from this list.</small>
               </p>
+              <button type="button" class="m__button-secondary-outline S" data-alerts-open="recipients" data-role="admin">Edit</button>
             </div>
           {% endcall %}
         </section>
@@ -134,35 +130,6 @@ permalink: /dashboard/billing/
             </p>
             <button type="button" class="m__button-primary S" data-modal-open="modal-billing-recharge" data-autotopup-enable data-autotopup-show="off" data-role="admin">Enable Auto Top-Up</button>
             <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-recharge" data-autotopup-show="on failed" data-role="admin">Manage</button>
-          </div>
-        {% endcall %}
-      </section>
-
-      {# ── Alerts: thresholds and recipients as separate rows, each with its own modal. Low balance is a % of the grant used or credits left, as in the brief. ── #}
-      <section class="m__widget billing-card billing-alerts" id="alerts" aria-labelledby="billing-alerts-title">
-        <h2 id="billing-alerts-title">Alerts</h2>
-        {% call states('alerts', '', 'rows', '', 'ready') %}
-          {# Each row edits its own list in its own modal. #}
-          <div class="billing-alerts__row">
-            <p class="billing-alerts__row-main">
-              <strong>Low balance</strong>
-              <small data-alerts-summary="low">Notify at 75% and 90% of credits used and at 10,000 credits left.</small>
-            </p>
-            <button type="button" class="m__button-secondary-outline S" data-alerts-open="low" data-role="admin">Edit</button>
-          </div>
-          <div class="billing-alerts__row" data-for="metered">
-            <p class="billing-alerts__row-main">
-              <strong>Overage threshold</strong>
-              <small data-alerts-summary="overage">Notify when estimated overage reaches $250 and $500.</small>
-            </p>
-            <button type="button" class="m__button-secondary-outline S" data-alerts-open="overage" data-role="admin">Edit</button>
-          </div>
-          <div class="billing-alerts__row">
-            <p class="billing-alerts__row-main">
-              <strong>Recipients</strong>
-              <small data-alerts-summary="recipients">Notify all admins and recipients from this list.</small>
-            </p>
-            <button type="button" class="m__button-secondary-outline S" data-alerts-open="recipients" data-role="admin">Edit</button>
           </div>
         {% endcall %}
       </section>
@@ -267,6 +234,7 @@ permalink: /dashboard/billing/
 {# Top-up: choose a quantity at the contracted rate, then pay in Stripe Checkout. The low-balance email links to #top-up. #}
 {% call modal("modal-billing-topup", "Buy Credits") %}
 <div class="m__modal__body billing-topup-modal">
+  <p class="billing-topup-modal__lead">Credits pay for API usage. 1 credit = {{ b.contract.rate }} USD, spent based on audio duration and model cost.</p>
   <div class="billing-topup-modal__controls">
     <fieldset class="billing-topup-modal__presets m__radio-card-group" aria-label="Credit presets">
       <label class="m__radio-card" data-credits-preset="100">

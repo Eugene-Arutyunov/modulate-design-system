@@ -203,12 +203,29 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   margin-top: auto;
   padding-top: var(--m__gap-l);
 
-  /* Regular-size buttons use the regular text size, as in banners. */
+  /* Regular-size buttons use the regular text size. */
   & > [class*="m__button-"]:not(.S) { font-size: var(--m__font-size-m); }
 }
 
-.billing-meta {
-  margin-top: var(--m__gap-m);
+/* Buttons fill the card width, each keeping its share by label length. */
+.billing-card__actions.billing-card__actions--fill {
+  flex-wrap: nowrap;
+  align-items: stretch;
+
+  /* Label as in the S buttons of the other widgets; the button itself stays large. */
+  & > [class*="m__button-"]:not(.S) {
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.4rem;
+    font-size: var(--m__font-size-s);
+    white-space: nowrap;
+  }
+}
+
+/* Rows sit right under the balance value; the value's bottom margin is the only gap. */
+.billing-meta.billing-meta {
+  margin-top: 0;
 }
 
 .billing-muted { color: var(--m__text-caption); }
@@ -240,8 +257,20 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   align-items: baseline;
   flex-wrap: wrap;
   gap: 0 var(--m__gap-xxs);
-  margin-bottom: var(--m__gap-s) !important;
+  margin-bottom: var(--m__gap-m) !important;
 }
+
+/* More air between the rows and the purchase buttons. */
+.billing-balance > .billing-card__actions { padding-top: calc(var(--m__spacer-m) * 1.25); }
+
+/* Loading and error: only the title and the skeleton / placeholder, no purchase buttons or view-only note. */
+body:is([data-billing-data="loading"], [data-billing-data="error"]) .billing-balance:not(:has(> .billing-block[data-force])) > :is(.billing-card__actions, .billing-card__viewer-note),
+.billing-balance:has(> .billing-block:is([data-force="loading"], [data-force="error"])) > :is(.billing-card__actions, .billing-card__viewer-note) {
+  display: none;
+}
+
+/* Title, value and rows read as one tight group. */
+.billing-balance > .billing-card__head { margin-bottom: var(--m__gap-xxxs); }
 
 .billing-unit {
   font-size: var(--m__font-size-s);
@@ -299,7 +328,7 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   margin-bottom: var(--billing-grid-gap);
   padding: var(--m__widget-padding);
 
-  & .billing-banner__body { max-width: 60ch; }
+  & .billing-banner__body { max-width: 90ch; }
   border-radius: var(--m__widget-radius);
   font-size: var(--m__font-size-s);
 
@@ -311,7 +340,7 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 }
 
 .billing-banner__title {
-  margin: 0 0 var(--m__gap-xxs) !important;
+  margin: 0 0 0.15rem !important; /* same as the row title / caption pair in Alerts */
   color: inherit;
   font-size: var(--m__font-size-m);
   font-weight: var(--m__font-weight-bold);
@@ -320,11 +349,37 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 .billing-banner__actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--m__gap-xs);
   align-self: center;
-  font-size: var(--m__font-size-m); /* regular DS button size, not the banner's small text */
 
   & a { white-space: nowrap; }
+}
+
+/* Info banners only: hides the notice. Inherits the banner's text colour. */
+button.m__button-icon.billing-banner__dismiss {
+  flex-shrink: 0;
+  align-self: center;
+  width: 1.75rem; /* height of the S buttons next to it */
+  height: 1.75rem;
+  color: inherit;
+
+  & svg { width: 1rem; height: 1rem; }
+}
+
+/* Stacked banner: the cross moves to the top right corner, the text leaves room for it. */
+@media (width < 640px) {
+  .billing-banner.billing-banner:has(.billing-banner__dismiss) {
+    position: relative;
+
+    & .billing-banner__body { padding-right: 2rem; }
+    & .billing-banner__dismiss {
+      position: absolute;
+      top: var(--m__gap-xs);
+      right: var(--m__gap-xs);
+      margin: 0;
+    }
+  }
 }
 
 /* ── Tables (history) ──────────────────────────────────────────────── */
@@ -541,7 +596,13 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 /* ── Email alerts widget + list editors in modals ──────────────────── */
 
 .billing-alerts {
-  & h2 { margin: 0 0 var(--m__gap-xs) !important; }
+  /* Same title box as .billing-card__head, so titles line up across the status row. */
+  & h2 {
+    display: flex;
+    align-items: center;
+    min-height: 1.6rem;
+    margin: 0 0 var(--m__gap-xs) !important;
+  }
 }
 
 .billing-alerts__lead {
@@ -961,17 +1022,16 @@ body[data-billing-data="empty"] .billing-autotopup .billing-card__head > .m__tag
 .billing-topup-modal {
   --m__radio-card-padding: var(--m__padding-input-m);
 
+  /* Same size and gap as the leads in the Alerts modals. */
+  & .billing-topup-modal__lead { margin: 0 0 var(--m__gap-s); }
   & .billing-topup-modal__controls { display: grid; gap: var(--m__gap-xs); }
+  /* Presets stack one per row, same width as the custom amount field. */
   & .billing-topup-modal__presets {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--m__gap-xs);
   }
   & .m__textfield { margin: 0; }
-
-  @media (width < 520px) {
-    & .billing-topup-modal__presets { grid-template-columns: 1fr; }
-  }
 }
 
 /* ── Spec page ─────────────────────────────────────────────────────── */
