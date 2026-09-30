@@ -154,7 +154,8 @@ the Chrome extension, the in-app browser or ad-hoc scripts, and do not hand-edit
 - **Anonymization happens in the page code before the screenshot.** Private text is
   replaced in the DOM with meaningful synthetic values of similar length (names, emails,
   organizations, codes, numbers), keeping styles, structure, dates, units, punctuation,
-  headings, statuses and control labels. **Never mask, blur, crop out, paint over or
+  headings, statuses and control labels. Credit balances, credit amounts and platform
+  aggregate figures are not sensitive (user decision) and stay unchanged. **Never mask, blur, crop out, paint over or
   otherwise edit an image**, and never re-render a frozen DOM snapshot. Canvas charts
   are kept unchanged (approved by the user) and are checked for private labels; if a
   chart shows private values, stop and ask.

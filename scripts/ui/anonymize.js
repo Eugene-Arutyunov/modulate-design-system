@@ -77,7 +77,8 @@ function prototypeRules({ substitutions, words, forbidden }) {
 
 /**
  * In page: rules for production. Replaces table columns by header, every non-example email,
- * IP addresses, the signed-in user's name and the organization name, then checks the captured
+ * IP addresses, the signed-in user's name, the organization name, key names and timestamps
+ * on the user's own pages (credit amounts are not sensitive and stay unchanged), then checks the captured
  * area for anything left. Returns { rules, originals, stopwords } for the canvas check.
  */
 function productionRules({ scopeSel, stoplist }) {
@@ -100,7 +101,6 @@ function productionRules({ scopeSel, stoplist }) {
   const isMine = v => meWords.some(w => v.toLowerCase().split('@')[0].includes(w.toLowerCase()));
   const email = v => isMine(v) ? 'jamie.parker@example.com' : `${name(v).toLowerCase().replace(' ', '.')}@example.com`;
   const code = v => { const n = hash(v); let i = 0; return v.replace(/[a-z0-9]/gi, c => { const k = (n + ++i * 7) % 16; if (/\d/.test(c)) return String(k % 10); const hex = /[a-f]/i.test(c) && /^[0-9a-f.\-_]+$/i.test(v); const ch = hex ? 'abcdef'[k % 6] : String.fromCharCode(97 + (n + i * 11) % 26); return c === c.toUpperCase() && !hex ? ch.toUpperCase() : ch; }); };
-  const digits = v => { const n = hash(v); let i = 0; return v.replace(/\d/g, () => String((n + ++i * 7) % 10)); };
   // Valid, descending synthetic timestamps in the production format (M/D/YYYY, h:mm:ss AM/PM).
   // Two production formats: 9/29/2026, 4:12:05 PM (tables) and 29 Sept 2026, 16:12 (Overview).
   const DATE = /^\d{1,2}\/\d{1,2}\/\d{4}, \d{1,2}:\d{2}:\d{2} [AP]M$/;
@@ -122,9 +122,9 @@ function productionRules({ scopeSel, stoplist }) {
 
   // Table columns by header name.
   const KIND = { 'User': 'identity', 'Recipient': 'identity', 'Initiated By': 'identity', 'Created By': 'identity', 'Email': 'identity', 'UUID': 'code', 'SES Message ID': 'code', 'Code': 'code', 'Link': 'code', 'Organization': 'org', 'Tags': 'tag' };
-  // Account values on the user's own dashboard pages.
-  const account = location.pathname.startsWith('/dashboard/');
-  if (account) Object.assign(KIND, { 'API Key': 'keyName', 'Credits': 'number', 'Date': 'date', 'Submitted': 'date', 'Completed': 'date' });
+  // The user's own dashboard pages. Credit balances and amounts are not sensitive (user decision)
+  // and stay unchanged, so they match the charts; key names and timestamps are replaced.
+  if (location.pathname.startsWith('/dashboard/')) Object.assign(KIND, { 'API Key': 'keyName', 'Date': 'date', 'Submitted': 'date', 'Completed': 'date' });
   for (const table of document.querySelectorAll('main table')) {
     const heads = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim());
     [...table.querySelectorAll('tbody tr')].forEach((tr, row) => {
@@ -143,14 +143,11 @@ function productionRules({ scopeSel, stoplist }) {
           else if (kind === 'org') set(n, t.replace(s, s.includes('@') ? s.replace(EMAIL, email) : s.split(/,\s*/).map(p => p === 'Personal' ? p : org(p)).join(', ')));
           else if (kind === 'tag') set(n, KEEP_TAGS.has(s) ? t : t.replace(s, org(s)));
           else if (kind === 'keyName' && (heads[i] === 'API Key' || n.parentElement.matches('div.font-medium'))) set(n, t.replace(s, ['Development', 'Staging service', 'Production service', 'Integration tests'][hash(s) % 4]));
-          else if (kind === 'number') set(n, digits(t));
           else if (kind === 'date' && (DATE.test(s) || SHORT_DATE.test(s))) set(n, t.replace(s, date(heads[i], row, SHORT_DATE.test(s))));
         }
       });
     });
   }
-  // Balances and totals shown as large figures on the user's own pages.
-  if (account) for (const el of document.querySelectorAll('main p.text-2xl, main strong.tabular-nums')) for (const n of textNodes(el)) if (/\d/.test(n.textContent)) set(n, digits(n.textContent));
   // Everything else on the page.
   for (const n of textNodes(document.body)) {
     let t = cur(n);
@@ -161,7 +158,6 @@ function productionRules({ scopeSel, stoplist }) {
     t = t.replace(IP, m => { const h = hash(m); const ip = `10.${h % 200 + 20}.${(h >>> 8) % 250}.${(h >>> 16) % 250 + 2}`; produced.add(ip); return ip; });
     // The organization name outside the logo, links and legal footer (the account menu included).
     if ((!p.closest('a, footer') || p.closest('[role=menu]')) && /^\s*Modulate(,|\s*$)/.test(t)) t = t.replace('Modulate', 'Demo Organization');
-    if (location.pathname === '/dashboard/organization' && p.closest('td') && /credits/.test(t)) t = digits(t);
     set(n, t);
   }
   const pathOf = el => { const parts = []; for (let e = el; e && e !== document.documentElement; e = e.parentElement) parts.unshift(`${e.tagName.toLowerCase()}:nth-child(${[...e.parentElement.children].indexOf(e) + 1})`); return 'html > ' + parts.join(' > '); };

@@ -58,7 +58,9 @@ Other options: `--max-age=14` (production age in days), `--workers=4`,
 - Replacements: [`anonymize.js`](anonymize.js). Prototype fixtures are an explicit
   substitution list. Production is replaced by meaning: table columns by header (users,
   emails, UUIDs, codes, organizations, tags, key names), every non-`example.com` email,
-  IP addresses, the signed-in user's name (read from the page header) and organization.
+  IP addresses, the signed-in user's name (read from the page header) and organization,
+  and API key names and timestamps on the user's own pages. Credit balances and amounts
+  are not sensitive (user decision) and stay unchanged, so they match the charts.
   Distinct organizations get distinct synthetic names. UUID colour dots are re-derived
   from the synthetic UUID.
 - Optional private words that must never appear (one per line):

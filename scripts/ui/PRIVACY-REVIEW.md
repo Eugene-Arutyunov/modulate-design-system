@@ -85,3 +85,12 @@ model names, series labels, dates and numbers, so they are shown unchanged, whil
 organization names and member emails in the Top tables are replaced in the page;
 distinct organizations receive distinct synthetic names. Captures that showed a load
 error or empty data were discarded. The dataset still contains 58 states and 77 images.
+
+## One-command workflow (1 October 2026)
+
+Captures now run through `npm run ui:refresh` (anonymization in the page, leftover and
+chart-label checks, local review, `ui:publish`). The user confirmed that credit
+balances and credit amounts are not sensitive: Overview, Billing, Usage and
+Organization were recaptured with real credit figures, which now match the Overview
+balance chart; names, emails, API key names and timestamps remain synthetic. All four
+images were reviewed visually before publication.
