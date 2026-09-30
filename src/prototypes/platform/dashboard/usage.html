@@ -35,10 +35,13 @@ chartJs: true
       ] %}
       {% set statusLabel = { success: 'Success', error: 'Error', processing: 'Processing' } %}
 
-      {# ── Usage History: filters and export like Billing History ── #}
-      <section class="dashboard-section m__widget usage-history" aria-labelledby="usage-history-title">
-        <div class="table-toolbar">
-          <h2 id="usage-history-title">Usage History</h2>
+      {# ── One widget: request table under a search line (filters and export like Billing History), then the two charts ── #}
+      <section class="dashboard-section m__widget usage-history" aria-label="Usage history">
+        <div class="m__widget-header">
+          <label class="m__searchbar" for="usage-search">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#search"></use></svg>
+            <input type="search" id="usage-search" placeholder="Search by model or API key" data-usage-search />
+          </label>
           <div class="table-filters" data-usage-filters></div>
         </div>
         <div class="review-filter-strip table-filters-strip" data-usage-strip hidden></div>
@@ -78,15 +81,14 @@ chartJs: true
               </tr>
               {% endfor %}
               <tr data-filter-empty hidden>
-                <td colspan="9"><div class="m__table-empty"><p>Nothing matches these filters</p></div></td>
+                <td colspan="9"><div class="m__table-empty"><p>Nothing matches your search or filters</p></div></td>
               </tr>
             </tbody>
           </table>
         </div>
         {% endcall %}
-      </section>
 
-      <section class="dashboard-section m__widget" aria-labelledby="usage-credits-title">
+        <div class="m__space M"></div>
         <h2 id="usage-credits-title">Credits Consumed</h2>
         {# Empty: the chart itself with its axes and no data (dashboard-charts.js). #}
         {% call states('usage-credits', '', 'chart', '', 'ready') %}
@@ -96,9 +98,8 @@ chartJs: true
         </div>
         <p class="chart-status-bar"></p>
         {% endcall %}
-      </section>
 
-      <section class="dashboard-section m__widget" aria-labelledby="usage-status-title">
+        <div class="m__space M"></div>
         <h2 id="usage-status-title">Requests by Status</h2>
         {% call states('usage-status', '', 'chart', '', 'ready') %}
         <div class="chart-container">
@@ -119,19 +120,25 @@ chartJs: true
 <script src="/assets/prototypes/billing.js"></script>
 <script src="/assets/prototypes/table-filters.js"></script>
 <script>
-  // Usage History: Date / Model / API Key / Status (+ Billed as for Metered) filters and CSV export.
+  // Usage History: search, Date / Model / API Key / Status (+ Billed as for Metered) filters and CSV export.
   (function () {
     var widget = document.querySelector(".usage-history");
     if (!widget || !window.TableFilters) return;
     var body = document.body;
     var isMetered = function () { return body.dataset.billingType === "metered"; };
     var visible = function (el) { return el.offsetParent !== null; };
+    var search = widget.querySelector("[data-usage-search]");
     var table = TableFilters.init({
       widget: widget,
       controls: widget.querySelector("[data-usage-filters]"),
       strip: widget.querySelector("[data-usage-strip]"),
       rows: function () { return [].slice.call(widget.querySelectorAll("tr[data-row]")); },
       today: new Date(2026, 3, 16),
+      // Search line: model name or API key, on top of the filters.
+      match: function (tr) {
+        var q = search.value.trim().toLowerCase();
+        return !q || (tr.dataset.model + " " + tr.dataset.key).toLowerCase().indexOf(q) >= 0;
+      },
       categories: [
         { name: "Date", attr: "date" },
         { name: "Model", attr: "model" },
@@ -161,6 +168,7 @@ chartJs: true
       if (v && (!isMetered() || !table.choices("Billed as").some(function (c) { return c[0] === v; }))) table.clear("Billed as");
       table.apply();
     }
+    search.addEventListener("input", function () { table.apply(); });
     document.addEventListener("billing:change", syncBilled);
     syncBilled();
   })();

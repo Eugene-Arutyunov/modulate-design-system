@@ -126,7 +126,8 @@ permalink: /dashboard/billing/spec/
     <table class="billing-spec__table">
       <thead><tr><th>Component</th><th>Used for</th></tr></thead>
       <tbody>
-        <tr><td>{{ ds('m__widget') }}</td><td>Every block: balance card, Alerts, Auto Top-Up, Billing History, Usage History, both charts.</td></tr>
+        <tr><td>{{ ds('m__widget') }}</td><td>Every block: balance card, Alerts, Auto Top-Up, Billing History. Usage is one widget: the request table, then both charts.</td></tr>
+        <tr><td><code>m__widget-header</code><br><code>m__searchbar</code></td><td>Top line of the Usage widget instead of a title: search by model or API key, with Filter and Export on the right.</td></tr>
         <tr><td>{{ ds('m__alert-error') }}</td><td>Banners. Info (blue) for 75%, 90% and metered billing; error (red) for stopped usage and a failed top-up. No icon.</td></tr>
         <tr><td>{{ ds('m__button-primary.M') }}<br>{{ ds('m__button-secondary-outline.M') }}</td><td>Buy Credits and Apply Credit Code in the balance card; Pay in the Buy Credits modal.</td></tr>
         <tr><td>{{ ds('m__button-primary.S') }}</td><td>Main action: Enable Auto Top-Up, the first button of an error banner, Save in modals.</td></tr>

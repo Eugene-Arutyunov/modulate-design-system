@@ -6360,6 +6360,20 @@ button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expa
   & .review-date-range-header + .review-filter-values { padding-top: .25rem; } /* gap under the divider, as in the queue */
 }
 
+/* In a widget header the search line takes the title's place; the buttons keep the widget padding. */
+.m__widget-header > .table-filters {
+  padding: 0.4rem var(--m__widget-padding);
+}
+
+@media (max-width: 640px) {
+  .m__widget-header:has(> .table-filters) {
+    flex-wrap: wrap;
+
+    & .m__searchbar { flex: 1 1 100%; }
+    & > .table-filters { padding-top: 0; }
+  }
+}
+
 /* A category can be switched off (TableFilters `when`), e.g. one customer type only. */
 .review-filter-popup .review-filter-categories button[hidden] { display: none; }
 

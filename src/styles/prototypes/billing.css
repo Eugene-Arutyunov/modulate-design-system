@@ -68,7 +68,7 @@ body[data-billing-data="empty"] .billing-block[data-empty="ready"]:not([data-for
 }
 
 /* Nothing to filter or export in an empty history, or in one that failed to load. */
-body:is([data-billing-data="empty"], [data-billing-data="error"]) :is(.billing-history, .usage-history):not(:has(.billing-block[data-force])) :is(.table-filters, .table-filters-strip) {
+body:is([data-billing-data="empty"], [data-billing-data="error"]) :is(.billing-history, .usage-history):not(:has(.billing-block[data-billing-block*="history"][data-force])) :is(.table-filters, .table-filters-strip) {
   display: none !important;
 }
 

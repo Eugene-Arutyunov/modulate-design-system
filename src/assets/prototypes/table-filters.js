@@ -11,6 +11,7 @@
  *   activeRows(),      // rows the value lists are built from (defaults to rows)
  *   categories: [{ name, attr, labels?, when? }],  // attr = data-* key on each row; "date" is special;
  *                      // when() → false hides the category (e.g. one customer type only)
+ *   match(tr),         // optional extra condition (e.g. a search field)
  *   today,             // Date the presets count back from
  *   exportCsv: { filename, head (array or function), cells(tr) → [text], label },
  *   toast(message)
@@ -70,6 +71,7 @@
     }
 
     function matches(tr) {
+      if (cfg.match && !cfg.match(tr)) return false;
       return CATEGORIES.every(function (c) {
         var v = filters[c];
         if (!v) return true;
