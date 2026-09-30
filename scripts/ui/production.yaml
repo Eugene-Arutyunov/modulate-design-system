@@ -1,0 +1,74 @@
+# How `npm run ui:refresh` opens each Compare row on production (https://platform.modulate.ai).
+# Prototype states come from `audit.scenarios` in src/service/ui.yaml; this file only covers
+# production, so editing it never marks prototype screenshots as stale.
+#
+#   url:          production path (required)
+#   steps:        [{ action: click|check|hover, selector }] to open a tab, menu or dialog.
+#                 A selector is CSS or { role, name } (exact name match).
+#   visible:      wait for this element after the steps
+#   scope:        capture only this element (menus, components); otherwise full page
+#   dpr:          device pixel ratio (default 1)
+#   anonymous:    open signed out (auth pages)
+#   min_canvases: wait until at least this many charts exist
+#   ready:        JS expression that must become true before capture (live data loaded)
+#   same_as:      reuse another row's production capture (same production view)
+#
+# Never add steps that create, send, delete or change anything; requests other than
+# GET/HEAD/OPTIONS are blocked anyway.
+
+dashboard-home: { url: /dashboard/overview }
+dashboard-api-keys: { url: /dashboard/api-keys }
+dashboard-api-keys-create-key:
+  url: /dashboard/api-keys
+  steps: [{ action: click, selector: { role: button, name: Create API Key } }]
+  visible: { role: dialog }
+dashboard-usage: { url: /dashboard/usage }
+dashboard-billing: { url: /dashboard/billing }
+dashboard-account: { url: /account }
+dashboard-organization: { url: /dashboard/organization }
+conversations: { url: /dashboard/conversations }
+conversations-review: { url: /dashboard/conversations/review-queue }
+conversations-review-detail: { url: /dashboard/conversations/f238e9ca-6509-4a8d-9a79-b18aa09f5a1f }
+conversations-report: { same_as: conversations-review-detail }
+docs-models-overview: { url: /pricing }
+
+auth-login: { url: /signin, anonymous: true }
+auth-signup: { url: /signup-request, anonymous: true }
+auth-reset-password: { url: /password-reset-request, anonymous: true }
+auth-org-select: { url: /org-select }
+
+header-account-menu:
+  url: /dashboard/overview
+  steps: [{ action: click, selector: 'header button:has(span.max-w-40)' }]
+  scope: '[role=menu]'
+  dpr: 2
+component-pagination:
+  url: /dashboard/usage
+  scope: 'main nav.mx-auto > ul'
+  dpr: 2
+
+internal-users: { url: /internal/users }
+internal-organizations: { url: /internal/organizations }
+internal-unverified-signups: { url: /internal/unverified-signups }
+internal-data-export: { url: /internal/data }
+internal-data-deletion:
+  url: /internal/data
+  steps: [{ action: click, selector: { role: tab, name: Data Deletion } }]
+internal-training-exclusions:
+  url: /internal/data
+  steps: [{ action: click, selector: { role: tab, name: Exclude from Training } }]
+internal-invites: { url: /internal/invites }
+internal-credit-codes:
+  url: /internal/invites
+  steps: [{ action: click, selector: { role: tab, name: Credit Codes } }]
+internal-usage:
+  url: /internal/usage
+  min_canvases: 8
+  # Total Requests is non-zero once live data has arrived.
+  ready: >-
+    [...document.querySelectorAll('main p')].some(p => p.textContent.trim() === 'Total Requests'
+    && p.nextElementSibling && !['', '0'].includes(p.nextElementSibling.textContent.trim()))
+internal-overrides: { url: /internal/overrides }
+internal-reports: { url: /internal/reports }
+internal-models: { url: /internal/models }
+internal-email-status: { url: /internal/email-status }
