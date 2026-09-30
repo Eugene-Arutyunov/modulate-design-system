@@ -1,0 +1,64 @@
+{
+  "period": "12 Sep – 11 Oct 2026",
+  "nextDate": "12 Oct 2026",
+  "contract": {
+    "rate": "$0.01",
+    "rateValue": 0.01,
+    "allocation": "500,000"
+  },
+  "paygo": {
+    "threshold": "10,000",
+    "recharge": "50,000",
+    "rechargeAmount": "$500.00",
+    "card": "Visa •••• 4242"
+  },
+  "metered": {
+    "commitment": "$1,000.00",
+    "included": "100,000",
+    "overageRate": "$0.012"
+  },
+  "alerts": [
+    { "kind": "percent", "value": 75 },
+    { "kind": "percent", "value": 90 },
+    { "kind": "remaining", "value": 10000 }
+  ],
+  "overageAlerts": [
+    { "value": "$250.00" },
+    { "value": "$500.00" }
+  ],
+  "recipients": [
+    { "email": "finance@example.com" },
+    { "email": "ops@example.com" }
+  ],
+  "history": {
+    "contracting": [
+      { "date": "12 Sep 2026, 09:00", "kind": "allocation", "type": "Monthly allocation", "invoice": "INV-2026-0922", "receipt": "RC-2026-0922", "method": "Wire transfer", "credits": "+500,000.00", "amount": "$5,000.00", "status": "Paid" },
+      { "date": "3 Sep 2026, 14:32", "kind": "top-up", "type": "Top-up", "invoice": "INV-2026-0914", "receipt": "RC-2026-0914", "method": "Visa •••• 4242", "credits": "+100,000.00", "amount": "$1,000.00", "status": "Paid" },
+      { "date": "19 Aug 2026, 11:07", "kind": "top-up", "type": "Top-up", "invoice": "INV-2026-0851", "receipt": "RC-2026-0851", "method": "Visa •••• 4242", "credits": "+50,000.00", "amount": "$500.00", "status": "Paid" },
+      { "date": "12 Aug 2026, 09:00", "kind": "allocation", "type": "Monthly allocation", "invoice": "INV-2026-0840", "receipt": "RC-2026-0840", "method": "Wire transfer", "credits": "+500,000.00", "amount": "$5,000.00", "status": "Paid" },
+      { "date": "30 Jul 2026, 16:48", "kind": "top-up", "type": "Top-up", "invoice": "INV-2026-0776", "receipt": "RC-2026-0776", "method": "Mastercard •••• 8210", "credits": "+200,000.00", "amount": "$2,000.00", "status": "Paid" },
+      { "date": "12 Jul 2026, 09:00", "kind": "allocation", "type": "Monthly allocation", "invoice": "INV-2026-0712", "receipt": "RC-2026-0712", "method": "Wire transfer", "credits": "+500,000.00", "amount": "$5,000.00", "status": "Paid" },
+      { "date": "12 Jun 2026, 10:15", "kind": "grant", "type": "Credit grant", "invoice": "GR-2026-0612", "method": "Contract start bonus", "credits": "+50,000.00", "amount": "—", "status": "Used" }
+    ],
+    "paygo": [
+      { "date": "28 Sep 2026, 03:41", "kind": "recharge", "type": "Auto top-up", "invoice": "INV-2026-0981", "method": "Visa •••• 4242 · declined", "credits": "—", "amount": "$500.00", "status": "Failed" },
+      { "date": "20 Sep 2026, 18:22", "kind": "recharge", "type": "Auto top-up", "invoice": "INV-2026-0962", "receipt": "RC-2026-0962", "method": "Visa •••• 4242", "credits": "+50,000.00", "amount": "$500.00", "status": "Paid" },
+      { "date": "6 Sep 2026, 07:55", "kind": "recharge", "type": "Auto top-up", "invoice": "INV-2026-0917", "receipt": "RC-2026-0917", "method": "Visa •••• 4242", "credits": "+50,000.00", "amount": "$500.00", "status": "Paid" },
+      { "date": "22 Aug 2026, 12:09", "kind": "recharge", "type": "Top-up", "invoice": "INV-2026-0862", "receipt": "RC-2026-0862", "method": "Visa •••• 4242", "credits": "+20,000.00", "amount": "$200.00", "status": "Paid" },
+      { "date": "14 Aug 2026, 15:30", "kind": "grant", "type": "Credit grant", "invoice": "GR-2026-0814", "method": "Credit code SPRING26", "credits": "+5,000.00", "amount": "—", "status": "Used" },
+      { "date": "2 Jun 2026, 10:02", "kind": "grant", "type": "Credit grant", "invoice": "GR-2026-0602", "method": "Invite bonus", "credits": "+250.00", "amount": "—", "status": "Used" },
+      { "date": "1 Jun 2026, 09:47", "kind": "grant", "type": "Credit grant", "invoice": "GR-2026-0601", "method": "New account credits", "credits": "+1,000.00", "amount": "—", "status": "Used" }
+    ],
+    "metered": [
+      { "date": "12 Sep 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0921", "method": "ACH · due 12 Oct", "credits": "—", "amount": "$1,144.00", "status": "Open",
+        "lines": [{ "label": "Commitment", "amount": "$1,000.00" }, { "label": "Overage", "amount": "$144.00" }] },
+      { "date": "12 Sep 2026, 09:00", "kind": "allocation", "type": "Monthly allocation", "invoice": "GR-2026-0921", "method": "Included with commitment", "credits": "+100,000.00", "amount": "—", "status": "Active", "docs": false },
+      { "date": "12 Aug 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0844", "receipt": "RC-2026-0844", "method": "ACH", "credits": "—", "amount": "$1,000.00", "status": "Paid",
+        "lines": [{ "label": "Commitment", "amount": "$1,000.00" }, { "label": "Overage", "amount": "$0.00" }] },
+      { "date": "12 Aug 2026, 09:00", "kind": "allocation", "type": "Monthly allocation", "invoice": "GR-2026-0844", "method": "Included with commitment", "credits": "+100,000.00", "amount": "—", "status": "Expired", "docs": false },
+      { "date": "12 Jul 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0765", "receipt": "RC-2026-0765", "method": "ACH", "credits": "—", "amount": "$1,000.00", "status": "Paid",
+        "lines": [{ "label": "Commitment", "amount": "$1,000.00" }, { "label": "Overage", "amount": "$0.00" }] },
+      { "date": "12 Jul 2026, 09:00", "kind": "allocation", "type": "Monthly allocation", "invoice": "GR-2026-0765", "method": "Included with commitment", "credits": "+100,000.00", "amount": "—", "status": "Expired", "docs": false }
+    ]
+  }
+}

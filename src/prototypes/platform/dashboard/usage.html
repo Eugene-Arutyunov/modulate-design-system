@@ -5,6 +5,7 @@ chartJs: true
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
+{% from 'prototypes/billing/macros.njk' import states, usageHead %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
@@ -14,35 +15,162 @@ chartJs: true
     </div>
 
     <main class="dashboard-content">
-      <h1 class="dashboard-page-title">Usage</h1>
-      <div class="dashboard-section">
-        <p>
-          Every API request your organization makes is recorded here with its
-          status, duration, and credit cost. Use the filters to narrow by date
-          range or model. Statuses: Success, Processing, Client Error, Server
-          Error.
-        </p>
-      </div>
+      {# Same head as Billing (prototype state before first paint, title, lead), without the banners. #}
+      {% set billingBanners = false %}
+      {% set billingTitle = 'Usage' %}
+      {% set billingLead = 'Every API request your organization makes is recorded here with its status, duration, credits and cost.' %}
+      {% include 'prototypes/billing/page-head.html' %}
 
-      <div class="m__space XS"></div>
+      {# 1 credit = $0.01, so cost = credits / 100. Metered: once included credits are used up,
+         the newest requests are overage and cost credits × the metered rate (overCost). #}
+      {% set rows = [
+        { model: 'velma-2-stt-batch',     key: 'Production Key', status: 'success',    submitted: '15 Apr 2026, 09:12', completed: '15 Apr 2026, 09:14', duration: '1m 48s', credits: '108.00', cost: '$1.08', overCost: '$1.30' },
+        { model: 'velma-2-stt-streaming', key: 'Dev Key',        status: 'success',    submitted: '15 Apr 2026, 08:55', completed: '15 Apr 2026, 08:57', duration: '2m 03s', credits: '123.00', cost: '$1.23', overCost: '$1.48' },
+        { model: 'velma-2-stt-batch',     key: 'Production Key', status: 'error',      submitted: '14 Apr 2026, 17:30', completed: '14 Apr 2026, 17:30', duration: '—',      credits: '0',      cost: '$0.00' },
+        { model: 'velma-2-stt-streaming', key: 'CI Key',         status: 'success',    submitted: '14 Apr 2026, 14:22', completed: '14 Apr 2026, 14:25', duration: '3m 11s', credits: '191.00', cost: '$1.91', overCost: '$2.29' },
+        { model: 'velma-2-stt-batch',     key: 'Dev Key',        status: 'processing', submitted: '14 Apr 2026, 11:08', completed: '—',                  duration: '—',      credits: '—',      cost: '—' },
+        { model: 'velma-2-stt-batch',     key: 'Production Key', status: 'success',    submitted: '13 Apr 2026, 16:44', completed: '13 Apr 2026, 16:46', duration: '1m 55s', credits: '115.00', cost: '$1.15' },
+        { model: 'velma-2-stt-streaming', key: 'CI Key',         status: 'error',      submitted: '13 Apr 2026, 10:30', completed: '13 Apr 2026, 10:30', duration: '—',      credits: '0',      cost: '$0.00' },
+        { model: 'velma-2-stt-batch',     key: 'Dev Key',        status: 'success',    submitted: '12 Apr 2026, 15:17', completed: '12 Apr 2026, 15:19', duration: '2m 22s', credits: '142.00', cost: '$1.42' }
+      ] %}
+      {% set statusLabel = { success: 'Success', error: 'Error', processing: 'Processing' } %}
 
-      <div class="dashboard-section">
-        {% set rows = [
-          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'success',    submitted: '15 Apr 2026, 09:12', completed: '15 Apr 2026, 09:14', duration: '1m 48s', credits: '0.045' },
-          { model: 'velma-2-stt-streaming',  key: 'Dev Key',        status: 'success',    submitted: '15 Apr 2026, 08:55', completed: '15 Apr 2026, 08:57', duration: '2m 03s', credits: '0.122' },
-          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'error',      submitted: '14 Apr 2026, 17:30', completed: '14 Apr 2026, 17:30', duration: '—',       credits: '0' },
-          { model: 'velma-2-stt-streaming',  key: 'CI Key',         status: 'success',    submitted: '14 Apr 2026, 14:22', completed: '14 Apr 2026, 14:25', duration: '3m 11s', credits: '0.198' },
-          { model: 'velma-2-stt-batch',      key: 'Dev Key',        status: 'processing', submitted: '14 Apr 2026, 11:08', completed: '—',                   duration: '—',       credits: '—' },
-          { model: 'velma-2-stt-batch',      key: 'Production Key', status: 'success',    submitted: '13 Apr 2026, 16:44', completed: '13 Apr 2026, 16:46', duration: '1m 55s', credits: '0.051' },
-          { model: 'velma-2-stt-streaming',  key: 'CI Key',         status: 'error',      submitted: '13 Apr 2026, 10:30', completed: '13 Apr 2026, 10:30', duration: '—',       credits: '0' },
-          { model: 'velma-2-stt-batch',      key: 'Dev Key',        status: 'success',    submitted: '12 Apr 2026, 15:17', completed: '12 Apr 2026, 15:19', duration: '2m 22s', credits: '0.087' }
-        ] %}
-        {% set showFilters = true %}
-        {% include 'service/table-usage-log.html' %}
-      </div>
+      {# ── One widget: request table under a search line (filters and export like Billing History), then the two charts ── #}
+      <section class="dashboard-section m__widget usage-history" aria-label="Usage history">
+        <div class="m__widget-header">
+          <label class="m__searchbar" for="usage-search">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><use href="#search"></use></svg>
+            <input type="search" id="usage-search" placeholder="Search by model or API key" data-usage-search />
+          </label>
+          <div class="table-filters" data-usage-filters></div>
+        </div>
+        <div class="review-filter-strip table-filters-strip" data-usage-strip hidden></div>
+        {% set usageEmpty %}
+          {# Same table as filled: headers stay, one centered row explains what will appear. #}
+          <div class="m__table-wrapper">
+            <table class="usage-table">
+              {{ usageHead() }}
+              <tbody>
+                <tr><td colspan="9"><div class="m__table-empty"><p>No requests yet. They appear here as soon as your organization starts using the API</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        {% endset %}
+        {% call states('usage-history', usageEmpty, 'usage-table', '', 'custom') %}
+        <div class="m__table-wrapper">
+          <table class="usage-table">
+            {{ usageHead() }}
+            <tbody>
+              {% for row in rows %}
+              {% set billable = row.credits != '—' and row.credits != '0' %}
+              <tr data-row data-date="{{ row.submitted }}" data-model="{{ row.model }}" data-key="{{ row.key }}" data-status="{{ statusLabel[row.status] }}"
+                {%- if billable %} data-billed="Included"{% endif %}{% if row.overCost %} data-base-cost="{{ row.cost }}" data-overage-cost="{{ row.overCost }}"{% endif %}>
+                <td>{{ row.model }}</td>
+                <td><span class="m__tag-flat">{{ row.key }}</span></td>
+                <td>
+                  {% if row.status == 'success' %}<span class="m__tag m__tag--success">Success</span>
+                  {% elif row.status == 'error' %}<span class="m__tag m__tag--error">Error</span>
+                  {% else %}<span class="m__tag m__tag--muted">Processing</span>{% endif %}
+                </td>
+                <td>{{ row.submitted }}</td>
+                <td {% if row.completed == '—' %}class="muted"{% endif %}>{{ row.completed }}</td>
+                <td {% if row.duration == '—' %}class="muted"{% endif %}>{{ row.duration }}</td>
+                <td data-for="metered" data-billed-cell {% if not billable %}class="muted"{% endif %}>{% if billable %}Included{% else %}—{% endif %}</td>
+                <td class="is-num{% if not billable %} muted{% endif %}">{{ row.credits }}</td>
+                <td class="is-num{% if row.cost == '—' or row.cost == '$0.00' %} muted{% endif %}" data-cost-cell>{{ row.cost }}</td>
+              </tr>
+              {% endfor %}
+              <tr data-filter-empty hidden>
+                <td colspan="9"><div class="m__table-empty"><p>Nothing matches your search or filters</p></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        {% endcall %}
+
+        <div class="m__space M"></div>
+        <h2 id="usage-credits-title">Credits Consumed</h2>
+        {# Empty: the chart itself with its axes and no data (dashboard-charts.js). #}
+        {% call states('usage-credits', '', 'chart', '', 'ready') %}
+        <div class="chart-container">
+          <canvas id="usage-credits-consumed-chart"></canvas>
+          <p class="chart-empty" hidden>No credit data available</p>
+        </div>
+        <p class="chart-status-bar"></p>
+        {% endcall %}
+
+        <div class="m__space M"></div>
+        <h2 id="usage-status-title">Requests by Status</h2>
+        {% call states('usage-status', '', 'chart', '', 'ready') %}
+        <div class="chart-container">
+          <canvas id="usage-requests-status-chart"></canvas>
+          <p class="chart-empty" hidden>No requests recorded</p>
+        </div>
+        <div class="chart-legend"></div>
+        {% endcall %}
+      </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
 
+{# Only the data state is switched here; the customer type and scenario are the ones chosen on Billing. #}
+{% set protoDataOnly = true %}
+{% include 'prototypes/billing/prototype-panel.html' %}
+<script src="/assets/prototypes/billing.js"></script>
+<script src="/assets/prototypes/table-filters.js"></script>
+<script>
+  // Usage History: search, Date / Model / API Key / Status (+ Billed as for Metered) filters and CSV export.
+  (function () {
+    var widget = document.querySelector(".usage-history");
+    if (!widget || !window.TableFilters) return;
+    var body = document.body;
+    var isMetered = function () { return body.dataset.billingType === "metered"; };
+    var visible = function (el) { return el.offsetParent !== null; };
+    var search = widget.querySelector("[data-usage-search]");
+    var table = TableFilters.init({
+      widget: widget,
+      controls: widget.querySelector("[data-usage-filters]"),
+      strip: widget.querySelector("[data-usage-strip]"),
+      rows: function () { return [].slice.call(widget.querySelectorAll("tr[data-row]")); },
+      today: new Date(2026, 3, 16),
+      // Search line: model name or API key, on top of the filters.
+      match: function (tr) {
+        var q = search.value.trim().toLowerCase();
+        return !q || (tr.dataset.model + " " + tr.dataset.key).toLowerCase().indexOf(q) >= 0;
+      },
+      categories: [
+        { name: "Date", attr: "date" },
+        { name: "Model", attr: "model" },
+        { name: "API Key", attr: "key" },
+        { name: "Status", attr: "status" },
+        { name: "Billed as", attr: "billed", when: isMetered }
+      ],
+      exportCsv: {
+        filename: "usage-history.csv",
+        label: "Export usage history to CSV",
+        // Only the columns on screen: “Billed as” is exported for Metered customers.
+        head: function () { return [].filter.call(widget.querySelectorAll('[data-state="ready"] thead th'), visible).map(function (th) { return th.textContent; }); },
+        cells: function (tr) { return [].filter.call(tr.children, visible).map(function (td) { return td.textContent; }); }
+      },
+      toast: function (m) { (window.billingToast || function () {})(m); }
+    });
+
+    // Metered: after included credits run out, the newest requests are billed as overage at the metered rate.
+    function syncBilled() {
+      var over = isMetered() && body.dataset.billingScenario === "now-metered";
+      widget.querySelectorAll("tr[data-overage-cost]").forEach(function (tr) {
+        tr.dataset.billed = over ? "Overage" : "Included";
+        tr.querySelector("[data-billed-cell]").textContent = tr.dataset.billed;
+        tr.querySelector("[data-cost-cell]").textContent = over ? tr.dataset.overageCost : tr.dataset.baseCost;
+      });
+      var v = table.filters()["Billed as"];
+      if (v && (!isMetered() || !table.choices("Billed as").some(function (c) { return c[0] === v; }))) table.clear("Billed as");
+      table.apply();
+    }
+    search.addEventListener("input", function () { table.apply(); });
+    document.addEventListener("billing:change", syncBilled);
+    syncBilled();
+  })();
+</script>
 {% endblock %}

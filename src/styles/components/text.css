@@ -128,6 +128,33 @@ code,
   }
 }
 
+/* A code tag that is a link. At rest it looks like any code tag, without the link underline;
+   on hover and press the whole tag takes the link colours. */
+a.m__code-link {
+  text-decoration: none;
+
+  & > code {
+    transition:
+      color var(--m__duration-base) var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base),
+      background-color var(--m__duration-base) var(--m__easing-base);
+  }
+
+  &:hover > code {
+    color: var(--m__text-link-hover);
+    border-color: color-mix(in srgb, var(--m__text-link-hover) 30%, transparent);
+    background: color-mix(in srgb, var(--m__text-link-hover) 10%, transparent);
+    transition-duration: var(--m__duration-instant);
+  }
+
+  &:active > code {
+    color: var(--m__text-link-pressed);
+    border-color: color-mix(in srgb, var(--m__text-link-pressed) 30%, transparent);
+    background: color-mix(in srgb, var(--m__text-link-pressed) 12%, transparent);
+    transition-duration: var(--m__duration-instant);
+  }
+}
+
 ul,
 ol {
   margin: 0 0 var(--m__default-margin-bottom) 0;

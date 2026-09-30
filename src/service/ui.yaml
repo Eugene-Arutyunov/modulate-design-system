@@ -209,7 +209,7 @@ current:
 
   - id: dashboard-billing
     route: /web/billing
-    title: Billing
+    title: 'Billing: Overview'
     sections:
       - section:
           text-content: billing-intro
@@ -221,6 +221,11 @@ current:
           widget: purchase-credits
       - section:
           widget: billing-history
+
+  - id: dashboard-billing-top-up
+    route: —
+    title: 'Billing: Top-up'
+    sections: []
 
   - id: dashboard-account
     route: /account
@@ -861,8 +866,9 @@ target:
           text-content: usage-intro
       - section:
           widgets:
+            - search
             - filters
-            - request-log
+            - usage-history
             - credits-consumed
             - requests-by-status
 
@@ -998,18 +1004,23 @@ target:
 
   - id: dashboard-billing
     route: /dashboard/billing/
-    title: Billing
+    title: 'Billing: Overview'
     sections:
       - section:
-          text-content: billing-intro
+          widget: billing-banner
+          states: [usage-75, usage-90, usage-stopped, failed-recharge, now-metered]
       - section:
-          widget: purchase-credits
+          widgets:
+            - credit-balance
+            - purchase-credits
+            - overage-summary
       - section:
-          widget: credit-balance
+          widget: auto-top-up
       - section:
-          widget: apply-credit-code
+          widget: alerts
       - section:
           widget: billing-history
+          filters: [type]
 
   - id: dashboard-account
     route: /dashboard/account/
