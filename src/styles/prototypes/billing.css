@@ -455,47 +455,18 @@ button.m__button-icon.billing-banner__dismiss {
   & td[data-label="Status"] { padding-left: var(--m__gap-m); }
 }
 
-/* Invoice line items (Metered: commitment + overage): caption rows tied to the invoice row above. */
-.billing-history__table {
-  & tbody tr:has(+ .billing-history__line) td,
-  & tbody tr.billing-history__line:has(+ .billing-history__line) td { border-bottom: 0; }
-  & tr[hidden] + .billing-history__line,
-  & tr[hidden] + .billing-history__line + .billing-history__line { display: none; }
-
-  & tbody tr.billing-history__line td {
-    height: auto;
-    padding-block: 0 0.35rem;
-    font-size: var(--m__font-size-xs);
-    line-height: 1.3;
-  }
-  & tbody tr.billing-history__line:not(:has(+ .billing-history__line)) td { padding-bottom: 0.6rem; }
-  & .billing-history__line-name .billing-muted { margin-left: var(--m__gap-xxs); }
-
-  @media (width >= 640px) {
-    & tbody tr:has(+ .billing-history__line) td { height: auto; padding-bottom: 0.5rem; }
-    /* A lighter rule sets the line items apart from the invoice; it starts at the Type column. */
-    & tbody tr:not(.billing-history__line) + .billing-history__line td:not(:first-child) {
-      padding-top: 0.45rem;
-      border-top: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 7%, transparent);
-    }
-  }
-
-  /* Phones: each line is one label / amount row inside the invoice block. */
-  @media (width < 640px) {
-    & tbody tr:has(+ .billing-history__line) { border-bottom: 0; padding-bottom: 0; }
-    & tbody tr.billing-history__line { padding-top: 0; }
-    & tbody tr.billing-history__line:has(+ .billing-history__line) { border-bottom: 0; padding-bottom: 0; }
-    & tbody tr.billing-history__line td:not([data-label]) { display: none; }
-    & tbody tr.billing-history__line td { font-size: inherit; padding-block: var(--m__gap-xxxs); }
-  }
-}
-
 .billing-history__method {
   display: block;
   margin-top: 0.15rem; /* same as the uploaded date in Conversations */
   color: var(--m__text-caption);
   font-size: var(--m__font-size-xs);
   line-height: 1.3;
+}
+
+/* Metered invoice: commitment and overage listed under the total, one per line. */
+.billing-history__breakdown > span {
+  display: block;
+  white-space: nowrap;
 }
 
 .billing-section-note {

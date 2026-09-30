@@ -32,7 +32,11 @@
         var type = td[1].cloneNode(true);
         var small = type.querySelector("small");
         if (small) small.remove();
-        return [text(td[0]), text(type), text(td[1].querySelector(".billing-history__method")), text(td[2]), text(td[3]), text(td[4]), text(td[5])];
+        // Amount without the commitment / overage breakdown under it.
+        var amount = td[4].cloneNode(true);
+        var lines = amount.querySelector("small");
+        if (lines) lines.remove();
+        return [text(td[0]), text(type), text(td[1].querySelector(".billing-history__method")), text(td[2]), text(td[3]), text(amount), text(td[5])];
       }
     },
     toast: function (m) { (window.billingToast || function () {})(m); }

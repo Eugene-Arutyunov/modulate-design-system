@@ -48,14 +48,12 @@
     var lines = {
       low: src.low.length ? lowSummary(src.low) : "No thresholds yet.",
       overage: src.overage.length ? "Notify when estimated overage reaches " + list(src.overage.map(label.overage)) + "." : "No overage thresholds yet.",
-      // Admins always get alerts; the list adds extra addresses.
-      recipients: src.recipients.length ? "Notify all admins and recipients from this list." : "Notify all admins."
+      // Admins always get alerts; the list adds extra addresses. The caption is the same with an empty list.
+      recipients: "Notify all admins and recipients from this list."
     };
     KEYS.forEach(function (key) {
       var el = document.querySelector('[data-alerts-summary="' + key + '"]');
       if (el) el.textContent = lines[key];
-      var btn = document.querySelector('[data-alerts-open="' + key + '"]');
-      if (btn) btn.textContent = key !== "recipients" && !src[key].length ? "Add" : "Edit";
     });
   }
 
@@ -281,9 +279,13 @@
 
   var HASH_MODALS = { "#top-up": "modal-billing-topup", "#recharge": "modal-billing-recharge", "#overage-alerts": "modal-billing-alerts" };
 
+  // Each deep link only works for the customer types that have the feature.
+  var HASH_TYPES = { "#top-up": ["contracting", "paygo"], "#recharge": ["paygo"], "#overage-alerts": ["metered"] };
+
   function openByHash(hash) {
     var id = HASH_MODALS[hash];
     if (!id || document.body.dataset.billingRole === "viewer") return false;
+    if (HASH_TYPES[hash].indexOf(document.body.dataset.billingType) < 0) return false;
     if (hash === "#overage-alerts") {
       openAlerts("overage");
       window.M.openModal(alertsModal);

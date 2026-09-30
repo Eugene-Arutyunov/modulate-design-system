@@ -31,13 +31,28 @@ permalink: /dashboard/billing/
             <span class="m__tag m__tag--secondary" data-for="metered" data-when="now-metered">Metered</span>
           </div>
           {% set balanceEmpty %}
-            <p class="m__widget__value m__widget__value--amount billing-balance__value">0.00</p>
+            <p class="m__widget__value m__widget__value--amount billing-balance__value" data-for="contracting paygo">0.00</p>
+            {# Metered: a new account already has its included credits and commitment. #}
+            <p class="m__widget__value m__widget__value--amount billing-balance__value" data-for="metered">{{ b.metered.included }}.00</p>
+            <div class="m__widget__meta-list billing-meta" data-for="metered">
+              <p class="m__widget__meta-item">
+                <span class="m__widget__meta-label">Included credits used</span>
+                <strong class="m__widget__meta-value">0% of {{ b.metered.included }}</strong>
+              </p>
+              <p class="m__widget__meta-item">
+                <span class="m__widget__meta-label">Next invoice</span>
+                <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
+              </p>
+              <p class="m__widget__meta-item">
+                <span class="m__widget__meta-label">Monthly commitment</span>
+                <strong class="m__widget__meta-value">{{ b.metered.commitment }}</strong>
+              </p>
+            </div>
           {% endset %}
           {% call states('balance', balanceEmpty, 'stat', '', 'custom') %}
             <p class="m__widget__value m__widget__value--amount billing-balance__value">
               <span data-bind="balance">290,000.00</span>
             </p>
-            {# One usage element for every type: same bar, legend names the base and the date. #}
             {# Same label / value rows for every type; only the labels change. #}
             <div class="m__widget__meta-list billing-meta">
               <p class="m__widget__meta-item">
@@ -64,6 +79,10 @@ permalink: /dashboard/billing/
               <p class="m__widget__meta-item" data-for="metered" data-when="now-metered">
                 <span class="m__widget__meta-label">Estimated overage</span>
                 <strong class="m__widget__meta-value" data-bind="overageCharge">$0.00</strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="metered" data-when="now-metered">
+                <span class="m__widget__meta-label">Metered rate</span>
+                <strong class="m__widget__meta-value">{{ b.metered.overageRate }} / credit</strong>
               </p>
               <p class="m__widget__meta-item" data-for="metered">
                 <span class="m__widget__meta-label">Next invoice</span>
@@ -152,7 +171,7 @@ permalink: /dashboard/billing/
                 <tr><td colspan="7"><div class="m__table-empty"><p>
                   <span data-for="contracting">No billing history yet. Credit allocations, top-ups and invoices will appear here</span>
                   <span data-for="paygo">No billing history yet. Your top-ups and their receipts will appear here</span>
-                  <span data-for="metered">No billing history yet. Monthly invoices will appear here after your first billing period</span>
+                  <span data-for="metered">No billing history yet. Monthly invoices and credit allocations will appear here</span>
                 </p></div></td></tr>
               </tbody>
             </table>
@@ -183,25 +202,18 @@ permalink: /dashboard/billing/
                   </td>
                   <td data-label="Number" class="billing-history__number">{{ row.invoice }}</td>
                   <td data-label="Credits" class="is-num">{% if row.credits == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.credits }}{% endif %}</td>
-                  <td data-label="Amount" class="is-num">{% if row.amount == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.amount }}{% endif %}</td>
+                  <td data-label="Amount" class="is-num">{% if row.amount == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.amount }}{% endif %}
+                    {# Metered invoices: commitment and overage as line items under the total, in the same cell. #}
+                    {% if row.lines %}<small class="billing-history__method billing-history__breakdown">{% for line in row.lines %}<span>{{ line.label }} {{ line.amount }}</span>{% endfor %}</small>{% endif %}
+                  </td>
                   <td data-label="Status">{{ statusTag(row.status) }}</td>
                   <td data-label="Action" class="m__col-actions billing-history__docs">
                     <div class="billing-history__actions">
                       {% if row.status == 'Failed' %}<button type="button" class="m__button-secondary-outline S billing-history__retry" data-role="admin" data-billing-toast="Retrying the payment with your primary payment method.">Retry</button>
-                      {% elif row.kind != 'grant' %}{{ viewMenu(row.invoice, row.receipt) }}{% endif %}
+                      {% elif row.kind != 'grant' and row.docs != false %}{{ viewMenu(row.invoice, row.receipt) }}{% endif %}
                     </div>
                   </td>
                 </tr>
-                {# Metered invoices: commitment and overage as separate line items under the invoice row. #}
-                {% for line in row.lines %}
-                <tr class="billing-history__line">
-                  <td></td>
-                  <td colspan="2" class="billing-history__line-name">{{ line.label }}{% if line.note %} <span class="billing-muted">{{ line.note }}</span>{% endif %}</td>
-                  <td class="is-num">{% if line.credits == '—' %}<span class="billing-muted">—</span>{% else %}{{ line.credits }}{% endif %}</td>
-                  <td data-label="{{ line.label }}" class="is-num">{{ line.amount }}</td>
-                  <td colspan="2"></td>
-                </tr>
-                {% endfor %}
                 {% endfor %}
                 <tr data-filter-empty hidden>
                   <td colspan="7"><div class="m__table-empty"><p>Nothing matches these filters</p></div></td>
