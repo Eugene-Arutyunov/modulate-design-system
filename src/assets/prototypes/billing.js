@@ -205,9 +205,9 @@
       saveState();
       apply();
     });
-    // Click the collapsed label to expand (remembered); × collapses.
+    // Collapsed by default. Click the label to expand (remembered for this tab only); × collapses.
     var pinned = false;
-    try { pinned = localStorage.getItem("billing-proto-open") === "1"; } catch (e) { /* ignore */ }
+    try { pinned = sessionStorage.getItem("billing-proto-open") === "1"; } catch (e) { /* ignore */ }
     function setOpen(v) {
       panel.classList.toggle("is-open", v);
       panel.querySelector(".billing-proto__open").setAttribute("aria-expanded", String(v));
@@ -215,7 +215,7 @@
     function setPinned(v) {
       pinned = v;
       setOpen(v);
-      try { localStorage.setItem("billing-proto-open", v ? "1" : "0"); } catch (e) { /* ignore */ }
+      try { sessionStorage.setItem("billing-proto-open", v ? "1" : "0"); } catch (e) { /* ignore */ }
     }
     setOpen(pinned);
     var trigger = panel.querySelector(".billing-proto__open");
