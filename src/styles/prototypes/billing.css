@@ -1007,18 +1007,20 @@ body[data-billing-data="empty"] .billing-autotopup .billing-card__head > .m__tag
 
 /* ── Spec page ─────────────────────────────────────────────────────── */
 
+/* Text follows the main DS: regular size and the primary text colour, in tables too. */
 .billing-spec {
   max-width: 1050px;
-  font-size: var(--m__font-size-s);
 
-  & h1 { font-size: var(--m__font-size-xxl); margin: var(--m__gap-xs) 0; }
-  & h2 { font-size: var(--m__font-size-l); margin: var(--m__spacer-l) 0 var(--m__gap-s); }
+  & h2 { scroll-margin-top: var(--m__gap-m); }
   & code { font-size: 0.92em; }
 }
 
-.billing-spec__lead { max-width: 75ch; color: var(--m__text-caption); }
-.billing-spec__toc { margin-top: var(--m__gap-m); line-height: 1.8; }
-.billing-spec__note { margin-top: var(--m__gap-xs); color: var(--m__text-caption); max-width: 85ch; }
+/* Contents: DS segmented nav; scrolls sideways when it does not fit. */
+.spec-toc { overflow-x: auto; }
+.billing-spec__note { margin-top: var(--m__gap-xs); max-width: 85ch; }
+
+/* Customer types use the UI Scheme table (/ui/) as is; only the top margin is the spec's. */
+.billing-spec__scheme.ui-viz { margin-top: var(--m__gap-xs); }
 
 .billing-spec__table {
   & td { min-width: 9rem; }

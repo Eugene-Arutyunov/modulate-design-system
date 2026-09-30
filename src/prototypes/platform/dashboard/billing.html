@@ -28,7 +28,6 @@ permalink: /dashboard/billing/
               <span data-for="contracting paygo">Credit Balance</span>
               <span data-for="metered">Included Credits</span>
             </h2>
-            <span class="m__tag m__tag--secondary" data-for="metered" data-when="now-metered">Metered</span>
           </div>
           {% set balanceEmpty %}
             <p class="m__widget__value m__widget__value--amount billing-balance__value" data-for="contracting paygo">0.00</p>
@@ -71,18 +70,10 @@ permalink: /dashboard/billing/
                 <span class="m__widget__meta-label">Last top-up</span>
                 <strong class="m__widget__meta-value">20 Sep 2026</strong>
               </p>
-              {# Overage summary: appears once included credits are used up. #}
-              <p class="m__widget__meta-item" data-for="metered" data-when="now-metered">
-                <span class="m__widget__meta-label">Overage credits</span>
-                <strong class="m__widget__meta-value" data-bind="overageCredits">0</strong>
-              </p>
+              {# Overage summary: one row, appears once included credits are used up. #}
               <p class="m__widget__meta-item" data-for="metered" data-when="now-metered">
                 <span class="m__widget__meta-label">Estimated overage</span>
-                <strong class="m__widget__meta-value" data-bind="overageCharge">$0.00</strong>
-              </p>
-              <p class="m__widget__meta-item" data-for="metered" data-when="now-metered">
-                <span class="m__widget__meta-label">Metered rate</span>
-                <strong class="m__widget__meta-value">{{ b.metered.overageRate }} / credit</strong>
+                <strong class="m__widget__meta-value"><span data-bind="overageCredits">0</span> credits · <span data-bind="overageCharge">$0.00</span></strong>
               </p>
               <p class="m__widget__meta-item" data-for="metered">
                 <span class="m__widget__meta-label">Next invoice</span>
@@ -165,7 +156,7 @@ permalink: /dashboard/billing/
           <div class="m__table-wrapper">
             <table class="billing-table billing-history__table">
               <thead>
-                <tr><th>Date</th><th>Type</th><th>Number</th><th class="is-num">Credits</th><th class="is-num">Amount</th><th>Status</th><th class="m__col-actions"><span class="billing-visually-hidden">Actions</span></th></tr>
+                <tr><th>Date</th><th>Type</th><th>Invoice Number</th><th class="is-num">Credits</th><th class="is-num">Amount</th><th>Status</th><th class="m__col-actions"><span class="billing-visually-hidden">Actions</span></th></tr>
               </thead>
               <tbody>
                 <tr><td colspan="7"><div class="m__table-empty"><p>
@@ -185,7 +176,7 @@ permalink: /dashboard/billing/
                 <tr>
                   <th>Date</th>
                   <th>Type</th>
-                  <th>Number</th>
+                  <th>Invoice Number</th>
                   <th class="is-num">Credits</th>
                   <th class="is-num">Amount</th>
                   <th>Status</th>
@@ -200,7 +191,7 @@ permalink: /dashboard/billing/
                     {{ row.type }}
                     {% if row.method %}<small class="billing-history__method">{{ row.method }}</small>{% endif %}
                   </td>
-                  <td data-label="Number" class="billing-history__number">{{ row.invoice }}</td>
+                  <td data-label="Invoice Number" class="billing-history__number">{{ row.invoice }}</td>
                   <td data-label="Credits" class="is-num">{% if row.credits == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.credits }}{% endif %}</td>
                   <td data-label="Amount" class="is-num">{% if row.amount == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.amount }}{% endif %}
                     {# Metered invoices: commitment and overage as line items under the total, in the same cell. #}

@@ -26,7 +26,7 @@
     exportCsv: {
       filename: "billing-history.csv",
       label: "Export billing history to CSV",
-      head: ["Date", "Type", "Payment method", "Number", "Credits", "Amount", "Status"],
+      head: ["Date", "Type", "Payment method", "Invoice Number", "Credits", "Amount", "Status"],
       cells: function (tr) {
         var td = tr.children;
         var type = td[1].cloneNode(true);
