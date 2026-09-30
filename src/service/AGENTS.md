@@ -130,8 +130,8 @@ with 0s ease on hover and .5s ease on exit.
    applies where that subtitle exists. Distinguish scope inferred from shared
    components/schema from individually measured pages. Do not claim measurements
    for uninspected pages. Keep the same stable issue ID across affected checks.
-6. Check the served Scheme/Compare data, image URLs and relevant layout in regular
-   Chrome. Run `npm run test:ui` for schema/model/capture changes; for a small
+6. Check the served Scheme/Compare data, image URLs and relevant layout in the
+   browser. Run `npm run test:ui` for schema/model/capture changes; for a small
    spacing/text edit, a focused check is enough. Run `git diff --check`.
 7. Report what changed and any uncaptured states. Code commits do not include local
    `.ui-audit` images/results. Deployable Compare content must be separately reviewed
@@ -139,55 +139,39 @@ with 0s ease on hover and .5s ease on exit.
 
 ## Capture and privacy
 
-Use installed regular Chrome with the existing login for interactive reviews.
-Do not log the user out or repeatedly launch Chrome for Testing. Use a consistent
-viewport (normally 1440 × 1000), verify actual full-page dimensions, and save
-lossless WebP without resizing. Avoid reduced-resolution in-app captures.
+**Use one command: `npm run ui:refresh`** (details in `scripts/ui/README.md`). It finds
+stale rows, captures prototype and production headless, anonymizes, and opens a review
+page from which approved images are published to `ui-public/`. Do not capture through
+the Chrome extension, the in-app browser or ad-hoc scripts, and do not hand-edit
+`ui-public` hashes. Run `npm run ui:refresh -- --dry-run` first to report the scope.
 
-Open only the pages, tabs and dialogs needed for the review. Do not create keys,
-organizations or invites, send signup/reset emails, delete data, or change the
-active organization just to obtain a screenshot. Token-dependent states require
-an appropriate user-provided link; do not invent a successful state.
+- **Sign-in.** The first production capture opens a window to sign in; the session is
+  kept outside the repo and reused. If it has expired, tell the user a sign-in window is
+  open and wait. Never ask for or type passwords, never log the user out.
+- **Read-only.** Only GET/HEAD/OPTIONS reach production. Do not add steps that create keys,
+  organizations or invites, send email, delete data or switch the active organization.
+  Token-dependent states need a user-provided link; do not invent a successful state.
+- **Anonymization happens in the page code before the screenshot.** Private text is
+  replaced in the DOM with meaningful synthetic values of similar length (names, emails,
+  organizations, codes, numbers), keeping styles, structure, dates, units, punctuation,
+  headings, statuses and control labels. Credit balances, credit amounts and platform
+  aggregate figures are not sensitive (user decision) and stay unchanged. **Never mask, blur, crop out, paint over or
+  otherwise edit an image**, and never re-render a frozen DOM snapshot. Canvas charts
+  are kept unchanged (approved by the user) and are checked for private labels; if a
+  chart shows private values, stop and ask.
+- **Blocked capture = fix the rule.** When the leftover check, a load error or missing
+  data cancels a capture, extend `scripts/ui/anonymize.js` or `scripts/ui/production.yaml`
+  and run again. Never publish an older, partial or empty image as a fix; report the
+  row as not updated instead.
+- **Review before publishing.** Open every candidate at full size and check names,
+  emails, IDs, keys, invite codes, charts, account chrome, wrapping and clipped text.
+  Approve only what you inspected (`--approve=<id>:<side>` or the review page). Then
+  re-check the listed rows' notes, run `npm run test:ui`, and verify `/ui/compare/`.
+- **Private files.** Candidates, raw captures and the built capture site stay in
+  `.ui-audit/private/` (ignored). Keep real names only in the local stop-list, never in
+  the repository or in public check metadata; no raw DOM, customer values or secret URLs.
 
-Treat screenshots as intended for public use. Inspect names, emails, phone
-numbers, organization identifiers, keys, invite codes, charts and account chrome.
-Replace concrete private fields in the capture browser before taking a new screenshot,
-using reviewed selectors and meaningful synthetic values (names, emails, organizations,
-codes and numbers). Preserve styles, element structure, formatting and control labels.
-Never blanket-replace unknown text with Demo/Example counters or repaint text on
-existing images. Use scripts/ui/semantic-capture.js with an authorized Playwright
-session; do not bypass browser-tool restrictions. Do not dispatch input/change events
-or submit synthetic values. Review all fields, graphics and overflow before approval;
-selector replacement alone does not guarantee privacy. Keep separate candidate files
-and original screenshots; keep
-raw captures in `.ui-audit/private/` or private temporary files, never in the
-served directory. Inspect the sanitized output before adding it to Compare.
-Apply this workflow to both Prototype and Production, across every affected page,
-tab, dialog and component in the requested scope, not just Internal tables. Replace
-personal-looking prototype fixtures too. Choose replacements appropriate to each
-field and similar in length; keep dates, units, punctuation and empty placeholders.
-Do not replace headings, statuses, control labels or other non-private UI copy.
-Wait for fonts and stable rendering, inspect the full image for wrapping, clipped
-text, broken borders and missing assets, then restore original values even if the
-capture fails. Do not overwrite original screenshots or modify application data.
-
-If the authorized browser is read-only, use the private frozen-DOM workflow in
-`scripts/ui/snapshot-capture.js` described in the README. Identify it as a rendered
-snapshot and verify fidelity; DOM serialization alone does not preserve canvas charts.
-The user has approved leaving chart content unchanged for this Compare report.
-Preserve reviewed canvas pixels separately in the snapshot; do not blur, replace
-or invent chart data. Continue replacing personal/account text outside charts.
-Capture canvas regions after layout is stable and check their dimensions; a full-page
-capture can trigger chart reflow. Never substitute an empty canvas.
-If a faithful capture is unavailable, retain the previous reviewed image and report
-the unresolved state. Never publish an incomplete replacement as a successful fix.
-Never put raw DOM, customer values or secret URLs into public check metadata.
-
-Internal local images additionally require the hash receipt in `public-internal.json`
-and `privacy: { version: 1, reviewed: true }`; see `scripts/ui/README.md`.
-Published images use the validated `ui-public/manifest.json` receipt instead.
-Changing bytes invalidates review. The receipt records manual review, not an
-automatic guarantee. Keep these safeguards in serving and offline export.
-Do not force-add ignored captures or deploy/share a report without the relevant
-user request. A report may include older, unaudited screenshots outside the
-current task; do not claim the entire report is sanitized after reviewing one part.
+Published images are bound by `ui-public/manifest.json` (and `public-internal.json` for
+Internal images); changed bytes fail the build. Receipts record manual review, not an
+automatic guarantee. Do not force-add ignored captures or deploy/share a report without
+the relevant user request.

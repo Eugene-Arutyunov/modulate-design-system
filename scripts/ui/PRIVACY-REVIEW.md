@@ -48,3 +48,49 @@ to visual review, not a privacy guarantee.
 The public dataset now contains 58 states and 77 unique images. Platform Usage and
 Unverified Signups still retain their earlier reviewed images, as noted above;
 this refresh does not claim to replace those two existing captures.
+
+## Billing and Usage refresh (30 September 2026)
+
+The redesigned Billing and Usage prototypes and the matching production pages were
+recaptured at 1440 × 1000 with field replacement before rendering. Prototype: the
+header user name. Production: the header user name, credit balance, lifetime spend,
+history and request credits, API key names and all table timestamps (replaced with
+valid synthetic dates in the production format). No canvases were present on the
+production pages. All four images were reviewed visually before publication; the
+four superseded images were removed. The dataset still contains 58 states and 77 images.
+
+The other 45 prototype states were marked stale by shared layout, navigation and
+icon changes and were recaptured the same day with field replacement before rendering:
+the owner name, email and organization, a member email, a real uploader and
+organization name, reviewer initials, and the PII-demo transcript identity (name,
+contact details, address, IDs and employer) use the same synthetic values as the
+previous refresh. A leftover check blocked capture while any original value remained
+visible. Clearly fictional fixtures (example.com users, fictional companies, the
+policy number and physician in the transcript) were kept. Production images and
+production notes were not recaptured; only the Review Queue and Review Detail notes
+were updated for the redesigned prototype.
+
+Later the same day 26 production states (27 rows; Conversation Report reuses the
+Review Detail capture) were recaptured with the user's approval from a saved local
+session, read-only (GET/HEAD/OPTIONS). All replacements were made in the page before
+rendering, with no masks or image edits: table columns (users, recipients, creators,
+emails, UUIDs, SES IDs, credit codes, links, organizations and tags), every
+non-example email, the owner name and organization, API key names, account values and
+internal server IP addresses use synthetic values, and UUID colour dots are re-derived
+in the page from the synthetic UUID. A per-state check blocked capture while any
+replaced original, non-example email or original IP remained visible. All images were
+reviewed visually. Platform Usage was also recaptured, replacing the legacy raster
+sanitization (Demo placeholders and empty chart boxes): its canvas charts draw only
+model names, series labels, dates and numbers, so they are shown unchanged, while
+organization names and member emails in the Top tables are replaced in the page;
+distinct organizations receive distinct synthetic names. Captures that showed a load
+error or empty data were discarded. The dataset still contains 58 states and 77 images.
+
+## One-command workflow (1 October 2026)
+
+Captures now run through `npm run ui:refresh` (anonymization in the page, leftover and
+chart-label checks, local review, `ui:publish`). The user confirmed that credit
+balances and credit amounts are not sensitive: Overview, Billing, Usage and
+Organization were recaptured with real credit figures, which now match the Overview
+balance chart; names, emails, API key names and timestamps remain synthetic. All four
+images were reviewed visually before publication.

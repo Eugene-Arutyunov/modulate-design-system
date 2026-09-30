@@ -150,7 +150,7 @@ async function main() {
   const jobs = routes.flatMap(route => scenarios(route).map(scenario => ({ route, scenario })));
   const count = Math.min(4, Math.max(1, Number(args.workers) || 2));
   fs.mkdirSync(latestDir, { recursive: true });
-  const auth = path.resolve(root, typeof args.auth === 'string' ? args.auth : '.ui-audit/auth.json');
+  const auth = typeof args.auth === 'string' ? path.resolve(root, args.auth) : require('./session').sessionFile;
   let storageState = fs.existsSync(auth) ? auth : undefined;
   const browser = await chromium.launch({ headless: !args.login });
   const results = [];
