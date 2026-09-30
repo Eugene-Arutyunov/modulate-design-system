@@ -5,13 +5,75 @@
 }
 
 .cc__stream {
-  color: var(--m__text-caption);
   white-space: nowrap;
+}
+
+/* Project names: one step down from <strong>'s bold */
+.cc__wide td strong {
+  font-weight: var(--m__font-weight-medium);
 }
 
 /* Unconfirmed content: quieted, not decorated */
 .cc__draft {
   color: var(--m__text-caption);
+}
+
+/* Filter row: type segmented control + "Show done" checkbox, one type
+   scale, aligned to the text baseline */
+.cc__controls {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--m__gap-l);
+}
+
+/* The label text (not the checkbox square) must carry the baseline: align
+   items to baseline and opt the square out, so the row's baseline comes from
+   the text. Type matches the segmented-control label style. */
+.cc__controls .m__checkbox-primary {
+  align-items: baseline;
+  font-size: 0.8em;
+  font-weight: var(--m__font-weight-medium);
+}
+
+.cc__controls .m__checkbox-primary input {
+  align-self: center;
+}
+
+/* Cells: one type scale (the link size), baseline-aligned, no extra bottom
+   padding from the base table style */
+.cc__wide td {
+  padding-bottom: 0.3rem;
+  vertical-align: baseline;
+  font-size: var(--m__font-size-s);
+}
+
+/* Stream and Project columns read one step larger than the rest */
+.cc__wide td:nth-child(-n + 2) {
+  font-size: var(--m__font-size-m);
+}
+
+/* Done rows: quieted text only — the row divider must keep full strength,
+   so fade the colors, not the cell (opacity would take the border with it) */
+tr[data-cc-done] td {
+  color: color-mix(in srgb, var(--m__text) 55%, transparent);
+}
+
+tr[data-cc-done] td a {
+  color: color-mix(in srgb, var(--m__text-link) 55%, transparent);
+}
+
+/* Darker divider under the header row and under the last visible row of
+   each stream (i.e. above the next stream); control-center.js maintains the
+   class on filter changes. The last row also gets extra bottom padding as a
+   gap before the next stream. */
+.cc__wide th {
+  border-bottom-color: color-mix(in srgb, var(--m__text) 35%, transparent);
+}
+
+tr.cc__stream-end td {
+  border-bottom-color: color-mix(in srgb, var(--m__text) 35%, transparent);
+  padding-bottom: 0.7rem;
 }
 
 /* Link column: bare URLs, truncated with an ellipsis when too long */
