@@ -11,13 +11,11 @@
   if (!dataEl) return;
   var saved = JSON.parse(dataEl.textContent);
   var toUsd = function (a) { return { value: parseFloat(String(a.value).replace(/[^\d.]/g, "")) || 0 }; };
-  saved.low = saved.low.map(toUsd);
-  saved.overage = saved.overage.map(function (a) { return { value: parseFloat(String(a.value).replace(/[^\d.]/g, "")) || 0 }; });
+  saved.overage = saved.overage.map(toUsd);
 
   /* ── Summaries on the overview ────────────────────────────────────── */
 
   var label = {
-    low: function (a) { return "$" + fmt(a.value); },
     overage: function (a) { return "$" + fmt(a.value); },
     recipients: function (r) { return r.email; }
   };
@@ -34,14 +32,21 @@
   var fresh = { low: [], overage: [], recipients: [] };
   function store() { return isNew() ? fresh : saved; }
 
-  // Spend is counted over each type's own window: contract period, since the last top-up, billing period.
-  var SPEND = { contracting: "spend this contract period", paygo: "spend since the last top-up", metered: "spend this billing period" };
+  // Low balance: % of the grant used and / or credits left. Metered measures both against included credits.
+  function lowSummary(items) {
+    var credits = isMetered() ? "included credits" : "credits";
+    var of = function (kind) { return items.filter(function (a) { return a.kind === kind; }); };
+    var parts = [];
+    if (of("percent").length) parts.push(list(of("percent").map(function (a) { return a.value + "%"; })) + " of " + credits + " used");
+    if (of("remaining").length) parts.push(list(of("remaining").map(function (a) { return fmt(a.value); })) + " " + credits + " left");
+    return "Notify at " + parts.join(" and at ") + ".";
+  }
 
   // One summary line per Alerts row.
   function renderSummary() {
     var src = store();
     var lines = {
-      low: src.low.length ? "Notify when " + SPEND[document.body.dataset.billingType] + " reaches " + list(src.low.map(label.low)) + "." : "No thresholds yet.",
+      low: src.low.length ? lowSummary(src.low) : "No thresholds yet.",
       overage: src.overage.length ? "Notify when estimated overage reaches " + list(src.overage.map(label.overage)) + "." : "No overage thresholds yet.",
       // Admins always get alerts; the list adds extra addresses.
       recipients: src.recipients.length ? "Notify all admins and recipients from this list." : "Notify all admins."
@@ -73,10 +78,28 @@
     var li = ed.box.querySelector("[data-edit-template]").content.firstElementChild.cloneNode(true);
     // Recipients are plain email fields, like the threshold amounts.
     if (item) li.querySelector("[data-edit-value]").value = key === "recipients" ? item.email : fmt(item.value);
+    if (item && item.kind) setKind(li.querySelector(".billing-edit-list__unit"), item.kind);
     ed.rows.appendChild(li);
     syncAdd(key);
     return li;
   }
+
+  // Threshold type dropdown: keeps the hidden select, the trigger text and the check in sync.
+  function setKind(unit, kind, list) {
+    unit.querySelector("[data-edit-kind]").value = kind;
+    (list || unit).querySelectorAll("[data-sort-option]").forEach(function (opt) {
+      var on = opt.dataset.sortOption === kind;
+      opt.setAttribute("aria-checked", String(on));
+      if (on) unit.querySelector("[data-edit-kind-label]").textContent = opt.textContent.trim();
+    });
+  }
+  // menu-button.js moves the open list to <body>; it remembers the unit it came from.
+  document.addEventListener("click", function (e) {
+    var opt = e.target.closest(".billing-unit-list [data-sort-option]");
+    if (!opt) return;
+    var list = opt.closest(".billing-unit-list");
+    setKind(list._menuButtonOriginalParent || list.parentNode, opt.dataset.sortOption, list);
+  });
 
   function syncAdd(key) {
     var ed = editor(key);
@@ -119,12 +142,20 @@
         continue;
       }
       var value = parse(raw);
+      var kindEl = li.querySelector("[data-edit-kind]");
+      var kind = kindEl ? kindEl.value : "";
       if (!value) return fail(ed, "Enter an amount greater than 0.", input);
-      if (seen[value]) return fail(ed, "This threshold is already on the list.", input);
-      seen[value] = true;
-      out.push({ value: value });
+      if (kind === "percent" && value > 100) return fail(ed, "Enter a percentage from 1 to 100.", input);
+      if (seen[kind + value]) return fail(ed, "This threshold is already on the list.", input);
+      seen[kind + value] = true;
+      out.push(kind ? { kind: kind, value: value } : { value: value });
     }
-    if (key !== "recipients") out.sort(function (a, b) { return a.value - b.value; });
+    // Earliest warning first: % used ascending, then credits left descending.
+    if (key === "low") out.sort(function (a, b) {
+      if (a.kind !== b.kind) return a.kind === "percent" ? -1 : 1;
+      return a.kind === "percent" ? a.value - b.value : b.value - a.value;
+    });
+    else if (key !== "recipients") out.sort(function (a, b) { return a.value - b.value; });
     return out;
   }
 
@@ -145,7 +176,8 @@
   /* ── One modal, one list at a time: Usage alerts · Overage alerts (Metered) · Recipients ── */
 
   var alertsModal = document.getElementById("modal-billing-alerts");
-  var TITLES = { low: "Spend limits", overage: "Overage threshold", recipients: "Recipients" };
+  var TITLES = { low: "Low balance", overage: "Overage threshold", recipients: "Recipients" };
+  var SAVED = { low: "Low-balance alerts saved.", overage: "Overage threshold saved.", recipients: "Recipients saved." };
   var current = "low";
 
   function openAlerts(key) {
@@ -168,7 +200,7 @@
     store()[current] = list;
     renderSummary();
     window.M.closeModal(alertsModal);
-    toast(TITLES[current] + " saved.");
+    toast(SAVED[current]);
   });
 
   document.addEventListener("billing:change", renderSummary);

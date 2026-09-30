@@ -6364,6 +6364,9 @@ button.moderation-review-accuracy__trigger:is(:hover, :focus-visible, [aria-expa
   & .review-date-range-header + .review-filter-values { padding-top: .25rem; } /* gap under the divider, as in the queue */
 }
 
+/* A category can be switched off (TableFilters `when`), e.g. one customer type only. */
+.review-filter-popup .review-filter-categories button[hidden] { display: none; }
+
 /* Selected filter conditions sit inside the card, above the table. */
 .table-filters-strip {
   margin: 0 0 var(--m__gap-xs);

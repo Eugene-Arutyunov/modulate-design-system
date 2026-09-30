@@ -9,9 +9,10 @@
  *   strip,             // element for the chosen conditions
  *   rows(),            // all filterable <tr> in the widget
  *   activeRows(),      // rows the value lists are built from (defaults to rows)
- *   categories: [{ name, attr, labels? }],  // attr = data-* key on each row; "date" is special
+ *   categories: [{ name, attr, labels?, when? }],  // attr = data-* key on each row; "date" is special;
+ *                      // when() → false hides the category (e.g. one customer type only)
  *   today,             // Date the presets count back from
- *   exportCsv: { filename, head, cells(tr) → [text], label },
+ *   exportCsv: { filename, head (array or function), cells(tr) → [text], label },
  *   toast(message)
  * }) → { apply, choices, filters }
  */
@@ -122,7 +123,8 @@
 
       exportButton.addEventListener("click", function () {
         var quote = function (text) { return '"' + String(text).trim().replace(/\s+/g, " ").replace(/"/g, '""') + '"'; };
-        var lines = [cfg.exportCsv.head.join(",")];
+        var head = cfg.exportCsv.head;
+        var lines = [(typeof head === "function" ? head() : head).join(",")];
         rows().forEach(function (tr) {
           if (tr.hidden || tr.offsetParent === null) return;
           lines.push(cfg.exportCsv.cells(tr).map(quote).join(","));
@@ -296,6 +298,10 @@
       close();
       options.hidden = true;
       host.querySelectorAll(".review-filter-categories button").forEach(function (b) { b.classList.remove("is-active"); });
+      host.querySelectorAll(".review-filter-categories button").forEach(function (b) {
+        var when = byName[b.dataset.category].when;
+        b.hidden = Boolean(when) && !when();
+      });
       popup.hidden = !opening;
       open.setAttribute("aria-expanded", String(opening));
     });

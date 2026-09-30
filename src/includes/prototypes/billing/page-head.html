@@ -1,5 +1,5 @@
 {# Shared head for every Billing view: title, description and banners.
-   Pages set billingTitle and billingLead before including it. #}
+   Pages set billingTitle and billingLead before including it; billingBanners = false leaves the banners out. #}
 <script>
   /* Apply prototype state before first paint; billing.js takes over after load. */
   (function () {
@@ -18,4 +18,11 @@
 </div>
 <div class="m__space XS"></div>
 {% endif %}
-{% include 'prototypes/billing/banners.html' %}
+{% if billingBanners != false %}{% include 'prototypes/billing/banners.html' %}{% endif %}
+{# Nothing loaded at all: one placeholder and one Try again for the whole page, instead of one per widget. #}
+<section class="m__widget billing-page-error" role="alert">
+  <div class="m__widget__placeholder L">
+    <p>Couldn’t load data</p>
+    <button type="button" class="m__button-secondary-outline S" data-billing-retry-all>Try again</button>
+  </div>
+</section>

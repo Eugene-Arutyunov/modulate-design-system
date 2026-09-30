@@ -13,8 +13,27 @@
   Loading shapes built from the DS skeleton (.m__skeleton). Each kind mirrors a widget:
   stat — big number + label / value rows; actions — text + two buttons;
   rows — label / summary rows with a button; lead-button — sentence + button;
-  table — the history table with its real headers and dividers, bars in the cells.
+  table — the history table with its real headers and dividers, bars in the cells;
+  usage-table — the same for Usage History. Charts (kind 'chart') have no separate shape:
+  the chart itself stays, without data, and its grid pulses.
 #}
+{# Usage History columns. “Billed as” exists for Metered only (included vs overage usage). #}
+{% macro usageHead() %}
+<thead>
+  <tr>
+    <th>Model</th>
+    <th>API Key</th>
+    <th>Status</th>
+    <th>Submitted</th>
+    <th>Completed</th>
+    <th>Duration</th>
+    <th data-for="metered">Billed as</th>
+    <th class="is-num">Credits</th>
+    <th class="is-num">Cost</th>
+  </tr>
+</thead>
+{% endmacro %}
+
 {% macro skeleton(kind) %}
 <div class="m__skeleton-stack billing-skeleton" aria-hidden="true">
   {% if kind == 'stat' %}
@@ -59,6 +78,27 @@
       </tbody>
     </table>
   </div>
+  {% elif kind == 'usage-table' %}
+  <div class="m__table-wrapper">
+    <table class="usage-table billing-skeleton__table">
+      {{ usageHead() }}
+      <tbody>
+        {% for w in [[7, 5, 6.6, 3], [8.5, 3.5, 6.8, 2.5], [7, 5, 6.4, 3.2], [8.5, 3, 6.7, 2.8]] %}
+        <tr>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[0] }}rem"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[1] }}rem"></span></td>
+          <td><span class="m__skeleton billing-skeleton__tag"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[2] }}rem"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[2] }}rem"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: 3rem"></span></td>
+          <td data-for="metered"><span class="m__skeleton" style="--m__skeleton-width: 3.5rem"></span></td>
+          <td class="is-num"><span class="m__skeleton billing-skeleton__num" style="--m__skeleton-width: {{ w[3] }}rem"></span></td>
+          <td class="is-num"><span class="m__skeleton billing-skeleton__num" style="--m__skeleton-width: 2.5rem"></span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
   {% else %}
   <span class="m__skeleton" style="--m__skeleton-width: 90%"></span>
   <span class="m__skeleton" style="--m__skeleton-width: 55%"></span>
@@ -66,24 +106,30 @@
 </div>
 {% endmacro %}
 
-{% macro states(id, empty, error, kind = 'lines', emptyAction = '', emptyMode = '') %}
-<div class="billing-block" data-billing-block="{{ id }}"{% if emptyMode == 'ready' %} data-empty="ready"{% endif %} aria-live="polite">
+{% macro states(id, empty, kind = 'lines', emptyAction = '', emptyMode = '') %}
+{% set size = ' L' if kind in ['table', 'usage-table', 'chart'] else '' %}
+<div class="billing-block" data-billing-block="{{ id }}"{% if emptyMode == 'ready' %} data-empty="ready"{% endif %}{% if kind == 'chart' %} data-loading="ready"{% endif %} aria-live="polite">
   <div class="billing-state" data-state="ready">{{ caller() }}</div>
   <div class="billing-state" data-state="loading">
     <span class="billing-visually-hidden">Loading…</span>
-    {{ skeleton(kind) }}
+    {% if kind != 'chart' %}{{ skeleton(kind) }}{% endif %}
   </div>
   {% if emptyMode == 'custom' %}
   <div class="billing-state" data-state="empty">{{ empty | safe }}</div>
   {% elif emptyMode != 'ready' %}
-  <div class="billing-state billing-state--message" data-state="empty">
-    <p>{{ empty | safe }}</p>
-    {% if emptyAction %}{{ emptyAction | safe }}{% endif %}
+  <div class="billing-state" data-state="empty">
+    <div class="m__widget__placeholder{{ size }}">
+      <p>{{ empty | safe }}</p>
+      {% if emptyAction %}{{ emptyAction | safe }}{% endif %}
+    </div>
   </div>
   {% endif %}
-  <div class="billing-state billing-state--message billing-state--error" data-state="error">
-    <p>{{ error | safe }}</p>
-    <button type="button" class="m__button-secondary-outline S" data-billing-retry>Try again</button>
+  {# Error: one message for every widget, in the same DS placeholder as an empty one — centered, neutral colour, with Try again. #}
+  <div class="billing-state" data-state="error">
+    <div class="m__widget__placeholder{{ size }}" role="alert">
+      <p>Couldn’t load data</p>
+      <button type="button" class="m__button-secondary-outline S" data-billing-retry>Try again</button>
+    </div>
   </div>
 </div>
 {% endmacro %}

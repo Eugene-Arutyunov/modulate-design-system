@@ -2,7 +2,7 @@
  * Billing prototype controller.
  *
  * Prototype state is kept in the URL: ?type=contracting|paygo|metered
- * &role=admin|viewer &scenario=<id> &data=ready|loading|empty|error
+ * &role=admin|viewer &scenario=<id> &data=ready|loading|empty|error|page-error
  * CSS reads the body data attributes for type/role/data; this script fills
  * scenario numbers, toggles [data-when] blocks and wires the interactions.
  */
@@ -62,7 +62,7 @@
     var role = params.get("role") || stored.role || "admin";
     if (role !== "viewer") role = "admin";
     var data = params.get("data") || "ready";
-    if (["ready", "loading", "empty", "error"].indexOf(data) < 0) data = "ready";
+    if (["ready", "loading", "empty", "error", "page-error"].indexOf(data) < 0) data = "ready";
     return { type: type, role: role, scenario: scenario, data: data };
   }
 
@@ -164,6 +164,7 @@
   function buildPanel() {
     panel.querySelectorAll(".billing-proto__options label").forEach(wrapLabel);
     var stack = panel.querySelector("[data-billing-proto-scenario]");
+    if (!stack) return; // Usage shows the Data group only
     Object.keys(TYPES).forEach(function (type) {
       var list = document.createElement("div");
       list.className = "billing-proto__options";
@@ -239,11 +240,28 @@
   window.billingToast = toast;
 
   document.addEventListener("click", function (e) {
+    // Page error: one Try again reloads every block at once.
+    if (e.target.closest("[data-billing-retry-all]")) {
+      state.data = "loading";
+      saveState();
+      apply();
+      setTimeout(function () {
+        if (state.data !== "loading") return;
+        state.data = "ready";
+        saveState();
+        apply();
+      }, 900);
+      return;
+    }
     var retry = e.target.closest("[data-billing-retry]");
     if (retry) {
       var block = retry.closest("[data-billing-block]");
-      block.dataset.force = "loading";
-      setTimeout(function () { block.dataset.force = "ready"; }, 900);
+      var forced = function (value) {
+        block.dataset.force = value;
+        block.dispatchEvent(new CustomEvent("billing:block", { bubbles: true }));
+      };
+      forced("loading");
+      setTimeout(function () { forced("ready"); }, 900);
       return;
     }
     if (e.target.closest("[data-billing-stripe]")) {

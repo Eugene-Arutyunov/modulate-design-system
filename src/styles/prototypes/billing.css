@@ -50,13 +50,25 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   display: none;
 }
 
+/* Page error: nothing loaded, so one placeholder replaces every widget below the page head. */
+.billing-page-error { display: none; }
+.billing-page-error .m__widget__placeholder { min-height: 18rem; }
+/* No title above it, so the group stays in the geometric middle (no optical offset). */
+.m__widget.billing-page-error .m__widget__placeholder.L:has(> button) { padding-block: 4rem; }
+body[data-billing-data="page-error"] {
+  & .billing-page-error { display: block; }
+  & .billing-page-error ~ *,
+  & .billing-banners { display: none !important; }
+}
+
 /* Empty = a new account. Blocks marked data-empty="ready" look the same as filled ones. */
 body[data-billing-data="empty"] .billing-block[data-empty="ready"]:not([data-force]) > [data-state="ready"] {
   display: flex !important;
+  flex-direction: column;
 }
 
-/* Nothing to filter or export in an empty history. */
-body[data-billing-data="empty"] .billing-history :is(.table-filters, .table-filters-strip) {
+/* Nothing to filter or export in an empty history, or in one that failed to load. */
+body:is([data-billing-data="empty"], [data-billing-data="error"]) :is(.billing-history, .usage-history):not(:has(.billing-block[data-force])) :is(.table-filters, .table-filters-strip) {
   display: none !important;
 }
 
@@ -70,25 +82,22 @@ body[data-billing-data="empty"] .billing-history :is(.table-filters, .table-filt
   display: block !important;
 }
 
-.billing-state--message {
-  padding: var(--m__gap-xl) 0 var(--m__gap-xs);
-  font-size: var(--m__font-size-s);
-  color: var(--m__text-caption);
-
-  & p {
-    max-width: 48ch;
-    margin: 0 0 var(--m__gap-xs);
-  }
-}
-
-.billing-state--error p {
-  color: var(--m__error);
-}
-
 /* Loading shapes come from the DS skeleton; only spacing inside cards is set here. */
 .billing-skeleton { padding-top: var(--m__gap-xxs); }
 .m__skeleton-row.billing-skeleton__buttons { justify-content: flex-start; gap: var(--m__gap-xs); margin-top: var(--m__gap-s); }
 .billing-skeleton:has(.billing-skeleton__table) { padding-top: 0; }
+/* Charts load in place: the chart stays, drawn without data, and its grid pulses like a skeleton. */
+body[data-billing-data="loading"] .billing-block[data-loading="ready"]:not([data-force]) > [data-state="ready"],
+.billing-block[data-loading="ready"][data-force="loading"] > [data-state="ready"] {
+  display: flex !important;
+  flex-direction: column;
+  pointer-events: none;
+  animation: m__skeleton-pulse var(--m__skeleton-duration) var(--m__easing-base) infinite;
+
+  & :is(.chart-legend, .chart-status-bar) { visibility: hidden; }
+
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
 .billing-skeleton__table {
   & td { vertical-align: middle; }
   & .billing-skeleton__caption { margin-top: 0.35rem; }
@@ -391,6 +400,41 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
   & td[data-label="Status"] { padding-left: var(--m__gap-m); }
 }
 
+/* Invoice line items (Metered: commitment + overage): caption rows tied to the invoice row above. */
+.billing-history__table {
+  & tbody tr:has(+ .billing-history__line) td,
+  & tbody tr.billing-history__line:has(+ .billing-history__line) td { border-bottom: 0; }
+  & tr[hidden] + .billing-history__line,
+  & tr[hidden] + .billing-history__line + .billing-history__line { display: none; }
+
+  & tbody tr.billing-history__line td {
+    height: auto;
+    padding-block: 0 0.35rem;
+    font-size: var(--m__font-size-xs);
+    line-height: 1.3;
+  }
+  & tbody tr.billing-history__line:not(:has(+ .billing-history__line)) td { padding-bottom: 0.6rem; }
+  & .billing-history__line-name .billing-muted { margin-left: var(--m__gap-xxs); }
+
+  @media (width >= 640px) {
+    & tbody tr:has(+ .billing-history__line) td { height: auto; padding-bottom: 0.5rem; }
+    /* A lighter rule sets the line items apart from the invoice; it starts at the Type column. */
+    & tbody tr:not(.billing-history__line) + .billing-history__line td:not(:first-child) {
+      padding-top: 0.45rem;
+      border-top: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 7%, transparent);
+    }
+  }
+
+  /* Phones: each line is one label / amount row inside the invoice block. */
+  @media (width < 640px) {
+    & tbody tr:has(+ .billing-history__line) { border-bottom: 0; padding-bottom: 0; }
+    & tbody tr.billing-history__line { padding-top: 0; }
+    & tbody tr.billing-history__line:has(+ .billing-history__line) { border-bottom: 0; padding-bottom: 0; }
+    & tbody tr.billing-history__line td:not([data-label]) { display: none; }
+    & tbody tr.billing-history__line td { font-size: inherit; padding-block: var(--m__gap-xxxs); }
+  }
+}
+
 .billing-history__method {
   display: block;
   margin-top: 0.15rem; /* same as the uploaded date in Conversations */
@@ -602,6 +646,8 @@ body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billin
 
 .billing-edit-list__value { flex: 1; min-width: 0; }
 .billing-edit-list__unit { width: 9.5rem; flex-shrink: 0; }
+/* The open list is moved to <body>, so it has to sit above the modal backdrop. */
+.m__menu-button-list.billing-unit-list { z-index: 1001; min-width: 9.5rem; }
 
 .billing-edit-list__value--money {
   position: relative;

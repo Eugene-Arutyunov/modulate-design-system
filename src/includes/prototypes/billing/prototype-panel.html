@@ -1,6 +1,7 @@
 {#
   Prototype-only controls, styled like the nav island. Not part of the product UI.
   State lives in the URL (?type=&role=&scenario=&data=) so every view is linkable.
+  protoDataOnly: only the Data group (Usage); customer type and scenario follow Billing.
 #}
 <div class="billing-proto" data-billing-proto role="region" aria-label="Prototype controls">
   <button type="button" class="billing-proto__open" data-billing-proto-toggle aria-expanded="false">
@@ -8,6 +9,7 @@
   </button>
   <div class="billing-proto__body" data-billing-proto-body>
     <button type="button" class="billing-proto__close" data-billing-proto-toggle aria-label="Hide prototype controls">×</button>
+    {% if not protoDataOnly %}
     <fieldset class="billing-proto__group">
       <legend>Customer</legend>
       <div class="billing-proto__options">
@@ -27,6 +29,7 @@
       <legend>Scenario</legend>
       <div class="billing-proto__stack" data-billing-proto-scenario></div>
     </fieldset>
+    {% endif %}
     <fieldset class="billing-proto__group">
       <legend>Data</legend>
       <div class="billing-proto__options">
@@ -34,8 +37,9 @@
       <label><input type="radio" name="bp-data" value="loading" />Loading</label>
       <label><input type="radio" name="bp-data" value="empty" />Empty</label>
       <label><input type="radio" name="bp-data" value="error" />Error</label>
+      <label><input type="radio" name="bp-data" value="page-error" />Page error</label>
       </div>
     </fieldset>
-    <a href="/dashboard/billing/spec/" class="m__button-secondary-outline XS billing-proto__spec">Component spec</a>
+    {% if not protoDataOnly %}<a href="/dashboard/billing/spec/" class="m__button-secondary-outline XS billing-proto__spec">Component spec</a>{% endif %}
   </div>
 </div>

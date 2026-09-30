@@ -17,16 +17,10 @@
     "included": "100,000",
     "overageRate": "$0.012"
   },
-  "spendLimit": {
-    "resets": "1 Oct 2026",
-    "contracting": { "spent": 214000, "limit": 400000 },
-    "paygo": { "spent": 61500, "limit": null },
-    "metered": { "spent": 93500, "limit": 150000 }
-  },
   "alerts": [
-    { "value": "$500.00" },
-    { "value": "$1,000.00" },
-    { "value": "$2,000.00" }
+    { "kind": "percent", "value": 75 },
+    { "kind": "percent", "value": 90 },
+    { "kind": "remaining", "value": 10000 }
   ],
   "overageAlerts": [
     { "value": "$250.00" },
@@ -56,9 +50,12 @@
       { "date": "1 Jun 2026, 09:47", "kind": "grant", "type": "Credit grant", "invoice": "GR-2026-0601", "method": "New account credits", "credits": "+1,000.00", "amount": "—", "status": "Used" }
     ],
     "metered": [
-      { "date": "12 Sep 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0921", "method": "ACH · due 12 Oct", "credits": "+100,000.00", "amount": "$1,146.00", "status": "Open" },
-      { "date": "12 Aug 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0844", "receipt": "RC-2026-0844", "method": "ACH", "credits": "+100,000.00", "amount": "$1,000.00", "status": "Paid" },
-      { "date": "12 Jul 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0765", "receipt": "RC-2026-0765", "method": "ACH", "credits": "+100,000.00", "amount": "$1,000.00", "status": "Paid" }
+      { "date": "12 Sep 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0921", "method": "ACH · due 12 Oct", "credits": "+100,000.00", "amount": "$1,144.00", "status": "Open",
+        "lines": [{ "label": "Commitment", "credits": "+100,000.00", "amount": "$1,000.00" }, { "label": "Overage", "note": "$0.012 per credit", "credits": "12,000.00", "amount": "$144.00" }] },
+      { "date": "12 Aug 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0844", "receipt": "RC-2026-0844", "method": "ACH", "credits": "+100,000.00", "amount": "$1,000.00", "status": "Paid",
+        "lines": [{ "label": "Commitment", "credits": "+100,000.00", "amount": "$1,000.00" }, { "label": "Overage", "note": "$0.012 per credit", "credits": "—", "amount": "$0.00" }] },
+      { "date": "12 Jul 2026, 09:00", "kind": "invoice", "type": "Monthly invoice", "invoice": "INV-2026-0765", "receipt": "RC-2026-0765", "method": "ACH", "credits": "+100,000.00", "amount": "$1,000.00", "status": "Paid",
+        "lines": [{ "label": "Commitment", "credits": "+100,000.00", "amount": "$1,000.00" }, { "label": "Overage", "note": "$0.012 per credit", "credits": "—", "amount": "$0.00" }] }
     ]
   }
 }
