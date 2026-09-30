@@ -1009,18 +1009,18 @@ target:
       - section:
           widget: billing-banner
           states: [usage-75, usage-90, usage-stopped, failed-recharge, now-metered]
+      # Status row: two separate cards side by side. Purchase buttons and the
+      # Metered overage row live inside credit-balance.
       - section:
-          widgets:
-            - credit-balance
-            - purchase-credits
-            - overage-summary
+          widget: credit-balance
+      - section:
+          widget: alerts
+      # Pay/Go only.
       - section:
           widget: auto-top-up
       - section:
-          widget: alerts
-      - section:
           widget: billing-history
-          filters: [type]
+          filters: [date, type, status]
 
   - id: dashboard-account
     route: /dashboard/account/
