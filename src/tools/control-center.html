@@ -1,74 +1,36 @@
-{% extends 'service/layout.html' %} {% set pageTitle = 'Control Center' %} {%
-block content %}
+{% extends 'service/layout.html' %} {% set pageTitle = 'Modulate Intuition
+Team Control Center' %} {% block content %}
 
 <div class="m__wrapper cc__wide">
   <div class="m__space XL"></div>
-  <h1>Control Center</h1>
+  <h1>Modulate Intuition Team Control Center</h1>
   <div class="m__space M"></div>
 
+  <!-- The table is rendered by control-center.js from
+       /assets/service/control-center-data.json (streams in display order +
+       one record per project: stream / name / type / status / link). Within
+       a stream, rows sort task → project → process → asset → product →
+       tool; done rows follow at the end in the same type order, quieted.
+       The page is editable in place: names are contenteditable, type and
+       status tags open a chip picker, links get an edit affordance. Edits
+       persist to localStorage; when they differ from the shipped JSON an
+       export bar appears (copy / download / discard) — the copied JSON is
+       meant to be handed back to the agent to update the repo file. Once
+       the shipped JSON matches the saved edits, the saved copy is dropped
+       and the bar disappears. -->
   <div class="cc__controls">
-    <div
-      class="m__segmented-control-secondary cc__filter"
-      role="group"
-      aria-label="Filter by stream">
-      <label>
-        <input
-          type="radio"
-          name="cc-stream-filter"
-          value="all"
-          data-cc-stream-filter
-          checked />
-        All
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="cc-stream-filter"
-          value="Design"
-          data-cc-stream-filter />
-        Design
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="cc-stream-filter"
-          value="Velma Demo"
-          data-cc-stream-filter />
-        Velma Demo
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="cc-stream-filter"
-          value="Platform"
-          data-cc-stream-filter />
-        Platform
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="cc-stream-filter"
-          value="Deeptalk"
-          data-cc-stream-filter />
-        Deeptalk
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="cc-stream-filter"
-          value="Marketing"
-          data-cc-stream-filter />
-        Marketing
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="cc-stream-filter"
-          value="Models QA"
-          data-cc-stream-filter />
-        Models QA
-      </label>
-    </div>
+    <label class="m__select S cc__stream-select">
+      <span>Stream</span>
+      <div class="m__select__inline-control">
+        <span class="m__select__value" data-cc-stream-value>All</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+          <use href="#chevron-down"></use>
+        </svg>
+        <select data-cc-stream-select aria-label="Filter by stream">
+          <option value="all" selected>All</option>
+        </select>
+      </div>
+    </label>
     <div
       class="m__segmented-control-secondary cc__filter"
       role="group"
@@ -107,475 +69,144 @@ block content %}
         Tool
       </label>
     </div>
-    <label class="m__checkbox-primary">
-      <input type="checkbox" data-cc-done-toggle /><svg aria-hidden="true">
-        <use href="#checkmark"></use>
-      </svg>
-      Show done
-    </label>
+    <div class="cc__controls-group">
+    <div
+      class="m__segmented-control-secondary cc__filter"
+      role="group"
+      aria-label="Filter by status">
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="all"
+          data-cc-status-filter
+          checked />
+        All
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="backlog"
+          data-cc-status-filter />
+        Backlog
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="planned"
+          data-cc-status-filter />
+        Planned
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="in-progress"
+          data-cc-status-filter />
+        In progress
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="running"
+          data-cc-status-filter />
+        Running
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="online"
+          data-cc-status-filter />
+        Online
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="paused"
+          data-cc-status-filter />
+        Paused
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="done"
+          data-cc-status-filter />
+        Done
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="archived"
+          data-cc-status-filter />
+        Archived
+      </label>
+    </div>
+    <div class="cc__export" data-cc-export hidden>
+      <span class="cc__export-note">Edited</span>
+      <button type="button" class="cc__export-button" data-cc-copy>
+        Copy
+      </button>
+      <button
+        type="button"
+        class="cc__export-button"
+        data-cc-download
+        aria-label="Download JSON">
+        &#8595;
+      </button>
+      <button type="button" class="cc__export-button" data-cc-discard>
+        Discard
+      </button>
+    </div>
+    </div>
   </div>
 
   <div class="m__space S"></div>
 
   <div class="m__table-wrapper">
-    <!-- Row anatomy: one <tr data-cc-type="task|project|process|asset|
-         product|tool" data-cc-stream="..."> per item: Stream / Project /
-         Type tag / Link. Done items carry data-cc-done, sit at the end of
-         their stream, and are hidden until "Show done" is checked. Within a
-         stream, live rows sort task → project → process → asset → product →
-         tool; done rows follow in the same type order. The stream cell is
-         left empty except on the first row of a stream; control-center.js
-         keeps the label on the first VISIBLE row when filtering, and marks
-         the last row of each stream with cc__stream-end for the darker
-         divider. Links live in the last column; their text is the URL
-         without the protocol (very long URLs are shortened by hand, e.g.
-         the Figma one). Tags are all the default currentColor m__tag. -->
     <table>
       <colgroup>
-        <col style="width: 15%" />
-        <col style="width: 34%" />
+        <col style="width: 13%" />
+        <col style="width: 30%" />
         <col style="width: 9%" />
-        <col style="width: 42%" />
+        <col style="width: 11%" />
+        <col style="width: 37%" />
       </colgroup>
       <thead>
         <tr>
           <th>Stream</th>
           <th>Project</th>
           <th>Type</th>
+          <th>Status</th>
           <th>Link</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Design & Design System -->
-        <tr data-cc-type="task" data-cc-stream="Design">
-          <td class="cc__stream">Design</td>
-          <td><strong>Audio Event Icon</strong></td>
-          <td><span class="m__tag">Task</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="task" data-cc-stream="Design">
-          <td class="cc__stream"></td>
-          <td><strong>Typography Update + Blog Post</strong></td>
-          <td><span class="m__tag">Task</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="task" data-cc-stream="Design">
-          <td class="cc__stream"></td>
-          <td><strong>Fingerprint Component + Blog Post</strong></td>
-          <td><span class="m__tag">Task</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Design">
-          <td class="cc__stream"></td>
-          <td><strong>Explainer Video</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="asset" data-cc-stream="Design">
-          <td class="cc__stream"></td>
-          <td><strong>Public Website &amp; Blog</strong></td>
-          <td><span class="m__tag">Asset</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="product" data-cc-stream="Design">
-          <td class="cc__stream"></td>
-          <td><strong>Design System</strong></td>
-          <td><span class="m__tag">Product</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/design-system/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/design-system/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="tool" data-cc-stream="Design">
-          <td class="cc__stream"></td>
-          <td><strong>Icon Studio</strong></td>
-          <td><span class="m__tag">Tool</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/tools/icon-studio/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/tools/icon-studio/</a
-            >
-          </td>
-        </tr>
-
-        <!-- Velma Demo -->
-        <tr data-cc-type="task" data-cc-stream="Velma Demo">
-          <td class="cc__stream">Velma Demo</td>
-          <td><strong>New Signals by Oct 12</strong></td>
-          <td><span class="m__tag">Task</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="product" data-cc-stream="Velma Demo">
-          <td class="cc__stream"></td>
-          <td><strong>Velma LLM Battle</strong></td>
-          <td><span class="m__tag">Product</span></td>
-          <td class="cc__link">
-            <a
-              href="https://velma-llm-demo.fly.dev/"
-              target="_blank"
-              rel="noopener"
-              >velma-llm-demo.fly.dev/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="product" data-cc-stream="Velma Demo">
-          <td class="cc__stream"></td>
-          <td><strong>Velma Showcase</strong></td>
-          <td><span class="m__tag">Product</span></td>
-          <td class="cc__link">
-            <a
-              href="https://modulate-showcase.com/"
-              target="_blank"
-              rel="noopener"
-              >modulate-showcase.com/</a
-            >
-          </td>
-        </tr>
-        <tr
-          data-cc-type="product"
-          data-cc-stream="Velma Demo"
-          data-cc-done>
-          <td class="cc__stream"></td>
-          <td><strong>Original Velma Preview</strong></td>
-          <td><span class="m__tag">Product</span></td>
-          <td class="cc__link">
-            <a
-              href="https://preview.modulate.ai/"
-              target="_blank"
-              rel="noopener"
-              >preview.modulate.ai/</a
-            >
-          </td>
-        </tr>
-
-        <!-- Platform -->
-        <tr data-cc-type="project" data-cc-stream="Platform">
-          <td class="cc__stream">Platform</td>
-          <td><strong>Playground</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/playground/velma/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/playground/velma/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Conversations</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/dashboard/conversations/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/dashboard/conversations/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Review Queue</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/dashboard/conversations/review/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/dashboard/conversations/review/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td>
-            <strong>Integrations &amp; Actions</strong>
-            <span class="cc__soon">soon</span>
-          </td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/dashboard/actions/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/dashboard/actions/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td>
-            <strong>Insights</strong>
-            <span class="cc__soon">soon</span>
-          </td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/dashboard/insights/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/dashboard/insights/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Billing</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/dashboard/billing/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/dashboard/billing/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Pricing Mini Apps</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Docs</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="process" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Platform Design Maintenance</strong></td>
-          <td><span class="m__tag">Process</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="asset" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Pricing Page</strong></td>
-          <td><span class="m__tag">Asset</span></td>
-          <td class="cc__link">
-            <a
-              href="https://platform.modulate.ai/pricing"
-              target="_blank"
-              rel="noopener"
-              >platform.modulate.ai/pricing</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="asset" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Platform Storybook</strong></td>
-          <td><span class="m__tag">Asset</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="tool" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>UI Scheme &amp; Compare</strong></td>
-          <td><span class="m__tag">Tool</span></td>
-          <td class="cc__link">
-            <a
-              href="https://m-design-system.intuition.team/ui/compare/"
-              target="_blank"
-              rel="noopener"
-              >m-design-system.intuition.team/ui/compare/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform" data-cc-done>
-          <td class="cc__stream"></td>
-          <td><strong>Behaviors Prototype</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/dashboard/behaviors/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/dashboard/behaviors/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Platform" data-cc-done>
-          <td class="cc__stream"></td>
-          <td><strong>Users &amp; Organizations</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/internal/users/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/internal/users/</a
-            >
-          </td>
-        </tr>
-
-        <!-- Deeptalk -->
-        <tr data-cc-type="task" data-cc-stream="Deeptalk">
-          <td class="cc__stream">Deeptalk</td>
-          <td><strong>Signals: Prompt Improvements</strong></td>
-          <td><span class="m__tag">Task</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>100 Talking Emma Ideas</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Speech Navigator</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>October Launch</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>VoiceWear Prototypes</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://www.figma.com/design/tH5w0rrPkKf6bO0Rl8bddC/VoiceWear--public-?node-id=2064-761"
-              target="_blank"
-              rel="noopener"
-              >www.figma.com/design/...</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="process" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Feedback Loop</strong></td>
-          <td><span class="m__tag">Process</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="product" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Deeptalk</strong></td>
-          <td><span class="m__tag">Product</span></td>
-          <td class="cc__link">
-            <a href="https://deeptalk.buzz/" target="_blank" rel="noopener"
-              >deeptalk.buzz/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="product" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Emma</strong></td>
-          <td><span class="m__tag">Product</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="product" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Vocal Effort Conductor</strong></td>
-          <td><span class="m__tag">Product</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Deeptalk" data-cc-done>
-          <td class="cc__stream"></td>
-          <td><strong>50 Future Signals &amp; Behaviors</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link">
-            <a
-              href="https://eugene-arutyunov.github.io/deeptalk-signals-brainstorm/"
-              target="_blank"
-              rel="noopener"
-              >eugene-arutyunov.github.io/deeptalk-signals-brainstorm/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="asset" data-cc-stream="Deeptalk" data-cc-done>
-          <td class="cc__stream"></td>
-          <td><strong>Signal Studio</strong></td>
-          <td><span class="m__tag">Asset</span></td>
-          <td class="cc__link"></td>
-        </tr>
-
-        <!-- Marketing -->
-        <tr data-cc-type="tool" data-cc-stream="Marketing">
-          <td class="cc__stream">Marketing</td>
-          <td><strong>Velma Fraud Demo Widget</strong></td>
-          <td><span class="m__tag">Tool</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/tools/velma-fraud-demo-widget/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/tools/velma-fraud-demo-widget/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="tool" data-cc-stream="Marketing">
-          <td class="cc__stream"></td>
-          <td><strong>Scatterplot Widget</strong></td>
-          <td><span class="m__tag">Tool</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/tools/scatterplot/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/tools/scatterplot/</a
-            >
-          </td>
-        </tr>
-        <tr data-cc-type="tool" data-cc-stream="Marketing">
-          <td class="cc__stream"></td>
-          <td><strong>Strategy Research Tool</strong></td>
-          <td><span class="m__tag">Tool</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="asset" data-cc-stream="Marketing" data-cc-done>
-          <td class="cc__stream"></td>
-          <td><strong>Marketecture Scheme Draft</strong></td>
-          <td><span class="m__tag">Asset</span></td>
-          <td class="cc__link">
-            <a
-              href="https://design.modulate.ai/tools/marketecture-draft/"
-              target="_blank"
-              rel="noopener"
-              >design.modulate.ai/tools/marketecture-draft/</a
-            >
-          </td>
-        </tr>
-
-        <!-- Models QA -->
-        <tr data-cc-type="task" data-cc-stream="Models QA">
-          <td class="cc__stream">Models QA</td>
-          <td><strong>Velma Issues &amp; Proposed Fixes</strong></td>
-          <td><span class="m__tag">Task</span></td>
-          <td class="cc__link"></td>
-        </tr>
-        <tr data-cc-type="project" data-cc-stream="Models QA">
-          <td class="cc__stream"></td>
-          <td><strong>Velma Future Capabilities</strong></td>
-          <td><span class="m__tag">Project</span></td>
-          <td class="cc__link"></td>
-        </tr>
-      </tbody>
+      <tbody data-cc-body></tbody>
     </table>
   </div>
 
   <div class="m__space XL"></div>
 </div>
 
-<script src="/assets/service/control-center.js"></script>
+<div class="m__popover cc__picker" data-cc-picker hidden>
+  <div class="m__chip-group" data-cc-picker-chips></div>
+  <input
+    type="number"
+    class="cc__picker-progress"
+    data-cc-picker-progress
+    min="0"
+    max="100"
+    step="5"
+    aria-label="Progress, %"
+    hidden />
+</div>
+
+<script src="/assets/service/control-center.js?v=5"></script>
 
 {% endblock %}
