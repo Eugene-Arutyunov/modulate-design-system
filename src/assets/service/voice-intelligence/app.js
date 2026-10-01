@@ -1,6 +1,7 @@
 import RU from './data.js';
 import EN from './data.en.js';
 import {english, labels} from './copy.js';
+import origins, {authorNames} from './origins.js';
 
 let lang = 'en';
 try {
@@ -43,6 +44,8 @@ let selectedQualities = new Set();
 let selectedType = null;
 const fgroups=i=>D.groups.map((g,n)=>g.features.includes(i)?n:-1).filter(n=>n>=0);
 const ftype=i=>Object.keys(typeTagNames).find(type=>D.ideaTypes[type].includes(i));
+const author=i=>authorNames[lang][origins[i].author];
+const originQuotes=i=>origins[i].quotes.map(([by,text])=>`<blockquote><p>${esc(text)}</p><footer>${esc(authorNames[lang][by])}</footer></blockquote>`).join('');
 const featureLink=i=>`<a class="m__tag" href="#view=features&row=${i}">${esc(plain(D.directions[i][0]))}</a>`;
 const tags=i=>`<div class="m__tag-group"><a class="m__tag-flat idea-type-tag" href="#view=features&type=${ftype(i)}">${esc(typeTagNames[ftype(i)])}</a>${fgroups(i).map(n=>`<a class="m__tag" href="#view=features&quality=${n}">${esc(qualityTagNames[n])}</a>`).join('')}</div>`;
 const include = index => (selectedType === null || ftype(index) === selectedType)
@@ -194,6 +197,7 @@ function showIdeaPreview(link) {
  showPreview(link, plain(idea[0]), `
    <section><h3>How it works</h3><p>${md(idea[1])}</p></section>
    <section><h3>How it feels</h3><p>${md(plain(idea[2]))}</p></section>
+   <section class="idea-origins"><h3>Original wording</h3>${originQuotes(index)}</section>
    ${scenes.content.querySelector('.detail-content').children.length ? `<section><h3>Scenes</h3>${scenes.content.querySelector('.detail-content').innerHTML}</section>` : ''}`);
 }
 
@@ -243,7 +247,7 @@ function render(restoreTarget = true){
    return `<label class="m__chip"><input type="radio" name="voice-type" data-type="${type ?? ''}" ${selectedType === type ? 'checked' : ''}>${esc(name)}<span class="chip-count">${count}</span></label>`;
  }).join('');
  if(view==='features'){
- const rows=D.directions.flatMap((f,i)=>include(i)?[{id:i,cells:[`<a data-idea-preview="${i}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${i}">${md(f[0])}</a>`,`<p>${md(f[1])}</p>`,`<p>${md(plain(f[2]))}</p>`,tags(i)]}]:[]);
+ const rows=D.directions.flatMap((f,i)=>include(i)?[{id:i,cells:[`<a data-idea-preview="${i}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${i}">${md(f[0])}</a><p class="note idea-author">${esc(author(i))}</p>`,`<p>${md(f[1])}</p>`,`<p>${md(plain(f[2]))}</p>`,tags(i)]}]:[]);
  $('#results').innerHTML=table(['Idea','How it works','How it feels','Tags'],[21,36,27,16],rows);
  }else if(view==='references'){
  $('#results').innerHTML=references();
