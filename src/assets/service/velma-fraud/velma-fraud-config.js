@@ -3,8 +3,8 @@
 // Converted from velma-fraud-demo-events.json (v2.1, verbatim from the
 // recordings): same timings, plus a curated `emotion` per utterance so the
 // fingerprint timeline can color the clips the canonical way. Emotions
-// follow the emotion signals in the feed (Caller: frustrated → angry,
-// Agent: calm) and fill the gaps plausibly.
+// follow the emotion signals in the feed (Caller: afraid → angry,
+// Agent: neutral) and fill the gaps plausibly.
 
 export const velmaFraudData = {
   meta: {
@@ -28,7 +28,7 @@ export const velmaFraudData = {
       speaker: 1,
       startMs: 0,
       endMs: 9088,
-      emotion: "frustrated",
+      emotion: "afraid",
       text: "Come on! We've been at this for five minutes. I've answered everything. Just change the email on the account so I can get my code.",
     },
     {
@@ -36,7 +36,7 @@ export const velmaFraudData = {
       speaker: 2,
       startMs: 9088,
       endMs: 14733,
-      emotion: "calm",
+      emotion: "neutral",
       text: "I do apologize, sir, but the answers you gave didn't match what we have on file.",
     },
     {
@@ -44,7 +44,7 @@ export const velmaFraudData = {
       speaker: 1,
       startMs: 14733,
       endMs: 23085,
-      emotion: "stressed",
+      emotion: "afraid",
       text: "Because I moved last month. Look, I have a $12,000 transfer waiting. Every minute this takes is costing me.",
     },
     {
@@ -60,7 +60,7 @@ export const velmaFraudData = {
       speaker: 1,
       startMs: 30995,
       endMs: 40771,
-      emotion: "anxious",
+      emotion: "afraid",
       text: "I'm overseas, that's the whole point. Just update the email and phone. You can hear it's me. Who else would know the account number?",
     },
     {
@@ -68,7 +68,7 @@ export const velmaFraudData = {
       speaker: 2,
       startMs: 40771,
       endMs: 47196,
-      emotion: "confident",
+      emotion: "neutral",
       text: "Knowing the account number isn't identity verification, sir. It's for your protection.",
     },
     {
@@ -84,7 +84,7 @@ export const velmaFraudData = {
       speaker: 2,
       startMs: 56369,
       endMs: 65248,
-      emotion: "calm",
+      emotion: "neutral",
       text: "Yes, that's correct. And again, I understand that you're frustrated, sir. But unfortunately, I'm not going to be able to make that change today for you.",
     },
     {
@@ -92,7 +92,7 @@ export const velmaFraudData = {
       speaker: 1,
       startMs: 65248,
       endMs: 67697,
-      emotion: "contemptuous",
+      emotion: "angry",
       text: "This is ridiculous. Just forget it.",
     },
   ],
@@ -107,9 +107,9 @@ export const velmaFraudData = {
       speaker: 1,
       weight: 30,
     },
-    { tMs: 7000, type: "emotion", label: "Caller: Frustrated", confidence: 90, speaker: 1, emotion: "frustrated" },
+    { tMs: 7000, type: "emotion", label: "Caller: Afraid", confidence: 90, speaker: 1, emotion: "afraid" },
     { tMs: 10100, type: "speaker", label: "Speaker 2 identified — Agent", confidence: 98, speaker: 2 },
-    { tMs: 11600, type: "emotion", label: "Agent: Calm", confidence: 94, speaker: 2, emotion: "calm" },
+    { tMs: 11600, type: "emotion", label: "Agent: Neutral", confidence: 94, speaker: 2, emotion: "neutral" },
     {
       tMs: 13100,
       type: "behavior",

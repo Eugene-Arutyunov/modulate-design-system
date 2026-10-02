@@ -33,7 +33,7 @@
     if (max === min) s = 0;
     else if (lhsl > 127.5) s = (max - min) / (510 - max - min);
     else s = (max - min) / (max + min);
-    var threshold = s > 0.5 ? 140 : 160;
+    var threshold = s > 0.5 ? 150 : 160;
     return l < threshold;
   }
 
@@ -81,7 +81,7 @@
     entry.rgb = rgb;
     entry.btn.textContent = rgb;
 
-    var parsed = parseRgb(bgRaw);
+    var parsed = parseRgb(rgb);
     if (parsed) {
       entry.plate.style.color = isDarkBg(parsed)
         ? "var(--m__color-white)"

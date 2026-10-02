@@ -75,7 +75,7 @@
 - **Прогрессив-ревил**: классы `vf-pending` (клипы/глифы) и `vf-visible` (реплики, сигналы, вердикт, чипы) тогглятся в `render(t)`; автоскролл панелей — только внутренний (`scrollPanelTo`), страницу не дёргает.
 - **Управление**: play/pause — полоса плеера; сик — драг по визуализации; клавиатура — space и стрелки (guard на инпуты/кнопки).
 - **Метр**: кейфреймы из данных, градиент по четырём цветам групп эмоций, заякорен на всю ширину бара трюком `--vf-fill` (fill — клип-окно, `::before` растягивается `calc(100% / var(--vf-fill))`).
-- **Цветовые соответствия сигналов**: language → calm-grounded (azure), speaker → low-energy (blue), deepfake → attack (red = error), behavior → excited (orange), emotion → цвет самой эмоции (инлайн `--vf-sig-RGB`).
+- **Цветовые соответствия сигналов**: deepfake/behavior → red-600; behavior-акцент виджета (`--vf-behavior-RGB`) → `--emotion-happy-RGB` (orange); emotion → цвет самой эмоции (инлайн `--ec`). После Emotion model update словарь плоский: angry, disgusted, afraid, happy, neutral, other, sad, surprised, unknown.
 - **Тема**: плата жёстко тёмная — класс `dark-mode` на корне резолвит `--m__*`/`--ids__*` в тёмные значения на странице; в embed-CSS они запечены.
 - **Респонзив (паттерн скеттерплота)**: фрейм 1140px → 100% ниже 1139px; em-база виджета 16px → 14px ниже 992px (в виджете `--player-strip-height: 3em` вместо плейграундных rem, чтобы полосы масштабировались); панели в столбик ниже 768px.
 
@@ -90,7 +90,7 @@
 - Для теста экспортного файла есть приём: собрать копию экспорта скриптом node (css + js + данные из `_site/`) и добавить `VelmaFraudWidget._last.seek(60000)` on load — скриншот середины проигрывания без кликов.
 - **Попутные фиксы уже в коммите**: в `fingerprint-studio.css` перепозиционирован `clip-text-caption` (плейграундная геометрия `top: 6rem` попадала за пределы полосы 3rem с `overflow: hidden` — подпись была невидима); в виджетном CSS растянут нулевой по ширине `player-position-indicator`.
 - **Отложено отдельной задачей** (договорённость с владельцем): замечания к коммиту скеттерплота `a0563ed` — дублирование CSS между `scatterplot.css` и `scatterplot-embed.css`, вьюпорт-зависимые медиа в скриншот-режиме, мёртвый JSON-пейлоад в HTML-экспорте. Возможное направление — общий `widget-studio`-хелпер для респонзив-стейджа и экспорта.
-- Кураторские эмоции реплик (config): Caller — frustrated → stressed → anxious → angry → contemptuous; Agent — calm / neutral / confident / calm. Держатся согласованными с emotion-сигналами ленты.
+- Кураторские эмоции реплик (config): Caller — afraid → afraid → afraid → angry → angry (эскалация розовый→красный); Agent — neutral. Держатся согласованными с emotion-сигналами ленты (словарь после Emotion model update: 9 значений).
 
 ## Как проверять
 

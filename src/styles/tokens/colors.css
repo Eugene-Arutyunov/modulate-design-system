@@ -95,53 +95,31 @@
 }
 
 :root {
-  /* Emotion group colors - base values */
-  --emotion-attack-rejection-group: var(--m__color-red-500);
-  --emotion-threat-uncertainty-group: var(--m__color-pink-600);
-  --emotion-excited-engaged-group: var(--m__color-orange-400);
-  --emotion-low-energy-negative-group: var(--m__color-azure-600);
-  --emotion-calm-grounded-group: var(--m__color-azure-400);
-  --emotion-neutral-group: var(--m__color-gray-600);
+  /* Emotion colors — one variable per supported emotion (flat, no groups).
+     The vocabulary matches the Emotion model: Angry, Disgusted, Afraid,
+     Happy, Neutral, Other, Sad, Surprised, Unknown. The warm five
+     (angry..happy) form a perceptually balanced scale: red through a cold
+     saturated pink at afraid back to deep coral at happy. */
+  --emotion-angry: var(--m__color-red-500);
+  --emotion-disgusted: var(--m__color-rose-600);
+  --emotion-afraid: var(--m__color-pink-500);
+  --emotion-surprised: var(--m__color-rose-400);
+  --emotion-happy: var(--m__color-orange-450);
+  --emotion-sad: var(--m__color-azure-600);
+  --emotion-neutral: var(--m__color-gray-600);
+  --emotion-other: var(--m__color-gray-600);
+  --emotion-unknown: var(--m__color-gray-600);
 
-  /* Individual emotion variables - map to group variables */
-  /* attack / rejection */
-  --emotion-angry: var(--emotion-attack-rejection-group);
-  --emotion-contemptuous: var(--emotion-attack-rejection-group);
-  --emotion-disgusted: var(--emotion-attack-rejection-group);
-
-  /* threat / uncertainty */
-  --emotion-afraid: var(--emotion-threat-uncertainty-group);
-  --emotion-anxious: var(--emotion-threat-uncertainty-group);
-  --emotion-stressed: var(--emotion-threat-uncertainty-group);
-  --emotion-surprised: var(--emotion-threat-uncertainty-group);
-  --emotion-ashamed: var(--emotion-threat-uncertainty-group);
-  --emotion-frustrated: var(--emotion-threat-uncertainty-group);
-  --emotion-fear: var(--emotion-threat-uncertainty-group);
-
-  /* excited / engaged */
-  --emotion-affectionate: var(--emotion-excited-engaged-group);
-  --emotion-amused: var(--emotion-excited-engaged-group);
-  --emotion-excited: var(--emotion-excited-engaged-group);
-  --emotion-happy: var(--emotion-excited-engaged-group);
-  --emotion-hopeful: var(--emotion-excited-engaged-group);
-  --emotion-proud: var(--emotion-excited-engaged-group);
-  --emotion-relieved: var(--emotion-excited-engaged-group);
-  --emotion-curious: var(--emotion-excited-engaged-group);
-
-  /* low energy, negative */
-  --emotion-disappointed: var(--emotion-low-energy-negative-group);
-  --emotion-bored: var(--emotion-low-energy-negative-group);
-  --emotion-tired: var(--emotion-low-energy-negative-group);
-  --emotion-concerned: var(--emotion-low-energy-negative-group);
-  --emotion-confused: var(--emotion-low-energy-negative-group);
-  --emotion-sad: var(--emotion-low-energy-negative-group);
-
-  /* calm / grounded */
-  --emotion-calm: var(--emotion-calm-grounded-group);
-  --emotion-confident: var(--emotion-calm-grounded-group);
-  --emotion-interested: var(--emotion-calm-grounded-group);
-
-  /* no strong signal */
-  --emotion-neutral: var(--emotion-neutral-group);
-  --emotion-unknown: var(--emotion-neutral-group);
+  /* RGB triplets for rgba() composition. Each must stay in sync with the
+     palette token named alongside — CSS can't extract channels from rgb()
+     for the targeted browser matrix, hence the literals. */
+  --emotion-angry-RGB: 238, 64, 86; /* = --m__color-red-500 */
+  --emotion-disgusted-RGB: 219, 68, 124; /* = --m__color-rose-600 */
+  --emotion-afraid-RGB: 209, 91, 162; /* = --m__color-pink-500 */
+  --emotion-surprised-RGB: 228, 99, 130; /* = --m__color-rose-400 */
+  --emotion-happy-RGB: 248, 106, 86; /* = --m__color-orange-450 */
+  --emotion-sad-RGB: 0, 120, 200; /* = --m__color-azure-600 */
+  --emotion-neutral-RGB: 97, 97, 118; /* = --m__color-gray-600 */
+  --emotion-other-RGB: 97, 97, 118; /* = --m__color-gray-600 */
+  --emotion-unknown-RGB: 97, 97, 118; /* = --m__color-gray-600 */
 }
