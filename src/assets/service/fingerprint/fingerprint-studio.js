@@ -456,7 +456,7 @@ function buildComparisonDemo(signalOnly) {
   const velma = [
     { s: 0, e: 6, emotion: "neutral", text: "Thanks for calling — how can I help?" },
     { s: 6, e: 13, emotion: "neutral", text: "I ordered the standing desk two weeks ago and it still shows processing." },
-    { s: 13, e: 21, emotion: "angry", behaviour: "Urgency pressure", at: 13.4, text: "I need this resolved today, not eventually — today." },
+    { s: 13, e: 21, emotion: "afraid", behaviour: "Urgency pressure", at: 13.4, text: "I need this resolved today, not eventually — today." },
     { s: 21, e: 29, emotion: "neutral", text: "Let me check what the warehouse says about that order." },
     { s: 29, e: 38, emotion: "angry", behaviour: "Coercion manipulation", at: 33.9, text: "If you can't fix it, I'll make sure your manager hears about this call." },
     { s: 38, e: 47.5, emotion: "neutral", text: "I understand. I'm escalating it right now." },

@@ -16,8 +16,9 @@ vocabulary shrinks to `angry`, `disgusted`, `afraid`, `happy`, `neutral`,
   `relieved`, `curious`, `frustrated`, `contemptuous`, `anxious`, `stressed`,
   `concerned`, `ashamed`, `fear`, `disappointed`, `bored`, `tired`,
   `confused`.
-- Added `--emotion-other`. `--emotion-neutral` now uses azure-400 (the former
-  calm color) so Neutral reads differently from Other/Unknown (gray).
+- Added `--emotion-other`. Neutral, Other and Unknown share gray-600; in the
+  fingerprint Neutral still reads differently (clips render muted), while
+  Other/Unknown paint at full opacity.
 - Added `--emotion-<name>-RGB` triplets to the published tokens (previously
   site-only) for `rgba()` composition.
 

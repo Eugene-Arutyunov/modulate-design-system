@@ -23,29 +23,37 @@ export const CANONICAL_EMOTIONS = [
 ];
 
 // Emotions dropped by the Emotion model update (and older in-house extras),
-// mapped to the nearest surviving register. Drives import normalization and
-// mirrors how fixtures were migrated.
+// mapped color-preservingly: each old emotion goes to the new emotion of its
+// former color group, so legacy fixtures and imports keep their visual
+// balance. Drives import normalization and mirrors how fixtures were
+// migrated.
 export const EMOTION_ALIASES = {
+  // calm-grounded (azure) → neutral
   calm: "neutral",
-  relieved: "neutral",
-  bored: "neutral",
-  tired: "neutral",
+  confident: "neutral",
   interested: "neutral",
-  curious: "neutral",
+  // excited-engaged (orange) → happy
   amused: "happy",
   excited: "happy",
   proud: "happy",
   affectionate: "happy",
   hopeful: "happy",
-  confident: "happy",
-  frustrated: "angry",
+  relieved: "happy",
+  curious: "happy",
+  // attack-rejection (red) → angry
   contemptuous: "angry",
+  // threat-uncertainty (pink) → afraid
+  frustrated: "afraid",
   anxious: "afraid",
   stressed: "afraid",
-  concerned: "afraid",
-  fear: "afraid",
   ashamed: "afraid",
+  fear: "afraid",
+  // low-energy-negative (blue) → sad
   disappointed: "sad",
+  bored: "sad",
+  tired: "sad",
+  concerned: "sad",
+  // no clean axis → other
   confused: "other",
 };
 

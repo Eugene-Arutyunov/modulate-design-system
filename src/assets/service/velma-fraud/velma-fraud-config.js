@@ -28,7 +28,7 @@ export const velmaFraudData = {
       speaker: 1,
       startMs: 0,
       endMs: 9088,
-      emotion: "angry",
+      emotion: "afraid",
       text: "Come on! We've been at this for five minutes. I've answered everything. Just change the email on the account so I can get my code.",
     },
     {
@@ -107,7 +107,7 @@ export const velmaFraudData = {
       speaker: 1,
       weight: 30,
     },
-    { tMs: 7000, type: "emotion", label: "Caller: Angry", confidence: 90, speaker: 1, emotion: "angry" },
+    { tMs: 7000, type: "emotion", label: "Caller: Afraid", confidence: 90, speaker: 1, emotion: "afraid" },
     { tMs: 10100, type: "speaker", label: "Speaker 2 identified — Agent", confidence: 98, speaker: 2 },
     { tMs: 11600, type: "emotion", label: "Agent: Neutral", confidence: 94, speaker: 2, emotion: "neutral" },
     {
