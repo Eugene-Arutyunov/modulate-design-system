@@ -72,8 +72,8 @@ export function normalizeEmotion(name) {
 const EMOTION_GROUPS = [
   { name: "neutral", weight: 20, emotions: ["neutral"] },
   { name: "indeterminate", weight: 1, emotions: ["other", "unknown"] },
-  { name: "excited-engaged", weight: 3, emotions: ["happy"] },
-  { name: "low-energy-negative", weight: 2.5, emotions: ["sad"] },
+  { name: "happy", weight: 1.5, emotions: ["happy"] },
+  { name: "sad", weight: 2, emotions: ["sad"] },
   { name: "threat-uncertainty", weight: 1.5, emotions: ["afraid", "surprised"] },
   { name: "attack-rejection", weight: 1, emotions: ["angry", "disgusted"] },
 ];
