@@ -81,7 +81,7 @@
     entry.rgb = rgb;
     entry.btn.textContent = rgb;
 
-    var parsed = parseRgb(bgRaw);
+    var parsed = parseRgb(rgb);
     if (parsed) {
       entry.plate.style.color = isDarkBg(parsed)
         ? "var(--m__color-white)"
