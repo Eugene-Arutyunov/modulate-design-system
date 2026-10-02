@@ -352,7 +352,7 @@ function updateConstraints() {
 
 // Short calls: at miniature scale the fingerprint should read as a coarse
 // pattern, not a dense texture. `biases` (EMOTION_GROUPS indices: 0 neutral,
-// 1 calm, 2 excited, 3 low-negative, 4 threat, 5 attack) pin each speaker's
+// 1 indeterminate, 2 happy, 3 sad, 4 threat, 5 attack) pin each speaker's
 // emotional register so the pattern matches the story.
 const EXAMPLE_ROWS = [
   {
@@ -360,7 +360,7 @@ const EXAMPLE_ROWS = [
     speakers: 2,
     durationSec: 296,
     seed: 101,
-    biases: [3, 1],
+    biases: [3, 0],
   },
   {
     title: "Health member appeals denied MRI claim",
@@ -374,14 +374,14 @@ const EXAMPLE_ROWS = [
     speakers: 3,
     durationSec: 312,
     seed: 103,
-    biases: [5, 4, 1],
+    biases: [5, 4, 0],
   },
   {
     title: "Manager pushes IT for password reset",
     speakers: 2,
     durationSec: 64,
     seed: 104,
-    biases: [5, 1],
+    biases: [5, 0],
   },
 ];
 
@@ -454,12 +454,12 @@ const DEMOS = {
 function buildComparisonDemo(signalOnly) {
   const durationSec = 47.5;
   const velma = [
-    { s: 0, e: 6, emotion: "calm", text: "Thanks for calling — how can I help?" },
+    { s: 0, e: 6, emotion: "neutral", text: "Thanks for calling — how can I help?" },
     { s: 6, e: 13, emotion: "neutral", text: "I ordered the standing desk two weeks ago and it still shows processing." },
-    { s: 13, e: 21, emotion: "frustrated", behaviour: "Urgency pressure", at: 13.4, text: "I need this resolved today, not eventually — today." },
+    { s: 13, e: 21, emotion: "angry", behaviour: "Urgency pressure", at: 13.4, text: "I need this resolved today, not eventually — today." },
     { s: 21, e: 29, emotion: "neutral", text: "Let me check what the warehouse says about that order." },
     { s: 29, e: 38, emotion: "angry", behaviour: "Coercion manipulation", at: 33.9, text: "If you can't fix it, I'll make sure your manager hears about this call." },
-    { s: 38, e: 47.5, emotion: "calm", text: "I understand. I'm escalating it right now." },
+    { s: 38, e: 47.5, emotion: "neutral", text: "I understand. I'm escalating it right now." },
   ];
   const stack = [
     { s: 0, e: 3.3, text: "thanks for calling" },

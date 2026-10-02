@@ -1,4 +1,4 @@
-import { renderFingerprint } from "../service/fingerprint/fingerprint.js";
+import { normalizeEmotion, renderFingerprint } from "../service/fingerprint/fingerprint.js";
 
 // Adapt the existing prototype fixtures to the same renderer used by Tools.
 // Keep detector-specific tracks intact; they are not transcript fingerprints.
@@ -11,7 +11,9 @@ document.querySelectorAll("[data-fingerprint-player]").forEach((source) => {
     speaker: Number(clip.dataset.speakerIndex || 1),
     startSec: parseFloat(clip.style.left) * durationSec / 100,
     durationSec: parseFloat(clip.style.width) * durationSec / 100,
-    emotion: Array.from(clip.classList).find((name) => name.startsWith("emotion-"))?.slice(8),
+    emotion: normalizeEmotion(
+      Array.from(clip.classList).find((name) => name.startsWith("emotion-"))?.slice(8)
+    ),
   }));
   const host = document.createElement("div");
   const speakers = Math.max(1, names.length, ...clips.map((clip) => clip.speaker));

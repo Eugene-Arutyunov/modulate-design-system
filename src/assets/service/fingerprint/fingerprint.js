@@ -6,34 +6,68 @@
 // (`.pg-player-dataviz` / `.transcript-clip`, styles already in the bundle).
 
 export const DATA_FORMAT = "modulate-fingerprint";
-export const DATA_VERSION = 2;
+export const DATA_VERSION = 3;
 
-// Emotion vocabulary grouped as in tokens/colors.css. Weights steer the
-// generator: neutral firmly dominates (as it does in real detector output),
-// hostile emotions are rare until a conflict arc kicks in.
+// The Emotion model vocabulary. Anything else in imported data is folded
+// into it by `normalizeEmotion`.
+export const CANONICAL_EMOTIONS = [
+  "angry",
+  "disgusted",
+  "afraid",
+  "happy",
+  "neutral",
+  "other",
+  "sad",
+  "surprised",
+  "unknown",
+];
+
+// Emotions dropped by the Emotion model update (and older in-house extras),
+// mapped to the nearest surviving register. Drives import normalization and
+// mirrors how fixtures were migrated.
+export const EMOTION_ALIASES = {
+  calm: "neutral",
+  relieved: "neutral",
+  bored: "neutral",
+  tired: "neutral",
+  interested: "neutral",
+  curious: "neutral",
+  amused: "happy",
+  excited: "happy",
+  proud: "happy",
+  affectionate: "happy",
+  hopeful: "happy",
+  confident: "happy",
+  frustrated: "angry",
+  contemptuous: "angry",
+  anxious: "afraid",
+  stressed: "afraid",
+  concerned: "afraid",
+  fear: "afraid",
+  ashamed: "afraid",
+  disappointed: "sad",
+  confused: "other",
+};
+
+export function normalizeEmotion(name) {
+  const id = String(name ?? "").toLowerCase();
+
+  if (CANONICAL_EMOTIONS.includes(id)) return id;
+  return EMOTION_ALIASES[id] ?? "unknown";
+}
+
+// Emotion vocabulary grouped for the generator. Weights steer it: neutral
+// firmly dominates (as it does in real detector output), hostile emotions
+// are rare until a conflict arc kicks in. Index order is load-bearing:
+// `driftMood` escalates towards 4 (threat) and 5 (attack), and studio
+// example `biases` pin speakers by index.
 const EMOTION_GROUPS = [
   { name: "neutral", weight: 20, emotions: ["neutral"] },
-  {
-    name: "calm-grounded",
-    weight: 5,
-    emotions: ["calm", "confident", "interested"],
-  },
-  {
-    name: "excited-engaged",
-    weight: 3,
-    emotions: ["amused", "happy", "excited", "hopeful", "relieved", "curious"],
-  },
-  {
-    name: "low-energy-negative",
-    weight: 2.5,
-    emotions: ["disappointed", "bored", "tired", "concerned", "confused", "sad"],
-  },
-  {
-    name: "threat-uncertainty",
-    weight: 1.5,
-    emotions: ["anxious", "stressed", "surprised", "frustrated", "afraid"],
-  },
-  { name: "attack-rejection", weight: 1, emotions: ["angry", "contemptuous", "disgusted"] },
+  { name: "indeterminate", weight: 1, emotions: ["other", "unknown"] },
+  { name: "excited-engaged", weight: 3, emotions: ["happy"] },
+  { name: "low-energy-negative", weight: 2.5, emotions: ["sad"] },
+  { name: "threat-uncertainty", weight: 1.5, emotions: ["afraid", "surprised"] },
+  { name: "attack-rejection", weight: 1, emotions: ["angry", "disgusted"] },
 ];
 
 const BEHAVIOURS = [
@@ -113,9 +147,10 @@ export function generateConversation({ speakers = 2, durationSec = 480, seed, bi
   const rng = createRng(seed === undefined ? Math.floor(Math.random() * 2 ** 31) : seed);
   const clips = [];
 
-  // Per-speaker emotional bias: index into EMOTION_GROUPS.
+  // Per-speaker emotional bias: index into EMOTION_GROUPS. Unpinned
+  // speakers start neutral (index 1 is detector noise — never a bias).
   const moods = Array.from({ length: speakers }, (_, i) =>
-    biases?.[i] !== undefined ? biases[i] : rng() < 0.7 ? 0 : 1
+    biases?.[i] !== undefined ? biases[i] : 0
   );
   // Uneven speak time: two leads carry the conversation, the rest chime in
   // occasionally — the more speakers, the stronger the skew away from an
@@ -250,15 +285,9 @@ function weightedGroup(rng) {
 // Behaviours land roughly on every ~8th clip: hostile clips first, tense
 // ones fill in when the conversation stays polite.
 function assignBehaviours(rng, clips) {
-  const hostile = clips.filter((clip) =>
-    ["angry", "contemptuous", "disgusted", "frustrated", "stressed", "anxious"].includes(
-      clip.emotion
-    )
-  );
+  const hostile = clips.filter((clip) => ["angry", "disgusted"].includes(clip.emotion));
   const tense = clips.filter((clip) =>
-    ["concerned", "disappointed", "sad", "confused", "afraid", "surprised"].includes(
-      clip.emotion
-    )
+    ["afraid", "surprised", "sad"].includes(clip.emotion)
   );
   // Hostile clips are consumed first, each group shuffled so behaviours
   // never land on the same clip twice.
@@ -335,9 +364,11 @@ function round2(value) {
 
 /* Import validation ──────────────────────────────────────────────────── */
 
-// Accepts both export versions: v2 wraps the conversation together with the
-// studio settings, v1 was the bare conversation. Returns
-// `{ conversation, settings }` (settings is null for v1 files).
+// Accepts all export versions: v2+ wraps the conversation together with the
+// studio settings, v1 was the bare conversation. Emotions are folded into
+// the current vocabulary, so files exported before the Emotion model update
+// keep rendering. Returns `{ conversation, settings }` (settings is null
+// for v1 files).
 export function parseConversation(json) {
   const data = JSON.parse(json);
 
@@ -356,13 +387,16 @@ export function parseConversation(json) {
   ) {
     throw new Error("Conversation file is missing speakers or duration");
   }
+  for (const clip of conversation.clips) {
+    clip.emotion = normalizeEmotion(clip.emotion);
+  }
   return { conversation, settings: data.settings || null };
 }
 
 /* Colors ─────────────────────────────────────────────────────────────── */
 
 function emotionColor(emotion) {
-  return `rgba(var(--emotion-${emotion}-RGB), 1)`;
+  return `rgba(var(--emotion-${normalizeEmotion(emotion)}-RGB), 1)`;
 }
 
 const VERDICT_COLORS = {
