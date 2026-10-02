@@ -9,8 +9,9 @@ vocabulary shrinks to `angry`, `disgusted`, `afraid`, `happy`, `neutral`,
 - Removed all `--emotion-*-group` variables (`attack-rejection`,
   `threat-uncertainty`, `excited-engaged`, `low-energy-negative`,
   `calm-grounded`, `neutral`). The structure is now flat: one
-  `--emotion-<name>` per supported emotion; emotions sharing a register share
-  a value.
+  `--emotion-<name>` per supported emotion. Angry is red-500, afraid
+  pink-600, happy orange-400, sad azure-600; disgusted and surprised sit
+  between their neighbors (angry–afraid and afraid–happy midpoints).
 - Removed per-emotion variables for dropped emotions: `calm`, `confident`,
   `interested`, `amused`, `excited`, `proud`, `affectionate`, `hopeful`,
   `relieved`, `curious`, `frustrated`, `contemptuous`, `anxious`, `stressed`,

@@ -97,12 +97,21 @@
 :root {
   /* Emotion colors — one variable per supported emotion (flat, no groups).
      The vocabulary matches the Emotion model: Angry, Disgusted, Afraid,
-     Happy, Neutral, Other, Sad, Surprised, Unknown. Emotions that share a
-     register share a value. */
+     Happy, Neutral, Other, Sad, Surprised, Unknown. Disgusted and
+     surprised sit between their neighbors: disgusted is the angry–afraid
+     midpoint, surprised the afraid–happy midpoint. */
   --emotion-angry: var(--m__color-red-500);
-  --emotion-disgusted: var(--m__color-red-500);
+  --emotion-disgusted: color-mix(
+    in srgb,
+    var(--m__color-red-500) 50%,
+    var(--m__color-pink-600)
+  );
   --emotion-afraid: var(--m__color-pink-600);
-  --emotion-surprised: var(--m__color-pink-600);
+  --emotion-surprised: color-mix(
+    in srgb,
+    var(--m__color-pink-600) 50%,
+    var(--m__color-orange-400)
+  );
   --emotion-happy: var(--m__color-orange-400);
   --emotion-sad: var(--m__color-azure-600);
   --emotion-neutral: var(--m__color-gray-600);
@@ -113,9 +122,9 @@
      palette token named alongside — CSS can't extract channels from rgb()
      for the targeted browser matrix, hence the literals. */
   --emotion-angry-RGB: 238, 64, 86; /* = --m__color-red-500 */
-  --emotion-disgusted-RGB: 238, 64, 86; /* = --m__color-red-500 */
+  --emotion-disgusted-RGB: 219, 72, 123; /* = mix(red-500, pink-600) */
   --emotion-afraid-RGB: 200, 80, 160; /* = --m__color-pink-600 */
-  --emotion-surprised-RGB: 200, 80, 160; /* = --m__color-pink-600 */
+  --emotion-surprised-RGB: 228, 100, 120; /* = mix(pink-600, orange-400) */
   --emotion-happy-RGB: 255, 120, 80; /* = --m__color-orange-400 */
   --emotion-sad-RGB: 0, 120, 200; /* = --m__color-azure-600 */
   --emotion-neutral-RGB: 97, 97, 118; /* = --m__color-gray-600 */
