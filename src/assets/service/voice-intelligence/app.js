@@ -1,6 +1,7 @@
 import RU from './data.js';
 import EN from './data.en.js';
 import {english, labels} from './copy.js';
+import origins, {authorNames} from './origins.js';
 
 let lang = 'en';
 try {
@@ -19,7 +20,7 @@ const russianGroupNames=['Понимает меня','Чувствует сит�
 const qualityTagNames=['Understanding','Attunement','Personality','Care & boundaries','Shared meaning'];
 // Architecture: needs architectural or technical changes. Skill: trained and improved in conversation.
 const typeTagNames={architecture:'Architecture',skill:'Skill'};
-const russianTests=[['Поймать мысль','«Хочу, чтобы было серьёзно, но не…»','Сравнить уточняющий вопрос и осторожно предложенную формулировку.','«Да, именно» — или лёгкая поправка без повторения всего запроса.',6],['Принять мою реакцию','«Вообще-то мне сейчас не смешно».','После неудачной шутки сравнить формальное извинение и заметную смену поведения.','Человек замечает изменение тона в следующих репликах и может продолжить разговор.',11],['Придумать вместе','«Сегодня я официально картошка».','Сравнить нейтральный ответ и короткую импровизацию, которую легко подхватить или остановить.','Человек добавляет что-то своё. Если он не хочет продолжать, игра спокойно заканчивается.',12]];
+const russianTests=[['Поймать мысль','«Хочу, чтобы было серьёзно, но не…»','Сравнить уточняющий вопрос и осторожно предложенную формулировку.','«Да, именно» — или лёгкая поправка без повторения всего запроса.',23],['Принять мою реакцию','«Вообще-то мне сейчас не смешно».','После неудачной шутки сравнить формальное извинение и заметную смену поведения.','Человек замечает изменение тона в следующих репликах и может продолжить разговор.',34],['Придумать вместе','«Сегодня я официально картошка».','Сравнить нейтральный ответ и короткую импровизацию, которую легко подхватить или остановить.','Человек добавляет что-то своё. Если он не хочет продолжать, игра спокойно заканчивается.',37]];
 const russianCulture=[['Her','Spike Jonze · 2013','Чувствует меня и остаётся другой.','Повседневность становится совместной. Самостоятельный собеседник может вести себя не так, как я ожидаю.','Сколько собственной инициативы нужно Эмме, чтобы удивлять и оставаться чуткой?','https://www.filmlinc.org/daily/interview-spike-jonze-her-joaquin-phoenix-scarlett-johansson-nyff/','Интервью с режиссёром',[2,3]],['Маленький принц','Antoine de Saint-Exupéry · 1943','Знакомство делает кого-то особенным.','Со временем повторяющиеся встречи и общие ритуалы делают отношения особенными.','Что возникает между нами со временем и заслуживает сохранения в памяти?','https://www.lepetitprince.com/en/','О произведении',[4]]];
 
 let groupNames, tests, culture;
@@ -43,6 +44,8 @@ let selectedQualities = new Set();
 let selectedType = null;
 const fgroups=i=>D.groups.map((g,n)=>g.features.includes(i)?n:-1).filter(n=>n>=0);
 const ftype=i=>Object.keys(typeTagNames).find(type=>D.ideaTypes[type].includes(i));
+const author=i=>authorNames[lang][origins[i].author];
+const originQuotes=i=>origins[i].quotes.map(([by,text])=>`<blockquote><p>${esc(text)}</p><footer>${esc(authorNames[lang][by])}</footer></blockquote>`).join('');
 const featureLink=i=>`<a class="m__tag" href="#view=features&row=${i}">${esc(plain(D.directions[i][0]))}</a>`;
 const tags=i=>`<div class="m__tag-group"><a class="m__tag-flat idea-type-tag" href="#view=features&type=${ftype(i)}">${esc(typeTagNames[ftype(i)])}</a>${fgroups(i).map(n=>`<a class="m__tag" href="#view=features&quality=${n}">${esc(qualityTagNames[n])}</a>`).join('')}</div>`;
 const include = index => (selectedType === null || ftype(index) === selectedType)
@@ -194,6 +197,7 @@ function showIdeaPreview(link) {
  showPreview(link, plain(idea[0]), `
    <section><h3>How it works</h3><p>${md(idea[1])}</p></section>
    <section><h3>How it feels</h3><p>${md(plain(idea[2]))}</p></section>
+   ${origins[index].quotes.length ? `<section class="idea-origins"><h3>Original wording</h3>${originQuotes(index)}</section>` : ''}
    ${scenes.content.querySelector('.detail-content').children.length ? `<section><h3>Scenes</h3>${scenes.content.querySelector('.detail-content').innerHTML}</section>` : ''}`);
 }
 
@@ -243,7 +247,7 @@ function render(restoreTarget = true){
    return `<label class="m__chip"><input type="radio" name="voice-type" data-type="${type ?? ''}" ${selectedType === type ? 'checked' : ''}>${esc(name)}<span class="chip-count">${count}</span></label>`;
  }).join('');
  if(view==='features'){
- const rows=D.directions.flatMap((f,i)=>include(i)?[{id:i,cells:[`<a data-idea-preview="${i}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${i}">${md(f[0])}</a>`,`<p>${md(f[1])}</p>`,`<p>${md(plain(f[2]))}</p>`,tags(i)]}]:[]);
+ const rows=D.directions.flatMap((f,i)=>include(i)?[{id:i,cells:[`<a data-idea-preview="${i}" aria-haspopup="dialog" aria-controls="idea-preview" aria-expanded="false" href="#view=features&row=${i}">${md(f[0])}</a><p class="note idea-author">${esc(author(i))}</p>`,`<p>${md(f[1])}</p>`,`<p>${md(plain(f[2]))}</p>`,tags(i)]}]:[]);
  $('#results').innerHTML=table(['Idea','How it works','How it feels','Tags'],[21,36,27,16],rows);
  }else if(view==='references'){
  $('#results').innerHTML=references();
