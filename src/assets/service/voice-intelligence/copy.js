@@ -7,9 +7,9 @@ export const english = {
     'That led me to think of a voice assistant as a conversation partner. So it is worth researching not only what it can do, but also what it is like to talk to.'
   ],
   tests: [
-    ['Finding the thought', '“I want it to be serious, but not…”', 'Compare a clarifying question with a tentative suggestion of the missing phrase.', '“Yes, exactly,” or a small correction without repeating the whole request.', 6],
-    ['Responding to my reaction', '“Actually, I don’t find that funny.”', 'After a joke falls flat, compare a formal apology with a noticeable change in behavior.', 'The person notices the change of tone in subsequent responses and can keep talking.', 11],
-    ['Inventing together', '“Today I’m officially a potato.”', 'Compare a neutral response with a short improvisation that is easy to pick up or stop.', 'The person adds something of their own. If they do not want to continue, the game ends comfortably.', 12]
+    ['Finding the thought', '“I want it to be serious, but not…”', 'Compare a clarifying question with a tentative suggestion of the missing phrase.', '“Yes, exactly,” or a small correction without repeating the whole request.', 23],
+    ['Responding to my reaction', '“Actually, I don’t find that funny.”', 'After a joke falls flat, compare a formal apology with a noticeable change in behavior.', 'The person notices the change of tone in subsequent responses and can keep talking.', 34],
+    ['Inventing together', '“Today I’m officially a potato.”', 'Compare a neutral response with a short improvisation that is easy to pick up or stop.', 'The person adds something of their own. If they do not want to continue, the game ends comfortably.', 37]
   ],
   culture: [
     ['Her', 'Spike Jonze · 2013', 'Understands me while remaining someone different.', 'Everyday life becomes shared. An independent conversation partner may behave differently from what I expect.', 'How much initiative does Emma need to surprise me while remaining attentive?', 'https://www.filmlinc.org/daily/interview-spike-jonze-her-joaquin-phoenix-scarlett-johansson-nyff/', 'Interview with the director', [2,3]],
