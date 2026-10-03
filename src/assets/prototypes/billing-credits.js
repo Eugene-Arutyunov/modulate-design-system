@@ -9,10 +9,12 @@
   if (!input || !payLabelEl || !presetCards.length) return;
 
   var maxCustomCredits = parseCredits(input.dataset.creditsMax);
+  var rate = parseFloat(input.dataset.creditsRate) || 0.01;
+  var afterEl = document.querySelector('[data-credits-after]');
   var maxCustomDigits = String(maxCustomCredits).length;
 
   function formatUSD(credits) {
-    return '$' + (credits * 0.01).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return '$' + (credits * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   function parseCredits(value) {
@@ -41,6 +43,8 @@
 
   function updatePayLabel(credits) {
     payLabelEl.textContent = formatUSD(parseCredits(credits));
+    if (payButton) payButton.disabled = parseCredits(credits) === 0;
+    if (afterEl) afterEl.textContent = (parseCredits(afterEl.dataset.creditsAfter) + parseCredits(credits)).toLocaleString('en-US');
   }
 
   function update(shouldReport) {
@@ -118,6 +122,22 @@
     }
   });
 
-  var initialPreset = document.querySelector('input[name="credits-preset"]:checked');
-  updatePayLabel(initialPreset ? initialPreset.value : input.value);
+  function currentCredits() {
+    var preset = document.querySelector('input[name="credits-preset"]:checked');
+    return preset ? preset.value : input.value;
+  }
+
+  document.addEventListener('billing:change', function () { updatePayLabel(currentCredits()); });
+
+  // In a modal: no autofocus (it would land in the amount field and clear the preset),
+  // and every open starts again from the default preset.
+  var backdrop = input.closest('.m__modal-backdrop');
+  var defaultCard = document.querySelector('[data-credits-preset] input[checked]');
+  if (backdrop && defaultCard) {
+    backdrop.dataset.modalAutofocus = 'false';
+    new MutationObserver(function () {
+      if (!backdrop.hidden) selectPreset(defaultCard.closest('[data-credits-preset]'));
+    }).observe(backdrop, { attributes: true, attributeFilter: ['hidden'] });
+  }
+  updatePayLabel(currentCredits());
 })();

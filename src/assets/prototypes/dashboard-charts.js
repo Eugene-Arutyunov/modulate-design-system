@@ -605,6 +605,21 @@
     attachCustomLegend(canvas, function () { return charts.requestStatus; });
   }
 
+  // Usage prototype: in the Empty (new account) and Loading states the charts keep their
+  // grid for the same period and draw no data. Loading also hides the tick labels and the
+  // grid pulses like a skeleton (CSS). A single block can be retried on its own (data-force).
+  function usageChartMode(canvas) {
+    var block = canvas.closest("[data-billing-block]");
+    var mode = (block && block.dataset.force) || document.body.dataset.billingData;
+    return mode === "empty" || mode === "loading" ? mode : "";
+  }
+
+  function hideTickLabels(chart) {
+    chart.options.scales.x.ticks.color = "transparent";
+    chart.options.scales.y.ticks.color = "transparent";
+    chart.update("none");
+  }
+
   // --- Credits Consumed (inside usage table widget) ---
 
   function renderCreditsConsumedChart() {
@@ -634,6 +649,9 @@
       running += dayMap.get(sortedDays[j]);
       values.push(+(running / 1000).toFixed(2));
     }
+    var mode = usageChartMode(canvas);
+    var empty = Boolean(mode);
+    if (empty) values = values.map(function () { return null; });
 
     var theme = readThemeColors();
     var baseRgb = theme.chartDefault;
@@ -676,10 +694,12 @@
         },
         scales: {
           x: xScaleOptions(theme, sortedDays),
-          y: Object.assign({ grace: "25%" }, baseScaleOptions(theme)),
+          y: Object.assign(empty ? { min: 0, max: 1 } : { grace: "25%" }, baseScaleOptions(theme)),
         },
       },
     });
+
+    if (mode === "loading") hideTickLabels(charts.creditsConsumed);
 
     attachStatusBar(
       canvas,
@@ -722,6 +742,13 @@
 
     var sortedDays = Array.from(periodMap.keys()).sort();
     var theme = readThemeColors();
+    var mode = usageChartMode(canvas);
+    var emptyAccount = Boolean(mode);
+    if (emptyAccount) {
+      periodMap.forEach(function (entry) {
+        entry.success = entry.clientError = entry.serverError = entry.processing = 0;
+      });
+    }
 
     charts.usageRequestsStatus = new Chart(canvas, {
       type: "bar",
@@ -767,12 +794,14 @@
         scales: {
           x: xScaleOptions(theme, sortedDays, { stacked: true }),
           y: Object.assign(
-            { stacked: true, beginAtZero: true },
+            emptyAccount ? { stacked: true, min: 0, max: 10 } : { stacked: true, beginAtZero: true },
             baseScaleOptions(theme)
           ),
         },
       },
     });
+
+    if (mode === "loading") hideTickLabels(charts.usageRequestsStatus);
 
     attachCustomLegend(canvas, function () { return charts.usageRequestsStatus; });
   }
@@ -820,6 +849,14 @@
       }
     }
   }).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+  // The Usage prototype switches its data state (or retries one block) without reloading.
+  ["billing:change", "billing:block"].forEach(function (name) {
+    document.addEventListener(name, function () {
+      renderCreditsConsumedChart();
+      renderUsageRequestsStatusChart();
+    });
+  });
 
   fetch("/dashboard-charts.json")
     .then(function (res) {

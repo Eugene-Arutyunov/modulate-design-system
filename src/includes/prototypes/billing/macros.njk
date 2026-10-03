@@ -1,0 +1,160 @@
+{#
+  Billing prototype building blocks.
+
+  states(): every data component renders Ready / Loading / Empty / Error bodies.
+  The widget heading stays outside, so it is visible in every state.
+  The prototype panel switches all blocks at once; Retry re-runs one block.
+  emptyMode: '' — a message (+ optional emptyAction);
+             'ready' — a new account looks the same as a filled one, the ready body stays;
+             'custom' — `empty` is raw markup (e.g. a zero balance), not a caption.
+#}
+
+{#
+  Loading shapes built from the DS skeleton (.m__skeleton). Each kind mirrors a widget:
+  stat — big number + label / value rows; actions — text + two buttons;
+  rows — label / summary rows with a button; lead-button — sentence + button;
+  table — the history table with its real headers and dividers, bars in the cells;
+  usage-table — the same for Usage History. Charts (kind 'chart') have no separate shape:
+  the chart itself stays, without data, and its grid pulses.
+#}
+{# Usage History columns. “Billed as” exists for Metered only (included vs overage usage). #}
+{% macro usageHead() %}
+<thead>
+  <tr>
+    <th>Model</th>
+    <th>API Key</th>
+    <th>Status</th>
+    <th>Submitted</th>
+    <th>Completed</th>
+    <th>Duration</th>
+    <th data-for="metered">Billed as</th>
+    <th class="is-num">Credits</th>
+    <th class="is-num">Cost</th>
+  </tr>
+</thead>
+{% endmacro %}
+
+{% macro skeleton(kind) %}
+<div class="m__skeleton-stack billing-skeleton" aria-hidden="true">
+  {% if kind == 'stat' %}
+  <span class="m__skeleton L" style="--m__skeleton-width: 55%"></span>
+  <div class="m__skeleton-row"><span class="m__skeleton S" style="--m__skeleton-width: 40%"></span><span class="m__skeleton S" style="--m__skeleton-width: 25%"></span></div>
+  <div class="m__skeleton-row"><span class="m__skeleton S" style="--m__skeleton-width: 30%"></span><span class="m__skeleton S" style="--m__skeleton-width: 30%"></span></div>
+  {% elif kind == 'actions' %}
+  <span class="m__skeleton" style="--m__skeleton-width: 90%"></span>
+  <span class="m__skeleton" style="--m__skeleton-width: 55%"></span>
+  <div class="m__skeleton-row billing-skeleton__buttons"><span class="m__skeleton button" style="--m__skeleton-width: 8rem"></span><span class="m__skeleton button" style="--m__skeleton-width: 10rem"></span></div>
+  {% elif kind == 'rows' %}
+  {% for i in range(0, 2) %}
+  <div class="m__skeleton-row">
+    <div class="m__skeleton-stack"><span class="m__skeleton" style="--m__skeleton-width: 25%"></span><span class="m__skeleton S" style="--m__skeleton-width: 55%"></span></div>
+    <span class="m__skeleton button"></span>
+  </div>
+  {% endfor %}
+  {% elif kind == 'lead-button' %}
+  <div class="m__skeleton-row">
+    <div class="m__skeleton-stack"><span class="m__skeleton" style="--m__skeleton-width: 70%"></span><span class="m__skeleton" style="--m__skeleton-width: 45%"></span></div>
+    <span class="m__skeleton button"></span>
+  </div>
+  {% elif kind == 'table' %}
+  {# Real table: headers and row dividers stay, cells hold text-sized bars of varying width. #}
+  <div class="m__table-wrapper">
+    <table class="billing-table billing-history__table billing-skeleton__table">
+      <thead>
+        <tr><th>Date</th><th>Type</th><th>Invoice Number</th><th class="is-num">Credits</th><th class="is-num">Amount</th><th>Status</th><th class="m__col-actions"><span class="billing-visually-hidden">Actions</span></th></tr>
+      </thead>
+      <tbody>
+        {% for w in [[8.5, 7, 5, 6, 4.5], [8, 8.5, 4.5, 5.5, 4], [8.8, 6.5, 5.5, 6.5, 5], [8.2, 7.5, 5, 5, 4.2]] %}
+        <tr>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[0] }}rem"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[1] }}rem"></span><span class="m__skeleton S billing-skeleton__caption" style="--m__skeleton-width: {{ w[1] - 2 }}rem"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[2] + 2 }}rem"></span></td>
+          <td class="is-num"><span class="m__skeleton billing-skeleton__num" style="--m__skeleton-width: {{ w[3] }}rem"></span></td>
+          <td class="is-num"><span class="m__skeleton billing-skeleton__num" style="--m__skeleton-width: {{ w[4] }}rem"></span></td>
+          <td><span class="m__skeleton billing-skeleton__tag"></span></td>
+          <td class="m__col-actions"><span class="m__skeleton button billing-skeleton__num" style="--m__skeleton-width: 4.5rem"></span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% elif kind == 'usage-table' %}
+  <div class="m__table-wrapper">
+    <table class="usage-table billing-skeleton__table">
+      {{ usageHead() }}
+      <tbody>
+        {% for w in [[7, 5, 6.6, 3], [8.5, 3.5, 6.8, 2.5], [7, 5, 6.4, 3.2], [8.5, 3, 6.7, 2.8]] %}
+        <tr>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[0] }}rem"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[1] }}rem"></span></td>
+          <td><span class="m__skeleton billing-skeleton__tag"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[2] }}rem"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: {{ w[2] }}rem"></span></td>
+          <td><span class="m__skeleton" style="--m__skeleton-width: 3rem"></span></td>
+          <td data-for="metered"><span class="m__skeleton" style="--m__skeleton-width: 3.5rem"></span></td>
+          <td class="is-num"><span class="m__skeleton billing-skeleton__num" style="--m__skeleton-width: {{ w[3] }}rem"></span></td>
+          <td class="is-num"><span class="m__skeleton billing-skeleton__num" style="--m__skeleton-width: 2.5rem"></span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <span class="m__skeleton" style="--m__skeleton-width: 90%"></span>
+  <span class="m__skeleton" style="--m__skeleton-width: 55%"></span>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro states(id, empty, kind = 'lines', emptyAction = '', emptyMode = '') %}
+{% set size = ' L' if kind in ['table', 'usage-table', 'chart'] else '' %}
+<div class="billing-block" data-billing-block="{{ id }}"{% if emptyMode == 'ready' %} data-empty="ready"{% endif %}{% if kind == 'chart' %} data-loading="ready"{% endif %} aria-live="polite">
+  <div class="billing-state" data-state="ready">{{ caller() }}</div>
+  <div class="billing-state" data-state="loading">
+    <span class="billing-visually-hidden">Loading…</span>
+    {% if kind != 'chart' %}{{ skeleton(kind) }}{% endif %}
+  </div>
+  {% if emptyMode == 'custom' %}
+  <div class="billing-state" data-state="empty">{{ empty | safe }}</div>
+  {% elif emptyMode != 'ready' %}
+  <div class="billing-state" data-state="empty">
+    <div class="m__widget__placeholder{{ size }}">
+      <p>{{ empty | safe }}</p>
+      {% if emptyAction %}{{ emptyAction | safe }}{% endif %}
+    </div>
+  </div>
+  {% endif %}
+  {# Error: one message for every widget, in the same DS placeholder as an empty one — centered, neutral colour, with Try again. #}
+  <div class="billing-state" data-state="error">
+    <div class="m__widget__placeholder{{ size }}" role="alert">
+      <p>Couldn’t load data</p>
+      <button type="button" class="m__button-secondary-outline S" data-billing-retry>Try again</button>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro statusTag(status) %}
+{% if status in ['Paid', 'Succeeded', 'Active'] %}
+<span class="m__tag m__tag--success">{{ status }}</span>
+{% elif status in ['Failed', 'Overdue'] %}
+<span class="m__tag m__tag--error">{{ status }}</span>
+{% elif status in ['Used up', 'Pending', 'Open'] %}
+<span class="m__tag m__tag--warning billing-tag-warning">{{ status }}</span>
+{% else %}
+<span class="m__tag m__tag--muted">{{ status }}</span>
+{% endif %}
+{% endmacro %}
+
+{% macro viewMenu(invoice, receipt) %}
+<div class="m__menu-button">
+  <button type="button" class="m__menu-button-secondary S m__menu-button-trigger" aria-haspopup="menu" aria-expanded="false" aria-label="View documents for {{ invoice }}">
+    View
+    <svg class="m__button__icon" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+  </button>
+  <div class="m__menu-button-list" role="menu" hidden>
+    <button type="button" class="m__menu-button-item" role="menuitem" data-billing-pdf="{{ invoice }}">Invoice</button>
+    {% if receipt %}<button type="button" class="m__menu-button-item" role="menuitem" data-billing-pdf="{{ receipt }}">Receipt</button>{% endif %}
+  </div>
+</div>
+{% endmacro %}

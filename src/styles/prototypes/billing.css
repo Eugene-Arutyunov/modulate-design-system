@@ -1,0 +1,1029 @@
+/*
+ * Billing — customer-facing credits, usage, history and alert settings.
+ * Built on DS tokens only. Local tokens below are the component spec surface.
+ */
+
+:root {
+  --billing-warning: var(--m__color-orange-500);
+  --billing-meter-track: color-mix(in srgb, var(--m__text) 10%, transparent);
+  --billing-meter-height: 0.5rem;
+  --billing-overage: var(--m__bg-accent-hover);
+  --billing-grid-gap: var(--m__gap-xs);
+}
+
+/* ── Prototype visibility switches ─────────────────────────────────── */
+
+body[data-billing-type="contracting"] [data-for]:not([data-for~="contracting"]),
+body[data-billing-type="paygo"] [data-for]:not([data-for~="paygo"]),
+body[data-billing-type="metered"] [data-for]:not([data-for~="metered"]),
+body[data-billing-role="admin"] [data-role="viewer"],
+body[data-billing-role="viewer"] [data-role="admin"],
+[data-when][hidden],
+.billing-table tr[hidden] {
+  display: none !important;
+}
+
+.billing-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── Component states: ready / loading / empty / error ─────────────── */
+
+.billing-state {
+  display: none;
+}
+
+.billing-state[data-state="ready"],
+body[data-billing-data="loading"] .billing-state[data-state="loading"],
+body[data-billing-data="empty"] .billing-state[data-state="empty"],
+body[data-billing-data="error"] .billing-state[data-state="error"] {
+  display: block;
+}
+
+body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billing-data="error"])
+  .billing-state[data-state="ready"] {
+  display: none;
+}
+
+/* Page error: nothing loaded, so one placeholder replaces every widget below the page head. */
+.billing-page-error { display: none; }
+.billing-page-error .m__widget__placeholder { min-height: 18rem; }
+/* No title above it, so the group stays in the geometric middle (no optical offset). */
+.m__widget.billing-page-error .m__widget__placeholder.L:has(> button) { padding-block: 4rem; }
+body[data-billing-data="page-error"] {
+  & .billing-page-error { display: block; }
+  & .billing-page-error ~ *,
+  & .billing-banners { display: none !important; }
+}
+
+/* Empty = a new account. Blocks marked data-empty="ready" look the same as filled ones. */
+body[data-billing-data="empty"] .billing-block[data-empty="ready"]:not([data-force]) > [data-state="ready"] {
+  display: flex !important;
+  flex-direction: column;
+}
+
+/* Nothing to filter or export in an empty history, or in one that failed to load. */
+body:is([data-billing-data="empty"], [data-billing-data="error"]) :is(.billing-history, .usage-history):not(:has(.billing-block[data-billing-block*="history"][data-force])) :is(.table-filters, .table-filters-strip) {
+  display: none !important;
+}
+
+/* A single block can be forced (Retry → loading → ready). */
+.billing-block[data-force] > .billing-state {
+  display: none !important;
+}
+
+.billing-block[data-force="ready"] > [data-state="ready"],
+.billing-block[data-force="loading"] > [data-state="loading"] {
+  display: block !important;
+}
+
+/* Loading shapes come from the DS skeleton; only spacing inside cards is set here. */
+.billing-skeleton { padding-top: var(--m__gap-xxs); }
+.m__skeleton-row.billing-skeleton__buttons { justify-content: flex-start; gap: var(--m__gap-xs); margin-top: var(--m__gap-s); }
+.billing-skeleton:has(.billing-skeleton__table) { padding-top: 0; }
+/* Charts load in place: the chart stays, drawn without data, and its grid pulses like a skeleton. */
+body[data-billing-data="loading"] .billing-block[data-loading="ready"]:not([data-force]) > [data-state="ready"],
+.billing-block[data-loading="ready"][data-force="loading"] > [data-state="ready"] {
+  display: flex !important;
+  flex-direction: column;
+  pointer-events: none;
+  animation: m__skeleton-pulse var(--m__skeleton-duration) var(--m__easing-base) infinite;
+
+  & :is(.chart-legend, .chart-status-bar) { visibility: hidden; }
+
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+.billing-skeleton__table {
+  & td { vertical-align: middle; }
+  & .billing-skeleton__caption { margin-top: 0.35rem; }
+  & .billing-skeleton__num { margin-left: auto; }
+  & .billing-skeleton__tag { width: 3rem; height: 1.2rem; border-radius: var(--m__radius-xs); }
+}
+
+/* ── Page structure ────────────────────────────────────────────────── */
+
+.billing-page {
+  & > .m__widget,
+  & > .billing-grid,
+  & > section {
+    margin-bottom: var(--billing-grid-gap);
+  }
+
+  & p { margin-bottom: 0; }
+}
+
+.billing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--billing-grid-gap);
+  align-items: stretch;
+
+  @media (width < 900px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Same split as the Overview stats row: balance 2fr, side card 3fr. */
+.billing-grid--status {
+  grid-template-columns: minmax(11rem, 2fr) minmax(0, 3fr);
+
+  @media (width < 767px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── Card anatomy ──────────────────────────────────────────────────── */
+
+.billing-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: var(--m__font-size-s);
+
+  & > .billing-block { flex: 1; display: flex; flex-direction: column; }
+  & > .billing-block > [data-state="ready"] { flex: 1; display: flex; flex-direction: column; }
+}
+
+body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billing-data="error"])
+  .billing-card > .billing-block:not([data-force="ready"]) > [data-state="ready"],
+.billing-card > .billing-block[data-force="loading"] > [data-state="ready"] {
+  display: none;
+}
+
+.billing-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m__gap-xs);
+  margin-bottom: var(--m__gap-xs);
+  min-height: 1.6rem;
+
+  & h2 {
+    margin: 0 !important;
+    font-size: var(--m__font-size-m);
+    font-weight: var(--m__font-weight-bold);
+  }
+
+  & h2 + :is(.m__tag, span) { margin-right: auto; }
+}
+
+.billing-card__caption {
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+}
+
+.billing-card__lead {
+  color: var(--m__text-caption);
+  max-width: 52ch;
+}
+
+.billing-card__lead--empty {
+  margin-top: var(--m__gap-s);
+}
+
+/* View-only: says who can act, placed where the buttons would be */
+.billing-card__viewer-note {
+  margin: auto 0 0 !important;
+  padding-top: var(--m__gap-l);
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs) !important; /* card paragraphs are set to S */
+  line-height: 1.3;
+}
+
+.billing-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--m__gap-xs);
+  margin-top: auto;
+  padding-top: var(--m__gap-l);
+
+  /* Regular-size buttons use the regular text size. */
+  & > [class*="m__button-"]:not(.S) { font-size: var(--m__font-size-m); }
+}
+
+/* Buttons fill the card width, each keeping its share by label length. */
+.billing-card__actions.billing-card__actions--fill {
+  flex-wrap: nowrap;
+  align-items: stretch;
+
+  /* Label as in the S buttons of the other widgets; the button itself stays large. */
+  & > [class*="m__button-"]:not(.S) {
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.4rem;
+    font-size: var(--m__font-size-s);
+    white-space: nowrap;
+  }
+}
+
+/* Rows sit right under the balance value; the value's bottom margin is the only gap. */
+.billing-meta.billing-meta {
+  margin-top: 0;
+}
+
+.billing-muted { color: var(--m__text-caption); }
+.billing-error-text { color: var(--m__error); }
+
+.billing-card-hint {
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+  margin-top: var(--m__gap-xs) !important;
+}
+
+.billing-link-quiet {
+  font-size: var(--m__font-size-s);
+  color: var(--m__text-link);
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover { color: var(--m__text-link-hover); }
+}
+
+.billing-tag-warning {
+  color: var(--billing-warning);
+}
+
+/* ── Balance + meter ───────────────────────────────────────────────── */
+
+.billing-balance__value {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 var(--m__gap-xxs);
+  margin-bottom: var(--m__gap-m) !important;
+}
+
+/* More air between the rows and the purchase buttons. */
+.billing-balance > .billing-card__actions { padding-top: calc(var(--m__spacer-m) * 1.25); }
+
+/* Loading and error: only the title and the skeleton / placeholder, no purchase buttons or view-only note. */
+body:is([data-billing-data="loading"], [data-billing-data="error"]) .billing-balance:not(:has(> .billing-block[data-force])) > :is(.billing-card__actions, .billing-card__viewer-note),
+.billing-balance:has(> .billing-block:is([data-force="loading"], [data-force="error"])) > :is(.billing-card__actions, .billing-card__viewer-note) {
+  display: none;
+}
+
+/* Title, value and rows read as one tight group. */
+.billing-balance > .billing-card__head { margin-bottom: var(--m__gap-xxxs); }
+
+.billing-unit {
+  font-size: var(--m__font-size-s);
+  font-weight: var(--m__font-weight-regular, 400);
+  color: var(--m__text-caption);
+}
+
+.billing-meter {
+  --value: 0%;
+  --fill: var(--m__text-accent);
+
+  position: relative;
+  height: var(--billing-meter-height);
+  border-radius: var(--m__radius-pill);
+  background: var(--billing-meter-track);
+  overflow: hidden;
+
+  &[data-level="warning"] { --fill: var(--billing-warning); }
+  &[data-level="critical"],
+  &[data-level="full"] { --fill: var(--m__error); }
+  &[data-level="metered"] { --fill: var(--billing-overage); }
+}
+
+.billing-meter__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--value);
+  background: var(--fill);
+  border-radius: inherit;
+  transition: width var(--m__duration-base) var(--m__easing-base);
+}
+
+.billing-meter__legend {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--m__gap-xs);
+  margin-top: var(--m__gap-xxs);
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+
+  & strong { color: var(--m__text); }
+}
+
+/* ── Banners ───────────────────────────────────────────────────────── */
+
+.billing-banners:empty { display: none; }
+
+/* Built on DS alerts (.m__alert-*): no icon or side stripe; widget padding and a widget-size title.
+   Doubled class so it wins over the alert's own padding and radius. */
+.billing-banner.billing-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--m__gap-xs) var(--m__spacer-l);
+  margin-bottom: var(--billing-grid-gap);
+  padding: var(--m__widget-padding);
+
+  & .billing-banner__body { max-width: 90ch; }
+  border-radius: var(--m__widget-radius);
+  font-size: var(--m__font-size-s);
+
+  & p { margin: 0; }
+
+  @media (width < 640px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.billing-banner__title {
+  margin: 0 0 0.15rem !important; /* same as the row title / caption pair in Alerts */
+  color: inherit;
+  font-size: var(--m__font-size-m);
+  font-weight: var(--m__font-weight-bold);
+}
+
+.billing-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--m__gap-xs);
+  align-self: center;
+
+  & a { white-space: nowrap; }
+}
+
+/* Info banners only: hides the notice. Inherits the banner's text colour. */
+button.m__button-icon.billing-banner__dismiss {
+  flex-shrink: 0;
+  align-self: center;
+  width: 1.75rem; /* height of the S buttons next to it */
+  height: 1.75rem;
+  color: inherit;
+
+  & svg { width: 1rem; height: 1rem; }
+}
+
+/* Stacked banner: the cross moves to the top right corner, the text leaves room for it. */
+@media (width < 640px) {
+  .billing-banner.billing-banner:has(.billing-banner__dismiss) {
+    position: relative;
+
+    & .billing-banner__body { padding-right: 2rem; }
+    & .billing-banner__dismiss {
+      position: absolute;
+      top: var(--m__gap-xs);
+      right: var(--m__gap-xs);
+      margin: 0;
+    }
+  }
+}
+
+/* ── Tables (history) ──────────────────────────────────────────────── */
+
+.billing-table {
+  font-size: var(--m__font-size-s);
+
+  & td, & th { white-space: nowrap; }
+  & td.billing-table__wrap { white-space: normal; min-width: 14rem; }
+
+  /* The last row can be followed by a hidden "empty filter" row. */
+  & .is-num { text-align: right; font-variant-numeric: tabular-nums; padding-right: var(--m__gap-l); }
+
+  /* Stacked rows on phones: every cell carries its column label. */
+  @media (width < 640px) {
+    & thead { display: none; }
+
+    & tbody tr {
+      display: block;
+      padding: var(--m__gap-xs) 0;
+      border-bottom: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 12%, transparent);
+    }
+
+    /* Label in a fixed left column; any number of children on the right. */
+    & tbody td {
+      position: relative;
+      display: block;
+      padding: var(--m__gap-xxxs) 0 var(--m__gap-xxxs) 7rem;
+      border: 0;
+      white-space: normal;
+      text-align: left;
+    }
+
+    & tbody td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      color: var(--m__text-caption);
+    }
+
+    & tbody td[colspan] { padding-left: 0; }
+    & tbody td[colspan]::before { content: none; }
+    & .billing-history__docs:not(:has(.m__menu-button, .billing-history__retry)) { display: none; }
+    & tbody td.is-num { padding-right: 0; text-align: left; }
+  }
+}
+
+.billing-history {
+  scroll-margin-top: var(--m__gap-m);
+}
+
+.billing-history__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--m__gap-xxs);
+}
+
+.billing-history__table {
+  /* Same height for every row, with or without a View button; every cell top-aligned. */
+  @media (width >= 640px) {
+    & tbody td {
+      height: 2.6rem;
+      padding-block: 0.35rem;
+      vertical-align: top;
+    }
+
+  }
+
+  & th:nth-child(3),
+  & td.billing-history__number { width: 1%; }
+
+  & th:nth-child(6),
+  & td[data-label="Status"] { padding-left: var(--m__gap-m); }
+}
+
+.billing-history__method {
+  display: block;
+  margin-top: 0.15rem; /* same as the uploaded date in Conversations */
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+  line-height: 1.3;
+}
+
+/* Metered invoice: commitment and overage listed under the total, one per line. */
+.billing-history__breakdown > span {
+  display: block;
+  white-space: nowrap;
+}
+
+.billing-section-note {
+  color: var(--m__text-caption);
+  margin-bottom: var(--m__gap-s) !important;
+  max-width: 70ch;
+}
+
+/* ── Settings ──────────────────────────────────────────────────────── */
+
+.billing-settings-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  & > li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--m__gap-m);
+    margin: 0;
+    padding: var(--m__gap-xs) 0;
+    border-bottom: var(--m__border-width-s) solid color-mix(in srgb, var(--m__text) 12%, transparent);
+
+    &::before { content: none; }
+    &:last-child { border-bottom: 0; }
+  }
+}
+
+.billing-settings-list__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  & small {
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-xs);
+  }
+}
+
+.billing-settings-list__actions {
+  display: flex;
+  gap: var(--m__gap-xxs);
+  flex-shrink: 0;
+}
+
+.billing-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--m__gap-xs);
+  padding: var(--m__gap-xs) 0;
+
+  & .m__textfield { margin: 0; width: 8.5rem; }
+  & .m__textfield input { font: inherit; }
+}
+
+.billing-form-row__label {
+  min-width: 10rem;
+  color: var(--m__text-caption);
+}
+
+.billing-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+
+  &:disabled { opacity: 0.6; }
+}
+
+.billing-readonly {
+  display: flex;
+  align-items: center;
+  gap: var(--m__gap-xs);
+  margin-bottom: var(--billing-grid-gap);
+  padding: var(--m__gap-s) var(--m__widget-padding);
+  border-radius: var(--m__widget-radius);
+  background: var(--m__bg-surface);
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-s);
+}
+
+.billing-future {
+  display: flex;
+  align-items: center;
+  gap: var(--m__gap-xs);
+  color: var(--m__text-caption);
+  font-size: var(--m__font-size-xs);
+}
+
+.billing-inline-error {
+  color: var(--m__error);
+  font-size: var(--m__font-size-xs);
+  margin-top: var(--m__gap-xxxs) !important;
+}
+
+/* ── Email alerts widget + list editors in modals ──────────────────── */
+
+.billing-alerts {
+  /* Same title box as .billing-card__head, so titles line up across the status row. */
+  & h2 {
+    display: flex;
+    align-items: center;
+    min-height: 1.6rem;
+    margin: 0 0 var(--m__gap-xs) !important;
+  }
+}
+
+.billing-alerts__lead {
+  margin: 0.25rem 0 var(--m__gap-s) !important;
+  color: var(--m__text-caption);
+}
+
+.billing-alerts__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m__gap-m);
+  padding: var(--m__gap-xs) 0;
+
+  &:last-child { padding-bottom: 0; }
+}
+
+.billing-alerts__row-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0 !important;
+
+  & strong { font-weight: var(--m__font-weight-medium); }
+  & small {
+    margin-top: 0.15rem;
+    color: var(--m__text-caption);
+    font-size: var(--m__font-size-s);
+  }
+}
+
+/* Auto Top-Up widget: rows follow its state (off / on / failed), set by billing-alerts.js. */
+.billing-autotopup[data-autotopup="off"] [data-autotopup-show]:not([data-autotopup-show~="off"]),
+.billing-autotopup[data-autotopup="on"] [data-autotopup-show]:not([data-autotopup-show~="on"]),
+.billing-autotopup[data-autotopup="failed"] [data-autotopup-show]:not([data-autotopup-show~="failed"]) {
+  display: none !important;
+}
+
+.billing-autotopup {
+  & .billing-card__head { gap: var(--m__gap-xs); justify-content: flex-start; margin-bottom: 0.25rem; }
+  & h2 { margin: 0 !important; }
+}
+
+.billing-autotopup__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m__gap-m);
+}
+
+.billing-autotopup__lead {
+  max-width: 90ch;
+  margin: 0 !important;
+  color: var(--m__text-caption);
+}
+
+.billing-alerts-modal {
+  & .billing-edit-list[hidden] { display: none; }
+}
+
+.m__modal__body .billing-edit-list__lead {
+  color: var(--m__text);
+  margin-bottom: var(--m__gap-s);
+}
+
+.billing-edit-list {
+  width: 100%;
+
+  & .billing-edit-list__label {
+    font-size: var(--m__font-size-s);
+    font-weight: var(--m__font-weight-medium);
+    margin-bottom: 0.3rem;
+  }
+}
+
+.billing-edit-list__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m__gap-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &:empty { display: none; }
+}
+
+.billing-edit-list__row {
+  display: flex;
+  align-items: center;
+  gap: var(--m__gap-xs);
+  margin: 0;
+  padding: 0;
+
+  &::before { content: none; }
+}
+
+.billing-edit-list__row--member {
+  min-height: 2.5rem;
+
+  & .m__tag { flex-shrink: 0; }
+}
+
+.billing-edit-list__value { flex: 1; min-width: 0; }
+.billing-edit-list__unit { width: 9.5rem; flex-shrink: 0; }
+/* The open list is moved to <body>, so it has to sit above the modal backdrop. */
+.m__menu-button-list.billing-unit-list { z-index: 1001; min-width: 9.5rem; }
+
+.billing-edit-list__value--money {
+  position: relative;
+
+  & > span {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--m__text-caption);
+    pointer-events: none;
+  }
+
+  & input { padding-left: 1.6rem; }
+}
+
+.billing-edit-list__value--suffix {
+  position: relative;
+
+  & > span {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--m__text-caption);
+    pointer-events: none;
+  }
+
+  & input { padding-right: 4.5rem; }
+}
+
+.billing-edit-list__value--wide { flex: 1; min-width: 0; }
+
+/* DS icon button (transparent, fill on hover) with a cross; square, the field's height, close to it. */
+button.m__button-icon.billing-edit-list__remove {
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-left: calc(0.25rem - var(--m__gap-xs));
+  justify-content: center;
+
+  & svg { width: 1rem; height: 1rem; }
+}
+
+.billing-edit-list__add {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--m__gap-xxs);
+  margin-top: var(--m__gap-s);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--m__text);
+  font: inherit;
+  cursor: pointer;
+  /* DS link motion: eases out, snaps in on hover / press */
+  transition: color var(--m__duration-base) var(--m__easing-base);
+
+  & svg { width: 1rem; height: 1rem; }
+  &:hover:not(:disabled) { color: var(--m__text-link-hover); transition-duration: var(--m__duration-instant); }
+  &:active:not(:disabled) { color: var(--m__text-link-pressed); transition-duration: var(--m__duration-instant); }
+  &:disabled { color: var(--m__text-caption); cursor: not-allowed; }
+}
+
+.billing-recharge-form {
+  /* Label left, switch right, in a bordered plate the size of a field; the border follows the hover colour */
+  & .billing-recharge-toggle {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: var(--m__gap-s);
+    padding: var(--m__padding-input-m);
+    border: var(--m__border-width-s) solid color-mix(in srgb, currentColor 25%, transparent);
+    border-radius: var(--m__radius-s);
+    line-height: var(--m__line-height-base);
+    transition:
+      color var(--m__duration-base) var(--m__easing-base),
+      border-color var(--m__duration-base) var(--m__easing-base);
+  }
+  & .billing-fieldset { display: flex; flex-direction: column; gap: var(--m__gap-s); }
+  & .billing-fieldset .m__modal__field-hint { margin: 0.25rem 0 0; }
+}
+
+/* ── Prototype panel (not product UI), styled like the nav island ──── */
+
+.billing-proto {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 190;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: var(--m__font-size-xs);
+}
+
+.billing-proto__open,
+.billing-proto__body {
+  border-radius: var(--m__radius-l);
+  background-color: color-mix(in srgb, var(--m__bg) 72%, transparent);
+  box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, black 8%, transparent);
+  backdrop-filter: blur(0.5rem);
+}
+
+.billing-proto__open {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border: 0;
+  color: var(--m__text);
+  font: inherit;
+  line-height: 1.55;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.5s ease;
+
+  &:hover { color: var(--m__text-link-hover); transition-duration: 0s; }
+}
+
+/* Collapsed: hidden until the pointer reaches the corner (or it gets keyboard focus).
+   Appears and disappears instantly; clicking the label expands the panel. */
+.billing-proto:not(.is-open) {
+  & .billing-proto__open { opacity: 0; }
+
+  &::before {
+    content: "";
+    position: absolute;
+    right: -1rem;
+    bottom: -1rem;
+    width: 14rem;
+    height: 5rem;
+  }
+
+  &:hover .billing-proto__open,
+  &:focus-within .billing-proto__open { opacity: 1; }
+
+  @media (hover: none) {
+    & .billing-proto__open { opacity: 1; }
+  }
+}
+
+.billing-proto__body {
+  border-radius: var(--m__radius-l);
+  background-color: color-mix(in srgb, var(--m__bg) 72%, transparent);
+  box-shadow: 0 0.25rem 0.75rem color-mix(in srgb, black 8%, transparent);
+  backdrop-filter: blur(0.5rem);
+}
+
+.billing-proto__body {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: max-content;
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding: 1.25rem 1.25rem 0.6rem 0.6rem;
+}
+
+.billing-proto.is-open {
+  & .billing-proto__open { display: none; }
+  & .billing-proto__body { display: flex; }
+}
+
+.billing-proto__close {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.875rem;
+  line-height: 1;
+  color: var(--m__text);
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.5s ease;
+
+  &:hover { opacity: 1; transition-duration: 0s; }
+}
+
+.billing-proto__group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+
+  /* Caption style from the playground sidebar headings (.m__nav-menu-heading). */
+  & legend {
+    padding: 0;
+    color: var(--m__text-caption);
+    font-family: var(--m__font-family-semi-mono);
+    font-size: var(--m__font-size-xs);
+    line-height: var(--m__line-height-base);
+    text-transform: uppercase;
+  }
+
+  & label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--m__gap-xxxs);
+    line-height: 1.55;
+    color: var(--m__text);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.5s ease;
+
+    &:hover { color: var(--m__text-link-hover); transition-duration: 0s; }
+    &:has(input:checked) { font-weight: var(--m__font-weight-bold); }
+    &:has(input:focus-visible) { outline: 2px solid var(--m__text-link-hover); outline-offset: 1px; }
+  }
+
+  /* Dot marker, ringed when selected: same as the playground plate state switch. */
+  & input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    display: block;
+    box-sizing: border-box;
+    flex: none;
+    width: 4px;
+    height: 4px;
+    margin: 0 0.1rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: var(--m__bg-accent);
+    outline: none;
+  }
+
+  & input[type="radio"]:checked {
+    box-shadow:
+      0 0 0 2px var(--m__bg),
+      0 0 0 3px var(--m__bg-accent);
+  }
+}
+
+/* Groups with two or more options stack vertically; the panel is as wide as its longest option. */
+.billing-proto__options {
+  display: flex;
+  gap: 0 0.6rem;
+}
+
+.billing-proto__options:has(> label:nth-of-type(2)) { flex-direction: column; }
+
+/* All scenario lists share one cell: inactive ones keep contributing width (so the panel
+   doesn't resize between customer types) but collapse to zero height. */
+.billing-proto__stack {
+  display: grid;
+
+  & > .billing-proto__options { grid-area: 1 / 1; height: 0; overflow: hidden; visibility: hidden; }
+  & > .billing-proto__options.is-active { height: auto; overflow: visible; visibility: visible; }
+}
+
+/* Reserve the bold width of every option, so selecting one doesn't widen the panel. */
+.billing-proto__text {
+  display: inline-flex;
+  flex-direction: column;
+
+  &::after {
+    content: attr(data-text);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    font-weight: var(--m__font-weight-bold);
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.billing-proto__spec {
+  align-self: stretch;
+  justify-content: center;
+  margin-top: 0.15rem;
+  /* The body's right padding makes room for ×; the button uses it to match the left inset. */
+  margin-right: -0.65rem;
+  font-size: var(--m__font-size-xs);
+}
+
+/* Status that depends on loaded data is hidden until data is ready. */
+body:is([data-billing-data="loading"], [data-billing-data="empty"], [data-billing-data="error"]) {
+  & .billing-banners,
+  & .billing-card__head > .m__tag {
+    display: none !important;
+  }
+}
+
+/* A new account has Auto Top-Up switched off, and says so. */
+body[data-billing-data="empty"] .billing-autotopup .billing-card__head > .m__tag[data-autotopup-show="off"] {
+  display: inline-flex !important;
+}
+
+/* Top-up modal: plain DS radio cards and textfield M; presets in a row, custom amount below. */
+#modal-billing-topup .m__modal {
+  /* Pay matches the preset cards and the amount field: same padding and radius. */
+  & .m__modal__footer .m__button-primary {
+    flex: 1;
+    justify-content: center;
+    padding: var(--m__padding-input-m);
+    border: var(--m__border-width-s) solid transparent;
+    border-radius: var(--m__radius-s);
+  }
+}
+
+.billing-topup-modal {
+  --m__radio-card-padding: var(--m__padding-input-m);
+
+  /* Same size and gap as the leads in the Alerts modals. */
+  & .billing-topup-modal__lead { margin: 0 0 var(--m__gap-s); }
+  & .billing-topup-modal__controls { display: grid; gap: var(--m__gap-xs); }
+  /* Presets stack one per row, same width as the custom amount field. */
+  & .billing-topup-modal__presets {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--m__gap-xs);
+  }
+  & .m__textfield { margin: 0; }
+}
+
+/* ── Spec page ─────────────────────────────────────────────────────── */
+
+/* Text follows the main DS: regular size and the primary text colour, in tables too. */
+.billing-spec {
+  max-width: 1050px;
+
+  & h2 { scroll-margin-top: var(--m__gap-m); }
+  & code { font-size: 0.92em; }
+}
+
+/* Contents: DS segmented nav; scrolls sideways when it does not fit. */
+.spec-toc { overflow-x: auto; }
+.billing-spec__note { margin-top: var(--m__gap-xs); max-width: 85ch; }
+
+/* Customer types use the UI Scheme table (/ui/) as is; only the top margin is the spec's. */
+.billing-spec__scheme.ui-viz { margin-top: var(--m__gap-xs); }
+
+.billing-spec__table {
+  & td { min-width: 9rem; }
+  & td:first-child { white-space: nowrap; }
+}
+

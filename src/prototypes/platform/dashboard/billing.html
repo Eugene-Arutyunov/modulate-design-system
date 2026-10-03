@@ -4,6 +4,8 @@ permalink: /dashboard/billing/
 ---
 
 {% extends 'prototypes/layout.html' %} {% block content %}
+{% from 'prototypes/billing/macros.njk' import states, statusTag, viewMenu %}
+{% set b = billing %}
 
 <div class="m__wrapper">
   <div class="m__space XL"></div>
@@ -12,103 +14,374 @@ permalink: /dashboard/billing/
       <nav class="m__nav-menu">{% include 'prototypes/dashboard-nav-sidebar.html' %}</nav>
     </div>
 
-    <main class="dashboard-content">
-      <h1 class="dashboard-page-title">Billing</h1>
-      <div class="dashboard-section billing-intro">
-        <p>
-          Credits fund your API usage. 1 credit = $0.01 USD, consumed based on
-          audio duration and model cost rate. Purchase credits via Stripe, apply
-          a credit code, or receive credits through an invite link.
-        </p>
-      </div>
+    <main class="dashboard-content billing-page">
+      {% set billingTitle = 'Billing' %}
+      {% set billingLead = 'Your credit balance, alerts, and your invoices and credit grants.' %}
+      {% include 'prototypes/billing/page-head.html' %}
 
-      <div class="billing-block-gap"></div>
+      {# ── Account status ───────────────────────────────────────────── #}
+      <div class="billing-grid billing-grid--status">
 
-      <div class="m__widget billing-purchase">
-        <h2>Purchase Credits</h2>
-        <div class="billing-purchase__body">
-          <div class="billing-purchase__controls">
-            <fieldset class="billing-purchase__presets m__radio-card-group" aria-label="Credit presets">
-              <label class="m__radio-card" data-credits-preset="100">
-                <input type="radio" name="credits-preset" value="100" />
-                <span class="m__radio-card__value">100</span>
-                <span class="m__radio-card__caption">$1.00</span>
-              </label>
-              <label class="m__radio-card" data-credits-preset="1000">
-                <input type="radio" name="credits-preset" value="1000" checked />
-                <span class="m__radio-card__value">1,000</span>
-                <span class="m__radio-card__caption">$10.00</span>
-              </label>
-              <label class="m__radio-card" data-credits-preset="10000">
-                <input type="radio" name="credits-preset" value="10000" />
-                <span class="m__radio-card__value">10,000</span>
-                <span class="m__radio-card__caption">$100.00</span>
-              </label>
-            </fieldset>
-            <div class="m__textfield M m__textfield--no-spin">
-              <input
-                type="text"
-                id="credits-amount"
-                inputmode="numeric"
-                pattern="[0-9,]*"
-                data-credits-max="1000000"
-                placeholder="Custom amount"
-                aria-label="Credit amount"
-                data-credits-input
-              />
+        <section class="m__widget billing-card billing-balance" aria-labelledby="billing-balance-title">
+          <div class="billing-card__head">
+            <h2 id="billing-balance-title">
+              <span data-for="contracting paygo">Credit Balance</span>
+              <span data-for="metered">Included Credits</span>
+            </h2>
+          </div>
+          {% set balanceEmpty %}
+            <p class="m__widget__value m__widget__value--amount billing-balance__value" data-for="contracting paygo">0.00</p>
+            {# Metered: a new account already has its included credits and commitment. #}
+            <p class="m__widget__value m__widget__value--amount billing-balance__value" data-for="metered">{{ b.metered.included }}.00</p>
+            <div class="m__widget__meta-list billing-meta" data-for="metered">
+              <p class="m__widget__meta-item">
+                <span class="m__widget__meta-label">Included credits used</span>
+                <strong class="m__widget__meta-value">0% of {{ b.metered.included }}</strong>
+              </p>
+              <p class="m__widget__meta-item">
+                <span class="m__widget__meta-label">Next invoice</span>
+                <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
+              </p>
+              <p class="m__widget__meta-item">
+                <span class="m__widget__meta-label">Monthly commitment</span>
+                <strong class="m__widget__meta-value">{{ b.metered.commitment }}</strong>
+              </p>
             </div>
-            <button type="button" class="m__button-primary M billing-pay-btn" data-credits-pay>Pay <span data-credits-pay-label>$10.00</span></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="billing-block-gap"></div>
-
-      <div class="dashboard-stats">
-        <div class="m__widget">
-          <h2>Credit Balance</h2>
-          <p class="m__widget__value">1,000</p>
-          <div class="m__widget__meta-list">
-            <p class="m__widget__meta-item">
-              <span class="m__widget__meta-label">All-Time Credits Used</span>
-              <strong class="m__widget__meta-value">542</strong>
+          {% endset %}
+          {% call states('balance', balanceEmpty, 'stat', '', 'custom') %}
+            <p class="m__widget__value m__widget__value--amount billing-balance__value">
+              <span data-bind="balance">290,000.00</span>
             </p>
-            <p class="m__widget__meta-item">
-              <span class="m__widget__meta-label">All-Time Hours</span>
-              <strong class="m__widget__meta-value">90.3</strong>
-            </p>
-          </div>
-        </div>
-
-        <div class="m__widget billing-credit-code">
-          <h2>Apply Credit Code</h2>
-          <p class="billing-credit-code__description">
-            Enter a credit code to add credits to your balance.
-          </p>
-          <div class="billing-credit-code__form">
-            <div class="m__textfield M">
-              <input type="text" placeholder="Enter credit code" data-apply-code-input />
+            {# Same label / value rows for every type; only the labels change. #}
+            <div class="m__widget__meta-list billing-meta">
+              <p class="m__widget__meta-item">
+                <span class="m__widget__meta-label">
+                  <span data-for="contracting">Used this period</span>
+                  <span data-for="paygo">Used since last top-up</span>
+                  <span data-for="metered">Included credits used</span>
+                </span>
+                <strong class="m__widget__meta-value"><span data-bind="percent">42%</span> of <span data-bind="total">500,000</span></strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="contracting">
+                <span class="m__widget__meta-label">Renews</span>
+                <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="paygo">
+                <span class="m__widget__meta-label">Last top-up</span>
+                <strong class="m__widget__meta-value">20 Sep 2026</strong>
+              </p>
+              {# Overage summary: one row, appears once included credits are used up. #}
+              <p class="m__widget__meta-item" data-for="metered" data-when="now-metered">
+                <span class="m__widget__meta-label">Estimated overage</span>
+                <strong class="m__widget__meta-value"><span data-bind="overageCredits">0</span> credits · <span data-bind="overageCharge">$0.00</span></strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="metered">
+                <span class="m__widget__meta-label">Next invoice</span>
+                <strong class="m__widget__meta-value">{{ b.nextDate }}</strong>
+              </p>
+              <p class="m__widget__meta-item" data-for="metered">
+                <span class="m__widget__meta-label">Monthly commitment</span>
+                <strong class="m__widget__meta-value">{{ b.metered.commitment }}</strong>
+              </p>
             </div>
-            <button type="button" class="m__button-secondary M" data-apply-code>Apply Code</button>
+          {% endcall %}
+          {# Contracting and Pay/Go: one-off purchase, full-width buttons at the card bottom in every data state. #}
+          <div class="billing-card__actions billing-card__actions--fill" data-for="contracting paygo" data-role="admin">
+            <button type="button" class="m__button-primary" data-modal-open="modal-billing-topup" data-role="admin">Buy Credits</button>
+            <button type="button" class="m__button-secondary-outline" data-modal-open="modal-billing-code" data-role="admin">Apply Credit Code</button>
           </div>
-        </div>
+          <p class="billing-card__viewer-note" data-for="contracting paygo" data-role="viewer">Only your organization’s admins can buy credits.</p>
+        </section>
+
+        {# ── Alerts: thresholds and recipients as separate rows, each with its own modal. Low balance is a % of the grant used or credits left, as in the brief. ── #}
+        <section class="m__widget billing-card billing-alerts" id="alerts" aria-labelledby="billing-alerts-title">
+          <h2 id="billing-alerts-title">Alerts</h2>
+          {% call states('alerts', '', 'rows', '', 'ready') %}
+            {# Each row edits its own list in its own modal. #}
+            <div class="billing-alerts__row">
+              <p class="billing-alerts__row-main">
+                <strong>Low balance</strong>
+                <small data-alerts-summary="low">Notify at 75% and 90% of credits used and at 10,000 credits left.</small>
+              </p>
+              <button type="button" class="m__button-secondary-outline S" data-alerts-open="low" data-role="admin">Edit</button>
+            </div>
+            <div class="billing-alerts__row" data-for="metered">
+              <p class="billing-alerts__row-main">
+                <strong>Overage threshold</strong>
+                <small data-alerts-summary="overage">Notify when estimated overage reaches $250 and $500.</small>
+              </p>
+              <button type="button" class="m__button-secondary-outline S" data-alerts-open="overage" data-role="admin">Edit</button>
+            </div>
+            <div class="billing-alerts__row">
+              <p class="billing-alerts__row-main">
+                <strong>Recipients</strong>
+                <small data-alerts-summary="recipients">Notify all admins and recipients from this list.</small>
+              </p>
+              <button type="button" class="m__button-secondary-outline S" data-alerts-open="recipients" data-role="admin">Edit</button>
+            </div>
+          {% endcall %}
+        </section>
       </div>
 
-      <div class="billing-block-gap"></div>
-      <div class="dashboard-section">
-        {% set rows = [ { date: '6 Mar 2026, 19:01', type: 'new_account_grant',
-        credits: '+1,000', description: 'New account credits' }, { date: '1 Apr
-        2026, 12:00', type: 'purchase', credits: '+500', description: 'Credit
-        purchase via Stripe' }, { date: '10 Apr 2026, 09:30', type:
-        'invite_grant', credits: '+250', description: 'Referral invite bonus' }
-        ] %} {% include 'service/table-billing-history.html' %}
-      </div>
+      {# ── Pay/Go Auto Top-Up: title, one state sentence and one button (Enable when off, Manage otherwise) ── #}
+      <section class="m__widget billing-card billing-autotopup" id="auto-recharge" data-for="paygo" data-autotopup="on" aria-labelledby="billing-autotopup-title">
+        <div class="billing-card__head">
+          <h2 id="billing-autotopup-title">Auto Top-Up</h2>
+          <span class="m__tag m__tag--success" data-autotopup-show="on">On</span>
+          <span class="m__tag m__tag--error" data-autotopup-show="failed">Failed</span>
+          <span class="m__tag m__tag--muted" data-autotopup-show="off">Off</span>
+        </div>
+        {% call states('recharge', '', 'lead-button', '', 'ready') %}
+          <div class="billing-autotopup__row">
+            <p class="billing-autotopup__lead">
+              <span data-autotopup-show="off">Automatically purchase credits when your balance is below a certain threshold. You can select multiple payment methods that will be tried in order if payment fails.</span>
+              <span data-autotopup-show="on">Auto top-up is enabled and will add <span data-recharge-summary="amount">{{ b.paygo.recharge }}</span> credits automatically when your balance drops below <span data-recharge-summary="threshold">{{ b.paygo.threshold }}</span>.</span>
+              <span data-autotopup-show="failed">Auto top-up couldn’t charge <span data-recharge-summary="card">{{ b.paygo.card }}</span> on 28 Sep. Choose another payment method or update this one to resume.</span>
+            </p>
+            <button type="button" class="m__button-primary S" data-modal-open="modal-billing-recharge" data-autotopup-enable data-autotopup-show="off" data-role="admin">Enable Auto Top-Up</button>
+            <button type="button" class="m__button-secondary-outline S" data-modal-open="modal-billing-recharge" data-autotopup-show="on failed" data-role="admin">Manage</button>
+          </div>
+        {% endcall %}
+      </section>
+
+      {# ── Billing history: one list of every credit and billing event ─ #}
+      <section class="m__widget billing-card billing-history" id="history" aria-labelledby="billing-history-title">
+        <div class="table-toolbar">
+          <h2 id="billing-history-title">Billing History</h2>
+          <div class="table-filters" data-billing-history-filters></div>
+        </div>
+        <div class="review-filter-strip table-filters-strip" data-billing-history-strip hidden></div>
+        {% set historyEmpty %}
+          {# Same table as filled: headers stay, one centered row explains what will appear. #}
+          <div class="m__table-wrapper">
+            <table class="billing-table billing-history__table">
+              <thead>
+                <tr><th>Date</th><th>Type</th><th>Invoice Number</th><th class="is-num">Credits</th><th class="is-num">Amount</th><th>Status</th><th class="m__col-actions"><span class="billing-visually-hidden">Actions</span></th></tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="7"><div class="m__table-empty"><p>
+                  <span data-for="contracting">No billing history yet. Credit allocations, top-ups and invoices will appear here</span>
+                  <span data-for="paygo">No billing history yet. Your top-ups and their receipts will appear here</span>
+                  <span data-for="metered">No billing history yet. Monthly invoices and credit allocations will appear here</span>
+                </p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        {% endset %}
+        {% call states('history', historyEmpty, 'table', '', 'custom') %}
+          {% for type in ['contracting', 'paygo', 'metered'] %}
+          <div class="m__table-wrapper" data-for="{{ type }}">
+            <table class="billing-table billing-history__table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Invoice Number</th>
+                  <th class="is-num">Credits</th>
+                  <th class="is-num">Amount</th>
+                  <th>Status</th>
+                  <th class="m__col-actions"><span class="billing-visually-hidden">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in b.history[type] %}
+                <tr data-kind="{{ row.kind }}" data-status="{{ row.status }}" data-date="{{ row.date }}">
+                  <td data-label="Date">{{ row.date }}</td>
+                  <td data-label="Type">
+                    {{ row.type }}
+                    {% if row.method %}<small class="billing-history__method">{{ row.method }}</small>{% endif %}
+                  </td>
+                  <td data-label="Invoice Number" class="billing-history__number">{{ row.invoice }}</td>
+                  <td data-label="Credits" class="is-num">{% if row.credits == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.credits }}{% endif %}</td>
+                  <td data-label="Amount" class="is-num">{% if row.amount == '—' %}<span class="billing-muted">—</span>{% else %}{{ row.amount }}{% endif %}
+                    {# Metered invoices: commitment and overage as line items under the total, in the same cell. #}
+                    {% if row.lines %}<small class="billing-history__method billing-history__breakdown">{% for line in row.lines %}<span>{{ line.label }} {{ line.amount }}</span>{% endfor %}</small>{% endif %}
+                  </td>
+                  <td data-label="Status">{{ statusTag(row.status) }}</td>
+                  <td data-label="Action" class="m__col-actions billing-history__docs">
+                    <div class="billing-history__actions">
+                      {% if row.status == 'Failed' %}<button type="button" class="m__button-secondary-outline S billing-history__retry" data-role="admin" data-billing-toast="Retrying the payment with your primary payment method.">Retry</button>
+                      {% elif row.kind != 'grant' and row.docs != false %}{{ viewMenu(row.invoice, row.receipt) }}{% endif %}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+                <tr data-filter-empty hidden>
+                  <td colspan="7"><div class="m__table-empty"><p>Nothing matches these filters</p></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          {% endfor %}
+        {% endcall %}
+      </section>
     </main>
   </div>
   <div class="m__space XL"></div>
 </div>
 
-{% include 'service/modal-billing-apply-code.html' %}
+{% from 'service/modal-wrapper.njk' import modal %}
+{% call modal("modal-billing-code", "Apply Credit Code") %}
+<div class="m__modal__body">
+  <div class="m__textfield M">
+    <label for="billing-code">Credit code</label>
+    <input type="text" id="billing-code" autocomplete="off" placeholder="e.g. SPRING26" />
+  </div>
+</div>
+<div class="m__modal__footer">
+  <button type="button" class="m__button-secondary-outline S" data-modal-close="modal-billing-code">Cancel</button>
+  <button type="button" class="m__button-primary S" data-modal-close="modal-billing-code" data-billing-toast="Credit code applied. 5,000 credits added.">Apply Code</button>
+</div>
+{% endcall %}
+
+{# Top-up: choose a quantity at the contracted rate, then pay in Stripe Checkout. The low-balance email links to #top-up. #}
+{% call modal("modal-billing-topup", "Buy Credits") %}
+<div class="m__modal__body billing-topup-modal">
+  <p class="billing-topup-modal__lead">Credits pay for API usage. 1 credit = {{ b.contract.rate }} USD, spent based on audio duration and model cost.</p>
+  <div class="billing-topup-modal__controls">
+    <fieldset class="billing-topup-modal__presets m__radio-card-group" aria-label="Credit presets">
+      <label class="m__radio-card" data-credits-preset="100">
+        <input type="radio" name="credits-preset" value="100" />
+        <span class="m__radio-card__value">100</span>
+        <span class="m__radio-card__caption">$1.00</span>
+      </label>
+      <label class="m__radio-card" data-credits-preset="1000">
+        <input type="radio" name="credits-preset" value="1000" checked />
+        <span class="m__radio-card__value">1,000</span>
+        <span class="m__radio-card__caption">$10.00</span>
+      </label>
+      <label class="m__radio-card" data-credits-preset="10000">
+        <input type="radio" name="credits-preset" value="10000" />
+        <span class="m__radio-card__value">10,000</span>
+        <span class="m__radio-card__caption">$100.00</span>
+      </label>
+    </fieldset>
+    <div class="m__textfield M m__textfield--no-spin">
+      <input type="text" id="credits-amount" inputmode="numeric" pattern="[0-9,]*"
+        data-credits-max="10000000" data-credits-rate="{{ b.contract.rateValue }}"
+        placeholder="Custom amount" aria-label="Credit amount" data-credits-input />
+    </div>
+  </div>
+</div>
+<div class="m__modal__footer">
+  <button type="button" class="m__button-primary" data-credits-pay data-modal-close="modal-billing-topup" data-billing-toast="Continues to Stripe Checkout to pay (handled by Stripe).">Pay <span data-credits-pay-label>$10.00</span></button>
+</div>
+{% endcall %}
+
+{# Threshold lists edit in place, like Claude’s email notifications: rows + remove cross, “Add threshold”, Save. #}
+{% set plus %}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>{% endset %}
+
+{# One modal shell; each Alerts row opens it with only its own list and title. #}
+<div class="m__modal-backdrop" id="modal-billing-alerts" hidden aria-modal="true" role="dialog" aria-labelledby="modal-billing-alerts-title">
+  <div class="m__modal billing-alerts-modal">
+    <div class="m__modal__header">
+      <h2 class="m__modal__title" id="modal-billing-alerts-title"><span data-alerts-title>Low balance</span></h2>
+      <button type="button" class="m__modal__close" aria-label="Close" data-modal-close="modal-billing-alerts">
+        <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true"><use href="#close"></use></svg>
+      </button>
+    </div>
+    <div class="m__modal__body">
+    <div class="billing-edit-list" data-edit-list="low" data-max="5">
+    <p class="billing-edit-list__lead">Everyone on the recipient list gets an email when your balance runs low. Set a threshold as a percentage of <span data-for="contracting">credits used since the last allocation</span><span data-for="paygo">credits used since the last top-up</span><span data-for="metered">this period’s included credits used</span>, or as <span data-for="contracting paygo">credits</span><span data-for="metered">included credits</span> left.</p>
+    <p class="billing-edit-list__label">Notify at</p>
+    <ul class="billing-edit-list__rows" data-edit-rows></ul>
+    <template data-edit-template>
+      <li class="billing-edit-list__row">
+        <div class="m__textfield M billing-edit-list__value">
+          <input type="text" inputmode="numeric" aria-label="Threshold" data-billing-number data-edit-value />
+        </div>
+        {# DS dropdown: select-styled trigger + menu with a check on the right (same as “Sorted by” in the Review Queue). #}
+        <div class="m__menu-button billing-edit-list__unit">
+          <button type="button" class="m__select has-value m__menu-button-trigger" aria-haspopup="menu" aria-expanded="false" aria-label="Threshold type">
+            <span data-edit-kind-label>% used</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><use href="#chevron-down"></use></svg>
+          </button>
+          <div class="m__menu-button-list moderation-sort-list billing-unit-list" role="menu" hidden>
+            <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="percent" aria-checked="true">% used<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
+            <button type="button" class="m__menu-button-item" role="menuitemradio" data-sort-option="remaining" aria-checked="false">credits left<svg class="moderation-sort-check" viewBox="0 0 10 10" aria-hidden="true"><use href="#checkmark"></use></svg></button>
+          </div>
+          <select data-edit-kind hidden aria-hidden="true">
+            <option value="percent">% used</option>
+            <option value="remaining">credits left</option>
+          </select>
+        </div>
+        <button type="button" class="m__button-icon billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
+      </li>
+    </template>
+    <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add threshold</button>
+    <p class="billing-inline-error" data-edit-error hidden></p>
+  </div>
+    <div class="billing-edit-list" data-edit-list="overage" hidden data-max="5">
+    <p class="billing-edit-list__lead">Everyone on the recipient list gets an email when the estimated overage for the current period reaches an amount. Usage is never paused.</p>
+    <p class="billing-edit-list__label">Notify when estimated overage reaches</p>
+    <ul class="billing-edit-list__rows" data-edit-rows></ul>
+    <template data-edit-template>
+      <li class="billing-edit-list__row">
+        <div class="m__textfield M billing-edit-list__value billing-edit-list__value--money">
+          <span aria-hidden="true">$</span>
+          <input type="text" inputmode="numeric" aria-label="Amount in USD" data-billing-number data-edit-value />
+        </div>
+        <button type="button" class="m__button-icon billing-edit-list__remove" aria-label="Remove threshold" data-edit-remove><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
+      </li>
+    </template>
+    <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add threshold</button>
+    <p class="billing-inline-error" data-edit-error hidden></p>
+  </div>
+    <div class="billing-edit-list" data-edit-list="recipients" hidden data-max="10">
+    <p class="billing-edit-list__lead">
+      All admins get alert emails. Add more addresses, such as a shared finance inbox.
+    </p>
+    <ul class="billing-edit-list__rows" data-edit-rows></ul>
+    <template data-edit-template>
+      <li class="billing-edit-list__row">
+        <div class="m__textfield M billing-edit-list__value billing-edit-list__value--wide">
+          <input type="email" autocomplete="off" placeholder="name@company.com" aria-label="Email" data-edit-value />
+        </div>
+        <button type="button" class="m__button-icon billing-edit-list__remove" aria-label="Remove recipient" data-edit-remove><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
+      </li>
+    </template>
+    <button type="button" class="billing-edit-list__add" data-edit-add>{{ plus | safe }}Add recipient</button>
+    <p class="billing-inline-error" data-edit-error hidden></p>
+  </div>
+    </div>
+    <div class="m__modal__footer">
+      <button type="button" class="m__button-secondary-outline S" data-modal-close="modal-billing-alerts">Cancel</button>
+      <button type="button" class="m__button-primary S" data-alerts-save>Save</button>
+    </div>
+  </div>
+</div>
+
+{% call modal("modal-billing-recharge", "Auto Top-Up") %}
+<div class="m__modal__body billing-recharge-form">
+  <label class="m__toggle-primary billing-recharge-toggle">
+    <input type="checkbox" data-billing-recharge-toggle />
+    <span>Enable Auto Top-Up</span>
+  </label>
+  <fieldset class="billing-fieldset" data-billing-recharge-fields>
+    <div class="m__textfield M">
+      <label for="br-threshold">When credits are below</label>
+      <input type="text" id="br-threshold" inputmode="numeric" value="{{ b.paygo.threshold }}" data-billing-number />
+    </div>
+    <div class="m__textfield M">
+      <label for="br-amount">Purchase this amount, credits</label>
+      <input type="text" id="br-amount" inputmode="numeric" value="{{ b.paygo.recharge }}" data-billing-number data-billing-recharge-amount />
+    </div>
+    <p class="m__modal__field-hint"><span data-billing-recharge-price>{{ b.paygo.rechargeAmount }}</span> per top-up.</p>
+    <p class="billing-inline-error" data-billing-recharge-error hidden>Enter at least 1,000 credits per top-up.</p>
+  </fieldset>
+</div>
+<div class="m__modal__footer">
+  <button type="button" class="m__button-secondary-outline S" data-modal-close="modal-billing-recharge">Cancel</button>
+  <button type="button" class="m__button-primary S" data-billing-recharge-save>Save</button>
+</div>
+{% endcall %}
+
+<script type="application/json" id="billing-alert-data">{{ {"low": b.alerts, "overage": b.overageAlerts, "recipients": b.recipients} | dump | safe }}</script>
+
+{% include 'prototypes/billing/prototype-panel.html' %}
+<script src="/assets/prototypes/billing.js"></script>
+<script src="/assets/prototypes/table-filters.js"></script>
+<script src="/assets/prototypes/billing-history.js"></script>
+<script src="/assets/prototypes/billing-alerts.js"></script>
 <script src="/assets/prototypes/billing-credits.js"></script>
-<script src="/assets/prototypes/billing-modals.js"></script>
 {% endblock %}

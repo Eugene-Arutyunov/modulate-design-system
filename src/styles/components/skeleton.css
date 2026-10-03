@@ -1,0 +1,52 @@
+/*
+ * Skeleton: placeholder shapes shown while content loads.
+ * .m__skeleton is one bar; size modifiers match the text or control it stands in for.
+ * .m__skeleton-stack and .m__skeleton-row compose bars into the shape of the real block.
+ */
+:root {
+  --m__skeleton-bg: color-mix(in srgb, var(--m__text) 8%, transparent);
+  --m__skeleton-duration: 1.4s;
+}
+
+.m__skeleton {
+  display: block;
+  flex-shrink: 0;
+  width: var(--m__skeleton-width, 100%);
+  max-width: 100%;
+  height: 0.8em;
+  border-radius: var(--m__radius-s);
+  background: var(--m__skeleton-bg);
+  animation: m__skeleton-pulse var(--m__skeleton-duration) var(--m__easing-base) infinite;
+
+  /* Caption text */
+  &.S { height: 0.65em; }
+  /* Big number, as in m__widget__value */
+  &.L { height: 2rem; border-radius: var(--m__radius-m); }
+  /* S button */
+  &.button { width: var(--m__skeleton-width, 6rem); height: 1.75rem; border-radius: var(--m__radius-s); }
+}
+
+/* Vertical group: lines of a paragraph, or rows of a list */
+.m__skeleton-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m__gap-xs);
+}
+
+/* Horizontal row: label / value, text / button, or table cells */
+.m__skeleton-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m__gap-m);
+
+  & > .m__skeleton-stack { flex: 1; min-width: 0; }
+}
+
+@keyframes m__skeleton-pulse {
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m__skeleton { animation: none; }
+}

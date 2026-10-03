@@ -1,0 +1,97 @@
+{#
+  In-app status banners. Shown at the top of Billing (and, in product, above every
+  dashboard page) for the current scenario. One banner at a time, most severe wins.
+  Info (blue) banners can be dismissed; error banners stay until the problem is fixed.
+#}
+{% set b = billing %}
+<div class="billing-banners">
+
+  {# 75% used #}
+  <div class="m__alert-info billing-banner" data-when="usage-75" hidden>
+    <div class="billing-banner__body">
+      <h2 class="billing-banner__title">
+        <span data-for="contracting paygo">You’ve used 75% of your credits</span>
+        <span data-for="metered">You’ve used 75% of included credits</span>
+      </h2>
+      <p>
+        <span data-for="contracting">Usage stops when credits run out.</span>
+        <span data-for="paygo">Auto Top-Up adds {{ b.paygo.recharge }} credits when the balance falls below {{ b.paygo.threshold }}.</span>
+        <span data-for="metered">When they run out, usage continues at the metered rate.</span>
+      </p>
+    </div>
+    <div class="billing-banner__actions">
+      <a href="/dashboard/billing/#top-up" class="m__button-secondary-outline S" data-billing-link data-for="contracting" data-role="admin">Buy Credits</a>
+      <a href="/dashboard/billing/#recharge" class="m__button-secondary-outline S" data-billing-link data-for="paygo" data-role="admin">Auto Top-Up Settings</a>
+      <a href="/dashboard/billing/#overage-alerts" class="m__button-secondary-outline S" data-billing-link data-for="metered" data-role="admin">Overage alerts</a>
+      <button type="button" class="m__button-icon billing-banner__dismiss" aria-label="Dismiss" data-billing-dismiss><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+
+  {# 90% used #}
+  <div class="m__alert-info billing-banner" data-when="usage-90" hidden>
+    <div class="billing-banner__body">
+      <h2 class="billing-banner__title">
+        <span data-for="contracting paygo">Credits are running low: 90% used</span>
+        <span data-for="metered">90% of included credits used</span>
+      </h2>
+      <p>
+        <span data-for="contracting">At your current pace, credits run out in about 2 days.</span>
+        <span data-for="paygo">Auto Top-Up adds {{ b.paygo.recharge }} credits when the balance falls below {{ b.paygo.threshold }}.</span>
+        <span data-for="metered">At your current pace, metered billing starts in about 2 days.</span>
+      </p>
+    </div>
+    <div class="billing-banner__actions">
+      <a href="/dashboard/billing/#top-up" class="m__button-secondary-outline S" data-billing-link data-for="contracting" data-role="admin">Buy Credits</a>
+      <a href="/dashboard/billing/#recharge" class="m__button-secondary-outline S" data-billing-link data-for="paygo" data-role="admin">Auto Top-Up Settings</a>
+      <a href="/dashboard/billing/#overage-alerts" class="m__button-secondary-outline S" data-billing-link data-for="metered" data-role="admin">Overage alerts</a>
+      <button type="button" class="m__button-icon billing-banner__dismiss" aria-label="Dismiss" data-billing-dismiss><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+
+  {# 100% used — Contracting: usage stopped #}
+  <div class="m__alert-error billing-banner" data-when="usage-stopped" data-for="contracting" hidden>
+    <div class="billing-banner__body">
+      <h2 class="billing-banner__title">Usage stopped: you’re out of credits</h2>
+      <p>API requests are rejected until you add credits.</p>
+    </div>
+    <div class="billing-banner__actions" data-role="admin">
+      <a href="/dashboard/billing/#top-up" class="m__button-primary S" data-billing-link>Buy Credits</a>
+    </div>
+  </div>
+
+  {# 100% used — Pay/Go with Auto Top-Up off #}
+  <div class="m__alert-error billing-banner" data-when="usage-stopped" data-for="paygo" hidden>
+    <div class="billing-banner__body">
+      <h2 class="billing-banner__title">Usage stopped: you’re out of credits</h2>
+      <p>API requests are rejected until you add credits. Auto Top-Up is off.</p>
+    </div>
+    <div class="billing-banner__actions" data-role="admin">
+      <a href="/dashboard/billing/#top-up" class="m__button-primary S" data-billing-link>Buy Credits</a>
+      <a href="/dashboard/billing/#recharge" class="m__button-secondary-outline S" data-billing-link>Turn On Auto Top-Up</a>
+    </div>
+  </div>
+
+  {# Pay/Go: failed recharge #}
+  <div class="m__alert-error billing-banner" data-when="failed-recharge" hidden>
+    <div class="billing-banner__body">
+      <h2 class="billing-banner__title">Auto Top-Up failed</h2>
+      <p>We couldn’t charge {{ b.paygo.card }} on 28 Sep. Update your payment method to keep credits coming.</p>
+    </div>
+    <div class="billing-banner__actions" data-role="admin">
+      <a href="#" class="m__button-primary S billing-external" data-billing-stripe>Update Payment Method</a>
+    </div>
+  </div>
+
+  {# Metered: now in metered billing #}
+  <div class="m__alert-info billing-banner" data-when="now-metered" hidden>
+    <div class="billing-banner__body">
+      <h2 class="billing-banner__title">You’re now in metered billing</h2>
+      <p>Included credits are used up. Requests keep running; extra usage is billed at the metered rate on your {{ b.nextDate }} invoice.</p>
+    </div>
+    <div class="billing-banner__actions">
+      <a href="/dashboard/billing/#overage-alerts" class="m__button-secondary-outline S" data-billing-link data-role="admin">Set overage alert</a>
+      <button type="button" class="m__button-icon billing-banner__dismiss" aria-label="Dismiss" data-billing-dismiss><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,36 @@
+/*
+ * Toast: short confirmation that appears at the bottom centre and fades out.
+ * Add .is-visible to show it. Solid accent background, squircle corners.
+ */
+.m__toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 300;
+  max-width: min(32rem, calc(100vw - 2rem));
+  padding: var(--m__padding-button-m);
+  border-radius: var(--m__radius-xl);
+  corner-shape: squircle;
+  background: var(--m__bg-accent);
+  color: var(--m__text-inverted);
+  font-size: var(--m__font-size-s);
+  line-height: var(--m__line-height-base);
+  box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--m__color-gray-950) 20%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 0.5rem);
+  /* Hiding fades out; showing is instant (see .is-visible). */
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+
+  &.is-visible { opacity: 1; transform: translate(-50%, 0); transition: none; }
+
+  /* In documentation: shown in place instead of fixed to the viewport */
+  &.is-static {
+    position: static;
+    display: inline-block;
+    opacity: 1;
+    transform: none;
+  }
+}

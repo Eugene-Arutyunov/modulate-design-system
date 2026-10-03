@@ -5,11 +5,272 @@
 }
 
 .cc__stream {
-  color: var(--m__text-caption);
   white-space: nowrap;
+}
+
+/* Project names: one step down from <strong>'s bold */
+.cc__wide td strong {
+  font-weight: var(--m__font-weight-medium);
 }
 
 /* Unconfirmed content: quieted, not decorated */
 .cc__draft {
   color: var(--m__text-caption);
+}
+
+/* Filter row: stream select + type and status segmented controls, one type
+   scale, aligned to the text baseline */
+.cc__controls {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--m__gap-l);
+}
+
+/* The components bring their own bottom margins; the row's gap is enough */
+.cc__controls .m__segmented-control-secondary {
+  margin: 0;
+}
+
+/* The status filter and the export group wrap together, so the export
+   controls always end that line instead of dropping to their own */
+.cc__controls-group {
+  display: flex;
+  align-items: baseline;
+  gap: var(--m__gap-l);
+}
+
+/* Compact in the controls row, not the component's default full width */
+.cc__stream-select {
+  font-size: var(--m__font-size-s);
+  width: auto;
+  flex: 0 0 auto;
+}
+
+/* The component animates some parts of the text and not others; make the
+   whole control transition uniformly */
+.cc__stream-select > span:first-child,
+.cc__stream-select .m__select__value,
+.cc__stream-select .m__select__inline-control > svg {
+  transition: color var(--m__duration-base) var(--m__easing-base);
+}
+
+.cc__stream-select:hover > span:first-child,
+.cc__stream-select:hover .m__select__value,
+.cc__stream-select:hover .m__select__inline-control > svg {
+  color: var(--m__text-link-hover);
+  transition-duration: var(--m__duration-instant);
+}
+
+/* Cells: one type scale (the link size), baseline-aligned, no extra bottom
+   padding from the base table style */
+.cc__wide td {
+  padding-bottom: 0.3rem;
+  vertical-align: baseline;
+  font-size: var(--m__font-size-s);
+}
+
+/* Stream and Project columns read one step larger than the rest */
+.cc__wide td:nth-child(-n + 2) {
+  font-size: var(--m__font-size-m);
+}
+
+/* Done rows: quieted text only — the row divider must keep full strength,
+   so fade the colors, not the cell (opacity would take the border with it) */
+tr.cc__done td {
+  color: color-mix(in srgb, var(--m__text) 55%, transparent);
+}
+
+tr.cc__done td a {
+  color: color-mix(in srgb, var(--m__text-link) 55%, transparent);
+}
+
+/* Darker divider under the header row and under the last visible row of
+   each stream (i.e. above the next stream); control-center.js maintains the
+   class on filter changes. The last row also gets extra bottom padding as a
+   gap before the next stream. */
+.cc__wide th {
+  border-bottom-color: color-mix(in srgb, var(--m__text) 35%, transparent);
+}
+
+tr.cc__stream-end td {
+  border-bottom-color: color-mix(in srgb, var(--m__text) 35%, transparent);
+  padding-bottom: 0.7rem;
+}
+
+/* Link column: bare URLs, truncated with an ellipsis when too long */
+.cc__link {
+  font-size: var(--m__font-size-s);
+  white-space: nowrap;
+}
+
+.cc__link a {
+  display: inline-block;
+  max-width: calc(100% - 1.5rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+/* --- In-place editing --- */
+
+/* Editable name: no outlines; while editing, the whole cell gets a surface
+   background instead */
+.cc__wide [data-cc-name] {
+  display: block;
+  outline: none;
+}
+
+/* Editable cells: light surface on hover, full surface while editing.
+   Hovering the link itself drops the cell hover — opening the link and
+   editing the cell are different actions. */
+.cc__wide td:has([data-cc-name]):hover,
+td.cc__link:hover:not(:has(a:hover)) {
+  background-color: color-mix(in srgb, var(--m__bg-surface) 50%, transparent);
+}
+
+.cc__wide td:has([data-cc-name]:focus),
+.cc__wide td:has(.cc__link-input:focus) {
+  background-color: var(--m__bg-surface);
+}
+
+/* Type/status tags double as picker buttons */
+button.cc__tag-button {
+  background: none;
+  font: inherit;
+  font-size: var(--m__font-size-s);
+  color: inherit;
+  cursor: pointer;
+}
+
+button.cc__tag-button:hover {
+  color: var(--m__text-link-hover);
+}
+
+/* The whole link cell is clickable for add/edit (the anchor itself still
+   opens the link); the quiet affordance shows on cell hover */
+td.cc__link {
+  cursor: pointer;
+}
+
+.cc__link-add {
+  font-size: var(--m__font-size-s);
+  color: var(--m__text-caption);
+  opacity: 0;
+  transition: opacity var(--m__duration-base) var(--m__easing-base);
+}
+
+td.cc__link:hover .cc__link-add {
+  opacity: 1;
+}
+
+/* Draft rows: empty name shows a quiet placeholder */
+.cc__wide [data-cc-name]:empty::before {
+  content: "New project";
+  color: var(--m__text-caption);
+}
+
+/* "+" row at the end of each stream drafts a new project there */
+tr.cc__add td {
+  cursor: pointer;
+  color: var(--m__text-caption);
+}
+
+tr.cc__add:hover td {
+  color: var(--m__text);
+  background-color: color-mix(in srgb, var(--m__bg-surface) 50%, transparent);
+}
+
+/* Bare editing field: no extra chrome, the focused cell carries the state */
+.cc__link-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--m__font-size-s);
+  color: var(--m__text);
+}
+
+/* Chip picker popover for type/status */
+.cc__picker {
+  width: auto;
+  max-width: 24rem;
+  padding: 0.5rem;
+}
+
+/* Percent input, shown only while "In progress" is selected */
+.cc__picker-progress {
+  width: 4.5rem;
+  margin-top: 0.5rem;
+  box-sizing: border-box;
+  background: var(--m__bg-input);
+  border: var(--m__border-width-s) solid var(--m__border);
+  border-radius: var(--m__radius-s);
+  padding: 0.2rem 0.4rem;
+  font: inherit;
+  font-size: var(--m__font-size-s);
+  color: var(--m__text);
+}
+
+.cc__picker-progress[hidden] {
+  display: none;
+}
+
+/* Export group: one more block in the controls row (no right-alignment),
+   shows only when local edits differ from the repo JSON; tight gap */
+.cc__export {
+  display: flex;
+  align-items: baseline;
+  gap: var(--m__gap-xxs);
+}
+
+/* display: flex above beats the UA rule for [hidden] — restate it, or the
+   export group never actually hides */
+.cc__export[hidden] {
+  display: none;
+}
+
+.cc__export-note {
+  font-size: var(--m__font-size-s);
+  color: var(--m__text-caption);
+}
+
+/* Export buttons styled like segmented-control segments */
+.cc__export-button {
+  background: none;
+  padding: var(--m__padding-button-s);
+  font-size: 0.8em;
+  font-weight: var(--m__font-weight-medium);
+  color: var(--m__text);
+  border: var(--m__border-width-s) solid
+    color-mix(in srgb, currentColor 15%, transparent);
+  border-radius: var(--m__radius-s);
+  cursor: pointer;
+  transition: var(--m__duration-base) var(--m__easing-base);
+}
+
+.cc__export-button:hover {
+  color: var(--m__text-link-hover);
+  background-color: color-mix(
+    in srgb,
+    var(--m__text-link-hover) 10%,
+    transparent
+  );
+  transition-duration: var(--m__duration-instant);
+}
+
+/* Narrow screens: the link column shows just an arrow instead of the URL */
+@media (width < 768px) {
+  td.cc__link a {
+    font-size: 0;
+  }
+
+  td.cc__link a::after {
+    content: "\2197";
+    font-size: var(--m__font-size-s);
+  }
 }

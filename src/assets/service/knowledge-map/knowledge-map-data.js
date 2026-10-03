@@ -2,7 +2,8 @@
 // Bilingual: EN is the public language; RU is reachable through the hidden
 // corner toggle (double-click the bottom-right corner of the stage).
 // Merged from the original 37 disciplines down to 29 — the absorbed topics
-// live on as sentences inside their hosts (see the site registry).
+// live on as sentences inside their hosts (see the site registry);
+// Hermeneutics and Negotiation were added later as their own nodes.
 
 const W = "https://en.wikipedia.org/wiki/";
 
@@ -11,7 +12,7 @@ export const UI = {
     title:
       "Conversation intelligence = conversation understanding + a speaking agent",
     intro:
-      "Thirty disciplines. The upper half is what it takes to understand a conversation; the lower half is what it takes to take part in one. The technology underneath carries both. Lines connect fields that work on the same problem from different sides.",
+      "Thirty-one disciplines. The upper half is what it takes to understand a conversation; the lower half is what it takes to take part in one. The technology underneath carries both. Lines connect fields that work on the same problem from different sides.",
     hint: "Select a discipline to read what it is and why it matters here.",
     read: "Read more",
     linked: "Connected to",
@@ -20,7 +21,7 @@ export const UI = {
     title:
       "Conversation intelligence = понимание разговора + говорящий агент",
     intro:
-      "Тридцать дисциплин. Верхняя половина — то, что нужно, чтобы понимать разговор; нижняя — то, что нужно, чтобы в нём участвовать. Технология внизу несёт и то и другое. Линии соединяют области, которые решают одну задачу с разных сторон.",
+      "Тридцать одна дисциплина. Верхняя половина — то, что нужно, чтобы понимать разговор; нижняя — то, что нужно, чтобы в нём участвовать. Технология внизу несёт и то и другое. Линии соединяют области, которые решают одну задачу с разных сторон.",
     hint: "Выберите дисциплину, чтобы прочитать, что это и зачем она здесь.",
     read: "Почитать",
     linked: "Связано с",
@@ -140,6 +141,27 @@ export const DISCIPLINES = {
       [
         "Communication accommodation theory",
         W + "Communication_accommodation_theory",
+      ],
+    ],
+  },
+
+  neg: {
+    g: "conv",
+    n: { en: "Negotiation", ru: "Переговоры" },
+    t: {
+      en: "The study of how parties with different interests reach agreement: positions versus interests, the best alternative to a deal, concessions, commitments. A large share of the conversations worth understanding are negotiations, open or hidden, and this discipline says what to listen for: the moment a position softens, the difference between “we’ll think about it” and an actual concession, the point where the agreement happens and what it was traded for. Without it a meeting summary records who said what, but not who moved — and a detected commitment carries no sense of its price.",
+      ru: "Наука о том, как стороны с разными интересами приходят к соглашению: позиции и интересы, лучшая альтернатива сделке, уступки, обязательства. Заметная часть разговоров, которые стоит понимать, — переговоры, явные или скрытые, и эта дисциплина говорит, что именно слушать: момент, когда позиция смягчается, разницу между «мы подумаем» и настоящей уступкой, точку, где соглашение состоялось, и то, чем за него заплатили. Без неё выжимка встречи фиксирует, кто что сказал, но не кто сдвинулся, — а найденное обязательство остаётся без своей цены.",
+    },
+    l: [
+      ["Negotiation", W + "Negotiation"],
+      [
+        "Jim Camp, Start with No",
+        "https://books.google.com/books/about/Start_with_No.html?id=bdsV4mkvQAIC",
+      ],
+      ["Getting to Yes", W + "Getting_to_Yes"],
+      [
+        "Best alternative to a negotiated agreement",
+        W + "Best_alternative_to_a_negotiated_agreement",
       ],
     ],
   },
@@ -455,7 +477,7 @@ export const DISCIPLINES = {
 export const ORDER = {
   // Conversation understanding
   voice: ["pros", "phon", "para"],
-  conv: ["comm", "prag", "herm", "ca", "psl", "socio"],
+  conv: ["comm", "prag", "herm", "ca", "neg", "psl", "socio"],
   person: ["emo", "soc", "cog", "pm"],
   // Speaking agent
   conduct: ["couns", "fac", "polite", "philo"],
@@ -498,4 +520,7 @@ export const LINKS = [
   ["herm", "philo"],
   ["herm", "comm"],
   ["herm", "pm"],
+  ["neg", "prag"],
+  ["neg", "fac"],
+  ["neg", "soc"],
 ];

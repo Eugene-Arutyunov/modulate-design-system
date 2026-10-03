@@ -1,0 +1,28 @@
+{# Shared head for every Billing view: title, description and banners.
+   Pages set billingTitle and billingLead before including it; billingBanners = false leaves the banners out. #}
+<script>
+  /* Apply prototype state before first paint; billing.js takes over after load. */
+  (function () {
+    var p = new URLSearchParams(location.search), s = {};
+    try { s = JSON.parse(sessionStorage.getItem("billing-proto") || "{}"); } catch (e) {}
+    var b = document.body;
+    b.dataset.billingType = p.get("type") || s.type || "contracting";
+    b.dataset.billingRole = p.get("role") || s.role || "admin";
+    b.dataset.billingData = p.get("data") || "ready";
+  })();
+</script>
+<h1 class="dashboard-page-title">{{ billingTitle or 'Billing' }}</h1>
+{% if billingLead %}
+<div class="dashboard-section">
+  <p>{{ billingLead | safe }}</p>
+</div>
+<div class="m__space XS"></div>
+{% endif %}
+{% if billingBanners != false %}{% include 'prototypes/billing/banners.html' %}{% endif %}
+{# Nothing loaded at all: one placeholder and one Try again for the whole page, instead of one per widget. #}
+<section class="m__widget billing-page-error" role="alert">
+  <div class="m__widget__placeholder L">
+    <p>Couldn’t load data</p>
+    <button type="button" class="m__button-secondary-outline S" data-billing-retry-all>Try again</button>
+  </div>
+</section>

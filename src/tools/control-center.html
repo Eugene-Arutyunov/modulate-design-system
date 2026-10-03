@@ -1,171 +1,212 @@
-{% extends 'service/layout.html' %} {% set pageTitle = 'Control Center' %} {%
-block content %}
+{% extends 'service/layout.html' %} {% set pageTitle = 'Modulate Intuition
+Team Control Center' %} {% block content %}
 
 <div class="m__wrapper cc__wide">
   <div class="m__space XL"></div>
-  <h1>Control Center</h1>
+  <h1>Modulate Intuition Team Control Center</h1>
   <div class="m__space M"></div>
 
-  <div
-    class="m__segmented-control-secondary S cc__filter"
-    role="group"
-    aria-label="Filter by type">
-    <label>
-      <input type="radio" name="cc-filter" value="all" data-cc-filter checked />
-      All
+  <!-- The table is rendered by control-center.js from
+       /assets/service/control-center-data.json (streams in display order +
+       one record per project: stream / name / type / status / link). Within
+       a stream, rows sort task → project → process → asset → product →
+       tool; done rows follow at the end in the same type order, quieted.
+       The page is editable in place: names are contenteditable, type and
+       status tags open a chip picker, links get an edit affordance. Edits
+       persist to localStorage; when they differ from the shipped JSON an
+       export bar appears (copy / download / discard) — the copied JSON is
+       meant to be handed back to the agent to update the repo file. Once
+       the shipped JSON matches the saved edits, the saved copy is dropped
+       and the bar disappears. -->
+  <div class="cc__controls">
+    <label class="m__select S cc__stream-select">
+      <span>Stream</span>
+      <div class="m__select__inline-control">
+        <span class="m__select__value" data-cc-stream-value>All</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+          <use href="#chevron-down"></use>
+        </svg>
+        <select data-cc-stream-select aria-label="Filter by stream">
+          <option value="all" selected>All</option>
+        </select>
+      </div>
     </label>
-    <label>
-      <input type="radio" name="cc-filter" value="discovery" data-cc-filter />
-      Discovery
-    </label>
-    <label>
-      <input type="radio" name="cc-filter" value="delivery" data-cc-filter />
-      Delivery
-    </label>
+    <div
+      class="m__segmented-control-secondary cc__filter"
+      role="group"
+      aria-label="Filter by type">
+      <label>
+        <input
+          type="radio"
+          name="cc-filter"
+          value="all"
+          data-cc-filter
+          checked />
+        All
+      </label>
+      <label>
+        <input type="radio" name="cc-filter" value="task" data-cc-filter />
+        Task
+      </label>
+      <label>
+        <input type="radio" name="cc-filter" value="project" data-cc-filter />
+        Project
+      </label>
+      <label>
+        <input type="radio" name="cc-filter" value="process" data-cc-filter />
+        Process
+      </label>
+      <label>
+        <input type="radio" name="cc-filter" value="asset" data-cc-filter />
+        Asset
+      </label>
+      <label>
+        <input type="radio" name="cc-filter" value="product" data-cc-filter />
+        Product
+      </label>
+      <label>
+        <input type="radio" name="cc-filter" value="tool" data-cc-filter />
+        Tool
+      </label>
+    </div>
+    <div class="cc__controls-group">
+    <div
+      class="m__segmented-control-secondary cc__filter"
+      role="group"
+      aria-label="Filter by status">
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="all"
+          data-cc-status-filter
+          checked />
+        All
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="backlog"
+          data-cc-status-filter />
+        Backlog
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="planned"
+          data-cc-status-filter />
+        Planned
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="in-progress"
+          data-cc-status-filter />
+        In progress
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="running"
+          data-cc-status-filter />
+        Running
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="online"
+          data-cc-status-filter />
+        Online
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="paused"
+          data-cc-status-filter />
+        Paused
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="done"
+          data-cc-status-filter />
+        Done
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="cc-status-filter"
+          value="archived"
+          data-cc-status-filter />
+        Archived
+      </label>
+    </div>
+    <div class="cc__export" data-cc-export hidden>
+      <span class="cc__export-note">Edited</span>
+      <button type="button" class="cc__export-button" data-cc-copy>
+        Copy
+      </button>
+      <button
+        type="button"
+        class="cc__export-button"
+        data-cc-download
+        aria-label="Download JSON">
+        &#8595;
+      </button>
+      <button type="button" class="cc__export-button" data-cc-discard>
+        Discard
+      </button>
+    </div>
+    </div>
   </div>
 
   <div class="m__space S"></div>
 
   <div class="m__table-wrapper">
-    <!-- Row anatomy: one <tr data-cc-type="delivery|discovery"
-         data-cc-stream="..."> per project: Stream / Project / Type tag /
-         October scope / Next steps. Within a stream, discovery rows come
-         first. The stream cell is left empty except on the first row of a
-         stream; control-center.js keeps the label on the first VISIBLE row
-         when filtering. -->
     <table>
       <colgroup>
+        <col style="width: 13%" />
+        <col style="width: 30%" />
+        <col style="width: 9%" />
         <col style="width: 11%" />
-        <col style="width: 19%" />
-        <col style="width: 10%" />
-        <col style="width: 30%" />
-        <col style="width: 30%" />
+        <col style="width: 37%" />
       </colgroup>
       <thead>
         <tr>
           <th>Stream</th>
           <th>Project</th>
           <th>Type</th>
-          <th>October scope</th>
-          <th>Next steps</th>
+          <th>Status</th>
+          <th>Link</th>
         </tr>
       </thead>
-      <tbody>
-        <tr data-cc-type="discovery" data-cc-stream="Platform">
-          <td class="cc__stream">Platform</td>
-          <td><strong>Review Queue</strong></td>
-          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="delivery" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Users &amp; Organizations</strong></td>
-          <td><span class="m__tag m__tag--success">Delivery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="delivery" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Platform Design Maintenance</strong></td>
-          <td><span class="m__tag m__tag--success">Delivery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="delivery" data-cc-stream="Platform">
-          <td class="cc__stream"></td>
-          <td><strong>Pricing Page</strong></td>
-          <td><span class="m__tag m__tag--success">Delivery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-
-        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
-          <td class="cc__stream">Deeptalk</td>
-          <td><strong>Speech Navigator</strong></td>
-          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Emma</strong></td>
-          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Vocal Effort Conductor</strong></td>
-          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Signals Tuning</strong></td>
-          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="discovery" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Feedback Loop</strong></td>
-          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="delivery" data-cc-stream="Deeptalk">
-          <td class="cc__stream"></td>
-          <td><strong>Deeptalk Product</strong></td>
-          <td><span class="m__tag m__tag--success">Delivery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-
-        <tr data-cc-type="discovery" data-cc-stream="Tools">
-          <td class="cc__stream">Tools</td>
-          <td><strong>Strategy Research Tool</strong></td>
-          <td><span class="m__tag m__tag--secondary">Discovery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="delivery" data-cc-stream="Tools">
-          <td class="cc__stream"></td>
-          <td><strong>UI Scheme &amp; Compare</strong></td>
-          <td><span class="m__tag m__tag--success">Delivery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="delivery" data-cc-stream="Tools">
-          <td class="cc__stream"></td>
-          <td><strong>Velma LLM Battle</strong></td>
-          <td><span class="m__tag m__tag--success">Delivery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-
-        <tr data-cc-type="delivery" data-cc-stream="Design System">
-          <td class="cc__stream">Design System</td>
-          <td><strong>Design System Releases</strong></td>
-          <td><span class="m__tag m__tag--success">Delivery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr data-cc-type="delivery" data-cc-stream="Design System">
-          <td class="cc__stream"></td>
-          <td><strong>Deeptalk Icons</strong></td>
-          <td><span class="m__tag m__tag--success">Delivery</span></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
+      <tbody data-cc-body></tbody>
     </table>
   </div>
 
   <div class="m__space XL"></div>
 </div>
 
-<script src="/assets/service/control-center.js"></script>
+<div class="m__popover cc__picker" data-cc-picker hidden>
+  <div class="m__chip-group" data-cc-picker-chips></div>
+  <input
+    type="number"
+    class="cc__picker-progress"
+    data-cc-picker-progress
+    min="0"
+    max="100"
+    step="5"
+    aria-label="Progress, %"
+    hidden />
+</div>
+
+<script src="/assets/service/control-center.js?v=5"></script>
 
 {% endblock %}

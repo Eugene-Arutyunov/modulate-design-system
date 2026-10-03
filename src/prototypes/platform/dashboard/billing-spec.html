@@ -1,0 +1,150 @@
+---
+pageTitle: "Billing: UI Spec"
+permalink: /dashboard/billing/spec/
+---
+
+{% extends 'prototypes/layout.html' %} {% block content %}
+{% set b = billing %}
+
+<div class="m__wrapper billing-spec">
+  <div class="m__space L"></div>
+  <a href="/dashboard/billing/" class="dashboard-back-link">
+    <span aria-hidden="true">←</span>
+    Billing prototype
+  </a>
+  <div class="m__space S"></div>
+  <h1 class="loud">Billing: UI Spec</h1>
+  <div class="m__space M"></div>
+  {# Contents: the same sections for every page spec. #}
+  {% include 'prototypes/spec-nav.html' %}
+
+  {# Link to the prototype in a given state (the state is in the URL). #}
+  {% macro proto(label, type = 'contracting', scenario = 'healthy', data = 'ready', role = 'admin') %}<a href="/dashboard/billing/?type={{ type }}&amp;scenario={{ scenario }}&amp;role={{ role }}&amp;data={{ data }}">{{ label }}</a>{% endmacro %}
+
+  {# Component name as a code tag linking to its block on the design system page. #}
+  {% macro ds(name) %}<a class="m__code-link" href="/design-system/#{{ name | replace('.', '-') }}"><code>{{ name }}</code></a>{% endmacro %}
+
+  <div class="m__space L"></div>
+  <h2 id="scheme">Scheme</h2>
+  {# Same markup and styles as the UI Scheme (/ui/): text blocks as lines, widgets in frames. #}
+  {% macro schemeSections(sections) %}
+  <ul class="ui-viz__sections">
+    {% for s in sections %}
+    {% if s.text %}<li class="ui-viz__section ui-viz__section--text-content">{{ s.text }}</li>
+    {% else %}<li class="ui-viz__section ui-viz__section--{{ 'widgets' if s.widgets.length > 1 else 'widget' }}"><div class="ui-viz__section-frame"><ul class="ui-viz__section-frame-list">{% for w in s.widgets %}<li class="ui-viz__section-frame-item"><span class="ui-viz__widget">{{ w }}</span></li>{% endfor %}</ul></div></li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+  {% endmacro %}
+  {% set types = [
+    { name: 'Contracting', query: 'contracting',
+      billing: [
+        { text: 'billing-intro' },
+        { widgets: ['billing-banner'] },
+        { widgets: ['credit-balance', 'alerts'] },
+        { widgets: ['billing-history'] }
+      ]
+    },
+    { name: 'Pay/Go', query: 'paygo',
+      billing: [
+        { text: 'billing-intro' },
+        { widgets: ['billing-banner'] },
+        { widgets: ['credit-balance', 'alerts'] },
+        { widgets: ['auto-top-up'] },
+        { widgets: ['billing-history'] }
+      ]
+    },
+    { name: 'Metered', query: 'metered',
+      billing: [
+        { text: 'billing-intro' },
+        { widgets: ['billing-banner'] },
+        { widgets: ['included-credits', 'alerts'] },
+        { widgets: ['billing-history'] }
+      ]
+    }
+  ] %}
+  <p>The Billing page for each customer type, in the <a href="/ui/">UI Scheme</a> notation: a line is a text block, a frame is a widget, widgets in one frame share a row.</p>
+  <div class="ui-viz billing-spec__scheme">
+    <table class="ui-viz__table ui-viz__table--scheme">
+      <colgroup><col style="width:33.33%"><col style="width:33.33%"><col style="width:33.33%"></colgroup>
+      <thead><tr>{% for t in types %}<th scope="col">{{ t.name }}</th>{% endfor %}</tr></thead>
+      <tbody>
+        <tr>{% for t in types %}<td data-label="{{ t.name }}"><a class="ui-viz__route-path" href="/dashboard/billing/?type={{ t.query }}&amp;scenario=healthy&amp;role=admin&amp;data=ready">/dashboard/billing/</a>{{ schemeSections(t.billing) }}</td>{% endfor %}</tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space L"></div>
+  <h2 id="layout">Layout</h2>
+  <h3>Page states</h3>
+  <p>Each state links to the prototype in that state. The widget title stays in every state. Tags, banners and the balance card buttons are hidden while loading or on error.</p>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>State</th><th>Rendering</th></tr></thead>
+      <tbody>
+        <tr><td><strong>{{ proto('Loading', data='loading') }}</strong></td><td>{{ ds('m__skeleton') }} in the shape of the content. Balance: one large bar and two rows of small bars. Alerts: two rows with a button. Tables: real headers, four rows of bars. Charts: their own grid, pulsing.</td></tr>
+        <tr><td><strong>{{ proto('Empty', data='empty') }}</strong></td><td>Balance: 0.00 with the purchase buttons ({{ proto('Metered', type='metered', data='empty') }}: full included credits and its rows). Alerts: same rows, “No thresholds yet.” Tables: headers and one centered caption line, no Filter or Export. Charts: axes and grid, no data.</td></tr>
+        <tr><td><strong>{{ proto('Error', data='error') }}</strong></td><td>{{ ds('m__widget__placeholder') }}: “Couldn’t load data” in caption colour, centered, with {{ ds('m__button-secondary-outline.S') }} “Try again”. Tables and charts use the large placeholder.</td></tr>
+        <tr><td><strong>{{ proto('Page error', data='page-error') }}</strong></td><td>One widget instead of all blocks: large placeholder, at least 18rem tall, same text and button.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="m__space M"></div>
+  <h3>Modes</h3>
+  <p><strong>Customer type</strong> changes the balance card:</p>
+  <ul>
+    <li><strong>{{ proto('Contracting') }}:</strong> Used this period, Renews; buttons Buy Credits and Apply Credit Code.</li>
+    <li><strong>{{ proto('Pay/Go', type='paygo') }}:</strong> Used since last top-up, Last top-up; the same two buttons.</li>
+    <li><strong>{{ proto('Metered', type='metered') }}:</strong> Included credits used, Estimated overage ({{ proto('once used up', type='metered', scenario='now-metered') }}), Next invoice, Monthly commitment; no buttons.</li>
+  </ul>
+  <div class="m__space S"></div>
+  <p>and the banner:</p>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>When</th><th>Contracting</th><th>Pay/Go</th><th>Metered</th></tr></thead>
+      <tbody>
+        <tr><td><strong>75% used</strong></td><td>{{ proto('Info, Buy Credits', scenario='usage-75') }}</td><td>{{ proto('Info, Auto Top-Up Settings', type='paygo', scenario='usage-75') }}</td><td>{{ proto('Info, Overage alerts', type='metered', scenario='usage-75') }}</td></tr>
+        <tr><td><strong>90% used</strong></td><td>{{ proto('Info, Buy Credits', scenario='usage-90') }}</td><td>{{ proto('Info, Auto Top-Up Settings', type='paygo', scenario='usage-90') }}</td><td>{{ proto('Info, Overage alerts', type='metered', scenario='usage-90') }}</td></tr>
+        <tr><td><strong>100% used</strong></td><td>{{ proto('Error, Buy Credits', scenario='usage-stopped') }}</td><td>{{ proto('Error, Buy Credits, Turn On Auto Top-Up', type='paygo', scenario='usage-stopped') }}</td><td>{{ proto('Info, Set overage alert', type='metered', scenario='now-metered') }}</td></tr>
+        <tr><td><strong>Top-up failed</strong></td><td><span class="billing-muted">—</span></td><td>{{ proto('Error, Update Payment Method', type='paygo', scenario='failed-recharge') }}</td><td><span class="billing-muted">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="m__space M"></div>
+  <p><strong>{{ proto('View-only', role='viewer') }}</strong> keeps the layout and the data:</p>
+  <ul>
+    <li>Buttons that change something are removed, not disabled: Edit, Manage, Retry, banner buttons.</li>
+    <li>In the balance card the buttons are replaced by an xs caption at the card bottom: “Only your organization’s admins can buy credits.”</li>
+    <li>View, Filter and Export stay.</li>
+  </ul>
+
+  <div class="m__space L"></div>
+  <h2 id="components">Components</h2>
+  <p>Design system components on these pages and where each one is used.</p>
+  <div class="m__table-wrapper">
+    <table class="billing-spec__table">
+      <thead><tr><th>Component</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td>{{ ds('m__widget') }}</td><td>Every block: balance card, Alerts, Auto Top-Up, Billing History. Usage is one widget: the request table, then both charts.</td></tr>
+        <tr><td><code>m__widget-header</code><br><code>m__searchbar</code></td><td>Top line of the Usage widget instead of a title: search by model or API key, with Filter and Export on the right.</td></tr>
+        <tr><td>{{ ds('m__alert-error') }}</td><td>Banners. Info (blue) for 75%, 90% and metered billing; error (red) for stopped usage and a failed top-up. No icon.</td></tr>
+        <tr><td>{{ ds('m__button-primary.M') }}<br>{{ ds('m__button-secondary-outline.M') }}</td><td>Buy Credits and Apply Credit Code in the balance card; Pay in the Buy Credits modal.</td></tr>
+        <tr><td>{{ ds('m__button-primary.S') }}</td><td>Main action: Enable Auto Top-Up, the first button of an error banner, Save in modals.</td></tr>
+        <tr><td>{{ ds('m__button-secondary-outline.S') }}</td><td>Everything else: Edit, Manage, Retry, Try again, Filter, Export, info banner buttons, Cancel in modals.</td></tr>
+        <tr><td>{{ ds('m__menu-button-secondary.S') }}</td><td>View in Billing History, with Invoice and Receipt.</td></tr>
+        <tr><td>{{ ds('m__tag') }}</td><td>Status in both tables and the Auto Top-Up state. Success: Paid, Active, On. Error: Failed. Warning: Open. Muted: Used, Expired, Off.</td></tr>
+        <tr><td>{{ ds('m__tag-flat') }}</td><td>API key in Usage History.</td></tr>
+        <tr><td>{{ ds('m__textfield.M') }}</td><td>All modal fields: thresholds, recipients, credit code, custom amount, Auto Top-Up settings.</td></tr>
+        <tr><td>{{ ds('m__select.M') }}</td><td>Threshold type in the Low balance modal: “% used” or “credits left”.</td></tr>
+        <tr><td>{{ ds('m__radio-card') }}</td><td>Credit presets in the Buy Credits modal, stacked.</td></tr>
+        <tr><td>{{ ds('m__toggle-primary') }}</td><td>Enable Auto Top-Up in its modal.</td></tr>
+        <tr><td>{{ ds('m__skeleton') }}</td><td>Loading state of every widget.</td></tr>
+        <tr><td>{{ ds('m__widget__placeholder') }}</td><td>Error state of every widget and the page error.</td></tr>
+        <tr><td>{{ ds('m__toast') }}</td><td>Confirmation after Save, Apply Code and Retry.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="m__space XL"></div>
+</div>
+{% endblock %}

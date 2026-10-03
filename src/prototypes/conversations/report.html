@@ -16,9 +16,7 @@ permalink: /dashboard/conversations/7839f2/
 
     <main class="dashboard-content conversation-report">
       <a href="/dashboard/conversations/" class="conversation-report__back">
-        <svg viewBox="0 0 12 12" aria-hidden="true">
-          <use href="#chevron-left"></use>
-        </svg>
+        <span aria-hidden="true">←</span>
         Conversations
       </a>
 
@@ -36,7 +34,7 @@ permalink: /dashboard/conversations/7839f2/
       </div>
 
       <div class="conversation-report__player m__rounded">
-        <div class="media-container">
+        <div class="media-container" data-fingerprint-player>
           <div class="pg-player-dataviz">
             <div class="player-visualization">
               {% include 'prototypes/playground/player-clips.html' %}
@@ -119,6 +117,7 @@ permalink: /dashboard/conversations/7839f2/
   <div class="m__space XL"></div>
 </div>
 
+<script src="/assets/prototypes/review-assignments.js"></script>
 <script>
   document.querySelectorAll(".media-container").forEach(function (container) {
     container.addEventListener("mousemove", function (event) {
@@ -135,4 +134,5 @@ permalink: /dashboard/conversations/7839f2/
   });
 </script>
 
+<script type="module" src="/assets/prototypes/fingerprint-player.js"></script>
 {% endblock %}

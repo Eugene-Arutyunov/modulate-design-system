@@ -33,7 +33,7 @@
 
       <!-- PLAYER + OUTPUT -->
       <div class="pg-player-output m__rounded">
-      <div class="media-container">
+      <div class="media-container" data-fingerprint-player>
     <div class="pg-player-dataviz">
       <div class="player-visualization">
         {% block player_clips %}
@@ -133,6 +133,7 @@
   {% include 'prototypes/playground/demo-recordings.html' %}
 
   {% endblock %} {% block scripts %}
+  <script type="module" src="/assets/prototypes/fingerprint-player.js"></script>
   <div class="m__tooltip" hidden></div>
   <script src="/assets/components/tooltip.js"></script>
   <script>
